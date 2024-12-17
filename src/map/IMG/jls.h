@@ -60,9 +60,8 @@ private:
 	struct Context
 	{
 		Context(quint16 width, quint16 range)
+		  : data(QVector<quint16>((width + 3) * 2)), w(width)
 		{
-			w = width;
-			data = QVector<quint16>((w + 3) * 2);
 			last = data.data();
 			current = data.data() + (w + 3);
 
@@ -79,18 +78,17 @@ private:
 			}
 		}
 
-		quint8 runIndex;
-		quint8 rk;
+		QVector<quint16> data;
+		quint16 *current;
+		quint16 *last;
+		quint16 w;
 		quint16 rg;
 		quint16 n[4];
 		quint16 a[4];
 		qint16 b[4];
+		quint8 runIndex;
+		quint8 rk;
 		quint8 lrk;
-
-		quint16 w;
-		QVector<quint16> data;
-		quint16 *current;
-		quint16 *last;
 	};
 
 	bool readLine(BitStream &bs, Context &ctx) const;
