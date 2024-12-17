@@ -60,17 +60,14 @@ private:
 	struct Context
 	{
 		Context(quint16 width, quint16 range)
-		  : data(QVector<quint16>((width + 3) * 2)), w(width)
+		  : data(QVector<quint16>((width + 3) * 2)), w(width), rg(1),
+		  runIndex(0), rk(0), lrk(0)
 		{
+			quint16 A = qMax(2, (range + 32) / 64);
+
 			last = data.data();
 			current = data.data() + (w + 3);
 
-			runIndex = 0;
-			rk = 0;
-			rg = 1;
-			lrk = 0;
-
-			quint16 A = qMax(2, (range + 32) / 64);
 			for (int i = 0; i < 4; i++) {
 				a[i] = A;
 				b[i] = 0;
