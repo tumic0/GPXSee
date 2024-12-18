@@ -67,6 +67,7 @@
 #define PONTON 95
 #define PRCARE 96
 #define PYLONS 98
+#define RADRFL 101
 #define RADSTA 102
 #define RTPBCN 103
 #define RDOCAL 104

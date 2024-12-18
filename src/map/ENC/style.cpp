@@ -335,6 +335,7 @@ void Style::pointStyle(qreal ratio)
 	_points[SUBTYPE(WEDKLP, 0)] = Point(QImage(":/marine/kelp.png"));
 	_points[SUBTYPE(WEDKLP, 1)] = Point(QImage(":/marine/kelp.png"));
 	_points[TYPE(SEAARE)].setHaloColor(QColor());
+	_points[TYPE(RADRFL)] = Point(QImage(":/marine/radar-reflector.png"));
 
 	_points[SUBTYPE(SMCFAC, 7)] = Point(svg2img(":/POI/restaurant-11.svg",
 	  ratio), Small);

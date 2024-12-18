@@ -206,6 +206,7 @@
 		<file alias="kelp.png">icons/map/marine/kelp.png</file>
 		<file alias="eddies.png">icons/map/marine/eddies.png</file>
 		<file alias="dome.png">icons/map/marine/dome.png</file>
+		<file alias="radar-reflector.png">icons/map/marine/radar-reflector.png</file>
 	</qresource>
 
 	<!-- Patterns (Mapsforge) -->

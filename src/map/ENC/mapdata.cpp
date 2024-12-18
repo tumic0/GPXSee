@@ -63,16 +63,17 @@ static QMap<uint,uint> orderMapInit()
 	map.insert(TYPE(PILPNT), 34);
 	map.insert(TYPE(ACHBRT), 35);
 	map.insert(TYPE(I_ACHBRT), 35);
-	map.insert(TYPE(CRANES), 36);
-	map.insert(TYPE(I_CRANES), 36);
-	map.insert(TYPE(I_WTWGAG), 37);
-	map.insert(TYPE(PYLONS), 38);
-	map.insert(TYPE(SLCONS), 39);
-	map.insert(TYPE(LNDMRK), 40);
-	map.insert(TYPE(SILTNK), 41);
-	map.insert(TYPE(LNDELV), 42);
-	map.insert(TYPE(SMCFAC), 43);
-	map.insert(TYPE(BUISGL), 44);
+	map.insert(TYPE(RADRFL), 36);
+	map.insert(TYPE(CRANES), 37);
+	map.insert(TYPE(I_CRANES), 37);
+	map.insert(TYPE(I_WTWGAG), 38);
+	map.insert(TYPE(PYLONS), 39);
+	map.insert(TYPE(SLCONS), 40);
+	map.insert(TYPE(LNDMRK), 41);
+	map.insert(TYPE(SILTNK), 42);
+	map.insert(TYPE(LNDELV), 43);
+	map.insert(TYPE(SMCFAC), 44);
+	map.insert(TYPE(BUISGL), 45);
 
 	map.insert(TYPE(I_DISMAR), 0xFFFFFFFE);
 	map.insert(TYPE(SOUNDG), 0xFFFFFFFF);
