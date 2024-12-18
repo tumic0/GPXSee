@@ -304,7 +304,8 @@ MapData::Poly::Poly(uint type, const Polygon &path, const QString &label,
 			_label = QString::fromUtf8("\xE2\x86\x95") + UNIT_SPACE
 			  + QString::number(clr) + UNIT_SPACE + hUnits(HUNI);
 		}
-	} else if (type>>16 == LNDARE || type>>16 == SEAARE)
+	} else if (type>>16 == LNDARE || type>>16 == SEAARE || type>>16 == BERTHS
+	  || type>>16 == I_BERTHS)
 		_label = label;
 }
 

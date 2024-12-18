@@ -113,8 +113,9 @@ void Style::polygonStyle()
 	_polygons[TYPE(CBLARE)] = Polygon(QImage(":/marine/cable-area-line.png"));
 	_polygons[TYPE(PIPARE)] = Polygon(QImage(":/marine/pipeline-area-line.png"));
 	_polygons[SUBTYPE(MARKUL, 3)] = Polygon(QImage(":/marine/fishing-farm-line.png"));
-	_polygons[SUBTYPE(I_BERTHS, 6)] = Polygon(Qt::NoBrush,
-	  QPen(QColor(0xeb, 0x49, 0xeb), 1, Qt::DashLine));
+	_polygons[TYPE(BERTHS)] = Polygon(Qt::NoBrush, QPen(QColor(0xeb, 0x49, 0xeb),
+	  1, Qt::DashLine));
+	_polygons[TYPE(I_BERTHS)] = _polygons[TYPE(BERTHS)];
 	_polygons[TYPE(CONZNE)] = Polygon(Qt::NoBrush, QPen(QColor(0xeb, 0x49, 0xeb),
 	  1, Qt::DashDotLine));
 
@@ -129,13 +130,14 @@ void Style::polygonStyle()
 	  << TYPE(I_TERMNL) << TYPE(SLCONS) << TYPE(I_SLCONS) << TYPE(PONTON)
 	  << TYPE(I_PONTON) << TYPE(HULKES) << TYPE(I_HULKES) << TYPE(FLODOC)
 	  << TYPE(I_FLODOC) << TYPE(DRYDOC) << TYPE(DAMCON) << TYPE(PYLONS)
-	  << TYPE(MORFAC) << TYPE(GATCON) << TYPE(I_GATCON) << SUBTYPE(I_BERTHS, 6)
-	  << TYPE(DMPGRD) << TYPE(TSEZNE) << TYPE(OBSTRN) << TYPE(UWTROC)
-	  << TYPE(DWRTPT) << SUBTYPE(ACHARE, 1) << SUBTYPE(I_ACHARE, 1)
-	  << SUBTYPE(RESARE, 9) << SUBTYPE(RESARE, 2) << SUBTYPE(I_RESARE, 2)
-	  << SUBTYPE(RESARE, 17) << SUBTYPE(I_RESARE, 17) << SUBTYPE(RESARE, 12)
-	  << SUBTYPE(I_RESARE, 12) << SUBTYPE(RESARE, 1) << TYPE(CBLARE)
-	  << TYPE(PIPARE) << TYPE(PRCARE) << SUBTYPE(MARKUL, 3) << TYPE(CONZNE);
+	  << TYPE(MORFAC) << TYPE(GATCON) << TYPE(I_GATCON) << TYPE(BERTHS)
+	  << TYPE(I_BERTHS) << TYPE(DMPGRD) << TYPE(TSEZNE) << TYPE(OBSTRN)
+	  << TYPE(UWTROC) << TYPE(DWRTPT) << SUBTYPE(ACHARE, 1)
+	  << SUBTYPE(I_ACHARE, 1) << SUBTYPE(RESARE, 9) << SUBTYPE(RESARE, 2)
+	  << SUBTYPE(I_RESARE, 2) << SUBTYPE(RESARE, 17) << SUBTYPE(I_RESARE, 17)
+	  << SUBTYPE(RESARE, 12) << SUBTYPE(I_RESARE, 12) << SUBTYPE(RESARE, 1)
+	  << TYPE(CBLARE) << TYPE(PIPARE) << TYPE(PRCARE) << SUBTYPE(MARKUL, 3)
+	  << TYPE(CONZNE);
 }
 
 void Style::lineStyle(qreal ratio)
@@ -152,7 +154,7 @@ void Style::lineStyle(qreal ratio)
 	_lines[TYPE(CBLSUB)].setTextFontSize(Small);
 	_lines[TYPE(PIPSOL)] = Line(QImage(":/marine/pipeline.png"));
 	_lines[TYPE(PIPSOL)].setTextFontSize(Small);
-	_lines[TYPE(NAVLNE)] = Line(QPen(QColor(0xeb, 0x49, 0xeb), 1, Qt::DashLine));
+	_lines[TYPE(NAVLNE)] = Line(QPen(QColor(0, 0, 0), 1, Qt::DashLine));
 	_lines[TYPE(COALNE)] = Line(QPen(QColor(0, 0, 0), 1, Qt::SolidLine));
 	_lines[TYPE(SLCONS)] = Line(QPen(QColor(0, 0, 0), 2, Qt::SolidLine));
 	_lines[TYPE(I_SLCONS)] = Line(QPen(QColor(0, 0, 0), 2, Qt::SolidLine));
