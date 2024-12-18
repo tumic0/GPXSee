@@ -150,19 +150,42 @@ QPolygonF RasterTile::tsslptArrow(const QPointF &p, qreal angle) const
 	return polygon;
 }
 
+static void drawArrow(QPainter *painter, const QPolygonF &polygon, uint type)
+{
+	if (type>>16 == RCTLPT) {
+		painter->setPen(QPen(tsslptPen, 1, Qt::DashLine));
+		painter->setBrush(Qt::NoBrush);
+	} else {
+		painter->setPen(QPen(tsslptPen, 1));
+		painter->setBrush(QBrush(tsslptBrush));
+	}
+	painter->drawPolygon(polygon);
+}
+
 void RasterTile::drawArrows(QPainter *painter,
   const QList<MapData::Poly> &polygons)
 {
 	for (int i = 0; i < polygons.size(); i++) {
 		const MapData::Poly &poly = polygons.at(i);
 
-		if (poly.type()>>16 == TSSLPT) {
+		if (poly.type()>>16 == TSSLPT || poly.type()>>16 == RCTLPT) {
 			QPolygonF polygon(tsslptArrow(centroid(poly.path().first()),
 			  deg2rad(poly.param().toDouble())));
+			drawArrow(painter, polygon, poly.type());
+		}
+	}
+}
 
-			painter->setPen(QPen(tsslptPen, 1));
-			painter->setBrush(QBrush(tsslptBrush));
-			painter->drawPolygon(polygon);
+void RasterTile::drawArrows(QPainter *painter,
+  const QList<MapData::Point> &points)
+{
+	for (int i = 0; i < points.size(); i++) {
+		const MapData::Point &point = points.at(i);
+
+		if (point.type()>>16 == TSSLPT || point.type()>>16 == RCTLPT) {
+			QPolygonF polygon(tsslptArrow(ll2xy(point.pos()),
+			  deg2rad(point.param().toDouble())));
+			drawArrow(painter, polygon, point.type());
 		}
 	}
 }
@@ -400,6 +423,7 @@ void RasterTile::render()
 	drawPolygons(&painter, polygons);
 	drawLines(&painter, lines);
 	drawArrows(&painter, polygons);
+	drawArrows(&painter, points);
 
 	drawTextItems(&painter, lights);
 	drawTextItems(&painter, textItems);

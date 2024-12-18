@@ -52,6 +52,7 @@ private:
 	void drawBitmapPath(QPainter *painter, const QImage &img,
 	  const Polygon &polygon);
 	void drawArrows(QPainter *painter, const QList<MapData::Poly> &polygons);
+	void drawArrows(QPainter *painter, const QList<MapData::Point> &points);
 	void drawPolygons(QPainter *painter, const QList<MapData::Poly> &polygons);
 	void drawLines(QPainter *painter, const QList<MapData::Line> &lines);
 	void drawTextItems(QPainter *painter, const QList<TextItem*> &textItems);

@@ -285,7 +285,8 @@ MapData::Point::Point(uint type, const Coordinates &c, const QString &label,
 		else
 			_label += "\n(" + QString::fromLatin1(params.at(0))
 			  + "\xE2\x80\x89m)";
-	}
+	} else if ((type == TYPE(TSSLPT) || type == TYPE(RCTLPT)) && params.size())
+		_param = QVariant(params.at(0).toDouble());
 }
 
 MapData::Poly::Poly(uint type, const Polygon &path, const QString &label,
@@ -293,7 +294,7 @@ MapData::Poly::Poly(uint type, const Polygon &path, const QString &label,
 {
 	if (type == TYPE(DEPARE) && params.size())
 		_type = SUBTYPE(DEPARE, depthLevel(params.at(0)));
-	else if (type == TYPE(TSSLPT) && params.size())
+	else if ((type == TYPE(TSSLPT) || type == TYPE(RCTLPT)) && params.size())
 		_param = QVariant(params.at(0).toDouble());
 	else if ((type == TYPE(BRIDGE) || type == TYPE(I_BRIDGE))
 	  && params.size()) {
@@ -595,7 +596,9 @@ MapData::Attr MapData::pointAttr(const ISO8211::Record &r, uint OBJL)
 		  || (OBJL == RDOCAL && key == ORIENT)
 		  || (OBJL == I_RDOCAL && key == ORIENT)
 		  || (OBJL == CURENT && key == ORIENT)
-		  || (OBJL == LNDELV && key == ELEVAT))
+		  || (OBJL == LNDELV && key == ELEVAT)
+		  || (OBJL == TSSLPT && key == ORIENT)
+		  || (OBJL == RCTLPT && key == ORIENT))
 			params[0] = av.at(1).toByteArray();
 		if ((OBJL == I_RDOCAL && key == COMCHA)
 		  || (OBJL == RDOCAL && key == COMCHA)
@@ -668,6 +671,7 @@ MapData::Attr MapData::polyAttr(const ISO8211::Record &r, uint OBJL)
 		}
 
 		if ((OBJL == TSSLPT && key == ORIENT)
+		  || (OBJL == RCTLPT && key == ORIENT)
 		  || (OBJL == DEPARE && key == DRVAL1))
 			params[0] = av.at(1).toByteArray();
 		if ((OBJL == BRIDGE && key == VERCLR)

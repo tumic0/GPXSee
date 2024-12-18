@@ -74,6 +74,7 @@
 #define RAILWY 106
 #define RCRTCL 108
 #define RECTRC 109
+#define RCTLPT 110
 #define RSCSTA 111
 #define RESARE 112
 #define RIVERS 114
