@@ -82,7 +82,27 @@ void Style::polygonStyle()
 	_polygons[SUBTYPE(I_RESARE, 12)] = Polygon(QImage(":/marine/safety-zone-line.png"));
 	_polygons[SUBTYPE(RESARE, 1)] = Polygon(QImage(":/marine/safety-zone-line.png"));
 	_polygons[SUBTYPE(ACHARE, 1)] = Polygon(QImage(":/marine/anchor-line.png"));
-	_polygons[SUBTYPE(I_ACHARE, 1)] = Polygon(QImage(":/marine/anchor-line.png"));
+	_polygons[SUBTYPE(ACHARE, 2)] = _polygons[SUBTYPE(ACHARE, 1)];
+	_polygons[SUBTYPE(ACHARE, 3)] = _polygons[SUBTYPE(ACHARE, 1)];
+	_polygons[SUBTYPE(ACHARE, 4)] = _polygons[SUBTYPE(ACHARE, 1)];
+	_polygons[SUBTYPE(ACHARE, 5)] = _polygons[SUBTYPE(ACHARE, 1)];
+	_polygons[SUBTYPE(ACHARE, 6)] = _polygons[SUBTYPE(ACHARE, 1)];
+	_polygons[SUBTYPE(ACHARE, 7)] = _polygons[SUBTYPE(ACHARE, 1)];
+	_polygons[SUBTYPE(ACHARE, 8)] = Polygon(Qt::NoBrush,
+	  QPen(QColor(0xeb, 0x49, 0xeb), 1, Qt::DashLine));
+	_polygons[SUBTYPE(ACHARE, 9)] = _polygons[SUBTYPE(ACHARE, 1)];
+	_polygons[SUBTYPE(I_ACHARE, 1)] = _polygons[SUBTYPE(ACHARE, 1)];
+	_polygons[SUBTYPE(I_ACHARE, 2)] = _polygons[SUBTYPE(ACHARE, 2)];
+	_polygons[SUBTYPE(I_ACHARE, 3)] = _polygons[SUBTYPE(ACHARE, 3)];
+	_polygons[SUBTYPE(I_ACHARE, 4)] = _polygons[SUBTYPE(ACHARE, 4)];
+	_polygons[SUBTYPE(I_ACHARE, 5)] = _polygons[SUBTYPE(ACHARE, 5)];
+	_polygons[SUBTYPE(I_ACHARE, 6)] = _polygons[SUBTYPE(ACHARE, 6)];
+	_polygons[SUBTYPE(I_ACHARE, 7)] = _polygons[SUBTYPE(ACHARE, 7)];
+	_polygons[SUBTYPE(I_ACHARE, 8)] = _polygons[SUBTYPE(ACHARE, 8)];
+	_polygons[SUBTYPE(I_ACHARE, 9)] = _polygons[SUBTYPE(ACHARE, 9)];
+	_polygons[SUBTYPE(I_ACHARE, 10)] = _polygons[SUBTYPE(I_ACHARE, 1)];
+	_polygons[SUBTYPE(I_ACHARE, 11)] = _polygons[SUBTYPE(I_ACHARE, 1)];
+	_polygons[SUBTYPE(I_ACHARE, 12)] = _polygons[SUBTYPE(I_ACHARE, 1)];
 	_polygons[TYPE(PRCARE)] = Polygon(QBrush(QColor(0xeb, 0x49, 0xeb),
 	  Qt::BDiagPattern));
 	_polygons[TYPE(DAMCON)] = Polygon(QBrush(QColor(0xd9, 0x8b, 0x21)),
@@ -117,6 +137,8 @@ void Style::polygonStyle()
 	  1, Qt::DashLine));
 	_polygons[TYPE(I_BERTHS)] = _polygons[TYPE(BERTHS)];
 	_polygons[SUBTYPE(I_BERTHS, 6)] = _polygons[TYPE(BERTHS)];
+	_polygons[TYPE(I_TRNBSN)] = Polygon(Qt::NoBrush, QPen(QColor(0xeb, 0x49, 0xeb),
+	  1, Qt::DashLine));
 	_polygons[TYPE(CONZNE)] = Polygon(Qt::NoBrush, QPen(QColor(0xeb, 0x49, 0xeb),
 	  1, Qt::DashDotLine));
 
@@ -134,11 +156,17 @@ void Style::polygonStyle()
 	  << TYPE(MORFAC) << TYPE(GATCON) << TYPE(I_GATCON) << TYPE(BERTHS)
 	  << TYPE(I_BERTHS) << SUBTYPE(I_BERTHS, 6) << TYPE(DMPGRD) << TYPE(TSEZNE)
 	  << TYPE(OBSTRN) << TYPE(UWTROC) << TYPE(DWRTPT) << SUBTYPE(ACHARE, 1)
-	  << SUBTYPE(I_ACHARE, 1) << SUBTYPE(RESARE, 9) << SUBTYPE(RESARE, 2)
-	  << SUBTYPE(I_RESARE, 2) << SUBTYPE(RESARE, 17) << SUBTYPE(I_RESARE, 17)
-	  << SUBTYPE(RESARE, 12) << SUBTYPE(I_RESARE, 12) << SUBTYPE(RESARE, 1)
-	  << TYPE(CBLARE) << TYPE(PIPARE) << TYPE(PRCARE) << SUBTYPE(MARKUL, 3)
-	  << TYPE(CONZNE);
+	  << SUBTYPE(ACHARE, 2) << SUBTYPE(ACHARE, 3) << SUBTYPE(ACHARE, 4)
+	  << SUBTYPE(ACHARE, 5) << SUBTYPE(ACHARE, 6) << SUBTYPE(ACHARE, 7)
+	  << SUBTYPE(ACHARE, 8) << SUBTYPE(ACHARE, 9) << SUBTYPE(I_ACHARE, 1)
+	  << SUBTYPE(I_ACHARE, 2) << SUBTYPE(I_ACHARE, 3) << SUBTYPE(I_ACHARE, 4)
+	  << SUBTYPE(I_ACHARE, 5) << SUBTYPE(I_ACHARE, 6) << SUBTYPE(I_ACHARE, 7)
+	  << SUBTYPE(I_ACHARE, 8) << SUBTYPE(I_ACHARE, 9) << SUBTYPE(I_ACHARE, 10)
+	  << SUBTYPE(I_ACHARE, 11) << SUBTYPE(I_ACHARE, 12) << SUBTYPE(RESARE, 9)
+	  << SUBTYPE(RESARE, 2) << SUBTYPE(I_RESARE, 2) << SUBTYPE(RESARE, 17)
+	  << SUBTYPE(I_RESARE, 17) << SUBTYPE(RESARE, 12) << SUBTYPE(I_RESARE, 12)
+	  << SUBTYPE(RESARE, 1) << TYPE(CBLARE) << TYPE(PIPARE) << TYPE(PRCARE)
+	  << TYPE(I_TRNBSN) << SUBTYPE(MARKUL, 3) << TYPE(CONZNE);
 }
 
 void Style::lineStyle(qreal ratio)
