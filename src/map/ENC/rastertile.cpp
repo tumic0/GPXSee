@@ -40,31 +40,6 @@ static bool showLabel(const QImage *img, const Range &range, int zoom, int type)
 	return true;
 }
 
-QPointF RasterTile::centroid(const QVector<Coordinates> &polygon) const
-{
-	Q_ASSERT(polygon.size() > 3);
-	Q_ASSERT(polygon.first() == polygon.last());
-
-	double area = 0;
-	double cx = 0, cy = 0;
-	QPointF pi;
-	QPointF pj(ll2xy(polygon.at(0)));
-
-	for (int i = 0; i < polygon.size() - 1; i++) {
-		pi = pj;
-		pj = ll2xy(polygon.at(i + 1));
-
-		double f = pi.x() * pj.y() - pj.x() * pi.y();
-		area += f;
-		cx += (pi.x() + pj.x()) * f;
-		cy += (pi.y() + pj.y()) * f;
-	}
-
-	double factor = 1.0 / (3.0 * area);
-
-	return QPointF(cx * factor, cy * factor);
-}
-
 QPainterPath RasterTile::painterPath(const Polygon &polygon) const
 {
 	QPainterPath path;
@@ -163,20 +138,6 @@ static void drawArrow(QPainter *painter, const QPolygonF &polygon, uint type)
 }
 
 void RasterTile::drawArrows(QPainter *painter,
-  const QList<MapData::Poly> &polygons)
-{
-	for (int i = 0; i < polygons.size(); i++) {
-		const MapData::Poly &poly = polygons.at(i);
-
-		if (poly.type()>>16 == TSSLPT || poly.type()>>16 == RCTLPT) {
-			QPolygonF polygon(tsslptArrow(centroid(poly.path().first()),
-			  deg2rad(poly.param().toDouble())));
-			drawArrow(painter, polygon, poly.type());
-		}
-	}
-}
-
-void RasterTile::drawArrows(QPainter *painter,
   const QList<MapData::Point> &points)
 {
 	for (int i = 0; i < points.size(); i++) {
@@ -249,46 +210,6 @@ void RasterTile::drawTextItems(QPainter *painter,
 		const TextItem *ti = textItems.at(i);
 		if (rect.intersects(ti->boundingRect()))
 			ti->paint(painter);
-	}
-}
-
-void RasterTile::processPolygons(const QList<MapData::Poly> &polygons,
-  QList<TextItem*> &textItems)
-{
-	for (int i = 0; i < polygons.size(); i++) {
-		const MapData::Poly &poly = polygons.at(i);
-		uint type = poly.type()>>16;
-		const QImage *img = 0;
-		const QString *label = 0;
-		const QFont *fnt = 0;
-		const QColor *color = 0, *hColor = 0;
-		QPoint offset(0, 0);
-
-		if (!poly.label().isEmpty()) {
-			const Style::Point &style = _style->point(poly.type());
-			fnt = _style->font(style.textFontSize());
-			color = &style.textColor();
-			hColor = style.haloColor().isValid() ? &style.haloColor() : 0;
-			label = &poly.label();
-		}
-		if (type == HRBFAC || type == I_TRNBSN
-		  || poly.type() == SUBTYPE(I_BERTHS, 6)) {
-			const Style::Point &style = _style->point(poly.type());
-			img = style.img().isNull() ? 0 : &style.img();
-			offset = style.offset();
-		}
-
-		if ((!label || !fnt) && !img)
-			continue;
-
-		TextPointItem *item = new TextPointItem(offset +
-		  centroid(poly.path().first()).toPoint(), label, fnt, img, color,
-		  hColor, 0, 0);
-		if (item->isValid() && _rect.contains(item->boundingRect().toRect())
-		  && !item->collides(textItems))
-			textItems.append(item);
-		else
-			delete item;
 	}
 }
 
@@ -412,7 +333,6 @@ void RasterTile::render()
 	fetchData(polygons, lines, points);
 
 	processPoints(points, textItems, lights);
-	processPolygons(polygons, textItems);
 	processLines(lines, textItems);
 
 	QPainter painter(&img);
@@ -422,7 +342,6 @@ void RasterTile::render()
 
 	drawPolygons(&painter, polygons);
 	drawLines(&painter, lines);
-	drawArrows(&painter, polygons);
 	drawArrows(&painter, points);
 
 	drawTextItems(&painter, lights);

@@ -47,11 +47,8 @@ private:
 	  QList<TextItem*> &textItems, QList<TextItem *> &lights);
 	void processLines(const QList<MapData::Line> &lines,
 	  QList<TextItem*> &textItems);
-	void processPolygons(const QList<MapData::Poly> &polygons,
-	  QList<TextItem*> &textItems);
 	void drawBitmapPath(QPainter *painter, const QImage &img,
 	  const Polygon &polygon);
-	void drawArrows(QPainter *painter, const QList<MapData::Poly> &polygons);
 	void drawArrows(QPainter *painter, const QList<MapData::Point> &points);
 	void drawPolygons(QPainter *painter, const QList<MapData::Poly> &polygons);
 	void drawLines(QPainter *painter, const QList<MapData::Line> &lines);

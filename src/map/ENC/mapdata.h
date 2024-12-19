@@ -49,6 +49,8 @@ public:
 	public:
 		Point(uint type, const Coordinates &c, const QString &label,
 		  const QVector<QByteArray> &params);
+		Point(uint type, const Coordinates &c, const QString &label,
+		  const QVariant &param);
 
 		const Coordinates &pos() const {return _pos;}
 		uint type() const {return _type;}

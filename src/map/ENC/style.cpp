@@ -116,6 +116,7 @@ void Style::polygonStyle()
 	_polygons[TYPE(BERTHS)] = Polygon(Qt::NoBrush, QPen(QColor(0xeb, 0x49, 0xeb),
 	  1, Qt::DashLine));
 	_polygons[TYPE(I_BERTHS)] = _polygons[TYPE(BERTHS)];
+	_polygons[SUBTYPE(I_BERTHS, 6)] = _polygons[TYPE(BERTHS)];
 	_polygons[TYPE(CONZNE)] = Polygon(Qt::NoBrush, QPen(QColor(0xeb, 0x49, 0xeb),
 	  1, Qt::DashDotLine));
 
@@ -131,8 +132,8 @@ void Style::polygonStyle()
 	  << TYPE(I_PONTON) << TYPE(HULKES) << TYPE(I_HULKES) << TYPE(FLODOC)
 	  << TYPE(I_FLODOC) << TYPE(DRYDOC) << TYPE(DAMCON) << TYPE(PYLONS)
 	  << TYPE(MORFAC) << TYPE(GATCON) << TYPE(I_GATCON) << TYPE(BERTHS)
-	  << TYPE(I_BERTHS) << TYPE(DMPGRD) << TYPE(TSEZNE) << TYPE(OBSTRN)
-	  << TYPE(UWTROC) << TYPE(DWRTPT) << SUBTYPE(ACHARE, 1)
+	  << TYPE(I_BERTHS) << SUBTYPE(I_BERTHS, 6) << TYPE(DMPGRD) << TYPE(TSEZNE)
+	  << TYPE(OBSTRN) << TYPE(UWTROC) << TYPE(DWRTPT) << SUBTYPE(ACHARE, 1)
 	  << SUBTYPE(I_ACHARE, 1) << SUBTYPE(RESARE, 9) << SUBTYPE(RESARE, 2)
 	  << SUBTYPE(I_RESARE, 2) << SUBTYPE(RESARE, 17) << SUBTYPE(I_RESARE, 17)
 	  << SUBTYPE(RESARE, 12) << SUBTYPE(I_RESARE, 12) << SUBTYPE(RESARE, 1)
@@ -325,7 +326,8 @@ void Style::pointStyle(qreal ratio)
 	_points[SUBTYPE(I_RDOCAL, 3)].setTextColor(QColor(0xeb, 0x49, 0xeb));
 	_points[SUBTYPE(I_RDOCAL, 4)].setTextColor(QColor(0xeb, 0x49, 0xeb));
 	_points[TYPE(PYLONS)] = Point(QImage(":/marine/pylon.png"));
-	_points[SUBTYPE(I_BERTHS, 6)] = Point(QImage(":/marine/fleeting-area.png"));
+	_points[SUBTYPE(I_BERTHS, 6)] = Point(QImage(":/marine/fleeting-area.png"),
+	  Small);
 	_points[SUBTYPE(WATTUR, 1)] = Point(QImage(":/marine/breakers.png"));
 	_points[SUBTYPE(WATTUR, 2)] = Point(QImage(":/marine/eddies.png"));
 	_points[SUBTYPE(WATTUR, 3)] = Point(QImage(":/marine/overfalls.png"));

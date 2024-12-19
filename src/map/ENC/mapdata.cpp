@@ -170,6 +170,14 @@ static bool polygonCb(const MapData::Poly *polygon, void *context)
 	return true;
 }
 
+static bool polygonPointCb(const MapData::Poly *polygon, void *context)
+{
+	QList<MapData::Point> *points = (QList<MapData::Point>*)context;
+	points->append(MapData::Point(polygon->type(), polygon->bounds().center(),
+	  polygon->label(), polygon->param()));
+	return true;
+}
+
 static Coordinates coordinates(int x, int y, uint COMF)
 {
 	return Coordinates(x / (double)COMF, y / (double)COMF);
@@ -288,6 +296,12 @@ MapData::Point::Point(uint type, const Coordinates &c, const QString &label,
 			  + "\xE2\x80\x89m)";
 	} else if ((type == TYPE(TSSLPT) || type == TYPE(RCTLPT)) && params.size())
 		_param = QVariant(params.at(0).toDouble());
+}
+
+MapData::Point::Point(uint type, const Coordinates &c, const QString &label,
+  const QVariant &param) : _type(type), _pos(c), _label(label), _param(param)
+{
+	_id = ((quint64)order(type))<<32 | (uint)qHash(c);
 }
 
 MapData::Poly::Poly(uint type, const Polygon &path, const QString &label,
@@ -848,6 +862,7 @@ void MapData::points(const RectC &rect, QList<Point> *points) const
 
 	rectcBounds(rect, min, max);
 	_points.Search(min, max, pointCb, points);
+	_areas.Search(min, max, polygonPointCb, points);
 }
 
 void MapData::lines(const RectC &rect, QList<Line> *lines) const
