@@ -176,7 +176,14 @@ static bool polygonPointCb(const MapData::Poly *polygon, void *context)
 	uint baseType = polygon->type()>>16;
 
 	if (!polygon->label().isEmpty() || baseType == TSSLPT || baseType == RCTLPT
-	  || baseType == I_TRNBSN || polygon->type() == SUBTYPE(I_BERTHS, 6))
+	  || baseType == I_TRNBSN
+	  || polygon->type() == SUBTYPE(ACHARE, 2)
+	  || polygon->type() == SUBTYPE(ACHARE, 3)
+	  || polygon->type() == SUBTYPE(ACHARE, 9)
+	  || polygon->type() == SUBTYPE(I_ACHARE, 2)
+	  || polygon->type() == SUBTYPE(I_ACHARE, 3)
+	  || polygon->type() == SUBTYPE(I_ACHARE, 9)
+	  || polygon->type() == SUBTYPE(I_BERTHS, 6))
 		points->append(MapData::Point(polygon->type(), polygon->bounds().center(),
 		  polygon->label(), polygon->param()));
 

@@ -207,6 +207,9 @@
 		<file alias="eddies.png">icons/map/marine/eddies.png</file>
 		<file alias="dome.png">icons/map/marine/dome.png</file>
 		<file alias="radar-reflector.png">icons/map/marine/radar-reflector.png</file>
+		<file alias="24h-anchorage.png">icons/map/marine/24h-anchorage.png</file>
+		<file alias="dw-anchorage.png">icons/map/marine/dw-anchorage.png</file>
+		<file alias="tanker-anchorage.png">icons/map/marine/tanker-anchorage.png</file>
 	</qresource>
 
 	<!-- Patterns (Mapsforge) -->

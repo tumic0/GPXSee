@@ -355,8 +355,6 @@ void Style::pointStyle(qreal ratio)
 	_points[SUBTYPE(I_RDOCAL, 3)].setTextColor(QColor(0xeb, 0x49, 0xeb));
 	_points[SUBTYPE(I_RDOCAL, 4)].setTextColor(QColor(0xeb, 0x49, 0xeb));
 	_points[TYPE(PYLONS)] = Point(QImage(":/marine/pylon.png"));
-	_points[SUBTYPE(I_BERTHS, 6)] = Point(QImage(":/marine/fleeting-area.png"),
-	  Small);
 	_points[SUBTYPE(WATTUR, 1)] = Point(QImage(":/marine/breakers.png"));
 	_points[SUBTYPE(WATTUR, 2)] = Point(QImage(":/marine/eddies.png"));
 	_points[SUBTYPE(WATTUR, 3)] = Point(QImage(":/marine/overfalls.png"));
@@ -369,6 +367,18 @@ void Style::pointStyle(qreal ratio)
 	_points[SUBTYPE(WEDKLP, 1)] = Point(QImage(":/marine/kelp.png"));
 	_points[TYPE(SEAARE)].setHaloColor(QColor());
 	_points[TYPE(RADRFL)] = Point(QImage(":/marine/radar-reflector.png"));
+
+	_points[SUBTYPE(I_BERTHS, 6)] = Point(QImage(":/marine/fleeting-area.png"),
+	  Small);
+	_points[SUBTYPE(ACHARE, 2)] = Point(QImage(":/marine/dw-anchorage.png"),
+	  Small);
+	_points[SUBTYPE(ACHARE, 3)] = Point(QImage(":/marine/tanker-anchorage.png"),
+	  Small);
+	_points[SUBTYPE(ACHARE, 9)] = Point(QImage(":/marine/24h-anchorage.png"),
+	  Small);
+	_points[SUBTYPE(I_ACHARE, 2)] = _points[SUBTYPE(ACHARE, 2)];
+	_points[SUBTYPE(I_ACHARE, 3)] = _points[SUBTYPE(ACHARE, 3)];
+	_points[SUBTYPE(I_ACHARE, 9)] = _points[SUBTYPE(ACHARE, 9)];
 
 	_points[SUBTYPE(SMCFAC, 7)] = Point(svg2img(":/POI/restaurant-11.svg",
 	  ratio), Small);
