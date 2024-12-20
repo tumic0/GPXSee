@@ -173,10 +173,13 @@ static bool polygonCb(const MapData::Poly *polygon, void *context)
 static bool polygonPointCb(const MapData::Poly *polygon, void *context)
 {
 	QList<MapData::Point> *points = (QList<MapData::Point>*)context;
-	if (!((polygon->type()>>16 == BUISGL && polygon->label().isEmpty())
-	  || polygon->type()>>16 == PYLONS))
+	uint baseType = polygon->type()>>16;
+
+	if (!polygon->label().isEmpty() || baseType == TSSLPT || baseType == RCTLPT
+	  || baseType == I_TRNBSN || polygon->type() == SUBTYPE(I_BERTHS, 6))
 		points->append(MapData::Point(polygon->type(), polygon->bounds().center(),
 		  polygon->label(), polygon->param()));
+
 	return true;
 }
 
