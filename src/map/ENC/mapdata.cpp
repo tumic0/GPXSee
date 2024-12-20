@@ -173,7 +173,8 @@ static bool polygonCb(const MapData::Poly *polygon, void *context)
 static bool polygonPointCb(const MapData::Poly *polygon, void *context)
 {
 	QList<MapData::Point> *points = (QList<MapData::Point>*)context;
-	if (!(polygon->type()>>16 == BUISGL && polygon->label().isEmpty()))
+	if (!((polygon->type()>>16 == BUISGL && polygon->label().isEmpty())
+	  || polygon->type()>>16 == PYLONS))
 		points->append(MapData::Point(polygon->type(), polygon->bounds().center(),
 		  polygon->label(), polygon->param()));
 	return true;
