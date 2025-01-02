@@ -365,7 +365,9 @@ void RMap::load(const Projection &in, const Projection &out, qreal deviceRatio,
 	Q_UNUSED(out);
 
 	_mapRatio = hidpi ? deviceRatio : 1.0;
-	_file.open(QIODevice::ReadOnly);
+	if (!_file.open(QIODevice::ReadOnly))
+		qWarning("%s: %s", qPrintable(_file.fileName()),
+		  qPrintable(_file.errorString()));
 }
 
 void RMap::unload()

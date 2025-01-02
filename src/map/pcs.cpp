@@ -31,8 +31,7 @@ bool PCS::loadList(const QString &path)
 	bool res;
 
 	if (!file.open(QFile::ReadOnly)) {
-		qWarning("Error opening PCS file: %s: %s", qPrintable(path),
-		  qPrintable(file.errorString()));
+		qWarning("%s: %s", qPrintable(path), qPrintable(file.errorString()));
 		return false;
 	}
 

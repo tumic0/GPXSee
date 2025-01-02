@@ -162,7 +162,10 @@ void JNXMap::load(const Projection &in, const Projection &out,
 	_projection = in;
 	_mapRatio = hidpi ? deviceRatio : 1.0;
 
-	if (_file.open(QIODevice::ReadOnly))
+	if (!_file.open(QIODevice::ReadOnly))
+		qWarning("%s: %s", qPrintable(_file.fileName()),
+		  qPrintable(_file.errorString()));
+	else
 		readTiles();
 }
 

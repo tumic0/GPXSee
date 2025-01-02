@@ -445,7 +445,11 @@ void RasterTile::fetchData(QList<MapData::Poly> &polygons,
 
 	if (dynamic_cast<IMGData*>(_data)) {
 		_file = new QFile(_data->fileName());
-		_file->open(QIODevice::ReadOnly | QIODevice::Unbuffered);
+		if (!_file->open(QIODevice::ReadOnly | QIODevice::Unbuffered)) {
+			qWarning("%s: %s", qPrintable(_file->fileName()),
+			  qPrintable(_file->errorString()));
+			return;
+		}
 	}
 
 	QRectF polyRect(ttl, QPointF(ttl.x() + _rect.width(), ttl.y()

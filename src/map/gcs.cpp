@@ -102,8 +102,7 @@ bool GCS::loadList(const QString &path)
 	bool res;
 
 	if (!file.open(QFile::ReadOnly)) {
-		qWarning("Error opening GCS file: %s: %s", qPrintable(path),
-		  qPrintable(file.errorString()));
+		qWarning("%s: %s", qPrintable(path), qPrintable(file.errorString()));
 		return false;
 	}
 

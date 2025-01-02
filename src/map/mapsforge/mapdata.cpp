@@ -459,7 +459,11 @@ RectC MapData::bounds() const
 void MapData::load()
 {
 	QFile file(_fileName);
-	if (file.open(QIODevice::ReadOnly | QIODevice::Unbuffered))
+
+	if (!file.open(QIODevice::ReadOnly | QIODevice::Unbuffered))
+		qWarning("%s: %s", qPrintable(file.fileName()),
+		  qPrintable(file.errorString()));
+	else
 		readSubFiles(file);
 }
 

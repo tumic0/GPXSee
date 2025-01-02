@@ -410,8 +410,11 @@ void RasterTile::fetchData(QList<MapData::Path> &paths,
 	QPoint ttl(_rect.topLeft());
 	QFile file(_data->fileName());
 
-	if (!file.open(QIODevice::ReadOnly | QIODevice::Unbuffered))
+	if (!file.open(QIODevice::ReadOnly | QIODevice::Unbuffered)) {
+		qWarning("%s: %s", qPrintable(file.fileName()),
+		  qPrintable(file.errorString()));
 		return;
+	}
 
 	QRectF pathRect(QPointF(ttl.x() - PATHS_EXTENT, ttl.y() - PATHS_EXTENT),
 	  QPointF(ttl.x() + _rect.width() + PATHS_EXTENT, ttl.y() + _rect.height()

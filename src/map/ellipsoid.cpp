@@ -38,8 +38,7 @@ bool Ellipsoid::loadList(const QString &path)
 	bool res;
 
 	if (!file.open(QFile::ReadOnly)) {
-		qWarning("Error opening ellipsoids file: %s: %s", qPrintable(path),
-		  qPrintable(file.errorString()));
+		qWarning("%s: %s", qPrintable(path), qPrintable(file.errorString()));
 		return false;
 	}
 
