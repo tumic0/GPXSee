@@ -12,11 +12,9 @@ environment:
   - QTDIR: C:\Qt\5.15\msvc2019_64
     OPENSSLDIR: C:\OpenSSL-v111-Win64\bin
     NSISDEF: /DOPENSSL /DANGLE
-    LRELEASE: lrelease
   - QTDIR: C:\Qt\6.8\msvc2019_64
     OPENSSLDIR: C:\OpenSSL-v33-Win64\bin
     NSISDEF: /DQT6 /DOPENSSL
-    LRELEASE: lrelease-pro
 
 install:
 - cmd: |-
@@ -25,7 +23,7 @@ install:
 
 build_script:
 - cmd: |-
-    %LRELEASE% gpxsee.pro
+    lrelease gpxsee.pro
     qmake gpxsee.pro
     nmake release
 
