@@ -58,7 +58,7 @@ VIProductVersion "${VERSION}.0.0"
 VIAddVersionKey "ProductVersion" ${VERSION}
 VIAddVersionKey "FileVersion" "${VERSION}.0.0"
 VIAddVersionKey "ProductName" "GPXSee"
-VIAddVersionKey "LegalCopyright" "Copyright (c) 2015-2024 Martin Tůma"
+VIAddVersionKey "LegalCopyright" "Copyright (c) 2015-2025 Martin Tůma"
 VIAddVersionKey "FileDescription" "GPXSee installer (x64)"
 
 ; Registry key to check for directory (so if you install again, it will
