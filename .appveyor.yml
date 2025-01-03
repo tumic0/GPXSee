@@ -13,8 +13,7 @@ environment:
     OPENSSLDIR: C:\OpenSSL-v111-Win64\bin
     NSISDEF: /DOPENSSL /DANGLE
   - QTDIR: C:\Qt\6.8\msvc2022_64
-    OPENSSLDIR: C:\OpenSSL-v33-Win64\bin
-    NSISDEF: /DQT6 /DOPENSSL
+    NSISDEF: /DQT6
 
 install:
 - cmd: |-
@@ -36,8 +35,10 @@ build_script:
     xcopy lang\*.qm installer\translations\ /sy
     xcopy icons\symbols installer\symbols /i
     copy licence.txt installer
-    copy %OPENSSLDIR%\libcrypto-*-x64.dll installer
-    copy %OPENSSLDIR%\libssl-*-x64.dll installer
+    IF EXISTS OPENSSLDIR (
+      copy %OPENSSLDIR%\libcrypto-*-x64.dll installer
+      copy %OPENSSLDIR%\libssl-*-x64.dll installer
+    )
 
     makensis.exe %NSISDEF% installer\gpxsee64.nsi
 
