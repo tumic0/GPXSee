@@ -18,7 +18,7 @@ class NETFile : public SubFile
 public:
 	NETFile(const IMGData *img)
 	  : SubFile(img), _huffmanTable(0), _tp(0), _netShift(0), _linksShift(0) {}
-	NETFile(const QString *path)
+	NETFile(const QString &path)
 	  : SubFile(path), _huffmanTable(0), _tp(0), _netShift(0), _linksShift(0) {}
 	NETFile(const SubFile *gmp, quint32 offset)
 	  : SubFile(gmp, offset), _huffmanTable(0), _tp(0), _netShift(0),

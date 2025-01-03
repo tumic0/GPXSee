@@ -11,7 +11,7 @@ class DEMFile : public SubFile
 {
 public:
 	DEMFile(const IMGData *img) : SubFile(img) {}
-	DEMFile(const QString *path) : SubFile(path) {}
+	DEMFile(const QString &path) : SubFile(path) {}
 	DEMFile(const SubFile *gmp, quint32 offset) : SubFile(gmp, offset) {}
 
 	bool load(Handle &hdl);

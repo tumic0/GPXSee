@@ -18,7 +18,7 @@ public:
 	class Handle
 	{
 	public:
-		Handle(QFile *file, const SubFile *subFile)
+		Handle(const SubFile *subFile, QFile *file = 0)
 		  : _file(file), _blockNum(-1), _blockPos(-1), _pos(-1), _delete(false)
 		{
 			if (!subFile)
@@ -53,13 +53,18 @@ public:
 	SubFile(const IMGData *img)
 	  : _gmpOffset(0), _img(img), _blocks(new QVector<quint16>()), _path(0) {}
 	SubFile(const SubFile *gmp, quint32 offset) : _gmpOffset(offset),
-	  _img(gmp->_img), _blocks(gmp->_blocks), _path(gmp->_path) {}
-	SubFile(const QString *path)
-	  : _gmpOffset(0), _img(0), _blocks(0), _path(path) {}
+	  _img(gmp->_img), _blocks(gmp->_blocks), _path(gmp->_path)
+	{
+		Q_ASSERT(offset);
+	}
+	SubFile(const QString &path)
+	  : _gmpOffset(0), _img(0), _blocks(0), _path(new QString(path)) {}
 	~SubFile()
 	{
-		if (!_gmpOffset)
+		if (!_gmpOffset) {
 			delete _blocks;
+			delete _path;
+		}
 	}
 
 	void addBlock(quint16 block) {_blocks->append(block);}

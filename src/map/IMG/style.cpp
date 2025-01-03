@@ -1268,9 +1268,9 @@ bool Style::parseDrawOrder(SubFile *file, SubFile::Handle &hdl,
 	return true;
 }
 
-bool Style::parseTYPFile(QFile *file, SubFile *typ)
+bool Style::parseTYPFile(SubFile *typ)
 {
-	SubFile::Handle hdl(file, typ);
+	SubFile::Handle hdl(typ);
 	Section points, lines, polygons, order;
 	quint16 tmp16, codepage;
 
@@ -1311,7 +1311,7 @@ bool Style::parseTYPFile(QFile *file, SubFile *typ)
 	return true;
 }
 
-Style::Style(QFile *file, qreal ratio, SubFile *typ)
+Style::Style(qreal ratio, SubFile *typ)
 {
 	_large = pixelSizeFont(16);
 	_normal = pixelSizeFont(14);
@@ -1326,7 +1326,7 @@ Style::Style(QFile *file, qreal ratio, SubFile *typ)
 	defaultPointStyle(ratio);
 
 	if (typ)
-		parseTYPFile(file, typ);
+		parseTYPFile(typ);
 }
 
 const Style::Line &Style::line(quint32 type) const

@@ -117,8 +117,7 @@ bool IMGData::readFAT(QFile *file, TileMap &tileMap)
 			} else
 				tile = *it;
 
-			SubFile *subFile = part ? tile->file(tt)
-			  : tile->addFile(this, tt);
+			SubFile *subFile = part ? tile->file(tt) : tile->addFile(this, tt);
 			if (!(subFile && readSubFileBlocks(file, offset, subFile)))
 				return false;
 		} else if (tt == SubFile::TYP) {

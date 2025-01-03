@@ -104,7 +104,7 @@ public:
 	};
 
 
-	Style(QFile *file, qreal ratio, SubFile *typ = 0);
+	Style(qreal ratio, SubFile *typ = 0);
 
 	const Line &line(quint32 type) const;
 	const Polygon &polygon(quint32 type) const;
@@ -171,7 +171,7 @@ private:
 		bool extended;
 	};
 
-	bool parseTYPFile(QFile *file, SubFile *typ);
+	bool parseTYPFile(SubFile *typ);
 	bool parsePoints(SubFile *file, SubFile::Handle &hdl,
 	  const Section &section);
 	bool parsePoint(SubFile *file, SubFile::Handle &hdl,

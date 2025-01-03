@@ -18,7 +18,7 @@ public:
 	LBLFile(const IMGData *img)
 	  : SubFile(img), _huffmanText(0), _imgIdSize(0), _poiShift(0), _shift(0),
 	  _encoding(0) {}
-	LBLFile(const QString *path)
+	LBLFile(const QString &path)
 	  : SubFile(path), _huffmanText(0), _imgIdSize(0), _poiShift(0), _shift(0),
 	  _encoding(0) {}
 	LBLFile(const SubFile *gmp, quint32 offset)

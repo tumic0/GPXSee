@@ -87,12 +87,16 @@ bool GMAPData::loadTile(const QDir &dir)
 		const QFileInfo &fi = ml.at(i);
 		SubFile::Type tt = tileType(fi.suffix());
 		if (VectorTile::isTileFile(tt)) {
-			_files.append(new QString(fi.absoluteFilePath()));
-			tile->addFile(_files.last(), tt);
+			if (!tile->addFile(fi.absoluteFilePath(), tt)) {
+				qWarning("%s: Invalid map tile structure",
+				  qPrintable(dir.path()));
+				delete tile;
+				return false;
+			}
 		}
 	}
 
-	if (!tile->init(0)) {
+	if (!tile->init()) {
 		qWarning("%s: Invalid map tile", qPrintable(dir.path()));
 		delete tile;
 		return false;
@@ -131,10 +135,8 @@ GMAPData::GMAPData(const QString &fileName) : MapData(fileName)
 			loadTile(QDir(fi.absoluteFilePath()));
 	}
 
-	if (baseDir.exists(typFilePath)) {
-		_files.append(new QString(baseDir.filePath(typFilePath)));
-		_typ = new SubFile(_files.last());
-	}
+	if (baseDir.exists(typFilePath))
+		_typ = new SubFile(baseDir.filePath(typFilePath));
 
 	if (!_tileTree.Count())
 		_errorString = "No usable map tile found";
@@ -142,9 +144,4 @@ GMAPData::GMAPData(const QString &fileName) : MapData(fileName)
 		_valid = true;
 
 	computeZooms();
-}
-
-GMAPData::~GMAPData()
-{
-	qDeleteAll(_files);
 }

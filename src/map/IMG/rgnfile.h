@@ -24,7 +24,7 @@ public:
 	};
 
 	RGNFile(const IMGData *img) : SubFile(img), _huffmanTable(0) {}
-	RGNFile(const QString *path) : SubFile(path), _huffmanTable(0) {}
+	RGNFile(const QString &path) : SubFile(path), _huffmanTable(0) {}
 	RGNFile(const SubFile *gmp, quint32 offset)
 	  : SubFile(gmp, offset), _huffmanTable(0) {}
 	~RGNFile();

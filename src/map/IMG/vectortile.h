@@ -21,7 +21,7 @@ public:
 		delete _dem; delete _gmp;
 	}
 
-	bool init(QFile *file);
+	bool init(QFile *file = 0);
 	void clear();
 
 	const RectC &bounds() const {return _tre->bounds();}
@@ -49,25 +49,37 @@ public:
 	}
 
 	template<typename T>
-	SubFile *addFile(T *container, SubFile::Type type)
+	SubFile *addFile(T container, SubFile::Type type)
 	{
 		switch (type) {
 			case SubFile::TRE:
+				if (_tre)
+					return 0;
 				_tre = new TREFile(container);
 				return _tre;
 			case SubFile::RGN:
+				if (_rgn)
+					return 0;
 				_rgn = new RGNFile(container);
 				return _rgn;
 			case SubFile::LBL:
+				if (_lbl)
+					return 0;
 				_lbl = new LBLFile(container);
 				return _lbl;
 			case SubFile::NET:
+				if (_net)
+					return 0;
 				_net = new NETFile(container);
 				return _net;
 			case SubFile::NOD:
+				if (_nod)
+					return 0;
 				_nod = new NODFile(container);
 				return _nod;
 			case SubFile::DEM:
+				if (_dem)
+					return 0;
 				_dem = new DEMFile(container);
 				return _dem;
 			case SubFile::GMP:

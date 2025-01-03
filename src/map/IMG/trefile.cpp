@@ -51,7 +51,7 @@ TREFile::~TREFile()
 
 bool TREFile::init(QFile *file)
 {
-	Handle hdl(file, this);
+	Handle hdl(this, file);
 	quint8 locked, levels[64];
 	quint16 hdrLen;
 	qint32 north, east, south, west;
@@ -156,7 +156,7 @@ int TREFile::readExtEntry(Handle &hdl, quint32 &polygons, quint32 &lines,
 
 bool TREFile::load(QFile *file, int idx)
 {
-	Handle hdl(file, this);
+	Handle hdl(this, file);
 	QList<SubDiv*> sl;
 	SubDiv *s = 0;
 	SubDivTree *tree = new SubDivTree();

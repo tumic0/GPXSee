@@ -99,14 +99,14 @@ void MapData::load(qreal ratio)
 	Q_ASSERT(!_style);
 
 	if (_typ)
-		_style = new Style(0, ratio, _typ);
+		_style = new Style(ratio, _typ);
 	else {
 		QString typFile(ProgramPaths::typFile());
 		if (QFileInfo::exists(typFile)) {
-			SubFile typ(&typFile);
-			_style = new Style(0, ratio, &typ);
+			SubFile typ(typFile);
+			_style = new Style(ratio, &typ);
 		} else
-			_style = new Style(0, ratio);
+			_style = new Style(ratio);
 	}
 }
 

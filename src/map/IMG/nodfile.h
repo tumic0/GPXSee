@@ -62,7 +62,7 @@ public:
 	NODFile(const IMGData *img)
 	  : SubFile(img), _indexFlags(0), _indexRecordSize(0), _blockRecordSize(0),
 	  _blockShift(0), _nodeShift(0), _indexIdSize(0) {}
-	NODFile(const QString *path)
+	NODFile(const QString &path)
 	  : SubFile(path), _indexFlags(0), _indexRecordSize(0), _blockRecordSize(0),
 	  _blockShift(0), _nodeShift(0), _indexIdSize(0) {}
 	NODFile(const SubFile *gmp, quint32 offset)

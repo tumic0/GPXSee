@@ -152,7 +152,7 @@ void RasterTile::drawPolygons(QPainter *painter,
 				bool insert = false;
 				SubFile::Handle *hdl = hc.object(poly.raster.lbl());
 				if (!hdl) {
-					hdl = new SubFile::Handle(_file, poly.raster.lbl());
+					hdl = new SubFile::Handle(poly.raster.lbl(), _file);
 					insert = true;
 				}
 				QPixmap pm(poly.raster.lbl()->image(*hdl, poly.raster.id()));

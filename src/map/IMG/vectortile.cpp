@@ -53,8 +53,11 @@ bool VectorTile::init(QFile *file)
 
 bool VectorTile::initGMP(QFile *file)
 {
-	SubFile::Handle hdl(file, _gmp);
+	SubFile::Handle hdl(_gmp, file);
 	quint32 tre, rgn, lbl, net, nod, dem;
+
+	if (_tre || _rgn || _lbl || _net || _nod || _dem)
+		return false;
 
 	if (!(_gmp->seek(hdl, 0x19) && _gmp->readUInt32(hdl, tre)
 	  && _gmp->readUInt32(hdl, rgn) && _gmp->readUInt32(hdl, lbl)
@@ -133,10 +136,10 @@ void VectorTile::polys(QFile *file, const RectC &rect, const Zoom &zoom,
 	}
 
 	if (!_loaded) {
-		rgnHdl = new SubFile::Handle(file, _rgn);
-		lblHdl = new SubFile::Handle(file, _lbl);
-		netHdl = new SubFile::Handle(file, _net);
-		nodHdl = new SubFile::Handle(file, _nod);
+		rgnHdl = new SubFile::Handle(_rgn, file);
+		lblHdl = new SubFile::Handle(_lbl, file);
+		netHdl = new SubFile::Handle(_net, file);
+		nodHdl = new SubFile::Handle(_nod, file);
 
 		if (!load(*rgnHdl, *lblHdl, *netHdl, *nodHdl)) {
 			_lock.unlock();
@@ -159,9 +162,9 @@ void VectorTile::polys(QFile *file, const RectC &rect, const Zoom &zoom,
 			quint32 shift = _tre->shift(subdiv->bits());
 
 			if (!rgnHdl) {
-				rgnHdl = new SubFile::Handle(file, _rgn);
-				lblHdl = new SubFile::Handle(file, _lbl);
-				netHdl = new SubFile::Handle(file, _net);
+				rgnHdl = new SubFile::Handle(_rgn, file);
+				lblHdl = new SubFile::Handle(_lbl, file);
+				netHdl = new SubFile::Handle(_net, file);
 			}
 
 			if (!subdiv->initialized() && !_rgn->subdivInit(*rgnHdl, subdiv)) {
@@ -182,9 +185,9 @@ void VectorTile::polys(QFile *file, const RectC &rect, const Zoom &zoom,
 
 			if (_net && _net->hasLinks()) {
 				if (!nodHdl)
-					nodHdl = new SubFile::Handle(file, _nod);
+					nodHdl = new SubFile::Handle(_nod, file);
 				if (!nodHdl2)
-					nodHdl2 = new SubFile::Handle(file, _nod);
+					nodHdl2 = new SubFile::Handle(_nod, file);
 				_rgn->links(*rgnHdl, subdiv, shift, _net, *netHdl, _nod, *nodHdl,
 				  *nodHdl2, _lbl, *lblHdl, &polys->lines);
 			}
@@ -221,10 +224,10 @@ void VectorTile::points(QFile *file, const RectC &rect, const Zoom &zoom,
 	}
 
 	if (!_loaded) {
-		rgnHdl = new SubFile::Handle(file, _rgn);
-		lblHdl = new SubFile::Handle(file, _lbl);
-		SubFile::Handle nodHdl(file, _nod);
-		SubFile::Handle netHdl(file, _net);
+		rgnHdl = new SubFile::Handle(_rgn, file);
+		lblHdl = new SubFile::Handle(_lbl, file);
+		SubFile::Handle nodHdl(_nod, file);
+		SubFile::Handle netHdl(_net, file);
 
 		if (!load(*rgnHdl, *lblHdl, netHdl, nodHdl)) {
 			_lock.unlock();
@@ -245,8 +248,8 @@ void VectorTile::points(QFile *file, const RectC &rect, const Zoom &zoom,
 			cacheLock->unlock();
 
 			if (!rgnHdl) {
-				rgnHdl = new SubFile::Handle(file, _rgn);
-				lblHdl = new SubFile::Handle(file, _lbl);
+				rgnHdl = new SubFile::Handle(_rgn, file);
+				lblHdl = new SubFile::Handle(_lbl, file);
 			}
 
 			if (!subdiv->initialized() && !_rgn->subdivInit(*rgnHdl, subdiv)) {
@@ -290,7 +293,7 @@ void VectorTile::elevations(QFile *file, const RectC &rect, const Zoom &zoom,
 	}
 
 	if (!_demLoaded) {
-		hdl = new SubFile::Handle(file, _dem);
+		hdl = new SubFile::Handle(_dem, file);
 
 		if (!loadDem(*hdl)) {
 			_demLock.unlock();
@@ -315,7 +318,7 @@ void VectorTile::elevations(QFile *file, const RectC &rect, const Zoom &zoom,
 			cacheLock->unlock();
 
 			if (!hdl)
-				hdl = new SubFile::Handle(file, _dem);
+				hdl = new SubFile::Handle(_dem, file);
 
 			el = _dem->elevations(*hdl, level, tile);
 			if (!el->m.isNull())
