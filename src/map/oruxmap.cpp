@@ -514,8 +514,8 @@ QPixmap OruxMap::tile(const Zoom &z, int x, int y) const
 		query.exec();
 
 		if (!query.first()) {
-			qWarning("%s: SQL %d-%d-%d: not found", qPrintable(name()), z.zoom,
-			  x, y);
+			qWarning("%s: SQL %d-%d-%d: not found", qUtf8Printable(name()),
+			  z.zoom, x, y);
 			return QPixmap();
 		} else {
 			QImage img(QImage::fromData(query.value(0).toByteArray()));
@@ -526,8 +526,8 @@ QPixmap OruxMap::tile(const Zoom &z, int x, int y) const
 		  + QString::number(y) + ".omc2");
 		QString path(z.set.absoluteFilePath(fileName));
 		if (!QFileInfo::exists(path)) {
-			qWarning("%s: %s: not found", qPrintable(name()),
-			  qPrintable(fileName));
+			qWarning("%s: %s: not found", qUtf8Printable(name()),
+			  qUtf8Printable(fileName));
 			return QPixmap();
 		} else {
 			QImage img(path);

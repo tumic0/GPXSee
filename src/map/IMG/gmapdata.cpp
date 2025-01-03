@@ -89,7 +89,7 @@ bool GMAPData::loadTile(const QDir &dir)
 		if (VectorTile::isTileFile(tt)) {
 			if (!tile->addFile(fi.absoluteFilePath(), tt)) {
 				qWarning("%s: Invalid map tile structure",
-				  qPrintable(dir.path()));
+				  qUtf8Printable(dir.path()));
 				delete tile;
 				return false;
 			}
@@ -97,7 +97,7 @@ bool GMAPData::loadTile(const QDir &dir)
 	}
 
 	if (!tile->init()) {
-		qWarning("%s: Invalid map tile", qPrintable(dir.path()));
+		qWarning("%s: Invalid map tile", qUtf8Printable(dir.path()));
 		delete tile;
 		return false;
 	}

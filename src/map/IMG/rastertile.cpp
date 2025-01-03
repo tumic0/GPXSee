@@ -446,8 +446,8 @@ void RasterTile::fetchData(QList<MapData::Poly> &polygons,
 	if (dynamic_cast<IMGData*>(_data)) {
 		_file = new QFile(_data->fileName());
 		if (!_file->open(QIODevice::ReadOnly | QIODevice::Unbuffered)) {
-			qWarning("%s: %s", qPrintable(_file->fileName()),
-			  qPrintable(_file->errorString()));
+			qWarning("%s: %s", qUtf8Printable(_file->fileName()),
+			  qUtf8Printable(_file->errorString()));
 			return;
 		}
 	}

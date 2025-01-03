@@ -190,8 +190,8 @@ void GEMFMap::load(const Projection &in, const Projection &out,
 
 	_mapRatio = hidpi ? deviceRatio : 1.0;
 	if (!_file.open(QIODevice::ReadOnly))
-		qWarning("%s: %s", qPrintable(_file.fileName()),
-		  qPrintable(_file.errorString()));
+		qWarning("%s: %s", qUtf8Printable(_file.fileName()),
+		  qUtf8Printable(_file.errorString()));
 }
 
 void GEMFMap::unload()

@@ -96,9 +96,9 @@ Map *MapList::loadFile(const QString &path, const Projection &proj, bool *isDir)
 		}
 	}
 
-	qWarning("%s:", qPrintable(path));
+	qWarning("%s:", qUtf8Printable(path));
 	for (int i = 0; i < errors.size(); i++)
-		qWarning("  %s", qPrintable(errors.at(i)));
+		qWarning("  %s", qUtf8Printable(errors.at(i)));
 
 	return map ? map : new InvalidMap(path, "Unknown file format");
 }

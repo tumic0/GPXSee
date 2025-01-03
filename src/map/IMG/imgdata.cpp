@@ -146,8 +146,8 @@ bool IMGData::createTileTree(QFile *file, const TileMap &tileMap)
 		VectorTile *tile = it.value();
 
 		if (!tile->init(file)) {
-			qWarning("%s: %s: Invalid map tile", qPrintable(_fileName),
-			  qPrintable(it.key()));
+			qWarning("%s: %s: Invalid map tile", qUtf8Printable(_fileName),
+			  qUtf8Printable(it.key()));
 			delete tile;
 			continue;
 		}

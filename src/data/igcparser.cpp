@@ -245,7 +245,7 @@ bool IGCParser::parse(QFile *file, QList<TrackData> &tracks,
 					/* The date H header is mandatory, but XCSOAR generates
 					   files without it, so add a dummy date in such case */
 					qWarning("%s: Missing date header",
-					  qPrintable(file->fileName()));
+					  qUtf8Printable(file->fileName()));
 					ctx.date = QDate(1970, 1, 1);
 				}
 				if (!track) {

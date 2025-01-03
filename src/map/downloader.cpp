@@ -165,7 +165,7 @@ bool Downloader::doDownload(const Download &dl, const QList<HTTPHeader> &headers
 
 	if (!url.isValid() || !(url.scheme() == QLatin1String("http")
 	  || url.scheme() == QLatin1String("https"))) {
-		qWarning("%s: Invalid URL", qPrintable(url.toString()));
+		qWarning("%s: Invalid URL", qUtf8Printable(url.toString()));
 		return false;
 	}
 
@@ -195,8 +195,8 @@ bool Downloader::doDownload(const Download &dl, const QList<HTTPHeader> &headers
 
 	QFile *file = new QFile(tmpName(dl.file()));
 	if (!file->open(QIODevice::WriteOnly)) {
-		qWarning("%s: %s", qPrintable(file->fileName()),
-		  qPrintable(file->errorString()));
+		qWarning("%s: %s", qUtf8Printable(file->fileName()),
+		  qUtf8Printable(file->errorString()));
 		delete file;
 		_errorDownloads.insert(url, RETRIES);
 		return false;

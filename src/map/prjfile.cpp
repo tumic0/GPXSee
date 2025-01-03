@@ -28,7 +28,7 @@ static Conversion::Method projectionMethod(const QString &name)
 		if (!name.compare(methods[i].name, Qt::CaseInsensitive))
 			return methods[i].id;
 
-	qWarning("%s: unknown projection", qPrintable(name));
+	qWarning("%s: unknown projection", qUtf8Printable(name));
 
 	return Conversion::Method();
 }
@@ -66,7 +66,7 @@ static void setParameter(Conversion::Setup *setup, const QString &name,
 	else if (!name.compare("azimuth", Qt::CaseInsensitive))
 		setup->setStandardParallel2(val);
 	else
-		qWarning("%s: unknown projection parameter", qPrintable(name));
+		qWarning("%s: unknown projection parameter", qUtf8Printable(name));
 }
 
 PRJFile::Token PRJFile::keyword(CTX &ctx)

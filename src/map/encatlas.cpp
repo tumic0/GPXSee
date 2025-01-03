@@ -102,11 +102,11 @@ void ENCAtlas::addMap(const QDir &dir, const QByteArray &file,
 {
 	QString path(dir.absoluteFilePath(file));
 	if (!QFileInfo::exists(path)) {
-		qWarning("%s: No such map file", qPrintable(path));
+		qWarning("%s: No such map file", qUtf8Printable(path));
 		return;
 	}
 	if (!bounds.isValid()) {
-		qWarning("%s: Invalid map bounds", qPrintable(path));
+		qWarning("%s: Invalid map bounds", qUtf8Printable(path));
 		return;
 	}
 

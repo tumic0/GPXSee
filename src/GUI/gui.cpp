@@ -164,7 +164,8 @@ void GUI::mapInitialized()
 		_showMapAction->setEnabled(true);
 		_clearMapCacheAction->setEnabled(true);
 	} else {
-		qWarning("%s: %s", qPrintable(map->path()), qPrintable(map->errorString()));
+		qWarning("%s: %s", qUtf8Printable(map->path()),
+		  qUtf8Printable(map->errorString()));
 		action->deleteLater();
 	}
 }

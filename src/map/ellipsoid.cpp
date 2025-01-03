@@ -38,36 +38,37 @@ bool Ellipsoid::loadList(const QString &path)
 	bool res;
 
 	if (!file.open(QFile::ReadOnly)) {
-		qWarning("%s: %s", qPrintable(path), qPrintable(file.errorString()));
+		qWarning("%s: %s", qUtf8Printable(path),
+		  qUtf8Printable(file.errorString()));
 		return false;
 	}
 
 	while (!csv.atEnd()) {
 		if (!csv.readEntry(entry)) {
-			qWarning("%s:%d: Parse error", qPrintable(path), csv.line());
+			qWarning("%s:%d: Parse error", qUtf8Printable(path), csv.line());
 			return false;
 		}
 		if (entry.size() < 4) {
-			qWarning("%s:%d: Invalid column count", qPrintable(path),
+			qWarning("%s:%d: Invalid column count", qUtf8Printable(path),
 			  csv.line() - 1);
 			return false;
 		}
 
 		int id = entry.at(1).toInt(&res);
 		if (!res) {
-			qWarning("%s:%d: Invalid ellipsoid code", qPrintable(path),
+			qWarning("%s:%d: Invalid ellipsoid code", qUtf8Printable(path),
 			  csv.line() - 1);
 			continue;
 		}
 		double radius = entry.at(2).toDouble(&res);
 		if (!res) {
-			qWarning("%s:%d: Invalid radius", qPrintable(path),
+			qWarning("%s:%d: Invalid radius", qUtf8Printable(path),
 			  csv.line() - 1);
 			continue;
 		}
 		double flattening = entry.at(3).toDouble(&res);
 		if (!res) {
-			qWarning("%s:%d: Invalid flattening", qPrintable(path),
+			qWarning("%s:%d: Invalid flattening", qUtf8Printable(path),
 			  csv.line() - 1);
 			continue;
 		}

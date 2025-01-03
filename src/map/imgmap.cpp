@@ -46,8 +46,8 @@ static QList<MapData*> overlays(const QString &fileName)
 			if (data->isValid())
 				list.append(data);
 			else {
-				qWarning("%s: %s", qPrintable(data->fileName()),
-				  qPrintable(data->errorString()));
+				qWarning("%s: %s", qUtf8Printable(data->fileName()),
+				  qUtf8Printable(data->errorString()));
 				delete data;
 			}
 		} else

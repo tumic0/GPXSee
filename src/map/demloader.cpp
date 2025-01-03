@@ -57,7 +57,7 @@ bool DEMLoader::loadTiles(const RectC &rect)
 	/* Create the user DEM dir only when a download is requested as it will
 	   override the global DEM dir. */
 	if (!_dir.mkpath(_dir.absolutePath())) {
-		qWarning("%s: %s", qPrintable(_dir.canonicalPath()),
+		qWarning("%s: %s", qUtf8Printable(_dir.canonicalPath()),
 		  "Error creating DEM directory");
 		return false;
 	}

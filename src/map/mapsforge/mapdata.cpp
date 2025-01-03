@@ -461,8 +461,8 @@ void MapData::load()
 	QFile file(_fileName);
 
 	if (!file.open(QIODevice::ReadOnly | QIODevice::Unbuffered))
-		qWarning("%s: %s", qPrintable(file.fileName()),
-		  qPrintable(file.errorString()));
+		qWarning("%s: %s", qUtf8Printable(file.fileName()),
+		  qUtf8Printable(file.errorString()));
 	else
 		readSubFiles(file);
 }

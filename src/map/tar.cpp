@@ -103,7 +103,7 @@ bool Tar::loadTmi(const QString &path)
 		QByteArray line(file.readLine(4096));
 		int pos = line.indexOf(':');
 		if (line.size() < 10 || pos < 7 || !line.startsWith("block")) {
-			qWarning("%s:%d: syntax error", qPrintable(path), ln);
+			qWarning("%s:%d: syntax error", qUtf8Printable(path), ln);
 			_index.clear();
 			return false;
 		}

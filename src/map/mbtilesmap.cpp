@@ -41,7 +41,7 @@ bool MBTilesMap::getMinZoom(int &zoom)
 			return false;
 		}
 	} else {
-		qWarning("%s: missing minzoom metadata", qPrintable(path()));
+		qWarning("%s: missing minzoom metadata", qUtf8Printable(path()));
 		zoom = OSM::ZOOMS.min();
 	}
 
@@ -60,7 +60,7 @@ bool MBTilesMap::getMaxZoom(int &zoom)
 			return false;
 		}
 	} else {
-		qWarning("%s: missing maxzoom metadata", qPrintable(path()));
+		qWarning("%s: missing maxzoom metadata", qUtf8Printable(path()));
 		zoom = OSM::ZOOMS.max();
 	}
 
@@ -103,7 +103,7 @@ bool MBTilesMap::getBounds()
 		}
 		_bounds = b;
 	} else {
-		qWarning("%s: missing bounds metadata", qPrintable(path()));
+		qWarning("%s: missing bounds metadata", qUtf8Printable(path()));
 
 		int z = _zoomsBase.first().z;
 		QString sql = QString("SELECT min(tile_column), min(tile_row), "
@@ -156,7 +156,7 @@ void MBTilesMap::getTileFormat()
 		if (query.value(0).toString() == "pbf")
 			_scalable = true;
 	} else
-		qWarning("%s: missing tiles format metadata", qPrintable(path()));
+		qWarning("%s: missing tiles format metadata", qUtf8Printable(path()));
 }
 
 void MBTilesMap::getTilePixelRatio()
@@ -177,7 +177,7 @@ void MBTilesMap::getName()
 	if (query.first())
 		_name = query.value(0).toString();
 	else {
-		qWarning("%s: missing map name", qPrintable(path()));
+		qWarning("%s: missing map name", qUtf8Printable(path()));
 		_name = Util::file2name(path());
 	}
 }

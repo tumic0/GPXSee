@@ -131,8 +131,8 @@ DEM::Entry *DEM::loadTile(const Tile &tile)
 	} else {
 		QFile file(path);
 		if (!file.open(QIODevice::ReadOnly)) {
-			qWarning("%s: %s", qPrintable(file.fileName()),
-			  qPrintable(file.errorString()));
+			qWarning("%s: %s", qUtf8Printable(file.fileName()),
+			  qUtf8Printable(file.errorString()));
 			return new Entry();
 		} else
 			return new Entry(file.readAll());

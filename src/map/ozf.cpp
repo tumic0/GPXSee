@@ -117,7 +117,7 @@ bool OZF::readHeaders()
 		if (!initOZF3())
 			return false;
 	} else {
-		qWarning("%s: not a OZF2/OZF3 file", qPrintable(_file.fileName()));
+		qWarning("%s: not a OZF2/OZF3 file", qUtf8Printable(_file.fileName()));
 		return false;
 	}
 

@@ -37,7 +37,7 @@ void Waypoint::loadSymbolIcons(const QString &dir)
 		QPixmap pm(files.at(i).absoluteFilePath());
 		if (pm.isNull())
 			qWarning("%s: error loading image",
-			  qPrintable(files.at(i).absoluteFilePath()));
+			  qUtf8Printable(files.at(i).absoluteFilePath()));
 		else
 			_symbolIcons.insert(files.at(i).baseName(), pm);
 	}

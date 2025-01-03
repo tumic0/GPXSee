@@ -108,8 +108,8 @@ TreeNode<QString> POI::loadDir(const QString &path)
 			if (loadFile(fi.absoluteFilePath()))
 				tree.addItem(fi.absoluteFilePath());
 			else
-				qWarning("%s: %s", qPrintable(fi.absoluteFilePath()),
-				  qPrintable(_errorString));
+				qWarning("%s: %s", qUtf8Printable(fi.absoluteFilePath()),
+				  qUtf8Printable(_errorString));
 		}
 	}
 

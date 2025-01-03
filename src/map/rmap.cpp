@@ -366,8 +366,8 @@ void RMap::load(const Projection &in, const Projection &out, qreal deviceRatio,
 
 	_mapRatio = hidpi ? deviceRatio : 1.0;
 	if (!_file.open(QIODevice::ReadOnly))
-		qWarning("%s: %s", qPrintable(_file.fileName()),
-		  qPrintable(_file.errorString()));
+		qWarning("%s: %s", qUtf8Printable(_file.fileName()),
+		  qUtf8Printable(_file.errorString()));
 }
 
 void RMap::unload()
@@ -455,7 +455,7 @@ void RMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 			}
 
 			if (pixmap.isNull())
-				qWarning("%s: error loading tile image", qPrintable(key));
+				qWarning("%s: error loading tile image", qUtf8Printable(key));
 			else {
 				pixmap.setDevicePixelRatio(_mapRatio);
 				QPointF tp(tl.x() + i * ts.width(), tl.y() + j * ts.height());

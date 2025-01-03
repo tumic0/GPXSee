@@ -28,11 +28,12 @@ bool OMDParser::readHeaderFile(const QString &omdPath, Header &hdr)
 	char buffer[60];
 
 	if (!file.open(QIODevice::ReadOnly)) {
-		qWarning("%s: %s", qPrintable(path), qPrintable(file.errorString()));
+		qWarning("%s: %s", qUtf8Printable(path),
+		  qUtf8Printable(file.errorString()));
 		return false;
 	}
 	if (file.read(buffer, sizeof(buffer)) != sizeof(buffer)) {
-		qWarning("%s: invalid OMH file", qPrintable(path));
+		qWarning("%s: invalid OMH file", qUtf8Printable(path));
 		return false;
 	}
 
@@ -48,7 +49,7 @@ bool OMDParser::readHeaderFile(const QString &omdPath, Header &hdr)
 
 	QDateTime date(QDate(Y + 2000, M, D), QTime(h, m), QTimeZone::utc());
 	if (!date.isValid()) {
-		qWarning("%s: invalid date", qPrintable(path));
+		qWarning("%s: invalid date", qUtf8Printable(path));
 		return false;
 	}
 
@@ -183,11 +184,12 @@ bool GHPParser::readHeaderFile(const QString &ghpPath, Header &hdr)
 	char buffer[96];
 
 	if (!file.open(QIODevice::ReadOnly)) {
-		qWarning("%s: %s", qPrintable(path), qPrintable(file.errorString()));
+		qWarning("%s: %s", qUtf8Printable(path),
+		  qUtf8Printable(file.errorString()));
 		return false;
 	}
 	if (file.read(buffer, sizeof(buffer)) != sizeof(buffer)) {
-		qWarning("%s: invalid GHT file", qPrintable(path));
+		qWarning("%s: invalid GHT file", qUtf8Printable(path));
 		return false;
 	}
 
@@ -202,7 +204,7 @@ bool GHPParser::readHeaderFile(const QString &ghpPath, Header &hdr)
 
 	QDateTime date(QDate(Y + 2000, M, D), QTime(h, m, s), QTimeZone::utc());
 	if (!date.isValid()) {
-		qWarning("%s: invalid date", qPrintable(path));
+		qWarning("%s: invalid date", qUtf8Printable(path));
 		return false;
 	}
 

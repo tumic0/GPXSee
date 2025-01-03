@@ -288,7 +288,7 @@ bool OziMap::setTileInfo(const QStringList &tiles, const QString &path)
 			if (_tile.size.isValid())
 				return true;
 			else
-				qWarning("%s: error reading tile image", qPrintable(tile));
+				qWarning("%s: error reading tile image", qUtf8Printable(tile));
 		}
 	}
 
@@ -310,16 +310,16 @@ void OziMap::load(const Projection &in, const Projection &out,
 	if (_tar) {
 		Q_ASSERT(!_tar->isOpen());
 		if (!_tar->open()) {
-			qWarning("%s: %s", qPrintable(_tar->fileName()),
-			  qPrintable(_tar->errorString()));
+			qWarning("%s: %s", qUtf8Printable(_tar->fileName()),
+			  qUtf8Printable(_tar->errorString()));
 			return;
 		}
 	}
 	if (_ozf) {
 		Q_ASSERT(!_ozf->isOpen());
 		if (!_ozf->open()) {
-			qWarning("%s: %s", qPrintable(_ozf->fileName()),
-			  qPrintable(_ozf->errorString()));
+			qWarning("%s: %s", qUtf8Printable(_ozf->fileName()),
+			  qUtf8Printable(_ozf->errorString()));
 			return;
 		}
 	}
@@ -370,7 +370,7 @@ void OziMap::drawTiled(QPainter *painter, const QRectF &rect) const
 				pixmap = QPixmap(tileName);
 
 			if (pixmap.isNull())
-				qWarning("%s: error loading tile image", qPrintable(tileName));
+				qWarning("%s: error loading tile image", qUtf8Printable(tileName));
 			else {
 				pixmap.setDevicePixelRatio(_mapRatio);
 				QPointF tp(tl.x() + i * ts.width(), tl.y() + j * ts.height());
@@ -404,7 +404,7 @@ void OziMap::drawOZF(QPainter *painter, const QRectF &rect) const
 			}
 
 			if (pixmap.isNull())
-				qWarning("%s: error loading tile image", qPrintable(key));
+				qWarning("%s: error loading tile image", qUtf8Printable(key));
 			else {
 				pixmap.setDevicePixelRatio(_mapRatio);
 				QPointF tp(tl.x() + i * ts.width(), tl.y() + j * ts.height());

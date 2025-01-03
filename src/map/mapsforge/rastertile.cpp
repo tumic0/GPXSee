@@ -411,8 +411,8 @@ void RasterTile::fetchData(QList<MapData::Path> &paths,
 	QFile file(_data->fileName());
 
 	if (!file.open(QIODevice::ReadOnly | QIODevice::Unbuffered)) {
-		qWarning("%s: %s", qPrintable(file.fileName()),
-		  qPrintable(file.errorString()));
+		qWarning("%s: %s", qUtf8Printable(file.fileName()),
+		  qUtf8Printable(file.errorString()));
 		return;
 	}
 

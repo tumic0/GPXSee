@@ -85,7 +85,7 @@ const Style::Menu::Layer *Style::Menu::findLayer(const QString &id) const
 		if (_layers.at(i).id() == id)
 			return &_layers.at(i);
 
-	qWarning("%s: layer not found", qPrintable(id));
+	qWarning("%s: layer not found", qUtf8Printable(id));
 
 	return 0;
 }
@@ -792,8 +792,8 @@ bool Style::loadXml(const QString &path, const MapData &data, qreal ratio)
 	}
 
 	if (reader.error())
-		qWarning("%s:%lld %s", qPrintable(path), reader.lineNumber(),
-		  qPrintable(reader.errorString()));
+		qWarning("%s:%lld %s", qUtf8Printable(path), reader.lineNumber(),
+		  qUtf8Printable(reader.errorString()));
 
 	return !reader.error();
 }

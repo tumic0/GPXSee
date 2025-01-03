@@ -127,11 +127,11 @@ Data::Data(const QString &fileName, bool tryUnknown)
 			++it;
 		}
 
-		qWarning("%s:", qPrintable(fileName));
+		qWarning("%s:", qUtf8Printable(fileName));
 		for (it = _parsers.find(suffix); it != _parsers.end()
 		  && it.key() == suffix; it++)
-			qWarning("  %s: line %d: %s", qPrintable(it.key()),
-			  it.value()->errorLine(), qPrintable(it.value()->errorString()));
+			qWarning("  %s: line %d: %s", qUtf8Printable(it.key()),
+			  it.value()->errorLine(), qUtf8Printable(it.value()->errorString()));
 
 	} else if (tryUnknown) {
 		for (it = _parsers.begin(); it != _parsers.end(); it++) {
@@ -144,10 +144,10 @@ Data::Data(const QString &fileName, bool tryUnknown)
 			file.reset();
 		}
 
-		qWarning("%s:", qPrintable(fileName));
+		qWarning("%s:", qUtf8Printable(fileName));
 		for (it = _parsers.begin(); it != _parsers.end(); it++)
-			qWarning("  %s: line %d: %s", qPrintable(it.key()),
-			  it.value()->errorLine(), qPrintable(it.value()->errorString()));
+			qWarning("  %s: line %d: %s", qUtf8Printable(it.key()),
+			  it.value()->errorLine(), qUtf8Printable(it.value()->errorString()));
 
 		_errorLine = 0;
 		_errorString = "Unknown format";

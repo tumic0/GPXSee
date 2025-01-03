@@ -156,7 +156,8 @@ Atlas::Atlas(const QString &fileName, bool TAR, const Projection &proj,
 				OziMap::CalibrationType type;
 				QString cf(calibrationFile(path, type));
 				if (cf.isNull()) {
-					qWarning("%s: no calibration file found", qPrintable(path));
+					qWarning("%s: no calibration file found",
+					  qUtf8Printable(path));
 					continue;
 				}
 				map = new OziMap(cf, type, proj, this);
@@ -165,8 +166,8 @@ Atlas::Atlas(const QString &fileName, bool TAR, const Projection &proj,
 			if (map->isValid())
 				_maps.append(map);
 			else {
-				qWarning("%s: %s",  qPrintable(map->path()),
-				  qPrintable(map->errorString()));
+				qWarning("%s: %s", qUtf8Printable(map->path()),
+				  qUtf8Printable(map->errorString()));
 				delete map;
 			}
 		}

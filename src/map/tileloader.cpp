@@ -56,7 +56,8 @@ TileLoader::TileLoader(const QString &dir, QObject *parent)
   : QObject(parent), _urlType(XYZ), _dir(dir)
 {
 	if (!QDir().mkpath(_dir))
-		qWarning("%s: %s", qPrintable(_dir), "Error creating tiles directory");
+		qWarning("%s: %s", qUtf8Printable(_dir),
+		  "Error creating tiles directory");
 
 	_downloader = new Downloader(this);
 	connect(_downloader, &Downloader::finished, this, &TileLoader::finished);

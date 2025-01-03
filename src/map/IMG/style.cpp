@@ -1177,7 +1177,7 @@ bool Style::parsePolygons(SubFile *file, SubFile::Handle &hdl,
 
 		if (!parsePolygon(file, hdl, section, info, type))
 			qWarning("%s: %x: broken polygon style",
-			  qPrintable(file->fileName()), type);
+			  qUtf8Printable(file->fileName()), type);
 	}
 
 	return true;
@@ -1201,8 +1201,8 @@ bool Style::parseLines(SubFile *file, SubFile::Handle &hdl,
 		  ? 0x10000 | (info.type << 8) | info.subtype : (info.type << 8);
 
 		if (!parseLine(file, hdl, section, info, type))
-			qWarning("%s: %x: broken line style", qPrintable(file->fileName()),
-			  type);
+			qWarning("%s: %x: broken line style",
+			  qUtf8Printable(file->fileName()), type);
 	}
 
 	return true;
@@ -1227,8 +1227,8 @@ bool Style::parsePoints(SubFile *file, SubFile::Handle &hdl,
 		  : (info.type << 8) | info.subtype;
 
 		if (!parsePoint(file, hdl, section, info, type))
-			qWarning("%s: %x: broken point style", qPrintable(file->fileName()),
-			  type);
+			qWarning("%s: %x: broken point style",
+			  qUtf8Printable(file->fileName()), type);
 	}
 
 	return true;
@@ -1304,7 +1304,7 @@ bool Style::parseTYPFile(SubFile *typ)
 	  && parsePolygons(typ, hdl, polygons)
 	  && parseDrawOrder(typ, hdl, order))) {
 		qWarning("%s: Invalid TYP file, using default style",
-		  qPrintable(typ->fileName()));
+		  qUtf8Printable(typ->fileName()));
 		return false;
 	}
 
