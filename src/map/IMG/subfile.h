@@ -5,8 +5,7 @@
 #include <QFile>
 #include "imgdata.h"
 
-
-#define BLOCK_BITS 12 /* 4096 bytes */
+#define BLOCK_BITS 9 /* 512 bytes */
 
 namespace IMG {
 
