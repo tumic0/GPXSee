@@ -150,7 +150,7 @@ Label LBLFile::str2label(const QVector<quint8> &str, bool capitalize,
 			bap->append(c);
 	}
 
-	if (split >= 0) {
+	if (convert && split >= 0) {
 		QByteArray num(ft2m(label.mid(split), &ok));
 		if (ok) {
 			QByteArray name(label.left(split - 1));
@@ -208,7 +208,7 @@ Label LBLFile::label6b(const SubFile *file, Handle &fileHdl, quint32 size,
 
 		for (int cpt = 0; cpt < 4; cpt++) {
 			if (c[cpt] > 0x2f || (charset == Normal && c[cpt] == 0x1d)) {
-				if (split >= 0) {
+				if (convert && split >= 0) {
 					QByteArray num(ft2m(label.mid(split), &ok));
 					if (ok) {
 						QByteArray name(label.left(split - 1));
