@@ -40,11 +40,10 @@ static QString capitalized(const QString &str)
 	return ret;
 }
 
-static QByteArray ft2m(const QByteArray &str)
+static QByteArray ft2m(const QByteArray &str, bool *ok)
 {
-	bool ok;
-	double number = str.toDouble(&ok);
-	return ok ? QByteArray::number(qRound(number * 0.3048)) : str;
+	double number = str.toDouble(ok);
+	return *ok ? QByteArray::number(qRound(number * 0.3048)) : str;
 }
 
 
@@ -123,6 +122,7 @@ Label LBLFile::str2label(const QVector<quint8> &str, bool capitalize,
 	QByteArray label, shieldLabel;
 	QByteArray *bap = &label;
 	int split = -1;
+	bool ok;
 
 	for (int i = 0; i < str.size(); i++) {
 		const quint8 &c = str.at(i);
@@ -137,7 +137,7 @@ Label LBLFile::str2label(const QVector<quint8> &str, bool capitalize,
 				bap = &label;
 			else {
 				if (!bap->isEmpty())
-					bap->append('\n');
+					bap->append(' ');
 				if (c == 0x1f && split < 0)
 					split = bap->size();
 			}
@@ -150,10 +150,14 @@ Label LBLFile::str2label(const QVector<quint8> &str, bool capitalize,
 			bap->append(c);
 	}
 
-	if (split >= 0)
-		label = label.left(split) + ft2m(label.mid(split));
-	else if (convert)
-		label = ft2m(label);
+	if (split >= 0) {
+		QByteArray num(ft2m(label.mid(split), &ok));
+		if (ok) {
+			QByteArray name(label.left(split - 1));
+			label = name.isEmpty() ? num : name + "\n" + num;
+		}
+	} else if (convert)
+		label = ft2m(label, &ok);
 	QString text(_codec.toString(label));
 	return Label(capitalize && isAllUpperCase(text) ? capitalized(text) : text,
 	  Shield(shieldType, _codec.toString(shieldLabel)));
@@ -193,6 +197,7 @@ Label LBLFile::label6b(const SubFile *file, Handle &fileHdl, quint32 size,
 	Charset charset = Normal;
 	quint8 b1, b2, b3;
 	int split = -1;
+	bool ok;
 
 	for (quint32 i = 0; i < size; i = i + 3) {
 		if (!(file->readByte(fileHdl, &b1) && file->readByte(fileHdl, &b2)
@@ -203,10 +208,14 @@ Label LBLFile::label6b(const SubFile *file, Handle &fileHdl, quint32 size,
 
 		for (int cpt = 0; cpt < 4; cpt++) {
 			if (c[cpt] > 0x2f || (charset == Normal && c[cpt] == 0x1d)) {
-				if (split >= 0)
-					label = label.left(split) + ft2m(label.mid(split));
-				else if (convert)
-					label = ft2m(label);
+				if (split >= 0) {
+					QByteArray num(ft2m(label.mid(split), &ok));
+					if (ok) {
+						QByteArray name(label.left(split - 1));
+						label = name.isEmpty() ? num : name + "\n" + num;
+					}
+				} else if (convert)
+					label = ft2m(label, &ok);
 				QString text(QString::fromLatin1(label));
 				return Label(capitalize && isAllUpperCase(text)
 				  ? capitalized(text) : text, Shield(shieldType, shieldLabel));
@@ -222,7 +231,7 @@ Label LBLFile::label6b(const SubFile *file, Handle &fileHdl, quint32 size,
 							bap = &label;
 						else {
 							if (!bap->isEmpty())
-								bap->append('\n');
+								bap->append(' ');
 							if (c[cpt] == 0x1f && split < 0)
 								split = bap->size();
 						}
