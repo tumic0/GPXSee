@@ -483,22 +483,18 @@ MatrixD RasterTile::elevation(int extend) const
 
 	if (_data->hasDEM()) {
 		RectC rect;
-		QList<MapData::Elevation> tiles;
-
 		for (int i = 0; i < ll.size(); i++)
 			rect = rect.united(ll.at(i));
-		// Extra margin for always including the next DEM tile on the map tile
-		// edges (the DEM tile resolution is usally 0.5-15% of the map tile)
+		/* Extra margin for always including the next DEM tile on the map tile
+		   edges (the DEM tile resolution is usally 0.5-15% of the map tile) */
 		double factor = 6 - (_zoom - 24) * 1.7;
-		_data->elevations(_file, rect.adjusted(0, 0, rect.width() / factor,
-		  -rect.height() / factor), _zoom, &tiles);
+		RectC br(rect.adjusted(0, 0, rect.width() / factor, -rect.height()
+		  / factor));
 
-		DEMTree tree(tiles);
-		MatrixD m(ll.h(), ll.w());
-		for (int i = 0; i < ll.size(); i++)
-			m.at(i) = tree.elevation(ll.at(i));
+		QList<MapData::Elevation> tiles;
+		_data->elevations(_file, br, _zoom, &tiles);
 
-		return m;
+		return DEMTree(tiles).elevation(ll);
 	} else
 		return DEM::elevation(ll);
 }

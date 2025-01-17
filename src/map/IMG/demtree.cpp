@@ -111,3 +111,13 @@ double DEMTree::elevation(const Coordinates &c) const
 
 	return ele;
 }
+
+MatrixD DEMTree::elevation(const MatrixC &m) const
+{
+	MatrixD ret(m.h(), m.w());
+
+	for (int i = 0; i < m.size(); i++)
+		ret.at(i) = elevation(m.at(i));
+
+	return ret;
+}

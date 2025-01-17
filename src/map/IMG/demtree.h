@@ -2,6 +2,7 @@
 #define IMG_DEMTREE_H
 
 #include "common/rtree.h"
+#include "map/matrix.h"
 #include "mapdata.h"
 
 namespace IMG {
@@ -11,6 +12,7 @@ public:
 	DEMTree(const QList<MapData::Elevation> &tiles);
 
 	double elevation(const Coordinates &c) const;
+	MatrixD elevation(const MatrixC &m) const;
 
 private:
 	typedef RTree<const MapData::Elevation*, double, 2> Tree;
