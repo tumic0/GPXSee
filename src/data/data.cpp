@@ -2,6 +2,7 @@
 #include <QFile>
 #include <QFileInfo>
 #include "common/util.h"
+#include "map/crs.h"
 #include "gpxparser.h"
 #include "tcxparser.h"
 #include "csvparser.h"
@@ -152,6 +153,69 @@ Data::Data(const QString &fileName, bool tryUnknown)
 		_errorLine = 0;
 		_errorString = "Unknown format";
 	}
+}
+
+Data::Data(const QUrl &url)
+{
+	bool caOk, cbOk, ccOk;
+	Coordinates c;
+	Projection proj;
+
+	_valid = false;
+
+	QStringList parts(url.path().split(';'));
+	if (parts.size() < 1) {
+		_errorString = "Syntax error";
+		return;
+	}
+	QStringList coords(parts.at(0).split(','));
+	if (coords.size() < 2 || coords.size() > 3) {
+		_errorString = "Syntax error";
+		return;
+	}
+	double ca = coords.at(0).toDouble(&caOk);
+	double cb = coords.at(1).toDouble(&cbOk);
+	double cc = NAN;
+	if (!(caOk && cbOk)) {
+		_errorString = "Invalid coordinates";
+		return;
+	}
+	if (coords.size() > 2) {
+		cc = coords.at(2).toDouble(&ccOk);
+		if (!ccOk) {
+			_errorString = "Invalid elevation";
+			return;
+		}
+	}
+
+	if (parts.size() > 1) {
+		QStringList crsp(parts.at(1).split('='));
+		if (crsp.size() != 2) {
+			_errorString = "Syntax error";
+			return;
+		}
+		if (!crsp.at(0).compare("crs", Qt::CaseInsensitive)) {
+			if (crsp.at(1).compare("wgs84", Qt::CaseInsensitive)) {
+				proj = CRS::projection(crsp.at(1));
+				if (!proj.isValid()) {
+					_errorString = "Unknown CRS";
+					return;
+				}
+			}
+		}
+	}
+
+	c = proj.isValid() ? proj.xy2ll(PointD(ca, cb)) : Coordinates(cb, ca);
+	if (!c.isValid()) {
+		_errorString = "Invalid coordinates";
+		return;
+	}
+
+	Waypoint w(c);
+	w.setElevation(cc);
+	_waypoints.append(w);
+
+	_valid = true;
 }
 
 QString Data::formats()

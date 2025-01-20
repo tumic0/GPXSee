@@ -1069,6 +1069,16 @@ void GUI::openDir()
 
 bool GUI::openFile(const QString &fileName, bool tryUnknown, int &showError)
 {
+	QUrl url(fileName);
+	if (url.scheme() == "geo") {
+		if (loadURL(url, showError)) {
+			_fileActionGroup->setEnabled(true);
+			_reloadFileAction->setEnabled(false);
+			return true;
+		} else if (showError)
+			return false;
+	}
+
 	QFileInfo fi(fileName);
 	QString canonicalFileName(fi.canonicalFilePath());
 
@@ -1097,6 +1107,36 @@ bool GUI::openFile(const QString &fileName, bool tryUnknown, int &showError)
 #endif // Q_OS_ANDROID
 
 	return true;
+}
+
+bool GUI::loadURL(const QUrl &url, int &showError)
+{
+	Data data(url);
+
+	if (data.isValid()) {
+		loadData(data);
+		return true;
+	} else {
+		if (showError) {
+			QString error = tr("Error loading geo URI:") + "\n" + url.toString()
+			  + ": " + data.errorString();
+
+			if (showError > 1) {
+				QMessageBox message(QMessageBox::Critical, APP_NAME, error,
+				  QMessageBox::Ok, this);
+				QCheckBox checkBox(tr("Don't show again"));
+				message.setCheckBox(&checkBox);
+				message.exec();
+				if (checkBox.isChecked())
+					showError = 0;
+			} else
+				QMessageBox::critical(this, APP_NAME, error);
+		} else
+			qWarning("%s: %s", qUtf8Printable(url.toString()),
+			  qUtf8Printable(data.errorString()));
+
+		return false;
+	}
 }
 
 bool GUI::loadFile(const QString &fileName, bool tryUnknown, int &showError)

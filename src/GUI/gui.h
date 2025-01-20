@@ -158,6 +158,7 @@ private:
 #endif // Q_OS_ANDROID
 	bool openPOIFile(const QString &fileName);
 	bool loadFile(const QString &fileName, bool tryUnknown, int &showError);
+	bool loadURL(const QUrl &url, int &showError);
 	void loadData(const Data &data);
 	bool loadMapNode(const TreeNode<Map*> &node, MapAction *&action,
 	  const QList<QAction*> &existingActions, int &showError);

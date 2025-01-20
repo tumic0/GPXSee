@@ -14,6 +14,7 @@ class Data
 {
 public:
 	Data(const QString &fileName, bool tryUnknown = true);
+	Data(const QUrl &url);
 
 	bool isValid() const {return _valid;}
 	const QString &errorString() const {return _errorString;}
