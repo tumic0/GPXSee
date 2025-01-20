@@ -63,7 +63,7 @@ MapList::ParserMap MapList::parsers()
 	return map;
 }
 
-MapList::ParserMap MapList::_parsers = parsers();
+MapList::ParserMap MapList::_parsers = MapList::parsers();
 
 Map *MapList::loadFile(const QString &path, const Projection &proj, bool *isDir)
 {
