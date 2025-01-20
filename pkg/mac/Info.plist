@@ -738,6 +738,20 @@
 		</dict>
 	</array>
 
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>geo</string>
+			</array>
+			<key>CFBundleURLName</key>
+			<string>org.geouri.geo</string>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+		</dict>
+	</array>
+
 	<key>UTImportedTypeDeclarations</key>
 	<array>
 		<dict>
