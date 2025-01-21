@@ -18,6 +18,18 @@
   DeleteRegKey HKCR ".${EXT}"
 !macroend
 
+; URI association
+!macro URI_ASSOCIATION_ADD PROTO DESC
+  WriteRegStr HKCR "${PROTO}" "" "${DESC}"
+  WriteRegStr HKCR "${PROTO}" "URL Protocol" ""
+  WriteRegStr HKCR "${PROTO}\DefaultIcon" "" "$INSTDIR\GPXSee.exe,0"
+  WriteRegStr HKCR "${PROTO}\shell\open\command" "" "$\"$INSTDIR\GPXSee.exe$\" $\"%1$\""
+!macroend
+
+!macro URI_ASSOCIATION_REMOVE PROTO
+  DeleteRegKey HKCR "${PROTO}"
+!macroend
+
 ; Translations
 !macro LOCALIZATION LANG CODE
   Section "${LANG}"
@@ -199,6 +211,8 @@ Section "GPXSee" SEC_APP
   !insertmacro FILE_ASSOCIATION_ADD "nmea" "NMEA 0183 Data" 32
   !insertmacro FILE_ASSOCIATION_ADD "plt" "OziExplorer Track File" 33
   !insertmacro FILE_ASSOCIATION_ADD "rte" "OziExplorer Route File" 34
+
+  !insertmacro URI_ASSOCIATION_ADD "geo" "geo URI"
 
   WriteRegStr HKCR "Applications\GPXSee.exe\shell\open\command" "" "$\"$INSTDIR\GPXSee.exe$\" $\"%1$\""
   WriteRegStr HKCR ".gpx\OpenWithList" "GPXSee.exe" ""
@@ -425,6 +439,8 @@ Section "Uninstall"
   !insertmacro FILE_ASSOCIATION_REMOVE "gemf"
   !insertmacro FILE_ASSOCIATION_REMOVE "000"
   !insertmacro FILE_ASSOCIATION_REMOVE "031"
+
+  !insertmacro URI_ASSOCIATION_REMOVE "geo"
 
   DeleteRegValue HKCR ".gpx\OpenWithList" "GPXSee.exe"
   DeleteRegValue HKCR ".tcx\OpenWithList" "GPXSee.exe"
