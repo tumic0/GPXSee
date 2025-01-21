@@ -19,8 +19,8 @@
 !macroend
 
 ; URI association
-!macro URI_ASSOCIATION_ADD PROTO DESC
-  WriteRegStr HKCR "${PROTO}" "" "${DESC}"
+!macro URI_ASSOCIATION_ADD PROTO
+  WriteRegStr HKCR "${PROTO}" "" "URL:${PROTO}"
   WriteRegStr HKCR "${PROTO}" "URL Protocol" ""
   WriteRegStr HKCR "${PROTO}\DefaultIcon" "" "$INSTDIR\GPXSee.exe,0"
   WriteRegStr HKCR "${PROTO}\shell\open\command" "" "$\"$INSTDIR\GPXSee.exe$\" $\"%1$\""
@@ -212,7 +212,7 @@ Section "GPXSee" SEC_APP
   !insertmacro FILE_ASSOCIATION_ADD "plt" "OziExplorer Track File" 33
   !insertmacro FILE_ASSOCIATION_ADD "rte" "OziExplorer Route File" 34
 
-  !insertmacro URI_ASSOCIATION_ADD "geo" "geo URI"
+  !insertmacro URI_ASSOCIATION_ADD "geo"
 
   WriteRegStr HKCR "Applications\GPXSee.exe\shell\open\command" "" "$\"$INSTDIR\GPXSee.exe$\" $\"%1$\""
   WriteRegStr HKCR ".gpx\OpenWithList" "GPXSee.exe" ""
