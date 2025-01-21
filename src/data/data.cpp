@@ -158,8 +158,7 @@ Data::Data(const QString &fileName, bool tryUnknown)
 Data::Data(const QUrl &url)
 {
 	bool caOk, cbOk, ccOk;
-	Coordinates c;
-	Projection proj;
+	Projection proj(GCS::WGS84());
 
 	_valid = false;
 
@@ -205,7 +204,9 @@ Data::Data(const QUrl &url)
 		}
 	}
 
-	c = proj.isValid() ? proj.xy2ll(PointD(ca, cb)) : Coordinates(cb, ca);
+	CoordinateSystem::AxisOrder ao = proj.coordinateSystem().axisOrder();
+	PointD p(ao == CoordinateSystem::XY ? PointD(ca, cb) : PointD(cb, ca));
+	Coordinates c(proj.xy2ll(p));
 	if (!c.isValid()) {
 		_errorString = "Invalid coordinates";
 		return;
