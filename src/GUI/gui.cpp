@@ -1069,6 +1069,8 @@ void GUI::openDir()
 
 bool GUI::openFile(const QString &fileName, bool tryUnknown, int &showError)
 {
+	QString path;
+
 	QUrl url(fileName);
 	if (url.scheme() == "geo") {
 		if (loadURL(url, showError)) {
@@ -1077,20 +1079,23 @@ bool GUI::openFile(const QString &fileName, bool tryUnknown, int &showError)
 			return true;
 		} else if (showError)
 			return false;
-	}
+	} else if (url.isLocalFile())
+		path = url.toLocalFile();
+	else
+		path = fileName;
 
-	QFileInfo fi(fileName);
-	QString canonicalFileName(fi.canonicalFilePath());
+	QFileInfo fi(path);
+	QString canonicalPath(fi.canonicalFilePath());
 
-	if (_files.contains(canonicalFileName))
+	if (_files.contains(canonicalPath))
 		return true;
 
-	if (!loadFile(fileName, tryUnknown, showError))
+	if (!loadFile(path, tryUnknown, showError))
 		return false;
 
-	_files.append(canonicalFileName);
+	_files.append(canonicalPath);
 #ifndef Q_OS_ANDROID
-	_browser->setCurrent(fileName);
+	_browser->setCurrent(path);
 #endif // Q_OS_ANDROID
 	_fileActionGroup->setEnabled(true);
 	// Explicitly enable the reload action as it may be disabled by loadMapDir()
@@ -1103,7 +1108,7 @@ bool GUI::openFile(const QString &fileName, bool tryUnknown, int &showError)
 	if (_files.count() > 1)
 		_mapView->showExtendedInfo(true);
 #ifndef Q_OS_ANDROID
-	updateRecentFiles(canonicalFileName);
+	updateRecentFiles(canonicalPath);
 #endif // Q_OS_ANDROID
 
 	return true;
@@ -1890,7 +1895,13 @@ bool GUI::loadMapNode(const TreeNode<Map*> &node, MapAction *&action,
 
 bool GUI::loadMap(const QString &fileName, MapAction *&action, int &showError)
 {
-	TreeNode<Map*> maps(MapList::loadMaps(fileName, _mapView->inputProjection()));
+	QString path;
+	QUrl url(fileName);
+
+	path = url.isLocalFile() ? url.toLocalFile() : fileName;
+
+
+	TreeNode<Map*> maps(MapList::loadMaps(path, _mapView->inputProjection()));
 	QList<QAction*> existingActions(_mapsActionGroup->actions());
 
 	return loadMapNode(maps, action, existingActions, showError);
