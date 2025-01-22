@@ -112,5 +112,6 @@
 		<mimetype>application/vnd.iho.s57-catalogue</mimetype>
 		<mimetype>application/vnd.gpsdump.wpt</mimetype>
 		<mimetype>application/vnd.gpstuner.gmi</mimetype>
+		<mimetype>x-scheme-handler/geo</mimetype>
 	</mimetypes>
 </component>
