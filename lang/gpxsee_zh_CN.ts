@@ -486,17 +486,17 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="370"/>
         <source>All</source>
-        <translation>全部</translation>
+        <translation>所有图层</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="374"/>
         <source>Raster only</source>
-        <translation>仅栅格</translation>
+        <translation>仅栅格层</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="378"/>
         <source>Vector only</source>
-        <translation>仅矢量</translation>
+        <translation>仅矢量层</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="385"/>
@@ -1796,7 +1796,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="537"/>
         <source>Detection:</source>
-        <translation>检测：</translation>
+        <translation>检测模式：</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="538"/>
@@ -1821,7 +1821,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="552"/>
         <source>Pause detection</source>
-        <translation>暂停检测</translation>
+        <translation>检测暂停</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="564"/>
@@ -1870,7 +1870,7 @@
         <location filename="../src/GUI/optionsdialog.cpp" line="314"/>
         <location filename="../src/GUI/optionsdialog.cpp" line="655"/>
         <source>Opacity:</source>
-        <translation>透明度：</translation>
+        <translation>不透明度：</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="657"/>
@@ -1922,7 +1922,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="656"/>
         <source>Lightening:</source>
-        <translation type="unfinished"></translation>
+        <translation>明亮度：</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="713"/>
