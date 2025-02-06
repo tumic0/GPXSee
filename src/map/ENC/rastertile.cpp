@@ -228,9 +228,12 @@ void RasterTile::drawSectorLights(QPainter *painter,
 
 		if (l.visibility == 3 || l.visibility >= 6)
 			painter->setPen(QPen(Qt::black, 1, Qt::DashLine));
-		else
-			painter->setPen(QPen(Style::color(l.color), 5,  Qt::SolidLine,
+		else {
+			painter->setPen(QPen(Qt::black, 6,  Qt::SolidLine, Qt::FlatCap));
+			painter->drawArc(rect, a1 * 16, (a2 - a1) * 16);
+			painter->setPen(QPen(Style::color(l.color), 4,  Qt::SolidLine,
 			  Qt::FlatCap));
+		}
 
 		painter->drawArc(rect, a1 * 16, (a2 - a1) * 16);
 
