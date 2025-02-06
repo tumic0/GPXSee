@@ -193,6 +193,9 @@
 		<file alias="overfalls.png">icons/map/marine/overfalls.png</file>
 		<file alias="boarding-place.png">icons/map/marine/boarding-place.png</file>
 		<file alias="light.png">icons/map/marine/light.png</file>
+		<file alias="light-red.png">icons/map/marine/light-red.png</file>
+		<file alias="light-green.png">icons/map/marine/light-green.png</file>
+		<file alias="light-yellow.png">icons/map/marine/light-yellow.png</file>
 		<file alias="building.png">icons/map/marine/building.png</file>
 		<file alias="fog-signal.png">icons/map/marine/fog-signal.png</file>
 		<file alias="construction.png">icons/map/marine/construction.png</file>

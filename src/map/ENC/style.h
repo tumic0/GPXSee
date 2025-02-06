@@ -89,6 +89,11 @@ public:
 		QPoint _offset;
 	};
 
+	enum Color {
+		Unknown, White, Black, Red, Green, Blue, Yellow, Gray,
+		Brown, Amber, Violet, Orange, Magenta, Pink
+	};
+
 	Style(qreal ratio);
 
 	const Line &line(uint type) const;
@@ -97,10 +102,12 @@ public:
 	const QVector<uint> &drawOrder() const {return _drawOrder;}
 
 	const QFont *font(Style::FontSize size) const;
-	const QImage *light() const {return &_light;}
+	const QImage *light(Color color) const;
 	const QImage *signal() const {return &_signal;}
 	const QPoint &lightOffset() const {return _lightOffset;}
 	const QPoint &signalOffset() const {return _signalOffset;}
+
+	static QColor color(Color c);
 
 private:
 	void polygonStyle();
@@ -114,7 +121,7 @@ private:
 
 	/* Fonts and images must be initialized after QGuiApplication! */
 	QFont _small, _normal, _large;
-	QImage _light, _signal;
+	QImage _light, _lightRed, _lightGreen, _lightYellow, _signal;
 	QPoint _lightOffset, _signalOffset;
 };
 

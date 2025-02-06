@@ -11,51 +11,51 @@ namespace ENC {
 class MapData
 {
 public:
+	typedef QMap<uint, QByteArray> Attributes;
+
 	class Poly {
 	public:
-		Poly(uint type, const Polygon &path, const QString &label,
-		  const QVector<QByteArray> &params, uint HUNI);
+		Poly(uint type, const Polygon &path, const Attributes &attr, uint HUNI);
 
 		RectC bounds() const {return _path.boundingRect();}
 		const Polygon &path() const {return _path;}
 		uint type() const {return _type;}
-		const QString &label() const {return _label;}
-		const QVariant &param() const {return _param;}
+		const Attributes &attributes() const {return _attr;}
+		uint HUNI() const {return _HUNI;}
 
 	private:
 		uint _type;
 		Polygon _path;
-		QString _label;
-		QVariant _param;
+		Attributes _attr;
+		uint _HUNI;
 	};
 
 	class Line {
 	public:
-		Line(uint type, const QVector<Coordinates> &path, const QString &label,
-		  const QVector<QByteArray> &params);
+		Line(uint type, const QVector<Coordinates> &path, const Attributes &attr);
 
 		RectC bounds() const;
 		const QVector<Coordinates> &path() const {return _path;}
 		uint type() const {return _type;}
 		const QString &label() const {return _label;}
+		const Attributes &attributes() const {return _attr;}
 
 	private:
 		uint _type;
 		QVector<Coordinates> _path;
 		QString _label;
+		Attributes _attr;
 	};
 
 	class Point {
 	public:
-		Point(uint type, const Coordinates &c, const QString &label,
-		  const QVector<QByteArray> &params);
-		Point(uint type, const Coordinates &c, const QString &label,
-		  const QVariant &param);
+		Point(uint type, const Coordinates &c, const Attributes &attr, uint HUNI);
+		Point(uint type, const Coordinates &s, const QString &label);
 
 		const Coordinates &pos() const {return _pos;}
 		uint type() const {return _type;}
 		const QString &label() const {return _label;}
-		const QVariant &param() const {return _param;}
+		const Attributes &attributes() const {return _attr;}
 
 		bool operator<(const Point &other) const
 		  {return _id < other._id;}
@@ -65,7 +65,7 @@ public:
 		Coordinates _pos;
 		QString _label;
 		quint64 _id;
-		QVariant _param;
+		Attributes _attr;
 	};
 
 	MapData(const QString &path);
@@ -76,23 +76,6 @@ public:
 	void points(const RectC &rect, QList<Point> *points) const;
 
 private:
-	class Attr {
-	public:
-		Attr() : _subtype(0) {}
-		Attr(uint subtype, const QString &label,
-		  const QVector<QByteArray> &params)
-		  : _subtype(subtype), _label(label), _params(params) {}
-
-		unsigned subtype() const {return _subtype;}
-		const QString &label() const {return _label;}
-		const QVector<QByteArray> &params() const {return _params;}
-
-	private:
-		unsigned _subtype;
-		QString _label;
-		QVector<QByteArray> _params;
-	};
-
 	struct Sounding {
 		Sounding() : depth(NAN) {}
 		Sounding(const Coordinates &c, double depth) : c(c), depth(depth) {}
@@ -117,12 +100,10 @@ private:
 	  const RecordMap &vc, const RecordMap &ve, uint COMF);
 	static Polygon polyGeometry(const ISO8211::Record &r, const RecordMap &vc,
 	  const RecordMap &ve, uint COMF);
-	static Attr pointAttr(const ISO8211::Record &r, uint OBJL);
-	static Attr lineAttr(const ISO8211::Record &r, uint OBJL);
-	static Attr polyAttr(const ISO8211::Record &r, uint OBJL);
+	static Attributes attributes(const ISO8211::Record &r);
 	static Point *pointObject(const Sounding &s);
 	static Point *pointObject(const ISO8211::Record &r, const RecordMap &vi,
-	  const RecordMap &vc, uint COMF, uint OBJL);
+	  const RecordMap &vc, uint COMF, uint OBJL, uint HUNI);
 	static Line *lineObject(const ISO8211::Record &r, const RecordMap &vc,
 	  const RecordMap &ve, uint COMF, uint OBJL);
 	static Poly *polyObject(const ISO8211::Record &r, const RecordMap &vc,

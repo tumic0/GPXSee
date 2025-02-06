@@ -222,6 +222,14 @@ void Style::lineStyle(qreal ratio)
 	_lines[TYPE(PIPOHD)] = Line(QImage(":/marine/pipeline-overhead.png"));
 	_lines[TYPE(I_PIPOHD)] = Line(QImage(":/marine/pipeline-overhead.png"));
 	_lines[TYPE(CANALS)] = Line(QPen(QColor(0x9f, 0xc4, 0xe1), 2));
+	_lines[SUBTYPE(RDOCAL, 1)] = Line(QPen(QColor(0xeb, 0x49, 0xeb), 1,
+	  Qt::DashLine));
+	_lines[SUBTYPE(RDOCAL, 2)] = Line(QPen(QColor(0xeb, 0x49, 0xeb), 1,
+	  Qt::DashLine));
+	_lines[SUBTYPE(RDOCAL, 3)] = Line(QPen(QColor(0xeb, 0x49, 0xeb), 1,
+	  Qt::DashLine));
+	_lines[SUBTYPE(RDOCAL, 4)] = Line(QPen(QColor(0xeb, 0x49, 0xeb), 1,
+	  Qt::DashLine));
 }
 
 void Style::pointStyle(qreal ratio)
@@ -302,7 +310,9 @@ void Style::pointStyle(qreal ratio)
 	_points[SUBTYPE(I_HRBFAC, 5)] = Point(QImage(":/marine/yacht-harbor.png"));
 	_points[SUBTYPE(I_HRBFAC, 9)] = Point(QImage(":/marine/shipyard.png"));
 	_points[TYPE(ACHBRT)] = Point(QImage(":/marine/anchorage.png"));
-	_points[TYPE(I_ACHBRT)] = Point(QImage(":/marine/anchorage.png"));
+	_points[TYPE(ACHBRT)].setTextColor(QColor(0xeb, 0x49, 0xeb));
+	_points[TYPE(ACHBRT)].setHaloColor(QColor());
+	_points[TYPE(I_ACHBRT)] = _points[TYPE(ACHBRT)];
 	_points[TYPE(OFSPLF)] = Point(QImage(":/marine/platform.png"));
 	_points[TYPE(PILPNT)] = Point(QImage(":/marine/pile.png"), Small);
 	_points[SUBTYPE(MORFAC, 1)] = Point(QImage(":/marine/pile.png"), Small);
@@ -366,6 +376,8 @@ void Style::pointStyle(qreal ratio)
 	_points[SUBTYPE(WEDKLP, 0)] = Point(QImage(":/marine/kelp.png"));
 	_points[SUBTYPE(WEDKLP, 1)] = Point(QImage(":/marine/kelp.png"));
 	_points[TYPE(SEAARE)].setHaloColor(QColor());
+	_points[TYPE(LNDARE)].setHaloColor(QColor());
+	_points[TYPE(LNDRGN)].setHaloColor(QColor());
 	_points[TYPE(RADRFL)] = Point(QImage(":/marine/radar-reflector.png"));
 
 	_points[SUBTYPE(I_BERTHS, 6)] = Point(QImage(":/marine/fleeting-area.png"),
@@ -427,6 +439,9 @@ void Style::pointStyle(qreal ratio)
 Style::Style(qreal ratio)
 {
 	_light = QImage(":/marine/light.png");
+	_lightRed = QImage(":/marine/light-red.png");
+	_lightGreen = QImage(":/marine/light-green.png");
+	_lightYellow = QImage(":/marine/light-yellow.png");
 	_lightOffset = QPoint(11, 11);
 	_signal = QImage(":/marine/fog-signal.png");
 	_signalOffset = QPoint(-9, 9);
@@ -475,5 +490,39 @@ const QFont *Style::font(Style::FontSize size) const
 			return &_small;
 		default:
 			return &_normal;
+	}
+}
+
+const QImage *Style::light(Color color) const
+{
+	switch (color) {
+		case Red:
+			return &_lightRed;
+		case Green:
+			return &_lightGreen;
+		case White:
+		case Yellow:
+		case Amber:
+		case Orange:
+			return &_lightYellow;
+		default:
+			return &_light;
+	}
+}
+
+QColor Style::color(Style::Color c)
+{
+	switch (c) {
+		case Red:
+			return Qt::red;
+		case Green:
+			return Qt::green;
+		case White:
+		case Yellow:
+		case Amber:
+		case Orange:
+			return Qt::yellow;
+		default:
+			return Qt::magenta;
 	}
 }

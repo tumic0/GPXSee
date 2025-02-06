@@ -51,6 +51,7 @@
 #define LAKARE 69
 #define LNDARE 71
 #define LNDELV 72
+#define LNDRGN 73
 #define LNDMRK 74
 #define LIGHTS 75
 #define LOKBSN 79

@@ -6,6 +6,7 @@
 #define CATDIS 21
 #define CATHAF 30
 #define CATLMK 35
+#define CATLIT 37
 #define CATMFA 38
 #define CATMOR 40
 #define CATTRK 54
@@ -16,14 +17,18 @@
 #define CATWAT 69
 #define CATWED 70
 #define CATWRK 71
+#define COLOUR 75
 #define COMCHA 77
 #define CURVEL 84
 #define DRVAL1 87
 #define ELEVAT 90
 #define FUNCTN 94
+#define LITVIS 108
 #define OBJNAM 116
 #define ORIENT 117
 #define RESTRN 131
+#define SECTR1 136
+#define SECTR2 137
 #define TRAFIC 172
 #define VALDCO 174
 #define VERCLR 181
