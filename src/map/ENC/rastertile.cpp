@@ -138,7 +138,7 @@ static void drawArrow(QPainter *painter, const QPolygonF &polygon, uint type)
 }
 
 void RasterTile::drawArrows(QPainter *painter,
-  const QList<MapData::Point> &points)
+  const QList<MapData::Point> &points) const
 {
 	for (int i = 0; i < points.size(); i++) {
 		const MapData::Point &point = points.at(i);
@@ -152,7 +152,7 @@ void RasterTile::drawArrows(QPainter *painter,
 }
 
 void RasterTile::drawPolygons(QPainter *painter,
-  const QList<MapData::Poly> &polygons)
+  const QList<MapData::Poly> &polygons) const
 {
 	for (int n = 0; n < _style->drawOrder().size(); n++) {
 		for (int i = 0; i < polygons.size(); i++) {
@@ -184,7 +184,7 @@ void RasterTile::drawPolygons(QPainter *painter,
 	}
 }
 
-void RasterTile::drawLines(QPainter *painter, const QList<MapData::Line> &lines)
+void RasterTile::drawLines(QPainter *painter, const QList<MapData::Line> &lines) const
 {
 	painter->setBrush(Qt::NoBrush);
 
@@ -202,7 +202,7 @@ void RasterTile::drawLines(QPainter *painter, const QList<MapData::Line> &lines)
 }
 
 void RasterTile::drawTextItems(QPainter *painter,
-  const QList<TextItem*> &textItems)
+  const QList<TextItem*> &textItems) const
 {
 	QRectF rect(_rect);
 
@@ -214,7 +214,7 @@ void RasterTile::drawTextItems(QPainter *painter,
 }
 
 void RasterTile::drawSectorLights(QPainter *painter,
-  const QList<SectorLight> &lights)
+  const QList<SectorLight> &lights) const
 {
 	for (int i = 0; i < lights.size(); i++) {
 		const SectorLight &l = lights.at(i);

@@ -36,7 +36,7 @@ public:
 private:
 	struct SectorLight
 	{
-		SectorLight(const Coordinates pos, Style::Color color, uint visibility,
+		SectorLight(const Coordinates &pos, Style::Color color, uint visibility,
 		  double start, double end) : pos(pos), color(color),
 		  visibility(visibility), start(start), end(end) {}
 
@@ -64,13 +64,11 @@ private:
 	  QList<SectorLight> &sectorLights);
 	void processLines(const QList<MapData::Line> &lines,
 	  QList<TextItem*> &textItems);
-	void drawBitmapPath(QPainter *painter, const QImage &img,
-	  const Polygon &polygon);
-	void drawArrows(QPainter *painter, const QList<MapData::Point> &points);
-	void drawPolygons(QPainter *painter, const QList<MapData::Poly> &polygons);
-	void drawLines(QPainter *painter, const QList<MapData::Line> &lines);
-	void drawTextItems(QPainter *painter, const QList<TextItem*> &textItems);
-	void drawSectorLights(QPainter *painter, const QList<SectorLight> &lights);
+	void drawArrows(QPainter *painter, const QList<MapData::Point> &points) const;
+	void drawPolygons(QPainter *painter, const QList<MapData::Poly> &polygons) const;
+	void drawLines(QPainter *painter, const QList<MapData::Line> &lines) const;
+	void drawTextItems(QPainter *painter, const QList<TextItem*> &textItems) const;
+	void drawSectorLights(QPainter *painter, const QList<SectorLight> &lights) const;
 
 	static bool polyCb(MapData *data, void *context);
 	static bool pointCb(MapData *data, void *context);
