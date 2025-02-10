@@ -13,7 +13,7 @@ using namespace ENC;
 
 #define TEXT_EXTENT 160
 #define TSSLPT_SIZE 24
-#define SECTOR_RADIUS 40
+#define RANGE_FACTOR 4
 
 static const float C1 = 0.866025f; /* sqrt(3)/2 */
 static const QColor tsslptPen = QColor(0xeb, 0x49, 0xeb);
@@ -213,36 +213,46 @@ void RasterTile::drawTextItems(QPainter *painter,
 	}
 }
 
+static QRectF lightRect(const QPointF &pos, double range)
+{
+	return QRectF(pos.x() - range * RANGE_FACTOR, pos.y() - range * RANGE_FACTOR,
+		  2*range * RANGE_FACTOR, 2*range * RANGE_FACTOR);
+}
+
 void RasterTile::drawSectorLights(QPainter *painter,
   const QList<SectorLight> &lights) const
 {
 	for (int i = 0; i < lights.size(); i++) {
 		const SectorLight &l = lights.at(i);
 		QPointF pos(ll2xy(l.pos));
-		QRectF rect(pos.x() - SECTOR_RADIUS, pos.y() - SECTOR_RADIUS,
-		  2*SECTOR_RADIUS, 2*SECTOR_RADIUS);
+		QRectF rect(lightRect(pos, (l.range == 0) ? 6 : l.range));
 		double a1 = -(l.end + 90);
 		double a2 = -(l.start + 90);
 		if (a1 > a2)
 			a2 += 360;
+		double as = (a2 - a1);
+		if (as == 0)
+			as = 360;
 
 		if (l.visibility == 3 || l.visibility >= 6)
 			painter->setPen(QPen(Qt::black, 1, Qt::DashLine));
 		else {
 			painter->setPen(QPen(Qt::black, 6,  Qt::SolidLine, Qt::FlatCap));
-			painter->drawArc(rect, a1 * 16, (a2 - a1) * 16);
+			painter->drawArc(rect, a1 * 16, as * 16);
 			painter->setPen(QPen(Style::color(l.color), 4,  Qt::SolidLine,
 			  Qt::FlatCap));
 		}
 
-		painter->drawArc(rect, a1 * 16, (a2 - a1) * 16);
+		painter->drawArc(rect, a1 * 16, as * 16);
 
-		QLineF ln(pos, QPointF(pos.x() + 2*SECTOR_RADIUS, pos.y()));
-		ln.setAngle(a1);
-		painter->setPen(QPen(Qt::black, 1, Qt::DashLine));
-		painter->drawLine(ln);
-		ln.setAngle(a2);
-		painter->drawLine(ln);
+		if (a2 - a1 != 0) {
+			QLineF ln(pos, QPointF(pos.x() + rect.width(), pos.y()));
+			ln.setAngle(a1);
+			painter->setPen(QPen(Qt::black, 1, Qt::DashLine));
+			painter->drawLine(ln);
+			ln.setAngle(a2);
+			painter->drawLine(ln);
+		}
 	}
 }
 
@@ -252,6 +262,7 @@ void RasterTile::processPoints(QList<MapData::Point> &points,
 {
 	LightMap lightsMap;
 	SignalSet signalsSet;
+	QSet<Coordinates> slMap;
 	int i;
 
 	std::sort(points.begin(), points.end());
@@ -263,11 +274,14 @@ void RasterTile::processPoints(QList<MapData::Point> &points,
 		if (point.type()>>16 == LIGHTS) {
 			const MapData::Attributes &attr = point.attributes();
 			Style::Color color = (Style::Color)(attr.value(COLOUR).toUInt());
+			double range = attr.value(VALNMR).toDouble();
 
-			if (attr.contains(SECTR1)) {
+			if (attr.contains(SECTR1)
+			  || (range >= 6 && !(point.type() & 0xFFFF))) {
 				sectorLights.append(SectorLight(point.pos(), color,
-				  attr.value(LITVIS).toUInt(), attr.value(SECTR1).toDouble(),
-				  attr.value(SECTR2).toDouble()));
+				  attr.value(LITVIS).toUInt(), range,
+				  attr.value(SECTR1).toDouble(), attr.value(SECTR2).toDouble()));
+				slMap.insert(point.pos());
 			} else
 				lightsMap.insert(point.pos(), color);
 		} else if (point.type()>>16 == FOGSIG)
@@ -298,7 +312,8 @@ void RasterTile::processPoints(QList<MapData::Point> &points,
 
 		TextPointItem *item = new TextPointItem(pos + offset, label, fnt, img,
 		  color, hColor, 0, 2, rotate);
-		if (item->isValid() && !item->collides(textItems)) {
+		if (item->isValid() && (slMap.contains(point.pos())
+		  || !item->collides(textItems))) {
 			textItems.append(item);
 			if (lightsMap.contains(point.pos()))
 				lights.append(new TextPointItem(pos + _style->lightOffset(),

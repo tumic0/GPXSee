@@ -245,7 +245,7 @@ void RasterTile::drawSectorLights(QPainter *painter,
 				const Lights::Sector &end = (j == p->lights.sectors.size() - 1)
 				  ? p->lights.sectors.at(0) : p->lights.sectors.at(j+1);
 
-				if (start.color && start.range) {
+				if (start.color) {
 					double a1 = -(end.angle / 10.0 + 90.0);
 					double a2 = -(start.angle / 10.0 + 90.0);
 					if (a1 > a2)
@@ -254,7 +254,7 @@ void RasterTile::drawSectorLights(QPainter *painter,
 					if (as == 0)
 						as = 360;
 
-					QRect rect(lightRect(pos, start.range));
+					QRect rect(lightRect(pos, start.range ? start.range : 6));
 
 					painter->setPen(QPen(Qt::black, 6,  Qt::SolidLine,
 					  Qt::FlatCap));
@@ -492,8 +492,8 @@ void RasterTile::processPoints(QList<MapData::Point> &points,
 
 		TextPointItem *item = new TextPointItem(pos + offset, label, fnt, img,
 		  color, hcolor, 0, ICON_PADDING);
-		if (point.lights.isSectorLight()
-		  || (item->isValid() && !item->collides(textItems))) {
+		if (item->isValid() && (point.lights.isSectorLight()
+		  || !item->collides(textItems))) {
 			textItems.append(item);
 			if (point.lights.color && !point.lights.isSectorLight())
 				textItems.append(new TextPointItem(pos + style->lightOffset(),

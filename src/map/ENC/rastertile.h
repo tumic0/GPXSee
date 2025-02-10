@@ -37,12 +37,13 @@ private:
 	struct SectorLight
 	{
 		SectorLight(const Coordinates &pos, Style::Color color, uint visibility,
-		  double start, double end) : pos(pos), color(color),
-		  visibility(visibility), start(start), end(end) {}
+		  double range, double start, double end) : pos(pos), color(color),
+		  visibility(visibility), range(range), start(start), end(end) {}
 
 		Coordinates pos;
 		Style::Color color;
 		uint visibility;
+		double range;
 		double start;
 		double end;
 	};
