@@ -118,6 +118,7 @@ HEADERS += src/common/config.h \
     src/data/gpsdumpparser.h \
     src/data/style.h \
     src/data/twonavparser.h \
+    src/map/IMG/lights.h \
     src/map/downloader.h \
     src/map/demloader.h \
     src/map/ENC/attributes.h \

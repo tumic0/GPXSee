@@ -34,7 +34,8 @@ public:
 private:
 	typedef RTree<const MapData::Elevation*, double, 2> DEMTRee;
 
-	struct ElevationCTX {
+	struct ElevationCTX
+	{
 		ElevationCTX(const DEMTRee &tree, const Coordinates &c, double &ele)
 		  : tree(tree), c(c), ele(ele) {}
 
@@ -42,7 +43,8 @@ private:
 		const Coordinates &c;
 		double &ele;
 	};
-	struct EdgeCTX {
+	struct EdgeCTX
+	{
 		EdgeCTX(const Coordinates &c, double &ele) : c(c), ele(ele) {}
 
 		const Coordinates &c;
@@ -62,13 +64,14 @@ private:
 	void drawLines(QPainter *painter, const QList<MapData::Poly> &lines) const;
 	void drawTextItems(QPainter *painter, const QList<TextItem*> &textItems) const;
 	void drawHillShading(QPainter *painter) const;
+	void drawSectorLights(QPainter *painter, const QList<const MapData::Point*> &lights) const;
 
 	void processPolygons(const QList<MapData::Poly> &polygons,
 	  QList<TextItem *> &textItems);
 	void processLines(QList<MapData::Poly> &lines, QList<TextItem*> &textItems,
 	  const QImage (&arrows)[2]);
-	void processPoints(QList<MapData::Point> &points,
-	  QList<TextItem*> &textItems);
+	void processPoints(QList<MapData::Point> &points, QList<TextItem*> &textItems,
+	  QList<const MapData::Point *> &lights);
 	void processShields(const QList<MapData::Poly> &lines,
 	  QList<TextItem*> &textItems);
 	void processStreetNames(const QList<MapData::Poly> &lines,

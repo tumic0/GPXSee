@@ -196,6 +196,7 @@
 		<file alias="light-red.png">icons/map/marine/light-red.png</file>
 		<file alias="light-green.png">icons/map/marine/light-green.png</file>
 		<file alias="light-yellow.png">icons/map/marine/light-yellow.png</file>
+		<file alias="light-white.png">icons/map/marine/light-white.png</file>
 		<file alias="building.png">icons/map/marine/building.png</file>
 		<file alias="fog-signal.png">icons/map/marine/fog-signal.png</file>
 		<file alias="construction.png">icons/map/marine/construction.png</file>

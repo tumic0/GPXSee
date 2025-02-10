@@ -18,12 +18,12 @@ using namespace IMG;
 
 #define TEXT_EXTENT 160
 #define ICON_PADDING 2
+#define RANGE_FACTOR 4
+#define ROAD  0
+#define WATER 1
 
 #define AREA(rect) \
 	(rect.size().width() * rect.size().height())
-
-#define ROAD  0
-#define WATER 1
 
 static const QColor textColor(Qt::black);
 static const QColor haloColor(Qt::white);
@@ -226,6 +226,67 @@ void RasterTile::drawTextItems(QPainter *painter,
 	}
 }
 
+static QRect lightRect(const QPoint &pos, quint32 range)
+{
+	return QRect(pos.x() - range * RANGE_FACTOR, pos.y() - range * RANGE_FACTOR,
+		  2*range * RANGE_FACTOR, 2*range * RANGE_FACTOR);
+}
+
+void RasterTile::drawSectorLights(QPainter *painter,
+  const QList<const MapData::Point *> &lights) const
+{
+	for (int i = 0; i < lights.size(); i++) {
+		const MapData::Point *p = lights.at(i);
+		QPoint pos(p->coordinates.lon(), p->coordinates.lat());
+
+		if (p->lights.sectors.size()) {
+			for (int j = 0; j < p->lights.sectors.size(); j++) {
+				const Lights::Sector &start = p->lights.sectors.at(j);
+				const Lights::Sector &end = (j == p->lights.sectors.size() - 1)
+				  ? p->lights.sectors.at(0) : p->lights.sectors.at(j+1);
+
+				if (start.color && start.range) {
+					double a1 = -(end.angle / 10.0 + 90.0);
+					double a2 = -(start.angle / 10.0 + 90.0);
+					if (a1 > a2)
+						a2 += 360;
+					double as = (a2 - a1);
+					if (as == 0)
+						as = 360;
+
+					QRect rect(lightRect(pos, start.range));
+
+					painter->setPen(QPen(Qt::black, 6,  Qt::SolidLine,
+					  Qt::FlatCap));
+					painter->drawArc(rect, a1 * 16, as * 16);
+					painter->setPen(QPen(Style::color(start.color), 4,
+					  Qt::SolidLine, Qt::FlatCap));
+					painter->drawArc(rect, a1 * 16, as * 16);
+
+					if (a2 - a1 != 0) {
+						QLineF ln(pos, QPointF(pos.x() + rect.width(), pos.y()));
+						ln.setAngle(a1);
+						painter->setPen(QPen(Qt::black, 1, Qt::DashLine));
+						painter->drawLine(ln);
+						ln.setAngle(a2);
+						painter->drawLine(ln);
+					}
+				}
+			}
+		} else {
+			if (p->lights.color && p->lights.range) {
+				QRect rect(lightRect(pos, p->lights.range));
+
+				painter->setPen(QPen(Qt::black, 6,  Qt::SolidLine, Qt::FlatCap));
+				painter->drawArc(rect, 0, 360 * 16);
+				painter->setPen(QPen(Style::color(p->lights.color), 4,
+				  Qt::SolidLine, Qt::FlatCap));
+				painter->drawArc(rect, 0, 360 * 16);
+			}
+		}
+	}
+}
+
 static void removeDuplicitLabel(QList<TextItem *> &labels, const QString &text,
   const QRectF &tileRect)
 {
@@ -398,7 +459,7 @@ void RasterTile::processShields(const QList<MapData::Poly> &lines,
 }
 
 void RasterTile::processPoints(QList<MapData::Point> &points,
-  QList<TextItem*> &textItems)
+  QList<TextItem*> &textItems, QList<const MapData::Point*> &lights)
 {
 	std::sort(points.begin(), points.end());
 
@@ -407,6 +468,9 @@ void RasterTile::processPoints(QList<MapData::Point> &points,
 		const Style *style = _data->style();
 		const Style::Point &ps = style->point(point.type);
 		bool poi = Style::isPOI(point.type);
+
+		if (point.lights.isSectorLight())
+			lights.append(&point);
 
 		const QString *label = point.label.text().isEmpty()
 		  ? 0 : &(point.label.text());
@@ -428,11 +492,12 @@ void RasterTile::processPoints(QList<MapData::Point> &points,
 
 		TextPointItem *item = new TextPointItem(pos + offset, label, fnt, img,
 		  color, hcolor, 0, ICON_PADDING);
-		if (item->isValid() && !item->collides(textItems)) {
+		if (point.lights.isSectorLight()
+		  || (item->isValid() && !item->collides(textItems))) {
 			textItems.append(item);
-			if (Style::isLight(point.type) || point.flags & MapData::Point::Light)
+			if (point.lights.color && !point.lights.isSectorLight())
 				textItems.append(new TextPointItem(pos + style->lightOffset(),
-				  0, 0, style->light(), 0, 0, 0, 0));
+				  0, 0, style->light(point.lights.color), 0, 0, 0, 0));
 		} else
 			delete item;
 	}
@@ -521,6 +586,7 @@ void RasterTile::render()
 	QList<MapData::Poly> lines;
 	QList<MapData::Point> points;
 	QList<TextItem*> textItems;
+	QList<const MapData::Point*> lights;
 	QImage arrows[2];
 
 	arrows[ROAD] = Util::svg2img(":/symbols/oneway.svg", _ratio);
@@ -531,7 +597,7 @@ void RasterTile::render()
 	ll2xy(lines);
 	ll2xy(points);
 
-	processPoints(points, textItems);
+	processPoints(points, textItems, lights);
 	processPolygons(polygons, textItems);
 	processLines(lines, textItems, arrows);
 
@@ -546,6 +612,7 @@ void RasterTile::render()
 	drawPolygons(&painter, polygons);
 	drawHillShading(&painter);
 	drawLines(&painter, lines);
+	drawSectorLights(&painter, lights);
 	drawTextItems(&painter, textItems);
 
 	qDeleteAll(textItems);

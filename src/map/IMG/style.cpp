@@ -1319,6 +1319,10 @@ Style::Style(qreal ratio, SubFile *typ)
 	_extraSmall = pixelSizeFont(10);
 
 	_light = QImage(":/marine/light.png");
+	_lightRed = QImage(":/marine/light-red.png");
+	_lightGreen = QImage(":/marine/light-green.png");
+	_lightYellow = QImage(":/marine/light-yellow.png");
+	_lightWhite = QImage(":/marine/light-white.png");
 	_lightOffset = QPoint(11, 11);
 
 	defaultLineStyle(ratio);
@@ -1370,6 +1374,40 @@ const QFont *Style::font(Style::FontSize size, Style::FontSize defaultSize) cons
 			return &_extraSmall;
 		default:
 			return font(defaultSize);
+	}
+}
+
+const QImage *Style::light(Lights::Color color) const
+{
+	switch (color) {
+		case Lights::Red:
+			return &_lightRed;
+		case Lights::Green:
+			return &_lightGreen;
+		case Lights::White:
+			return &_lightWhite;
+		case Lights::Yellow:
+		case Lights::Amber:
+			return &_lightYellow;
+		default:
+			return &_light;
+	}
+}
+
+QColor Style::color(Lights::Color c)
+{
+	switch (c) {
+		case Lights::Red:
+			return Qt::red;
+		case Lights::Green:
+			return Qt::green;
+		case Lights::White:
+			return Qt::white;
+		case Lights::Yellow:
+		case Lights::Amber:
+			return Qt::yellow;
+		default:
+			return Qt::magenta;
 	}
 }
 

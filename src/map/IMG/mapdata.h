@@ -14,6 +14,7 @@
 #include "map/matrix.h"
 #include "label.h"
 #include "raster.h"
+#include "lights.h"
 #include "zoom.h"
 
 namespace IMG {
@@ -51,11 +52,11 @@ public:
 		enum Flags {
 			NoFlag = 0,
 			ClassLabel = 1,
-			Light = 2
 		};
 
 		Coordinates coordinates;
 		Label label;
+		Lights lights;
 		quint64 id;
 		quint32 type;
 		quint32 flags;

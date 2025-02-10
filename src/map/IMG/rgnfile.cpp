@@ -107,7 +107,8 @@ bool RGNFile::readObstructionInfo(Handle &hdl, quint8 flags, quint32 size,
 	return true;
 }
 
-bool RGNFile::readBuoyInfo(Handle &hdl, quint8 flags, MapData::Point *point) const
+bool RGNFile::readBuoyInfo(Handle &hdl, quint8 flags, quint32 size,
+  MapData::Point *point) const
 {
 	quint16 val;
 	quint8 lc;
@@ -115,7 +116,7 @@ bool RGNFile::readBuoyInfo(Handle &hdl, quint8 flags, MapData::Point *point) con
 	if ((flags & 0xe0) != 0xe0)
 		return true;
 
-	if (!readUInt16(hdl, val))
+	if (!(size >= 2 && readUInt16(hdl, val)))
 		return false;
 
 	lc = (val >> 10) & 0x0f;
@@ -123,7 +124,105 @@ bool RGNFile::readBuoyInfo(Handle &hdl, quint8 flags, MapData::Point *point) con
 		lc = (val >> 6) & 7;
 
 	if (lc)
-		point->flags |= MapData::Point::Light;
+		point->lights.color = (Lights::Color)lc;
+
+	return true;
+}
+
+bool RGNFile::readLightInfo(Handle &hdl, quint8 flags, quint32 size,
+  MapData::Point *point) const
+{
+	quint16 flags1;
+	quint8 flags2;
+	quint32 unused;
+
+	if (!(size >= 3 && readUInt16(hdl, flags1) && readUInt8(hdl, flags2)))
+		return false;
+	size -= 3;
+	if (flags2 >> 6) {
+		if (!(size >= (flags2 >> 6) && readVUInt32(hdl, (flags2 >> 6), unused)))
+			return false;
+		size -= (flags2 >> 6);
+	}
+	if (flags2 >> 2 & 3) {
+		if (!(size >= (flags2 >> 2 & 3)
+		  && readVUInt32(hdl, (flags2 >> 2 & 3), unused)))
+			return false;
+		size -= (flags2 >> 2 & 3);
+	}
+	if (flags1 & 0xc0) {
+		if (flags1 & 0x80) {
+			if (!(size >= 1 && readUInt8(hdl, unused)))
+				return false;
+			unused |= ((flags1 & 0x40) << 2);
+			size--;
+		} else {
+			if (!(size >= 2 && readUInt16(hdl, unused)))
+				return false;
+			size -= 2;
+		}
+	}
+	if (flags & 2) {
+		if (!(size >= 3 && readUInt24(hdl, unused)))
+			return false;
+		size -= 3;
+	}
+	if (flags & 4) {
+		if (!(size >= 3 && readUInt24(hdl, unused)))
+			return false;
+		size -= 3;
+	}
+	if (flags & 8) {
+		if (!(size >= 3 && readUInt24(hdl, unused)))
+			return false;
+		size -= 3;
+	}
+	if (flags1 & 0x200) {
+		if (!(size >= 2 && readUInt16(hdl, unused)))
+			return false;
+		size -= 2;
+	}
+	if (flags1 & 0x400) {
+		if (!(size >= 1 && readUInt8(hdl, unused)))
+			return false;
+		size--;
+	}
+	if (flags1 & 0x800) {
+		quint16 la;
+		quint8 cf, range = 0;
+
+		do {
+			if (!(size >= 2 && readUInt16(hdl, la)))
+				return false;
+			size -= 2;
+
+			cf = la >> 8;
+			Lights::Color c = (Lights::Color)(cf >> 4 & 7);
+			if (c) {
+				if (!(size >= 1 && readUInt8(hdl, range)))
+					return false;
+				size--;
+			}
+			point->lights.sectors.append(Lights::Sector(c, la & 0xfff, range));
+		} while (!(cf >> 7));
+	} else {
+		quint8 v1, v2, range;
+
+		if (!(size >= 1 && readUInt8(hdl, v1)))
+			return false;
+		size--;
+
+		range = v1 & 0x1f;
+		if ((v1 & 0x1f) == 0x1f) {
+			if (!(size >= 1 && readUInt8(hdl, v2)))
+				return false;
+			size--;
+			range += v2;
+		}
+
+		point->lights.color = (Lights::Color)(v1 >> 5);
+		point->lights.range = range;
+	}
 
 	return true;
 }
@@ -183,7 +282,9 @@ bool RGNFile::readClassFields(Handle &hdl, SegmentType segmentType,
 	if (point && Style::isObstructionPoint(point->type))
 		readObstructionInfo(hdl, flags, rs, point);
 	if (point && Style::isBuoy(point->type))
-		readBuoyInfo(hdl, flags, point);
+		readBuoyInfo(hdl, flags, rs, point);
+	if (point && Style::isLight(point->type))
+		readLightInfo(hdl, flags, rs, point);
 
 	return seek(hdl, off + rs);
 }
