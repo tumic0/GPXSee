@@ -282,6 +282,7 @@ void RasterTile::processPoints(QList<MapData::Point> &points,
 				  attr.value(LITVIS).toUInt(), range,
 				  attr.value(SECTR1).toDouble(), attr.value(SECTR2).toDouble()));
 				slMap.insert(point.pos());
+				qDebug() << attr;
 			} else
 				lightsMap.insert(point.pos(), color);
 		} else if (point.type()>>16 == FOGSIG)

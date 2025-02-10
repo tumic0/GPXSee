@@ -329,7 +329,9 @@ MapData::Point::Point(uint type, const Coordinates &c, const Attributes &attr,
 	else if (type == I_DISMAR)
 		subtype = CATDIS;
 
-	_type = SUBTYPE(type, _attr.value(subtype).toUInt());
+	QList<QByteArray> list(_attr.value(subtype).split(','));
+	std::sort(list.begin(), list.end());
+	_type = SUBTYPE(type, list.first().toUInt());
 	_id = ((quint64)order(_type))<<32 | (uint)qHash(c);
 	_label = QString::fromLatin1(_attr.value(OBJNAM));
 
