@@ -256,7 +256,7 @@ void RasterTile::drawSectorLights(QPainter *painter,
 
 					QRect rect(lightRect(pos, start.range ? start.range : 6));
 
-					painter->setPen(QPen(Qt::black, 6,  Qt::SolidLine,
+					painter->setPen(QPen(Qt::black, 6, Qt::SolidLine,
 					  Qt::FlatCap));
 					painter->drawArc(rect, a1 * 16, as * 16);
 					painter->setPen(QPen(Style::color(start.color), 4,
@@ -274,15 +274,13 @@ void RasterTile::drawSectorLights(QPainter *painter,
 				}
 			}
 		} else {
-			if (p->lights.color && p->lights.range) {
-				QRect rect(lightRect(pos, p->lights.range));
+			QRect rect(lightRect(pos, p->lights.range));
 
-				painter->setPen(QPen(Qt::black, 6,  Qt::SolidLine, Qt::FlatCap));
-				painter->drawArc(rect, 0, 360 * 16);
-				painter->setPen(QPen(Style::color(p->lights.color), 4,
-				  Qt::SolidLine, Qt::FlatCap));
-				painter->drawArc(rect, 0, 360 * 16);
-			}
+			painter->setPen(QPen(Qt::black, 6, Qt::SolidLine, Qt::FlatCap));
+			painter->drawArc(rect, 0, 360 * 16);
+			painter->setPen(QPen(Style::color(p->lights.color), 4,
+			  Qt::SolidLine, Qt::FlatCap));
+			painter->drawArc(rect, 0, 360 * 16);
 		}
 	}
 }
