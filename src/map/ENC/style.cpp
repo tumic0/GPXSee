@@ -70,17 +70,24 @@ void Style::polygonStyle()
 	_polygons[TYPE(DRGARE)] = Polygon(QBrush(QColor(0xa0, 0xa0, 0xff),
 	  Qt::Dense4Pattern));
 	_polygons[TYPE(UNSARE)] = Polygon(QBrush(QColor(0x99, 0x99, 0x99)));
+	_polygons[SUBTYPE(RESARE, 1)] = Polygon(QImage(":/marine/safety-zone-line.png"));
+	_polygons[SUBTYPE(RESARE, 2)] = Polygon(QImage(":/marine/noanchor-line.png"));
+	_polygons[SUBTYPE(RESARE, 4)] = Polygon(QImage(":/marine/nature-reserve-line.png"));
+	_polygons[SUBTYPE(RESARE, 5)] = Polygon(QImage(":/marine/sanctuary-line.png"));
+	_polygons[SUBTYPE(RESARE, 6)] = Polygon(QImage(":/marine/sanctuary-line.png"));
+	_polygons[SUBTYPE(RESARE, 7)] = Polygon(QImage(":/marine/sanctuary-line.png"));
 	_polygons[SUBTYPE(RESARE, 9)] = Polygon(QBrush(QColor(0xff, 0x00, 0x00),
 	  Qt::BDiagPattern));
-	_polygons[SUBTYPE(RESARE, 2)] = Polygon(QImage(":/marine/noanchor-line.png"));
-	_polygons[SUBTYPE(I_RESARE, 2)] = Polygon(QImage(":/marine/noanchor-line.png"));
-	_polygons[SUBTYPE(RESARE, 17)] = Polygon(
-	  QImage(":/marine/entry-prohibited-line.png"));
-	_polygons[SUBTYPE(I_RESARE, 17)] = Polygon(
-	  QImage(":/marine/entry-prohibited-line.png"));
 	_polygons[SUBTYPE(RESARE, 12)] = Polygon(QImage(":/marine/safety-zone-line.png"));
-	_polygons[SUBTYPE(I_RESARE, 12)] = Polygon(QImage(":/marine/safety-zone-line.png"));
-	_polygons[SUBTYPE(RESARE, 1)] = Polygon(QImage(":/marine/safety-zone-line.png"));
+	_polygons[SUBTYPE(RESARE, 17)] = Polygon(QImage(":/marine/entry-prohibited-line.png"));
+	_polygons[SUBTYPE(RESARE, 22)] = Polygon(QImage(":/marine/sanctuary-line.png"));
+	_polygons[SUBTYPE(RESARE, 23)] = Polygon(QImage(":/marine/nature-reserve-line.png"));
+	_polygons[SUBTYPE(I_RESARE, 1)] = _polygons[SUBTYPE(RESARE, 1)];
+	_polygons[SUBTYPE(I_RESARE, 2)] = _polygons[SUBTYPE(RESARE, 2)];
+	_polygons[SUBTYPE(I_RESARE, 4)] = _polygons[SUBTYPE(RESARE, 4)];
+	_polygons[SUBTYPE(I_RESARE, 9)] = _polygons[SUBTYPE(RESARE, 9)];
+	_polygons[SUBTYPE(I_RESARE, 12)] = _polygons[SUBTYPE(RESARE, 12)];
+	_polygons[SUBTYPE(I_RESARE, 17)] = _polygons[SUBTYPE(RESARE, 17)];
 	_polygons[SUBTYPE(ACHARE, 1)] = Polygon(QImage(":/marine/anchor-line.png"));
 	_polygons[SUBTYPE(ACHARE, 2)] = _polygons[SUBTYPE(ACHARE, 1)];
 	_polygons[SUBTYPE(ACHARE, 3)] = _polygons[SUBTYPE(ACHARE, 1)];
@@ -162,9 +169,14 @@ void Style::polygonStyle()
 	  << SUBTYPE(I_ACHARE, 2) << SUBTYPE(I_ACHARE, 3) << SUBTYPE(I_ACHARE, 4)
 	  << SUBTYPE(I_ACHARE, 5) << SUBTYPE(I_ACHARE, 6) << SUBTYPE(I_ACHARE, 7)
 	  << SUBTYPE(I_ACHARE, 8) << SUBTYPE(I_ACHARE, 9) << SUBTYPE(I_ACHARE, 10)
-	  << SUBTYPE(I_ACHARE, 11) << SUBTYPE(I_ACHARE, 12) << SUBTYPE(RESARE, 9)
-	  << SUBTYPE(RESARE, 2) << SUBTYPE(I_RESARE, 2) << SUBTYPE(RESARE, 17)
-	  << SUBTYPE(I_RESARE, 17) << SUBTYPE(RESARE, 12) << SUBTYPE(I_RESARE, 12)
+	  << SUBTYPE(I_ACHARE, 11) << SUBTYPE(I_ACHARE, 12) << SUBTYPE(RESARE, 1)
+	  << SUBTYPE(I_RESARE, 1) << SUBTYPE(RESARE, 2) << SUBTYPE(I_RESARE, 2)
+	  << SUBTYPE(RESARE, 4) << SUBTYPE(I_RESARE, 4) << SUBTYPE(RESARE, 5)
+	  << SUBTYPE(I_RESARE, 5) << SUBTYPE(RESARE, 6) << SUBTYPE(I_RESARE, 6)
+	  << SUBTYPE(RESARE, 7) << SUBTYPE(I_RESARE, 7) << SUBTYPE(RESARE, 9)
+	  << SUBTYPE(I_RESARE, 9) << SUBTYPE(RESARE, 12) << SUBTYPE(I_RESARE, 12)
+	  << SUBTYPE(RESARE, 17) << SUBTYPE(I_RESARE, 17) << SUBTYPE(RESARE, 22)
+	  << SUBTYPE(I_RESARE, 22) << SUBTYPE(RESARE, 23) << SUBTYPE(I_RESARE, 23)
 	  << SUBTYPE(RESARE, 1) << TYPE(CBLARE) << TYPE(PIPARE) << TYPE(PRCARE)
 	  << TYPE(I_TRNBSN) << SUBTYPE(MARKUL, 3) << TYPE(CONZNE);
 }
@@ -382,6 +394,8 @@ void Style::pointStyle(qreal ratio)
 
 	_points[SUBTYPE(I_BERTHS, 6)] = Point(QImage(":/marine/fleeting-area.png"),
 	  Small);
+	_points[SUBTYPE(I_BERTHS, 6)].setTextColor(QColor(0xeb, 0x49, 0xeb));
+	_points[SUBTYPE(I_BERTHS, 6)].setHaloColor(QColor());
 	_points[SUBTYPE(ACHARE, 2)] = Point(QImage(":/marine/dw-anchorage.png"),
 	  Small);
 	_points[SUBTYPE(ACHARE, 3)] = Point(QImage(":/marine/tanker-anchorage.png"),
@@ -391,6 +405,66 @@ void Style::pointStyle(qreal ratio)
 	_points[SUBTYPE(I_ACHARE, 2)] = _points[SUBTYPE(ACHARE, 2)];
 	_points[SUBTYPE(I_ACHARE, 3)] = _points[SUBTYPE(ACHARE, 3)];
 	_points[SUBTYPE(I_ACHARE, 9)] = _points[SUBTYPE(ACHARE, 9)];
+	_points[TYPE(RESARE)].setTextColor(QColor(0xeb, 0x49, 0xeb));
+	_points[TYPE(RESARE)].setHaloColor(QColor());
+	_points[SUBTYPE(RESARE, 1)] = _points[TYPE(RESARE)];
+	_points[SUBTYPE(RESARE, 2)] = _points[TYPE(RESARE)];
+	_points[SUBTYPE(RESARE, 3)] = _points[TYPE(RESARE)];
+	_points[SUBTYPE(RESARE, 4)].setTextColor(QColor(0x30, 0xa0, 0x1b));
+	_points[SUBTYPE(RESARE, 4)].setHaloColor(QColor());
+	_points[SUBTYPE(RESARE, 5)] = _points[SUBTYPE(RESARE, 4)];
+	_points[SUBTYPE(RESARE, 6)] = _points[SUBTYPE(RESARE, 4)];
+	_points[SUBTYPE(RESARE, 7)] = _points[SUBTYPE(RESARE, 4)];
+	_points[SUBTYPE(RESARE, 8)] = _points[TYPE(RESARE)];
+	_points[SUBTYPE(RESARE, 9)] = _points[TYPE(RESARE)];
+	_points[SUBTYPE(RESARE, 10)] = _points[TYPE(RESARE)];
+	_points[SUBTYPE(RESARE, 11)] = _points[TYPE(RESARE)];
+	_points[SUBTYPE(RESARE, 12)] = _points[TYPE(RESARE)];
+	_points[SUBTYPE(RESARE, 13)] = _points[TYPE(RESARE)];
+	_points[SUBTYPE(RESARE, 14)] = _points[TYPE(RESARE)];
+	_points[SUBTYPE(RESARE, 15)] = _points[TYPE(RESARE)];
+	_points[SUBTYPE(RESARE, 16)] = _points[TYPE(RESARE)];
+	_points[SUBTYPE(RESARE, 17)] = _points[TYPE(RESARE)];
+	_points[SUBTYPE(RESARE, 18)] = _points[TYPE(RESARE)];
+	_points[SUBTYPE(RESARE, 19)] = _points[TYPE(RESARE)];
+	_points[SUBTYPE(RESARE, 20)] = _points[TYPE(RESARE)];
+	_points[SUBTYPE(RESARE, 21)] = _points[TYPE(RESARE)];
+	_points[SUBTYPE(RESARE, 22)] = _points[SUBTYPE(RESARE, 4)];
+	_points[SUBTYPE(RESARE, 23)] = _points[SUBTYPE(RESARE, 4)];
+	_points[SUBTYPE(RESARE, 24)] = _points[TYPE(RESARE)];
+	_points[SUBTYPE(RESARE, 25)] = _points[TYPE(RESARE)];
+	_points[SUBTYPE(RESARE, 26)] = _points[TYPE(RESARE)];
+	_points[SUBTYPE(RESARE, 27)] = _points[TYPE(RESARE)];
+	_points[SUBTYPE(RESARE, 28)] = _points[TYPE(RESARE)];
+	_points[TYPE(I_RESARE)] = _points[TYPE(RESARE)];
+	_points[SUBTYPE(I_RESARE, 1)] = _points[SUBTYPE(RESARE, 1)];
+	_points[SUBTYPE(I_RESARE, 2)] = _points[SUBTYPE(RESARE, 2)];
+	_points[SUBTYPE(I_RESARE, 3)] = _points[SUBTYPE(RESARE, 3)];
+	_points[SUBTYPE(I_RESARE, 4)] = _points[SUBTYPE(RESARE, 4)];
+	_points[SUBTYPE(I_RESARE, 5)] = _points[SUBTYPE(RESARE, 5)];
+	_points[SUBTYPE(I_RESARE, 6)] = _points[SUBTYPE(RESARE, 6)];
+	_points[SUBTYPE(I_RESARE, 7)] = _points[SUBTYPE(RESARE, 7)];
+	_points[SUBTYPE(I_RESARE, 8)] = _points[SUBTYPE(RESARE, 8)];
+	_points[SUBTYPE(I_RESARE, 9)] = _points[SUBTYPE(RESARE, 9)];
+	_points[SUBTYPE(I_RESARE, 10)] = _points[SUBTYPE(RESARE, 10)];
+	_points[SUBTYPE(I_RESARE, 11)] = _points[SUBTYPE(RESARE, 11)];
+	_points[SUBTYPE(I_RESARE, 12)] = _points[SUBTYPE(RESARE, 12)];
+	_points[SUBTYPE(I_RESARE, 13)] = _points[SUBTYPE(RESARE, 13)];
+	_points[SUBTYPE(I_RESARE, 14)] = _points[SUBTYPE(RESARE, 14)];
+	_points[SUBTYPE(I_RESARE, 15)] = _points[SUBTYPE(RESARE, 15)];
+	_points[SUBTYPE(I_RESARE, 16)] = _points[SUBTYPE(RESARE, 16)];
+	_points[SUBTYPE(I_RESARE, 17)] = _points[SUBTYPE(RESARE, 17)];
+	_points[SUBTYPE(I_RESARE, 18)] = _points[SUBTYPE(RESARE, 18)];
+	_points[SUBTYPE(I_RESARE, 19)] = _points[SUBTYPE(RESARE, 19)];
+	_points[SUBTYPE(I_RESARE, 20)] = _points[SUBTYPE(RESARE, 20)];
+	_points[SUBTYPE(I_RESARE, 21)] = _points[SUBTYPE(RESARE, 21)];
+	_points[SUBTYPE(I_RESARE, 22)] = _points[SUBTYPE(RESARE, 22)];
+	_points[SUBTYPE(I_RESARE, 23)] = _points[SUBTYPE(RESARE, 23)];
+	_points[SUBTYPE(I_RESARE, 24)] = _points[SUBTYPE(RESARE, 24)];
+	_points[SUBTYPE(I_RESARE, 25)] = _points[SUBTYPE(RESARE, 25)];
+	_points[SUBTYPE(I_RESARE, 26)] = _points[SUBTYPE(RESARE, 26)];
+	_points[SUBTYPE(I_RESARE, 27)] = _points[SUBTYPE(RESARE, 27)];
+	_points[SUBTYPE(I_RESARE, 28)] = _points[SUBTYPE(RESARE, 28)];
 
 	_points[SUBTYPE(SMCFAC, 7)] = Point(svg2img(":/POI/restaurant-11.svg",
 	  ratio), Small);

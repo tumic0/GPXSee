@@ -214,6 +214,8 @@
 		<file alias="24h-anchorage.png">icons/map/marine/24h-anchorage.png</file>
 		<file alias="dw-anchorage.png">icons/map/marine/dw-anchorage.png</file>
 		<file alias="tanker-anchorage.png">icons/map/marine/tanker-anchorage.png</file>
+		<file alias="nature-reserve-line.png">icons/map/marine/nature-reserve-line.png</file>
+		<file alias="sanctuary-line.png">icons/map/marine/sanctuary-line.png</file>
 	</qresource>
 
 	<!-- Patterns (Mapsforge) -->

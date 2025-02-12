@@ -285,6 +285,24 @@ static QString weed(uint type)
 	}
 }
 
+static uint restrictionCategory(uint type, const MapData::Attributes &attr)
+{
+	uint catrea = attr.value(CATREA).toUInt();
+
+	if (!catrea) {
+		uint restrn = attr.value(
+		  (type == RESARE) ? RESTRN : I_RESTRN).toUInt();
+
+		if (restrn == 1)
+			return 2;
+		else if (restrn == 7)
+			return 17;
+		else
+			return 0;
+	} else
+		return catrea;
+}
+
 MapData::Point::Point(uint type, const Coordinates &c, const QString &label)
   : _type(SUBTYPE(type, 0)), _pos(c), _label(label), _polygon(false)
 {
@@ -328,10 +346,18 @@ MapData::Point::Point(uint type, const Coordinates &c, const Attributes &attr,
 		subtype = CATLIT;
 	else if (type == I_DISMAR)
 		subtype = CATDIS;
+	else if (type == I_BERTHS)
+		subtype = I_CATBRT;
+	else if (type == ACHARE)
+		subtype = CATACH;
+	else if (type == I_ACHARE)
+		subtype = I_CATACH;
 
 	QList<QByteArray> list(_attr.value(subtype).split(','));
 	std::sort(list.begin(), list.end());
-	_type = SUBTYPE(type, list.first().toUInt());
+	_type = (type == RESARE || type == I_RESARE)
+	  ? SUBTYPE(type, restrictionCategory(type, _attr))
+	  : SUBTYPE(type, list.first().toUInt());
 	_id = ((quint64)order(_type))<<32 | (uint)qHash(c);
 	_label = QString::fromLatin1(_attr.value(OBJNAM));
 
@@ -377,9 +403,7 @@ MapData::Poly::Poly(uint type, const Polygon &path, const Attributes &attr,
 {
 	uint subtype = 0;
 
-	if (type == RESARE || type == I_RESARE)
-		subtype = CATREA;
-	else if (type == ACHARE)
+	if (type == ACHARE)
 		subtype = CATACH;
 	else if (type == I_ACHARE)
 		subtype = I_CATACH;
@@ -389,17 +413,19 @@ MapData::Poly::Poly(uint type, const Polygon &path, const Attributes &attr,
 		subtype = CATMFA;
 	else if (type == I_BERTHS)
 		subtype = I_CATBRT;
-	else if (type == RESARE || type == I_RESARE) {
-		uint restr = _attr.value((type == RESARE) ? RESTRN : I_RESTRN).toUInt();
-		if (restr == 1)
-			subtype = 2;
-		else if (restr == 7)
-			subtype = 17;
+
+	switch (type) {
+		case DEPARE:
+			_type = SUBTYPE(type, depthLevel(_attr.value(DRVAL1).toDouble()));
+			break;
+		case RESARE:
+		case I_RESARE:
+			_type = SUBTYPE(type, restrictionCategory(type, attr));
+			break;
+		default:
+			_type = SUBTYPE(type, _attr.value(subtype).toUInt());
 	}
 
-	_type = (type == DEPARE)
-	  ? SUBTYPE(DEPARE, depthLevel(_attr.value(DRVAL1).toDouble()))
-	  : SUBTYPE(type, _attr.value(subtype).toUInt());
 }
 
 MapData::Line::Line(uint type, const QVector<Coordinates> &path,
