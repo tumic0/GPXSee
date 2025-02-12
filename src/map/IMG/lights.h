@@ -23,7 +23,8 @@ public:
 	};
 
 	Lights() : color(None), range(0) {}
-	bool isSectorLight() const {return ((color && range) || !sectors.isEmpty());}
+	bool isSectorLight() const
+	  {return ((color && range > 6) || !sectors.isEmpty());}
 
 	Color color;
 	quint32 range;
