@@ -313,7 +313,7 @@ void RasterTile::processPoints(QList<MapData::Point> &points,
 		TextPointItem *item = new TextPointItem(pos + offset, label, fnt, img,
 		  color, hColor, 0, 2, rotate);
 		if (item->isValid() && (slMap.contains(point.pos())
-		  || !item->collides(textItems))) {
+		  || (point.polygon() && img) || !item->collides(textItems))) {
 			textItems.append(item);
 			if (lightsMap.contains(point.pos()))
 				lights.append(new TextPointItem(pos + _style->lightOffset(),

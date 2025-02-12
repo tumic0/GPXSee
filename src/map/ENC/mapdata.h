@@ -49,13 +49,15 @@ public:
 
 	class Point {
 	public:
-		Point(uint type, const Coordinates &c, const Attributes &attr, uint HUNI);
+		Point(uint type, const Coordinates &c, const Attributes &attr,
+		  uint HUNI, bool polygon = false);
 		Point(uint type, const Coordinates &s, const QString &label);
 
 		const Coordinates &pos() const {return _pos;}
 		uint type() const {return _type;}
 		const QString &label() const {return _label;}
 		const Attributes &attributes() const {return _attr;}
+		bool polygon() const {return _polygon;}
 
 		bool operator<(const Point &other) const
 		  {return _id < other._id;}
@@ -66,6 +68,7 @@ public:
 		QString _label;
 		quint64 _id;
 		Attributes _attr;
+		bool _polygon;
 	};
 
 	MapData(const QString &path);

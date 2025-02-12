@@ -185,7 +185,7 @@ static bool polygonPointCb(const MapData::Poly *polygon, void *context)
 	  || type == SUBTYPE(I_ACHARE, 3) || type == SUBTYPE(I_ACHARE, 9)
 	  || type == SUBTYPE(I_BERTHS, 6))
 		points->append(MapData::Point(baseType, polygon->bounds().center(),
-		  polygon->attributes(), polygon->HUNI()));
+		  polygon->attributes(), polygon->HUNI(), true));
 
 	return true;
 }
@@ -286,13 +286,13 @@ static QString weed(uint type)
 }
 
 MapData::Point::Point(uint type, const Coordinates &c, const QString &label)
-  : _type(SUBTYPE(type, 0)), _pos(c), _label(label)
+  : _type(SUBTYPE(type, 0)), _pos(c), _label(label), _polygon(false)
 {
 	_id = ((quint64)order(_type))<<32 | (uint)qHash(c);
 }
 
 MapData::Point::Point(uint type, const Coordinates &c, const Attributes &attr,
-  uint HUNI) : _pos(c), _attr(attr)
+  uint HUNI, bool polygon) : _pos(c), _attr(attr), _polygon(polygon)
 {
 	uint subtype = 0;
 
