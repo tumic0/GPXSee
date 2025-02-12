@@ -178,12 +178,22 @@ static bool polygonPointCb(const MapData::Poly *polygon, void *context)
 
 	if (baseType == TSSLPT || baseType == RCTLPT || baseType == I_TRNBSN
 	  || baseType == BRIDGE || baseType == I_BRIDGE || baseType == BUAARE
-	  || baseType == RESARE || baseType == I_RESARE || baseType == LNDARE
-	  || baseType == LNDRGN
-	  || type == SUBTYPE(ACHARE, 2) || type == SUBTYPE(ACHARE, 3)
-	  || type == SUBTYPE(ACHARE, 9) || type == SUBTYPE(I_ACHARE, 2)
-	  || type == SUBTYPE(I_ACHARE, 3) || type == SUBTYPE(I_ACHARE, 9)
-	  || type == SUBTYPE(I_BERTHS, 6))
+	  || baseType == LNDARE || baseType == LNDRGN
+	  || type == SUBTYPE(ACHARE, 2) || type == SUBTYPE(I_ACHARE, 2)
+	  || type == SUBTYPE(ACHARE, 3) || type == SUBTYPE(I_ACHARE, 3)
+	  || type == SUBTYPE(ACHARE, 9) || type == SUBTYPE(I_ACHARE, 9)
+	  || type == SUBTYPE(I_BERTHS, 6)
+	  || type == SUBTYPE(RESARE, 1) || type == SUBTYPE(I_RESARE, 1)
+	  || type == SUBTYPE(RESARE, 2) || type == SUBTYPE(I_RESARE, 2)
+	  || type == SUBTYPE(RESARE, 4) || type == SUBTYPE(I_RESARE, 4)
+	  || type == SUBTYPE(RESARE, 5) || type == SUBTYPE(I_RESARE, 5)
+	  || type == SUBTYPE(RESARE, 6) || type == SUBTYPE(I_RESARE, 6)
+	  || type == SUBTYPE(RESARE, 7) || type == SUBTYPE(I_RESARE, 7)
+	  || type == SUBTYPE(RESARE, 9) || type == SUBTYPE(I_RESARE, 9)
+	  || type == SUBTYPE(RESARE, 12) || type == SUBTYPE(I_RESARE, 12)
+	  || type == SUBTYPE(RESARE, 17) || type == SUBTYPE(I_RESARE, 17)
+	  || type == SUBTYPE(RESARE, 22) || type == SUBTYPE(I_RESARE, 22)
+	  || type == SUBTYPE(RESARE, 23) || type == SUBTYPE(I_RESARE, 23))
 		points->append(MapData::Point(baseType, polygon->bounds().center(),
 		  polygon->attributes(), polygon->HUNI(), true));
 
