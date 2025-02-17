@@ -19,6 +19,7 @@ using namespace IMG;
 #define TEXT_EXTENT 160
 #define ICON_PADDING 2
 #define RANGE_FACTOR 4
+#define RANGE_MIN    6
 #define ROAD  0
 #define WATER 1
 
@@ -228,8 +229,8 @@ void RasterTile::drawTextItems(QPainter *painter,
 
 static QRect lightRect(const QPoint &pos, quint32 range)
 {
-	return QRect(pos.x() - range * RANGE_FACTOR, pos.y() - range * RANGE_FACTOR,
-		  2*range * RANGE_FACTOR, 2*range * RANGE_FACTOR);
+	quint32 r = qMin(range * RANGE_FACTOR, (quint32)TEXT_EXTENT);
+	return QRect(pos.x() - r, pos.y() - r, 2 * r, 2 * r);
 }
 
 void RasterTile::drawSectorLights(QPainter *painter,
@@ -239,48 +240,54 @@ void RasterTile::drawSectorLights(QPainter *painter,
 		const MapData::Point *p = lights.at(i);
 		QPoint pos(p->coordinates.lon(), p->coordinates.lat());
 
-		if (p->lights.sectors.size()) {
-			for (int j = 0; j < p->lights.sectors.size(); j++) {
-				const Lights::Sector &start = p->lights.sectors.at(j);
-				const Lights::Sector &end = (j == p->lights.sectors.size() - 1)
-				  ? p->lights.sectors.at(0) : p->lights.sectors.at(j+1);
+		for (int j = 0; j < p->lights.size(); j++) {
+			const Light &l = p->lights.at(j);
 
-				if (start.color) {
-					double a1 = -(end.angle / 10.0 + 90.0);
-					double a2 = -(start.angle / 10.0 + 90.0);
-					if (a1 > a2)
-						a2 += 360;
-					double as = (a2 - a1);
-					if (as == 0)
-						as = 360;
+			if (l.sectors.size()) {
+				for (int k = 0; k < l.sectors.size(); k++) {
+					const Light::Sector &start = l.sectors.at(k);
+					const Light::Sector &end = (k == l.sectors.size() - 1)
+					  ? l.sectors.at(0) : l.sectors.at(k+1);
 
-					QRect rect(lightRect(pos, start.range ? start.range : 6));
+					if (start.color) {
+						double a1 = -(end.angle / 10.0 + 90.0);
+						double a2 = -(start.angle / 10.0 + 90.0);
+						if (a1 > a2)
+							a2 += 360;
+						double as = (a2 - a1);
+						if (as == 0)
+							as = 360;
 
-					painter->setPen(QPen(Qt::black, 6, Qt::SolidLine,
-					  Qt::FlatCap));
-					painter->drawArc(rect, a1 * 16, as * 16);
-					painter->setPen(QPen(Style::color(start.color), 4,
-					  Qt::SolidLine, Qt::FlatCap));
-					painter->drawArc(rect, a1 * 16, as * 16);
+						QRect rect(lightRect(pos, start.range
+						  ? start.range : RANGE_MIN));
 
-					if (a2 - a1 != 0) {
-						QLineF ln(pos, QPointF(pos.x() + rect.width(), pos.y()));
-						ln.setAngle(a1);
-						painter->setPen(QPen(Qt::black, 1, Qt::DashLine));
-						painter->drawLine(ln);
-						ln.setAngle(a2);
-						painter->drawLine(ln);
+						painter->setPen(QPen(Qt::black, 6, Qt::SolidLine,
+						  Qt::FlatCap));
+						painter->drawArc(rect, a1 * 16, as * 16);
+						painter->setPen(QPen(Style::color(start.color), 4,
+						  Qt::SolidLine, Qt::FlatCap));
+						painter->drawArc(rect, a1 * 16, as * 16);
+
+						if (a2 - a1 != 0) {
+							QLineF ln(pos, QPointF(pos.x() + rect.width(),
+							  pos.y()));
+							ln.setAngle(a1);
+							painter->setPen(QPen(Qt::black, 1, Qt::DashLine));
+							painter->drawLine(ln);
+							ln.setAngle(a2);
+							painter->drawLine(ln);
+						}
 					}
 				}
-			}
-		} else {
-			QRect rect(lightRect(pos, p->lights.range));
+			} else if (l.range > RANGE_MIN) {
+				QRect rect(lightRect(pos, l.range));
 
-			painter->setPen(QPen(Qt::black, 6, Qt::SolidLine, Qt::FlatCap));
-			painter->drawArc(rect, 0, 360 * 16);
-			painter->setPen(QPen(Style::color(p->lights.color), 4,
-			  Qt::SolidLine, Qt::FlatCap));
-			painter->drawArc(rect, 0, 360 * 16);
+				painter->setPen(QPen(Qt::black, 6, Qt::SolidLine, Qt::FlatCap));
+				painter->drawArc(rect, 0, 360 * 16);
+				painter->setPen(QPen(Style::color(l.color), 4, Qt::SolidLine,
+				  Qt::FlatCap));
+				painter->drawArc(rect, 0, 360 * 16);
+			}
 		}
 	}
 }
@@ -456,6 +463,17 @@ void RasterTile::processShields(const QList<MapData::Poly> &lines,
 	}
 }
 
+static bool showAsSector(const QVector<Light> &lights)
+{
+	for (int i = 0; i < lights.size(); i++) {
+		const Light &l = lights.at(i);
+		if ((l.color && l.range > RANGE_MIN) || !l.sectors.isEmpty())
+			return true;
+	}
+
+	return false;
+}
+
 void RasterTile::processPoints(QList<MapData::Point> &points,
   QList<TextItem*> &textItems, QList<const MapData::Point*> &lights)
 {
@@ -466,8 +484,9 @@ void RasterTile::processPoints(QList<MapData::Point> &points,
 		const Style *style = _data->style();
 		const Style::Point &ps = style->point(point.type);
 		bool poi = Style::isPOI(point.type);
+		bool sl = showAsSector(point.lights);
 
-		if (point.lights.isSectorLight())
+		if (sl)
 			lights.append(&point);
 
 		const QString *label = point.label.text().isEmpty()
@@ -490,12 +509,16 @@ void RasterTile::processPoints(QList<MapData::Point> &points,
 
 		TextPointItem *item = new TextPointItem(pos + offset, label, fnt, img,
 		  color, hcolor, 0, ICON_PADDING);
-		if (item->isValid() && (point.lights.isSectorLight()
-		  || !item->collides(textItems))) {
+		if (item->isValid() && (sl || !item->collides(textItems))) {
 			textItems.append(item);
-			if (point.lights.color && !point.lights.isSectorLight())
-				textItems.append(new TextPointItem(pos + style->lightOffset(),
-				  0, 0, style->light(point.lights.color), 0, 0, 0, 0));
+			for (int j = 0; j < point.lights.size(); j++) {
+				const Light &l = point.lights.at(j);
+				if (l.color && l.range <= RANGE_MIN) {
+					textItems.append(new TextPointItem(pos + style->lightOffset(),
+					  0, 0, style->light(l.color), 0, 0, 0, 0));
+					break;
+				}
+			}
 		} else
 			delete item;
 	}

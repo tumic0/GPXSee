@@ -5,7 +5,7 @@
 #include <QBrush>
 #include <QFont>
 #include <QDebug>
-#include "lights.h"
+#include "light.h"
 #include "subfile.h"
 
 #define TYPE(t) ((t)<<8)
@@ -113,7 +113,7 @@ public:
 	const QList<quint32> &drawOrder() const {return _drawOrder;}
 	const QFont *font(Style::FontSize size, Style::FontSize defaultSize
 	  = Style::Normal) const;
-	const QImage *light(Lights::Color color) const;
+	const QImage *light(Light::Color color) const;
 	const QPoint &lightOffset() const {return _lightOffset;}
 
 	static bool isPOI(quint32 type)
@@ -157,7 +157,7 @@ public:
 	static bool isMarina(quint32 type)
 	  {return type == 0x10703;}
 
-	static QColor color(Lights::Color c);
+	static QColor color(Light::Color c);
 
 private:
 	struct Section {

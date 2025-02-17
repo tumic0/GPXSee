@@ -124,7 +124,7 @@ bool RGNFile::readBuoyInfo(Handle &hdl, quint8 flags, quint32 size,
 		lc = (val >> 6) & 7;
 
 	if (lc)
-		point->lights.color = (Lights::Color)lc;
+		point->lights.append(Light((Light::Color)lc, 0));
 
 	return true;
 }
@@ -190,6 +190,7 @@ bool RGNFile::readLightInfo(Handle &hdl, quint8 flags, quint32 size,
 	if (flags1 & 0x800) {
 		quint16 la;
 		quint8 cf, range = 0;
+		QVector<Light::Sector> sectors;
 
 		do {
 			if (!(size >= 2 && readUInt16(hdl, la)))
@@ -197,14 +198,16 @@ bool RGNFile::readLightInfo(Handle &hdl, quint8 flags, quint32 size,
 			size -= 2;
 
 			cf = la >> 8;
-			Lights::Color c = (Lights::Color)(cf >> 4 & 7);
+			Light::Color c = (Light::Color)(cf >> 4 & 7);
 			if (c) {
 				if (!(size >= 1 && readUInt8(hdl, range)))
 					return false;
 				size--;
 			}
-			point->lights.sectors.append(Lights::Sector(c, la & 0xfff, range));
+			sectors.append(Light::Sector(c, la & 0xfff, range));
 		} while (!(cf >> 7));
+
+		point->lights.append(Light(sectors));
 	} else {
 		quint8 v1, v2, range;
 
@@ -220,8 +223,7 @@ bool RGNFile::readLightInfo(Handle &hdl, quint8 flags, quint32 size,
 			range += v2;
 		}
 
-		point->lights.color = (Lights::Color)(v1 >> 5);
-		point->lights.range = range;
+		point->lights.append(Light((Light::Color)(v1 >> 5), range));
 	}
 
 	return true;
@@ -289,8 +291,153 @@ bool RGNFile::readClassFields(Handle &hdl, SegmentType segmentType,
 	return seek(hdl, off + rs);
 }
 
-bool RGNFile::skipLclFields(Handle &hdl, const quint32 flags[3]) const
+bool RGNFile::readLclNavaid(Handle &hdl, quint32 size,
+  MapData::Point *point) const
 {
+	quint32 unused, flags;
+
+	if (!(size >= 4 && readUInt32(hdl, flags)))
+		return false;
+	size -= 4;
+	if (flags & 1) {
+		if (!(size >= 1 && readUInt8(hdl, unused)))
+			return false;
+		size--;
+	}
+	if (flags & 2) {
+		if (!(size >= 1 && readUInt8(hdl, unused)))
+			return false;
+		size--;
+	}
+	if (flags & 4) {
+		if (!(size >= 1 && readUInt8(hdl, unused)))
+			return false;
+		size--;
+	}
+	if (flags & 8) {
+		if (!(size >= 3 && readUInt24(hdl, unused)))
+			return false;
+		size -= 3;
+	}
+	if (flags & 0x10) {
+		if (!(size >= 3 && readUInt24(hdl, unused)))
+			return false;
+		size -= 3;
+	}
+	if (flags & 0x20) {
+		if (!(size >= 3 && readUInt24(hdl, unused)))
+			return false;
+		size -= 3;
+	}
+	if (flags & 0x200) {
+		quint8 b;
+		do {
+			if (!(size >= 1 && readUInt8(hdl, b)))
+				return false;
+			size--;
+		} while (b & 0x80);
+	}
+
+	quint8 lights = (flags >> 6) & 7;
+
+	for (quint32 i = 0; i < lights; i ++) {
+		quint32 fs, vs, lflags;
+		Light light;
+
+		if (!(readVUInt32(hdl, fs, &vs) && size >= vs))
+			return false;
+		size -= vs;
+		if (!(size >= 4 && readUInt32(hdl, lflags)))
+			return false;
+		size -= 4;
+		if (lflags >> 0x11 & 3) {
+			if (!(size >= (lflags >> 0x11 & 3)
+			  && readVUInt32(hdl, lflags >> 0x11 & 3, unused)))
+				return false;
+			size -= (lflags >> 0x11 & 3);
+		}
+		if (lflags & 0x3000) {
+			if (lflags & 0x2000) {
+				if (!(size >= 1 && readUInt8(hdl, unused)))
+					return false;
+				size--;
+				unused |= (lflags >> 4) & 0x100;
+			} else {
+				if (!(size >= 2 && readUInt16(hdl, unused)))
+					return false;
+				size -= 2;
+			}
+		}
+		if (lflags & 0x100000) {
+			if (!(size >= 1 && readUInt8(hdl, unused)))
+				return false;
+			size--;
+			if (unused & 0x80) {
+				if (!(size >= 1 && readUInt8(hdl, unused)))
+					return false;
+				size--;
+			}
+		}
+
+		quint8 sectors = lflags & 0x1f;
+
+		for (quint32 j = 0; j < sectors; j++) {
+			quint32 cf, range = 0;
+
+			if (!(size >= 1 && readUInt8(hdl, cf)))
+				return false;
+			size--;
+			if (cf >> 6) {
+				if (!(size >= (cf >> 6) && readVUInt32(hdl, cf >> 6, range)))
+					return false;
+				size -= (cf >> 6);
+			}
+
+			if (sectors > 1) {
+				quint32 angle;
+
+				if (!(size >= 2 && readUInt16(hdl, angle)))
+					return false;
+				size -= 2;
+				if ((lflags >> 0x13) & 1) {
+					quint32 sflags;
+
+					if (!(size >= 1 && readUInt8(hdl, sflags)))
+						return false;
+					size--;
+					if (0x3f < sflags) {
+						if (sflags & 0x80) {
+							if (!(size >= 1 && readUInt8(hdl, unused)))
+								return false;
+							size--;
+							unused |= (sflags & 0x40) << 2;
+						} else {
+							if (!(size >= 2 && readUInt16(hdl, unused)))
+								return false;
+							size -= 2;
+						}
+					}
+				}
+
+				light.sectors.append(Light::Sector((Light::Color)(cf & 0x7),
+				  angle, range));
+			} else {
+				light.color = (Light::Color)(cf & 0x7);
+				light.range = range;
+			}
+		}
+
+		point->lights.append(light);
+	}
+
+	return (size == 0);
+}
+
+bool RGNFile::readLclFields(Handle &hdl, const quint32 flags[3],
+  SegmentType segmentType, void *object) const
+{
+	MapData::Point *point = (segmentType == Point)
+	  ? (MapData::Point *) object : 0;
 	quint32 bitfield = 0xFFFFFFFF;
 
 	if (flags[0] & 0x20000000)
@@ -302,14 +449,21 @@ bool RGNFile::skipLclFields(Handle &hdl, const quint32 flags[3]) const
 			if (bitfield & 1) {
 				quint32 m = flags[(j >> 4) + 1] >> ((j * 2) & 0x1e) & 3;
 
-				quint32 skip = 0;
+				quint32 size = 0;
 				if (m == 3) {
-					if (!readVUInt32(hdl, skip))
+					if (!readVUInt32(hdl, size))
 						return false;
 				} else
-					skip = m + 1;
-				if (!seek(hdl, pos(hdl) + skip))
-					return false;
+					size = m + 1;
+
+				if (i == 2 && point) {
+					point->lights.clear();
+					if (!readLclNavaid(hdl, size, point))
+						return false;
+				} else {
+					if (!seek(hdl, pos(hdl) + size))
+						return false;
+				}
 			}
 			bitfield >>= 1;
 			j++;
@@ -563,8 +717,8 @@ bool RGNFile::extPolyObjects(Handle &hdl, const SubDiv *subdiv, quint32 shift,
 		if (subtype & 0x80 && !readClassFields(hdl, segmentType, &poly, lbl,
 		  lblHdl))
 			return false;
-		if (subtype & 0x40 && !skipLclFields(hdl, segmentType == Line
-		  ? _linesLclFlags : _polygonsLclFlags))
+		if (subtype & 0x40 && !readLclFields(hdl, segmentType == Line
+		  ? _linesLclFlags : _polygonsLclFlags, segmentType, &poly))
 			return false;
 		quint32 gblFlags = (segmentType == Line)
 		  ? _linesGblFlags : _polygonsGblFlags;
@@ -654,7 +808,7 @@ bool RGNFile::extPointObjects(Handle &hdl, const SubDiv *subdiv,
 			return false;
 		if (subtype & 0x80 && !readClassFields(hdl, Point, &point, lbl, lblHdl))
 			return false;
-		if (subtype & 0x40 && !skipLclFields(hdl, _pointsLclFlags))
+		if (subtype & 0x40 && !readLclFields(hdl, _pointsLclFlags, Point, &point))
 			return false;
 		if (_pointsGblFlags && !skipGblFields(hdl, _pointsGblFlags))
 			return false;

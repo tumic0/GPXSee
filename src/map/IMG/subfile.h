@@ -169,7 +169,7 @@ public:
 		return true;
 	}
 
-	bool readVUInt32(Handle &hdl, quint32 &val) const;
+	bool readVUInt32(Handle &hdl, quint32 &val, quint32 *size = 0) const;
 	bool readVUInt32(Handle &hdl, quint32 bytes, quint32 &val) const;
 	bool readVBitfield32(Handle &hdl, quint32 &bitfield) const;
 

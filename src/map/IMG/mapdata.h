@@ -14,7 +14,7 @@
 #include "map/matrix.h"
 #include "label.h"
 #include "raster.h"
-#include "lights.h"
+#include "light.h"
 #include "zoom.h"
 
 namespace IMG {
@@ -56,7 +56,7 @@ public:
 
 		Coordinates coordinates;
 		Label label;
-		Lights lights;
+		QVector<Light> lights;
 		quint64 id;
 		quint32 type;
 		quint32 flags;

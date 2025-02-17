@@ -56,7 +56,8 @@ private:
 	bool segments(Handle &hdl, SubDiv *subdiv, SubDiv::Segment seg[5]) const;
 	bool readClassFields(Handle &hdl, SegmentType segmentType, void *object,
 	  LBLFile *lbl, Handle &lblHdl) const;
-	bool skipLclFields(Handle &hdl, const quint32 flags[3]) const;
+	bool readLclFields(Handle &hdl, const quint32 flags[3],
+	  SegmentType segmentType, void *object) const;
 	bool skipGblFields(Handle &hdl, quint32 flags) const;
 	bool readRasterInfo(Handle &hdl, const LBLFile *lbl, quint32 size,
 	  MapData::Poly *poly) const;
@@ -70,6 +71,8 @@ private:
 	  MapData::Point *point) const;
 	bool readLabel(Handle &hdl, LBLFile *lbl, Handle &lblHdl,
 	  quint8 flags, quint32 size, MapData::Point *point) const;
+	bool readLclNavaid(Handle &hdl, quint32 size,
+	  MapData::Point *point) const;
 
 	HuffmanTable *_huffmanTable;
 	Section _base, _dict, _polygons, _lines, _points;

@@ -1,18 +1,18 @@
-#ifndef IMG_LIGHTS_H
-#define IMG_LIGHTS_H
+#ifndef IMG_LIGHT_H
+#define IMG_LIGHT_H
 
 #include <QVector>
 #include <QDebug>
 
 namespace IMG {
 
-class Lights
+struct Light
 {
-public:
 	enum Color {None, Red, Green, White, Blue, Yellow, Violet, Amber};
 
 	struct Sector
 	{
+	public:
 		Sector() : color(None), angle(0), range(0) {}
 		Sector(Color color, quint32 angle, quint32 range)
 		  : color(color), angle(angle), range(range) {}
@@ -22,9 +22,10 @@ public:
 		quint32 range;
 	};
 
-	Lights() : color(None), range(0) {}
-	bool isSectorLight() const
-	  {return ((color && range > 6) || !sectors.isEmpty());}
+	Light() : color(None), range(0) {}
+	Light(Color color, quint32 range) : color(color), range(range) {}
+	Light(const QVector<Sector> &sectors)
+	  : color(None), range(0), sectors(sectors) {}
 
 	Color color;
 	quint32 range;
@@ -34,19 +35,19 @@ public:
 }
 
 #ifndef QT_NO_DEBUG
-inline QDebug operator<<(QDebug dbg, const IMG::Lights::Sector &sector)
+inline QDebug operator<<(QDebug dbg, const IMG::Light::Sector &sector)
 {
 	dbg.nospace() << "Sector(" << sector.color << ", " << sector.angle
 	  << ", " << sector.range << ")";
 	return dbg.space();
 }
 
-inline QDebug operator<<(QDebug dbg, const IMG::Lights &lights)
+inline QDebug operator<<(QDebug dbg, const IMG::Light &light)
 {
-	dbg.nospace() << "Lights(" << lights.color << ", " << lights.range << ", "
-	  << lights.sectors << ")";
+	dbg.nospace() << "Light(" << light.color << ", " << light.range << ", "
+	  << light.sectors << ")";
 	return dbg.space();
 }
 #endif // QT_NO_DEBUG
 
-#endif // IMG_LIGHTS_H
+#endif // IMG_LIGHT_H

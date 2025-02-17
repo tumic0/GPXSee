@@ -1377,34 +1377,34 @@ const QFont *Style::font(Style::FontSize size, Style::FontSize defaultSize) cons
 	}
 }
 
-const QImage *Style::light(Lights::Color color) const
+const QImage *Style::light(Light::Color color) const
 {
 	switch (color) {
-		case Lights::Red:
+		case Light::Red:
 			return &_lightRed;
-		case Lights::Green:
+		case Light::Green:
 			return &_lightGreen;
-		case Lights::White:
+		case Light::White:
 			return &_lightWhite;
-		case Lights::Yellow:
-		case Lights::Amber:
+		case Light::Yellow:
+		case Light::Amber:
 			return &_lightYellow;
 		default:
 			return &_light;
 	}
 }
 
-QColor Style::color(Lights::Color c)
+QColor Style::color(Light::Color c)
 {
 	switch (c) {
-		case Lights::Red:
+		case Light::Red:
 			return Qt::red;
-		case Lights::Green:
+		case Light::Green:
 			return Qt::green;
-		case Lights::White:
+		case Light::White:
 			return Qt::white;
-		case Lights::Yellow:
-		case Lights::Amber:
+		case Light::Yellow:
+		case Light::Amber:
 			return Qt::yellow;
 		default:
 			return Qt::magenta;
