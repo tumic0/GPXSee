@@ -9,9 +9,6 @@
 #include <QVBoxLayout>
 #include <QFormLayout>
 #include <QApplication>
-#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
-#include <QDesktopWidget>
-#endif // QT 5.15
 #include "tooltip.h"
 #include "thumbnail.h"
 #include "flowlayout.h"
@@ -184,11 +181,7 @@ bool PopupFrame::eventFilter(QObject *o, QEvent *ev)
 
 void PopupFrame::place(const QPoint &pos, QWidget *w)
 {
-#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
-	QRect screen = QApplication::desktop()->screenGeometry(w);
-#else // QT 5.15
 	QRect screen = w->screen()->geometry();
-#endif // QT 5.15
 	QPoint p(pos.x() + 2, pos.y() + 16);
 
 	if (p.x() + width() > screen.x() + screen.width())

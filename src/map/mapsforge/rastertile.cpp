@@ -39,9 +39,7 @@ static QPainterPath parallelPath(const QPainterPath &p, double dy)
 	QVector<QPointF> u(n);
 	QPainterPath h;
 
-#if QT_VERSION >= QT_VERSION_CHECK(5, 13, 0)
 	h.reserve(p.elementCount());
-#endif // QT 5.13
 
 	for (int k = 0; k < n; k++) {
 		qreal c = p.elementAt(k + 1).x - p.elementAt(k).x;
@@ -251,12 +249,10 @@ QPainterPath RasterTile::painterPath(const Polygon &polygon, bool curve) const
 	QPainterPath path;
 
 	if (curve) {
-#if QT_VERSION >= QT_VERSION_CHECK(5, 13, 0)
 		int size = 0;
 		for (int i = 0; i < polygon.size(); i++)
 			size += polygon.at(i).size();
 		path.reserve(size);
-#endif // QT 5.13
 
 		for (int i = 0; i < polygon.size(); i++) {
 			const QVector<Coordinates> &subpath = polygon.at(i);

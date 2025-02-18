@@ -676,21 +676,17 @@ QWidget *OptionsDialog::createPositionPage()
 	_positionPlugin = new QComboBox();
 	_positionPlugin->addItems(plugins);
 	_positionPlugin->setCurrentIndex(_positionPlugin->findText(_options.plugin));
-#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
 	_pluginParameters = new PluginParameters(_positionPlugin->currentText(),
 	  _options.pluginParams);
 	connect(_positionPlugin, &QComboBox::currentTextChanged, _pluginParameters,
 	  &PluginParameters::setPlugin);
-#endif // QT 5.14
 
 	QFormLayout *pluginLayout = new QFormLayout();
 	pluginLayout->addRow(tr("Plugin:"), _positionPlugin);
 
 	QVBoxLayout *sourceLayout = new QVBoxLayout();
 	sourceLayout->addLayout(pluginLayout);
-#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
 	sourceLayout->addWidget(_pluginParameters);
-#endif // QT 5.14
 	sourceLayout->addStretch();
 
 	QWidget *sourceTab = new QWidget();
@@ -1009,9 +1005,7 @@ void OptionsDialog::accept()
 	_options.hillshadingZFactor = _hillshadingZFactor->value();
 
 	_options.plugin = _positionPlugin->currentText();
-#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
 	_options.pluginParams = _pluginParameters->parameters();
-#endif // QT 5.14
 
 	_options.useOpenGL = _useOpenGL->isChecked();
 	_options.enableHTTP2 = _enableHTTP2->isChecked();

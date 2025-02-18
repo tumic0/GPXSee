@@ -638,11 +638,7 @@ void MapView::wheelEvent(QWheelEvent *event)
 		return;
 	_wheelDelta = _wheelDelta % (15 * 8);
 
-#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
-	zoom((delta > 0) ? 1 : -1, event->pos(), shift);
-#else // QT 5.15
 	zoom((delta > 0) ? 1 : -1, event->position().toPoint(), shift);
-#endif // QT 5.15
 
 	/* Do not call QGraphicsView::wheelEvent() here as this would shift the
 	   view ! */

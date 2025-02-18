@@ -27,14 +27,6 @@
 
 #define MAX_REDIRECT_LEVEL 5
 #define RETRIES 3
-
-#define ATTR_REDIRECT_POLICY QNetworkRequest::RedirectPolicyAttribute
-#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
-#define ATTR_HTTP2_ALLOWED QNetworkRequest::HTTP2AllowedAttribute
-#else // QT 5.15
-#define ATTR_HTTP2_ALLOWED QNetworkRequest::Http2AllowedAttribute
-#endif // QT 5.15
-
 #define TMP_SUFFIX ".download"
 
 // QNetworkReply::errorString() returns bullshit, use our own reporting
@@ -129,31 +121,6 @@ Authorization::Authorization(const QString &username, const QString &password)
 	_header = HTTPHeader("Authorization", "Basic " + data);
 }
 
-#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
-NetworkTimeout::NetworkTimeout(int timeout, QNetworkReply *reply)
-  : QObject(reply), _timeout(timeout)
-{
-	connect(reply, &QIODevice::readyRead, this, &NetworkTimeout::reset);
-	_timer.start(timeout * 1000, this);
-}
-
-void NetworkTimeout::reset()
-{
-	_timer.start(_timeout * 1000, this);
-}
-
-void NetworkTimeout::timerEvent(QTimerEvent *ev)
-{
-	if (!_timer.isActive() || ev->timerId() != _timer.timerId())
-		return;
-	QNetworkReply *reply = static_cast<QNetworkReply*>(parent());
-	if (reply->isRunning())
-		reply->abort();
-	_timer.stop();
-}
-#endif // QT 5.15
-
-
 QNetworkAccessManager *Downloader::_manager = 0;
 int Downloader::_timeout = 30;
 bool Downloader::_http2 = true;
@@ -176,12 +143,10 @@ bool Downloader::doDownload(const Download &dl, const QList<HTTPHeader> &headers
 
 	QNetworkRequest request(url);
 	request.setMaximumRedirectsAllowed(MAX_REDIRECT_LEVEL);
-	request.setAttribute(ATTR_REDIRECT_POLICY,
+	request.setAttribute(QNetworkRequest::RedirectPolicyAttribute,
 	  QNetworkRequest::NoLessSafeRedirectPolicy);
-	request.setAttribute(ATTR_HTTP2_ALLOWED, QVariant(_http2));
-#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+	request.setAttribute(QNetworkRequest::Http2AllowedAttribute, QVariant(_http2));
 	request.setTransferTimeout(_timeout * 1000);
-#endif // QT 5.15
 
 	for (int i = 0; i < headers.size(); i++) {
 		const HTTPHeader &hdr = headers.at(i);
@@ -208,9 +173,6 @@ bool Downloader::doDownload(const Download &dl, const QList<HTTPHeader> &headers
 	_currentDownloads.insert(url, file);
 
 	if (reply->isRunning()) {
-#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
-		new NetworkTimeout(_timeout, reply);
-#endif // QT 5.15
 		connect(reply, &QIODevice::readyRead, this, &Downloader::emitReadReady);
 		connect(reply, &QNetworkReply::finished, this, &Downloader::emitFinished);
 	} else {

@@ -29,8 +29,8 @@ GPS log file formats.
 
 ## Build
 Build requirements:
-* Qt5 >= 5.11 or Qt6 >= 6.2 (Android builds require Qt6)
-* C++11 or newer compiler (tested: msvc2019, gcc 7.5.0, clang/Apple LLVM version
+* Qt5 >= 5.15 or Qt6 >= 6.2 (Android builds require Qt6)
+* C++11 or newer compiler (tested: msvc2022, gcc 11, clang/Apple LLVM version
   10.0.0)
 
 Build steps:

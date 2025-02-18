@@ -6,16 +6,8 @@
 #define MAX_ANGLE      30
 #define PADDING        2
 
-#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
-#define INTERSECTS intersect
-#else // QT 5.15
-#define INTERSECTS intersects
-#endif // QT 5.15
-
-
 static void swap(const QLineF &line, QPointF *p1, QPointF *p2)
 {
-
 	QPointF lp1(line.p1());
 	QPointF lp2(line.p2());
 
@@ -34,10 +26,10 @@ static bool intersection(const QLineF &line, const QRectF &rect, QPointF *p1,
 {
 	QPointF *p = p1;
 
-	if (line.INTERSECTS(QLineF(rect.topLeft(), rect.topRight()), p)
+	if (line.intersects(QLineF(rect.topLeft(), rect.topRight()), p)
 	  == QLineF::BoundedIntersection)
 		p = p2;
-	if (line.INTERSECTS(QLineF(rect.topLeft(), rect.bottomLeft()), p)
+	if (line.intersects(QLineF(rect.topLeft(), rect.bottomLeft()), p)
 	  == QLineF::BoundedIntersection) {
 		if (p == p2) {
 			swap(line, p1, p2);
@@ -45,7 +37,7 @@ static bool intersection(const QLineF &line, const QRectF &rect, QPointF *p1,
 		}
 		p = p2;
 	}
-	if (line.INTERSECTS(QLineF(rect.bottomRight(), rect.bottomLeft()), p)
+	if (line.intersects(QLineF(rect.bottomRight(), rect.bottomLeft()), p)
 	  == QLineF::BoundedIntersection) {
 		if (p == p2) {
 			swap(line, p1, p2);
@@ -53,7 +45,7 @@ static bool intersection(const QLineF &line, const QRectF &rect, QPointF *p1,
 		}
 		p = p2;
 	}
-	if (line.INTERSECTS(QLineF(rect.bottomRight(), rect.topRight()), p)
+	if (line.intersects(QLineF(rect.bottomRight(), rect.topRight()), p)
 	  == QLineF::BoundedIntersection) {
 		if (p == p2) {
 			swap(line, p1, p2);
@@ -68,16 +60,16 @@ static bool intersection(const QLineF &line, const QRectF &rect, QPointF *p1,
 
 static bool intersection(const QLineF &line, const QRectF &rect, QPointF *p)
 {
-	if (line.INTERSECTS(QLineF(rect.topLeft(), rect.topRight()), p)
+	if (line.intersects(QLineF(rect.topLeft(), rect.topRight()), p)
 	  == QLineF::BoundedIntersection)
 		return true;
-	if (line.INTERSECTS(QLineF(rect.topLeft(), rect.bottomLeft()), p)
+	if (line.intersects(QLineF(rect.topLeft(), rect.bottomLeft()), p)
 	  == QLineF::BoundedIntersection)
 		return true;
-	if (line.INTERSECTS(QLineF(rect.bottomRight(), rect.bottomLeft()), p)
+	if (line.intersects(QLineF(rect.bottomRight(), rect.bottomLeft()), p)
 	  == QLineF::BoundedIntersection)
 		return true;
-	if (line.INTERSECTS(QLineF(rect.bottomRight(), rect.topRight()), p)
+	if (line.intersects(QLineF(rect.bottomRight(), rect.topRight()), p)
 	  == QLineF::BoundedIntersection)
 		return true;
 

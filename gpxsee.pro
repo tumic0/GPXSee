@@ -5,7 +5,6 @@ unix:!macx:!android {
 }
 VERSION = 13.36
 
-
 QT += core \
     gui \
     gui-private \

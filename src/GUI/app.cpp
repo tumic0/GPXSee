@@ -73,9 +73,7 @@ App::App(int &argc, char **argv) : QApplication(argc, argv)
 #if defined(Q_OS_WIN32) || defined(Q_OS_MAC)
 	QIcon::setThemeName(APP_NAME);
 #endif // Q_OS_WIN32 || Q_OS_MAC
-#if QT_VERSION >= QT_VERSION_CHECK(5, 12, 0)
 	QIcon::setFallbackThemeName(APP_NAME);
-#endif // QT 5.12
 
 	_gui = new GUI();
 

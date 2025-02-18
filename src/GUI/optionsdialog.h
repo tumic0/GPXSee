@@ -193,9 +193,7 @@ private:
 	QDoubleSpinBox *_hillshadingZFactor;
 	// Position
 	QComboBox *_positionPlugin;
-#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
 	PluginParameters *_pluginParameters;
-#endif // QT 5.14
 	// System
 	QSpinBox *_pixmapCache;
 	QSpinBox *_demCache;

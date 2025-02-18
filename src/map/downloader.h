@@ -3,9 +3,6 @@
 
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
-#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
-#include <QBasicTimer>
-#endif // QT 5.15
 #include <QUrl>
 #include <QList>
 #include <QHash>
@@ -40,25 +37,6 @@ public:
 private:
 	HTTPHeader _header;
 };
-
-#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
-class NetworkTimeout : public QObject
-{
-	Q_OBJECT
-
-public:
-	NetworkTimeout(int timeout, QNetworkReply *reply);
-
-private slots:
-	void reset();
-
-private:
-	void timerEvent(QTimerEvent *ev);
-
-	QBasicTimer _timer;
-	int _timeout;
-};
-#endif // QT 5.15
 
 class Downloader : public QObject
 {

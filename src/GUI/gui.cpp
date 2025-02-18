@@ -2498,12 +2498,8 @@ QGeoPositionInfoSource *GUI::positionSource(const Options &options)
 {
 	QGeoPositionInfoSource *source;
 
-#if QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
-	source = QGeoPositionInfoSource::createSource(options.plugin, this);
-#else // QT 5.14
 	source = QGeoPositionInfoSource::createSource(options.plugin,
 	  options.pluginParams.value(options.plugin), this);
-#endif // QT 5.14
 	if (source)
 		source->setPreferredPositioningMethods(
 		  QGeoPositionInfoSource::SatellitePositioningMethods);

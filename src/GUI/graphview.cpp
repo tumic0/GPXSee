@@ -25,15 +25,6 @@
 #define IW(item) ((item)->boundingRect().width())
 #define IH(item) ((item)->boundingRect().height())
 
-static inline QPoint POS(QWheelEvent *e)
-{
-#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
-	return e->pos();
-#else // QT 5.15
-	return e->position().toPoint();
-#endif // QT 5.15
-}
-
 static inline QPoint POS(QMouseEvent *e)
 {
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
@@ -393,7 +384,7 @@ void GraphView::wheelEvent(QWheelEvent *e)
 		return;
 	_angleDelta = _angleDelta % (15 * 8);
 
-	QPointF pos = mapToScene(POS(e));
+	QPointF pos = mapToScene(e->position().toPoint());
 	QRectF gr(_grid->boundingRect());
 	QPointF r(pos.x() / gr.width(), pos.y() / gr.height());
 
@@ -404,7 +395,8 @@ void GraphView::wheelEvent(QWheelEvent *e)
 	QPointF npos(mapFromScene(QPointF(r.x() * ngr.width(),
 	  r.y() * ngr.height())));
 	QScrollBar *sb = horizontalScrollBar();
-	sb->setSliderPosition(sb->sliderPosition() + npos.x() - POS(e).x());
+	sb->setSliderPosition(sb->sliderPosition() + npos.x()
+	  - e->position().toPoint().x());
 
 	QGraphicsView::wheelEvent(e);
 }
