@@ -9,6 +9,9 @@ jobs:
   build:
     name: GPXSee
     runs-on: ubuntu-20.04
+    strategy:
+      matrix:
+        config: ['release', 'debug']
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -19,6 +22,6 @@ jobs:
       - name: Create localization
         run: lrelease gpxsee.pro
       - name: Configure build
-        run: qmake gpxsee.pro
+        run: qmake CONFIG+=${{ matrix.config }} gpxsee.pro
       - name: Build project
         run: make -j2
