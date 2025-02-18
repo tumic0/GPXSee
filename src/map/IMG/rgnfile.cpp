@@ -13,7 +13,7 @@ using namespace Garmin;
 using namespace IMG;
 
 #define MASK(bits) ((1U << (bits)) - 1U)
-#define COLOR(color) ((Light::Color)(color))
+#define COLOR(color) static_cast<Light::Color>(color)
 
 static quint64 pointId(const QPoint &pos, quint32 type, const QString &label)
 {
