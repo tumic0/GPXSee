@@ -48,8 +48,8 @@ private:
 #ifndef QT_NO_DEBUG
 inline QDebug operator<<(QDebug dbg, const IMG::Light::Sector &sector)
 {
-	dbg.nospace() << "Sector(" << sector.color << ", " << sector.angle
-	  << ", " << sector.range << ")";
+	dbg.nospace() << "Sector(" << sector.color() << ", " << sector.angle()
+	  << ", " << sector.range() << ")";
 	return dbg.space();
 }
 
