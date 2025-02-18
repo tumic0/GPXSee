@@ -13,6 +13,7 @@ using namespace Garmin;
 using namespace IMG;
 
 #define MASK(bits) ((1U << (bits)) - 1U)
+#define COLOR(color) ((Light::Color)(color))
 
 static quint64 pointId(const QPoint &pos, quint32 type, const QString &label)
 {
@@ -124,7 +125,7 @@ bool RGNFile::readBuoyInfo(Handle &hdl, quint8 flags, quint32 size,
 		lc = (val >> 6) & 7;
 
 	if (lc)
-		point->lights.append(Light((Light::Color)lc, 0));
+		point->lights.append(Light(COLOR(lc), 0));
 
 	return true;
 }
@@ -198,7 +199,7 @@ bool RGNFile::readLightInfo(Handle &hdl, quint8 flags, quint32 size,
 			size -= 2;
 
 			cf = la >> 8;
-			Light::Color c = (Light::Color)(cf >> 4 & 7);
+			Light::Color c = COLOR(cf >> 4 & 7);
 			if (c) {
 				if (!(size >= 1 && readUInt8(hdl, range)))
 					return false;
@@ -223,7 +224,7 @@ bool RGNFile::readLightInfo(Handle &hdl, quint8 flags, quint32 size,
 			range += v2;
 		}
 
-		point->lights.append(Light((Light::Color)(v1 >> 5), range));
+		point->lights.append(Light(COLOR(v1 >> 5), range));
 	}
 
 	return true;
@@ -291,10 +292,122 @@ bool RGNFile::readClassFields(Handle &hdl, SegmentType segmentType,
 	return seek(hdl, off + rs);
 }
 
+bool RGNFile::readLclSectors(Handle &hdl, quint32 &size, quint32 flags,
+  Light &light) const
+{
+	quint32 unused, cnt = flags & 0x1f;
+	QVector<Light::Sector> sectors;
+
+	for (quint32 j = 0; j < cnt; j++) {
+		quint32 cf, range = 0;
+
+		if (!(size >= 1 && readUInt8(hdl, cf)))
+			return false;
+		size--;
+		if (cf >> 6) {
+			if (!(size >= (cf >> 6) && readVUInt32(hdl, cf >> 6, range)))
+				return false;
+			size -= (cf >> 6);
+		}
+
+		if (cnt > 1) {
+			quint32 angle;
+
+			if (!(size >= 2 && readUInt16(hdl, angle)))
+				return false;
+			size -= 2;
+			if ((flags >> 0x13) & 1) {
+				quint32 sflags;
+
+				if (!(size >= 1 && readUInt8(hdl, sflags)))
+					return false;
+				size--;
+				if (0x3f < sflags) {
+					if (sflags & 0x80) {
+						if (!(size >= 1 && readUInt8(hdl, unused)))
+							return false;
+						size--;
+						unused |= (sflags & 0x40) << 2;
+					} else {
+						if (!(size >= 2 && readUInt16(hdl, unused)))
+							return false;
+						size -= 2;
+					}
+				}
+			}
+
+			sectors.append(Light::Sector(COLOR(cf & 0x7), angle, range));
+		} else {
+			light = Light(COLOR(cf & 0x7), range);
+			return true;
+		}
+	}
+
+	light = Light(sectors);
+
+	return true;
+}
+
+bool RGNFile::readLclLights(Handle &hdl, quint32 &size, quint32 lights,
+  MapData::Point *point) const
+{
+	quint32 unused;
+
+	for (quint32 i = 0; i < lights; i++) {
+		quint32 fs, vs, flags;
+		Light light;
+
+		if (!(readVUInt32(hdl, fs, &vs) && size >= vs))
+			return false;
+		size -= vs;
+		if (!(size >= 4 && readUInt32(hdl, flags)))
+			return false;
+		size -= 4;
+		if (flags >> 0x11 & 3) {
+			if (!(size >= (flags >> 0x11 & 3)
+			  && readVUInt32(hdl, flags >> 0x11 & 3, unused)))
+				return false;
+			size -= (flags >> 0x11 & 3);
+		}
+		if (flags & 0x3000) {
+			if (flags & 0x2000) {
+				if (!(size >= 1 && readUInt8(hdl, unused)))
+					return false;
+				size--;
+				unused |= (flags >> 4) & 0x100;
+			} else {
+				if (!(size >= 2 && readUInt16(hdl, unused)))
+					return false;
+				size -= 2;
+			}
+		}
+		if (flags & 0x100000) {
+			if (!(size >= 1 && readUInt8(hdl, unused)))
+				return false;
+			size--;
+			if (unused & 0x80) {
+				if (!(size >= 1 && readUInt8(hdl, unused)))
+					return false;
+				size--;
+			}
+		}
+
+		if (!readLclSectors(hdl, size, flags, light))
+			return false;
+
+		point->lights.append(light);
+	}
+
+	return true;
+}
+
 bool RGNFile::readLclNavaid(Handle &hdl, quint32 size,
   MapData::Point *point) const
 {
 	quint32 unused, flags;
+
+	// Discard the class lights info if any (marine points may have both!)
+	point->lights.clear();
 
 	if (!(size >= 4 && readUInt32(hdl, flags)))
 		return false;
@@ -338,97 +451,8 @@ bool RGNFile::readLclNavaid(Handle &hdl, quint32 size,
 		} while (b & 0x80);
 	}
 
-	quint8 lights = (flags >> 6) & 7;
-
-	for (quint32 i = 0; i < lights; i ++) {
-		quint32 fs, vs, lflags;
-		Light light;
-
-		if (!(readVUInt32(hdl, fs, &vs) && size >= vs))
-			return false;
-		size -= vs;
-		if (!(size >= 4 && readUInt32(hdl, lflags)))
-			return false;
-		size -= 4;
-		if (lflags >> 0x11 & 3) {
-			if (!(size >= (lflags >> 0x11 & 3)
-			  && readVUInt32(hdl, lflags >> 0x11 & 3, unused)))
-				return false;
-			size -= (lflags >> 0x11 & 3);
-		}
-		if (lflags & 0x3000) {
-			if (lflags & 0x2000) {
-				if (!(size >= 1 && readUInt8(hdl, unused)))
-					return false;
-				size--;
-				unused |= (lflags >> 4) & 0x100;
-			} else {
-				if (!(size >= 2 && readUInt16(hdl, unused)))
-					return false;
-				size -= 2;
-			}
-		}
-		if (lflags & 0x100000) {
-			if (!(size >= 1 && readUInt8(hdl, unused)))
-				return false;
-			size--;
-			if (unused & 0x80) {
-				if (!(size >= 1 && readUInt8(hdl, unused)))
-					return false;
-				size--;
-			}
-		}
-
-		quint8 sectors = lflags & 0x1f;
-
-		for (quint32 j = 0; j < sectors; j++) {
-			quint32 cf, range = 0;
-
-			if (!(size >= 1 && readUInt8(hdl, cf)))
-				return false;
-			size--;
-			if (cf >> 6) {
-				if (!(size >= (cf >> 6) && readVUInt32(hdl, cf >> 6, range)))
-					return false;
-				size -= (cf >> 6);
-			}
-
-			if (sectors > 1) {
-				quint32 angle;
-
-				if (!(size >= 2 && readUInt16(hdl, angle)))
-					return false;
-				size -= 2;
-				if ((lflags >> 0x13) & 1) {
-					quint32 sflags;
-
-					if (!(size >= 1 && readUInt8(hdl, sflags)))
-						return false;
-					size--;
-					if (0x3f < sflags) {
-						if (sflags & 0x80) {
-							if (!(size >= 1 && readUInt8(hdl, unused)))
-								return false;
-							size--;
-							unused |= (sflags & 0x40) << 2;
-						} else {
-							if (!(size >= 2 && readUInt16(hdl, unused)))
-								return false;
-							size -= 2;
-						}
-					}
-				}
-
-				light.sectors.append(Light::Sector((Light::Color)(cf & 0x7),
-				  angle, range));
-			} else {
-				light.color = (Light::Color)(cf & 0x7);
-				light.range = range;
-			}
-		}
-
-		point->lights.append(light);
-	}
+	if (!readLclLights(hdl, size, (flags >> 6) & 7, point))
+		return false;
 
 	return (size == 0);
 }
@@ -457,7 +481,6 @@ bool RGNFile::readLclFields(Handle &hdl, const quint32 flags[3],
 					size = m + 1;
 
 				if (i == 2 && point) {
-					point->lights.clear();
 					if (!readLclNavaid(hdl, size, point))
 						return false;
 				} else {

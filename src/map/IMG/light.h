@@ -6,30 +6,41 @@
 
 namespace IMG {
 
-struct Light
+class Light
 {
+public:
 	enum Color {None, Red, Green, White, Blue, Yellow, Violet, Amber};
 
-	struct Sector
+	class Sector
 	{
 	public:
-		Sector() : color(None), angle(0), range(0) {}
+		Sector() : _color(None), _angle(0), _range(0) {}
 		Sector(Color color, quint32 angle, quint32 range)
-		  : color(color), angle(angle), range(range) {}
+		  : _color(color), _angle(angle), _range(range) {}
 
-		Color color;
-		quint32 angle;
-		quint32 range;
+		Color color() const {return _color;}
+		quint32 angle() const {return _angle;}
+		quint32 range() const {return _range;}
+
+	private:
+		Color _color;
+		quint32 _angle;
+		quint32 _range;
 	};
 
-	Light() : color(None), range(0) {}
-	Light(Color color, quint32 range) : color(color), range(range) {}
+	Light() : _color(None), _range(0) {}
+	Light(Color color, quint32 range) : _color(color), _range(range) {}
 	Light(const QVector<Sector> &sectors)
-	  : color(None), range(0), sectors(sectors) {}
+	  : _color(None), _range(0), _sectors(sectors) {}
 
-	Color color;
-	quint32 range;
-	QVector<Sector> sectors;
+	Color color() const {return _color;}
+	quint32 range() const {return _range;}
+	const QVector<Sector> &sectors() const {return _sectors;}
+
+private:
+	Color _color;
+	quint32 _range;
+	QVector<Sector> _sectors;
 };
 
 }
@@ -44,8 +55,8 @@ inline QDebug operator<<(QDebug dbg, const IMG::Light::Sector &sector)
 
 inline QDebug operator<<(QDebug dbg, const IMG::Light &light)
 {
-	dbg.nospace() << "Light(" << light.color << ", " << light.range << ", "
-	  << light.sectors << ")";
+	dbg.nospace() << "Light(" << light.color() << ", " << light.range() << ", "
+	  << light.sectors() << ")";
 	return dbg.space();
 }
 #endif // QT_NO_DEBUG
