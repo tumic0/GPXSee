@@ -19,6 +19,7 @@ using namespace IMG;
 #define TEXT_EXTENT 160
 #define ICON_PADDING 2
 #define RANGE_FACTOR 4
+#define MAJOR_RANGE  10
 #define ROAD  0
 #define WATER 1
 
@@ -275,7 +276,7 @@ void RasterTile::drawSectorLights(QPainter *painter,
 					  ? l.sectors().at(0) : l.sectors().at(k+1);
 					quint32 angle = end.angle() - start.angle();
 
-					if (start.color() && (angle || start.range())) {
+					if (start.color() && (angle || start.range() >= MAJOR_RANGE)) {
 						quint32 range = start.range() ? start.range() : 6;
 						Sector s(start.color(), start.angle(), end.angle());
 						if (rangeMap.value(s) >= range)
@@ -310,7 +311,7 @@ void RasterTile::drawSectorLights(QPainter *painter,
 						}
 					}
 				}
-			} else if (l.color() && l.range()) {
+			} else if (l.color() && l.range() >= MAJOR_RANGE) {
 				Sector s(l.color(), 0, 3600);
 				if (rangeMap.value(s) >= l.range())
 					continue;
@@ -503,14 +504,14 @@ static bool sectorLight(const QVector<Light> &lights)
 {
 	for (int i = 0; i < lights.size(); i++) {
 		const Light &l = lights.at(i);
-		if (l.color() && l.range())
+		if (l.color() && l.range() >= MAJOR_RANGE)
 			return true;
 		for (int j = 0; j < l.sectors().size(); j++) {
 			const Light::Sector &start = l.sectors().at(j);
 			const Light::Sector &end = (j == l.sectors().size() - 1)
 			  ? l.sectors().at(0) : l.sectors().at(j+1);
 			quint32 angle = end.angle() - start.angle();
-			if (start.color() && (angle || start.range()))
+			if (start.color() && (angle || start.range() >= MAJOR_RANGE))
 				return true;
 		}
 	}
@@ -522,14 +523,14 @@ static Light::Color ordinaryLight(const QVector<Light> &lights)
 {
 	for (int i = 0; i < lights.size(); i++) {
 		const Light &l = lights.at(i);
-		if (l.color() && !l.range())
+		if (l.color() && l.range() < MAJOR_RANGE)
 			return l.color();
 		for (int j = 0; j < l.sectors().size(); j++) {
 			const Light::Sector &start = l.sectors().at(j);
 			const Light::Sector &end = (j == l.sectors().size() - 1)
 			  ? l.sectors().at(0) : l.sectors().at(j+1);
 			quint32 angle = end.angle() - start.angle();
-			if (start.color() && !angle && !start.range())
+			if (start.color() && !angle && start.range() < MAJOR_RANGE)
 				return start.color();
 		}
 	}
