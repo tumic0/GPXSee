@@ -1254,7 +1254,7 @@ void MapView::drawHillShading(bool draw)
 	setMap(_map);
 }
 
-void MapView::selectLayers(Layers layers)
+void MapView::selectLayers(MapView::Layers layers)
 {
 	_layers = layers;
 

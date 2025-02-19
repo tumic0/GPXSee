@@ -136,7 +136,7 @@ public slots:
 	void showMotionInfo(bool show);
 	void useStyles(bool use);
 	void drawHillShading(bool draw);
-	void selectLayers(Layers layers);
+	void selectLayers(MapView::Layers layers);
 
 private slots:
 	void updatePOI();
