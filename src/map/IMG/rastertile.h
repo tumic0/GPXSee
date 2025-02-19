@@ -60,18 +60,22 @@ private:
 	void ll2xy(QList<MapData::Poly> &polys) const;
 	void ll2xy(QList<MapData::Point> &points) const;
 
-	void drawPolygons(QPainter *painter, const QList<MapData::Poly> &polygons) const;
+	void drawPolygons(QPainter *painter,
+	  const QList<MapData::Poly> &polygons) const;
 	void drawLines(QPainter *painter, const QList<MapData::Poly> &lines) const;
-	void drawTextItems(QPainter *painter, const QList<TextItem*> &textItems) const;
+	void drawTextItems(QPainter *painter,
+	  const QList<TextItem*> &textItems) const;
 	void drawHillShading(QPainter *painter) const;
-	void drawSectorLights(QPainter *painter, const QList<const MapData::Point*> &lights) const;
+	void drawSectorLights(QPainter *painter,
+	  const QList<const MapData::Point*> &lights) const;
 
 	void processPolygons(const QList<MapData::Poly> &polygons,
 	  QList<TextItem *> &textItems);
 	void processLines(QList<MapData::Poly> &lines, QList<TextItem*> &textItems,
 	  const QImage (&arrows)[2]);
-	void processPoints(QList<MapData::Point> &points, QList<TextItem*> &textItems,
-	  QList<const MapData::Point *> &lights);
+	void processPoints(QList<MapData::Point> &points,
+	  QList<TextItem*> &textItems, QList<TextItem*> &lights,
+	  QList<const MapData::Point*> &sectorLights);
 	void processShields(const QList<MapData::Poly> &lines,
 	  QList<TextItem*> &textItems);
 	void processStreetNames(const QList<MapData::Poly> &lines,

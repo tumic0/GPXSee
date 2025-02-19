@@ -19,12 +19,36 @@ using namespace IMG;
 #define TEXT_EXTENT 160
 #define ICON_PADDING 2
 #define RANGE_FACTOR 4
-#define RANGE_MIN    6
 #define ROAD  0
 #define WATER 1
 
 #define AREA(rect) \
 	(rect.size().width() * rect.size().height())
+
+struct Sector
+{
+	Sector(Light::Color color, quint32 start, quint32 end)
+	  : color(color), start(start), end(end) {}
+
+	bool operator==(const Sector &other) const
+	{
+		return (color == other.color && start == other.start && end == other.end);
+	}
+	bool operator<(const Sector &other) const
+	{
+		if (color == other.color) {
+			if (start == other.start)
+				return end < other.end;
+			else
+				return start < other.start;
+		} else
+			return color < other.color;
+	}
+
+	Light::Color color;
+	quint32 start;
+	quint32 end;
+};
 
 static const QColor textColor(Qt::black);
 static const QColor haloColor(Qt::white);
@@ -239,6 +263,7 @@ void RasterTile::drawSectorLights(QPainter *painter,
 	for (int i = 0; i < lights.size(); i++) {
 		const MapData::Point *p = lights.at(i);
 		QPoint pos(p->coordinates.lon(), p->coordinates.lat());
+		QMap<Sector, quint32> rangeMap;
 
 		for (int j = 0; j < p->lights.size(); j++) {
 			const Light &l = p->lights.at(j);
@@ -248,8 +273,16 @@ void RasterTile::drawSectorLights(QPainter *painter,
 					const Light::Sector &start = l.sectors().at(k);
 					const Light::Sector &end = (k == l.sectors().size() - 1)
 					  ? l.sectors().at(0) : l.sectors().at(k+1);
+					quint32 angle = end.angle() - start.angle();
 
-					if (start.color()) {
+					if (start.color() && (angle || start.range())) {
+						quint32 range = start.range() ? start.range() : 6;
+						Sector s(start.color(), start.angle(), end.angle());
+						if (rangeMap.value(s) >= range)
+							continue;
+						else
+							rangeMap.insert(s, range);
+
 						double a1 = -(end.angle() / 10.0 + 90.0);
 						double a2 = -(start.angle() / 10.0 + 90.0);
 						if (a1 > a2)
@@ -258,9 +291,7 @@ void RasterTile::drawSectorLights(QPainter *painter,
 						if (as == 0)
 							as = 360;
 
-						QRect rect(lightRect(pos, start.range()
-						  ? start.range() : RANGE_MIN));
-
+						QRect rect(lightRect(pos, range));
 						painter->setPen(QPen(Qt::black, 6, Qt::SolidLine,
 						  Qt::FlatCap));
 						painter->drawArc(rect, a1 * 16, as * 16);
@@ -268,7 +299,7 @@ void RasterTile::drawSectorLights(QPainter *painter,
 						  Qt::SolidLine, Qt::FlatCap));
 						painter->drawArc(rect, a1 * 16, as * 16);
 
-						if (a2 - a1 != 0) {
+						if (angle) {
 							QLineF ln(pos, QPointF(pos.x() + rect.width(),
 							  pos.y()));
 							ln.setAngle(a1);
@@ -279,9 +310,14 @@ void RasterTile::drawSectorLights(QPainter *painter,
 						}
 					}
 				}
-			} else if (l.range() > RANGE_MIN) {
-				QRect rect(lightRect(pos, l.range()));
+			} else if (l.color() && l.range()) {
+				Sector s(l.color(), 0, 3600);
+				if (rangeMap.value(s) >= l.range())
+					continue;
+				else
+					rangeMap.insert(s, l.range());
 
+				QRect rect(lightRect(pos, l.range()));
 				painter->setPen(QPen(Qt::black, 6, Qt::SolidLine, Qt::FlatCap));
 				painter->drawArc(rect, 0, 360 * 16);
 				painter->setPen(QPen(Style::color(l.color()), 4, Qt::SolidLine,
@@ -463,19 +499,47 @@ void RasterTile::processShields(const QList<MapData::Poly> &lines,
 	}
 }
 
-static bool showAsSector(const QVector<Light> &lights)
+static bool sectorLight(const QVector<Light> &lights)
 {
 	for (int i = 0; i < lights.size(); i++) {
 		const Light &l = lights.at(i);
-		if ((l.color() && l.range() > RANGE_MIN) || !l.sectors().isEmpty())
+		if (l.color() && l.range())
 			return true;
+		for (int j = 0; j < l.sectors().size(); j++) {
+			const Light::Sector &start = l.sectors().at(j);
+			const Light::Sector &end = (j == l.sectors().size() - 1)
+			  ? l.sectors().at(0) : l.sectors().at(j+1);
+			quint32 angle = end.angle() - start.angle();
+			if (start.color() && (angle || start.range()))
+				return true;
+		}
 	}
 
 	return false;
 }
 
+static Light::Color ordinaryLight(const QVector<Light> &lights)
+{
+	for (int i = 0; i < lights.size(); i++) {
+		const Light &l = lights.at(i);
+		if (l.color() && !l.range())
+			return l.color();
+		for (int j = 0; j < l.sectors().size(); j++) {
+			const Light::Sector &start = l.sectors().at(j);
+			const Light::Sector &end = (j == l.sectors().size() - 1)
+			  ? l.sectors().at(0) : l.sectors().at(j+1);
+			quint32 angle = end.angle() - start.angle();
+			if (start.color() && !angle && !start.range())
+				return start.color();
+		}
+	}
+
+	return Light::None;
+}
+
 void RasterTile::processPoints(QList<MapData::Point> &points,
-  QList<TextItem*> &textItems, QList<const MapData::Point*> &lights)
+  QList<TextItem*> &textItems, QList<TextItem *> &lights,
+  QList<const MapData::Point*> &sectorLights)
 {
 	std::sort(points.begin(), points.end());
 
@@ -484,10 +548,10 @@ void RasterTile::processPoints(QList<MapData::Point> &points,
 		const Style *style = _data->style();
 		const Style::Point &ps = style->point(point.type);
 		bool poi = Style::isPOI(point.type);
-		bool sl = showAsSector(point.lights);
+		bool sl = sectorLight(point.lights);
 
 		if (sl)
-			lights.append(&point);
+			sectorLights.append(&point);
 
 		const QString *label = point.label.text().isEmpty()
 		  ? 0 : &(point.label.text());
@@ -511,17 +575,15 @@ void RasterTile::processPoints(QList<MapData::Point> &points,
 		  color, hcolor, 0, ICON_PADDING);
 		if (item->isValid() && (sl || !item->collides(textItems))) {
 			textItems.append(item);
-			for (int j = 0; j < point.lights.size(); j++) {
-				const Light &l = point.lights.at(j);
-				if (l.color() && l.range() <= RANGE_MIN) {
-					textItems.append(new TextPointItem(pos + style->lightOffset(),
-					  0, 0, style->light(l.color()), 0, 0, 0, 0));
-					break;
-				}
-			}
+			Light::Color color = ordinaryLight(point.lights);
+			if (color)
+				lights.append(new TextPointItem(pos + style->lightOffset(),
+				  0, 0, style->light(color), 0, 0, 0, 0));
 		} else
 			delete item;
 	}
+
+
 }
 
 void RasterTile::fetchData(QList<MapData::Poly> &polygons,
@@ -606,8 +668,8 @@ void RasterTile::render()
 	QList<MapData::Poly> polygons;
 	QList<MapData::Poly> lines;
 	QList<MapData::Point> points;
-	QList<TextItem*> textItems;
-	QList<const MapData::Point*> lights;
+	QList<TextItem*> textItems, lights;
+	QList<const MapData::Point*> sectorLights;
 	QImage arrows[2];
 
 	arrows[ROAD] = Util::svg2img(":/symbols/oneway.svg", _ratio);
@@ -618,7 +680,7 @@ void RasterTile::render()
 	ll2xy(lines);
 	ll2xy(points);
 
-	processPoints(points, textItems, lights);
+	processPoints(points, textItems, lights, sectorLights);
 	processPolygons(polygons, textItems);
 	processLines(lines, textItems, arrows);
 
@@ -633,9 +695,11 @@ void RasterTile::render()
 	drawPolygons(&painter, polygons);
 	drawHillShading(&painter);
 	drawLines(&painter, lines);
-	drawSectorLights(&painter, lights);
+	drawTextItems(&painter, lights);
+	drawSectorLights(&painter, sectorLights);
 	drawTextItems(&painter, textItems);
 
+	qDeleteAll(lights);
 	qDeleteAll(textItems);
 
 	//painter.setPen(Qt::red);
