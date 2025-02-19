@@ -14,6 +14,7 @@ using namespace ENC;
 #define TEXT_EXTENT 160
 #define TSSLPT_SIZE 24
 #define RANGE_FACTOR 4
+#define MAJOR_RANGE 10
 
 static const float C1 = 0.866025f; /* sqrt(3)/2 */
 static const QColor tsslptPen = QColor(0xeb, 0x49, 0xeb);
@@ -277,7 +278,7 @@ void RasterTile::processPoints(QList<MapData::Point> &points,
 			double range = attr.value(VALNMR).toDouble();
 
 			if (attr.contains(SECTR1)
-			  || (range > 6 && !(point.type() & 0xFFFF))) {
+			  || (range >= MAJOR_RANGE && !(point.type() & 0xFFFF))) {
 				sectorLights.append(SectorLight(point.pos(), color,
 				  attr.value(LITVIS).toUInt(), range,
 				  attr.value(SECTR1).toDouble(), attr.value(SECTR2).toDouble()));
