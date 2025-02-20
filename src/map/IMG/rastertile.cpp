@@ -26,31 +26,6 @@ using namespace IMG;
 #define AREA(rect) \
 	(rect.size().width() * rect.size().height())
 
-struct Sector
-{
-	Sector(Light::Color color, quint32 start, quint32 end)
-	  : color(color), start(start), end(end) {}
-
-	bool operator==(const Sector &other) const
-	{
-		return (color == other.color && start == other.start && end == other.end);
-	}
-	bool operator<(const Sector &other) const
-	{
-		if (color == other.color) {
-			if (start == other.start)
-				return end < other.end;
-			else
-				return start < other.start;
-		} else
-			return color < other.color;
-	}
-
-	Light::Color color;
-	quint32 start;
-	quint32 end;
-};
-
 static const QColor textColor(Qt::black);
 static const QColor haloColor(Qt::white);
 static const QColor shieldColor(Qt::white);
@@ -259,7 +234,7 @@ static QRect lightRect(const QPoint &pos, quint32 range)
 }
 
 void RasterTile::drawSectorLights(QPainter *painter,
-  const QList<const MapData::Point *> &lights) const
+  const QList<const MapData::Point*> &lights) const
 {
 	for (int i = 0; i < lights.size(); i++) {
 		const MapData::Point *p = lights.at(i);
@@ -329,7 +304,7 @@ void RasterTile::drawSectorLights(QPainter *painter,
 	}
 }
 
-static void removeDuplicitLabel(QList<TextItem *> &labels, const QString &text,
+static void removeDuplicitLabel(QList<TextItem*> &labels, const QString &text,
   const QRectF &tileRect)
 {
 	for (int i = 0; i < labels.size(); i++) {
@@ -539,7 +514,7 @@ static Light::Color ordinaryLight(const QVector<Light> &lights)
 }
 
 void RasterTile::processPoints(QList<MapData::Point> &points,
-  QList<TextItem*> &textItems, QList<TextItem *> &lights,
+  QList<TextItem*> &textItems, QList<TextItem*> &lights,
   QList<const MapData::Point*> &sectorLights)
 {
 	std::sort(points.begin(), points.end());

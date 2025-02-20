@@ -51,6 +51,32 @@ private:
 		double &ele;
 	};
 
+	struct Sector
+	{
+		Sector(Light::Color color, quint32 start, quint32 end)
+		  : color(color), start(start), end(end) {}
+
+		bool operator==(const Sector &other) const
+		{
+			return (color == other.color && start == other.start
+			  && end == other.end);
+		}
+		bool operator<(const Sector &other) const
+		{
+			if (color == other.color) {
+				if (start == other.start)
+					return end < other.end;
+				else
+					return start < other.start;
+			} else
+				return color < other.color;
+		}
+
+		Light::Color color;
+		quint32 start;
+		quint32 end;
+	};
+
 	void fetchData(QList<MapData::Poly> &polygons, QList<MapData::Poly> &lines,
 	  QList<MapData::Point> &points);
 	QPointF ll2xy(const Coordinates &c) const
@@ -70,7 +96,7 @@ private:
 	  const QList<const MapData::Point*> &lights) const;
 
 	void processPolygons(const QList<MapData::Poly> &polygons,
-	  QList<TextItem *> &textItems);
+	  QList<TextItem*> &textItems);
 	void processLines(QList<MapData::Poly> &lines, QList<TextItem*> &textItems,
 	  const QImage (&arrows)[2]);
 	void processPoints(QList<MapData::Point> &points,
