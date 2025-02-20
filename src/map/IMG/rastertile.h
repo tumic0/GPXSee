@@ -32,25 +32,6 @@ public:
 	void render();
 
 private:
-	typedef RTree<const MapData::Elevation*, double, 2> DEMTRee;
-
-	struct ElevationCTX
-	{
-		ElevationCTX(const DEMTRee &tree, const Coordinates &c, double &ele)
-		  : tree(tree), c(c), ele(ele) {}
-
-		const DEMTRee &tree;
-		const Coordinates &c;
-		double &ele;
-	};
-	struct EdgeCTX
-	{
-		EdgeCTX(const Coordinates &c, double &ele) : c(c), ele(ele) {}
-
-		const Coordinates &c;
-		double &ele;
-	};
-
 	struct Sector
 	{
 		Sector(Light::Color color, quint32 start, quint32 end)
