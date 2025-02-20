@@ -9,7 +9,6 @@
 #include "style.h"
 
 class QPainter;
-class IMGMap;
 class TextItem;
 
 namespace IMG {
