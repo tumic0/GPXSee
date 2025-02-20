@@ -216,8 +216,8 @@ void RasterTile::drawTextItems(QPainter *painter,
 
 static QRectF lightRect(const QPointF &pos, double range)
 {
-	return QRectF(pos.x() - range * RANGE_FACTOR, pos.y() - range * RANGE_FACTOR,
-		  2*range * RANGE_FACTOR, 2*range * RANGE_FACTOR);
+	double r = qMin(range * RANGE_FACTOR, (double)TEXT_EXTENT);
+	return QRect(pos.x() - r, pos.y() - r, 2 * r, 2 * r);
 }
 
 void RasterTile::drawSectorLights(QPainter *painter,
