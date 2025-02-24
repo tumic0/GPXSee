@@ -151,8 +151,7 @@ bool Downloader::doDownload(const Download &dl, const QList<HTTPHeader> &headers
 	for (int i = 0; i < headers.size(); i++) {
 		const HTTPHeader &hdr = headers.at(i);
 		request.setRawHeader(hdr.key(), hdr.value());
-		// QByteArray::compare() not available in Qt < 5.12
-		if (!QString(hdr.key()).compare("User-Agent", Qt::CaseInsensitive))
+		if (!hdr.key().compare("User-Agent", Qt::CaseInsensitive))
 			userAgent = true;
 	}
 	if (!userAgent)
