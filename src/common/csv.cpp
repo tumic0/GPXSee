@@ -7,15 +7,18 @@ RFC 4180 parser with the following enchancements:
  - allows LF line ends in addition to CRLF line ends
 */
 
-bool CSV::readEntry(QByteArrayList &list)
+bool CSV::readEntry(QByteArrayList &list, int limit)
 {
-	int state = 0;
+	int state = 0, len = 0;
 	char c;
 	QByteArray field;
 
 	list.clear();
 
 	while (_device->getChar(&c)) {
+		if (limit && ++len > limit)
+			return false;
+
 		switch (state) {
 			case 0:
 				if (c == '\r')
