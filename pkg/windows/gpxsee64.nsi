@@ -265,6 +265,7 @@ Section "GPXSee" SEC_APP
   WriteRegStr HKCR ".gemf\OpenWithList" "GPXSee.exe" ""
   WriteRegStr HKCR ".000\OpenWithList" "GPXSee.exe" ""
   WriteRegStr HKCR ".031\OpenWithList" "GPXSee.exe" ""
+  WriteRegStr HKCR ".txt\OpenWithList" "GPXSee.exe" ""
 
   System::Call 'shell32.dll::SHChangeNotify(i, i, i, i) v (0x08000000, 0, 0, 0)'
 
@@ -492,6 +493,7 @@ Section "Uninstall"
   DeleteRegValue HKCR ".gemf\OpenWithList" "GPXSee.exe"
   DeleteRegValue HKCR ".000\OpenWithList" "GPXSee.exe"
   DeleteRegValue HKCR ".031\OpenWithList" "GPXSee.exe"
+  DeleteRegValue HKCR ".txt\OpenWithList" "GPXSee.exe"
   DeleteRegKey HKCR "Applications\GPXSee.exe"   
   
   System::Call 'shell32.dll::SHChangeNotify(i, i, i, i) v (0x08000000, 0, 0, 0)'
