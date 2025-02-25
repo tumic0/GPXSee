@@ -736,6 +736,20 @@
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>
 		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>txt</string>
+			</array>
+			<key>CFBundleTypeMIMETypes</key>
+			<array>
+				<string>application/vnd.70mai.txt</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>70mai GPS Log File</string>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+		</dict>
 	</array>
 
 	<key>CFBundleURLTypes</key>
@@ -1716,6 +1730,27 @@
 				</array>
 				<key>public.mime-type</key>
 				<string>application/vnd.iho.s57-catalogue</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeIdentifier</key>
+			<string>com.70mai.txt</string>
+			<key>UTTypeReferenceURL</key>
+			<string>https://forum.mapillary.com/t/using-the-70mai-a810-dashcam-for-mapillary/9130/7?u=boris</string>
+			<key>UTTypeDescription</key>
+			<string>70mai GPS Log File</string>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>txt</string>
+				</array>
+				<key>public.mime-type</key>
+				<string>application/vnd.70mai.txt</string>
 			</dict>
 		</dict>
 	</array>
