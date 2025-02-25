@@ -1193,10 +1193,12 @@ void GUI::loadData(const Data &data)
 		_time += track.time();
 		_movingTime += track.movingTime();
 		const QDateTime date = track.date().toTimeZone(_options.timeZone.zone());
-		if (_dateRange.first.isNull() || _dateRange.first > date)
-			_dateRange.first = date;
-		if (_dateRange.second.isNull() || _dateRange.second < date)
-			_dateRange.second = date;
+		if (date.isValid()) {
+			if (_dateRange.first.isNull() || _dateRange.first > date)
+				_dateRange.first = date;
+			if (_dateRange.second.isNull() || _dateRange.second < date)
+				_dateRange.second = date;
+		}
 	}
 	_trackCount += data.tracks().count();
 
