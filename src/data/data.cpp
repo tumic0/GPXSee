@@ -23,6 +23,7 @@
 #include "onmoveparsers.h"
 #include "twonavparser.h"
 #include "gpsdumpparser.h"
+#include "txtparser.h"
 #include "data.h"
 
 
@@ -49,6 +50,7 @@ static OMDParser omd;
 static GHPParser ghp;
 static TwoNavParser twonav;
 static GPSDumpParser gpsdump;
+static TXTParser txt;
 
 static QMultiMap<QString, Parser*> parsers()
 {
@@ -82,6 +84,7 @@ static QMultiMap<QString, Parser*> parsers()
 	map.insert("rte", &twonav);
 	map.insert("wpt", &twonav);
 	map.insert("wpt", &gpsdump);
+	map.insert("txt", &txt);
 
 	return map;
 }
@@ -241,6 +244,7 @@ QString Data::formats()
 	  + qApp->translate("Data", "SLF files") + " (*.slf);;"
 	  + qApp->translate("Data", "SML files") + " (*.sml);;"
 	  + qApp->translate("Data", "TCX files") + " (*.tcx);;"
+	  + qApp->translate("Data", "70mai GPS log files") + " (*.txt);;"
 	  + qApp->translate("Data", "TwoNav files") + " (*.rte *.trk *.wpt);;"
 	  + qApp->translate("Data", "GPSDump files") + " (*.wpt);;"
 	  + qApp->translate("Data", "All files") + " (*)";
