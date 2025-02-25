@@ -188,6 +188,16 @@
 		<glob pattern="*.wpt"/>
 	</mime-type>
 
+	<mime-type type="application/vnd.70mai.txt">
+		<comment>70mai GPS Log File</comment>
+		<sub-class-of type="text/plain"/>
+		<generic-icon name="text/plain"/>
+		<magic>
+			<match type="string" offset="0" value="$V02"/>
+		</magic>
+		<glob pattern="*.txt"/>
+	</mime-type>
+
 	<!-- Maps -->
 
 	<mime-type type="application/vnd.garmin.img">
