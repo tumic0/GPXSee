@@ -40,14 +40,14 @@ bool TXTParser::parse(QFile *file, QList<TrackData> &tracks,
 				_errorLine = csv.line() - 1;
 				return false;
 			}
-		} else if (entry.size() == 13) {
+		} else {
 			if (!sg) {
 				_errorString = "Missing start marker";
 				_errorLine = csv.line() - 1;
 				return false;
 			}
 
-			if (entry.at(1) == "A") {
+			if (entry.size() == 13 && entry.at(1) == "A") {
 				Coordinates c(coordinates(entry));
 				if (!c.isValid()) {
 					_errorString = "Invalid coordinates";
