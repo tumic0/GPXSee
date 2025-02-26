@@ -167,7 +167,7 @@
     <message>
         <location filename="../src/data/data.cpp" line="247"/>
         <source>70mai GPS log files</source>
-        <translation type="unfinished"></translation>
+        <translation>Fichiers de journalisation GPS 70mai</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="248"/>
@@ -844,7 +844,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="1126"/>
         <source>Error loading geo URI:</source>
-        <translation type="unfinished"></translation>
+        <translation>Erreur de chargement de l&apos;URI géo&#xa0;:</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1132"/>
