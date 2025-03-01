@@ -142,12 +142,11 @@ int ISO8211::readDR(QVector<FieldDefinition> &fields)
 bool ISO8211::readDDA(const FieldDefinition &def, SubFields &fields)
 {
 	static QRegularExpression re("(\\d*)(\\w+)\\(*(\\d*)\\)*");
-	QByteArray ba;
+	QByteArray ba(def.size, Qt::Initialization::Uninitialized);
 	bool repeat = false;
 	QVector<SubFieldDefinition> defs;
 	QVector<QByteArray> defTags;
 
-	ba.resize(def.size);
 	if (!(_file.seek(def.pos) && _file.read(ba.data(), ba.size()) == ba.size()))
 		return false;
 
@@ -236,9 +235,8 @@ bool ISO8211::readDDR()
 bool ISO8211::readUDA(quint64 pos, const FieldDefinition &def,
   const QVector<SubFieldDefinition> &fields, bool repeat, Data &data)
 {
-	QByteArray ba;
+	QByteArray ba(def.size, Qt::Initialization::Uninitialized);
 
-	ba.resize(def.size);
 	if (!(_file.seek(pos + def.pos)
 	  && _file.read(ba.data(), ba.size()) == ba.size()))
 		return false;
@@ -248,8 +246,7 @@ bool ISO8211::readUDA(quint64 pos, const FieldDefinition &def,
 	const char *ep = ba.constData() + ba.size() - 1;
 
 	do {
-		QVector<QVariant> row;
-		row.resize(fields.size());
+		QVector<QVariant> row(fields.size());
 
 		for (int i = 0; i < fields.size(); i++) {
 			const SubFieldDefinition &f = fields.at(i);
