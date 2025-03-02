@@ -141,7 +141,7 @@ int ISO8211::readDR(QVector<FieldDefinition> &fields)
 
 bool ISO8211::readDDA(const FieldDefinition &def, SubFields &fields)
 {
-	static QRegularExpression re("(\\d*)(\\w+)\\(*(\\d*)\\)*");
+	static const QRegularExpression re("(\\d*)(\\w+)\\(*(\\d*)\\)*");
 	QByteArray ba(def.size, Qt::Initialization::Uninitialized);
 	bool repeat = false;
 	QVector<SubFieldDefinition> defs;

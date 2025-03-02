@@ -541,7 +541,7 @@ void KMLParser::photoOverlay(const Ctx &ctx, QVector<Waypoint> &waypoints,
 	Waypoint w;
 	QMap<QString, PolygonStyle> unused;
 	QMap<QString, LineStyle> unused2;
-	static QRegularExpression re("\\$\\[[^\\]]+\\]");
+	static const QRegularExpression re("\\$\\[[^\\]]+\\]");
 
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == QLatin1String("name"))
