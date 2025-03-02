@@ -121,7 +121,7 @@ private:
 
 	/* Fonts and images must be initialized after QGuiApplication! */
 	QFont _small, _normal, _large;
-	QImage _light, _lightRed, _lightGreen, _lightYellow, _signal;
+	QImage _light, _lightRed, _lightGreen, _lightYellow, _lightWhite, _signal;
 	QPoint _lightOffset, _signalOffset;
 };
 

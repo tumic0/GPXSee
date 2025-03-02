@@ -482,6 +482,7 @@ Style::Style(qreal ratio)
 	_lightRed = QImage(":/marine/light-red.png");
 	_lightGreen = QImage(":/marine/light-green.png");
 	_lightYellow = QImage(":/marine/light-yellow.png");
+	_lightWhite = QImage(":/marine/light-white.png");
 	_lightOffset = QPoint(11, 11);
 	_signal = QImage(":/marine/fog-signal.png");
 	_signalOffset = QPoint(-9, 9);
@@ -541,6 +542,7 @@ const QImage *Style::light(Color color) const
 		case Green:
 			return &_lightGreen;
 		case White:
+			return &_lightWhite;
 		case Yellow:
 		case Amber:
 		case Orange:
@@ -558,6 +560,7 @@ QColor Style::color(Style::Color c)
 		case Green:
 			return Qt::green;
 		case White:
+			return Qt::white;
 		case Yellow:
 		case Amber:
 		case Orange:
