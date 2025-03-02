@@ -362,6 +362,8 @@ MapData::Point::Point(uint type, const Coordinates &c, const Attributes &attr,
 		subtype = CATACH;
 	else if (type == I_ACHARE)
 		subtype = I_CATACH;
+	else if (type == MARKUL)
+		subtype = CATMFA;
 
 	QList<QByteArray> list(_attr.value(subtype).split(','));
 	std::sort(list.begin(), list.end());
