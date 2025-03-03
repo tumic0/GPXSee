@@ -53,7 +53,7 @@ public:
 	bool intersects(const RectC &r) const
 	  {return (right() >= r.left() && bottom() <= r.top() && left() <= r.right()
 		&& top() >= r.bottom());}
-	bool contains(const Coordinates&c) const
+	bool contains(const Coordinates &c) const
 	  {return (c.lon() >= left() && c.lon() <= right() && c.lat() <= top()
 		&& c.lat() >= bottom());}
 
