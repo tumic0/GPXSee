@@ -115,7 +115,7 @@ public:
 
 	/// Count the data elements in this container.  This is slow as no internal
 	/// counter is maintained.
-	int Count();
+	int Count() const;
 
 
 	/// Iterator is not remove safe.
@@ -363,7 +363,7 @@ protected:
 	  void* a_context) const;
 	void RemoveAllRec(Node* a_node);
 	void Reset();
-	void CountRec(Node* a_node, int& a_count);
+	void CountRec(Node* a_node, int& a_count) const;
 
 	/// Root of tree
 	Node* m_root;
@@ -473,7 +473,7 @@ int RTREE_QUAL::Search(const ELEMTYPE a_min[NUMDIMS], const ELEMTYPE a_max[NUMDI
 
 
 RTREE_TEMPLATE
-int RTREE_QUAL::Count()
+int RTREE_QUAL::Count() const
 {
 	int count = 0;
 	CountRec(m_root, count);
@@ -483,7 +483,7 @@ int RTREE_QUAL::Count()
 
 
 RTREE_TEMPLATE
-void RTREE_QUAL::CountRec(Node* a_node, int& a_count)
+void RTREE_QUAL::CountRec(Node* a_node, int& a_count) const
 {
 	if (a_node->IsInternalNode()) {  // not a leaf node
 		for (int index = 0; index < a_node->m_count; ++index)
