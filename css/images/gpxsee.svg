@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN" "http://www.w3.org/TR/2001/PR-SVG-20010719/DTD/svg10.dtd">
+<svg width="6cm" height="6cm" viewBox="47 79 119 119" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <g>
+    <rect style="fill: #ffffff" x="47.729" y="79.875" width="118.071" height="118.071" rx="10" ry="10"/>
+    <rect style="fill: none; fill-opacity:0; stroke-width: 2.35099e-37; stroke-linejoin: round; stroke: #ffffff" x="47.729" y="79.875" width="118.071" height="118.071" rx="10" ry="10"/>
+  </g>
+  <g>
+    <ellipse style="fill: #000000" cx="113" cy="90.875" rx="7.021" ry="7.021"/>
+    <ellipse style="fill: none; fill-opacity:0; stroke-width: 2; stroke-linejoin: round; stroke: #000000" cx="113" cy="90.875" rx="7.021" ry="7.021"/>
+  </g>
+  <polyline style="fill: none; fill-opacity:0; stroke-width: 4; stroke: #000000" points="61.5289,182.479 73.5,125.854 96,151.875 113,90.875 136.5,172.375 151.658,157.199 "/>
+  <g>
+    <ellipse style="fill: #000000" cx="73.5" cy="125.854" rx="7.021" ry="7.021"/>
+    <ellipse style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" cx="73.5" cy="125.854" rx="7.021" ry="7.021"/>
+  </g>
+  <g>
+    <ellipse style="fill: #000000" cx="136.5" cy="172.375" rx="7.021" ry="7.021"/>
+    <ellipse style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" cx="136.5" cy="172.375" rx="7.021" ry="7.021"/>
+  </g>
+  <g>
+    <ellipse style="fill: #000000" cx="60.7" cy="186.4" rx="7.021" ry="7.021"/>
+    <ellipse style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" cx="60.7" cy="186.4" rx="7.021" ry="7.021"/>
+  </g>
+  <g>
+    <ellipse style="fill: #000000" cx="154.5" cy="154.354" rx="7.021" ry="7.021"/>
+    <ellipse style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" cx="154.5" cy="154.354" rx="7.021" ry="7.021"/>
+  </g>
+  <g>
+    <ellipse style="fill: #000000" cx="96" cy="151.875" rx="7.021" ry="7.021"/>
+    <ellipse style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" cx="96" cy="151.875" rx="7.021" ry="7.021"/>
+  </g>
+</svg>
