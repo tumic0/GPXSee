@@ -10,18 +10,18 @@ namespace ENC {
 
 typedef QCache<QString, MapData> MapCache;
 
-class AtlasData
+class AtlasData : public Data
 {
 public:
 	AtlasData(MapCache &cache, QMutex &cacheLock)
 	  : _cache(cache), _cacheLock(cacheLock) {}
-	~AtlasData();
+	virtual ~AtlasData();
 
 	void addMap(const RectC &bounds, const QString &path);
 
-	void polys(const RectC &rect, QList<MapData::Poly> *polygons,
+	virtual void polys(const RectC &rect, QList<MapData::Poly> *polygons,
 	  QList<MapData::Line> *lines);
-	void points(const RectC &rect, QList<MapData::Point> *points);
+	virtual void points(const RectC &rect, QList<MapData::Point> *points);
 
 private:
 	struct MapEntry {

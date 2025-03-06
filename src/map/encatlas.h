@@ -74,6 +74,7 @@ private:
 	void cancelJobs(bool wait);
 	QString key(int zoom, const QPoint &xy) const;
 	void addMap(const QDir &dir, const QByteArray &file, const RectC &bounds);
+	QList<ENC::Data*> levels() const;
 
 	static bool processRecord(const ENC::ISO8211::Record &record,
 	  QByteArray &file, RectC &bounds);

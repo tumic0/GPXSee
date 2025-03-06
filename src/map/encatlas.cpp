@@ -154,7 +154,7 @@ ENCAtlas::ENCAtlas(const QString &fileName, QObject *parent)
 	_zoom = zooms(_usage).min();
 	updateTransform();
 
-	_cache.setMaxCost(10);
+	_cache.setMaxCost(16);
 
 	_valid = true;
 }
@@ -345,9 +345,21 @@ QString ENCAtlas::key(int zoom, const QPoint &xy) const
 	  + QString::number(xy.x()) + "_" + QString::number(xy.y());
 }
 
+QList<Data*> ENCAtlas::levels() const
+{
+	QList<Data*> list;
+	QMap<IntendedUsage, ENC::AtlasData*>::const_iterator it = _data.find(_usage);
+
+	list.append(it.value());
+	if (it != _data.cbegin())
+		list.prepend((--it).value());
+
+	return list;
+}
+
 void ENCAtlas::draw(QPainter *painter, const QRectF &rect, Flags flags)
 {
-	AtlasData *data = _data.value(_usage);
+	QList<Data*> data(levels());
 	Range zr(zooms(_usage));
 	QPointF tl(floor(rect.left() / TILE_SIZE) * TILE_SIZE,
 	  floor(rect.top() / TILE_SIZE) * TILE_SIZE);

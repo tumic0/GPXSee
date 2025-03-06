@@ -866,7 +866,7 @@ MapData::~MapData()
 		delete _points.GetAt(pit);
 }
 
-void MapData::points(const RectC &rect, QList<Point> *points) const
+void MapData::points(const RectC &rect, QList<Point> *points)
 {
 	double min[2], max[2];
 
@@ -876,18 +876,12 @@ void MapData::points(const RectC &rect, QList<Point> *points) const
 	_lines.Search(min, max, linePointCb, points);
 }
 
-void MapData::lines(const RectC &rect, QList<Line> *lines) const
+void MapData::polys(const RectC &rect, QList<Poly> *polygons,
+  QList<Line> *lines)
 {
 	double min[2], max[2];
 
 	rectcBounds(rect, min, max);
 	_lines.Search(min, max, lineCb, lines);
-}
-
-void MapData::polygons(const RectC &rect, QList<Poly> *polygons) const
-{
-	double min[2], max[2];
-
-	rectcBounds(rect, min, max);
 	_areas.Search(min, max, polygonCb, polygons);
 }
