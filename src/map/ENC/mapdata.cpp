@@ -425,6 +425,8 @@ MapData::Poly::Poly(uint type, const Polygon &path, const Attributes &attr,
 		subtype = CATMFA;
 	else if (type == I_BERTHS)
 		subtype = I_CATBRT;
+	else if (type == M_COVR)
+		subtype = CATCOV;
 
 	switch (type) {
 		case DEPARE:

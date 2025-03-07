@@ -350,9 +350,9 @@ QList<Data*> ENCAtlas::levels() const
 	QList<Data*> list;
 	QMap<IntendedUsage, ENC::AtlasData*>::const_iterator it = _data.find(_usage);
 
-	list.append(it.value());
-	if (it != _data.cbegin())
-		list.prepend((--it).value());
+	do {
+		list.append(it.value());
+	} while (it-- != _data.cbegin());
 
 	return list;
 }

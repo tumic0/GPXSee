@@ -3,6 +3,7 @@
 
 #define CATACH 8
 #define CATBUA 10
+#define CATCOV 18
 #define CATDIS 21
 #define CATHAF 30
 #define CATLMK 35

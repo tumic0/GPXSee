@@ -51,6 +51,16 @@ private:
 		double end;
 	};
 
+	struct Level {
+		QList<Data::Line> lines;
+		QList<Data::Poly> polygons;
+		QList<Data::Point> points;
+		bool overZoom;
+
+		bool isNull() const
+		  {return lines.isEmpty() && polygons.isEmpty() && points.isEmpty();}
+	};
+
 	typedef QMap<Coordinates, Style::Color> LightMap;
 	typedef QSet<Coordinates> SignalSet;
 
@@ -61,16 +71,20 @@ private:
 	QVector<QPolygonF> polylineM(const QVector<Coordinates> &path) const;
 	QPolygonF tsslptArrow(const QPointF &p, qreal angle) const;
 	QPointF centroid(const QVector<Coordinates> &polygon) const;
-	void processPoints(QList<Data::Point> &points,
+	void processPoints(const QList<Data::Point> &points,
 	  QList<TextItem*> &textItems, QList<TextItem *> &lights,
-	  QList<SectorLight> &sectorLights, bool overZoom);
-	void processLines(const QList<Data::Line> &lines, QList<TextItem*> &textItems);
+	  QList<SectorLight> &sectorLights, bool overZoom) const;
+	void processLines(const QList<Data::Line> &lines,
+	  QList<TextItem*> &textItems) const;
 	void drawArrows(QPainter *painter, const QList<Data::Point> &points) const;
 	void drawPolygons(QPainter *painter, const QList<Data::Poly> &polygons) const;
 	void drawLines(QPainter *painter, const QList<Data::Line> &lines) const;
 	void drawTextItems(QPainter *painter, const QList<TextItem*> &textItems) const;
 	void drawSectorLights(QPainter *painter, const QList<SectorLight> &lights) const;
 	bool showLabel(const QImage *img, int type) const;
+	void drawLevels(QPainter *painter, const QList<Level> &levels);
+	QList<Level> fetchLevels();
+	QPainterPath shape(const QList<Data::Poly> &polygons) const;
 
 	Projection _proj;
 	Transform _transform;

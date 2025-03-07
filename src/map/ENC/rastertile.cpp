@@ -257,16 +257,14 @@ void RasterTile::drawSectorLights(QPainter *painter,
 	}
 }
 
-void RasterTile::processPoints(QList<Data::Point> &points,
+void RasterTile::processPoints(const QList<Data::Point> &points,
   QList<TextItem*> &textItems, QList<TextItem*> &lights,
-  QList<SectorLight> &sectorLights, bool overZoom)
+  QList<SectorLight> &sectorLights, bool overZoom) const
 {
 	LightMap lightsMap;
 	SignalSet signalsSet;
 	QSet<Coordinates> slMap;
 	int i;
-
-	std::sort(points.begin(), points.end());
 
 	/* Lights & Signals */
 	for (i = 0; i < points.size(); i++) {
@@ -328,7 +326,7 @@ void RasterTile::processPoints(QList<Data::Point> &points,
 }
 
 void RasterTile::processLines(const QList<Data::Line> &lines,
-  QList<TextItem*> &textItems)
+  QList<TextItem*> &textItems) const
 {
 	for (int i = 0; i < lines.size(); i++) {
 		const Data::Line &line = lines.at(i);
@@ -351,19 +349,45 @@ void RasterTile::processLines(const QList<Data::Line> &lines,
 	}
 }
 
-void RasterTile::render()
+void RasterTile::drawLevels(QPainter *painter, const QList<Level> &levels)
 {
-	QImage img(_rect.width() * _ratio, _rect.height() * _ratio,
-	  QImage::Format_ARGB32_Premultiplied);
+	for (int i = levels.size() - 1; i >= 0; i--) {
+		QList<TextItem*> textItems, lights;
+		QList<SectorLight> sectorLights;
+		const Level &l = levels.at(i);
 
-	img.setDevicePixelRatio(_ratio);
-	img.fill(Qt::transparent);
+		processPoints(l.points, textItems, lights, sectorLights, l.overZoom);
+		processLines(l.lines, textItems);
 
-	QPainter painter(&img);
-	painter.setRenderHint(QPainter::SmoothPixmapTransform);
-	painter.setRenderHint(QPainter::Antialiasing);
-	painter.translate(-_rect.x(), -_rect.y());
+		drawPolygons(painter, l.polygons);
+		drawLines(painter, l.lines);
+		drawArrows(painter, l.points);
 
+		drawTextItems(painter, lights);
+		drawSectorLights(painter, sectorLights);
+		drawTextItems(painter, textItems);
+
+		qDeleteAll(textItems);
+		qDeleteAll(lights);
+	}
+}
+
+QPainterPath RasterTile::shape(const QList<Data::Poly> &polygons) const
+{
+	QPainterPath shp;
+
+	for (int i = 0; i < polygons.size(); i++) {
+		const Data::Poly &p = polygons.at(i);
+		if (p.type() == SUBTYPE(M_COVR, 1))
+			shp.addPath(painterPath(p.path()));
+	}
+
+	return shp;
+}
+
+QList<RasterTile::Level> RasterTile::fetchLevels()
+{
+	QList<RasterTile::Level> list;
 	QPoint ttl(_rect.topLeft());
 	QRectF polyRect(ttl, QPointF(ttl.x() + _rect.width(), ttl.y()
 	  + _rect.height()));
@@ -378,30 +402,40 @@ void RasterTile::render()
 	RectC pointRectC(pointRectD.toRectC(_proj, 20));
 
 	for (int i = 0; i < _data.size(); i++) {
-		QList<Data::Line> lines;
-		QList<Data::Poly> polygons;
-		QList<Data::Point> points;
-		QList<TextItem*> textItems, lights;
-		QList<SectorLight> sectorLights;
+		Level level;
 
-		_data.at(i)->polys(polyRectC, &polygons, &lines);
-		_data.at(i)->points(pointRectC, &points);
+		_data.at(i)->polys(polyRectC, &level.polygons, &level.lines);
+		_data.at(i)->points(pointRectC, &level.points);
+		level.overZoom = i > 0;
 
-		processPoints(points, textItems, lights, sectorLights,
-		  _data.size() > 1 && i == 0);
-		processLines(lines, textItems);
+		std::sort(level.points.begin(), level.points.end());
 
-		drawPolygons(&painter, polygons);
-		drawLines(&painter, lines);
-		drawArrows(&painter, points);
+		if (!level.isNull())
+			list.append(level);
 
-		drawTextItems(&painter, lights);
-		drawSectorLights(&painter, sectorLights);
-		drawTextItems(&painter, textItems);
-
-		qDeleteAll(textItems);
-		qDeleteAll(lights);
+		if (shape(level.polygons).contains(_rect))
+			break;
 	}
+
+	return list;
+}
+
+void RasterTile::render()
+{
+	QList<Level> levels(fetchLevels());
+
+	QImage img(_rect.width() * _ratio, _rect.height() * _ratio,
+	  QImage::Format_ARGB32_Premultiplied);
+
+	img.setDevicePixelRatio(_ratio);
+	img.fill(Qt::transparent);
+
+	QPainter painter(&img);
+	painter.setRenderHint(QPainter::SmoothPixmapTransform);
+	painter.setRenderHint(QPainter::Antialiasing);
+	painter.translate(-_rect.x(), -_rect.y());
+
+	drawLevels(&painter, levels);
 
 	//painter.setPen(Qt::red);
 	//painter.setBrush(Qt::NoBrush);
