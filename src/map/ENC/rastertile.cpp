@@ -169,8 +169,13 @@ void RasterTile::drawPolygons(QPainter *painter,
 			} else {
 				if (style.brush() != Qt::NoBrush) {
 					painter->setPen(Qt::NoPen);
+					QPainterPath path(painterPath(poly.path()));
+					if (poly.type() == TYPE(DRGARE)) {
+						painter->setBrush(Qt::white);
+						painter->drawPath(path);
+					}
 					painter->setBrush(style.brush());
-					painter->drawPath(painterPath(poly.path()));
+					painter->drawPath(path);
 				}
 				if (style.pen() != Qt::NoPen) {
 					painter->setPen(style.pen());
@@ -413,7 +418,7 @@ QList<RasterTile::Level> RasterTile::fetchLevels()
 		if (!level.isNull())
 			list.append(level);
 
-		if (shape(level.polygons).contains(_rect))
+		if (_data.size() > 0 && shape(level.polygons).contains(_rect))
 			break;
 	}
 
