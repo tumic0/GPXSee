@@ -133,9 +133,7 @@ bool RGNFile::readBuoyInfo(Handle &hdl, quint8 flags, quint32 size,
 bool RGNFile::readLightInfo(Handle &hdl, quint8 flags, quint32 size,
   MapData::Point *point) const
 {
-	quint16 flags1;
-	quint8 flags2;
-	quint32 unused;
+	quint32 flags1, flags2, unused;
 
 	if (!(size >= 3 && readUInt16(hdl, flags1) && readUInt8(hdl, flags2)))
 		return false;
