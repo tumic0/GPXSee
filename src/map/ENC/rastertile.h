@@ -61,9 +61,6 @@ private:
 		  {return lines.isEmpty() && polygons.isEmpty() && points.isEmpty();}
 	};
 
-	typedef QMap<Coordinates, Style::Color> LightMap;
-	typedef QSet<Coordinates> SignalSet;
-
 	QPointF ll2xy(const Coordinates &c) const
 	  {return _transform.proj2img(_proj.ll2xy(c));}
 	QPainterPath painterPath(const Polygon &polygon) const;

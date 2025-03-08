@@ -266,9 +266,8 @@ void RasterTile::processPoints(const QList<Data::Point> &points,
   QList<TextItem*> &textItems, QList<TextItem*> &lights,
   QList<SectorLight> &sectorLights, bool overZoom) const
 {
-	LightMap lightsMap;
-	SignalSet signalsSet;
-	QSet<Coordinates> slMap;
+	QMap<Coordinates, Style::Color> lightsMap;
+	QSet<Coordinates> signalsSet, sectorLightsSet;
 	int i;
 
 	/* Lights & Signals */
@@ -285,7 +284,7 @@ void RasterTile::processPoints(const QList<Data::Point> &points,
 				sectorLights.append(SectorLight(point.pos(), color,
 				  attr.value(LITVIS).toUInt(), range,
 				  attr.value(SECTR1).toDouble(), attr.value(SECTR2).toDouble()));
-				slMap.insert(point.pos());
+				sectorLightsSet.insert(point.pos());
 			} else
 				lightsMap.insert(point.pos(), color);
 		} else if (point.type()>>16 == FOGSIG)
@@ -316,7 +315,7 @@ void RasterTile::processPoints(const QList<Data::Point> &points,
 
 		TextPointItem *item = new TextPointItem(pos + offset, label, fnt, img,
 		  color, hColor, 0, 2, rotate);
-		if (item->isValid() && (slMap.contains(point.pos())
+		if (item->isValid() && (sectorLightsSet.contains(point.pos())
 		  || (point.polygon() && img) || !item->collides(textItems))) {
 			textItems.append(item);
 			if (lightsMap.contains(point.pos()))
