@@ -263,11 +263,11 @@ void RasterTile::drawSectorLights(QPainter *painter,
 }
 
 void RasterTile::processPoints(const QList<Data::Point> &points,
-  QList<TextItem*> &textItems, QList<TextItem*> &lights,
+  QList<TextItem*> &textItems, QList<TextItem*> &lightItems,
   QMap<Coordinates, SectorLight> &sectorLights, bool overZoom) const
 {
-	QMap<Coordinates, Style::Color> lightsMap;
-	QSet<Coordinates> signalsSet;
+	QMap<Coordinates, Style::Color> lights;
+	QSet<Coordinates> sigs;
 	int i;
 
 	/* Lights & Signals */
@@ -285,9 +285,9 @@ void RasterTile::processPoints(const QList<Data::Point> &points,
 				  attr.value(LITVIS).toUInt(), range,
 				  attr.value(SECTR1).toDouble(), attr.value(SECTR2).toDouble()));
 			} else
-				lightsMap.insert(point.pos(), color);
+				lights.insert(point.pos(), color);
 		} else if (point.type()>>16 == FOGSIG)
-			signalsSet.insert(point.pos());
+			sigs.insert(point.pos());
 		else
 			break;
 	}
@@ -317,11 +317,11 @@ void RasterTile::processPoints(const QList<Data::Point> &points,
 		if (item->isValid() && (sectorLights.contains(point.pos())
 		  || (point.polygon() && img) || !item->collides(textItems))) {
 			textItems.append(item);
-			if (lightsMap.contains(point.pos()))
-				lights.append(new TextPointItem(pos + _style->lightOffset(),
-				  0, 0, _style->light(lightsMap.value(point.pos())), 0, 0, 0, 0));
-			if (signalsSet.contains(point.pos()))
-				lights.append(new TextPointItem(pos + _style->signalOffset(),
+			if (lights.contains(point.pos()))
+				lightItems.append(new TextPointItem(pos + _style->lightOffset(),
+				  0, 0, _style->light(lights.value(point.pos())), 0, 0, 0, 0));
+			if (sigs.contains(point.pos()))
+				lightItems.append(new TextPointItem(pos + _style->signalOffset(),
 				  0, 0, _style->signal(), 0, 0, 0, 0));
 		} else
 			delete item;
@@ -355,23 +355,23 @@ void RasterTile::processLines(const QList<Data::Line> &lines,
 void RasterTile::drawLevels(QPainter *painter, const QList<Level> &levels)
 {
 	for (int i = levels.size() - 1; i >= 0; i--) {
-		QList<TextItem*> textItems, lights;
+		QList<TextItem*> textItems, lightItems;
 		QMap<Coordinates, SectorLight> sectorLights;
 		const Level &l = levels.at(i);
 
-		processPoints(l.points, textItems, lights, sectorLights, l.overZoom);
+		processPoints(l.points, textItems, lightItems, sectorLights, l.overZoom);
 		processLines(l.lines, textItems);
 
 		drawPolygons(painter, l.polygons);
 		drawLines(painter, l.lines);
 		drawArrows(painter, l.points);
 
-		drawTextItems(painter, lights);
+		drawTextItems(painter, lightItems);
 		drawSectorLights(painter, sectorLights);
 		drawTextItems(painter, textItems);
 
 		qDeleteAll(textItems);
-		qDeleteAll(lights);
+		qDeleteAll(lightItems);
 	}
 }
 

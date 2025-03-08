@@ -68,7 +68,7 @@ private:
 	QPolygonF tsslptArrow(const QPointF &p, qreal angle) const;
 	QPointF centroid(const QVector<Coordinates> &polygon) const;
 	void processPoints(const QList<Data::Point> &points,
-	  QList<TextItem*> &textItems, QList<TextItem *> &lights,
+	  QList<TextItem*> &textItems, QList<TextItem*> &lightItems,
 	  QMap<Coordinates, SectorLight> &sectorLights, bool overZoom) const;
 	void processLines(const QList<Data::Line> &lines,
 	  QList<TextItem*> &textItems) const;
