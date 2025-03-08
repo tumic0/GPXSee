@@ -418,7 +418,7 @@ QList<RasterTile::Level> RasterTile::fetchLevels()
 		if (!level.isNull())
 			list.append(level);
 
-		if (_data.size() > 0 && shape(level.polygons).contains(_rect))
+		if (_data.size() > 1 && shape(level.polygons).contains(_rect))
 			break;
 	}
 
