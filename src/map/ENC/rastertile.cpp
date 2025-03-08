@@ -226,7 +226,7 @@ static QRectF lightRect(const QPointF &pos, double range)
 }
 
 void RasterTile::drawSectorLights(QPainter *painter,
-  const QMap<Coordinates, SectorLight> &lights) const
+  const QMultiMap<Coordinates, SectorLight> &lights) const
 {
 	for (auto it = lights.cbegin(); it != lights.cend(); ++it) {
 		const SectorLight &l = it.value();
@@ -264,7 +264,7 @@ void RasterTile::drawSectorLights(QPainter *painter,
 
 void RasterTile::processPoints(const QList<Data::Point> &points,
   QList<TextItem*> &textItems, QList<TextItem*> &lightItems,
-  QMap<Coordinates, SectorLight> &sectorLights, bool overZoom) const
+  QMultiMap<Coordinates, SectorLight> &sectorLights, bool overZoom) const
 {
 	QMap<Coordinates, Style::Color> lights;
 	QSet<Coordinates> sigs;
@@ -356,7 +356,7 @@ void RasterTile::drawLevels(QPainter *painter, const QList<Level> &levels)
 {
 	for (int i = levels.size() - 1; i >= 0; i--) {
 		QList<TextItem*> textItems, lightItems;
-		QMap<Coordinates, SectorLight> sectorLights;
+		QMultiMap<Coordinates, SectorLight> sectorLights;
 		const Level &l = levels.at(i);
 
 		processPoints(l.points, textItems, lightItems, sectorLights, l.overZoom);

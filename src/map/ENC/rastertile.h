@@ -69,7 +69,7 @@ private:
 	QPointF centroid(const QVector<Coordinates> &polygon) const;
 	void processPoints(const QList<Data::Point> &points,
 	  QList<TextItem*> &textItems, QList<TextItem*> &lightItems,
-	  QMap<Coordinates, SectorLight> &sectorLights, bool overZoom) const;
+	  QMultiMap<Coordinates, SectorLight> &sectorLights, bool overZoom) const;
 	void processLines(const QList<Data::Line> &lines,
 	  QList<TextItem*> &textItems) const;
 	void drawArrows(QPainter *painter, const QList<Data::Point> &points) const;
@@ -77,7 +77,7 @@ private:
 	void drawLines(QPainter *painter, const QList<Data::Line> &lines) const;
 	void drawTextItems(QPainter *painter, const QList<TextItem*> &textItems) const;
 	void drawSectorLights(QPainter *painter,
-	  const QMap<Coordinates, SectorLight> &lights) const;
+	  const QMultiMap<Coordinates, SectorLight> &lights) const;
 	bool showLabel(const QImage *img, int type) const;
 	void drawLevels(QPainter *painter, const QList<Level> &levels);
 	QList<Level> fetchLevels();
