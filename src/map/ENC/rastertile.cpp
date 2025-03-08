@@ -226,11 +226,11 @@ static QRectF lightRect(const QPointF &pos, double range)
 }
 
 void RasterTile::drawSectorLights(QPainter *painter,
-  const QList<SectorLight> &lights) const
+  const QMap<Coordinates, SectorLight> &lights) const
 {
-	for (int i = 0; i < lights.size(); i++) {
-		const SectorLight &l = lights.at(i);
-		QPointF pos(ll2xy(l.pos));
+	for (auto it = lights.cbegin(); it != lights.cend(); ++it) {
+		const SectorLight &l = it.value();
+		QPointF pos(ll2xy(it.key()));
 		QRectF rect(lightRect(pos, (l.range == 0) ? 6 : l.range));
 		double a1 = -(l.end + 90);
 		double a2 = -(l.start + 90);
@@ -264,10 +264,10 @@ void RasterTile::drawSectorLights(QPainter *painter,
 
 void RasterTile::processPoints(const QList<Data::Point> &points,
   QList<TextItem*> &textItems, QList<TextItem*> &lights,
-  QList<SectorLight> &sectorLights, bool overZoom) const
+  QMap<Coordinates, SectorLight> &sectorLights, bool overZoom) const
 {
 	QMap<Coordinates, Style::Color> lightsMap;
-	QSet<Coordinates> signalsSet, sectorLightsSet;
+	QSet<Coordinates> signalsSet;
 	int i;
 
 	/* Lights & Signals */
@@ -281,10 +281,9 @@ void RasterTile::processPoints(const QList<Data::Point> &points,
 
 			if (attr.contains(SECTR1)
 			  || (range >= MAJOR_RANGE && !(point.type() & 0xFFFF))) {
-				sectorLights.append(SectorLight(point.pos(), color,
+				sectorLights.insert(point.pos(), SectorLight(color,
 				  attr.value(LITVIS).toUInt(), range,
 				  attr.value(SECTR1).toDouble(), attr.value(SECTR2).toDouble()));
-				sectorLightsSet.insert(point.pos());
 			} else
 				lightsMap.insert(point.pos(), color);
 		} else if (point.type()>>16 == FOGSIG)
@@ -315,7 +314,7 @@ void RasterTile::processPoints(const QList<Data::Point> &points,
 
 		TextPointItem *item = new TextPointItem(pos + offset, label, fnt, img,
 		  color, hColor, 0, 2, rotate);
-		if (item->isValid() && (sectorLightsSet.contains(point.pos())
+		if (item->isValid() && (sectorLights.contains(point.pos())
 		  || (point.polygon() && img) || !item->collides(textItems))) {
 			textItems.append(item);
 			if (lightsMap.contains(point.pos()))
@@ -357,7 +356,7 @@ void RasterTile::drawLevels(QPainter *painter, const QList<Level> &levels)
 {
 	for (int i = levels.size() - 1; i >= 0; i--) {
 		QList<TextItem*> textItems, lights;
-		QList<SectorLight> sectorLights;
+		QMap<Coordinates, SectorLight> sectorLights;
 		const Level &l = levels.at(i);
 
 		processPoints(l.points, textItems, lights, sectorLights, l.overZoom);
