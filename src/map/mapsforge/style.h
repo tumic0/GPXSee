@@ -38,7 +38,7 @@ public:
 
 		class Filter {
 		public:
-			Filter() : _neg(false) {}
+			Filter() : _neg(false), _excl(false) {}
 			Filter(const MapData &data, const QList<QByteArray> &keys,
 			  const QList<QByteArray> &vals);
 
@@ -47,14 +47,15 @@ public:
 				if (_neg) {
 					if (!keyMatches(tags))
 						return true;
-					return valueMatches(tags);
+					return valueMatches(tags) ^ _excl;
 				} else
-					return (keyMatches(tags) && valueMatches(tags));
+					return (keyMatches(tags) && (valueMatches(tags) ^ _excl));
 			}
 
 			bool isTautology() const
 			{
-				return (!_neg && _keys.contains(0u) && _vals.contains(QByteArray()));
+				return (!_neg && !_excl && _keys.contains(0u)
+				  && _vals.contains(QByteArray()));
 			}
 
 		private:
@@ -86,7 +87,7 @@ public:
 
 			QList<unsigned> _keys;
 			QList<QByteArray> _vals;
-			bool _neg;
+			bool _neg, _excl;
 		};
 
 		void setType(Type type)

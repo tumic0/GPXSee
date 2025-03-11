@@ -116,13 +116,15 @@ QSet<QString> Style::Menu::cats() const
 }
 
 Style::Rule::Filter::Filter(const MapData &data, const QList<QByteArray> &keys,
-  const QList<QByteArray> &vals) : _neg(false)
+  const QList<QByteArray> &vals) : _neg(false), _excl(false)
 {
 	_keys = keyList(data, keys);
 
 	QList<QByteArray> vc(vals);
 	if (vc.removeAll("~"))
 		_neg = true;
+	if (vc.removeAll("-"))
+		_excl = true;
 	_vals = valList(vc);
 }
 
