@@ -64,6 +64,7 @@ GraphItem *SpeedGraph::loadGraph(const Graph &graph, const Track &track,
 	if (primary) {
 		_avg.append(QPointF(track.distance(), gi->avg()));
 		_mavg.append(QPointF(track.distance(), gi->mavg()));
+		_max.append(QPointF(track.distance(), gi->max()));
 	}
 
 	return gi;
@@ -117,6 +118,16 @@ qreal SpeedGraph::avg() const
 	return (sum / w);
 }
 
+qreal SpeedGraph::max() const
+{
+	qreal mv = 0;
+
+	for (int i = 0; i < _max.size(); i++)
+		mv = qMax(mv, _max.at(i).y());
+
+	return mv;
+}
+
 void SpeedGraph::clear()
 {
 	qDeleteAll(_tracks);
@@ -124,6 +135,7 @@ void SpeedGraph::clear()
 
 	_avg.clear();
 	_mavg.clear();
+	_max.clear();
 
 	GraphTab::clear();
 }

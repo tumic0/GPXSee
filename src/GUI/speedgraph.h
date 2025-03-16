@@ -26,12 +26,13 @@ private:
 	GraphItem *loadGraph(const Graph &graph, const Track &track,
 	  const QColor &color, bool primary);
 	qreal avg() const;
-	qreal max() const {return bounds().bottom();}
+	qreal max() const;
 	void setYUnits();
 	void setInfo();
 
 	QVector<QPointF> _avg;
 	QVector<QPointF> _mavg;
+	QVector<QPointF> _max;
 
 	Units _units;
 	TimeType _timeType;
