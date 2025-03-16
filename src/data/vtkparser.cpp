@@ -140,7 +140,7 @@ static bool trackpoint(CTX &ctx, Trackpoint &t)
 	t.setTimestamp(QDateTime::fromMSecsSinceEpoch(
 	  ((qint64)seconds * 1000) + ((qint64)centiSeconds * 10),
 	  QTimeZone::utc()));
-	t.setSpeed(speed / 5.1444);
+	t.setSpeed(speed * 0.051444);
 
 	return (ctx.bp == ee);
 }
