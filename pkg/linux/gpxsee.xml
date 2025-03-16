@@ -198,6 +198,13 @@
 		<glob pattern="*.txt"/>
 	</mime-type>
 
+	<mime-type type="application/vnd.velocitek.vtk">
+		<comment>Velocitek VTK File</comment>
+		<sub-class-of type="application/octet-stream"/>
+		<generic-icon name="application/octet-stream"/>
+		<glob pattern="*.vtk"/>
+	</mime-type>
+
 	<!-- Maps -->
 
 	<mime-type type="application/vnd.garmin.img">

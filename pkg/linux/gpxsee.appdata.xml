@@ -15,8 +15,8 @@
 			<li>Opens GPX, TCX, FIT, KML, IGC, NMEA, SIGMA SLF, Suunto SML, LOC,
 				OziExplorer (PLT, WPT, RTE), GeoJSON, SeeYou CUP,
 				Garmin GPI &amp; CSV, TomTom OV2 &amp; ITN, ONmove OMD/GHP,
-				TwoNav (TRK, RTE, WPT), GPSDump WPT, 70mai GPS logs and
-				geotagged JPEG files.</li>
+				TwoNav (TRK, RTE, WPT), GPSDump WPT, Velocitek VTK,
+				70mai GPS logs and geotagged JPEG files.</li>
 			<li>Opens geo URIs (RFC 5870).</li>
 			<li>User-definable online maps (OpenStreetMap/Google tiles, WMTS,
 				WMS, TMS, QuadTiles).</li>
@@ -114,6 +114,7 @@
 		<mimetype>application/vnd.gpsdump.wpt</mimetype>
 		<mimetype>application/vnd.gpstuner.gmi</mimetype>
 		<mimetype>application/vnd.70mai.txt</mimetype>
+		<mimetype>application/vnd.velocitek.vtk</mimetype>
 		<mimetype>x-scheme-handler/geo</mimetype>
 	</mimetypes>
 </component>
