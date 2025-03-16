@@ -428,6 +428,12 @@
                 <line stroke="#f7d9a6" stroke-width="1" stroke-linecap="butt"/>
             </rule>
         </rule>
+        <rule e="way" k="*" v="*" zoom-min="14">
+            <pathText fill="#000000" font-size="10" k="name" priority="-3" stroke="#FFFFFF" stroke-width="2"/>
+            <rule e="way" k="oneway" v="yes|true|1" zoom-min="16">
+                <lineSymbol priority="-50" src=":/symbols/oneway.svg" symbol-width="16" symbol-height="8"/>
+            </rule>
+        </rule>
     </rule>
     <rule e="way" k="highway" v="motorway|motorway_link">
         <rule e="way" k="tunnel" v="~|false|no">
