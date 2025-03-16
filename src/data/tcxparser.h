@@ -4,7 +4,6 @@
 #include <QXmlStreamReader>
 #include "parser.h"
 
-
 class TCXParser : public Parser
 {
 public:
