@@ -750,6 +750,22 @@
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>
 		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>vtk</string>
+			</array>
+			<key>CFBundleTypeMIMETypes</key>
+			<array>
+				<string>application/vnd.velocitek.vtk</string>
+			</array>
+			<key>CFBundleTypeIconFile</key>
+			<string>icons/vtk.icns</string>
+			<key>CFBundleTypeName</key>
+			<string>Velocitek VTK File</string>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+		</dict>
 	</array>
 
 	<key>CFBundleURLTypes</key>
@@ -1697,6 +1713,8 @@
 			<string>https://iho.int/uploads/user/pubs/standards/s-57/31Main.pdf</string>
 			<key>UTTypeDescription</key>
 			<string>IHO S-57 Electronic Navigation Chart</string>
+			<key>UTTypeIconFile</key>
+			<string>icons/000.icns</string>
 			<key>UTTypeConformsTo</key>
 			<array>
 				<string>public.data</string>
@@ -1718,6 +1736,8 @@
 			<string>https://iho.int/uploads/user/pubs/standards/s-57/20ApB1.pdf</string>
 			<key>UTTypeDescription</key>
 			<string>IHO S-57 Electronic Navigation Catalogue</string>
+			<key>UTTypeIconFile</key>
+			<string>icons/031.icns</string>
 			<key>UTTypeConformsTo</key>
 			<array>
 				<string>public.data</string>
@@ -1751,6 +1771,29 @@
 				</array>
 				<key>public.mime-type</key>
 				<string>application/vnd.70mai.txt</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeIdentifier</key>
+			<string>com.velocitek.vtk</string>
+			<key>UTTypeReferenceURL</key>
+			<string>https://github.com/velocitek/vtk_protocol</string>
+			<key>UTTypeDescription</key>
+			<string>Velocitek VTK File</string>
+			<key>UTTypeIconFile</key>
+			<string>icons/vtk.icns</string>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>vtk</string>
+				</array>
+				<key>public.mime-type</key>
+				<string>application/vnd.velocitek.vtk</string>
 			</dict>
 		</dict>
 	</array>
