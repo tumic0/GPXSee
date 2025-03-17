@@ -172,7 +172,7 @@
     <message>
         <location filename="../src/data/data.cpp" line="251"/>
         <source>VTK files</source>
-        <translation type="unfinished"></translation>
+        <translation>Soubory VTK</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="252"/>
