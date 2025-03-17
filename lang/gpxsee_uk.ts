@@ -70,117 +70,122 @@
 <context>
     <name>Data</name>
     <message>
-        <location filename="../src/data/data.cpp" line="228"/>
+        <location filename="../src/data/data.cpp" line="231"/>
         <source>Supported files</source>
         <translation>Всі підтримувані формати</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="229"/>
+        <location filename="../src/data/data.cpp" line="232"/>
         <source>CSV files</source>
         <translation>CSV файли</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="230"/>
+        <location filename="../src/data/data.cpp" line="233"/>
         <source>CUP files</source>
         <translation>CUP файли</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="231"/>
+        <location filename="../src/data/data.cpp" line="234"/>
         <source>FIT files</source>
         <translation>FIT файли</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="232"/>
+        <location filename="../src/data/data.cpp" line="235"/>
         <source>GeoJSON files</source>
         <translation>GeoJSON файли</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="233"/>
+        <location filename="../src/data/data.cpp" line="236"/>
         <source>GPI files</source>
         <translation>GPI файли</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="234"/>
+        <location filename="../src/data/data.cpp" line="237"/>
         <source>GPX files</source>
         <translation>GPX файли</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="235"/>
+        <location filename="../src/data/data.cpp" line="238"/>
         <source>IGC files</source>
         <translation>IGC файли</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="236"/>
+        <location filename="../src/data/data.cpp" line="239"/>
         <source>ITN files</source>
         <translation>ITN файли</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="237"/>
+        <location filename="../src/data/data.cpp" line="240"/>
         <source>JPEG images</source>
         <translation>JPEG зображення</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="238"/>
+        <location filename="../src/data/data.cpp" line="241"/>
         <source>KML files</source>
         <translation>KML файли</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="239"/>
+        <location filename="../src/data/data.cpp" line="242"/>
         <source>LOC files</source>
         <translation>LOC файли</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="240"/>
+        <location filename="../src/data/data.cpp" line="243"/>
         <source>NMEA files</source>
         <translation>NMEA файли</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="241"/>
+        <location filename="../src/data/data.cpp" line="244"/>
         <source>ONmove files</source>
         <translation>ONmove файли</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="242"/>
+        <location filename="../src/data/data.cpp" line="245"/>
         <source>OV2 files</source>
         <translation>OV2 файли</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="243"/>
+        <location filename="../src/data/data.cpp" line="246"/>
         <source>OziExplorer files</source>
         <translation>OziExplorer файли</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="244"/>
+        <location filename="../src/data/data.cpp" line="247"/>
         <source>SLF files</source>
         <translation>SLF файли</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="245"/>
+        <location filename="../src/data/data.cpp" line="248"/>
         <source>SML files</source>
         <translation>SML файли</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="246"/>
+        <location filename="../src/data/data.cpp" line="249"/>
         <source>TCX files</source>
         <translation>TCX файли</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="247"/>
+        <location filename="../src/data/data.cpp" line="250"/>
         <source>70mai GPS log files</source>
         <translation>70mai файли журналу GPS</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="248"/>
+        <location filename="../src/data/data.cpp" line="251"/>
+        <source>VTK files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/data/data.cpp" line="252"/>
         <source>TwoNav files</source>
         <translation>TwoNav файли</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="249"/>
+        <location filename="../src/data/data.cpp" line="253"/>
         <source>GPSDump files</source>
         <translation>GPSDump файли</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="250"/>
+        <location filename="../src/data/data.cpp" line="254"/>
         <source>All files</source>
         <translation>Всі файли</translation>
     </message>
@@ -2422,17 +2427,17 @@
         <translation>Темп</translation>
     </message>
     <message>
-        <location filename="../src/GUI/speedgraph.cpp" line="134"/>
+        <location filename="../src/GUI/speedgraph.cpp" line="146"/>
         <source>kn</source>
         <translation>вуз</translation>
     </message>
     <message>
-        <location filename="../src/GUI/speedgraph.cpp" line="137"/>
+        <location filename="../src/GUI/speedgraph.cpp" line="149"/>
         <source>mi/h</source>
         <translation>миль/год</translation>
     </message>
     <message>
-        <location filename="../src/GUI/speedgraph.cpp" line="140"/>
+        <location filename="../src/GUI/speedgraph.cpp" line="152"/>
         <source>km/h</source>
         <translation>км/год</translation>
     </message>

@@ -70,117 +70,122 @@
 <context>
     <name>Data</name>
     <message>
-        <location filename="../src/data/data.cpp" line="228"/>
+        <location filename="../src/data/data.cpp" line="231"/>
         <source>Supported files</source>
         <translation>Formatos suportados</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="229"/>
+        <location filename="../src/data/data.cpp" line="232"/>
         <source>CSV files</source>
         <translation>Arquivos CSV</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="230"/>
+        <location filename="../src/data/data.cpp" line="233"/>
         <source>CUP files</source>
         <translation>Arquivos CUP</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="231"/>
+        <location filename="../src/data/data.cpp" line="234"/>
         <source>FIT files</source>
         <translation>Arquivos FIT</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="232"/>
+        <location filename="../src/data/data.cpp" line="235"/>
         <source>GeoJSON files</source>
         <translation>Arquivos GeoJSON</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="233"/>
+        <location filename="../src/data/data.cpp" line="236"/>
         <source>GPI files</source>
         <translation>Arquivos GPI</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="234"/>
+        <location filename="../src/data/data.cpp" line="237"/>
         <source>GPX files</source>
         <translation>Arquivos GPX</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="235"/>
+        <location filename="../src/data/data.cpp" line="238"/>
         <source>IGC files</source>
         <translation>Arquivos IGC</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="236"/>
+        <location filename="../src/data/data.cpp" line="239"/>
         <source>ITN files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="237"/>
+        <location filename="../src/data/data.cpp" line="240"/>
         <source>JPEG images</source>
         <translation>Imagens JPEG</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="238"/>
+        <location filename="../src/data/data.cpp" line="241"/>
         <source>KML files</source>
         <translation>Arquivos KML</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="239"/>
+        <location filename="../src/data/data.cpp" line="242"/>
         <source>LOC files</source>
         <translation>Arquivos LOC</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="240"/>
+        <location filename="../src/data/data.cpp" line="243"/>
         <source>NMEA files</source>
         <translation>Arquivos NMEA</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="241"/>
+        <location filename="../src/data/data.cpp" line="244"/>
         <source>ONmove files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="242"/>
+        <location filename="../src/data/data.cpp" line="245"/>
         <source>OV2 files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="243"/>
+        <location filename="../src/data/data.cpp" line="246"/>
         <source>OziExplorer files</source>
         <translation>Arquivos OziExplorer</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="244"/>
+        <location filename="../src/data/data.cpp" line="247"/>
         <source>SLF files</source>
         <translation>Arquivos SLF</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="245"/>
+        <location filename="../src/data/data.cpp" line="248"/>
         <source>SML files</source>
         <translation>Arquivos SML</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="246"/>
+        <location filename="../src/data/data.cpp" line="249"/>
         <source>TCX files</source>
         <translation>Arquivos TCX</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="247"/>
+        <location filename="../src/data/data.cpp" line="250"/>
         <source>70mai GPS log files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="248"/>
+        <location filename="../src/data/data.cpp" line="251"/>
+        <source>VTK files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/data/data.cpp" line="252"/>
         <source>TwoNav files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="249"/>
+        <location filename="../src/data/data.cpp" line="253"/>
         <source>GPSDump files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="250"/>
+        <location filename="../src/data/data.cpp" line="254"/>
         <source>All files</source>
         <translation>Todos os arquivos</translation>
     </message>
@@ -2420,17 +2425,17 @@
         <translation>Ritmo</translation>
     </message>
     <message>
-        <location filename="../src/GUI/speedgraph.cpp" line="134"/>
+        <location filename="../src/GUI/speedgraph.cpp" line="146"/>
         <source>kn</source>
         <translation>kn</translation>
     </message>
     <message>
-        <location filename="../src/GUI/speedgraph.cpp" line="137"/>
+        <location filename="../src/GUI/speedgraph.cpp" line="149"/>
         <source>mi/h</source>
         <translation>mi/h</translation>
     </message>
     <message>
-        <location filename="../src/GUI/speedgraph.cpp" line="140"/>
+        <location filename="../src/GUI/speedgraph.cpp" line="152"/>
         <source>km/h</source>
         <translation>km/h</translation>
     </message>
