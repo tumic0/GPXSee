@@ -188,7 +188,7 @@ void RasterTile::processLineLabels(const QVector<PainterPath> &paths,
 		if (l.ti) {
 			limit = (l.ti->key() == ID_ELE || l.ti->key() == ID_REF
 			  || (!l.si && l.ti->shield()));
-			if (limit && set.contains(*l.lbl))
+			if (limit && l.lbl && set.contains(*l.lbl))
 				continue;
 		}
 
@@ -214,7 +214,7 @@ void RasterTile::processLineLabels(const QVector<PainterPath> &paths,
 			  color, hColor, rotate);
 			if (item->isValid() && !item->collides(textItems)) {
 				textItems.append(item);
-				if (limit)
+				if (limit && l.lbl)
 					set.insert(*l.lbl);
 			} else {
 				delete item;
