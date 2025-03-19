@@ -214,9 +214,10 @@
     </rule>
 
     <!-- Buildings -->
-    <rule e="way" k="building" v="*">
+    <rule e="way" k="building" v="-|civic|cathedral|church|basilica">
         <area fill="#dbd0b6" stroke="#cdccc4" stroke-width="0.1"/>
     </rule>
+
     <rule e="way" k="building" v="civic">
         <area fill="#cfc4b3" stroke="#cdccc4" stroke-width="0.1"/>
         <rule e="way" k="*" v="*" zoom-min="16">
