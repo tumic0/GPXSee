@@ -167,12 +167,12 @@
     <message>
         <location filename="../src/data/data.cpp" line="250"/>
         <source>70mai GPS log files</source>
-        <translation type="unfinished"></translation>
+        <translation>70mai GPS -lokitiedostot</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="251"/>
         <source>VTK files</source>
-        <translation type="unfinished"></translation>
+        <translation>VTK-tiedostot</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="252"/>
