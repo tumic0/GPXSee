@@ -24,4 +24,4 @@ jobs:
       - name: Configure build
         run: qmake CONFIG+=${{ matrix.config }} gpxsee.pro
       - name: Build project
-        run: make -j2
+        run: make -j4

@@ -43,7 +43,7 @@ jobs:
       - name: Configure build
         run:  qmake gpxsee.pro OPENSSL_PATH=android_openssl 
       - name: Build project
-        run:  make -j2 apk
+        run:  make -j4 apk
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
