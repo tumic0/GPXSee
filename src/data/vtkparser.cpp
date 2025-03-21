@@ -180,12 +180,15 @@ bool VTKParser::parse(QFile *file, QList<TrackData> &tracks,
 	_errorString = "";
 
 	while (true) {
-		len = file->read((char*)&recordLen, 2);
-		if (len < 0) {
-			_errorString = "I/O error";
-			return false;
-		} else if (len == 0)
-			break;
+		if ((len = file->read((char*)&recordLen, sizeof(recordLen)))
+		  != sizeof(recordLen)) {
+			if (!len)
+				break;
+			else {
+				_errorString = "Error reading VTK record size";
+				return false;
+			}
+		}
 
 		recordLen = qFromLittleEndian(recordLen);
 		ba.resize(recordLen);
