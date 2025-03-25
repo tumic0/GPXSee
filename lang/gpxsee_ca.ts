@@ -167,12 +167,12 @@
     <message>
         <location filename="../src/data/data.cpp" line="250"/>
         <source>70mai GPS log files</source>
-        <translation type="unfinished"></translation>
+        <translation>Fitxers de registre GPS de 70mai</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="251"/>
         <source>VTK files</source>
-        <translation type="unfinished"></translation>
+        <translation>Fitxers VTK</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="252"/>
@@ -961,7 +961,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="1126"/>
         <source>Error loading geo URI:</source>
-        <translation type="unfinished"></translation>
+        <translation>Error en carregar geo URI:</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1164"/>
