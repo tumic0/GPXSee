@@ -118,6 +118,7 @@ HEADERS += src/common/config.h \
     src/data/style.h \
     src/data/twonavparser.h \
     src/data/txtparser.h \
+    src/data/vkxparser.h \
     src/data/vtkparser.h \
     src/map/ENC/data.h \
     src/map/IMG/light.h \
@@ -347,6 +348,7 @@ SOURCES += src/main.cpp \
     src/GUI/projectioncombobox.cpp \
     src/GUI/passwordedit.cpp \
     src/data/txtparser.cpp \
+    src/data/vkxparser.cpp \
     src/data/vtkparser.cpp \
     src/map/downloader.cpp \
     src/map/demloader.cpp \

@@ -25,6 +25,7 @@
 #include "gpsdumpparser.h"
 #include "txtparser.h"
 #include "vtkparser.h"
+#include "vkxparser.h"
 #include "data.h"
 
 
@@ -53,6 +54,7 @@ static TwoNavParser twonav;
 static GPSDumpParser gpsdump;
 static TXTParser txt;
 static VTKParser vtk;
+static VKXParser vkx;
 
 static QMultiMap<QString, Parser*> parsers()
 {
@@ -88,6 +90,7 @@ static QMultiMap<QString, Parser*> parsers()
 	map.insert("wpt", &gpsdump);
 	map.insert("txt", &txt);
 	map.insert("vtk", &vtk);
+	map.insert("vkx", &vkx);
 
 	return map;
 }
@@ -248,6 +251,7 @@ QString Data::formats()
 	  + qApp->translate("Data", "SML files") + " (*.sml);;"
 	  + qApp->translate("Data", "TCX files") + " (*.tcx);;"
 	  + qApp->translate("Data", "70mai GPS log files") + " (*.txt);;"
+	  + qApp->translate("Data", "VKX files") + " (*.vkx);;"
 	  + qApp->translate("Data", "VTK files") + " (*.vtk);;"
 	  + qApp->translate("Data", "TwoNav files") + " (*.rte *.trk *.wpt);;"
 	  + qApp->translate("Data", "GPSDump files") + " (*.wpt);;"
