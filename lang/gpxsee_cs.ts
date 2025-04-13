@@ -70,122 +70,127 @@
 <context>
     <name>Data</name>
     <message>
-        <location filename="../src/data/data.cpp" line="231"/>
+        <location filename="../src/data/data.cpp" line="234"/>
         <source>Supported files</source>
         <translation>Podporované soubory</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="232"/>
+        <location filename="../src/data/data.cpp" line="235"/>
         <source>CSV files</source>
         <translation>Soubory CSV</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="233"/>
+        <location filename="../src/data/data.cpp" line="236"/>
         <source>CUP files</source>
         <translation>Soubory CUP</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="234"/>
+        <location filename="../src/data/data.cpp" line="237"/>
         <source>FIT files</source>
         <translation>Soubory FIT</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="235"/>
+        <location filename="../src/data/data.cpp" line="238"/>
         <source>GeoJSON files</source>
         <translation>Soubory GeoJSON</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="236"/>
+        <location filename="../src/data/data.cpp" line="239"/>
         <source>GPI files</source>
         <translation>Soubory GPI</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="237"/>
+        <location filename="../src/data/data.cpp" line="240"/>
         <source>GPX files</source>
         <translation>Soubory GPX</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="238"/>
+        <location filename="../src/data/data.cpp" line="241"/>
         <source>IGC files</source>
         <translation>Soubory IGC</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="239"/>
+        <location filename="../src/data/data.cpp" line="242"/>
         <source>ITN files</source>
         <translation>Soubory ITN</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="240"/>
+        <location filename="../src/data/data.cpp" line="243"/>
         <source>JPEG images</source>
         <translation>Obrázky JPEG</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="241"/>
+        <location filename="../src/data/data.cpp" line="244"/>
         <source>KML files</source>
         <translation>Soubory KML</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="242"/>
+        <location filename="../src/data/data.cpp" line="245"/>
         <source>LOC files</source>
         <translation>Soubory LOC</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="243"/>
+        <location filename="../src/data/data.cpp" line="246"/>
         <source>NMEA files</source>
         <translation>Soubory NMEA</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="245"/>
+        <location filename="../src/data/data.cpp" line="248"/>
         <source>OV2 files</source>
         <translation>Soubory OV2</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="246"/>
+        <location filename="../src/data/data.cpp" line="249"/>
         <source>OziExplorer files</source>
         <translation>Soubory OziExploreru</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="248"/>
+        <location filename="../src/data/data.cpp" line="251"/>
         <source>SML files</source>
         <translation>Soubory SML</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="249"/>
+        <location filename="../src/data/data.cpp" line="252"/>
         <source>TCX files</source>
         <translation>Soubory TCX</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="247"/>
+        <location filename="../src/data/data.cpp" line="250"/>
         <source>SLF files</source>
         <translation>Soubory SLF</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="244"/>
+        <location filename="../src/data/data.cpp" line="247"/>
         <source>ONmove files</source>
         <translation>Soubory ONmove</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="250"/>
+        <location filename="../src/data/data.cpp" line="253"/>
         <source>70mai GPS log files</source>
         <translation>GPS logy z kamer 70mai</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="251"/>
+        <location filename="../src/data/data.cpp" line="254"/>
+        <source>VKX files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/data/data.cpp" line="255"/>
         <source>VTK files</source>
         <translation>Soubory VTK</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="252"/>
+        <location filename="../src/data/data.cpp" line="256"/>
         <source>TwoNav files</source>
         <translation>Soubory TwoNavu</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="253"/>
+        <location filename="../src/data/data.cpp" line="257"/>
         <source>GPSDump files</source>
         <translation>Soubory GPSDumpu</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="254"/>
+        <location filename="../src/data/data.cpp" line="258"/>
         <source>All files</source>
         <translation>Všechny soubory</translation>
     </message>
