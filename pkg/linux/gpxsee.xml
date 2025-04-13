@@ -205,6 +205,16 @@
 		<glob pattern="*.vtk"/>
 	</mime-type>
 
+	<mime-type type="application/vnd.vakaros.vkx">
+		<comment>Vakaros VKX File</comment>
+		<sub-class-of type="application/octet-stream"/>
+		<generic-icon name="application/octet-stream"/>
+		<magic>
+			<match type="byte" offset="0" value="0xFF"/>
+		</magic>
+		<glob pattern="*.vkx"/>
+	</mime-type>
+
 	<!-- Maps -->
 
 	<mime-type type="application/vnd.garmin.img">

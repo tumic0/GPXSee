@@ -115,6 +115,7 @@
 		<mimetype>application/vnd.gpstuner.gmi</mimetype>
 		<mimetype>application/vnd.70mai.txt</mimetype>
 		<mimetype>application/vnd.velocitek.vtk</mimetype>
+		<mimetype>application/vnd.vakaros.vkx</mimetype>
 		<mimetype>x-scheme-handler/geo</mimetype>
 	</mimetypes>
 </component>
