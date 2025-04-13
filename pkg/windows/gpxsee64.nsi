@@ -205,13 +205,14 @@ Section "GPXSee" SEC_APP
   !insertmacro FILE_ASSOCIATION_ADD "000" "IHO S-57 Electronic Navigation Chart" 27
   !insertmacro FILE_ASSOCIATION_ADD "031" "IHO S-57 Electronic Navigation Catalogue" 28
   !insertmacro FILE_ASSOCIATION_ADD "vtk" "Velocitek VTK File" 29
-  !insertmacro FILE_ASSOCIATION_ADD "kml" "Keyhole Markup Language" 30
-  !insertmacro FILE_ASSOCIATION_ADD "kmz" "KML geographic compressed data" 30
-  !insertmacro FILE_ASSOCIATION_ADD "fit" "Flexible and Interoperable Data Transfer" 31
-  !insertmacro FILE_ASSOCIATION_ADD "igc" "Flight Recorder Data Format" 32
-  !insertmacro FILE_ASSOCIATION_ADD "nmea" "NMEA 0183 Data" 33
-  !insertmacro FILE_ASSOCIATION_ADD "plt" "OziExplorer Track File" 34
-  !insertmacro FILE_ASSOCIATION_ADD "rte" "OziExplorer Route File" 35
+  !insertmacro FILE_ASSOCIATION_ADD "vkx" "Vakaros VKX File" 30
+  !insertmacro FILE_ASSOCIATION_ADD "kml" "Keyhole Markup Language" 31
+  !insertmacro FILE_ASSOCIATION_ADD "kmz" "KML geographic compressed data" 31
+  !insertmacro FILE_ASSOCIATION_ADD "fit" "Flexible and Interoperable Data Transfer" 32
+  !insertmacro FILE_ASSOCIATION_ADD "igc" "Flight Recorder Data Format" 33
+  !insertmacro FILE_ASSOCIATION_ADD "nmea" "NMEA 0183 Data" 34
+  !insertmacro FILE_ASSOCIATION_ADD "plt" "OziExplorer Track File" 35
+  !insertmacro FILE_ASSOCIATION_ADD "rte" "OziExplorer Route File" 36
 
   !insertmacro URI_ASSOCIATION_ADD "geo"
 
@@ -268,6 +269,7 @@ Section "GPXSee" SEC_APP
   WriteRegStr HKCR ".031\OpenWithList" "GPXSee.exe" ""
   WriteRegStr HKCR ".txt\OpenWithList" "GPXSee.exe" ""
   WriteRegStr HKCR ".vtk\OpenWithList" "GPXSee.exe" ""
+  WriteRegStr HKCR ".vkx\OpenWithList" "GPXSee.exe" ""
 
   System::Call 'shell32.dll::SHChangeNotify(i, i, i, i) v (0x08000000, 0, 0, 0)'
 
@@ -443,6 +445,7 @@ Section "Uninstall"
   !insertmacro FILE_ASSOCIATION_REMOVE "000"
   !insertmacro FILE_ASSOCIATION_REMOVE "031"
   !insertmacro FILE_ASSOCIATION_REMOVE "vtk"
+  !insertmacro FILE_ASSOCIATION_REMOVE "vkx"
 
   !insertmacro URI_ASSOCIATION_REMOVE "geo"
 
@@ -498,6 +501,7 @@ Section "Uninstall"
   DeleteRegValue HKCR ".031\OpenWithList" "GPXSee.exe"
   DeleteRegValue HKCR ".txt\OpenWithList" "GPXSee.exe"
   DeleteRegValue HKCR ".vtk\OpenWithList" "GPXSee.exe"
+  DeleteRegValue HKCR ".vkx\OpenWithList" "GPXSee.exe"
   DeleteRegKey HKCR "Applications\GPXSee.exe"   
   
   System::Call 'shell32.dll::SHChangeNotify(i, i, i, i) v (0x08000000, 0, 0, 0)'

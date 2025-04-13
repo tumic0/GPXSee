@@ -566,7 +566,8 @@ win32 {
         icons/formats/gemf.ico \
         icons/formats/000.ico \
         icons/formats/031.ico \
-        icons/formats/vtk.ico
+        icons/formats/vtk.ico \
+        icons/formats/vkx.ico
     DEFINES += _USE_MATH_DEFINES \
         NOGDI
 }
