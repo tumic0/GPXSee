@@ -205,7 +205,7 @@
     <message>
         <location filename="../src/GUI/dirselectwidget.cpp" line="40"/>
         <source>Select directory</source>
-        <translation>Könyvtár választása</translation>
+        <translation>Könyvtár kiválasztása</translation>
     </message>
 </context>
 <context>
@@ -1071,7 +1071,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="2005"/>
         <source>Select map directory</source>
-        <translation>Térképmappa választása</translation>
+        <translation>Térképmappa kiválasztása</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="2054"/>
@@ -2040,7 +2040,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="826"/>
         <source>Select the initial paths of the file open dialogues. Leave the field empty for the system default.</source>
-        <translation>Alapértelmezetten megnyíló mappa a lenti elemekhez. Üresen hagyva a mezőt, a program által alapértelmezett.</translation>
+        <translation>Válassza ki a fájlmegnyitó párbeszédpanelek kezdeti elérési útvonalait. A rendszer alapértelmezett beállításaihoz hagyja üresen.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="830"/>
