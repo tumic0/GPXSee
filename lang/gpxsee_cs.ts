@@ -172,7 +172,7 @@
     <message>
         <location filename="../src/data/data.cpp" line="254"/>
         <source>VKX files</source>
-        <translation type="unfinished"></translation>
+        <translation>Soubory VKX</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="255"/>
