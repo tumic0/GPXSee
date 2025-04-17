@@ -219,7 +219,7 @@ bool ISO8211::readDDR()
 		SubFields def;
 		if (!readDDA(fields.at(i), def)) {
 			_errorString = QString("Error reading %1 DDA field")
-			  .arg(QByteArray((char*)&fields.at(i).tag, 4));
+			  .arg(QString(QByteArray((char*)&fields.at(i).tag, 4)));
 			return false;
 		}
 		_map.insert(fields.at(i).tag, def);
@@ -324,13 +324,13 @@ bool ISO8211::readRecord(Record &record)
 		FieldsMap::const_iterator it(_map.find(def.tag));
 		if (it == _map.constEnd()) {
 			_errorString = QString("%1: unknown record")
-			  .arg(QByteArray((char*)&def.tag, 4));
+			  .arg(QString(QByteArray((char*)&def.tag, 4)));
 			return false;
 		}
 
 		if (!readUDA(pos, def, it->defs(), it->repeat(), data)) {
 			_errorString = QString("Error reading %1 record")
-			  .arg(QByteArray((char*)&def.tag, 4));
+			  .arg(QString(QByteArray((char*)&def.tag, 4)));
 			return false;
 		}
 
