@@ -187,6 +187,8 @@ bool ISO8211::readDDA(const FieldDefinition &def, SubFields &fields)
 				SubFieldDefinition sfd(fieldType(typeStr, size));
 				if (sfd.type() == Unknown)
 					return false;
+				if (tag >= tags.size())
+					return false;
 				defs[tag] = sfd;
 				defTags[tag] = tags.at(tag);
 				tag++;
