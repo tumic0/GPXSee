@@ -194,6 +194,9 @@ bool ISO8211::readDDA(const FieldDefinition &def, SubFields &fields)
 				tag++;
 			}
 		}
+
+		if (tag != tags.size())
+			return false;
 	}
 
 	fields = SubFields(defTags, defs, repeat);
