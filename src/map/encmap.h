@@ -97,7 +97,7 @@ private:
 	static bool bounds(const ENC::ISO8211::Record &record, Rect &rect);
 	static bool bounds(const QVector<ENC::ISO8211::Record> &gv, Rect &b);
 	static bool processRecord(const ENC::ISO8211::Record &record,
-	  QVector<ENC::ISO8211::Record> &rv, uint &COMF, QString &name);
+	  QVector<ENC::ISO8211::Record> &rv, uint &comf, QByteArray &dsnm);
 
 	QString _name;
 	ENC::MapData *_data;

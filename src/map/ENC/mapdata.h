@@ -32,28 +32,28 @@ private:
 	typedef RTree<const Line*, double, 2> LineTree;
 	typedef RTree<const Point*, double, 2> PointTree;
 
-	static QVector<Sounding> soundings(const ISO8211::Record &r, uint COMF,
-	  uint SOMF);
+	static QVector<Sounding> soundings(const ISO8211::Record &r, uint comf,
+	  uint somf);
 	static QVector<Sounding> soundingGeometry(const ISO8211::Record &r,
-	  const RecordMap &vi, const RecordMap &vc, uint COMF, uint SOMF);
+	  const RecordMap &vi, const RecordMap &vc, uint comf, uint somf);
 	static Coordinates pointGeometry(const ISO8211::Record &r,
-	  const RecordMap &vi, const RecordMap &vc, uint COMF);
+	  const RecordMap &vi, const RecordMap &vc, uint comf);
 	static QVector<Coordinates> lineGeometry(const ISO8211::Record &r,
-	  const RecordMap &vc, const RecordMap &ve, uint COMF);
+	  const RecordMap &vc, const RecordMap &ve, uint comf);
 	static Polygon polyGeometry(const ISO8211::Record &r, const RecordMap &vc,
-	  const RecordMap &ve, uint COMF);
+	  const RecordMap &ve, uint comf);
 	static Attributes attributes(const ISO8211::Record &r);
 	static Point *pointObject(const Sounding &s);
 	static Point *pointObject(const ISO8211::Record &r, const RecordMap &vi,
-	  const RecordMap &vc, uint COMF, uint OBJL, uint HUNI);
+	  const RecordMap &vc, uint comf, uint objl, uint huni);
 	static Line *lineObject(const ISO8211::Record &r, const RecordMap &vc,
-	  const RecordMap &ve, uint COMF, uint OBJL);
+	  const RecordMap &ve, uint comf, uint objl);
 	static Poly *polyObject(const ISO8211::Record &r, const RecordMap &vc,
-	  const RecordMap &ve, uint COMF, uint OBJL, uint HUNI);
+	  const RecordMap &ve, uint comf, uint objl, uint huni);
 
 	static bool processRecord(const ISO8211::Record &record,
 	  QVector<ISO8211::Record> &fe, RecordMap &vi, RecordMap &vc, RecordMap &ve,
-	  RecordMap &vf, uint &COMF, uint &SOMF, uint &HUNI);
+	  RecordMap &vf, uint &comf, uint &somf, uint &huni);
 
 	PolygonTree _areas;
 	LineTree _lines;

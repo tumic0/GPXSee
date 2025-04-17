@@ -12,6 +12,14 @@ using namespace ENC;
 #define EPSILON   1e-6
 #define TILE_SIZE 512
 
+constexpr quint32 CATD = ISO8211::NAME("CATD");
+constexpr quint32 IMPL = ISO8211::NAME("IMPL");
+constexpr quint32 F1LE = ISO8211::NAME("FILE");
+constexpr quint32 SLAT = ISO8211::NAME("SLAT");
+constexpr quint32 WLON = ISO8211::NAME("WLON");
+constexpr quint32 NLAT = ISO8211::NAME("NLAT");
+constexpr quint32 ELON = ISO8211::NAME("ELON");
+
 Range ENCAtlas::zooms(IntendedUsage usage)
 {
 	switch (usage) {
@@ -60,35 +68,34 @@ bool ENCAtlas::processRecord(const ISO8211::Record &record, QByteArray &file,
 		return false;
 
 	const ENC::ISO8211::Field &f = record.at(1);
-	const QByteArray &ba = f.tag();
 
-	if (ba == "CATD") {
-		QByteArray FILE, IMPL;
+	if (f.tag() == CATD) {
+		QByteArray impl;
 
-		if (!f.subfield("IMPL", &IMPL))
+		if (!f.subfield(IMPL, &impl))
 			return false;
-		if (!f.subfield("FILE", &FILE))
+		if (!f.subfield(F1LE, &file))
 			return false;
 
-		if (IMPL == "BIN" && FILE.endsWith("000")) {
-			QByteArray SLAT, WLON, NLAT, ELON;
+		if (impl == "BIN" && file.endsWith("000")) {
+			QByteArray slat, wlon, nlat, elon;
 
-			if (!f.subfield("SLAT", &SLAT))
+			if (!f.subfield(SLAT, &slat))
 				return false;
-			if (!f.subfield("WLON", &WLON))
+			if (!f.subfield(WLON, &wlon))
 				return false;
-			if (!f.subfield("NLAT", &NLAT))
+			if (!f.subfield(NLAT, &nlat))
 				return false;
-			if (!f.subfield("ELON", &ELON))
+			if (!f.subfield(ELON, &elon))
 				return false;
 
 			bool ok1, ok2, ok3, ok4;
-			bounds = RectC(Coordinates(WLON.toDouble(&ok1), NLAT.toDouble(&ok2)),
-			  Coordinates(ELON.toDouble(&ok3), SLAT.toDouble(&ok4)));
+			bounds = RectC(Coordinates(wlon.toDouble(&ok1), nlat.toDouble(&ok2)),
+			  Coordinates(elon.toDouble(&ok3), slat.toDouble(&ok4)));
 			if (!(ok1 && ok2 && ok3 && ok4))
 				return false;
 
-			file = FILE.replace('\\', '/');
+			file.replace('\\', '/');
 
 			return true;
 		}
