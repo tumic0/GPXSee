@@ -104,21 +104,22 @@ static uint order(uint type)
 	return (it == orderMap.constEnd()) ? (type>>16) + 512 : it.value();
 }
 
-static void warning(const ISO8211::Field &frid, uint prim)
+static void warning(const ISO8211 &ddf, const ISO8211::Field &frid, uint prim)
 {
-	uint rcid = 0xFFFFFFFF;
-	frid.subfield(RCID, &rcid);
+	uint rcid;
 
-	switch (prim) {
-		case PRIM_P:
-			qWarning("%u: invalid point feature", rcid);
-			break;
-		case PRIM_L:
-			qWarning("%u: invalid line feature", rcid);
-			break;
-		case PRIM_A:
-			qWarning("%u: invalid area feature", rcid);
-			break;
+	if (ddf.subfield(frid, RCID, &rcid)) {
+		switch (prim) {
+			case PRIM_P:
+				qWarning("%u: invalid point feature", rcid);
+				break;
+			case PRIM_L:
+				qWarning("%u: invalid line feature", rcid);
+				break;
+			case PRIM_A:
+				qWarning("%u: invalid area feature", rcid);
+				break;
+		}
 	}
 }
 
@@ -760,7 +761,7 @@ MapData::Poly *MapData::polyObject(const ISO8211::Record &r,
 	return (path.isEmpty() ? 0 : new Poly(objl, path, attributes(r), huni));
 }
 
-bool MapData::processRecord(const ISO8211::Record &record,
+bool MapData::processRecord(const ISO8211 &ddf, const ISO8211::Record &record,
   QVector<ISO8211::Record> &fe, RecordMap &vi, RecordMap &vc, RecordMap &ve,
   RecordMap &vf, uint &comf, uint &somf, uint &huni)
 {
@@ -795,9 +796,9 @@ bool MapData::processRecord(const ISO8211::Record &record,
 	} else if (tag == FRID) {
 		fe.append(record);
 	} else if (tag == DSPM) {
-		if (!(f.subfield(COMF, &comf) && f.subfield(SOMF, &somf)))
+		if (!(ddf.subfield(f, COMF, &comf) && ddf.subfield(f, SOMF, &somf)))
 			return false;
-		if (!f.subfield(HUNI, &huni))
+		if (!ddf.subfield(f, HUNI, &huni))
 			return false;
 	}
 
@@ -820,7 +821,7 @@ MapData::MapData(const QString &path)
 	if (!ddf.readDDR())
 		return;
 	while (ddf.readRecord(record))
-		if (!processRecord(record, fe, vi, vc, ve, vf, comf, somf, huni))
+		if (!processRecord(ddf, record, fe, vi, vc, ve, vf, comf, somf, huni))
 			qWarning("Invalid S-57 record");
 
 	for (int i = 0; i < fe.size(); i++) {
@@ -846,7 +847,7 @@ MapData::MapData(const QString &path)
 						pointBounds(point->pos(), min, max);
 						_points.Insert(min, max, point);
 					} else
-						warning(f, prim);
+						warning(ddf, f, prim);
 				}
 				break;
 			case PRIM_L:
@@ -854,14 +855,14 @@ MapData::MapData(const QString &path)
 					rectcBounds(line->bounds(), min, max);
 					_lines.Insert(min, max, line);
 				} else
-					warning(f, prim);
+					warning(ddf, f, prim);
 				break;
 			case PRIM_A:
 				if ((poly = polyObject(r, vc, ve, comf, objl, huni))) {
 					rectcBounds(poly->bounds(), min, max);
 					_areas.Insert(min, max, poly);
 				} else
-					warning(f, prim);
+					warning(ddf, f, prim);
 				break;
 		}
 	}

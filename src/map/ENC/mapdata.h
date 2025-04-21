@@ -51,7 +51,7 @@ private:
 	static Poly *polyObject(const ISO8211::Record &r, const RecordMap &vc,
 	  const RecordMap &ve, uint comf, uint objl, uint huni);
 
-	static bool processRecord(const ISO8211::Record &record,
+	static bool processRecord(const ISO8211 &ddf, const ISO8211::Record &record,
 	  QVector<ISO8211::Record> &fe, RecordMap &vi, RecordMap &vc, RecordMap &ve,
 	  RecordMap &vf, uint &comf, uint &somf, uint &huni);
 

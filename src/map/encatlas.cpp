@@ -61,32 +61,32 @@ ENCAtlas::IntendedUsage ENCAtlas::usage(const QString &path)
 	return (IntendedUsage)iu;
 }
 
-bool ENCAtlas::processRecord(const ISO8211::Record &record, QByteArray &file,
-  RectC &bounds)
+bool ENCAtlas::processRecord(const ISO8211 &ddf, const ISO8211::Record &record,
+  QByteArray &file, RectC &bounds)
 {
 	if (record.size() < 2)
 		return false;
 
-	const ENC::ISO8211::Field &f = record.at(1);
+	const ENC::ISO8211::Field &field = record.at(1);
 
-	if (f.tag() == CATD) {
+	if (field.tag() == CATD) {
 		QByteArray impl;
 
-		if (!f.subfield(IMPL, &impl))
+		if (!ddf.subfield(field, IMPL, &impl))
 			return false;
-		if (!f.subfield(F1LE, &file))
+		if (!ddf.subfield(field, F1LE, &file))
 			return false;
 
 		if (impl == "BIN" && file.endsWith("000")) {
 			QByteArray slat, wlon, nlat, elon;
 
-			if (!f.subfield(SLAT, &slat))
+			if (!ddf.subfield(field, SLAT, &slat))
 				return false;
-			if (!f.subfield(WLON, &wlon))
+			if (!ddf.subfield(field, WLON, &wlon))
 				return false;
-			if (!f.subfield(NLAT, &nlat))
+			if (!ddf.subfield(field, NLAT, &nlat))
 				return false;
-			if (!f.subfield(ELON, &elon))
+			if (!ddf.subfield(field, ELON, &elon))
 				return false;
 
 			bool ok1, ok2, ok3, ok4;
@@ -142,7 +142,7 @@ ENCAtlas::ENCAtlas(const QString &fileName, QObject *parent)
 		return;
 	}
 	while (ddf.readRecord(record)) {
-		if (processRecord(record, file, bounds))
+		if (processRecord(ddf, record, file, bounds))
 			addMap(dir, file, bounds);
 	}
 	if (!ddf.errorString().isNull()) {

@@ -104,7 +104,7 @@ bool ENCMap::bounds(const QVector<ISO8211::Record> &gv, Rect &b)
 	return true;
 }
 
-bool ENCMap::processRecord(const ISO8211::Record &record,
+bool ENCMap::processRecord(const ISO8211 &ddf, const ISO8211::Record &record,
   QVector<ISO8211::Record> &rv, uint &comf, QByteArray &dsnm)
 {
 	if (record.size() < 2)
@@ -116,10 +116,10 @@ bool ENCMap::processRecord(const ISO8211::Record &record,
 	if (tag == VRID) {
 		rv.append(record);
 	} else if (tag == DSID) {
-		if (!f.subfield(DSNM, &dsnm))
+		if (!ddf.subfield(f, DSNM, &dsnm))
 			return false;
 	} else if (tag == DSPM) {
-		if (!f.subfield(COMF, &comf))
+		if (!ddf.subfield(f, COMF, &comf))
 			return false;
 	}
 
@@ -141,7 +141,7 @@ ENCMap::ENCMap(const QString &fileName, QObject *parent)
 		return;
 	}
 	while (ddf.readRecord(record)) {
-		if (!processRecord(record, gv, comf, dsnm)) {
+		if (!processRecord(ddf, record, gv, comf, dsnm)) {
 			_errorString = "Invalid S-57 record";
 			return;
 		}
