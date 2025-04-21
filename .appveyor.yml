@@ -1,4 +1,4 @@
-version: 13.39.{build}
+version: 13.40.{build}
 
 configuration:
   - Release
