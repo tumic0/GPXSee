@@ -22,9 +22,9 @@ struct DR {
 	char FieldTagSize;
 };
 
-const QVariant *ISO8211::data(const Field &field, quint32 name, int idx) const
+const QVariant *ISO8211::data(const Field &field, quint32 name) const
 {
-	const QVector<QVariant> &v = field.data().at(idx);
+	const QVector<QVariant> &v = field.data().first();
 
 	for (int i = 0; i < field.subFields()->size(); i++)
 		if (field.subFields()->at(i) == name)
@@ -33,11 +33,11 @@ const QVariant *ISO8211::data(const Field &field, quint32 name, int idx) const
 	return 0;
 }
 
-bool ISO8211::subfield(const Field &field, quint32 name, int *val, int idx) const
+bool ISO8211::subfield(const Field &field, quint32 name, int *val) const
 {
 	bool ok;
 
-	const QVariant *v = data(field, name, idx);
+	const QVariant *v = data(field, name);
 	if (!v)
 		return false;
 	*val = v->toInt(&ok);
@@ -45,11 +45,11 @@ bool ISO8211::subfield(const Field &field, quint32 name, int *val, int idx) cons
 	return ok;
 }
 
-bool ISO8211::subfield(const Field &field, quint32 name, uint *val, int idx) const
+bool ISO8211::subfield(const Field &field, quint32 name, uint *val) const
 {
 	bool ok;
 
-	const QVariant *v = data(field, name, idx);
+	const QVariant *v = data(field, name);
 	if (!v)
 		return false;
 	*val = v->toUInt(&ok);
@@ -57,10 +57,9 @@ bool ISO8211::subfield(const Field &field, quint32 name, uint *val, int idx) con
 	return ok;
 }
 
-bool ISO8211::subfield(const Field &field, quint32 name, QByteArray *val,
-  int idx) const
+bool ISO8211::subfield(const Field &field, quint32 name, QByteArray *val) const
 {
-	const QVariant *v = data(field, name, idx);
+	const QVariant *v = data(field, name);
 	if (!v)
 		return false;
 	*val = v->toByteArray();

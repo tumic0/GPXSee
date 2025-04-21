@@ -35,10 +35,9 @@ public:
 	bool readDDR();
 	bool readRecord(Record &record);
 
-	bool subfield(const Field &field, quint32 name, int *val, int idx = 0) const;
-	bool subfield(const Field &field, quint32 name, uint *val, int idx = 0) const;
-	bool subfield(const Field &field, quint32 name, QByteArray *val,
-	  int idx = 0) const;
+	bool subfield(const Field &field, quint32 name, int *val) const;
+	bool subfield(const Field &field, quint32 name, uint *val) const;
+	bool subfield(const Field &field, quint32 name, QByteArray *val) const;
 
 	const QString &errorString() const {return _errorString;}
 
@@ -103,7 +102,7 @@ private:
 	bool readDDA(const FieldDefinition &def, SubFields &fields);
 	bool readUDA(quint64 pos, const FieldDefinition &def,
 	  const QVector<SubFieldDefinition> &fields, bool repeat, Data &data);
-	const QVariant *data(const Field &field, quint32 name, int idx = 0) const;
+	const QVariant *data(const Field &field, quint32 name) const;
 
 	QFile _file;
 	FieldsMap _map;
