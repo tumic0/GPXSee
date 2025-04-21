@@ -19,9 +19,7 @@ constexpr quint32 SG2D = ISO8211::NAME("SG2D");
 constexpr quint32 SG3D = ISO8211::NAME("SG3D");
 constexpr quint32 VRID = ISO8211::NAME("VRID");
 constexpr quint32 DSID = ISO8211::NAME("DSID");
-constexpr quint32 DSNM = ISO8211::NAME("DSNM");
 constexpr quint32 DSPM = ISO8211::NAME("DSPM");
-constexpr quint32 COMF = ISO8211::NAME("COMF");
 
 static Range zooms(const RectC &bounds)
 {
@@ -104,7 +102,7 @@ bool ENCMap::bounds(const QVector<ISO8211::Record> &gv, Rect &b)
 	return true;
 }
 
-bool ENCMap::processRecord(const ISO8211 &ddf, const ISO8211::Record &record,
+bool ENCMap::processRecord(const ISO8211::Record &record,
   QVector<ISO8211::Record> &rv, uint &comf, QByteArray &dsnm)
 {
 	if (record.size() < 2)
@@ -116,10 +114,15 @@ bool ENCMap::processRecord(const ISO8211 &ddf, const ISO8211::Record &record,
 	if (tag == VRID) {
 		rv.append(record);
 	} else if (tag == DSID) {
-		if (!ddf.subfield(f, DSNM, &dsnm))
+		if (f.data().at(0).size() < 5)
 			return false;
+		dsnm = f.data().at(0).at(4).toByteArray();
 	} else if (tag == DSPM) {
-		if (!ddf.subfield(f, COMF, &comf))
+		bool ok;
+		if (f.data().at(0).size() < 11)
+			return false;
+		comf = f.data().at(0).at(10).toUInt(&ok);
+		if (!ok)
 			return false;
 	}
 
@@ -141,7 +144,7 @@ ENCMap::ENCMap(const QString &fileName, QObject *parent)
 		return;
 	}
 	while (ddf.readRecord(record)) {
-		if (!processRecord(ddf, record, gv, comf, dsnm)) {
+		if (!processRecord(record, gv, comf, dsnm)) {
 			_errorString = "Invalid S-57 record";
 			return;
 		}

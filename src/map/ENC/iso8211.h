@@ -15,17 +15,14 @@ public:
 	class Field
 	{
 	public:
-		Field() : _tag(0), _subFields(0) {}
-		Field(quint32 tag, const QVector<quint32> &subFields, const Data &data)
-		  : _tag(tag), _subFields(&subFields), _data(data) {}
+		Field() : _tag(0) {}
+		Field(quint32 tag, const Data &data) : _tag(tag), _data(data) {}
 
 		quint32 tag() const {return _tag;}
 		const Data &data() const {return _data;}
-		const QVector<quint32> *subFields() const {return _subFields;}
 
 	private:
 		quint32 _tag;
-		const QVector<quint32> *_subFields;
 		Data _data;
 	};
 
@@ -34,11 +31,6 @@ public:
 	ISO8211(const QString &path) : _file(path) {}
 	bool readDDR();
 	bool readRecord(Record &record);
-
-	bool subfield(const Field &field, quint32 name, int *val) const;
-	bool subfield(const Field &field, quint32 name, uint *val) const;
-	bool subfield(const Field &field, quint32 name, QByteArray *val) const;
-
 	const QString &errorString() const {return _errorString;}
 
 	static const Field *field(const Record &record, quint32 name);
@@ -102,7 +94,6 @@ private:
 	bool readDDA(const FieldDefinition &def, SubFields &fields);
 	bool readUDA(quint64 pos, const FieldDefinition &def,
 	  const QVector<SubFieldDefinition> &fields, bool repeat, Data &data);
-	const QVariant *data(const Field &field, quint32 name) const;
 
 	QFile _file;
 	FieldsMap _map;

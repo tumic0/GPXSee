@@ -22,51 +22,6 @@ struct DR {
 	char FieldTagSize;
 };
 
-const QVariant *ISO8211::data(const Field &field, quint32 name) const
-{
-	const QVector<QVariant> &v = field.data().first();
-
-	for (int i = 0; i < field.subFields()->size(); i++)
-		if (field.subFields()->at(i) == name)
-			return &v.at(i);
-
-	return 0;
-}
-
-bool ISO8211::subfield(const Field &field, quint32 name, int *val) const
-{
-	bool ok;
-
-	const QVariant *v = data(field, name);
-	if (!v)
-		return false;
-	*val = v->toInt(&ok);
-
-	return ok;
-}
-
-bool ISO8211::subfield(const Field &field, quint32 name, uint *val) const
-{
-	bool ok;
-
-	const QVariant *v = data(field, name);
-	if (!v)
-		return false;
-	*val = v->toUInt(&ok);
-
-	return ok;
-}
-
-bool ISO8211::subfield(const Field &field, quint32 name, QByteArray *val) const
-{
-	const QVariant *v = data(field, name);
-	if (!v)
-		return false;
-	*val = v->toByteArray();
-
-	return true;
-}
-
 ISO8211::SubFieldDefinition ISO8211::fieldType(const QString &str, int cnt)
 {
 	if (str == "A" || str == "I" || str == "R")
@@ -337,7 +292,7 @@ bool ISO8211::readRecord(Record &record)
 			return false;
 		}
 
-		record[i] = Field(def.tag, it->tags(), data);
+		record[i] = Field(def.tag, data);
 	}
 
 	return true;

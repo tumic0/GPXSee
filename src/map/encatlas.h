@@ -76,8 +76,8 @@ private:
 	void addMap(const QDir &dir, const QByteArray &file, const RectC &bounds);
 	QList<ENC::Data*> levels() const;
 
-	static bool processRecord(const ENC::ISO8211 &ddf,
-	  const ENC::ISO8211::Record &record, QByteArray &file, RectC &bounds);
+	static bool processRecord(const ENC::ISO8211::Record &record,
+	  QByteArray &file, RectC &bounds);
 	static Range zooms(IntendedUsage usage);
 	static IntendedUsage usage(const QString &path);
 

@@ -13,12 +13,6 @@ using namespace ENC;
 #define TILE_SIZE 512
 
 constexpr quint32 CATD = ISO8211::NAME("CATD");
-constexpr quint32 IMPL = ISO8211::NAME("IMPL");
-constexpr quint32 F1LE = ISO8211::NAME("FILE");
-constexpr quint32 SLAT = ISO8211::NAME("SLAT");
-constexpr quint32 WLON = ISO8211::NAME("WLON");
-constexpr quint32 NLAT = ISO8211::NAME("NLAT");
-constexpr quint32 ELON = ISO8211::NAME("ELON");
 
 Range ENCAtlas::zooms(IntendedUsage usage)
 {
@@ -61,8 +55,8 @@ ENCAtlas::IntendedUsage ENCAtlas::usage(const QString &path)
 	return (IntendedUsage)iu;
 }
 
-bool ENCAtlas::processRecord(const ISO8211 &ddf, const ISO8211::Record &record,
-  QByteArray &file, RectC &bounds)
+bool ENCAtlas::processRecord(const ISO8211::Record &record, QByteArray &file,
+  RectC &bounds)
 {
 	if (record.size() < 2)
 		return false;
@@ -70,24 +64,16 @@ bool ENCAtlas::processRecord(const ISO8211 &ddf, const ISO8211::Record &record,
 	const ENC::ISO8211::Field &field = record.at(1);
 
 	if (field.tag() == CATD) {
-		QByteArray impl;
-
-		if (!ddf.subfield(field, IMPL, &impl))
+		if (field.data().at(0).size() < 10)
 			return false;
-		if (!ddf.subfield(field, F1LE, &file))
-			return false;
+		QByteArray impl = field.data().at(0).at(5).toByteArray();
+		file = field.data().at(0).at(2).toByteArray();
 
 		if (impl == "BIN" && file.endsWith("000")) {
-			QByteArray slat, wlon, nlat, elon;
-
-			if (!ddf.subfield(field, SLAT, &slat))
-				return false;
-			if (!ddf.subfield(field, WLON, &wlon))
-				return false;
-			if (!ddf.subfield(field, NLAT, &nlat))
-				return false;
-			if (!ddf.subfield(field, ELON, &elon))
-				return false;
+			QByteArray slat = field.data().at(0).at(6).toByteArray();
+			QByteArray wlon = field.data().at(0).at(7).toByteArray();
+			QByteArray nlat = field.data().at(0).at(8).toByteArray();
+			QByteArray elon = field.data().at(0).at(9).toByteArray();
 
 			bool ok1, ok2, ok3, ok4;
 			bounds = RectC(Coordinates(wlon.toDouble(&ok1), nlat.toDouble(&ok2)),
@@ -142,7 +128,7 @@ ENCAtlas::ENCAtlas(const QString &fileName, QObject *parent)
 		return;
 	}
 	while (ddf.readRecord(record)) {
-		if (processRecord(ddf, record, file, bounds))
+		if (processRecord(record, file, bounds))
 			addMap(dir, file, bounds);
 	}
 	if (!ddf.errorString().isNull()) {

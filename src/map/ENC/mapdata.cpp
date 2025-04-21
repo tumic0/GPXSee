@@ -15,7 +15,6 @@ using namespace ENC;
 #define PRIM_L 2
 #define PRIM_A 3
 
-constexpr quint32 RCID = ISO8211::NAME("RCID");
 constexpr quint32 SG2D = ISO8211::NAME("SG2D");
 constexpr quint32 SG3D = ISO8211::NAME("SG3D");
 constexpr quint32 FSPT = ISO8211::NAME("FSPT");
@@ -24,9 +23,6 @@ constexpr quint32 ATTF = ISO8211::NAME("ATTF");
 constexpr quint32 VRID = ISO8211::NAME("VRID");
 constexpr quint32 FRID = ISO8211::NAME("FRID");
 constexpr quint32 DSPM = ISO8211::NAME("DSPM");
-constexpr quint32 COMF = ISO8211::NAME("COMF");
-constexpr quint32 SOMF = ISO8211::NAME("SOMF");
-constexpr quint32 HUNI = ISO8211::NAME("HUNI");
 
 static QMap<uint,uint> orderMapInit()
 {
@@ -104,22 +100,20 @@ static uint order(uint type)
 	return (it == orderMap.constEnd()) ? (type>>16) + 512 : it.value();
 }
 
-static void warning(const ISO8211 &ddf, const ISO8211::Field &frid, uint prim)
+static void warning(const ISO8211::Field &frid, uint prim)
 {
-	uint rcid;
+	uint rcid = frid.data().at(0).at(1).toUInt();
 
-	if (ddf.subfield(frid, RCID, &rcid)) {
-		switch (prim) {
-			case PRIM_P:
-				qWarning("%u: invalid point feature", rcid);
-				break;
-			case PRIM_L:
-				qWarning("%u: invalid line feature", rcid);
-				break;
-			case PRIM_A:
-				qWarning("%u: invalid area feature", rcid);
-				break;
-		}
+	switch (prim) {
+		case PRIM_P:
+			qWarning("%u: invalid point feature", rcid);
+			break;
+		case PRIM_L:
+			qWarning("%u: invalid line feature", rcid);
+			break;
+		case PRIM_A:
+			qWarning("%u: invalid area feature", rcid);
+			break;
 	}
 }
 
@@ -761,7 +755,7 @@ MapData::Poly *MapData::polyObject(const ISO8211::Record &r,
 	return (path.isEmpty() ? 0 : new Poly(objl, path, attributes(r), huni));
 }
 
-bool MapData::processRecord(const ISO8211 &ddf, const ISO8211::Record &record,
+bool MapData::processRecord(const ISO8211::Record &record,
   QVector<ISO8211::Record> &fe, RecordMap &vi, RecordMap &vc, RecordMap &ve,
   RecordMap &vf, uint &comf, uint &somf, uint &huni)
 {
@@ -772,10 +766,14 @@ bool MapData::processRecord(const ISO8211 &ddf, const ISO8211::Record &record,
 	quint32 tag = f.tag();
 
 	if (tag == VRID) {
+		bool nmok, idok;
+
 		if (f.data().at(0).size() < 2)
 			return false;
-		int rcnm = f.data().at(0).at(0).toInt();
-		uint rcid = f.data().at(0).at(1).toUInt();
+		int rcnm = f.data().at(0).at(0).toInt(&nmok);
+		uint rcid = f.data().at(0).at(1).toUInt(&idok);
+		if (!(nmok && idok))
+			return false;
 
 		switch (rcnm) {
 			case RCNM_VI:
@@ -796,10 +794,15 @@ bool MapData::processRecord(const ISO8211 &ddf, const ISO8211::Record &record,
 	} else if (tag == FRID) {
 		fe.append(record);
 	} else if (tag == DSPM) {
-		if (!(ddf.subfield(f, COMF, &comf) && ddf.subfield(f, SOMF, &somf)))
+		bool cok, sok, hok;
+
+		if (f.data().at(0).size() < 12)
 			return false;
-		if (!ddf.subfield(f, HUNI, &huni))
-			return false;
+		comf = f.data().at(0).at(10).toUInt(&cok);
+		somf = f.data().at(0).at(11).toUInt(&sok);
+		huni = f.data().at(0).at(7).toUInt(&hok);
+
+		return (cok && sok && hok);
 	}
 
 	return true;
@@ -821,7 +824,7 @@ MapData::MapData(const QString &path)
 	if (!ddf.readDDR())
 		return;
 	while (ddf.readRecord(record))
-		if (!processRecord(ddf, record, fe, vi, vc, ve, vf, comf, somf, huni))
+		if (!processRecord(record, fe, vi, vc, ve, vf, comf, somf, huni))
 			qWarning("Invalid S-57 record");
 
 	for (int i = 0; i < fe.size(); i++) {
@@ -847,7 +850,7 @@ MapData::MapData(const QString &path)
 						pointBounds(point->pos(), min, max);
 						_points.Insert(min, max, point);
 					} else
-						warning(ddf, f, prim);
+						warning(f, prim);
 				}
 				break;
 			case PRIM_L:
@@ -855,14 +858,14 @@ MapData::MapData(const QString &path)
 					rectcBounds(line->bounds(), min, max);
 					_lines.Insert(min, max, line);
 				} else
-					warning(ddf, f, prim);
+					warning(f, prim);
 				break;
 			case PRIM_A:
 				if ((poly = polyObject(r, vc, ve, comf, objl, huni))) {
 					rectcBounds(poly->bounds(), min, max);
 					_areas.Insert(min, max, poly);
 				} else
-					warning(ddf, f, prim);
+					warning(f, prim);
 				break;
 		}
 	}
