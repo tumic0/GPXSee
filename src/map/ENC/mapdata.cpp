@@ -757,7 +757,7 @@ MapData::Poly *MapData::polyObject(const ISO8211::Record &r,
 
 bool MapData::processRecord(const ISO8211::Record &record,
   QVector<ISO8211::Record> &fe, RecordMap &vi, RecordMap &vc, RecordMap &ve,
-  RecordMap &vf, uint &comf, uint &somf, uint &huni)
+  uint &comf, uint &huni, uint &somf)
 {
 	if (record.size() < 2)
 		return false;
@@ -786,8 +786,8 @@ bool MapData::processRecord(const ISO8211::Record &record,
 				ve.insert(rcid, record);
 				break;
 			case RCNM_VF:
-				vf.insert(rcid, record);
-				break;
+				qWarning("Full topology/faces not supported");
+				return false;
 			default:
 				return false;
 		}
@@ -810,7 +810,7 @@ bool MapData::processRecord(const ISO8211::Record &record,
 
 MapData::MapData(const QString &path)
 {
-	RecordMap vi, vc, ve, vf;
+	RecordMap vi, vc, ve;
 	QVector<ISO8211::Record> fe;
 	ISO8211 ddf(path);
 	ISO8211::Record record;
@@ -824,17 +824,17 @@ MapData::MapData(const QString &path)
 	if (!ddf.readDDR())
 		return;
 	while (ddf.readRecord(record))
-		if (!processRecord(record, fe, vi, vc, ve, vf, comf, somf, huni))
+		if (!processRecord(record, fe, vi, vc, ve, comf, somf, huni))
 			qWarning("Invalid S-57 record");
 
 	for (int i = 0; i < fe.size(); i++) {
 		const ISO8211::Record &r = fe.at(i);
-		const ISO8211::Field &f = r.at(1);
+		const ISO8211::Field &frid = r.at(1);
 
-		if (f.data().at(0).size() < 5)
+		if (frid.data().at(0).size() < 5)
 			continue;
-		prim = f.data().at(0).at(2).toUInt();
-		objl = f.data().at(0).at(4).toUInt();
+		prim = frid.data().at(0).at(2).toUInt();
+		objl = frid.data().at(0).at(4).toUInt();
 
 		switch (prim) {
 			case PRIM_P:
@@ -850,7 +850,7 @@ MapData::MapData(const QString &path)
 						pointBounds(point->pos(), min, max);
 						_points.Insert(min, max, point);
 					} else
-						warning(f, prim);
+						warning(frid, prim);
 				}
 				break;
 			case PRIM_L:
@@ -858,14 +858,14 @@ MapData::MapData(const QString &path)
 					rectcBounds(line->bounds(), min, max);
 					_lines.Insert(min, max, line);
 				} else
-					warning(f, prim);
+					warning(frid, prim);
 				break;
 			case PRIM_A:
 				if ((poly = polyObject(r, vc, ve, comf, objl, huni))) {
 					rectcBounds(poly->bounds(), min, max);
 					_areas.Insert(min, max, poly);
 				} else
-					warning(f, prim);
+					warning(frid, prim);
 				break;
 		}
 	}
