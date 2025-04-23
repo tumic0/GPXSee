@@ -70,10 +70,10 @@ static QMap<uint,uint> orderMapInit()
 	map.insert(TYPE(I_TRNBSN), 32);
 	map.insert(TYPE(HRBFAC), 33);
 	map.insert(TYPE(I_HRBFAC), 33);
-	map.insert(TYPE(PILPNT), 34);
-	map.insert(TYPE(ACHBRT), 35);
-	map.insert(TYPE(I_ACHBRT), 35);
-	map.insert(TYPE(RADRFL), 36);
+	map.insert(TYPE(RADRFL), 34);
+	map.insert(TYPE(PILPNT), 35);
+	map.insert(TYPE(ACHBRT), 36);
+	map.insert(TYPE(I_ACHBRT), 36);
 	map.insert(TYPE(CRANES), 37);
 	map.insert(TYPE(I_CRANES), 37);
 	map.insert(TYPE(I_WTWGAG), 38);
