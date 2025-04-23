@@ -210,7 +210,12 @@
 		<sub-class-of type="application/octet-stream"/>
 		<generic-icon name="application/octet-stream"/>
 		<magic>
-			<match type="byte" offset="0" value="0xFF"/>
+			<match type="big16" offset="0" value="0xFF00"/>
+			<match type="big16" offset="0" value="0xFF01"/>
+			<match type="big16" offset="0" value="0xFF02"/>
+			<match type="big16" offset="0" value="0xFF03"/>
+			<match type="big16" offset="0" value="0xFF04"/>
+			<match type="big16" offset="0" value="0xFF05"/>
 		</magic>
 		<glob pattern="*.vkx"/>
 	</mime-type>
