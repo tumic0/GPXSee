@@ -435,6 +435,13 @@ void Style::pointStyle(qreal ratio)
 	_points[SUBTYPE(I_RESARE, 22)] = _points[SUBTYPE(RESARE, 22)];
 	_points[SUBTYPE(I_RESARE, 23)] = _points[SUBTYPE(RESARE, 23)];
 
+	_points[SUBTYPE(I_BUNSTA, 1)] = Point(svg2img(":/POI/fuel-11.svg", ratio),
+	  Small);
+	_points[SUBTYPE(I_BUNSTA, 2)] = Point(svg2img(":/POI/drinking-water-11.svg",
+	  ratio), Small);
+	_points[SUBTYPE(I_BUNSTA, 4)] = Point(svg2img(":/POI/charging-station-11.svg",
+	  ratio), Small);
+
 	_points[SUBTYPE(SMCFAC, 7)] = Point(svg2img(":/POI/restaurant-11.svg",
 	  ratio), Small);
 	_points[SUBTYPE(SMCFAC, 11)] = Point(svg2img(":/POI/pharmacy-11.svg",
@@ -443,6 +450,8 @@ void Style::pointStyle(qreal ratio)
 	  ratio), Small);
 	_points[SUBTYPE(SMCFAC, 13)] = Point(svg2img(":/POI/fuel-11.svg", ratio),
 	  Small);
+	_points[SUBTYPE(SMCFAC, 14)] = Point(svg2img(":/POI/charging-station-11.svg",
+	  ratio), Small);
 	_points[SUBTYPE(SMCFAC, 18)] = Point(svg2img(":/POI/toilet-11.svg", ratio),
 	  Small);
 	_points[SUBTYPE(SMCFAC, 20)] = Point(svg2img(":/POI/telephone-11.svg",

@@ -81,9 +81,10 @@ static QMap<uint,uint> orderMapInit()
 	map.insert(TYPE(SLCONS), 40);
 	map.insert(TYPE(LNDMRK), 41);
 	map.insert(TYPE(SILTNK), 42);
-	map.insert(TYPE(LNDELV), 43);
-	map.insert(TYPE(SMCFAC), 44);
-	map.insert(TYPE(BUISGL), 45);
+	map.insert(TYPE(I_BUNSTA), 43);
+	map.insert(TYPE(LNDELV), 44);
+	map.insert(TYPE(SMCFAC), 45);
+	map.insert(TYPE(BUISGL), 46);
 
 	map.insert(TYPE(I_DISMAR), 0xFFFFFFFE);
 	map.insert(TYPE(SOUNDG), 0xFFFFFFFF);
@@ -373,6 +374,8 @@ MapData::Point::Point(uint type, const Coordinates &c, const Attributes &attr,
 		subtype = I_CATACH;
 	else if (type == MARKUL)
 		subtype = CATMFA;
+	else if (type == I_BUNSTA)
+		subtype = I_CATBUN;
 
 	QList<QByteArray> list(_attr.value(subtype).split(','));
 	std::sort(list.begin(), list.end());

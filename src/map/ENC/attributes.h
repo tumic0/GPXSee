@@ -43,6 +43,7 @@
 #define I_RDOCAL 17017
 #define I_WTWDIS 17064
 #define I_CATBRT 17066
+#define I_CATBUN 17067
 #define I_HUNITS 17103
 
 #endif // ENC_ATTRIBUTES_H
