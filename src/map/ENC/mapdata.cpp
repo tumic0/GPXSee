@@ -201,9 +201,12 @@ static bool polygonPointCb(const MapData::Poly *polygon, void *context)
 	  || type == SUBTYPE(RESARE, 7) || type == SUBTYPE(I_RESARE, 7)
 	  || type == SUBTYPE(RESARE, 9) || type == SUBTYPE(I_RESARE, 9)
 	  || type == SUBTYPE(RESARE, 12) || type == SUBTYPE(I_RESARE, 12)
+	  || type == SUBTYPE(RESARE, 14) || type == SUBTYPE(I_RESARE, 14)
 	  || type == SUBTYPE(RESARE, 17) || type == SUBTYPE(I_RESARE, 17)
 	  || type == SUBTYPE(RESARE, 22) || type == SUBTYPE(I_RESARE, 22)
-	  || type == SUBTYPE(RESARE, 23) || type == SUBTYPE(I_RESARE, 23))
+	  || type == SUBTYPE(RESARE, 23) || type == SUBTYPE(I_RESARE, 23)
+	  || type == SUBTYPE(RESARE, 25) || type == SUBTYPE(I_RESARE, 25)
+	  || type == SUBTYPE(RESARE, 26) || type == SUBTYPE(I_RESARE, 26))
 		points->append(MapData::Point(baseType, polygon->bounds().center(),
 		  polygon->attributes(), polygon->HUNI(), true));
 

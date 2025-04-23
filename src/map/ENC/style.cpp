@@ -78,17 +78,24 @@ void Style::polygonStyle()
 	_polygons[SUBTYPE(RESARE, 9)] = Polygon(QBrush(QColor(0xff, 0x00, 0x00),
 	  Qt::BDiagPattern));
 	_polygons[SUBTYPE(RESARE, 12)] = Polygon(QImage(":/marine/safety-zone-line.png"));
+	_polygons[SUBTYPE(RESARE, 14)] = Polygon(QImage(":/marine/safety-zone-line.png"));
 	_polygons[SUBTYPE(RESARE, 17)] = Polygon(QImage(":/marine/entry-prohibited-line.png"));
 	_polygons[SUBTYPE(RESARE, 22)] = Polygon(QImage(":/marine/sanctuary-line.png"));
 	_polygons[SUBTYPE(RESARE, 23)] = Polygon(QImage(":/marine/nature-reserve-line.png"));
+	_polygons[SUBTYPE(RESARE, 25)] = Polygon(Qt::NoBrush,
+	  QPen(QColor(0xeb, 0x49, 0xeb), 1, Qt::DashLine));
+	_polygons[SUBTYPE(RESARE, 26)] = Polygon(QImage(":/marine/safety-zone-line.png"));
 	_polygons[SUBTYPE(I_RESARE, 1)] = _polygons[SUBTYPE(RESARE, 1)];
 	_polygons[SUBTYPE(I_RESARE, 2)] = _polygons[SUBTYPE(RESARE, 2)];
 	_polygons[SUBTYPE(I_RESARE, 4)] = _polygons[SUBTYPE(RESARE, 4)];
 	_polygons[SUBTYPE(I_RESARE, 9)] = _polygons[SUBTYPE(RESARE, 9)];
 	_polygons[SUBTYPE(I_RESARE, 12)] = _polygons[SUBTYPE(RESARE, 12)];
+	_polygons[SUBTYPE(I_RESARE, 14)] = _polygons[SUBTYPE(RESARE, 14)];
 	_polygons[SUBTYPE(I_RESARE, 17)] = _polygons[SUBTYPE(RESARE, 17)];
 	_polygons[SUBTYPE(I_RESARE, 22)] = _polygons[SUBTYPE(RESARE, 22)];
 	_polygons[SUBTYPE(I_RESARE, 23)] = _polygons[SUBTYPE(RESARE, 23)];
+	_polygons[SUBTYPE(I_RESARE, 25)] = _polygons[SUBTYPE(RESARE, 25)];
+	_polygons[SUBTYPE(I_RESARE, 26)] = _polygons[SUBTYPE(RESARE, 26)];
 	_polygons[SUBTYPE(ACHARE, 1)] = Polygon(QImage(":/marine/anchor-line.png"));
 	_polygons[SUBTYPE(ACHARE, 2)] = _polygons[SUBTYPE(ACHARE, 1)];
 	_polygons[SUBTYPE(ACHARE, 3)] = _polygons[SUBTYPE(ACHARE, 1)];
@@ -177,11 +184,12 @@ void Style::polygonStyle()
 	  << SUBTYPE(I_RESARE, 5) << SUBTYPE(RESARE, 6) << SUBTYPE(I_RESARE, 6)
 	  << SUBTYPE(RESARE, 7) << SUBTYPE(I_RESARE, 7) << SUBTYPE(RESARE, 9)
 	  << SUBTYPE(I_RESARE, 9) << SUBTYPE(RESARE, 12) << SUBTYPE(I_RESARE, 12)
-	  << SUBTYPE(RESARE, 17) << SUBTYPE(I_RESARE, 17) << SUBTYPE(RESARE, 22)
-	  << SUBTYPE(I_RESARE, 22) << SUBTYPE(RESARE, 23) << SUBTYPE(I_RESARE, 23)
-	  << SUBTYPE(RESARE, 1) << TYPE(CBLARE) << TYPE(PIPARE) << TYPE(PRCARE)
-	  << TYPE(I_TRNBSN) << SUBTYPE(MARKUL, 0) << SUBTYPE(MARKUL, 3)
-	  << TYPE(CONZNE);
+	  << SUBTYPE(RESARE, 14) << SUBTYPE(I_RESARE, 14) << SUBTYPE(RESARE, 17)
+	  << SUBTYPE(I_RESARE, 17) << SUBTYPE(RESARE, 22) << SUBTYPE(I_RESARE, 22)
+	  << SUBTYPE(RESARE, 23) << SUBTYPE(I_RESARE, 23) << SUBTYPE(RESARE, 25)
+	  << SUBTYPE(I_RESARE, 25) << SUBTYPE(RESARE, 26) << SUBTYPE(I_RESARE, 26)
+	  << TYPE(CBLARE) << TYPE(PIPARE) << TYPE(PRCARE) << TYPE(I_TRNBSN)
+	  << SUBTYPE(MARKUL, 0) << SUBTYPE(MARKUL, 3) << TYPE(CONZNE);
 }
 
 void Style::lineStyle(qreal ratio)
@@ -420,9 +428,12 @@ void Style::pointStyle(qreal ratio)
 	_points[SUBTYPE(RESARE, 7)] = _points[SUBTYPE(RESARE, 4)];
 	_points[SUBTYPE(RESARE, 9)] = _points[SUBTYPE(RESARE, 1)];
 	_points[SUBTYPE(RESARE, 12)] = _points[SUBTYPE(RESARE, 1)];
+	_points[SUBTYPE(RESARE, 14)] = _points[SUBTYPE(RESARE, 1)];
 	_points[SUBTYPE(RESARE, 17)] = _points[SUBTYPE(RESARE, 1)];
 	_points[SUBTYPE(RESARE, 22)] = _points[SUBTYPE(RESARE, 4)];
 	_points[SUBTYPE(RESARE, 23)] = _points[SUBTYPE(RESARE, 4)];
+	_points[SUBTYPE(RESARE, 25)] = _points[SUBTYPE(RESARE, 1)];
+	_points[SUBTYPE(RESARE, 26)] = _points[SUBTYPE(RESARE, 1)];
 	_points[SUBTYPE(I_RESARE, 1)] = _points[SUBTYPE(RESARE, 1)];
 	_points[SUBTYPE(I_RESARE, 2)] = _points[SUBTYPE(RESARE, 2)];
 	_points[SUBTYPE(I_RESARE, 4)] = _points[SUBTYPE(RESARE, 4)];
@@ -431,9 +442,12 @@ void Style::pointStyle(qreal ratio)
 	_points[SUBTYPE(I_RESARE, 7)] = _points[SUBTYPE(RESARE, 7)];
 	_points[SUBTYPE(I_RESARE, 9)] = _points[SUBTYPE(RESARE, 9)];
 	_points[SUBTYPE(I_RESARE, 12)] = _points[SUBTYPE(RESARE, 12)];
+	_points[SUBTYPE(I_RESARE, 14)] = _points[SUBTYPE(RESARE, 14)];
 	_points[SUBTYPE(I_RESARE, 17)] = _points[SUBTYPE(RESARE, 17)];
 	_points[SUBTYPE(I_RESARE, 22)] = _points[SUBTYPE(RESARE, 22)];
 	_points[SUBTYPE(I_RESARE, 23)] = _points[SUBTYPE(RESARE, 23)];
+	_points[SUBTYPE(I_RESARE, 25)] = _points[SUBTYPE(RESARE, 25)];
+	_points[SUBTYPE(I_RESARE, 26)] = _points[SUBTYPE(RESARE, 26)];
 
 	_points[SUBTYPE(I_BUNSTA, 1)] = Point(svg2img(":/POI/fuel-11.svg", ratio),
 	  Small);
