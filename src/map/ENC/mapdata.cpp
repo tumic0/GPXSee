@@ -188,7 +188,7 @@ static bool polygonPointCb(const MapData::Poly *polygon, void *context)
 
 	if (baseType == TSSLPT || baseType == RCTLPT || baseType == I_TRNBSN
 	  || baseType == BRIDGE || baseType == I_BRIDGE || baseType == BUAARE
-	  || baseType == LNDARE || baseType == LNDRGN
+	  || baseType == LNDARE || baseType == LNDRGN || baseType == I_BUNSTA
 	  || type == SUBTYPE(ACHARE, 2) || type == SUBTYPE(I_ACHARE, 2)
 	  || type == SUBTYPE(ACHARE, 3) || type == SUBTYPE(I_ACHARE, 3)
 	  || type == SUBTYPE(ACHARE, 9) || type == SUBTYPE(I_ACHARE, 9)
