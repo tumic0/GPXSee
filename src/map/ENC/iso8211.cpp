@@ -91,16 +91,15 @@ bool ISO8211::readDDA(const FieldDefinition &def, SubFields &fields)
 {
 	static const QRegularExpression re(
 	  "([0-9]*)(A|I|R|B|b11|b12|b14|b21|b22|b24)\\(*([0-9]*)\\)*");
-	char buffer[def.size];
+	QByteArray ba(def.size, Qt::Initialization::Uninitialized);
 	bool repeat = false;
 	QVector<SubFieldDefinition> defs;
 	QVector<quint32> defTags;
 
-	if (!(_file.seek(def.pos) && _file.read(buffer, def.size) == def.size))
+	if (!(_file.seek(def.pos) && _file.read(ba.data(), ba.size()) == ba.size()))
 		return false;
 
-	QList<QByteArray> list(QByteArray::fromRawData(buffer, def.size)
-	  .split('\x1f'));
+	QList<QByteArray> list(ba.split('\x1f'));
 	if (!list.at(1).isEmpty() && list.at(1).front() == '*') {
 		repeat = true;
 		list[1].remove(0, 1);
@@ -193,14 +192,15 @@ bool ISO8211::readDDR()
 bool ISO8211::readUDA(quint64 pos, const FieldDefinition &def,
   const QVector<SubFieldDefinition> &fields, bool repeat, Data &data)
 {
-	char ba[def.size];
+	QByteArray ba(def.size, Qt::Initialization::Uninitialized);
 
-	if (!(_file.seek(pos + def.pos) && _file.read(ba, def.size) == def.size))
+	if (!(_file.seek(pos + def.pos)
+	  && _file.read(ba.data(), ba.size()) == ba.size()))
 		return false;
 
 	const char *sp;
-	const char *dp = ba;
-	const char *ep = ba + def.size - 1;
+	const char *dp = ba.constData();
+	const char *ep = ba.constData() + ba.size() - 1;
 
 	do {
 		QVector<QVariant> row(fields.size());
