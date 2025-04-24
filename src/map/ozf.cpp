@@ -232,7 +232,11 @@ QPixmap OZF::tile(int zoom, int x, int y)
 	  tileSize().height(), QImage::Format_Indexed8);
 	img.setColorTable(z.palette);
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 9, 0)
 	return QPixmap::fromImage(img.mirrored());
+#else // QT 6.9
+	return QPixmap::fromImage(img.flipped());
+#endif // QT 6.9
 }
 
 QSize OZF::size(int zoom) const
