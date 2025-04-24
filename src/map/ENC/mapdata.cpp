@@ -763,7 +763,7 @@ MapData::Poly *MapData::polyObject(const ISO8211::Record &r,
 
 bool MapData::processRecord(const ISO8211::Record &record,
   QVector<ISO8211::Record> &fe, RecordMap &vi, RecordMap &vc, RecordMap &ve,
-  uint &comf, uint &huni, uint &somf)
+  uint &comf, uint &somf, uint &huni)
 {
 	if (record.size() < 2)
 		return false;
