@@ -147,8 +147,10 @@ void Style::polygonStyle()
 	  1.5, Qt::DashLine));
 	_polygons[TYPE(CBLARE)] = Polygon(QImage(":/marine/cable-area-line.png"));
 	_polygons[TYPE(PIPARE)] = Polygon(QImage(":/marine/pipeline-area-line.png"));
-	_polygons[SUBTYPE(MARKUL, 0)] = Polygon(QImage(":/marine/fishing-farm-line.png"));
-	_polygons[SUBTYPE(MARKUL, 3)] = Polygon(QImage(":/marine/fishing-farm-line.png"));
+	_polygons[SUBTYPE(MARCUL, 0)] = Polygon(QImage(":/marine/fishing-farm-line.png"));
+	_polygons[SUBTYPE(MARCUL, 1)] = Polygon(QImage(":/marine/shellfish-farm-line.png"));
+	_polygons[SUBTYPE(MARCUL, 2)] = Polygon(QImage(":/marine/shellfish-farm-line.png"));
+	_polygons[SUBTYPE(MARCUL, 3)] = Polygon(QImage(":/marine/fishing-farm-line.png"));
 	_polygons[TYPE(BERTHS)] = Polygon(Qt::NoBrush, QPen(QColor(0xeb, 0x49, 0xeb),
 	  1, Qt::DashLine));
 	_polygons[TYPE(I_BERTHS)] = _polygons[TYPE(BERTHS)];
@@ -189,7 +191,8 @@ void Style::polygonStyle()
 	  << SUBTYPE(RESARE, 23) << SUBTYPE(I_RESARE, 23) << SUBTYPE(RESARE, 25)
 	  << SUBTYPE(I_RESARE, 25) << SUBTYPE(RESARE, 26) << SUBTYPE(I_RESARE, 26)
 	  << TYPE(CBLARE) << TYPE(PIPARE) << TYPE(PRCARE) << TYPE(I_TRNBSN)
-	  << SUBTYPE(MARKUL, 0) << SUBTYPE(MARKUL, 3) << TYPE(CONZNE);
+	  << SUBTYPE(MARCUL, 0) << SUBTYPE(MARCUL, 1) << SUBTYPE(MARCUL, 2)
+	  << SUBTYPE(MARCUL, 3) << TYPE(CONZNE);
 }
 
 void Style::lineStyle(qreal ratio)
@@ -402,8 +405,8 @@ void Style::pointStyle(qreal ratio)
 	_points[TYPE(LNDARE)].setHaloColor(QColor());
 	_points[TYPE(LNDRGN)].setHaloColor(QColor());
 	_points[TYPE(RADRFL)] = Point(QImage(":/marine/radar-reflector.png"));
-	_points[SUBTYPE(MARKUL, 0)] = Point(QImage(":/marine/fishing-farm.png"));
-	_points[SUBTYPE(MARKUL, 3)] = Point(QImage(":/marine/fishing-farm.png"));
+	_points[SUBTYPE(MARCUL, 0)] = Point(QImage(":/marine/fishing-farm.png"));
+	_points[SUBTYPE(MARCUL, 3)] = Point(QImage(":/marine/fishing-farm.png"));
 
 	_points[SUBTYPE(I_BERTHS, 6)] = Point(QImage(":/marine/fleeting-area.png"),
 	  Small);

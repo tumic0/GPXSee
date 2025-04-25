@@ -375,7 +375,7 @@ MapData::Point::Point(uint type, const Coordinates &c, const Attributes &attr,
 		subtype = CATACH;
 	else if (type == I_ACHARE)
 		subtype = I_CATACH;
-	else if (type == MARKUL)
+	else if (type == MARCUL)
 		subtype = CATMFA;
 	else if (type == I_BUNSTA)
 		subtype = I_CATBUN;
@@ -436,7 +436,7 @@ MapData::Poly::Poly(uint type, const Polygon &path, const Attributes &attr,
 		subtype = I_CATACH;
 	else if (type == HRBFAC)
 		subtype = CATHAF;
-	else if (type == MARKUL)
+	else if (type == MARCUL)
 		subtype = CATMFA;
 	else if (type == I_BERTHS)
 		subtype = I_CATBRT;
