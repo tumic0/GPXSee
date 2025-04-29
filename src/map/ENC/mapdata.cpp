@@ -151,9 +151,9 @@ static const ISO8211::Field *SGXD(const ISO8211::Record &r)
 {
 	const ISO8211::Field *f;
 
-	if ((f = ISO8211::field(r, SG2D)))
+	if ((f = r.field(SG2D)))
 		return f;
-	else if ((f = ISO8211::field(r, SG3D)))
+	else if ((f = r.field(SG3D)))
 		return f;
 	else
 		return 0;
@@ -495,7 +495,7 @@ QVector<MapData::Sounding> MapData::soundings(const ISO8211::Record &r,
   uint comf, uint somf)
 {
 	QVector<Sounding> s;
-	const ISO8211::Field *f = ISO8211::field(r, SG3D);
+	const ISO8211::Field *f = r.field(SG3D);
 	if (!f)
 		return QVector<Sounding>();
 
@@ -517,7 +517,7 @@ QVector<MapData::Sounding> MapData::soundingGeometry(const ISO8211::Record &r,
 	quint32 id;
 	RecordMapIterator it;
 
-	const ISO8211::Field *fspt = ISO8211::field(r, FSPT);
+	const ISO8211::Field *fspt = r.field(FSPT);
 	if (!fspt || fspt->data().at(0).size() != 4)
 		return QVector<Sounding>();
 
@@ -545,7 +545,7 @@ Coordinates MapData::pointGeometry(const ISO8211::Record &r,
 	quint32 id;
 	RecordMapIterator it;
 
-	const ISO8211::Field *fspt = ISO8211::field(r, FSPT);
+	const ISO8211::Field *fspt = r.field(FSPT);
 	if (!fspt || fspt->data().at(0).size() != 4)
 		return Coordinates();
 
@@ -575,7 +575,7 @@ QVector<Coordinates> MapData::lineGeometry(const ISO8211::Record &r,
 	quint8 type;
 	quint32 id;
 
-	const ISO8211::Field *fspt = ISO8211::field(r, FSPT);
+	const ISO8211::Field *fspt = r.field(FSPT);
 	if (!fspt || fspt->data().at(0).size() != 4)
 		return QVector<Coordinates>();
 
@@ -588,7 +588,7 @@ QVector<Coordinates> MapData::lineGeometry(const ISO8211::Record &r,
 		if (it == ve.constEnd())
 			return QVector<Coordinates>();
 		const ISO8211::Record &frid = it.value();
-		const ISO8211::Field *vrpt = ISO8211::field(frid, VRPT);
+		const ISO8211::Field *vrpt = frid.field(VRPT);
 		if (!vrpt || vrpt->data().size() != 2)
 			return QVector<Coordinates>();
 
@@ -641,7 +641,7 @@ Polygon MapData::polyGeometry(const ISO8211::Record &r, const RecordMap &vc,
 	quint8 type;
 	quint32 id;
 
-	const ISO8211::Field *fspt = ISO8211::field(r, FSPT);
+	const ISO8211::Field *fspt = r.field(FSPT);
 	if (!fspt || fspt->data().at(0).size() != 4)
 		return Polygon();
 
@@ -660,7 +660,7 @@ Polygon MapData::polyGeometry(const ISO8211::Record &r, const RecordMap &vc,
 		if (it == ve.constEnd())
 			return Polygon();
 		const ISO8211::Record &frid = it.value();
-		const ISO8211::Field *vrpt = ISO8211::field(frid, VRPT);
+		const ISO8211::Field *vrpt = frid.field(VRPT);
 		if (!vrpt || vrpt->data().size() != 2)
 			return Polygon();
 
@@ -723,7 +723,7 @@ MapData::Attributes MapData::attributes(const ISO8211::Record &r)
 {
 	Attributes attr;
 
-	const ISO8211::Field *attf = ISO8211::field(r, ATTF);
+	const ISO8211::Field *attf = r.field(ATTF);
 	if (!(attf && attf->data().at(0).size() == 2))
 		return attr;
 

@@ -298,11 +298,11 @@ bool ISO8211::readRecord(Record &record)
 	return true;
 }
 
-const ISO8211::Field *ISO8211::field(const Record &record, quint32 name)
+const ISO8211::Field *ISO8211::Record::field(quint32 name) const
 {
-	for (int i = 0; i < record.size(); i++)
-		if (record.at(i).tag() == name)
-			return &record.at(i);
+	for (int i = 0; i < size(); i++)
+		if (at(i).tag() == name)
+			return &at(i);
 
 	return 0;
 }

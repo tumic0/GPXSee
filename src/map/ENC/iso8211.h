@@ -26,14 +26,17 @@ public:
 		Data _data;
 	};
 
-	typedef QVector<Field> Record;
+	class Record : public QVector<Field>
+	{
+	public:
+		const Field *field(quint32 name) const;
+	};
 
 	ISO8211(const QString &path) : _file(path) {}
 	bool readDDR();
 	bool readRecord(Record &record);
 	const QString &errorString() const {return _errorString;}
 
-	static const Field *field(const Record &record, quint32 name);
 	static constexpr quint32 NAME(const char str[4])
 	{
 		return static_cast<quint32>(str[0])

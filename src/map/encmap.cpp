@@ -63,9 +63,9 @@ static const ISO8211::Field *SGXD(const ISO8211::Record &r)
 {
 	const ISO8211::Field *f;
 
-	if ((f = ISO8211::field(r, SG2D)))
+	if ((f = r.field(SG2D)))
 		return f;
-	else if ((f = ISO8211::field(r, SG3D)))
+	else if ((f = r.field(SG3D)))
 		return f;
 	else
 		return 0;
