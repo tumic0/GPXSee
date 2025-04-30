@@ -143,15 +143,15 @@ ENCMap::ENCMap(const QString &fileName, QObject *parent)
 		_errorString = ddf.errorString();
 		return;
 	}
-	while (ddf.readRecord(record)) {
+	while (!ddf.atEnd()) {
+		if (!ddf.readRecord(record)) {
+			_errorString = ddf.errorString();
+			return;
+		}
 		if (!processRecord(record, gv, comf, dsnm)) {
 			_errorString = "Invalid S-57 record";
 			return;
 		}
-	}
-	if (!ddf.errorString().isNull()) {
-		_errorString = ddf.errorString();
-		return;
 	}
 
 	_name = dsnm;

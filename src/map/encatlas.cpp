@@ -127,13 +127,13 @@ ENCAtlas::ENCAtlas(const QString &fileName, QObject *parent)
 		_errorString = ddf.errorString();
 		return;
 	}
-	while (ddf.readRecord(record)) {
+	while (!ddf.atEnd()) {
+		if (!ddf.readRecord(record)) {
+			_errorString = ddf.errorString();
+			return;
+		}
 		if (processRecord(record, file, bounds))
 			addMap(dir, file, bounds);
-	}
-	if (!ddf.errorString().isNull()) {
-		_errorString = ddf.errorString();
-		return;
 	}
 
 	if (_data.isEmpty()) {

@@ -35,6 +35,7 @@ public:
 	ISO8211(const QString &path) : _file(path) {}
 	bool readDDR();
 	bool readRecord(Record &record);
+	bool atEnd() const {return _file.atEnd();}
 	const QString &errorString() const {return _errorString;}
 
 	static constexpr quint32 NAME(const char str[4])

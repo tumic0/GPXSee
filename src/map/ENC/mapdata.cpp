@@ -829,9 +829,15 @@ MapData::MapData(const QString &path)
 
 	if (!ddf.readDDR())
 		return;
-	while (ddf.readRecord(record))
+	while (!ddf.atEnd()) {
+		if (!ddf.readRecord(record)) {
+			qWarning("%s: %s", qUtf8Printable(path),
+			  qUtf8Printable(ddf.errorString()));
+			break;
+		}
 		if (!processRecord(record, fe, vi, vc, ve, comf, somf, huni))
-			qWarning("Invalid S-57 record");
+			qWarning("%s: Invalid S-57 record", qUtf8Printable(path));
+	}
 
 	for (int i = 0; i < fe.size(); i++) {
 		const ISO8211::Record &r = fe.at(i);

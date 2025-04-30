@@ -259,12 +259,8 @@ bool ISO8211::readUDA(quint64 pos, const FieldDefinition &def,
 
 bool ISO8211::readRecord(Record &record)
 {
-	if (_file.atEnd())
-		return false;
-
 	QVector<FieldDefinition> fields;
 	qint64 pos = _file.pos();
-
 
 	if (readDR(fields) < 0) {
 		_errorString = "Error reading DR";
