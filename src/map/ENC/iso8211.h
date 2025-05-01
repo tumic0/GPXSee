@@ -38,13 +38,14 @@ public:
 	bool atEnd() const {return _file.atEnd();}
 	const QString &errorString() const {return _errorString;}
 
-	static constexpr quint32 NAME(const char str[4])
+	static constexpr quint32 TAG(const char name[4])
 	{
-		return static_cast<quint32>(str[0])
-		  + (static_cast<quint32>(str[1]) << 8)
-		  + (static_cast<quint32>(str[2]) << 16)
-		  + (static_cast<quint32>(str[3]) << 24);
+		return static_cast<quint32>(name[0])
+		  + (static_cast<quint32>(name[1]) << 8)
+		  + (static_cast<quint32>(name[2]) << 16)
+		  + (static_cast<quint32>(name[3]) << 24);
 	}
+	static QString NAME(quint32 tag);
 
 private:
 	enum FieldType {Unknown, String, Array, S8, S16, S32, U8, U16, U32};

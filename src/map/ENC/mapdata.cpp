@@ -15,14 +15,14 @@ using namespace ENC;
 #define PRIM_L 2
 #define PRIM_A 3
 
-constexpr quint32 SG2D = ISO8211::NAME("SG2D");
-constexpr quint32 SG3D = ISO8211::NAME("SG3D");
-constexpr quint32 FSPT = ISO8211::NAME("FSPT");
-constexpr quint32 VRPT = ISO8211::NAME("VRPT");
-constexpr quint32 ATTF = ISO8211::NAME("ATTF");
-constexpr quint32 VRID = ISO8211::NAME("VRID");
-constexpr quint32 FRID = ISO8211::NAME("FRID");
-constexpr quint32 DSPM = ISO8211::NAME("DSPM");
+constexpr quint32 SG2D = ISO8211::TAG("SG2D");
+constexpr quint32 SG3D = ISO8211::TAG("SG3D");
+constexpr quint32 FSPT = ISO8211::TAG("FSPT");
+constexpr quint32 VRPT = ISO8211::TAG("VRPT");
+constexpr quint32 ATTF = ISO8211::TAG("ATTF");
+constexpr quint32 VRID = ISO8211::TAG("VRID");
+constexpr quint32 FRID = ISO8211::TAG("FRID");
+constexpr quint32 DSPM = ISO8211::TAG("DSPM");
 
 static QMap<uint,uint> orderMapInit()
 {

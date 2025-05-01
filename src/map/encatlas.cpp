@@ -12,7 +12,7 @@ using namespace ENC;
 #define EPSILON   1e-6
 #define TILE_SIZE 512
 
-constexpr quint32 CATD = ISO8211::NAME("CATD");
+constexpr quint32 CATD = ISO8211::TAG("CATD");
 
 Range ENCAtlas::zooms(IntendedUsage usage)
 {
