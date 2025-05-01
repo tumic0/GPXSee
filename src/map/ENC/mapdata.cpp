@@ -85,6 +85,8 @@ static QMap<uint,uint> orderMapInit()
 	map.insert(TYPE(LNDELV), 44);
 	map.insert(TYPE(SMCFAC), 45);
 	map.insert(TYPE(BUISGL), 46);
+	map.insert(TYPE(ACHARE), 47);
+	map.insert(TYPE(I_ACHARE), 47);
 
 	map.insert(TYPE(I_DISMAR), 0xFFFFFFFE);
 	map.insert(TYPE(SOUNDG), 0xFFFFFFFF);
@@ -192,7 +194,8 @@ static bool polygonPointCb(const MapData::Poly *polygon, void *context)
 	  || type == SUBTYPE(ACHARE, 2) || type == SUBTYPE(I_ACHARE, 2)
 	  || type == SUBTYPE(ACHARE, 3) || type == SUBTYPE(I_ACHARE, 3)
 	  || type == SUBTYPE(ACHARE, 9) || type == SUBTYPE(I_ACHARE, 9)
-	  || type == SUBTYPE(I_BERTHS, 6)
+	  || type == SUBTYPE(I_ACHARE, 10) || type == SUBTYPE(I_ACHARE, 11)
+	  || type == SUBTYPE(I_ACHARE, 12) || type == SUBTYPE(I_BERTHS, 6)
 	  || type == SUBTYPE(RESARE, 1) || type == SUBTYPE(I_RESARE, 1)
 	  || type == SUBTYPE(RESARE, 2) || type == SUBTYPE(I_RESARE, 2)
 	  || type == SUBTYPE(RESARE, 4) || type == SUBTYPE(I_RESARE, 4)

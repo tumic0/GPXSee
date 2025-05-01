@@ -412,15 +412,42 @@ void Style::pointStyle(qreal ratio)
 	  Small);
 	_points[SUBTYPE(I_BERTHS, 6)].setTextColor(QColor(0xeb, 0x49, 0xeb));
 	_points[SUBTYPE(I_BERTHS, 6)].setHaloColor(QColor());
+	_points[SUBTYPE(ACHARE, 1)].setTextColor(QColor(0xeb, 0x49, 0xeb));
+	_points[SUBTYPE(ACHARE, 1)].setHaloColor(QColor());
 	_points[SUBTYPE(ACHARE, 2)] = Point(QImage(":/marine/dw-anchorage.png"),
 	  Small);
+	_points[SUBTYPE(ACHARE, 2)].setTextColor(QColor(0xeb, 0x49, 0xeb));
+	_points[SUBTYPE(ACHARE, 2)].setHaloColor(QColor());
 	_points[SUBTYPE(ACHARE, 3)] = Point(QImage(":/marine/tanker-anchorage.png"),
 	  Small);
+	_points[SUBTYPE(ACHARE, 3)].setTextColor(QColor(0xeb, 0x49, 0xeb));
+	_points[SUBTYPE(ACHARE, 3)].setHaloColor(QColor());
+	_points[SUBTYPE(ACHARE, 4)].setTextColor(QColor(0xeb, 0x49, 0xeb));
+	_points[SUBTYPE(ACHARE, 4)].setHaloColor(QColor());
+	_points[SUBTYPE(ACHARE, 5)].setTextColor(QColor(0xeb, 0x49, 0xeb));
+	_points[SUBTYPE(ACHARE, 5)].setHaloColor(QColor());
+	_points[SUBTYPE(ACHARE, 6)].setTextColor(QColor(0xeb, 0x49, 0xeb));
+	_points[SUBTYPE(ACHARE, 6)].setHaloColor(QColor());
+	_points[SUBTYPE(ACHARE, 7)].setTextColor(QColor(0xeb, 0x49, 0xeb));
+	_points[SUBTYPE(ACHARE, 7)].setHaloColor(QColor());
+	_points[SUBTYPE(ACHARE, 8)].setTextColor(QColor(0xeb, 0x49, 0xeb));
+	_points[SUBTYPE(ACHARE, 8)].setHaloColor(QColor());
 	_points[SUBTYPE(ACHARE, 9)] = Point(QImage(":/marine/24h-anchorage.png"),
 	  Small);
+	_points[SUBTYPE(ACHARE, 9)].setTextColor(QColor(0xeb, 0x49, 0xeb));
+	_points[SUBTYPE(ACHARE, 9)].setHaloColor(QColor());
+	_points[SUBTYPE(I_ACHARE, 1)] = _points[SUBTYPE(ACHARE, 1)];
 	_points[SUBTYPE(I_ACHARE, 2)] = _points[SUBTYPE(ACHARE, 2)];
 	_points[SUBTYPE(I_ACHARE, 3)] = _points[SUBTYPE(ACHARE, 3)];
+	_points[SUBTYPE(I_ACHARE, 4)] = _points[SUBTYPE(ACHARE, 4)];
+	_points[SUBTYPE(I_ACHARE, 5)] = _points[SUBTYPE(ACHARE, 5)];
+	_points[SUBTYPE(I_ACHARE, 6)] = _points[SUBTYPE(ACHARE, 6)];
+	_points[SUBTYPE(I_ACHARE, 7)] = _points[SUBTYPE(ACHARE, 7)];
+	_points[SUBTYPE(I_ACHARE, 8)] = _points[SUBTYPE(ACHARE, 8)];
 	_points[SUBTYPE(I_ACHARE, 9)] = _points[SUBTYPE(ACHARE, 9)];
+	_points[SUBTYPE(I_ACHARE, 10)] = _points[SUBTYPE(I_ACHARE, 1)];
+	_points[SUBTYPE(I_ACHARE, 11)] = _points[SUBTYPE(I_ACHARE, 1)];
+	_points[SUBTYPE(I_ACHARE, 12)] = _points[SUBTYPE(I_ACHARE, 1)];
 	_points[SUBTYPE(RESARE, 1)].setTextColor(QColor(0xeb, 0x49, 0xeb));
 	_points[SUBTYPE(RESARE, 1)].setHaloColor(QColor());
 	_points[SUBTYPE(RESARE, 2)] = _points[SUBTYPE(RESARE, 1)];
