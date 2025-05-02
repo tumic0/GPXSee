@@ -86,11 +86,13 @@ int ISO8211::readDR(QVector<FieldDefinition> &fields)
 			return -1;
 
 		r.tag = qFromLittleEndian<quint32>(tag);
-		r.pos = offset + Util::str2int(fieldPos.constData(), posSize);
+		r.pos = Util::str2int(fieldPos.constData(), posSize);
 		r.size = Util::str2int(fieldLen.constData(), lenSize);
 
 		if (r.pos < 0 || r.size < 0)
 			return -1;
+
+		r.pos += offset;
 	}
 
 	return len;
