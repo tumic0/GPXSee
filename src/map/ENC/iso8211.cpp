@@ -301,7 +301,7 @@ bool ISO8211::readRecord(Record &record)
 
 QString ISO8211::NAME(quint32 tag)
 {
-	QByteArray ba(sizeof(quint32), Qt::Initialization::Uninitialized);
-	qToLittleEndian<quint32>(tag, ba.data());
-	return QString::fromLatin1(ba);
+	char buffer[sizeof(quint32)];
+	qToLittleEndian<quint32>(tag, buffer);
+	return QString::fromLatin1(buffer, sizeof(buffer));
 }
