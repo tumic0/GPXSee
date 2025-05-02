@@ -181,10 +181,8 @@ bool ISO8211::readDDR()
 	for (int i = 0; i < fields.size(); i++) {
 		SubFields def;
 		if (!readDDA(fields.at(i), def)) {
-			QByteArray tag(sizeof(quint32), Qt::Initialization::Uninitialized);
-			qToLittleEndian<quint32>(fields.at(i).tag, tag.data());
 			_errorString = QString("Error reading %1 DDA field")
-			  .arg(QString(tag));
+			  .arg(NAME(fields.at(i).tag));
 			return false;
 		}
 		_map.insert(fields.at(i).tag, def);
