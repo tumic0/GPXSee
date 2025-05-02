@@ -219,6 +219,7 @@
 		<file alias="sanctuary-line.png">icons/map/marine/sanctuary-line.png</file>
 		<file alias="fishing-farm.png">icons/map/marine/fishing-farm.png</file>
 		<file alias="shellfish-farm-line.png">icons/map/marine/shellfish-farm-line.png</file>
+		<file alias="degaussing-line.png">icons/map/marine/degaussing-line.png</file>
 	</qresource>
 
 	<!-- Patterns (Mapsforge) -->

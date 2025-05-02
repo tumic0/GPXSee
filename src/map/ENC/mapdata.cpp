@@ -191,6 +191,7 @@ static bool polygonPointCb(const MapData::Poly *polygon, void *context)
 	if (baseType == TSSLPT || baseType == RCTLPT || baseType == I_TRNBSN
 	  || baseType == BRIDGE || baseType == I_BRIDGE || baseType == BUAARE
 	  || baseType == LNDARE || baseType == LNDRGN || baseType == I_BUNSTA
+	  || baseType == PILBOP
 	  || type == SUBTYPE(ACHARE, 2) || type == SUBTYPE(I_ACHARE, 2)
 	  || type == SUBTYPE(ACHARE, 3) || type == SUBTYPE(I_ACHARE, 3)
 	  || type == SUBTYPE(ACHARE, 9) || type == SUBTYPE(I_ACHARE, 9)
@@ -202,6 +203,7 @@ static bool polygonPointCb(const MapData::Poly *polygon, void *context)
 	  || type == SUBTYPE(RESARE, 5) || type == SUBTYPE(I_RESARE, 5)
 	  || type == SUBTYPE(RESARE, 6) || type == SUBTYPE(I_RESARE, 6)
 	  || type == SUBTYPE(RESARE, 7) || type == SUBTYPE(I_RESARE, 7)
+	  || type == SUBTYPE(RESARE, 8) || type == SUBTYPE(I_RESARE, 8)
 	  || type == SUBTYPE(RESARE, 9) || type == SUBTYPE(I_RESARE, 9)
 	  || type == SUBTYPE(RESARE, 12) || type == SUBTYPE(I_RESARE, 12)
 	  || type == SUBTYPE(RESARE, 14) || type == SUBTYPE(I_RESARE, 14)
@@ -425,6 +427,9 @@ MapData::Point::Point(uint type, const Coordinates &c, const Attributes &attr,
 			_label = QString::fromUtf8("\xE2\x86\x95") + UNIT_SPACE
 			  + QString::number(clr) + UNIT_SPACE + hUnits(HUNI);
 		}
+	} else if (_type == SUBTYPE(RESARE, 8)) {
+		if (_label.isEmpty())
+			_label = "Degaussing Range";
 	}
 }
 
@@ -836,7 +841,7 @@ MapData::MapData(const QString &path)
 		if (!ddf.readRecord(record)) {
 			qWarning("%s: %s", qUtf8Printable(path),
 			  qUtf8Printable(ddf.errorString()));
-			break;
+			return;
 		}
 		if (!processRecord(record, fe, vi, vc, ve, comf, somf, huni))
 			qWarning("%s: Invalid S-57 record", qUtf8Printable(path));

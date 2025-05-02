@@ -75,6 +75,7 @@ void Style::polygonStyle()
 	_polygons[SUBTYPE(RESARE, 5)] = Polygon(QImage(":/marine/sanctuary-line.png"));
 	_polygons[SUBTYPE(RESARE, 6)] = Polygon(QImage(":/marine/sanctuary-line.png"));
 	_polygons[SUBTYPE(RESARE, 7)] = Polygon(QImage(":/marine/sanctuary-line.png"));
+	_polygons[SUBTYPE(RESARE, 8)] = Polygon(QImage(":/marine/degaussing-line.png"));
 	_polygons[SUBTYPE(RESARE, 9)] = Polygon(QBrush(QColor(0xff, 0x00, 0x00),
 	  Qt::BDiagPattern));
 	_polygons[SUBTYPE(RESARE, 12)] = Polygon(QImage(":/marine/safety-zone-line.png"));
@@ -88,6 +89,10 @@ void Style::polygonStyle()
 	_polygons[SUBTYPE(I_RESARE, 1)] = _polygons[SUBTYPE(RESARE, 1)];
 	_polygons[SUBTYPE(I_RESARE, 2)] = _polygons[SUBTYPE(RESARE, 2)];
 	_polygons[SUBTYPE(I_RESARE, 4)] = _polygons[SUBTYPE(RESARE, 4)];
+	_polygons[SUBTYPE(I_RESARE, 5)] = _polygons[SUBTYPE(RESARE, 5)];
+	_polygons[SUBTYPE(I_RESARE, 6)] = _polygons[SUBTYPE(RESARE, 6)];
+	_polygons[SUBTYPE(I_RESARE, 7)] = _polygons[SUBTYPE(RESARE, 7)];
+	_polygons[SUBTYPE(I_RESARE, 8)] = _polygons[SUBTYPE(RESARE, 8)];
 	_polygons[SUBTYPE(I_RESARE, 9)] = _polygons[SUBTYPE(RESARE, 9)];
 	_polygons[SUBTYPE(I_RESARE, 12)] = _polygons[SUBTYPE(RESARE, 12)];
 	_polygons[SUBTYPE(I_RESARE, 14)] = _polygons[SUBTYPE(RESARE, 14)];
@@ -159,6 +164,8 @@ void Style::polygonStyle()
 	  1, Qt::DashLine));
 	_polygons[TYPE(CONZNE)] = Polygon(Qt::NoBrush, QPen(QColor(0xeb, 0x49, 0xeb),
 	  1, Qt::DashDotLine));
+	_polygons[TYPE(PILBOP)] = Polygon(Qt::NoBrush, QPen(QColor(0xeb, 0x49, 0xeb),
+	  1, Qt::DashLine));
 
 	_drawOrder
 	  << TYPE(LNDARE) << SUBTYPE(DEPARE, 0) << SUBTYPE(DEPARE, 1)
@@ -184,13 +191,14 @@ void Style::polygonStyle()
 	  << SUBTYPE(I_RESARE, 1) << SUBTYPE(RESARE, 2) << SUBTYPE(I_RESARE, 2)
 	  << SUBTYPE(RESARE, 4) << SUBTYPE(I_RESARE, 4) << SUBTYPE(RESARE, 5)
 	  << SUBTYPE(I_RESARE, 5) << SUBTYPE(RESARE, 6) << SUBTYPE(I_RESARE, 6)
-	  << SUBTYPE(RESARE, 7) << SUBTYPE(I_RESARE, 7) << SUBTYPE(RESARE, 9)
-	  << SUBTYPE(I_RESARE, 9) << SUBTYPE(RESARE, 12) << SUBTYPE(I_RESARE, 12)
-	  << SUBTYPE(RESARE, 14) << SUBTYPE(I_RESARE, 14) << SUBTYPE(RESARE, 17)
-	  << SUBTYPE(I_RESARE, 17) << SUBTYPE(RESARE, 22) << SUBTYPE(I_RESARE, 22)
-	  << SUBTYPE(RESARE, 23) << SUBTYPE(I_RESARE, 23) << SUBTYPE(RESARE, 25)
-	  << SUBTYPE(I_RESARE, 25) << SUBTYPE(RESARE, 26) << SUBTYPE(I_RESARE, 26)
-	  << TYPE(CBLARE) << TYPE(PIPARE) << TYPE(PRCARE) << TYPE(I_TRNBSN)
+	  << SUBTYPE(RESARE, 7) << SUBTYPE(I_RESARE, 7) << SUBTYPE(RESARE, 8)
+	  << SUBTYPE(I_RESARE, 8) << SUBTYPE(RESARE, 9) << SUBTYPE(I_RESARE, 9)
+	  << SUBTYPE(RESARE, 12) << SUBTYPE(I_RESARE, 12) << SUBTYPE(RESARE, 14)
+	  << SUBTYPE(I_RESARE, 14) << SUBTYPE(RESARE, 17) << SUBTYPE(I_RESARE, 17)
+	  << SUBTYPE(RESARE, 22) << SUBTYPE(I_RESARE, 22) << SUBTYPE(RESARE, 23)
+	  << SUBTYPE(I_RESARE, 23) << SUBTYPE(RESARE, 25) << SUBTYPE(I_RESARE, 25)
+	  << SUBTYPE(RESARE, 26) << SUBTYPE(I_RESARE, 26) << TYPE(CBLARE)
+	  << TYPE(PIPARE) << TYPE(PRCARE) << TYPE(I_TRNBSN) << TYPE(PILBOP)
 	  << SUBTYPE(MARCUL, 0) << SUBTYPE(MARCUL, 1) << SUBTYPE(MARCUL, 2)
 	  << SUBTYPE(MARCUL, 3) << TYPE(CONZNE);
 }
@@ -456,6 +464,7 @@ void Style::pointStyle(qreal ratio)
 	_points[SUBTYPE(RESARE, 5)] = _points[SUBTYPE(RESARE, 4)];
 	_points[SUBTYPE(RESARE, 6)] = _points[SUBTYPE(RESARE, 4)];
 	_points[SUBTYPE(RESARE, 7)] = _points[SUBTYPE(RESARE, 4)];
+	_points[SUBTYPE(RESARE, 8)] = _points[SUBTYPE(RESARE, 1)];
 	_points[SUBTYPE(RESARE, 9)] = _points[SUBTYPE(RESARE, 1)];
 	_points[SUBTYPE(RESARE, 12)] = _points[SUBTYPE(RESARE, 1)];
 	_points[SUBTYPE(RESARE, 14)] = _points[SUBTYPE(RESARE, 1)];
@@ -470,6 +479,7 @@ void Style::pointStyle(qreal ratio)
 	_points[SUBTYPE(I_RESARE, 5)] = _points[SUBTYPE(RESARE, 5)];
 	_points[SUBTYPE(I_RESARE, 6)] = _points[SUBTYPE(RESARE, 6)];
 	_points[SUBTYPE(I_RESARE, 7)] = _points[SUBTYPE(RESARE, 7)];
+	_points[SUBTYPE(I_RESARE, 8)] = _points[SUBTYPE(RESARE, 8)];
 	_points[SUBTYPE(I_RESARE, 9)] = _points[SUBTYPE(RESARE, 9)];
 	_points[SUBTYPE(I_RESARE, 12)] = _points[SUBTYPE(RESARE, 12)];
 	_points[SUBTYPE(I_RESARE, 14)] = _points[SUBTYPE(RESARE, 14)];
