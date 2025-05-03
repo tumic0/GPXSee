@@ -135,6 +135,14 @@
 $ gpxsee geo:50.0797778,14.4297314
 </pre>
 
+          <p>Although RFC5870 discourages the use of coorinate systems (CRS) other than
+          wgs84, GPXSee supports all the CRSs defined in its GCS/PCS files, i.e. you can
+          also use URIs like:</p>
+
+<pre>
+gpxsee 'geo:323482,4306480;crs=EPSG:32618'
+</pre>
+
           <h2 id="maps">Maps</h2>
           <p>Two kinds of maps are supported by GPXSee - online maps and offline maps.
           You may either load them "ad hoc" from the GUI or they can be loaded
