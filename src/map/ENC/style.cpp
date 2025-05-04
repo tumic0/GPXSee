@@ -6,88 +6,48 @@
 using namespace ENC;
 using namespace Util;
 
-#define IMG(type, subtype, img, dx, dy) \
+#define PNT(type, subtype, img, dx, dy) \
   _points[SUBTYPE((type), (subtype))] = Point(QImage(img), Small, QPoint(dx, dy));
 
-#define BUOY(type) \
-	IMG((type), 0, ":/marine/buoy.png", 6, -6); \
-	IMG((type), 1, ":/marine/buoy-white.png", 6, -6); \
-	IMG((type), 2, ":/marine/buoy.png", 6, -6); \
-	IMG((type), 3, ":/marine/buoy-red.png", 6, -6); \
-	IMG((type), 4, ":/marine/buoy-green.png", 6, -6); \
-	IMG((type), 5, ":/marine/buoy.png", 6, -6); \
-	IMG((type), 6, ":/marine/buoy-yellow.png", 6, -6); \
-	IMG((type), 7, ":/marine/buoy.png", 6, -6); \
-	IMG((type), 8, ":/marine/buoy.png", 6, -6); \
-	IMG((type), 9, ":/marine/buoy-yellow.png", 6, -6); \
-	IMG((type), 10, ":/marine/buoy.png", 6, -6); \
-	IMG((type), 11, ":/marine/buoy-yellow.png", 6, -6); \
-	IMG((type), 12, ":/marine/buoy.png", 6, -6); \
-	IMG((type), 13, ":/marine/buoy.png", 6, -6); \
-	IMG((type), 0x201, ":/marine/buoy-white-black.png", 6, -6); \
-	IMG((type), 0x301, ":/marine/buoy-white-red.png", 6, -6); \
-	IMG((type), 0x401, ":/marine/buoy-white-green.png", 6, -6); \
-	IMG((type), 0x601, ":/marine/buoy-white-yellow.png", 6, -6); \
-	IMG((type), 0x901, ":/marine/buoy-white-yellow.png", 6, -6); \
-	IMG((type), 0xb01, ":/marine/buoy-white-yellow.png", 6, -6); \
-	IMG((type), 0x102, ":/marine/buoy-black-white.png", 6, -6); \
-	IMG((type), 0x302, ":/marine/buoy-black-red.png", 6, -6); \
-	IMG((type), 0x402, ":/marine/buoy-black-green.png", 6, -6); \
-	IMG((type), 0x602, ":/marine/buoy-black-yellow.png", 6, -6); \
-	IMG((type), 0x902, ":/marine/buoy-black-yellow.png", 6, -6); \
-	IMG((type), 0xb02, ":/marine/buoy-black-yellow.png", 6, -6); \
-	IMG((type), 0x103, ":/marine/buoy-red-white.png", 6, -6); \
-	IMG((type), 0x203, ":/marine/buoy-red-black.png", 6, -6); \
-	IMG((type), 0x403, ":/marine/buoy-red-green.png", 6, -6); \
-	IMG((type), 0x104, ":/marine/buoy-green-white.png", 6, -6); \
-	IMG((type), 0x204, ":/marine/buoy-green-black.png", 6, -6); \
-	IMG((type), 0x304, ":/marine/buoy-green-red.png", 6, -6); \
-	IMG((type), 0x106, ":/marine/buoy-yellow-white.png", 6, -6); \
-	IMG((type), 0x109, ":/marine/buoy-yellow-white.png", 6, -6); \
-	IMG((type), 0x10b, ":/marine/buoy-yellow-white.png", 6, -6); \
-	IMG((type), 0x206, ":/marine/buoy-yellow-black.png", 6, -6); \
-	IMG((type), 0x209, ":/marine/buoy-yellow-black.png", 6, -6); \
-	IMG((type), 0x20b, ":/marine/buoy-yellow-black.png", 6, -6);
-
-#define BEACON(type) \
-	IMG((type), 0, ":/marine/beacon.png", 0, -8); \
-	IMG((type), 1, ":/marine/beacon-white.png", 0, -8); \
-	IMG((type), 2, ":/marine/beacon.png", 0, -8); \
-	IMG((type), 3, ":/marine/beacon-red.png", 0, -8); \
-	IMG((type), 4, ":/marine/beacon-green.png", 0, -8); \
-	IMG((type), 5, ":/marine/beacon.png", 0, -8); \
-	IMG((type), 6, ":/marine/beacon-yellow.png", 0, -8); \
-	IMG((type), 7, ":/marine/beacon.png", 0, -8); \
-	IMG((type), 8, ":/marine/beacon.png", 0, -8); \
-	IMG((type), 9, ":/marine/beacon-yellow.png", 0, -8); \
-	IMG((type), 10, ":/marine/beacon.png", 0, -8); \
-	IMG((type), 11, ":/marine/beacon-yellow.png", 0, -8); \
-	IMG((type), 12, ":/marine/beacon.png", 0, -8); \
-	IMG((type), 13, ":/marine/beacon.png", 0, -8); \
-	IMG((type), 0x201, ":/marine/beacon-white-black.png", 0, -8); \
-	IMG((type), 0x301, ":/marine/beacon-white-red.png", 0, -8); \
-	IMG((type), 0x401, ":/marine/beacon-white-green.png", 0, -8); \
-	IMG((type), 0x601, ":/marine/beacon-white-yellow.png", 0, -8); \
-	IMG((type), 0x901, ":/marine/beacon-white-yellow.png", 0, -8); \
-	IMG((type), 0xb01, ":/marine/beacon-white-yellow.png", 0, -8); \
-	IMG((type), 0x102, ":/marine/beacon-black-white.png", 0, -8); \
-	IMG((type), 0x302, ":/marine/beacon-black-red.png", 0, -8); \
-	IMG((type), 0x402, ":/marine/beacon-black-green.png", 0, -8); \
-	IMG((type), 0x602, ":/marine/beacon-black-yellow.png", 0, -8); \
-	IMG((type), 0x902, ":/marine/beacon-black-yellow.png", 0, -8); \
-	IMG((type), 0xb02, ":/marine/beacon-black-yellow.png", 0, -8); \
-	IMG((type), 0x103, ":/marine/beacon-red-white.png", 0, -8); \
-	IMG((type), 0x203, ":/marine/beacon-red-black.png", 0, -8); \
-	IMG((type), 0x403, ":/marine/beacon-red-green.png", 0, -8); \
-	IMG((type), 0x104, ":/marine/beacon-green-white.png", 0, -8); \
-	IMG((type), 0x204, ":/marine/beacon-green-black.png", 0, -8); \
-	IMG((type), 0x304, ":/marine/beacon-green-red.png", 0, -8); \
-	IMG((type), 0x106, ":/marine/beacon-yellow-white.png", 0, -8); \
-	IMG((type), 0x109, ":/marine/beacon-yellow-white.png", 0, -8); \
-	IMG((type), 0x10b, ":/marine/beacon-yellow-white.png", 0, -8); \
-	IMG((type), 0x206, ":/marine/beacon-yellow-black.png", 0, -8); \
-	IMG((type), 0x209, ":/marine/beacon-yellow-black.png", 0, -8); \
-	IMG((type), 0x20b, ":/marine/beacon-yellow-black.png", 0, -8);
+#define COLORSET(type, name, dx, dy) \
+	PNT(type, 0, ":/marine/" name ".png", dx, dy); \
+	PNT(type, 1, ":/marine/" name "-white.png", dx, dy); \
+	PNT(type, 2, ":/marine/" name ".png", dx, dy); \
+	PNT(type, 3, ":/marine/" name "-red.png", dx, dy); \
+	PNT(type, 4, ":/marine/" name "-green.png", dx, dy); \
+	PNT(type, 5, ":/marine/" name ".png", dx, dy); \
+	PNT(type, 6, ":/marine/" name "-yellow.png", dx, dy); \
+	PNT(type, 7, ":/marine/" name ".png", dx, dy); \
+	PNT(type, 8, ":/marine/" name ".png", dx, dy); \
+	PNT(type, 9, ":/marine/" name "-yellow.png", dx, dy); \
+	PNT(type, 10, ":/marine/" name ".png", dx, dy); \
+	PNT(type, 11, ":/marine/" name "-yellow.png", dx, dy); \
+	PNT(type, 12, ":/marine/" name ".png", dx, dy); \
+	PNT(type, 13, ":/marine/" name ".png", dx, dy); \
+	PNT(type, 0x201, ":/marine/" name "-white-black.png", dx, dy); \
+	PNT(type, 0x301, ":/marine/" name "-white-red.png", dx, dy); \
+	PNT(type, 0x401, ":/marine/" name "-white-green.png", dx, dy); \
+	PNT(type, 0x601, ":/marine/" name "-white-yellow.png", dx, dy); \
+	PNT(type, 0x901, ":/marine/" name "-white-yellow.png", dx, dy); \
+	PNT(type, 0xb01, ":/marine/" name "-white-yellow.png", dx, dy); \
+	PNT(type, 0x102, ":/marine/" name "-black-white.png", dx, dy); \
+	PNT(type, 0x302, ":/marine/" name "-black-red.png", dx, dy); \
+	PNT(type, 0x402, ":/marine/" name "-black-green.png", dx, dy); \
+	PNT(type, 0x602, ":/marine/" name "-black-yellow.png", dx, dy); \
+	PNT(type, 0x902, ":/marine/" name "-black-yellow.png", dx, dy); \
+	PNT(type, 0xb02, ":/marine/" name "-black-yellow.png", dx, dy); \
+	PNT(type, 0x103, ":/marine/" name "-red-white.png", dx, dy); \
+	PNT(type, 0x203, ":/marine/" name "-red-black.png", dx, dy); \
+	PNT(type, 0x403, ":/marine/" name "-red-green.png", dx, dy); \
+	PNT(type, 0x104, ":/marine/" name "-green-white.png", dx, dy); \
+	PNT(type, 0x204, ":/marine/" name "-green-black.png", dx, dy); \
+	PNT(type, 0x304, ":/marine/" name "-green-red.png", dx, dy); \
+	PNT(type, 0x106, ":/marine/" name "-yellow-white.png", dx, dy); \
+	PNT(type, 0x109, ":/marine/" name "-yellow-white.png", dx, dy); \
+	PNT(type, 0x10b, ":/marine/" name "-yellow-white.png", dx, dy); \
+	PNT(type, 0x206, ":/marine/" name "-yellow-black.png", dx, dy); \
+	PNT(type, 0x209, ":/marine/" name "-yellow-black.png", dx, dy); \
+	PNT(type, 0x20b, ":/marine/" name "-yellow-black.png", dx, dy);
 
 static QImage railroad(qreal ratio)
 {
@@ -351,20 +311,20 @@ void Style::lineStyle(qreal ratio)
 
 void Style::pointStyle(qreal ratio)
 {
-	BUOY(BOYCAR);
-	BUOY(BOYINB);
-	BUOY(BOYISD);
-	BUOY(BOYLAT);
-	BUOY(I_BOYLAT);
-	BUOY(BOYSAW);
-	BUOY(BOYSPP);
+	COLORSET(BOYCAR, "buoy", 6, -6);
+	COLORSET(BOYINB, "buoy", 6, -6);
+	COLORSET(BOYISD, "buoy", 6, -6);
+	COLORSET(BOYLAT, "buoy", 6, -6);
+	COLORSET(I_BOYLAT, "buoy", 6, -6);
+	COLORSET(BOYSAW, "buoy", 6, -6);
+	COLORSET(BOYSPP, "buoy", 6, -6);
 
-	BEACON(BCNCAR);
-	BEACON(BCNISD);
-	BEACON(BCNLAT);
-	BEACON(I_BCNLAT);
-	BEACON(BCNSAW);
-	BEACON(BCNSPP);
+	COLORSET(BCNCAR, "beacon", 0, -8);
+	COLORSET(BCNISD, "beacon", 0, -8);
+	COLORSET(BCNLAT, "beacon", 0, -8);
+	COLORSET(I_BCNLAT, "beacon", 0, -8);
+	COLORSET(BCNSAW, "beacon", 0, -8);
+	COLORSET(BCNSPP, "beacon", 0, -8);
 
 	_points[SUBTYPE(BUAARE, 1)].setTextFontSize(Large);
 	_points[SUBTYPE(BUAARE, 5)].setTextFontSize(Large);
