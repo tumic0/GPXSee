@@ -331,6 +331,16 @@ static uint restrictionCategory(uint type, const MapData::Attributes &attr)
 		return catrea;
 }
 
+static uint color(const QList<QByteArray> &list)
+{
+	uint c = 0;
+
+	for (int i = 0; i < list.size() && i < 2; i++)
+		c |= list.at(i).toUInt() << (i * 8);
+
+	return c;
+}
+
 MapData::Point::Point(uint type, const Coordinates &c, const QString &label)
   : _type(SUBTYPE(type, 0)), _pos(c), _label(label), _polygon(false)
 {
@@ -384,12 +394,22 @@ MapData::Point::Point(uint type, const Coordinates &c, const Attributes &attr,
 		subtype = CATMFA;
 	else if (type == I_BUNSTA)
 		subtype = I_CATBUN;
+	else if (type == BOYCAR || type == BOYINB || type == BOYISD
+	  || type == BOYLAT || type == I_BOYLAT || type == BOYSAW || type == BOYSPP
+	  || type == BCNCAR || type == BCNISD || type == BCNLAT || type == I_BCNLAT
+	  || type == BCNSAW || type == BCNSPP)
+		subtype = COLOUR;
 
 	QList<QByteArray> list(_attr.value(subtype).split(','));
-	std::sort(list.begin(), list.end());
-	_type = (type == RESARE || type == I_RESARE)
-	  ? SUBTYPE(type, restrictionCategory(type, _attr))
-	  : SUBTYPE(type, list.first().toUInt());
+	if (type == RESARE || type == I_RESARE)
+		_type = SUBTYPE(type, restrictionCategory(type, _attr));
+	else if (subtype == COLOUR)
+		_type = SUBTYPE(type, color(list));
+	else {
+		std::sort(list.begin(), list.end());
+		_type = SUBTYPE(type, list.first().toUInt());
+	}
+
 	_id = ((quint64)order(_type))<<32 | (uint)qHash(c);
 	_label = QString::fromLatin1(_attr.value(OBJNAM));
 

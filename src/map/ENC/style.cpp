@@ -6,6 +6,77 @@
 using namespace ENC;
 using namespace Util;
 
+#define IMG(type, subtype, img, dx, dy) \
+  _points[SUBTYPE((type), (subtype))] = Point(QImage(img), Small, QPoint(dx, dy));
+
+#define BUOY(type) \
+	IMG((type), 0, ":/marine/buoy.png", 6, -6); \
+	IMG((type), 1, ":/marine/buoy-white.png", 6, -6); \
+	IMG((type), 2, ":/marine/buoy.png", 6, -6); \
+	IMG((type), 3, ":/marine/buoy-red.png", 6, -6); \
+	IMG((type), 4, ":/marine/buoy-green.png", 6, -6); \
+	IMG((type), 5, ":/marine/buoy.png", 6, -6); \
+	IMG((type), 6, ":/marine/buoy-yellow.png", 6, -6); \
+	IMG((type), 7, ":/marine/buoy.png", 6, -6); \
+	IMG((type), 8, ":/marine/buoy.png", 6, -6); \
+	IMG((type), 9, ":/marine/buoy.png", 6, -6); \
+	IMG((type), 10, ":/marine/buoy.png", 6, -6); \
+	IMG((type), 11, ":/marine/buoy-yellow.png", 6, -6); \
+	IMG((type), 12, ":/marine/buoy.png", 6, -6); \
+	IMG((type), 13, ":/marine/buoy.png", 6, -6); \
+	IMG((type), 0x201, ":/marine/buoy-white-black.png", 6, -6); \
+	IMG((type), 0x301, ":/marine/buoy-white-red.png", 6, -6); \
+	IMG((type), 0x401, ":/marine/buoy-white-green.png", 6, -6); \
+	IMG((type), 0x601, ":/marine/buoy-white-yellow.png", 6, -6); \
+	IMG((type), 0xb01, ":/marine/buoy-white-yellow.png", 6, -6); \
+	IMG((type), 0x102, ":/marine/buoy-black-white.png", 6, -6); \
+	IMG((type), 0x302, ":/marine/buoy-black-red.png", 6, -6); \
+	IMG((type), 0x402, ":/marine/buoy-black-green.png", 6, -6); \
+	IMG((type), 0x602, ":/marine/buoy-black-yellow.png", 6, -6); \
+	IMG((type), 0xb02, ":/marine/buoy-black-yellow.png", 6, -6); \
+	IMG((type), 0x103, ":/marine/buoy-red-white.png", 6, -6); \
+	IMG((type), 0x203, ":/marine/buoy-red-black.png", 6, -6); \
+	IMG((type), 0x403, ":/marine/buoy-red-green.png", 6, -6); \
+	IMG((type), 0x104, ":/marine/buoy-green-white.png", 6, -6); \
+	IMG((type), 0x204, ":/marine/buoy-green-black.png", 6, -6); \
+	IMG((type), 0x304, ":/marine/buoy-green-red.png", 6, -6); \
+	IMG((type), 0x106, ":/marine/buoy-yellow-white.png", 6, -6); \
+	IMG((type), 0x206, ":/marine/buoy-yellow-black.png", 6, -6);
+
+#define BEACON(type) \
+	IMG((type), 0, ":/marine/beacon.png", 0, -8); \
+	IMG((type), 1, ":/marine/beacon-white.png", 0, -8); \
+	IMG((type), 2, ":/marine/beacon.png", 0, -8); \
+	IMG((type), 3, ":/marine/beacon-red.png", 0, -8); \
+	IMG((type), 4, ":/marine/beacon-green.png", 0, -8); \
+	IMG((type), 5, ":/marine/beacon.png", 0, -8); \
+	IMG((type), 6, ":/marine/beacon-yellow.png", 0, -8); \
+	IMG((type), 7, ":/marine/beacon.png", 0, -8); \
+	IMG((type), 8, ":/marine/beacon.png", 0, -8); \
+	IMG((type), 9, ":/marine/beacon.png", 0, -8); \
+	IMG((type), 10, ":/marine/beacon.png", 0, -8); \
+	IMG((type), 11, ":/marine/beacon-yellow.png", 0, -8); \
+	IMG((type), 12, ":/marine/beacon.png", 0, -8); \
+	IMG((type), 13, ":/marine/beacon.png", 0, -8); \
+	IMG((type), 0x201, ":/marine/beacon-white-black.png", 0, -8); \
+	IMG((type), 0x301, ":/marine/beacon-white-red.png", 0, -8); \
+	IMG((type), 0x401, ":/marine/beacon-white-green.png", 0, -8); \
+	IMG((type), 0x601, ":/marine/beacon-white-yellow.png", 0, -8); \
+	IMG((type), 0xb01, ":/marine/beacon-white-yellow.png", 0, -8); \
+	IMG((type), 0x102, ":/marine/beacon-black-white.png", 0, -8); \
+	IMG((type), 0x302, ":/marine/beacon-black-red.png", 0, -8); \
+	IMG((type), 0x402, ":/marine/beacon-black-green.png", 0, -8); \
+	IMG((type), 0x602, ":/marine/beacon-black-yellow.png", 0, -8); \
+	IMG((type), 0xb02, ":/marine/beacon-black-yellow.png", 0, -8); \
+	IMG((type), 0x103, ":/marine/beacon-red-white.png", 0, -8); \
+	IMG((type), 0x203, ":/marine/beacon-red-black.png", 0, -8); \
+	IMG((type), 0x403, ":/marine/beacon-red-green.png", 0, -8); \
+	IMG((type), 0x104, ":/marine/beacon-green-white.png", 0, -8); \
+	IMG((type), 0x204, ":/marine/beacon-green-black.png", 0, -8); \
+	IMG((type), 0x304, ":/marine/beacon-green-red.png", 0, -8); \
+	IMG((type), 0x106, ":/marine/beacon-yellow-white.png", 0, -8); \
+	IMG((type), 0x206, ":/marine/beacon-yellow-black.png", 0, -8);
+
 static QImage railroad(qreal ratio)
 {
 	QImage img(16 * ratio, 4 * ratio, QImage::Format_ARGB32_Premultiplied);
@@ -268,6 +339,21 @@ void Style::lineStyle(qreal ratio)
 
 void Style::pointStyle(qreal ratio)
 {
+	BUOY(BOYCAR);
+	BUOY(BOYINB);
+	BUOY(BOYISD);
+	BUOY(BOYLAT);
+	BUOY(I_BOYLAT);
+	BUOY(BOYSAW);
+	BUOY(BOYSPP);
+
+	BEACON(BCNCAR);
+	BEACON(BCNISD);
+	BEACON(BCNLAT);
+	BEACON(I_BCNLAT);
+	BEACON(BCNSAW);
+	BEACON(BCNSPP);
+
 	_points[SUBTYPE(BUAARE, 1)].setTextFontSize(Large);
 	_points[SUBTYPE(BUAARE, 5)].setTextFontSize(Large);
 	_points[SUBTYPE(BUAARE, 4)].setTextFontSize(Large);
@@ -275,32 +361,6 @@ void Style::pointStyle(qreal ratio)
 	_points[SUBTYPE(BUAARE, 6)].setTextFontSize(Small);
 	_points[TYPE(SOUNDG)].setTextFontSize(Small);
 	_points[TYPE(SOUNDG)].setHaloColor(QColor());
-	_points[TYPE(BOYCAR)] = Point(QImage(":/marine/buoy.png"), Small,
-	  QPoint(6, -6));
-	_points[TYPE(BOYINB)] = Point(QImage(":/marine/buoy.png"), Small,
-	  QPoint(6, -6));
-	_points[TYPE(BOYISD)] = Point(QImage(":/marine/buoy.png"), Small,
-	  QPoint(6, -6));
-	_points[TYPE(BOYLAT)] = Point(QImage(":/marine/buoy.png"), Small,
-	  QPoint(6, -6));
-	_points[TYPE(I_BOYLAT)] = Point(QImage(":/marine/buoy.png"), Small,
-	  QPoint(6, -6));
-	_points[TYPE(BOYSAW)] = Point(QImage(":/marine/buoy.png"), Small,
-	  QPoint(6, -6));
-	_points[TYPE(BOYSPP)] = Point(QImage(":/marine/buoy.png"), Small,
-	  QPoint(6, -6));
-	_points[TYPE(BCNCAR)] = Point(QImage(":/marine/beacon.png"), Small,
-	  QPoint(0, -8));
-	_points[TYPE(BCNISD)] = Point(QImage(":/marine/beacon.png"), Small,
-	  QPoint(0, -8));
-	_points[TYPE(BCNLAT)] = Point(QImage(":/marine/beacon.png"), Small,
-	  QPoint(0, -8));
-	_points[TYPE(I_BCNLAT)] = Point(QImage(":/marine/beacon.png"), Small,
-	  QPoint(0, -8));
-	_points[TYPE(BCNSAW)] = Point(QImage(":/marine/beacon.png"), Small,
-	  QPoint(0, -8));
-	_points[TYPE(BCNSPP)] = Point(QImage(":/marine/beacon.png"), Small,
-	  QPoint(0, -8));
 	_points[SUBTYPE(LNDMRK, 3)] = Point(QImage(":/marine/chimney.png"),
 	  Small, QPoint(0, -11));
 	_points[SUBTYPE(LNDMRK, 5)] = Point(QImage(":/marine/flagstaff.png"),
