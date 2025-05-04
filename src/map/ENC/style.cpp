@@ -19,7 +19,7 @@ using namespace Util;
 	IMG((type), 6, ":/marine/buoy-yellow.png", 6, -6); \
 	IMG((type), 7, ":/marine/buoy.png", 6, -6); \
 	IMG((type), 8, ":/marine/buoy.png", 6, -6); \
-	IMG((type), 9, ":/marine/buoy.png", 6, -6); \
+	IMG((type), 9, ":/marine/buoy-yellow.png", 6, -6); \
 	IMG((type), 10, ":/marine/buoy.png", 6, -6); \
 	IMG((type), 11, ":/marine/buoy-yellow.png", 6, -6); \
 	IMG((type), 12, ":/marine/buoy.png", 6, -6); \
@@ -28,11 +28,13 @@ using namespace Util;
 	IMG((type), 0x301, ":/marine/buoy-white-red.png", 6, -6); \
 	IMG((type), 0x401, ":/marine/buoy-white-green.png", 6, -6); \
 	IMG((type), 0x601, ":/marine/buoy-white-yellow.png", 6, -6); \
+	IMG((type), 0x901, ":/marine/buoy-white-yellow.png", 6, -6); \
 	IMG((type), 0xb01, ":/marine/buoy-white-yellow.png", 6, -6); \
 	IMG((type), 0x102, ":/marine/buoy-black-white.png", 6, -6); \
 	IMG((type), 0x302, ":/marine/buoy-black-red.png", 6, -6); \
 	IMG((type), 0x402, ":/marine/buoy-black-green.png", 6, -6); \
 	IMG((type), 0x602, ":/marine/buoy-black-yellow.png", 6, -6); \
+	IMG((type), 0x902, ":/marine/buoy-black-yellow.png", 6, -6); \
 	IMG((type), 0xb02, ":/marine/buoy-black-yellow.png", 6, -6); \
 	IMG((type), 0x103, ":/marine/buoy-red-white.png", 6, -6); \
 	IMG((type), 0x203, ":/marine/buoy-red-black.png", 6, -6); \
@@ -41,7 +43,11 @@ using namespace Util;
 	IMG((type), 0x204, ":/marine/buoy-green-black.png", 6, -6); \
 	IMG((type), 0x304, ":/marine/buoy-green-red.png", 6, -6); \
 	IMG((type), 0x106, ":/marine/buoy-yellow-white.png", 6, -6); \
-	IMG((type), 0x206, ":/marine/buoy-yellow-black.png", 6, -6);
+	IMG((type), 0x109, ":/marine/buoy-yellow-white.png", 6, -6); \
+	IMG((type), 0x10b, ":/marine/buoy-yellow-white.png", 6, -6); \
+	IMG((type), 0x206, ":/marine/buoy-yellow-black.png", 6, -6); \
+	IMG((type), 0x209, ":/marine/buoy-yellow-black.png", 6, -6); \
+	IMG((type), 0x20b, ":/marine/buoy-yellow-black.png", 6, -6);
 
 #define BEACON(type) \
 	IMG((type), 0, ":/marine/beacon.png", 0, -8); \
@@ -53,7 +59,7 @@ using namespace Util;
 	IMG((type), 6, ":/marine/beacon-yellow.png", 0, -8); \
 	IMG((type), 7, ":/marine/beacon.png", 0, -8); \
 	IMG((type), 8, ":/marine/beacon.png", 0, -8); \
-	IMG((type), 9, ":/marine/beacon.png", 0, -8); \
+	IMG((type), 9, ":/marine/beacon-yellow.png", 0, -8); \
 	IMG((type), 10, ":/marine/beacon.png", 0, -8); \
 	IMG((type), 11, ":/marine/beacon-yellow.png", 0, -8); \
 	IMG((type), 12, ":/marine/beacon.png", 0, -8); \
@@ -62,11 +68,13 @@ using namespace Util;
 	IMG((type), 0x301, ":/marine/beacon-white-red.png", 0, -8); \
 	IMG((type), 0x401, ":/marine/beacon-white-green.png", 0, -8); \
 	IMG((type), 0x601, ":/marine/beacon-white-yellow.png", 0, -8); \
+	IMG((type), 0x901, ":/marine/beacon-white-yellow.png", 0, -8); \
 	IMG((type), 0xb01, ":/marine/beacon-white-yellow.png", 0, -8); \
 	IMG((type), 0x102, ":/marine/beacon-black-white.png", 0, -8); \
 	IMG((type), 0x302, ":/marine/beacon-black-red.png", 0, -8); \
 	IMG((type), 0x402, ":/marine/beacon-black-green.png", 0, -8); \
 	IMG((type), 0x602, ":/marine/beacon-black-yellow.png", 0, -8); \
+	IMG((type), 0x902, ":/marine/beacon-black-yellow.png", 0, -8); \
 	IMG((type), 0xb02, ":/marine/beacon-black-yellow.png", 0, -8); \
 	IMG((type), 0x103, ":/marine/beacon-red-white.png", 0, -8); \
 	IMG((type), 0x203, ":/marine/beacon-red-black.png", 0, -8); \
@@ -75,7 +83,11 @@ using namespace Util;
 	IMG((type), 0x204, ":/marine/beacon-green-black.png", 0, -8); \
 	IMG((type), 0x304, ":/marine/beacon-green-red.png", 0, -8); \
 	IMG((type), 0x106, ":/marine/beacon-yellow-white.png", 0, -8); \
-	IMG((type), 0x206, ":/marine/beacon-yellow-black.png", 0, -8);
+	IMG((type), 0x109, ":/marine/beacon-yellow-white.png", 0, -8); \
+	IMG((type), 0x10b, ":/marine/beacon-yellow-white.png", 0, -8); \
+	IMG((type), 0x206, ":/marine/beacon-yellow-black.png", 0, -8); \
+	IMG((type), 0x209, ":/marine/beacon-yellow-black.png", 0, -8); \
+	IMG((type), 0x20b, ":/marine/beacon-yellow-black.png", 0, -8);
 
 static QImage railroad(qreal ratio)
 {
