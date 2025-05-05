@@ -522,7 +522,8 @@ void RasterTile::processPoints(QList<MapData::Point> &points,
 	for (int i = 0; i < points.size(); i++) {
 		const MapData::Point &point = points.at(i);
 		const Style *style = _data->style();
-		const Style::Point &ps = style->point(point.type);
+		const Style::Point &ps = style->point(Style::hasColorset(point.type)
+		  ? point.type | (point.flags & 0xFF000000) : point.type);
 		bool poi = Style::isPOI(point.type);
 		bool sl = sectorLight(point.lights);
 

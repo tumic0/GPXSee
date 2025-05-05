@@ -7,6 +7,37 @@
 using namespace IMG;
 using namespace Util;
 
+#define PNT(type, color, img, dx, dy) \
+  _points[(type) | (color)<<24] = Point(QImage(img), QPoint(dx, dy));
+
+#define COLORSET(type, name, dx, dy) \
+	PNT(type, 0, ":/marine/" name ".png", dx, dy); \
+	PNT(type, 1, ":/marine/" name "-red.png", dx, dy); \
+	PNT(type, 2, ":/marine/" name "-green.png", dx, dy); \
+	PNT(type, 3, ":/marine/" name "-yellow.png", dx, dy); \
+	PNT(type, 4, ":/marine/" name "-white.png", dx, dy); \
+	PNT(type, 5, ":/marine/" name ".png", dx, dy); \
+	PNT(type, 6, ":/marine/" name "-black-yellow.png", dx, dy); \
+	PNT(type, 7, ":/marine/" name "-white-red.png", dx, dy); \
+	PNT(type, 8, ":/marine/" name "-black-red.png", dx, dy); \
+	PNT(type, 9, ":/marine/" name "-white-green.png", dx, dy); \
+	PNT(type, 10, ":/marine/" name "-red-yellow.png", dx, dy); \
+	PNT(type, 11, ":/marine/" name "-red-green.png", dx, dy); \
+	PNT(type, 12, ":/marine/" name "yellow.png", dx, dy); \
+	PNT(type, 13, ":/marine/" name "-black-yellow-black.png", dx, dy); \
+	PNT(type, 14, ":/marine/" name "-yellow-black.png", dx, dy); \
+	PNT(type, 15, ":/marine/" name "-yellow-black-yellow.png", dx, dy); \
+	PNT(type, 16, ":/marine/" name "-red-white.png", dx, dy); \
+	PNT(type, 17, ":/marine/" name "-green-red-green.png", dx, dy); \
+	PNT(type, 18, ":/marine/" name "-red-green-red.png", dx, dy); \
+	PNT(type, 19, ":/marine/" name "-black-red-black.png", dx, dy); \
+	PNT(type, 20, ":/marine/" name "-yellow-red-yellow.png", dx, dy); \
+	PNT(type, 21, ":/marine/" name "-green-red.png", dx, dy); \
+	PNT(type, 22, ":/marine/" name "-black-white.png", dx, dy); \
+	PNT(type, 23, ":/marine/" name "-white-yellow.png", dx, dy); \
+	PNT(type, 24, ":/marine/" name "-yellow-white.png", dx, dy); \
+	PNT(type, 25, ":/marine/" name "-green-white.png", dx, dy);
+
 static QFont pixelSizeFont(int pixelSize)
 {
 	QFont f;
@@ -731,29 +762,32 @@ void Style::defaultPointStyle(qreal ratio)
 	_points[0x10108] = Point(QImage(":/marine/light-major.png"));
 	_points[0x10109] = Point(QImage(":/marine/light-major.png"));
 	_points[0x1010a] = Point(QImage(":/marine/light-major.png"));
-	_points[0x10200] = Point(QImage(":/marine/buoy.png"), QPoint(6, -6));
-	_points[0x10201] = Point(QImage(":/marine/buoy.png"), QPoint(6, -6));
-	_points[0x10202] = Point(QImage(":/marine/buoy.png"), QPoint(6, -6));
-	_points[0x10203] = Point(QImage(":/marine/buoy.png"), QPoint(6, -6));
-	_points[0x10204] = Point(QImage(":/marine/buoy.png"), QPoint(6, -6));
-	_points[0x10205] = Point(QImage(":/marine/buoy.png"), QPoint(6, -6));
-	_points[0x10206] = Point(QImage(":/marine/beacon.png"), QPoint(0, -8));
+
+	COLORSET(0x10200, "buoy", 6, -6);
+	COLORSET(0x10201, "buoy", 6, -6);
+	COLORSET(0x10202, "buoy", 6, -6);
+	COLORSET(0x10203, "buoy", 6, -6);
+	COLORSET(0x10204, "buoy", 6, -6);
+	COLORSET(0x10205, "buoy", 6, -6);
+	COLORSET(0x10206, "beacon", 0, -8);
 	_points[0x10207] = Point(QImage(":/marine/spar-buoy.png"), QPoint(2, -9));
-	_points[0x10208] = Point(QImage(":/marine/buoy.png"), QPoint(2, -9));
-	_points[0x10209] = Point(QImage(":/marine/buoy.png"), QPoint(6, -6));
-	_points[0x1020a] = Point(QImage(":/marine/buoy.png"), QPoint(6, -6));
-	_points[0x1020b] = Point(QImage(":/marine/buoy.png"), QPoint(6, -6));
-	_points[0x1020c] = Point(QImage(":/marine/buoy.png"), QPoint(6, -6));
+	COLORSET(0x10208, "buoy", 6, -6);
+	COLORSET(0x10209, "buoy", 6, -6);
+	COLORSET(0x1020a, "buoy", 6, -6);
+	COLORSET(0x1020b, "buoy", 6, -6);
+	COLORSET(0x1020c, "buoy", 6, -6);
 	_points[0x1020d] = Point(QImage(":/marine/platform.png"));
-	_points[0x1020e] = Point(QImage(":/marine/beacon.png"), QPoint(0, -8));
-	_points[0x1020f] = Point(QImage(":/marine/beacon.png"), QPoint(0, -8));
-	_points[0x10210] = Point(QImage(":/marine/beacon.png"), QPoint(0, -8));
-	_points[0x10211] = Point(QImage(":/marine/beacon.png"), QPoint(0, -8));
-	_points[0x10212] = Point(QImage(":/marine/beacon.png"), QPoint(0, -8));
-	_points[0x10213] = Point(QImage(":/marine/beacon.png"), QPoint(0, -8));
-	_points[0x10214] = Point(QImage(":/marine/beacon.png"), QPoint(0, -8));
-	_points[0x10215] = Point(QImage(":/marine/beacon.png"), QPoint(0, -8));
+	COLORSET(0x1020e, "beacon", 0, -8);
+	COLORSET(0x1020f, "beacon", 0, -8);
+	COLORSET(0x10210, "beacon", 0, -8);
+	COLORSET(0x10210, "beacon", 0, -8);
+	COLORSET(0x10211, "beacon", 0, -8);
+	COLORSET(0x10212, "beacon", 0, -8);
+	COLORSET(0x10213, "beacon", 0, -8);
+	COLORSET(0x10214, "beacon", 0, -8);
+	COLORSET(0x10215, "beacon", 0, -8);
 	_points[0x10216] = Point(QImage(":/marine/mooring-buoy.png"), QPoint(0, -5));
+
 	_points[0x10304] = Point(QImage(":/marine/building.png"));
 	_points[0x10305] = Point(QImage(":/marine/chimney.png"), QPoint(0, -11));
 	_points[0x10306] = Point(QImage(":/marine/church.png"));
@@ -761,6 +795,7 @@ void Style::defaultPointStyle(qreal ratio)
 	_points[0x10308] = Point(QImage(":/marine/tower.png"), QPoint(0, -11));
 	_points[0x1030a] = Point(QImage(":/marine/triangulation-point.png"));
 	_points[0x1030b] = Point(QImage(":/marine/radio.png"));
+
 	_points[0x10400] = Point(QImage(":/marine/obstruction.png"));
 	_points[0x10401] = Point(QImage(":/marine/obstruction.png"));
 	_points[0x10402] = Point(QImage(":/marine/wreck.png"));
@@ -768,6 +803,7 @@ void Style::defaultPointStyle(qreal ratio)
 	_points[0x10408] = Point(QImage(":/marine/obstruction-covers.png"));
 	_points[0x1040a] = Point(QImage(":/marine/rock-dangerous.png"));
 	_points[0x1040c] = Point(QImage(":/marine/rock-exposed.png"));
+
 	_points[0x10701] = Point(QImage(":/marine/anchorage.png"));
 	_points[0x10702] = Point(QImage(":/marine/boarding-place.png"));
 	_points[0x10703] = Point(QImage(":/marine/yacht-harbor.png"));

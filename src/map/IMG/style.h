@@ -118,16 +118,16 @@ public:
 
 	static bool isPOI(quint32 type)
 	  {return !((type >= TYPE(0x01) && type <= TYPE(0x1f))
-	  || (type >= 0x11400 && type < 0x11500));}
+		|| (type >= 0x11400 && type < 0x11500));}
 	static bool isContourLine(quint32 type)
 	  {return ((type >= TYPE(0x20) && type <= TYPE(0x25))
-	  || (type & 0xffff00) == TYPE(0x109));}
+		|| (type & 0xffff00) == TYPE(0x109));}
 	static bool isWaterArea(quint32 type)
 	  {return ((type >= TYPE(0x3c) && type <= TYPE(0x44))
-	  || (type & 0xffff00) == TYPE(0x10b));}
+		|| (type & 0xffff00) == TYPE(0x10b));}
 	static bool isWaterLine(quint32 type)
 	  {return (type == TYPE(0x26) || type == TYPE(0x18)
-	  || type == TYPE(0x1f));}
+		|| type == TYPE(0x1f));}
 	static bool isMilitaryArea(quint32 type)
 	  {return (type == TYPE(0x04) || type == 0x10901);}
 	static bool isNatureReserve(quint32 type)
@@ -156,6 +156,9 @@ public:
 	  {return type >= 0x10100 && type < 0x10a00;}
 	static bool isMarina(quint32 type)
 	  {return type == 0x10703;}
+	static bool hasColorset(quint32 type)
+	  {return (isBuoy(type)
+		&& !(type == 0x10207 || type == 0x1020d || type == 0x10216));}
 
 	static QColor color(Light::Color c);
 
