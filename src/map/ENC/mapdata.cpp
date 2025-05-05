@@ -335,8 +335,8 @@ static uint color(const QList<QByteArray> &list)
 {
 	uint c = 0;
 
-	for (int i = 0; i < list.size() && i < 2; i++)
-		c |= list.at(i).toUInt() << (i * 8);
+	for (int i = 0; i < list.size() && i < 4; i++)
+		c |= list.at(i).toUInt() << (i * 4);
 
 	return c;
 }
