@@ -10,68 +10,48 @@ using namespace Util;
 #define COLOR3(c1, c2, c3) (((c3)<<8) | ((c2)<<4) | (c1))
 #define COLOR4(c1, c2, c3, c4) (((c4)<<12) | ((c3)<<8) | ((c2)<<4) | (c1))
 
-#define PATH(name) ":/marine/" name ".png"
-#define PATH1(name, c1) ":/marine/" name "-" c1 ".png"
-#define PATH2(name, c1, c2) ":/marine/" name "-" c1 "-" c2 ".png"
-#define PATH3(name, c1, c2, c3) ":/marine/" name "-" c1 "-" c2 "-" c3 ".png"
-#define PATH4(name, c1, c2, c3, c4) ":/marine/" name "-" c1 "-" c2 "-" c3 "-" c4 ".png"
-
 #define PNT(type, subtype, img, dx, dy) \
 	_points[SUBTYPE((type), (subtype))] = Point(QImage(img), Small, QPoint((dx), (dy)));
 
 #define COLORSET(type, name, dx, dy) \
-	PNT(type, 0, PATH(name), dx, dy); \
-	PNT(type, 1, PATH1(name, "white"), dx, dy); \
-	PNT(type, 2, PATH(name), dx, dy); \
-	PNT(type, 3, PATH1(name, "red"), dx, dy); \
-	PNT(type, 4, PATH1(name, "green"), dx, dy); \
-	PNT(type, 5, PATH(name), dx, dy); \
-	PNT(type, 6, PATH1(name, "yellow"), dx, dy); \
-	PNT(type, 7, PATH(name), dx, dy); \
-	PNT(type, 8, PATH(name), dx, dy); \
-	PNT(type, 9, PATH1(name, "yellow"), dx, dy); \
-	PNT(type, 10, PATH(name), dx, dy); \
-	PNT(type, 11, PATH1(name, "yellow"), dx, dy); \
-	PNT(type, 12, PATH(name), dx, dy); \
-	PNT(type, 13, PATH(name), dx, dy); \
-	PNT(type, COLOR2(1, 2), PATH2(name, "white", "black"), dx, dy); \
-	PNT(type, COLOR2(1, 3), PATH2(name, "white", "red"), dx, dy); \
-	PNT(type, COLOR2(1, 4), PATH2(name, "white", "green"), dx, dy); \
-	PNT(type, COLOR2(1, 6), PATH2(name, "white", "yellow"), dx, dy); \
-	PNT(type, COLOR2(1, 9), PATH2(name, "white", "yellow"), dx, dy); \
-	PNT(type, COLOR2(1, 11), PATH2(name, "white", "yellow"), dx, dy); \
-	PNT(type, COLOR2(2, 1), PATH2(name, "black", "white"), dx, dy); \
-	PNT(type, COLOR2(2, 3), PATH2(name, "black", "red"), dx, dy); \
-	PNT(type, COLOR2(2, 4), PATH2(name, "black", "green"), dx, dy); \
-	PNT(type, COLOR2(2, 6), PATH2(name, "black", "yellow"), dx, dy); \
-	PNT(type, COLOR2(2, 9), PATH2(name, "black", "yellow"), dx, dy); \
-	PNT(type, COLOR2(2, 11), PATH2(name, "black", "yellow"), dx, dy); \
-	PNT(type, COLOR2(3, 1), PATH2(name, "red", "white"), dx, dy); \
-	PNT(type, COLOR2(3, 2), PATH2(name, "red", "black"), dx, dy); \
-	PNT(type, COLOR2(3, 4), PATH2(name, "red", "green"), dx, dy); \
-	PNT(type, COLOR2(4, 1), PATH2(name, "green", "white"), dx, dy); \
-	PNT(type, COLOR2(4, 2), PATH2(name, "green", "black"), dx, dy); \
-	PNT(type, COLOR2(4, 3), PATH2(name, "green", "red"), dx, dy); \
-	PNT(type, COLOR2(6, 1), PATH2(name, "yellow", "white"), dx, dy); \
-	PNT(type, COLOR2(9, 1), PATH2(name, "yellow", "white"), dx, dy); \
-	PNT(type, COLOR2(11, 1), PATH2(name, "yellow", "white"), dx, dy); \
-	PNT(type, COLOR2(6, 2), PATH2(name, "yellow", "black"), dx, dy); \
-	PNT(type, COLOR2(9, 2), PATH2(name, "yellow", "black"), dx, dy); \
-	PNT(type, COLOR2(11, 2), PATH2(name, "yellow", "black"), dx, dy); \
-	PNT(type, COLOR3(1, 6, 1), PATH3(name, "white", "yellow", "white"), dx, dy); \
-	PNT(type, COLOR3(1, 9, 1), PATH3(name, "white", "yellow", "white"), dx, dy); \
-	PNT(type, COLOR3(1, 11, 1), PATH3(name, "white", "yellow", "white"), dx, dy); \
-	PNT(type, COLOR3(2, 3, 2), PATH3(name, "black", "red", "black"), dx, dy); \
-	PNT(type, COLOR3(2, 6, 2), PATH3(name, "black", "yellow", "black"), dx, dy); \
-	PNT(type, COLOR3(3, 4, 3), PATH3(name, "red", "green", "red"), dx, dy); \
-	PNT(type, COLOR3(4, 3, 4), PATH3(name, "green", "red", "green"), dx, dy); \
-	PNT(type, COLOR3(6, 1, 6), PATH3(name, "yellow", "white", "yellow"), dx, dy); \
-	PNT(type, COLOR3(6, 2, 6), PATH3(name, "yellow", "black", "yellow"), dx, dy); \
-	PNT(type, COLOR3(6, 3, 6), PATH3(name, "yellow", "red", "yellow"), dx, dy); \
-	PNT(type, COLOR4(3, 1, 3, 1), PATH4(name, "red", "white", "red", "white"), dx, dy); \
-	PNT(type, COLOR4(3, 4, 3, 4), PATH4(name, "red", "green", "red", "green"), dx, dy); \
-	PNT(type, COLOR4(4, 1, 4, 1), PATH4(name, "green", "white", "green", "white"), dx, dy); \
-	PNT(type, COLOR4(4, 3, 4, 3), PATH4(name, "green", "red", "green", "red"), dx, dy);
+	PNT(type, COLOR2(1, 2), ":/marine/" name "-white-black.png", dx, dy); \
+	PNT(type, COLOR2(1, 3), ":/marine/" name "-white-red.png", dx, dy); \
+	PNT(type, COLOR2(1, 4), ":/marine/" name "-white-green.png", dx, dy); \
+	PNT(type, COLOR2(1, 6), ":/marine/" name "-white-yellow.png", dx, dy); \
+	PNT(type, COLOR2(1, 9), ":/marine/" name "-white-yellow.png", dx, dy); \
+	PNT(type, COLOR2(1, 11), ":/marine/" name "-white-yellow.png", dx, dy); \
+	PNT(type, COLOR2(2, 1), ":/marine/" name "-black-white.png", dx, dy); \
+	PNT(type, COLOR2(2, 3), ":/marine/" name "-black-red.png", dx, dy); \
+	PNT(type, COLOR2(2, 4), ":/marine/" name "-black-green.png", dx, dy); \
+	PNT(type, COLOR2(2, 6), ":/marine/" name "-black-yellow.png", dx, dy); \
+	PNT(type, COLOR2(2, 9), ":/marine/" name "-black-yellow.png", dx, dy); \
+	PNT(type, COLOR2(2, 11), ":/marine/" name "-black-yellow.png", dx, dy); \
+	PNT(type, COLOR2(3, 1), ":/marine/" name "-red-white.png", dx, dy); \
+	PNT(type, COLOR2(3, 2), ":/marine/" name "-red-black.png", dx, dy); \
+	PNT(type, COLOR2(3, 4), ":/marine/" name "-red-green.png", dx, dy); \
+	PNT(type, COLOR2(4, 1), ":/marine/" name "-green-white.png", dx, dy); \
+	PNT(type, COLOR2(4, 2), ":/marine/" name "-green-black.png", dx, dy); \
+	PNT(type, COLOR2(4, 3), ":/marine/" name "-green-red.png", dx, dy); \
+	PNT(type, COLOR2(6, 1), ":/marine/" name "-yellow-white.png", dx, dy); \
+	PNT(type, COLOR2(9, 1), ":/marine/" name "-yellow-white.png", dx, dy); \
+	PNT(type, COLOR2(11, 1), ":/marine/" name "-yellow-white.png", dx, dy); \
+	PNT(type, COLOR2(6, 2), ":/marine/" name "-yellow-black.png", dx, dy); \
+	PNT(type, COLOR2(9, 2), ":/marine/" name "-yellow-black.png", dx, dy); \
+	PNT(type, COLOR2(11, 2), ":/marine/" name "-yellow-black.png", dx, dy); \
+	PNT(type, COLOR3(1, 6, 1), ":/marine/" name "-white-yellow-white.png", dx, dy); \
+	PNT(type, COLOR3(1, 9, 1), ":/marine/" name "-white-yellow-white.png", dx, dy); \
+	PNT(type, COLOR3(1, 11, 1), ":/marine/" name "-white-yellow-white.png", dx, dy); \
+	PNT(type, COLOR3(2, 3, 2), ":/marine/" name "-black-red-black.png", dx, dy); \
+	PNT(type, COLOR3(2, 6, 2), ":/marine/" name "-black-yellow-black.png", dx, dy); \
+	PNT(type, COLOR3(3, 4, 3), ":/marine/" name "-red-green-red.png", dx, dy); \
+	PNT(type, COLOR3(4, 3, 4), ":/marine/" name "-green-red-green.png", dx, dy); \
+	PNT(type, COLOR3(6, 1, 6), ":/marine/" name "-yellow-white-yellow.png", dx, dy); \
+	PNT(type, COLOR3(6, 2, 6), ":/marine/" name "-yellow-black-yellow.png", dx, dy); \
+	PNT(type, COLOR3(6, 3, 6), ":/marine/" name "-yellow-red-yellow.png", dx, dy); \
+	PNT(type, COLOR4(3, 1, 3, 1), ":/marine/" name "-red-white-red-white.png", dx, dy); \
+	PNT(type, COLOR4(3, 4, 3, 4), ":/marine/" name "-red-green-red-green.png", dx, dy); \
+	PNT(type, COLOR4(4, 1, 4, 1), ":/marine/" name "-green-white-green-white.png", dx, dy); \
+	PNT(type, COLOR4(4, 3, 4, 3), ":/marine/" name "-green-red-green-red.png", dx, dy);
 
 static QImage railroad(qreal ratio)
 {
