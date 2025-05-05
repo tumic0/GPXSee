@@ -14,6 +14,20 @@ using namespace Util;
 	_points[SUBTYPE((type), (subtype))] = Point(QImage(img), Small, QPoint((dx), (dy)));
 
 #define COLORSET(type, name, dx, dy) \
+	PNT(type, 0, ":/marine/" name ".png", dx, dy); \
+	PNT(type, 1, ":/marine/" name "-white.png", dx, dy); \
+	PNT(type, 2, ":/marine/" name ".png", dx, dy); \
+	PNT(type, 3, ":/marine/" name "-red.png", dx, dy); \
+	PNT(type, 4, ":/marine/" name "-green.png", dx, dy); \
+	PNT(type, 5, ":/marine/" name ".png", dx, dy); \
+	PNT(type, 6, ":/marine/" name "-yellow.png", dx, dy); \
+	PNT(type, 7, ":/marine/" name ".png", dx, dy); \
+	PNT(type, 8, ":/marine/" name ".png", dx, dy); \
+	PNT(type, 9, ":/marine/" name "-yellow.png", dx, dy); \
+	PNT(type, 10, ":/marine/" name ".png", dx, dy); \
+	PNT(type, 11, ":/marine/" name "-yellow.png", dx, dy); \
+	PNT(type, 12, ":/marine/" name ".png", dx, dy); \
+	PNT(type, 13, ":/marine/" name ".png", dx, dy); \
 	PNT(type, COLOR2(1, 2), ":/marine/" name "-white-black.png", dx, dy); \
 	PNT(type, COLOR2(1, 3), ":/marine/" name "-white-red.png", dx, dy); \
 	PNT(type, COLOR2(1, 4), ":/marine/" name "-white-green.png", dx, dy); \
