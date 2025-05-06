@@ -157,8 +157,7 @@ public:
 	static bool isMarina(quint32 type)
 	  {return type == 0x10703;}
 	static bool hasColorset(quint32 type)
-	  {return (isBuoy(type)
-		&& !(type == 0x10207 || type == 0x1020d || type == 0x10216));}
+	  {return (isBuoy(type) && !(type == 0x1020d || type == 0x10216));}
 
 	static QColor color(Light::Color c);
 

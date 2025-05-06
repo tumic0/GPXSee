@@ -773,7 +773,7 @@ void Style::defaultPointStyle(qreal ratio)
 	COLORSET(0x10204, "buoy", 6, -6);
 	COLORSET(0x10205, "buoy", 6, -6);
 	COLORSET(0x10206, "beacon", 0, -8);
-	_points[0x10207] = Point(QImage(":/marine/spar-buoy.png"), QPoint(2, -9));
+	COLORSET(0x10207, "spar-buoy", 2, -8);
 	COLORSET(0x10208, "buoy", 6, -6);
 	COLORSET(0x10209, "buoy", 6, -6);
 	COLORSET(0x1020a, "buoy", 6, -6);
