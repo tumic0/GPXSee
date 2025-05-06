@@ -120,6 +120,8 @@ bool RGNFile::readBuoyInfo(Handle &hdl, quint8 flags, quint32 size,
 	if (!(size >= 2 && readUInt16(hdl, val)))
 		return false;
 
+	point->flags = (val & 0x3f)<<24;
+
 	lc = (val >> 10) & 0x0f;
 	if (!lc)
 		lc = (val >> 6) & 7;
