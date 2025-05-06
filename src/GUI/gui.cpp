@@ -1075,7 +1075,6 @@ bool GUI::openFile(const QString &fileName, bool tryUnknown, int &showError)
 	if (url.scheme() == "geo") {
 		if (loadURL(url, showError)) {
 			_fileActionGroup->setEnabled(true);
-			_reloadFileAction->setEnabled(false);
 			return true;
 		} else if (showError)
 			return false;
@@ -1098,8 +1097,6 @@ bool GUI::openFile(const QString &fileName, bool tryUnknown, int &showError)
 	_browser->setCurrent(path);
 #endif // Q_OS_ANDROID
 	_fileActionGroup->setEnabled(true);
-	// Explicitly enable the reload action as it may be disabled by loadMapDir()
-	_reloadFileAction->setEnabled(true);
 	_navigationActionGroup->setEnabled(true);
 
 	updateNavigationActions();
@@ -2025,7 +2022,6 @@ void GUI::loadMapDir()
 
 	_mapDir = fi.absolutePath();
 	_fileActionGroup->setEnabled(true);
-	_reloadFileAction->setEnabled(false);
 }
 
 void GUI::clearMapCache()
@@ -2087,11 +2083,8 @@ void GUI::showDEMTiles()
 		QMessageBox::information(this, APP_NAME, tr("No local DEM tiles found."));
 	} else {
 		_mapView->loadDEMs(tiles);
-
 		_areaCount += tiles.size();
-
 		_fileActionGroup->setEnabled(true);
-		_reloadFileAction->setEnabled(false);
 	}
 }
 
