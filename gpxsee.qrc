@@ -157,6 +157,7 @@
 		<file alias="buoy-red-white-red-white.png">icons/map/marine/buoy-red-white-red-white.png</file>
 		<file alias="buoy-red-black.png">icons/map/marine/buoy-red-black.png</file>
 		<file alias="buoy-red-green.png">icons/map/marine/buoy-red-green.png</file>
+		<file alias="buoy-red-yellow.png">icons/map/marine/buoy-red-yellow.png</file>
 		<file alias="buoy-red-green-red.png">icons/map/marine/buoy-red-green-red.png</file>
 		<file alias="buoy-red-green-red-green.png">icons/map/marine/buoy-red-green-red-green.png</file>
 		<file alias="buoy-yellow.png">icons/map/marine/buoy-yellow.png</file>
@@ -167,6 +168,7 @@
 		<file alias="buoy-yellow-red-yellow.png">icons/map/marine/buoy-yellow-red-yellow.png</file>
 		<file alias="buoy-black-white.png">icons/map/marine/buoy-black-white.png</file>
 		<file alias="buoy-black-red.png">icons/map/marine/buoy-black-red.png</file>
+		<file alias="buoy-black-white-black.png">icons/map/marine/buoy-black-white-black.png</file>
 		<file alias="buoy-black-red-black.png">icons/map/marine/buoy-black-red-black.png</file>
 		<file alias="buoy-black-green.png">icons/map/marine/buoy-black-green.png</file>
 		<file alias="buoy-black-yellow.png">icons/map/marine/buoy-black-yellow.png</file>
@@ -190,6 +192,7 @@
 		<file alias="beacon-red-white-red-white.png">icons/map/marine/beacon-red-white-red-white.png</file>
 		<file alias="beacon-red-black.png">icons/map/marine/beacon-red-black.png</file>
 		<file alias="beacon-red-green.png">icons/map/marine/beacon-red-green.png</file>
+		<file alias="beacon-red-yellow.png">icons/map/marine/beacon-red-yellow.png</file>
 		<file alias="beacon-red-green-red.png">icons/map/marine/beacon-red-green-red.png</file>
 		<file alias="beacon-red-green-red-green.png">icons/map/marine/beacon-red-green-red-green.png</file>
 		<file alias="beacon-yellow.png">icons/map/marine/beacon-yellow.png</file>
@@ -199,6 +202,7 @@
 		<file alias="beacon-yellow-black-yellow.png">icons/map/marine/beacon-yellow-black-yellow.png</file>
 		<file alias="beacon-yellow-red-yellow.png">icons/map/marine/beacon-yellow-red-yellow.png</file>
 		<file alias="beacon-black-white.png">icons/map/marine/beacon-black-white.png</file>
+		<file alias="beacon-black-white-black.png">icons/map/marine/beacon-black-white-black.png</file>
 		<file alias="beacon-black-red.png">icons/map/marine/beacon-black-red.png</file>
 		<file alias="beacon-black-red-black.png">icons/map/marine/beacon-black-red-black.png</file>
 		<file alias="beacon-black-green.png">icons/map/marine/beacon-black-green.png</file>
