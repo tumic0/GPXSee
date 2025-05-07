@@ -351,6 +351,7 @@ MapData::Point::Point(uint type, const Coordinates &c, const Attributes &attr,
   uint HUNI, bool polygon) : _pos(c), _attr(attr), _polygon(polygon)
 {
 	uint subtype = 0;
+	bool ok;
 
 	if (type == HRBFAC)
 		subtype = CATHAF;
@@ -442,11 +443,14 @@ MapData::Point::Point(uint type, const Coordinates &c, const Attributes &attr,
 			_label += "\n(" + QString::fromLatin1(_attr.value(ELEVAT))
 			  + "\xE2\x80\x89m)";
 	} else if (type == BRIDGE || type == I_BRIDGE) {
-		double clr = _attr.value(VERCLR).toDouble();
-		if (clr > 0) {
+		double clr = _attr.value(VERCLR).toDouble(&ok);
+		if (ok && clr > 0)
 			_label = QString::fromUtf8("\xE2\x86\x95") + UNIT_SPACE
 			  + QString::number(clr) + UNIT_SPACE + hUnits(HUNI);
-		}
+	} else if (type == OBSTRN || type == WRECKS) {
+		double depth = _attr.value(VALSOU).toDouble(&ok);
+		if (ok && _label.isEmpty())
+			_label = QString::number(depth);
 	} else if (_type == SUBTYPE(RESARE, 8)) {
 		if (_label.isEmpty())
 			_label = "Degaussing Range";

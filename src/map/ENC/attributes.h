@@ -33,6 +33,7 @@
 #define TRAFIC 172
 #define VALDCO 174
 #define VALNMR 178
+#define VALSOU 179
 #define VERCLR 181
 #define WATLEV 187
 
