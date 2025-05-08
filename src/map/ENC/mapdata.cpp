@@ -447,7 +447,7 @@ MapData::Point::Point(uint type, const Coordinates &c, const Attributes &attr,
 		if (ok && clr > 0)
 			_label = QString::fromUtf8("\xE2\x86\x95") + UNIT_SPACE
 			  + QString::number(clr) + UNIT_SPACE + hUnits(HUNI);
-	} else if (type == OBSTRN || type == WRECKS) {
+	} else if (type == OBSTRN || type == WRECKS || type == UWTROC) {
 		double depth = _attr.value(VALSOU).toDouble(&ok);
 		if (ok && _label.isEmpty())
 			_label = QString::number(depth);
