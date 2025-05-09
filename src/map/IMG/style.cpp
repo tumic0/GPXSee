@@ -366,7 +366,7 @@ void Style::defaultPolygonStyle()
 	_drawOrder
 	  << TYPE(0x4b) << 0x10d01 << 0x10106 << 0x10104 << TYPE(0x4a) << 0x10614
 	  << 0x10101 << 0x10102 << 0x10301 << 0x10302 << 0x10303 << 0x10304
-	  << 0x10305 << 0x10306 << 0x10307 << 0x10308 << 0x10601 << 0x10105
+	  << 0x10305 << 0x10306 << 0x10307 << 0x10308 << 0x10601 << 0x1060a << 0x10105
 	  << TYPE(0x01) << 0x10800 << TYPE(0x02) << 0x10801 << TYPE(0x03) << 0x10802
 	  << TYPE(0x17) << 0x10a04 << TYPE(0x18) << 0x1090c << TYPE(0x1a) << 0x1090e
 	  << TYPE(0x28) << 0x10b01 << TYPE(0x32) << 0x10b02 << TYPE(0x3c) << 0x10b03
@@ -383,8 +383,7 @@ void Style::defaultPolygonStyle()
 	  << TYPE(0x0a) << 0x10907 << TYPE(0x0b) << 0x10908 << TYPE(0x0c) << 0x10909
 	  << TYPE(0x26) << TYPE(0x0d) << 0x1090a << TYPE(0x0e) << 0x1090b << TYPE(0x0f)
 	  << TYPE(0x10) << TYPE(0x11) << TYPE(0x12) << TYPE(0x19) << 0x1090d
-	  << TYPE(0x13) << 0x10900 << 0x10613 << 0x10407 << 0x10409 << 0x10503
-	  << 0x10504 << 0x1060a;
+	  << TYPE(0x13) << 0x10900 << 0x10407 << 0x10409 << 0x10503 << 0x10504;
 }
 
 void Style::defaultLineStyle(qreal ratio)
@@ -790,6 +789,8 @@ void Style::defaultPointStyle(qreal ratio)
 	COLORSET(0x10214, "beacon", 0, -8);
 	COLORSET(0x10215, "beacon", 0, -8);
 	_points[0x10216] = Point(QImage(":/marine/mooring-buoy.png"), QPoint(0, -5));
+	_points[0x10217] = Point(QImage(":/marine/pylon.png"));
+	_points[0x10218] = Point(QImage(":/marine/pylon.png"));
 
 	_points[0x10304] = Point(QImage(":/marine/building.png"));
 	_points[0x10305] = Point(QImage(":/marine/chimney.png"), QPoint(0, -11));
@@ -804,6 +805,7 @@ void Style::defaultPointStyle(qreal ratio)
 	_points[0x10402] = Point(QImage(":/marine/wreck.png"));
 	_points[0x10403] = Point(QImage(":/marine/wreck-exposed.png"), QPoint(0, -4));
 	_points[0x10408] = Point(QImage(":/marine/obstruction-covers.png"));
+	_points[0x10409] = Point(QImage(":/marine/fishing-farm.png"));
 	_points[0x1040a] = Point(QImage(":/marine/rock-dangerous.png"));
 	_points[0x1040c] = Point(QImage(":/marine/rock-exposed.png"));
 
