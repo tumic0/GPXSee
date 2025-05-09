@@ -559,8 +559,6 @@ void RasterTile::processPoints(QList<MapData::Point> &points,
 		} else
 			delete item;
 	}
-
-
 }
 
 void RasterTile::fetchData(QList<MapData::Poly> &polygons,
