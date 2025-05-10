@@ -312,6 +312,7 @@
 		<file alias="shellfish-farm-line.png">icons/map/marine/shellfish-farm-line.png</file>
 		<file alias="degaussing-line.png">icons/map/marine/degaussing-line.png</file>
 		<file alias="nofishing-line.png">icons/map/marine/nofishing-line.png</file>
+		<file alias="fishing-line.png">icons/map/marine/fishing-line.png</file>
 	</qresource>
 
 	<!-- Patterns (Mapsforge) -->

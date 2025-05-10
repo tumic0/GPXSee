@@ -506,8 +506,10 @@ void Style::defaultLineStyle(qreal ratio)
 	_lines[0x10506] = Line(QImage(":/marine/nature-reserve-line.png"));
 	_lines[0x10507] = Line(QImage(":/marine/safety-zone-line.png"));
 	_lines[0x10601] = Line(QPen(QColor(0, 0, 0), 1, Qt::SolidLine));
-	_lines[0x10603] = Line(QPen(QColor(0xe7, 0x28, 0xe7), 2, Qt::DashDotLine));
+	_lines[0x10603] = Line(QPen(QColor(0xe7, 0x28, 0xe7), 1.5, Qt::DashDotLine));
+	_lines[0x10604] = Line(QPen(QColor(0xe7, 0x28, 0xe7), 1, Qt::DashDotLine));
 	_lines[0x10606] = Line(QImage(":/marine/anchor-line.png"));
+	_lines[0x10608] = Line(QImage(":/marine/fishing-line.png"));
 	_lines[0x1060c] = Line(QPen(QColor(0xe7, 0x28, 0xe7), 1, Qt::SolidLine));
 	_lines[0x1060d] = Line(QPen(QColor(0xeb, 0x49, 0xeb), 1, Qt::DashLine));
 	_lines[0x10611] = Line(QPen(QColor(0xeb, 0x49, 0xeb), 1, Qt::DashLine));
