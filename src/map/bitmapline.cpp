@@ -53,7 +53,7 @@ void BitmapLine::draw(QPainter *painter, const QPolygonF &line,
 	}
 }
 
-void BitmapLine::drawr(QPainter *painter, const QPolygonF &line,
+void BitmapLine::drawR(QPainter *painter, const QPolygonF &line,
   const QImage &img)
 {
 	int offset = 0;

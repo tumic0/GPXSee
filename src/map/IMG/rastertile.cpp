@@ -208,7 +208,7 @@ void RasterTile::drawLines(QPainter *painter,
 
 		if (!style.img().isNull()) {
 			if (poly.flags & MapData::Poly::Invert)
-				BitmapLine::drawr(painter, poly.points, style.img());
+				BitmapLine::drawR(painter, poly.points, style.img());
 			else
 				BitmapLine::draw(painter, poly.points, style.img());
 		} else if (style.foreground() != Qt::NoPen) {
