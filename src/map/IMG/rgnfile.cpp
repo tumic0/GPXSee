@@ -244,12 +244,30 @@ bool RGNFile::readLabel(Handle &hdl, LBLFile *lbl, Handle &lblHdl,
 	return true;
 }
 
+bool RGNFile::readLineInfo(Handle &hdl, quint32 size, MapData::Poly *line) const
+{
+	if (size == 1) {
+		quint32 val;
+
+		if (!readUInt8(hdl, val))
+			return false;
+
+		if (((val >> 3) & 3) & 2)
+			line->flags |= MapData::Poly::Invert;
+
+		return true;
+	} else
+		return (!size);
+}
+
 bool RGNFile::readClassFields(Handle &hdl, SegmentType segmentType,
   void *object, LBLFile *lbl, Handle &lblHdl) const
 {
 	quint8 flags;
 	quint32 rs = 0;
 	MapData::Poly *poly = (segmentType == Polygon)
+	  ? (MapData::Poly *) object : 0;
+	MapData::Poly *line = (segmentType == Line)
 	  ? (MapData::Poly *) object : 0;
 	MapData::Point *point = (segmentType == Point)
 	  ? (MapData::Point *) object : 0;
@@ -288,6 +306,9 @@ bool RGNFile::readClassFields(Handle &hdl, SegmentType segmentType,
 		readBuoyInfo(hdl, flags, rs, point);
 	if (point && Style::isLight(point->type))
 		readLightInfo(hdl, flags, rs, point);
+
+	if (line && Style::isMarineLine(line->type))
+		readLineInfo(hdl, rs, line);
 
 	return seek(hdl, off + rs);
 }
@@ -597,8 +618,7 @@ bool RGNFile::polyObjects(Handle &hdl, const SubDiv *subdiv,
 		poly.type = (segmentType == Polygon)
 		  ? ((quint32)(type & 0x7F)) << 8 : ((quint32)(type & 0x3F)) << 8;
 		if (segmentType == Line && type & 0x40)
-			poly.oneway = true;
-
+			poly.flags |= MapData::Poly::OneWay;
 
 		QPoint pos(subdiv->lon() + LS(lon, 24-subdiv->bits()),
 		  subdiv->lat() + LS(lat, 24-subdiv->bits()));
