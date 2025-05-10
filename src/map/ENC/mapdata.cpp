@@ -199,6 +199,7 @@ static bool polygonPointCb(const MapData::Poly *polygon, void *context)
 	  || type == SUBTYPE(I_ACHARE, 12) || type == SUBTYPE(I_BERTHS, 6)
 	  || type == SUBTYPE(RESARE, 1) || type == SUBTYPE(I_RESARE, 1)
 	  || type == SUBTYPE(RESARE, 2) || type == SUBTYPE(I_RESARE, 2)
+	  || type == SUBTYPE(RESARE, 3) || type == SUBTYPE(I_RESARE, 3)
 	  || type == SUBTYPE(RESARE, 4) || type == SUBTYPE(I_RESARE, 4)
 	  || type == SUBTYPE(RESARE, 5) || type == SUBTYPE(I_RESARE, 5)
 	  || type == SUBTYPE(RESARE, 6) || type == SUBTYPE(I_RESARE, 6)
@@ -323,6 +324,8 @@ static uint restrictionCategory(uint type, const MapData::Attributes &attr)
 
 		if (restrn == 1)
 			return 2;
+		else if (restrn == 3)
+			return 3;
 		else if (restrn == 7)
 			return 17;
 		else

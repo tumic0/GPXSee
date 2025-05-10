@@ -134,6 +134,7 @@ void Style::polygonStyle()
 	_polygons[TYPE(UNSARE)] = Polygon(QBrush(QColor(0x99, 0x99, 0x99)));
 	_polygons[SUBTYPE(RESARE, 1)] = Polygon(QImage(":/marine/safety-zone-line.png"));
 	_polygons[SUBTYPE(RESARE, 2)] = Polygon(QImage(":/marine/noanchor-line.png"));
+	_polygons[SUBTYPE(RESARE, 3)] = Polygon(QImage(":/marine/nofishing-line.png"));
 	_polygons[SUBTYPE(RESARE, 4)] = Polygon(QImage(":/marine/nature-reserve-line.png"));
 	_polygons[SUBTYPE(RESARE, 5)] = Polygon(QImage(":/marine/sanctuary-line.png"));
 	_polygons[SUBTYPE(RESARE, 6)] = Polygon(QImage(":/marine/sanctuary-line.png"));
@@ -151,6 +152,7 @@ void Style::polygonStyle()
 	_polygons[SUBTYPE(RESARE, 26)] = Polygon(QImage(":/marine/safety-zone-line.png"));
 	_polygons[SUBTYPE(I_RESARE, 1)] = _polygons[SUBTYPE(RESARE, 1)];
 	_polygons[SUBTYPE(I_RESARE, 2)] = _polygons[SUBTYPE(RESARE, 2)];
+	_polygons[SUBTYPE(I_RESARE, 3)] = _polygons[SUBTYPE(RESARE, 3)];
 	_polygons[SUBTYPE(I_RESARE, 4)] = _polygons[SUBTYPE(RESARE, 4)];
 	_polygons[SUBTYPE(I_RESARE, 5)] = _polygons[SUBTYPE(RESARE, 5)];
 	_polygons[SUBTYPE(I_RESARE, 6)] = _polygons[SUBTYPE(RESARE, 6)];
