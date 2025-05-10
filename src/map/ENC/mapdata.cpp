@@ -87,6 +87,7 @@ static QMap<uint,uint> orderMapInit()
 	map.insert(TYPE(BUISGL), 46);
 	map.insert(TYPE(ACHARE), 47);
 	map.insert(TYPE(I_ACHARE), 47);
+	map.insert(TYPE(DMPGRD), 48);
 
 	map.insert(TYPE(I_DISMAR), 0xFFFFFFFE);
 	map.insert(TYPE(SOUNDG), 0xFFFFFFFF);
@@ -191,7 +192,7 @@ static bool polygonPointCb(const MapData::Poly *polygon, void *context)
 	if (baseType == TSSLPT || baseType == RCTLPT || baseType == I_TRNBSN
 	  || baseType == BRIDGE || baseType == I_BRIDGE || baseType == BUAARE
 	  || baseType == LNDARE || baseType == LNDRGN || baseType == I_BUNSTA
-	  || baseType == PILBOP
+	  || baseType == PILBOP || baseType == DMPGRD
 	  || type == SUBTYPE(ACHARE, 2) || type == SUBTYPE(I_ACHARE, 2)
 	  || type == SUBTYPE(ACHARE, 3) || type == SUBTYPE(I_ACHARE, 3)
 	  || type == SUBTYPE(ACHARE, 9) || type == SUBTYPE(I_ACHARE, 9)
@@ -477,6 +478,8 @@ MapData::Poly::Poly(uint type, const Polygon &path, const Attributes &attr,
 		subtype = I_CATBRT;
 	else if (type == M_COVR)
 		subtype = CATCOV;
+	else if (type == DMPGRD)
+		subtype = CATDPG;
 
 	switch (type) {
 		case DEPARE:

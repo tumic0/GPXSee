@@ -351,7 +351,9 @@ void Style::defaultPolygonStyle()
 	_polygons[0x10307] = Polygon(QBrush(QColor(0xff, 0xff, 0xff)));
 	_polygons[0x10308] = Polygon(QBrush(QColor(0xff, 0xff, 0xff)));
 	_polygons[0x10407] = Polygon(QBrush(QColor(0xa3, 0xa3, 0xa3),
-	  Qt::Dense3Pattern));
+	  Qt::Dense5Pattern));
+	_polygons[0x10408] = Polygon(QBrush(QColor(0xff, 0x40, 0x40),
+	  Qt::Dense5Pattern));
 	_polygons[0x10409] = Polygon(QBrush(QColor(0xff, 0x40, 0x40),
 	  Qt::FDiagPattern));
 	_polygons[0x10503] = Polygon(QBrush(QColor(0xff, 0x40, 0x40),
@@ -382,8 +384,8 @@ void Style::defaultPolygonStyle()
 	  << TYPE(0x26) << TYPE(0x0d) << 0x1090a << TYPE(0x0e) << 0x1090b
 	  << TYPE(0x0f) << TYPE(0x10) << TYPE(0x11) << TYPE(0x12)
 	  << TYPE(0x19) << 0x1090d << TYPE(0x13) << 0x10900
-	  << 0x10613 /*raster*/ << 0x1060a << 0x10407 << 0x10409 << 0x10503
-	  << 0x10105;
+	  << 0x10613 /*raster*/ << 0x1060a << 0x10407 << 0x10408 << 0x10409
+	  << 0x10503 << 0x10105;
 }
 
 void Style::defaultLineStyle(qreal ratio)
@@ -497,6 +499,7 @@ void Style::defaultLineStyle(qreal ratio)
 	_lines[0x10405] = Line(QImage(":/marine/pipeline-area-line.png"));
 	_lines[0x10406] = Line(QImage(":/marine/cable-area-line.png"));
 	_lines[0x10407] = Line(QPen(QColor(0xa3, 0xa3, 0xa3), 1, Qt::DashLine));
+	_lines[0x10408] = Line(QPen(QColor(0xff, 0x40, 0x40), 1, Qt::DashLine));
 	_lines[0x10409] = Line(QPen(QColor(0, 0, 0), 1, Qt::DotLine));
 	_lines[0x10501] = Line(QImage(":/marine/noanchor-line.png"));
 	_lines[0x10502] = Line(QImage(":/marine/nofishing-line.png"));
@@ -505,7 +508,7 @@ void Style::defaultLineStyle(qreal ratio)
 	_lines[0x10505] = Line(QImage(":/marine/noanchor-line.png"));
 	_lines[0x10506] = Line(QImage(":/marine/nature-reserve-line.png"));
 	_lines[0x10507] = Line(QImage(":/marine/safety-zone-line.png"));
-	_lines[0x10601] = Line(QPen(QColor(0, 0, 0), 1, Qt::SolidLine));
+	_lines[0x10601] = Line(QPen(QColor(0, 0, 0), 1, Qt::DashLine));
 	_lines[0x10602] = Line(QPen(QColor(0xfc, 0xb4, 0xfc), 2));
 	_lines[0x10603] = Line(QPen(QColor(0xe7, 0x28, 0xe7), 1.5, Qt::DashDotLine));
 	_lines[0x10604] = Line(QPen(QColor(0xe7, 0x28, 0xe7), 1, Qt::DashDotLine));

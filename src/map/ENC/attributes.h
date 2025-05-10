@@ -5,6 +5,7 @@
 #define CATBUA 10
 #define CATCOV 18
 #define CATDIS 21
+#define CATDPG 23
 #define CATHAF 30
 #define CATLMK 35
 #define CATLIT 37

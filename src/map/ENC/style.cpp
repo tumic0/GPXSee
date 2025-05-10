@@ -104,7 +104,19 @@ void Style::polygonStyle()
 	_polygons[SUBTYPE(DEPARE, 5)] = Polygon(QBrush(QColor(0xc0, 0xe0, 0xff)));
 	_polygons[SUBTYPE(DEPARE, 6)] = Polygon(QBrush(QColor(0xff, 0xff, 0xff)));
 	_polygons[TYPE(DMPGRD)] = Polygon(QBrush(QColor(0xa3, 0xa3, 0xa3),
-	  Qt::Dense3Pattern));
+	  Qt::Dense5Pattern));
+	_polygons[SUBTYPE(DMPGRD, 1)] = Polygon(QBrush(QColor(0xa3, 0xa3, 0xa3),
+	  Qt::Dense5Pattern));
+	_polygons[SUBTYPE(DMPGRD, 2)] = Polygon(QBrush(QColor(0xa3, 0xa3, 0xa3),
+	  Qt::Dense5Pattern));
+	_polygons[SUBTYPE(DMPGRD, 3)] = Polygon(QBrush(QColor(0xa3, 0xa3, 0xa3),
+	  Qt::Dense5Pattern));
+	_polygons[SUBTYPE(DMPGRD, 4)] = Polygon(QBrush(QColor(0xff, 0x40, 0x40),
+	  Qt::Dense5Pattern));
+	_polygons[SUBTYPE(DMPGRD, 5)] = Polygon(QBrush(QColor(0xa3, 0xa3, 0xa3),
+	  Qt::Dense5Pattern));
+	_polygons[SUBTYPE(DMPGRD, 6)] = Polygon(QBrush(QColor(0xa3, 0xa3, 0xa3),
+	  Qt::Dense5Pattern));
 	_polygons[TYPE(FAIRWY)] = Polygon(Qt::NoBrush, QPen(QColor(0x88, 0x88, 0x88),
 	  1, Qt::DashDotDotLine));
 	_polygons[TYPE(OBSTRN)] = Polygon(Qt::NoBrush, QPen(QColor(0, 0, 0), 1.5,
@@ -244,7 +256,9 @@ void Style::polygonStyle()
 	  << TYPE(HULKES) << TYPE(I_HULKES) << TYPE(FLODOC) << TYPE(I_FLODOC)
 	  << TYPE(DRYDOC) << TYPE(DAMCON) << TYPE(PYLONS) << TYPE(MORFAC)
 	  << TYPE(GATCON) << TYPE(I_GATCON) << TYPE(BERTHS) << TYPE(I_BERTHS)
-	  << SUBTYPE(I_BERTHS, 6) << TYPE(DMPGRD) << TYPE(TSEZNE) << TYPE(OBSTRN)
+	  << SUBTYPE(I_BERTHS, 6) << TYPE(DMPGRD) << SUBTYPE(DMPGRD, 1)
+	  << SUBTYPE(DMPGRD, 2) << SUBTYPE(DMPGRD, 3) << SUBTYPE(DMPGRD, 4)
+	  << SUBTYPE(DMPGRD, 5) << SUBTYPE(DMPGRD, 6) << TYPE(TSEZNE) << TYPE(OBSTRN)
 	  << TYPE(UWTROC) << TYPE(DWRTPT) << SUBTYPE(ACHARE, 1)
 	  << SUBTYPE(ACHARE, 2) << SUBTYPE(ACHARE, 3) << SUBTYPE(ACHARE, 4)
 	  << SUBTYPE(ACHARE, 5) << SUBTYPE(ACHARE, 6) << SUBTYPE(ACHARE, 7)
@@ -542,6 +556,15 @@ void Style::pointStyle(qreal ratio)
 	_points[SUBTYPE(I_RESARE, 23)] = _points[SUBTYPE(RESARE, 23)];
 	_points[SUBTYPE(I_RESARE, 25)] = _points[SUBTYPE(RESARE, 25)];
 	_points[SUBTYPE(I_RESARE, 26)] = _points[SUBTYPE(RESARE, 26)];
+	_points[TYPE(DMPGRD)].setTextColor(QColor(0x5d, 0x5b, 0x59));
+	_points[TYPE(DMPGRD)].setHaloColor(QColor());
+	_points[SUBTYPE(DMPGRD, 1)] = _points[TYPE(DMPGRD)];
+	_points[SUBTYPE(DMPGRD, 2)] = _points[TYPE(DMPGRD)];
+	_points[SUBTYPE(DMPGRD, 3)] = _points[TYPE(DMPGRD)];
+	_points[SUBTYPE(DMPGRD, 4)].setTextColor(QColor(0xff, 0x40, 0x40));
+	_points[SUBTYPE(DMPGRD, 4)].setHaloColor(QColor());
+	_points[SUBTYPE(DMPGRD, 5)] = _points[TYPE(DMPGRD)];
+	_points[SUBTYPE(DMPGRD, 6)] = _points[TYPE(DMPGRD)];
 
 	_points[SUBTYPE(I_BUNSTA, 1)] = Point(svg2img(":/POI/fuel-11.svg", ratio),
 	  Small);
