@@ -41,10 +41,10 @@ public:
 		   ll2xy() the points in the MapData class as this can not be done in
 		   parallel. */
 		QVector<QPointF> points;
+		RectC boundingRect;
 		Label label;
 		Raster raster;
 		quint32 type;
-		RectC boundingRect;
 		quint32 flags;
 
 		bool operator<(const Poly &other) const
