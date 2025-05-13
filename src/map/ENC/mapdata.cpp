@@ -480,6 +480,10 @@ MapData::Poly::Poly(uint type, const Polygon &path, const Attributes &attr,
 		subtype = CATCOV;
 	else if (type == DMPGRD)
 		subtype = CATDPG;
+	else if (type == SLCONS)
+		subtype = CATSLC;
+	else if (type == I_SLCONS)
+		subtype = I_CATSLC;
 
 	switch (type) {
 		case DEPARE:

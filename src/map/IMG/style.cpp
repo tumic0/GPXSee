@@ -501,6 +501,7 @@ void Style::defaultLineStyle(qreal ratio)
 	_lines[0x10407] = Line(QPen(QColor(0xa3, 0xa3, 0xa3), 1, Qt::DashLine));
 	_lines[0x10408] = Line(QPen(QColor(0xff, 0x40, 0x40), 1, Qt::DashLine));
 	_lines[0x10409] = Line(QPen(QColor(0, 0, 0), 1, Qt::DotLine));
+	_lines[0x1040c] = Line(QPen(QColor(0, 0, 0), 2));
 	_lines[0x10501] = Line(QImage(":/marine/noanchor-line.png"));
 	_lines[0x10502] = Line(QImage(":/marine/nofishing-line.png"));
 	_lines[0x10503] = Line(QImage(":/marine/entry-prohibited-line.png"));

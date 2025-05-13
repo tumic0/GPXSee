@@ -128,10 +128,46 @@ void Style::polygonStyle()
 	_polygons[TYPE(HULKES)] = Polygon(QBrush(QColor(0x33, 0x33, 0x33)));
 	_polygons[TYPE(I_HULKES)] = Polygon(QBrush(QColor(0x33, 0x33, 0x33)));
 	_polygons[TYPE(DRYDOC)] = Polygon(QBrush(QColor(0x33, 0x33, 0x33)));
-	_polygons[TYPE(SLCONS)] = Polygon(Qt::NoBrush,
-	  QPen(QColor(0x33, 0x33, 0x33), 1.5, Qt::DashLine));
-	_polygons[TYPE(I_SLCONS)] = Polygon(Qt::NoBrush,
-	  QPen(QColor(0x33, 0x33, 0x33), 1.5, Qt::DashLine));
+	_polygons[TYPE(SLCONS)] = Polygon(Qt::NoBrush, QPen(QColor(0, 0, 0), 2));
+	_polygons[SUBTYPE(SLCONS, 1)] = Polygon(Qt::NoBrush, QPen(QColor(0, 0, 0), 2));
+	_polygons[SUBTYPE(SLCONS, 2)] = Polygon(Qt::NoBrush, QPen(QColor(0, 0, 0),
+	  2, Qt::DashLine));
+	_polygons[SUBTYPE(SLCONS, 3)] = Polygon(Qt::NoBrush, QPen(QColor(0, 0, 0), 2));
+	_polygons[SUBTYPE(SLCONS, 4)] = Polygon(Qt::NoBrush, QPen(QColor(0, 0, 0), 2));
+	_polygons[SUBTYPE(SLCONS, 5)] = Polygon(Qt::NoBrush, QPen(QColor(0, 0, 0), 2));
+	_polygons[SUBTYPE(SLCONS, 6)] = Polygon(Qt::NoBrush, QPen(QColor(0, 0, 0), 2));
+	_polygons[SUBTYPE(SLCONS, 7)] = Polygon(Qt::NoBrush, QPen(QColor(0, 0, 0),
+	  2, Qt::DashLine));
+	_polygons[SUBTYPE(SLCONS, 8)] = Polygon(Qt::NoBrush, QPen(QColor(0, 0, 0), 2));
+	_polygons[SUBTYPE(SLCONS, 9)] = Polygon(Qt::NoBrush, QPen(QColor(0, 0, 0), 2));
+	_polygons[SUBTYPE(SLCONS, 10)] = Polygon(Qt::NoBrush, QPen(QColor(0, 0, 0), 2));
+	_polygons[SUBTYPE(SLCONS, 11)] = Polygon(Qt::NoBrush, QPen(QColor(0, 0, 0), 2));
+	_polygons[SUBTYPE(SLCONS, 12)] = Polygon(Qt::NoBrush, QPen(QColor(0, 0, 0),
+	  2, Qt::DashLine));
+	_polygons[SUBTYPE(SLCONS, 13)] = Polygon(Qt::NoBrush, QPen(QColor(0, 0, 0),
+	  2, Qt::DashLine));
+	_polygons[SUBTYPE(SLCONS, 14)] = Polygon(Qt::NoBrush, QPen(QColor(0, 0, 0), 2));
+	_polygons[SUBTYPE(SLCONS, 15)] = Polygon(Qt::NoBrush, QPen(QColor(0, 0, 0), 2));
+	_polygons[SUBTYPE(SLCONS, 16)] = Polygon(Qt::NoBrush, QPen(QColor(0, 0, 0),
+	  2, Qt::DashLine));
+	_polygons[TYPE(I_SLCONS)] = _polygons[TYPE(SLCONS)];
+	_polygons[SUBTYPE(I_SLCONS, 1)] = _polygons[SUBTYPE(SLCONS, 1)];
+	_polygons[SUBTYPE(I_SLCONS, 2)] = _polygons[SUBTYPE(SLCONS, 2)];
+	_polygons[SUBTYPE(I_SLCONS, 3)] = _polygons[SUBTYPE(SLCONS, 3)];
+	_polygons[SUBTYPE(I_SLCONS, 4)] = _polygons[SUBTYPE(SLCONS, 4)];
+	_polygons[SUBTYPE(I_SLCONS, 5)] = _polygons[SUBTYPE(SLCONS, 5)];
+	_polygons[SUBTYPE(I_SLCONS, 6)] = _polygons[SUBTYPE(SLCONS, 6)];
+	_polygons[SUBTYPE(I_SLCONS, 7)] = _polygons[SUBTYPE(SLCONS, 7)];
+	_polygons[SUBTYPE(I_SLCONS, 8)] = _polygons[SUBTYPE(SLCONS, 8)];
+	_polygons[SUBTYPE(I_SLCONS, 9)] = _polygons[SUBTYPE(SLCONS, 9)];
+	_polygons[SUBTYPE(I_SLCONS, 10)] = _polygons[SUBTYPE(SLCONS, 10)];
+	_polygons[SUBTYPE(I_SLCONS, 11)] = _polygons[SUBTYPE(SLCONS, 11)];
+	_polygons[SUBTYPE(I_SLCONS, 12)] = _polygons[SUBTYPE(SLCONS, 12)];
+	_polygons[SUBTYPE(I_SLCONS, 13)] = _polygons[SUBTYPE(SLCONS, 13)];
+	_polygons[SUBTYPE(I_SLCONS, 14)] = _polygons[SUBTYPE(SLCONS, 14)];
+	_polygons[SUBTYPE(I_SLCONS, 15)] = _polygons[SUBTYPE(SLCONS, 15)];
+	_polygons[SUBTYPE(I_SLCONS, 16)] = _polygons[SUBTYPE(SLCONS, 16)];
+	_polygons[SUBTYPE(I_SLCONS, 19)] = Polygon(Qt::NoBrush, QPen(QColor(0, 0, 0), 2));
 	_polygons[TYPE(LAKARE)] = Polygon(QBrush(QColor(0x9f, 0xc4, 0xe1)),
 	  QPen(QColor(0, 0, 0), 1));
 	_polygons[TYPE(CANALS)] = Polygon(QBrush(QColor(0x9f, 0xc4, 0xe1)),
@@ -252,34 +288,45 @@ void Style::polygonStyle()
 	  << TYPE(DRGARE) << TYPE(FAIRWY) << TYPE(LOKBSN) << TYPE(I_LOKBSN)
 	  << TYPE(BUAARE) << TYPE(BUISGL) << TYPE(SILTNK) << TYPE(AIRARE)
 	  << TYPE(BRIDGE) << TYPE(I_BRIDGE) << TYPE(TUNNEL) << TYPE(I_TERMNL)
-	  << TYPE(SLCONS) << TYPE(I_SLCONS) << TYPE(PONTON) << TYPE(I_PONTON)
-	  << TYPE(HULKES) << TYPE(I_HULKES) << TYPE(FLODOC) << TYPE(I_FLODOC)
-	  << TYPE(DRYDOC) << TYPE(DAMCON) << TYPE(PYLONS) << TYPE(MORFAC)
-	  << TYPE(GATCON) << TYPE(I_GATCON) << TYPE(BERTHS) << TYPE(I_BERTHS)
-	  << SUBTYPE(I_BERTHS, 6) << TYPE(DMPGRD) << SUBTYPE(DMPGRD, 1)
-	  << SUBTYPE(DMPGRD, 2) << SUBTYPE(DMPGRD, 3) << SUBTYPE(DMPGRD, 4)
-	  << SUBTYPE(DMPGRD, 5) << SUBTYPE(DMPGRD, 6) << TYPE(TSEZNE) << TYPE(OBSTRN)
-	  << TYPE(UWTROC) << TYPE(DWRTPT) << SUBTYPE(ACHARE, 1)
-	  << SUBTYPE(ACHARE, 2) << SUBTYPE(ACHARE, 3) << SUBTYPE(ACHARE, 4)
-	  << SUBTYPE(ACHARE, 5) << SUBTYPE(ACHARE, 6) << SUBTYPE(ACHARE, 7)
-	  << SUBTYPE(ACHARE, 8) << SUBTYPE(ACHARE, 9) << SUBTYPE(I_ACHARE, 1)
-	  << SUBTYPE(I_ACHARE, 2) << SUBTYPE(I_ACHARE, 3) << SUBTYPE(I_ACHARE, 4)
-	  << SUBTYPE(I_ACHARE, 5) << SUBTYPE(I_ACHARE, 6) << SUBTYPE(I_ACHARE, 7)
-	  << SUBTYPE(I_ACHARE, 8) << SUBTYPE(I_ACHARE, 9) << SUBTYPE(I_ACHARE, 10)
-	  << SUBTYPE(I_ACHARE, 11) << SUBTYPE(I_ACHARE, 12) << SUBTYPE(RESARE, 1)
-	  << SUBTYPE(I_RESARE, 1) << SUBTYPE(RESARE, 2) << SUBTYPE(I_RESARE, 2)
-	  << SUBTYPE(RESARE, 4) << SUBTYPE(I_RESARE, 4) << SUBTYPE(RESARE, 5)
-	  << SUBTYPE(I_RESARE, 5) << SUBTYPE(RESARE, 6) << SUBTYPE(I_RESARE, 6)
-	  << SUBTYPE(RESARE, 7) << SUBTYPE(I_RESARE, 7) << SUBTYPE(RESARE, 8)
-	  << SUBTYPE(I_RESARE, 8) << SUBTYPE(RESARE, 9) << SUBTYPE(I_RESARE, 9)
-	  << SUBTYPE(RESARE, 12) << SUBTYPE(I_RESARE, 12) << SUBTYPE(RESARE, 14)
-	  << SUBTYPE(I_RESARE, 14) << SUBTYPE(RESARE, 17) << SUBTYPE(I_RESARE, 17)
-	  << SUBTYPE(RESARE, 22) << SUBTYPE(I_RESARE, 22) << SUBTYPE(RESARE, 23)
-	  << SUBTYPE(I_RESARE, 23) << SUBTYPE(RESARE, 25) << SUBTYPE(I_RESARE, 25)
-	  << SUBTYPE(RESARE, 26) << SUBTYPE(I_RESARE, 26) << TYPE(CBLARE)
-	  << TYPE(PIPARE) << TYPE(PRCARE) << TYPE(I_TRNBSN) << TYPE(PILBOP)
-	  << SUBTYPE(MARCUL, 0) << SUBTYPE(MARCUL, 1) << SUBTYPE(MARCUL, 2)
-	  << SUBTYPE(MARCUL, 3) << TYPE(CONZNE);
+	  << TYPE(SLCONS) << SUBTYPE(SLCONS, 1) << SUBTYPE(SLCONS, 2)
+	  << SUBTYPE(SLCONS, 3) << SUBTYPE(SLCONS, 4) << SUBTYPE(SLCONS, 5)
+	  << SUBTYPE(SLCONS, 6) << SUBTYPE(SLCONS, 7) << SUBTYPE(SLCONS, 8)
+	  << SUBTYPE(SLCONS, 9) << SUBTYPE(SLCONS, 10) << SUBTYPE(SLCONS, 11)
+	  << SUBTYPE(SLCONS, 12) << SUBTYPE(SLCONS, 13) << SUBTYPE(SLCONS, 14)
+	  << SUBTYPE(SLCONS, 15) << SUBTYPE(SLCONS, 16) << TYPE(I_SLCONS)
+	  << SUBTYPE(I_SLCONS, 1) << SUBTYPE(I_SLCONS, 2) << SUBTYPE(I_SLCONS, 3)
+	  << SUBTYPE(I_SLCONS, 4) << SUBTYPE(I_SLCONS, 5) << SUBTYPE(I_SLCONS, 6)
+	  << SUBTYPE(I_SLCONS, 7) << SUBTYPE(I_SLCONS, 8) << SUBTYPE(I_SLCONS, 9)
+	  << SUBTYPE(I_SLCONS, 10) << SUBTYPE(I_SLCONS, 11) << SUBTYPE(I_SLCONS, 12)
+	  << SUBTYPE(I_SLCONS, 13) << SUBTYPE(I_SLCONS, 14) << SUBTYPE(I_SLCONS, 15)
+	  << SUBTYPE(I_SLCONS, 16) << SUBTYPE(I_SLCONS, 19) << TYPE(PONTON)
+	  << TYPE(I_PONTON) << TYPE(HULKES) << TYPE(I_HULKES) << TYPE(FLODOC)
+	  << TYPE(I_FLODOC) << TYPE(DRYDOC) << TYPE(DAMCON) << TYPE(PYLONS)
+	  << TYPE(MORFAC) << TYPE(GATCON) << TYPE(I_GATCON) << TYPE(BERTHS)
+	  << TYPE(I_BERTHS) << SUBTYPE(I_BERTHS, 6) << TYPE(DMPGRD)
+	  << SUBTYPE(DMPGRD, 1) << SUBTYPE(DMPGRD, 2) << SUBTYPE(DMPGRD, 3)
+	  << SUBTYPE(DMPGRD, 4) << SUBTYPE(DMPGRD, 5) << SUBTYPE(DMPGRD, 6)
+	  << TYPE(TSEZNE) << TYPE(OBSTRN) << TYPE(UWTROC) << TYPE(DWRTPT)
+	  << SUBTYPE(ACHARE, 1) << SUBTYPE(ACHARE, 2) << SUBTYPE(ACHARE, 3)
+	  << SUBTYPE(ACHARE, 4) << SUBTYPE(ACHARE, 5) << SUBTYPE(ACHARE, 6)
+	  << SUBTYPE(ACHARE, 7) << SUBTYPE(ACHARE, 8) << SUBTYPE(ACHARE, 9)
+	  << SUBTYPE(I_ACHARE, 1) << SUBTYPE(I_ACHARE, 2) << SUBTYPE(I_ACHARE, 3)
+	  << SUBTYPE(I_ACHARE, 4) << SUBTYPE(I_ACHARE, 5) << SUBTYPE(I_ACHARE, 6)
+	  << SUBTYPE(I_ACHARE, 7) << SUBTYPE(I_ACHARE, 8) << SUBTYPE(I_ACHARE, 9)
+	  << SUBTYPE(I_ACHARE, 10) << SUBTYPE(I_ACHARE, 11) << SUBTYPE(I_ACHARE, 12)
+	  << SUBTYPE(RESARE, 1) << SUBTYPE(I_RESARE, 1) << SUBTYPE(RESARE, 2)
+	  << SUBTYPE(I_RESARE, 2) << SUBTYPE(RESARE, 4) << SUBTYPE(I_RESARE, 4)
+	  << SUBTYPE(RESARE, 5) << SUBTYPE(I_RESARE, 5) << SUBTYPE(RESARE, 6)
+	  << SUBTYPE(I_RESARE, 6) << SUBTYPE(RESARE, 7) << SUBTYPE(I_RESARE, 7)
+	  << SUBTYPE(RESARE, 8) << SUBTYPE(I_RESARE, 8) << SUBTYPE(RESARE, 9)
+	  << SUBTYPE(I_RESARE, 9) << SUBTYPE(RESARE, 12) << SUBTYPE(I_RESARE, 12)
+	  << SUBTYPE(RESARE, 14) << SUBTYPE(I_RESARE, 14) << SUBTYPE(RESARE, 17)
+	  << SUBTYPE(I_RESARE, 17) << SUBTYPE(RESARE, 22) << SUBTYPE(I_RESARE, 22)
+	  << SUBTYPE(RESARE, 23) << SUBTYPE(I_RESARE, 23) << SUBTYPE(RESARE, 25)
+	  << SUBTYPE(I_RESARE, 25) << SUBTYPE(RESARE, 26) << SUBTYPE(I_RESARE, 26)
+	  << TYPE(CBLARE) << TYPE(PIPARE) << TYPE(PRCARE) << TYPE(I_TRNBSN)
+	  << TYPE(PILBOP) << SUBTYPE(MARCUL, 0) << SUBTYPE(MARCUL, 1)
+	  << SUBTYPE(MARCUL, 2) << SUBTYPE(MARCUL, 3) << TYPE(CONZNE);
 }
 
 void Style::lineStyle(qreal ratio)
@@ -298,8 +345,33 @@ void Style::lineStyle(qreal ratio)
 	_lines[TYPE(PIPSOL)].setTextFontSize(Small);
 	_lines[TYPE(NAVLNE)] = Line(QPen(QColor(0, 0, 0), 1, Qt::DashLine));
 	_lines[TYPE(COALNE)] = Line(QPen(QColor(0, 0, 0), 1, Qt::SolidLine));
-	_lines[TYPE(SLCONS)] = Line(QPen(QColor(0, 0, 0), 2, Qt::SolidLine));
-	_lines[TYPE(I_SLCONS)] = Line(QPen(QColor(0, 0, 0), 2, Qt::SolidLine));
+	_lines[TYPE(SLCONS)] = Line(QPen(QColor(0, 0, 0), 2));
+	_lines[SUBTYPE(SLCONS, 1)] = Line(QPen(QColor(0, 0, 0), 2));
+	_lines[SUBTYPE(SLCONS, 2)] = Line(QPen(QColor(0, 0, 0), 2, Qt::DashLine));
+	_lines[SUBTYPE(SLCONS, 3)] = Line(QPen(QColor(0, 0, 0), 2));
+	_lines[SUBTYPE(SLCONS, 4)] = Line(QPen(QColor(0, 0, 0), 2));
+	_lines[SUBTYPE(SLCONS, 5)] = Line(QPen(QColor(0, 0, 0), 2));
+	_lines[SUBTYPE(SLCONS, 6)] = Line(QPen(QColor(0, 0, 0), 2));
+	_lines[SUBTYPE(SLCONS, 7)] = Line(QPen(QColor(0, 0, 0), 2, Qt::DashLine));
+	_lines[SUBTYPE(SLCONS, 10)] = Line(QPen(QColor(0, 0, 0), 2));
+	_lines[SUBTYPE(SLCONS, 11)] = Line(QPen(QColor(0, 0, 0), 2));
+	_lines[SUBTYPE(SLCONS, 12)] = Line(QPen(QColor(0, 0, 0), 2, Qt::DashLine));
+	_lines[SUBTYPE(SLCONS, 13)] = Line(QPen(QColor(0, 0, 0), 2, Qt::DashLine));
+	_lines[SUBTYPE(SLCONS, 15)] = Line(QPen(QColor(0, 0, 0), 2));
+	_lines[TYPE(I_SLCONS)] = _lines[TYPE(SLCONS)];
+	_lines[SUBTYPE(I_SLCONS, 1)] = _lines[SUBTYPE(SLCONS, 1)];
+	_lines[SUBTYPE(I_SLCONS, 2)] = _lines[SUBTYPE(SLCONS, 2)];
+	_lines[SUBTYPE(I_SLCONS, 3)] = _lines[SUBTYPE(SLCONS, 3)];
+	_lines[SUBTYPE(I_SLCONS, 4)] = _lines[SUBTYPE(SLCONS, 4)];
+	_lines[SUBTYPE(I_SLCONS, 5)] = _lines[SUBTYPE(SLCONS, 5)];
+	_lines[SUBTYPE(I_SLCONS, 6)] = _lines[SUBTYPE(SLCONS, 6)];
+	_lines[SUBTYPE(I_SLCONS, 7)] = _lines[SUBTYPE(SLCONS, 7)];
+	_lines[SUBTYPE(I_SLCONS, 10)] = _lines[SUBTYPE(SLCONS, 10)];
+	_lines[SUBTYPE(I_SLCONS, 11)] = _lines[SUBTYPE(SLCONS, 11)];
+	_lines[SUBTYPE(I_SLCONS, 12)] = _lines[SUBTYPE(SLCONS, 12)];
+	_lines[SUBTYPE(I_SLCONS, 13)] = _lines[SUBTYPE(SLCONS, 13)];
+	_lines[SUBTYPE(I_SLCONS, 15)] = _lines[SUBTYPE(SLCONS, 15)];
+	_lines[SUBTYPE(I_SLCONS, 19)] = Line(QPen(QColor(0, 0, 0), 2));
 	_lines[TYPE(PONTON)] = Line(QPen(QColor(0x33, 0x33, 0x33), 1, Qt::SolidLine));
 	_lines[TYPE(DYKCON)] = Line(QPen(QColor(0x33, 0x33, 0x33), 2, Qt::SolidLine));
 	_lines[TYPE(RIVERS)] = Line(QPen(QColor(0, 0, 0), 1, Qt::SolidLine));
@@ -474,6 +546,7 @@ void Style::pointStyle(qreal ratio)
 	_points[TYPE(PILBOP)] = Point(QImage(":/marine/boarding-place.png"));
 	_points[TYPE(SISTAT)] = Point(QImage(":/marine/pylon.png"));
 	_points[TYPE(SLCONS)] = Point(QImage(":/marine/construction.png"), Small);
+	_points[TYPE(I_SLCONS)] = Point(QImage(":/marine/construction.png"), Small);
 	_points[TYPE(CURENT)] = Point(QImage(":/marine/current.png"));
 	_points[SUBTYPE(WEDKLP, 0)] = Point(QImage(":/marine/kelp.png"));
 	_points[SUBTYPE(WEDKLP, 1)] = Point(QImage(":/marine/kelp.png"));
