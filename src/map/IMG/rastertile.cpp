@@ -204,7 +204,9 @@ void RasterTile::drawLines(QPainter *painter,
 
 	for (int i = 0; i < lines.size(); i++) {
 		const MapData::Poly &poly = lines.at(i);
-		const Style::Line &style = _data->style()->line(poly.type);
+		const Style::Line &style = _data->style()->line(
+		  (poly.flags & MapData::Poly::Direction)
+		  ? poly.type | 1<<20 :  poly.type);
 
 		if (!style.img().isNull()) {
 			if (poly.flags & MapData::Poly::Invert)

@@ -252,7 +252,9 @@ bool RGNFile::readLineInfo(Handle &hdl, quint32 size, MapData::Poly *line) const
 		if (!readUInt8(hdl, val))
 			return false;
 
-		if (((val >> 3) & 3) & 2)
+		if ((val >> 3) & 3)
+			line->flags |= MapData::Poly::Direction;
+		if ((val >> 3) & 2)
 			line->flags |= MapData::Poly::Invert;
 
 		return true;

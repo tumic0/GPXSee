@@ -33,7 +33,8 @@ public:
 
 		enum Flags {
 			OneWay = 1,
-			Invert = 2
+			Invert = 2,
+			Direction = 4
 		};
 
 		/* QPointF insted of Coordinates for performance reasons (no need to

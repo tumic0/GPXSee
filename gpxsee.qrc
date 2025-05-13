@@ -313,6 +313,7 @@
 		<file alias="degaussing-line.png">icons/map/marine/degaussing-line.png</file>
 		<file alias="nofishing-line.png">icons/map/marine/nofishing-line.png</file>
 		<file alias="fishing-line.png">icons/map/marine/fishing-line.png</file>
+		<file alias="minefield-line.png">icons/map/marine/minefield-line.png</file>
 	</qresource>
 
 	<!-- Patterns (Mapsforge) -->
