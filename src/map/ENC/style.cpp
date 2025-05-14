@@ -128,17 +128,24 @@ void Style::polygonStyle()
 	_polygons[TYPE(HULKES)] = Polygon(QBrush(QColor(0x33, 0x33, 0x33)));
 	_polygons[TYPE(I_HULKES)] = Polygon(QBrush(QColor(0x33, 0x33, 0x33)));
 	_polygons[TYPE(DRYDOC)] = Polygon(QBrush(QColor(0x33, 0x33, 0x33)));
-	_polygons[TYPE(SLCONS)] = Polygon(Qt::NoBrush, QPen(QColor(0, 0, 0), 2));
-	_polygons[SUBTYPE(SLCONS, 1)] = Polygon(Qt::NoBrush, QPen(QColor(0, 0, 0), 2));
-	_polygons[SUBTYPE(SLCONS, 2)] = Polygon(Qt::NoBrush, QPen(QColor(0, 0, 0),
-	  2, Qt::DashLine));
-	_polygons[SUBTYPE(SLCONS, 3)] = Polygon(Qt::NoBrush, QPen(QColor(0, 0, 0), 2));
-	_polygons[SUBTYPE(SLCONS, 4)] = Polygon(Qt::NoBrush, QPen(QColor(0, 0, 0), 2));
-	_polygons[SUBTYPE(SLCONS, 5)] = Polygon(Qt::NoBrush, QPen(QColor(0, 0, 0), 2));
-	_polygons[SUBTYPE(SLCONS, 6)] = Polygon(Qt::NoBrush, QPen(QColor(0, 0, 0), 2));
+	_polygons[TYPE(SLCONS)] = Polygon(QBrush(QColor(0xe8, 0xe0, 0x64)),
+	  QPen(QColor(0, 0, 0), 2));
+	_polygons[SUBTYPE(SLCONS, 1)] = Polygon(QBrush(QColor(0xe8, 0xe0, 0x64),
+	  Qt::Dense4Pattern), QPen(QColor(0, 0, 0), 2));
+	_polygons[SUBTYPE(SLCONS, 2)] = Polygon(QBrush(QColor(0xe8, 0xe0, 0x64),
+	  Qt::Dense4Pattern), QPen(QColor(0, 0, 0), 2, Qt::DashLine));
+	_polygons[SUBTYPE(SLCONS, 3)] = Polygon(QBrush(QColor(0xe8, 0xe0, 0x64)),
+	  QPen(QColor(0, 0, 0), 2));
+	_polygons[SUBTYPE(SLCONS, 4)] = Polygon(QBrush(QColor(0xe8, 0xe0, 0x64)),
+	  QPen(QColor(0, 0, 0), 2));
+	_polygons[SUBTYPE(SLCONS, 5)] = Polygon(QBrush(QColor(0xe8, 0xe0, 0x64)),
+	  QPen(QColor(0, 0, 0), 2));
+	_polygons[SUBTYPE(SLCONS, 6)] = Polygon(QBrush(QColor(0xe8, 0xe0, 0x64)),
+	  QPen(QColor(0, 0, 0), 2));
 	_polygons[SUBTYPE(SLCONS, 7)] = Polygon(Qt::NoBrush, QPen(QColor(0, 0, 0),
 	  2, Qt::DashLine));
-	_polygons[SUBTYPE(SLCONS, 8)] = Polygon(Qt::NoBrush, QPen(QColor(0, 0, 0), 2));
+	_polygons[SUBTYPE(SLCONS, 8)] = Polygon(QBrush(QColor(0xe8, 0xe0, 0x64),
+	  Qt::Dense4Pattern), QPen(QColor(0, 0, 0), 2));
 	_polygons[SUBTYPE(SLCONS, 9)] = Polygon(Qt::NoBrush, QPen(QColor(0, 0, 0), 2));
 	_polygons[SUBTYPE(SLCONS, 10)] = Polygon(Qt::NoBrush, QPen(QColor(0, 0, 0), 2));
 	_polygons[SUBTYPE(SLCONS, 11)] = Polygon(Qt::NoBrush, QPen(QColor(0, 0, 0), 2));
