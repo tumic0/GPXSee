@@ -496,7 +496,8 @@ void Style::defaultLineStyle(qreal ratio)
 	_lines[0x10401] = Line(QImage(":/marine/cable.png"));
 	_lines[0x10402] = Line(QImage(":/marine/pipeline.png"));
 	_lines[0x10403] = Line(QPen(QColor(0xe7, 0x28, 0xe7), 2, Qt::DotLine));
-	_lines[0x10404] = Line(QImage(":/marine/fishing-farm-line.png"));
+	_lines[0x10404] = Line(QPen(QColor(0, 0, 0), 1, Qt::DashLine));
+	_lines[0x110404] = Line(QImage(":/marine/fishing-farm-line.png"));
 	_lines[0x10405] = Line(QPen(QColor(0xe7, 0x28, 0xe7), 1, Qt::DashLine));
 	_lines[0x110405] = Line(QImage(":/marine/pipeline-area-line.png"));
 	_lines[0x10406] = Line(QPen(QColor(0xe7, 0x28, 0xe7), 1, Qt::DashLine));
