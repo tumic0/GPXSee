@@ -146,14 +146,18 @@ void Style::polygonStyle()
 	  2, Qt::DashLine));
 	_polygons[SUBTYPE(SLCONS, 8)] = Polygon(QBrush(QColor(0xe8, 0xe0, 0x64),
 	  Qt::Dense4Pattern), QPen(QColor(0, 0, 0), 2));
-	_polygons[SUBTYPE(SLCONS, 9)] = Polygon(Qt::NoBrush, QPen(QColor(0, 0, 0), 2));
-	_polygons[SUBTYPE(SLCONS, 10)] = Polygon(Qt::NoBrush, QPen(QColor(0, 0, 0), 2));
-	_polygons[SUBTYPE(SLCONS, 11)] = Polygon(Qt::NoBrush, QPen(QColor(0, 0, 0), 2));
-	_polygons[SUBTYPE(SLCONS, 12)] = Polygon(Qt::NoBrush, QPen(QColor(0, 0, 0),
-	  2, Qt::DashLine));
-	_polygons[SUBTYPE(SLCONS, 13)] = Polygon(Qt::NoBrush, QPen(QColor(0, 0, 0),
-	  2, Qt::DashLine));
-	_polygons[SUBTYPE(SLCONS, 14)] = Polygon(Qt::NoBrush, QPen(QColor(0, 0, 0), 2));
+	_polygons[SUBTYPE(SLCONS, 9)] = Polygon(QBrush(QColor(0xe8, 0xe0, 0x64),
+	  Qt::Dense4Pattern), QPen(QColor(0, 0, 0), 2));
+	_polygons[SUBTYPE(SLCONS, 10)] = Polygon(QBrush(QColor(0xe8, 0xe0, 0x64)),
+	  QPen(QColor(0, 0, 0), 2));
+	_polygons[SUBTYPE(SLCONS, 11)] = Polygon(QBrush(QColor(0xe8, 0xe0, 0x64)),
+	  QPen(QColor(0, 0, 0), 2));
+	_polygons[SUBTYPE(SLCONS, 12)] = Polygon(QBrush(QColor(0xe8, 0xe0, 0x64)),
+	  QPen(QColor(0, 0, 0), 2, Qt::DashLine));
+	_polygons[SUBTYPE(SLCONS, 13)] = Polygon(QBrush(QColor(0xe8, 0xe0, 0x64)),
+	  QPen(QColor(0, 0, 0), 2, Qt::DashLine));
+	_polygons[SUBTYPE(SLCONS, 14)] = Polygon(QBrush(QColor(0xe8, 0xe0, 0x64)),
+	  QPen(QColor(0, 0, 0), 2));
 	_polygons[SUBTYPE(SLCONS, 15)] = Polygon(Qt::NoBrush, QPen(QColor(0, 0, 0), 2));
 	_polygons[SUBTYPE(SLCONS, 16)] = Polygon(Qt::NoBrush, QPen(QColor(0, 0, 0),
 	  2, Qt::DashLine));
@@ -296,9 +300,9 @@ void Style::polygonStyle()
 	  << TYPE(BUAARE) << TYPE(BUISGL) << TYPE(SILTNK) << TYPE(AIRARE)
 	  << TYPE(BRIDGE) << TYPE(I_BRIDGE) << TYPE(TUNNEL) << TYPE(I_TERMNL)
 	  << TYPE(SLCONS) << SUBTYPE(SLCONS, 1) << SUBTYPE(SLCONS, 2)
-	  << SUBTYPE(SLCONS, 3) << SUBTYPE(SLCONS, 4) << SUBTYPE(SLCONS, 5)
-	  << SUBTYPE(SLCONS, 6) << SUBTYPE(SLCONS, 7) << SUBTYPE(SLCONS, 8)
-	  << SUBTYPE(SLCONS, 9) << SUBTYPE(SLCONS, 10) << SUBTYPE(SLCONS, 11)
+	  << SUBTYPE(SLCONS, 8) << SUBTYPE(SLCONS, 9) << SUBTYPE(SLCONS, 3)
+	  << SUBTYPE(SLCONS, 4) << SUBTYPE(SLCONS, 5) << SUBTYPE(SLCONS, 6)
+	  << SUBTYPE(SLCONS, 7) << SUBTYPE(SLCONS, 10) << SUBTYPE(SLCONS, 11)
 	  << SUBTYPE(SLCONS, 12) << SUBTYPE(SLCONS, 13) << SUBTYPE(SLCONS, 14)
 	  << SUBTYPE(SLCONS, 15) << SUBTYPE(SLCONS, 16) << TYPE(I_SLCONS)
 	  << SUBTYPE(I_SLCONS, 1) << SUBTYPE(I_SLCONS, 2) << SUBTYPE(I_SLCONS, 3)
