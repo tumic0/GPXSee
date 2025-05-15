@@ -21,25 +21,26 @@ using namespace Util;
 	PNT(type, 4, ":/marine/" name "-green.png", dx, dy); \
 	PNT(type, 5, ":/marine/" name ".png", dx, dy); \
 	PNT(type, 6, ":/marine/" name "-yellow.png", dx, dy); \
-	PNT(type, 7, ":/marine/" name ".png", dx, dy); \
-	PNT(type, 8, ":/marine/" name ".png", dx, dy); \
-	PNT(type, 9, ":/marine/" name "-yellow.png", dx, dy); \
+	PNT(type, 7, ":/marine/" name "-grey.png", dx, dy); \
+	PNT(type, 8, ":/marine/" name "-orange.png", dx, dy); \
+	PNT(type, 9, ":/marine/" name "-orange.png", dx, dy); \
 	PNT(type, 10, ":/marine/" name ".png", dx, dy); \
-	PNT(type, 11, ":/marine/" name "-yellow.png", dx, dy); \
+	PNT(type, 11, ":/marine/" name "-orange.png", dx, dy); \
 	PNT(type, 12, ":/marine/" name ".png", dx, dy); \
 	PNT(type, 13, ":/marine/" name ".png", dx, dy); \
 	PNT(type, COLOR2(1, 2), ":/marine/" name "-white-black.png", dx, dy); \
 	PNT(type, COLOR2(1, 3), ":/marine/" name "-white-red.png", dx, dy); \
 	PNT(type, COLOR2(1, 4), ":/marine/" name "-white-green.png", dx, dy); \
 	PNT(type, COLOR2(1, 6), ":/marine/" name "-white-yellow.png", dx, dy); \
-	PNT(type, COLOR2(1, 9), ":/marine/" name "-white-yellow.png", dx, dy); \
-	PNT(type, COLOR2(1, 11), ":/marine/" name "-white-yellow.png", dx, dy); \
+	PNT(type, COLOR2(1, 8), ":/marine/" name "-white-orange.png", dx, dy); \
+	PNT(type, COLOR2(1, 9), ":/marine/" name "-white-orange.png", dx, dy); \
+	PNT(type, COLOR2(1, 11), ":/marine/" name "-white-orange.png", dx, dy); \
 	PNT(type, COLOR2(2, 1), ":/marine/" name "-black-white.png", dx, dy); \
 	PNT(type, COLOR2(2, 3), ":/marine/" name "-black-red.png", dx, dy); \
 	PNT(type, COLOR2(2, 4), ":/marine/" name "-black-green.png", dx, dy); \
 	PNT(type, COLOR2(2, 6), ":/marine/" name "-black-yellow.png", dx, dy); \
-	PNT(type, COLOR2(2, 9), ":/marine/" name "-black-yellow.png", dx, dy); \
-	PNT(type, COLOR2(2, 11), ":/marine/" name "-black-yellow.png", dx, dy); \
+	PNT(type, COLOR2(2, 9), ":/marine/" name "-black-orange.png", dx, dy); \
+	PNT(type, COLOR2(2, 11), ":/marine/" name "-black-orange.png", dx, dy); \
 	PNT(type, COLOR2(3, 1), ":/marine/" name "-red-white.png", dx, dy); \
 	PNT(type, COLOR2(3, 2), ":/marine/" name "-red-black.png", dx, dy); \
 	PNT(type, COLOR2(3, 4), ":/marine/" name "-red-green.png", dx, dy); \
@@ -48,14 +49,15 @@ using namespace Util;
 	PNT(type, COLOR2(4, 2), ":/marine/" name "-green-black.png", dx, dy); \
 	PNT(type, COLOR2(4, 3), ":/marine/" name "-green-red.png", dx, dy); \
 	PNT(type, COLOR2(6, 1), ":/marine/" name "-yellow-white.png", dx, dy); \
-	PNT(type, COLOR2(9, 1), ":/marine/" name "-yellow-white.png", dx, dy); \
-	PNT(type, COLOR2(11, 1), ":/marine/" name "-yellow-white.png", dx, dy); \
+	PNT(type, COLOR2(8, 1), ":/marine/" name "-orange-white.png", dx, dy); \
+	PNT(type, COLOR2(9, 1), ":/marine/" name "-orange-white.png", dx, dy); \
+	PNT(type, COLOR2(11, 1), ":/marine/" name "-orange-white.png", dx, dy); \
 	PNT(type, COLOR2(6, 2), ":/marine/" name "-yellow-black.png", dx, dy); \
-	PNT(type, COLOR2(9, 2), ":/marine/" name "-yellow-black.png", dx, dy); \
-	PNT(type, COLOR2(11, 2), ":/marine/" name "-yellow-black.png", dx, dy); \
+	PNT(type, COLOR2(9, 2), ":/marine/" name "-orange-black.png", dx, dy); \
+	PNT(type, COLOR2(11, 2), ":/marine/" name "-orange-black.png", dx, dy); \
 	PNT(type, COLOR3(1, 6, 1), ":/marine/" name "-white-yellow-white.png", dx, dy); \
-	PNT(type, COLOR3(1, 9, 1), ":/marine/" name "-white-yellow-white.png", dx, dy); \
-	PNT(type, COLOR3(1, 11, 1), ":/marine/" name "-white-yellow-white.png", dx, dy); \
+	PNT(type, COLOR3(1, 9, 1), ":/marine/" name "-white-orange-white.png", dx, dy); \
+	PNT(type, COLOR3(1, 11, 1), ":/marine/" name "-white-orange-white.png", dx, dy); \
 	PNT(type, COLOR3(2, 1, 2), ":/marine/" name "-black-white-black.png", dx, dy); \
 	PNT(type, COLOR3(2, 3, 2), ":/marine/" name "-black-red-black.png", dx, dy); \
 	PNT(type, COLOR3(2, 6, 2), ":/marine/" name "-black-yellow-black.png", dx, dy); \
