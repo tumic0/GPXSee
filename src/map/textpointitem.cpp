@@ -8,7 +8,7 @@
 
 
 #define FLAGS (Qt::AlignCenter | Qt::TextWordWrap | Qt::TextDontClip)
-#define MAX_TEXT_WIDTH 8
+#define MAX_TEXT_WIDTH 10
 #define MIN_BOX_WIDTH 2
 
 
