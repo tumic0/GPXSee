@@ -488,6 +488,8 @@ MapData::Poly::Poly(uint type, const Polygon &path, const Attributes &attr,
 		subtype = CATSLC;
 	else if (type == I_SLCONS)
 		subtype = I_CATSLC;
+	else if (type == ADMARE)
+		subtype = JRSDTN;
 
 	switch (type) {
 		case DEPARE:

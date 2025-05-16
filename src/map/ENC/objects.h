@@ -4,6 +4,7 @@
 #define TYPE(t) ((t)<<16)
 #define SUBTYPE(t, s) (((t)<<16)|(s))
 
+#define ADMARE 1
 #define AIRARE 2
 #define ACHBRT 3
 #define ACHARE 4
@@ -88,6 +89,8 @@
 #define SLOTOP 126
 #define SMCFAC 128
 #define SOUNDG 129
+#define STSLNE 132
+#define TESARE 135
 #define TSELNE 145
 #define TSSBND 146
 #define TSSLPT 148

@@ -288,10 +288,14 @@ void Style::polygonStyle()
 	_polygons[SUBTYPE(I_BERTHS, 6)] = _polygons[TYPE(BERTHS)];
 	_polygons[TYPE(I_TRNBSN)] = Polygon(Qt::NoBrush, QPen(QColor(0xeb, 0x49, 0xeb),
 	  1, Qt::DashLine));
-	_polygons[TYPE(CONZNE)] = Polygon(Qt::NoBrush, QPen(QColor(0xeb, 0x49, 0xeb),
-	  1, Qt::DashDotLine));
 	_polygons[TYPE(PILBOP)] = Polygon(Qt::NoBrush, QPen(QColor(0xeb, 0x49, 0xeb),
 	  1, Qt::DashLine));
+	_polygons[TYPE(CONZNE)] = Polygon(
+	  QImage(":/marine/seaward-limit-of-contiguous-zone.png"));
+	_polygons[TYPE(TESARE)] = Polygon(
+	  QImage(":/marine/seaward-limit-of-territorial-sea.png"));
+	_polygons[SUBTYPE(ADMARE, 2)] = Polygon(
+	  QImage(":/marine/international-maritime-boundary.png"));
 
 	_drawOrder
 	  << TYPE(LNDARE) << SUBTYPE(DEPARE, 0) << SUBTYPE(DEPARE, 1)
@@ -339,7 +343,8 @@ void Style::polygonStyle()
 	  << SUBTYPE(I_RESARE, 25) << SUBTYPE(RESARE, 26) << SUBTYPE(I_RESARE, 26)
 	  << TYPE(CBLARE) << TYPE(PIPARE) << TYPE(PRCARE) << TYPE(I_TRNBSN)
 	  << TYPE(PILBOP) << SUBTYPE(MARCUL, 0) << SUBTYPE(MARCUL, 1)
-	  << SUBTYPE(MARCUL, 2) << SUBTYPE(MARCUL, 3) << TYPE(CONZNE);
+	  << SUBTYPE(MARCUL, 2) << SUBTYPE(MARCUL, 3) << TYPE(CONZNE)
+	  << TYPE(TESARE) << SUBTYPE(ADMARE, 2);
 }
 
 void Style::lineStyle(qreal ratio)
@@ -428,6 +433,8 @@ void Style::lineStyle(qreal ratio)
 	  Qt::DashLine));
 	_lines[SUBTYPE(RDOCAL, 4)] = Line(QPen(QColor(0xeb, 0x49, 0xeb), 1,
 	  Qt::DashLine));
+	_lines[TYPE(STSLNE)] = Line(
+	  QImage(":/marine/straight-territorial-sea-baseline.png"));
 }
 
 void Style::pointStyle(qreal ratio)
