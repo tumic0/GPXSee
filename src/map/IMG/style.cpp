@@ -7,8 +7,8 @@
 using namespace IMG;
 using namespace Util;
 
-#define PNT(type, color, img, dx, dy) \
-  _points[(type) | (color)<<24] = Point(QImage(img), QPoint(dx, dy));
+#define PNT(type, index, img, dx, dy) \
+	_points[(type) | (index)<<24] = Point(QImage(img), QPoint(dx, dy));
 
 #define COLORSET(type, name, dx, dy) \
 	PNT(type, 0, ":/marine/" name ".png", dx, dy); \
@@ -490,9 +490,11 @@ void Style::defaultLineStyle(qreal ratio)
 	_lines[0x10106] = Line(QImage(":/marine/cable-line.png"));
 	_lines[0x10107] = Line(QPen(QColor(0xa5, 0x81, 0x40), 3, Qt::SolidLine));
 	_lines[0x10108] = Line(QPen(QColor(0, 0, 0), 1, Qt::SolidLine));
+
 	_lines[0x10301] = Line(QPen(QColor(0x0e, 0x10, 0x87), 1, Qt::SolidLine));
 	_lines[0x10307] = Line(QPen(QColor(0x05, 0x62, 0x0e), 1, Qt::SolidLine));
 	_lines[0x10309] = Line(QPen(QColor(0x0e, 0x10, 0x87), 1, Qt::SolidLine));
+
 	_lines[0x10401] = Line(QImage(":/marine/cable.png"));
 	_lines[0x10402] = Line(QImage(":/marine/pipeline.png"));
 	_lines[0x10403] = Line(QPen(QColor(0xe7, 0x28, 0xe7), 2, Qt::DotLine));
@@ -507,6 +509,7 @@ void Style::defaultLineStyle(qreal ratio)
 	_lines[0x10409] = Line(QPen(QColor(0, 0, 0), 1, Qt::DotLine));
 	_lines[0x1040b] = Line(QPen(QColor(0, 0, 0), 2, Qt::DashLine));
 	_lines[0x1040c] = Line(QPen(QColor(0, 0, 0), 2));
+
 	_lines[0x10501] = Line(QPen(QColor(0xe7, 0x28, 0xe7), 1, Qt::DashLine));
 	_lines[0x110501] = Line(QImage(":/marine/noanchor-line.png"));
 	_lines[0x10502] = Line(QPen(QColor(0xe7, 0x28, 0xe7), 1, Qt::DashLine));
@@ -514,6 +517,7 @@ void Style::defaultLineStyle(qreal ratio)
 	_lines[0x10503] = Line(QPen(QColor(0xe7, 0x28, 0xe7), 1, Qt::DashLine));
 	_lines[0x110503] = Line(QImage(":/marine/entry-prohibited-line.png"));
 	_lines[0x10504] = Line(QPen(QColor(0xe7, 0x28, 0xe7), 1, Qt::DashLine));
+	_lines[0x110504] = Line(QImage(":/marine/entry-prohibited-line.png"));
 	_lines[0x10505] = Line(QPen(QColor(0xe7, 0x28, 0xe7), 1, Qt::DashLine));
 	_lines[0x110505] = Line(QImage(":/marine/noanchor-line.png"));
 	_lines[0x10506] = Line(QPen(QColor(0x30, 0xa0, 0x1b), 1, Qt::DashLine));
@@ -522,15 +526,36 @@ void Style::defaultLineStyle(qreal ratio)
 	_lines[0x110507] = Line(QImage(":/marine/safety-zone-line.png"));
 	_lines[0x10508] = Line(QPen(QColor(0xff, 0x40, 0x40), 1, Qt::DashLine));
 	_lines[0x110508] = Line(QImage(":/marine/minefield-line.png"));
-	_lines[0x10601] = Line(QPen(QColor(0, 0, 0), 1, Qt::DashLine));
+
+	_lines[0x10601] = Line(QPen(QColor(0, 0, 0), 1));
+	_lines[0x10601 | 1<<24] = Line(QPen(QColor(0, 0x90, 0xfc), 1));
+	_lines[0x10601 | 2<<24] = Line(QPen(QColor(0x30, 0xa0, 0x1b), 1));
+	_lines[0x10601 | 3<<24] = Line(QPen(QColor(0xa7, 0xf1, 0xfc), 1));
+	_lines[0x10601 | 4<<24] = Line(QPen(QColor(0xff, 0x40, 0x40), 1));
+	_lines[0x10601 | 5<<24] = Line(QPen(QColor(0xe7, 0x28, 0xe7), 1));
+	_lines[0x10601 | 6<<24] = Line(QPen(QColor(0xfc, 0xe0, 0x1f), 1));
+	_lines[0x10601 | 7<<24] = Line(QPen(QColor(0xfc, 0x79, 0x1e), 1));
+	_lines[0x10601 | 8<<24] = Line(QPen(QColor(0x40, 0x40, 0x40), 1));
+	_lines[0x10601 | 9<<24] = Line(QPen(QColor(0x84, 0xe6, 0xfc), 1));
+	_lines[0x10601 | 10<<24] = Line(QPen(QColor(0x83, 0x53, 0x15), 1));
+	_lines[0x10601 | 11<<24] = Line(QPen(QColor(0xd2, 0xfc, 0xfc), 1));
+	_lines[0x10601 | 12<<24] = Line(QPen(QColor(0xc5, 0xf1, 0xc2), 1));
+	_lines[0x10601 | 13<<24] = Line(QPen(QColor(0xfc, 0xc6, 0xfc), 1));
+	_lines[0x10601 | 14<<24] = Line(QPen(QColor(0xe2, 0xdc, 0xa9), 1));
+	_lines[0x10601 | 15<<24] = Line(QPen(QColor(0xcd, 0xcd, 0xcd), 1));
 	_lines[0x10602] = Line(QPen(QColor(0xfc, 0xb4, 0xfc), 2));
-	_lines[0x10603] = Line(QPen(QColor(0xe7, 0x28, 0xe7), 1.5, Qt::DashDotLine));
-	_lines[0x10604] = Line(QPen(QColor(0xe7, 0x28, 0xe7), 1, Qt::DashDotLine));
+	_lines[0x10603] = Line(QImage(":/marine/international-maritime-boundary.png"));
+	_lines[0x110603] = Line(QImage(":/marine/international-maritime-boundary.png"));
+	_lines[0x10604] = Line(QPen(QColor(0xe7, 0x28, 0xe7), 1));
+	_lines[0x110604] = Line(QImage(":/marine/straight-territorial-sea-baseline.png"));
+	_lines[0x10605] = Line(QImage(":/marine/seaward-limit-of-territorial-sea.png"));
+	_lines[0x110605] = Line(QImage(":/marine/seaward-limit-of-territorial-sea.png"));
 	_lines[0x10606] = Line(QPen(QColor(0xe7, 0x28, 0xe7), 1, Qt::DashLine));
 	_lines[0x110606] = Line(QImage(":/marine/anchor-line.png"));
 	_lines[0x10608] = Line(QPen(QColor(0xe7, 0x28, 0xe7), 1, Qt::DashLine));
 	_lines[0x110608] = Line(QImage(":/marine/fishing-line.png"));
 	_lines[0x1060b] = Line(QPen(QColor(0xe7, 0x28, 0xe7), 1, Qt::DashDotDotLine));
+	_lines[0x11060b] = Line(QPen(QColor(0xe7, 0x28, 0xe7), 1, Qt::DashDotDotLine));
 	_lines[0x1060c] = Line(QPen(QColor(0xe7, 0x28, 0xe7), 1, Qt::SolidLine));
 	_lines[0x1060d] = Line(QPen(QColor(0xeb, 0x49, 0xeb), 1, Qt::DashLine));
 	_lines[0x10611] = Line(QPen(QColor(0xeb, 0x49, 0xeb), 1, Qt::DashLine));
@@ -832,6 +857,23 @@ void Style::defaultPointStyle(qreal ratio)
 	_points[0x10409] = Point(QImage(":/marine/fishing-farm.png"));
 	_points[0x1040a] = Point(QImage(":/marine/rock-dangerous.png"));
 	_points[0x1040c] = Point(QImage(":/marine/rock-exposed.png"));
+
+	_points[0x10500] = Point(Small, QColor(0, 0, 0));
+	_points[0x10500 | 1<<20] = Point(Small, QColor(0, 0x90, 0xfc));
+	_points[0x10500 | 2<<20] = Point(Small, QColor(0x30, 0xa0, 0x1b));
+	_points[0x10500 | 3<<20] = Point(Small, QColor(0xa7, 0xf1, 0xfc));
+	_points[0x10500 | 4<<20] = Point(Small, QColor(0xff, 0x40, 0x40));
+	_points[0x10500 | 5<<20] = Point(Small, QColor(0xe7, 0x28, 0xe7));
+	_points[0x10500 | 6<<20] = Point(Small, QColor(0xfc, 0xe0, 0x1f));
+	_points[0x10500 | 7<<20] = Point(Small, QColor(0xfc, 0x79, 0x1e));
+	_points[0x10500 | 8<<20] = Point(Small, QColor(0x40, 0x40, 0x40));
+	_points[0x10500 | 9<<20] = Point(Small, QColor(0x84, 0xe6, 0xfc));
+	_points[0x10500 | 10<<20] = Point(Small, QColor(0x83, 0x53, 0x15));
+	_points[0x10500 | 11<<20] = Point(Small, QColor(0xd2, 0xfc, 0xfc));
+	_points[0x10500 | 12<<20] = Point(Small, QColor(0xc5, 0xf1, 0xc2));
+	_points[0x10500 | 13<<20] = Point(Small, QColor(0xfc, 0xc6, 0xfc));
+	_points[0x10500 | 14<<20] = Point(Small, QColor(0xe2, 0xdc, 0xa9));
+	_points[0x10500 | 15<<20] = Point(Small, QColor(0xcd, 0xcd, 0xcd));
 
 	_points[0x10701] = Point(QImage(":/marine/anchorage.png"));
 	_points[0x10702] = Point(QImage(":/marine/boarding-place.png"));

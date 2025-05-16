@@ -244,8 +244,11 @@ bool RGNFile::readLabel(Handle &hdl, LBLFile *lbl, Handle &lblHdl,
 	return true;
 }
 
-bool RGNFile::readLineInfo(Handle &hdl, quint32 size, MapData::Poly *line) const
+bool RGNFile::readLineInfo(Handle &hdl, quint8 flags, quint32 size,
+  MapData::Poly *line) const
 {
+	line->flags |= (flags & 0xf)<<24;
+
 	if (size == 1) {
 		quint32 val;
 
@@ -308,9 +311,11 @@ bool RGNFile::readClassFields(Handle &hdl, SegmentType segmentType,
 		readBuoyInfo(hdl, flags, rs, point);
 	if (point && Style::isLight(point->type))
 		readLightInfo(hdl, flags, rs, point);
+	if (point && Style::isLabelPoint(point->type))
+		point->flags |= (flags & 0xf)<<20;
 
 	if (line && Style::isMarineLine(line->type))
-		readLineInfo(hdl, rs, line);
+		readLineInfo(hdl, flags, rs, line);
 
 	return seek(hdl, off + rs);
 }

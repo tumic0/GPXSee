@@ -186,6 +186,16 @@ void RasterTile::drawPolygons(QPainter *painter,
 	}
 }
 
+static quint32 lineType(quint32 type, quint32 flags)
+{
+	if (Style::isMiscLine(type))
+		return type | (flags & 0xFF000000);
+	else if (flags & MapData::Poly::Direction)
+		return type | 1<<20;
+	else
+		return type;
+}
+
 void RasterTile::drawLines(QPainter *painter,
   const QList<MapData::Poly> &lines) const
 {
@@ -205,8 +215,7 @@ void RasterTile::drawLines(QPainter *painter,
 	for (int i = 0; i < lines.size(); i++) {
 		const MapData::Poly &poly = lines.at(i);
 		const Style::Line &style = _data->style()->line(
-		  (poly.flags & MapData::Poly::Direction)
-		  ? poly.type | 1<<20 :  poly.type);
+		  lineType(poly.type, poly.flags));
 
 		if (!style.img().isNull()) {
 			if (poly.flags & MapData::Poly::Invert)
@@ -528,7 +537,8 @@ void RasterTile::processPoints(QList<MapData::Point> &points,
 		const MapData::Point &point = points.at(i);
 		const Style *style = _data->style();
 		const Style::Point &ps = style->point(Style::hasColorset(point.type)
-		  ? point.type | (point.flags & 0xFF000000) : point.type);
+		  ? point.type | (point.flags & 0xFF000000)
+		  : point.type | (point.flags & 0x00F00000));
 		bool poi = Style::isPOI(point.type);
 		bool sl = sectorLight(point.lights);
 
