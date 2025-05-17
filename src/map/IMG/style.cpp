@@ -853,6 +853,7 @@ void Style::defaultPointStyle(qreal ratio)
 	_points[0x10401] = Point(QImage(":/marine/obstruction.png"));
 	_points[0x10402] = Point(QImage(":/marine/wreck.png"));
 	_points[0x10403] = Point(QImage(":/marine/wreck-exposed.png"), QPoint(0, -4));
+	_points[0x10405] = Point(QImage(":/marine/foul.png"));
 	_points[0x10408] = Point(QImage(":/marine/obstruction-covers.png"));
 	_points[0x10409] = Point(QImage(":/marine/fishing-farm.png"));
 	_points[0x1040a] = Point(QImage(":/marine/rock-dangerous.png"));
