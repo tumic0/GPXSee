@@ -525,6 +525,8 @@ MapData::Line::Line(uint type, const QVector<Coordinates> &path,
 		_label = QString::fromLatin1(_attr.value(VALDCO));
 	else if (type == LNDELV)
 		_label = QString::fromLatin1(_attr.value(ELEVAT));
+	else if (type == RECTRC)
+		_label = QString::fromLatin1(_attr.value(ORIENT));
 	else
 		_label = QString::fromLatin1(_attr.value(OBJNAM));
 }

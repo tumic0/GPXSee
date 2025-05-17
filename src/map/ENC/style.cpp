@@ -411,6 +411,7 @@ void Style::lineStyle(qreal ratio)
 	  Qt::SolidLine));
 	_lines[TYPE(I_WTWAXS)] = Line(QPen(QColor(0, 0, 0), 0, Qt::DashLine));
 	_lines[SUBTYPE(RECTRC, 1)] = Line(QPen(QColor(0, 0, 0), 0, Qt::SolidLine));
+	_lines[SUBTYPE(RECTRC, 1)].setTextFontSize(Small);
 	_lines[SUBTYPE(RECTRC, 2)] = Line(QPen(QColor(0, 0, 0), 0, Qt::DashLine));
 	_lines[SUBTYPE(RCRTCL, 1)] = Line(QPen(QColor(0xeb, 0x49, 0xeb), 0,
 	  Qt::SolidLine));
