@@ -188,9 +188,12 @@ void RasterTile::drawPolygons(QPainter *painter,
 
 static quint32 lineType(quint32 type, quint32 flags)
 {
-	if (Style::isMiscLine(type))
-		return type | (flags & 0xFF000000);
-	else if (flags & MapData::Poly::Direction)
+	if (Style::isMiscLine(type)) {
+		if (flags & MapData::Poly::Dashed)
+			return type | (flags & 0xFF000000) | 1<<20;
+		else
+			return type | (flags & 0xFF000000);
+	} else if (flags & MapData::Poly::Direction)
 		return type | 1<<20;
 	else
 		return type;

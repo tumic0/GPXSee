@@ -255,14 +255,19 @@ bool RGNFile::readLineInfo(Handle &hdl, quint8 flags, quint32 size,
 		if (!readUInt8(hdl, val))
 			return false;
 
+		if (val & 3)
+			line->flags |= MapData::Poly::Dashed;
 		if ((val >> 3) & 3)
 			line->flags |= MapData::Poly::Direction;
 		if ((val >> 3) & 2)
 			line->flags |= MapData::Poly::Invert;
 
 		return true;
-	} else
+	} else {
+		if ((flags >> 4) & 3)
+			line->flags |= MapData::Poly::Dashed;
 		return (!size);
+	}
 }
 
 bool RGNFile::readClassFields(Handle &hdl, SegmentType segmentType,
