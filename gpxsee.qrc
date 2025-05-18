@@ -333,6 +333,7 @@
 		<file alias="seaward-limit-of-territorial-sea.png">icons/map/marine/seaward-limit-of-territorial-sea.png</file>
 		<file alias="seaward-limit-of-contiguous-zone.png">icons/map/marine/seaward-limit-of-contiguous-zone.png</file>
 		<file alias="foul.png">icons/map/marine/foul.png</file>
+		<file alias="dumping-ground-line.png">icons/map/marine/dumping-ground-line.png</file>
 	</qresource>
 
 	<!-- Patterns (Mapsforge) -->

@@ -497,7 +497,7 @@ void Style::defaultLineStyle(qreal ratio)
 
 	_lines[0x10401] = Line(QImage(":/marine/cable.png"));
 	_lines[0x10402] = Line(QImage(":/marine/pipeline.png"));
-	_lines[0x10403] = Line(QPen(QColor(0xe7, 0x28, 0xe7), 2, Qt::DotLine));
+	_lines[0x10403] = Line(QPen(QColor(0, 0, 0), 2, Qt::DotLine));
 	_lines[0x10404] = Line(QPen(QColor(0, 0, 0), 1, Qt::DashLine));
 	_lines[0x110404] = Line(QImage(":/marine/fishing-farm-line.png"));
 	_lines[0x10405] = Line(QPen(QColor(0xe7, 0x28, 0xe7), 1, Qt::DashLine));
@@ -505,7 +505,9 @@ void Style::defaultLineStyle(qreal ratio)
 	_lines[0x10406] = Line(QPen(QColor(0xe7, 0x28, 0xe7), 1, Qt::DashLine));
 	_lines[0x110406] = Line(QImage(":/marine/cable-area-line.png"));
 	_lines[0x10407] = Line(QPen(QColor(0xa3, 0xa3, 0xa3), 1, Qt::DashLine));
+	_lines[0x110407] = Line(QImage(":/marine/dumping-ground-line.png"));
 	_lines[0x10408] = Line(QPen(QColor(0xff, 0x40, 0x40), 1, Qt::DashLine));
+	_lines[0x110408] = Line(QImage(":/marine/minefield-line.png"));
 	_lines[0x10409] = Line(QPen(QColor(0, 0, 0), 1, Qt::DotLine));
 	_lines[0x1040b] = Line(QPen(QColor(0, 0, 0), 2, Qt::DashLine));
 	_lines[0x1040c] = Line(QPen(QColor(0, 0, 0), 2));
@@ -558,6 +560,8 @@ void Style::defaultLineStyle(qreal ratio)
 	_lines[0x11060b] = Line(QPen(QColor(0xe7, 0x28, 0xe7), 1, Qt::DashDotDotLine));
 	_lines[0x1060c] = Line(QPen(QColor(0xe7, 0x28, 0xe7), 1, Qt::SolidLine));
 	_lines[0x1060d] = Line(QPen(QColor(0xeb, 0x49, 0xeb), 1, Qt::DashLine));
+	_lines[0x1060e] = Line(QPen(QColor(0xff, 0x40, 0x40), 1, Qt::DashLine));
+	_lines[0x11060e] = Line(QPen(QColor(0xff, 0x40, 0x40), 1, Qt::DashLine));
 	_lines[0x10611] = Line(QPen(QColor(0xeb, 0x49, 0xeb), 1, Qt::DashLine));
 }
 
