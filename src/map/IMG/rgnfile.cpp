@@ -319,7 +319,7 @@ bool RGNFile::readClassFields(Handle &hdl, SegmentType segmentType,
 	if (point && Style::isLabelPoint(point->type))
 		point->flags |= (flags & 0xf)<<20;
 
-	if (line && Style::isMarineLine(line->type))
+	if (line && Style::isStyledLine(line->type))
 		readLineInfo(hdl, flags, rs, line);
 
 	return seek(hdl, off + rs);

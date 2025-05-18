@@ -142,6 +142,8 @@ public:
 	  {return (type >= 0x1400 && type <= 0x153f);}
 	static bool isState(quint32 type)
 	  {return (type == TYPE(0x1e));}
+	static bool isMarina(quint32 type)
+	  {return type == 0x10703;}
 	static bool isRaster(quint32 type)
 	  {return (type == 0x10613);}
 	static bool isDepthPoint(quint32 type)
@@ -156,12 +158,10 @@ public:
 	  {return type == 0x10500;}
 	static bool isMarinePoint(quint32 type)
 	  {return type >= 0x10100 && type < 0x10a00;}
-	static bool isMarineLine(quint32 type)
+	static bool isStyledLine(quint32 type)
 	  {return type >= 0x10400 && type < 0x10700;}
-	static bool isMiscLine(quint32 type)
+	static bool isCartographicLine(quint32 type)
 	  {return type == 0x10601;}
-	static bool isMarina(quint32 type)
-	  {return type == 0x10703;}
 
 	static bool hasColorset(quint32 type)
 	  {return (isBuoy(type) && !(type == 0x1020d || type >= 0x10216));}
