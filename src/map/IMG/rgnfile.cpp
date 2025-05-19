@@ -273,16 +273,70 @@ bool RGNFile::readLineStyle(Handle &hdl, quint8 flags, quint32 size,
 bool RGNFile::readRecommendedRoute(Handle &hdl, quint8 flags, quint32 size,
   MapData::Poly *line) const
 {
-	Q_UNUSED(flags);
-	quint32 val;
+	quint32 f2;
 
-	if (!(size >= 1 && readUInt8(hdl, val)))
+	if (!(size >= 1 && readUInt8(hdl, f2)))
 		return false;
+	size--;
 
-	if (val & 2)
-		line->flags |= MapData::Poly::Dashed;
+	if ((flags >> 5) == 7) {
+		quint32 f3;
+		if (!(size >= 1 && readUInt8(hdl, f3)))
+			return false;
+		size--;
 
-	return true;
+		if (f3 & 1) {
+			quint32 v1;
+			if (!(size >= 1 && readUInt8(hdl, v1)))
+				return false;
+			size--;
+			if (v1 & 1) {
+				quint32 v2;
+				if (!(size >= 1 && readUInt8(hdl, v2)))
+					return false;
+				size--;
+			}
+		}
+		if (f3 & 2) {
+			quint32 angle;
+			if (!(size >= 2 && readUInt16(hdl, angle)))
+				return false;
+			size -= 2;
+			line->label = Label(QString::number(angle / 10.0) + QChar(0x00B0));
+		}
+		if (f3 & 4) {
+			quint32 v;
+			if (!(size >= 1 && readUInt8(hdl, v)))
+				return false;
+			size--;
+
+			if ((v >> 4) & 3) {
+				line->flags |= MapData::Poly::Dashed;
+				line->label = Label();
+			}
+		}
+	} else {
+		if ((f2 & 0xe)) {
+			quint32 angle;
+			if (!(size >= 2 && readUInt16(hdl, angle)))
+				return false;
+			size -= 2;
+			line->label = Label(QString::number(angle / 10.0) + QChar(0x00B0));
+		} else if (f2 & 0x70) {
+			quint32 v1;
+			if (!(size >= 1 && readUInt8(hdl, v1)))
+				return false;
+			size--;
+			if (v1 & 1) {
+				quint32 v2;
+				if (!(size >= 1 && readUInt8(hdl, v2)))
+					return false;
+				size--;
+			}
+		}
+	}
+
+	return (size == 0);
 }
 
 bool RGNFile::readClassFields(Handle &hdl, SegmentType segmentType,
