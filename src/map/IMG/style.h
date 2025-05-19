@@ -162,6 +162,8 @@ public:
 	  {return type >= 0x10400 && type < 0x10700;}
 	static bool isCartographicLine(quint32 type)
 	  {return type == 0x10601;}
+	static bool isRecommendedRoute(quint32 type)
+	  {return type == 0x10108;}
 
 	static bool hasColorset(quint32 type)
 	  {return (isBuoy(type) && !(type == 0x1020d || type >= 0x10216));}

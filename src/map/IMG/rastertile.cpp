@@ -193,7 +193,9 @@ static quint32 lineType(quint32 type, quint32 flags)
 			return type | (flags & 0xFF000000) | 1<<20;
 		else
 			return type | (flags & 0xFF000000);
-	} else if (flags & MapData::Poly::Direction)
+	} else if (Style::isRecommendedRoute(type))
+		return (flags & MapData::Poly::Dashed) ? type | 1<<20 : type;
+	else if (flags & MapData::Poly::Direction)
 		return type | 1<<20;
 	else
 		return type;

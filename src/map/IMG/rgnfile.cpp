@@ -244,7 +244,7 @@ bool RGNFile::readLabel(Handle &hdl, LBLFile *lbl, Handle &lblHdl,
 	return true;
 }
 
-bool RGNFile::readLineInfo(Handle &hdl, quint8 flags, quint32 size,
+bool RGNFile::readLineStyle(Handle &hdl, quint8 flags, quint32 size,
   MapData::Poly *line) const
 {
 	line->flags |= (flags & 0xf)<<24;
@@ -268,6 +268,21 @@ bool RGNFile::readLineInfo(Handle &hdl, quint8 flags, quint32 size,
 			line->flags |= MapData::Poly::Dashed;
 		return (!size);
 	}
+}
+
+bool RGNFile::readRecommendedRoute(Handle &hdl, quint8 flags, quint32 size,
+  MapData::Poly *line) const
+{
+	Q_UNUSED(flags);
+	quint32 val;
+
+	if (!(size >= 1 && readUInt8(hdl, val)))
+		return false;
+
+	if (val & 2)
+		line->flags |= MapData::Poly::Dashed;
+
+	return true;
 }
 
 bool RGNFile::readClassFields(Handle &hdl, SegmentType segmentType,
@@ -320,7 +335,9 @@ bool RGNFile::readClassFields(Handle &hdl, SegmentType segmentType,
 		point->flags |= (flags & 0xf)<<20;
 
 	if (line && Style::isStyledLine(line->type))
-		readLineInfo(hdl, flags, rs, line);
+		readLineStyle(hdl, flags, rs, line);
+	if (line && Style::isRecommendedRoute(line->type))
+		readRecommendedRoute(hdl, flags, rs, line);
 
 	return seek(hdl, off + rs);
 }
