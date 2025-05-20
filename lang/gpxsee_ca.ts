@@ -30,7 +30,7 @@
     <message>
         <location filename="../src/GUI/cadencegraph.cpp" line="28"/>
         <source>Avg</source>
-        <translation>Mitjana</translation>
+        <translation>Mitj.</translation>
     </message>
     <message>
         <location filename="../src/GUI/cadencegraph.cpp" line="30"/>
@@ -1236,7 +1236,7 @@
     <message>
         <location filename="../src/GUI/heartrategraph.cpp" line="28"/>
         <source>Avg</source>
-        <translation>Mitjana</translation>
+        <translation>Mitj</translation>
     </message>
     <message>
         <location filename="../src/GUI/heartrategraph.cpp" line="30"/>
@@ -2282,7 +2282,7 @@
     <message>
         <location filename="../src/GUI/powergraph.cpp" line="28"/>
         <source>Avg</source>
-        <translation>Mitjana</translation>
+        <translation>Mitj</translation>
     </message>
     <message>
         <location filename="../src/GUI/powergraph.cpp" line="30"/>
@@ -2407,7 +2407,7 @@
     <message>
         <location filename="../src/GUI/speedgraph.cpp" line="34"/>
         <source>Avg</source>
-        <translation>Mitjana</translation>
+        <translation>Mitj</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraph.cpp" line="36"/>
@@ -2504,7 +2504,7 @@
     <message>
         <location filename="../src/GUI/temperaturegraph.cpp" line="28"/>
         <source>Avg</source>
-        <translation>Mitjana</translation>
+        <translation>Mitj</translation>
     </message>
     <message>
         <location filename="../src/GUI/temperaturegraph.cpp" line="30"/>
