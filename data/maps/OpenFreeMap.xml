@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map xmlns="http://www.gpxsee.org/map/1.4">
 	<name>OpenFreeMap</name>
-	<url>https://tiles.openfreemap.org/planet/20250507_001001_pt/$z/$x/$y.pbf</url>
+	<url>https://tiles.openfreemap.org/planet/latest/$z/$x/$y.pbf</url>
 	<tile type="vector" size="512"/>
 	<zoom max="14"/>
 	<copyright>© OpenFreeMap © OpenMapTiles © OpenStreetMap contributors</copyright>
