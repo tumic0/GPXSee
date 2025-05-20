@@ -374,9 +374,9 @@ bool RGNFile::readClassFields(Handle &hdl, SegmentType segmentType,
 
 	if (poly && Style::isRaster(poly->type))
 		readRasterInfo(hdl, lbl, rs, poly);
+
 	if (point && !Style::isMarinePoint(point->type))
 		readLabel(hdl, lbl, lblHdl, flags, rs, point);
-
 	if (point && Style::isDepthPoint(point->type))
 		readDepthInfo(hdl, flags, rs, point);
 	if (point && Style::isObstructionPoint(point->type))

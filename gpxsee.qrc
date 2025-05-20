@@ -334,6 +334,7 @@
 		<file alias="seaward-limit-of-contiguous-zone.png">icons/map/marine/seaward-limit-of-contiguous-zone.png</file>
 		<file alias="foul.png">icons/map/marine/foul.png</file>
 		<file alias="dumping-ground-line.png">icons/map/marine/dumping-ground-line.png</file>
+		<file alias="radio-call-garmin.png">icons/map/marine/radio-call-garmin.png</file>
 	</qresource>
 
 	<!-- Patterns (Mapsforge) -->
