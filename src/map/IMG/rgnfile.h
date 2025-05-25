@@ -75,12 +75,12 @@ private:
 	  MapData::Poly *line) const;
 	bool readLabel(Handle &hdl, LBLFile *lbl, Handle &lblHdl,
 	  quint8 flags, quint32 size, MapData::Point *point) const;
-	bool readLclNavaid(Handle &hdl, quint32 size,
-	  MapData::Point *point) const;
+	bool readLclNavaid(Handle &hdl, quint32 size, MapData::Point *point) const;
 	bool readLclSectors(Handle &hdl, quint32 &size, quint32 flags,
 	  Light &light) const;
 	bool readLclLights(Handle &hdl, quint32 &size, quint32 lights,
 	  MapData::Point *point) const;
+	bool readLclImg(Handle &hdl, quint32 size, MapData::Point *point) const;
 
 	HuffmanTable *_huffmanTable;
 	Section _base, _dict, _polygons, _lines, _points;
