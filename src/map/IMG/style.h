@@ -147,7 +147,7 @@ public:
 	static bool isRaster(quint32 type)
 	  {return (type == 0x10613);}
 	static bool isDepthPoint(quint32 type)
-	  {return (type == 0x10301);}
+	  {return (type >= 0x10301 && type <= 0x10302);}
 	static bool isObstructionPoint(quint32 type)
 	  {return (type >= 0x10400 && type <= 0x10401);}
 	static bool isBuoy(quint32 type)
@@ -156,6 +156,8 @@ public:
 	  {return (type >= 0x10100 && type < 0x10200);}
 	static bool isLabelPoint(quint32 type)
 	  {return type == 0x10500;}
+	static bool isDHPoint(quint32 type)
+	  {return type == 0x10300;}
 	static bool isMarinePoint(quint32 type)
 	  {return type >= 0x10100 && type < 0x10a00;}
 	static bool isStyledLine(quint32 type)

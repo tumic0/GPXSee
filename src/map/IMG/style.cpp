@@ -869,6 +869,9 @@ void Style::defaultPointStyle(qreal ratio)
 	_points[0x10217] = Point(QImage(":/marine/pylon.png"));
 	_points[0x10218] = Point(QImage(":/marine/pylon.png"));
 
+	_points[0x10300 | 29<<24] = Point(QImage(":/marine/flagstaff.png"));
+	_points[0x10300 | 30<<24] = Point(QImage(":/marine/monument.png"));
+	_points[0x10300 | 83<<24] = Point(QImage(":/marine/crane.png"));
 	_points[0x10304] = Point(QImage(":/marine/building.png"));
 	_points[0x10305] = Point(QImage(":/marine/chimney.png"), QPoint(0, -11));
 	_points[0x10306] = Point(QImage(":/marine/church.png"));

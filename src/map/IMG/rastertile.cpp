@@ -534,7 +534,7 @@ static Light::Color ordinaryLight(const QVector<Light> &lights)
 
 static quint32 pointType(quint32 type, quint32 flags)
 {
-	if (Style::hasColorset(type))
+	if (Style::hasColorset(type) || Style::isDHPoint(type))
 		return type | (flags & 0xFF000000);
 	else if (Style::isLabelPoint(type))
 		return type | (flags & 0xFFF00000);
