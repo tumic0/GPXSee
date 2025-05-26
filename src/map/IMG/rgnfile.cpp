@@ -605,16 +605,15 @@ bool RGNFile::readLclFields(Handle &hdl, const quint32 flags[3],
 				} else
 					size = m + 1;
 
-				if (i == 2 && point) {
-					if (!readLclNavaid(hdl, size, point))
-						return false;
-				} else if (i == 3 && point) {
-					if (!readLclImg(hdl, size, point))
-						return false;
-				} else {
-					if (!seek(hdl, pos(hdl) + size))
-						return false;
-				}
+				quint32 off = pos(hdl);
+
+				if (i == 2 && point)
+					readLclNavaid(hdl, size, point);
+				else if (i == 3 && point)
+					readLclImg(hdl, size, point);
+
+				if (!seek(hdl, off + size))
+					return false;
 			}
 			bitfield >>= 1;
 			j++;
