@@ -30,7 +30,7 @@
     <message>
         <location filename="../src/GUI/cadencegraph.cpp" line="28"/>
         <source>Avg</source>
-        <translation>Mitj.</translation>
+        <translation>Mitj</translation>
     </message>
     <message>
         <location filename="../src/GUI/cadencegraph.cpp" line="30"/>
