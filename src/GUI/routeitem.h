@@ -23,15 +23,9 @@ public:
 	void showWaypointIcons(bool show);
 
 	ToolTip info(bool extended) const;
-	QDateTime date() const {return QDateTime();}
 
 private:
-	QString _name;
-	QString _desc;
-	QString _comment;
-	QVector<Link> _links;
 	QVector<WaypointItem*> _waypoints;
-	QString _file;
 };
 
 #endif // ROUTEITEM_H

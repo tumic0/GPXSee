@@ -173,6 +173,7 @@ SETTING(routeWaypoints,      "routeWaypoints",         true                   );
 SETTING(waypointIcons,       "waypointIcons",          false                  );
 SETTING(waypointLabels,      "waypointLabels",         true                   );
 SETTING(pathTicks,           "pathTicks",              false                  );
+SETTING(legend,              "legend",                 false                  );
 SETTING(positionMarkers,     "positionMarkers",        true                   );
 SETTING(markerInfo,          "markerInfo",             MarkerInfoItem::None   );
 SETTING(useStyles,           "styles",                 true                   );

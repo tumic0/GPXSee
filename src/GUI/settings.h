@@ -122,6 +122,7 @@ public:
 	static const Setting waypointIcons;
 	static const Setting waypointLabels;
 	static const Setting pathTicks;
+	static const Setting legend;
 	static const Setting positionMarkers;
 	static const Setting markerInfo;
 	static const Setting useStyles;

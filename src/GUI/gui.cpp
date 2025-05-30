@@ -448,6 +448,11 @@ void GUI::createActions()
 	_showTicksAction->setCheckable(true);
 	connect(_showTicksAction, &QAction::triggered, _mapView,
 	  &MapView::showTicks);
+	_showLegendAction = new QAction(tr("Legend"), this);
+	_showLegendAction->setMenuRole(QAction::NoRole);
+	_showLegendAction->setCheckable(true);
+	connect(_showLegendAction, &QAction::triggered, _mapView,
+	  &MapView::showLegend);
 	QActionGroup *markerInfoGroup = new QActionGroup(this);
 	connect(markerInfoGroup, &QActionGroup::triggered, this,
 	  &GUI::showPathMarkerInfo);
@@ -719,6 +724,7 @@ void GUI::createMenus()
 	dataMenu->addAction(_showWaypointLabelsAction);
 	dataMenu->addAction(_showRouteWaypointsAction);
 	dataMenu->addAction(_showTicksAction);
+	dataMenu->addAction(_showLegendAction);
 	QMenu *markerMenu = dataMenu->addMenu(tr("Position info"));
 	markerMenu->menuAction()->setMenuRole(QAction::NoRole);
 	markerMenu->addAction(_hideMarkersAction);
@@ -2609,6 +2615,7 @@ void GUI::writeSettings()
 	WRITE(waypointLabels, _showWaypointLabelsAction->isChecked());
 	WRITE(routeWaypoints, _showRouteWaypointsAction->isChecked());
 	WRITE(pathTicks, _showTicksAction->isChecked());
+	WRITE(legend, _showLegendAction->isChecked());
 	WRITE(positionMarkers, _showMarkersAction->isChecked()
 	  || _showMarkerDateAction->isChecked()
 	  || _showMarkerCoordinatesAction->isChecked());
@@ -2899,6 +2906,10 @@ void GUI::readSettings(QString &activeMap, QStringList &disabledPOIs,
 	if (READ(pathTicks).toBool()) {
 		_showTicksAction->setChecked(true);
 		_mapView->showTicks(true);
+	}
+	if (READ(legend).toBool()) {
+		_showLegendAction->setChecked(true);
+		_mapView->showLegend(true);
 	}
 	if (READ(useStyles).toBool()) {
 		_useStylesAction->setChecked(true);

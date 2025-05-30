@@ -4,6 +4,7 @@
 #include <QPen>
 #include <QTimeZone>
 #include "data/path.h"
+#include "data/link.h"
 #include "graphicsscene.h"
 #include "markerinfoitem.h"
 #include "format.h"
@@ -27,9 +28,11 @@ public:
 	void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 	  QWidget *widget);
 
-	virtual QDateTime date() const = 0;
-
+	const QDateTime &date() const {return _date;}
+	const QString &file() const {return _file;}
+	const QString &name() const {return _name;}
 	const Path &path() const {return _path;}
+	const QColor &color() const;
 
 	void addGraph(GraphItem *graph);
 
@@ -67,6 +70,13 @@ protected:
 	void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
 	void mousePressEvent(QGraphicsSceneMouseEvent *event);
 
+	QDateTime _date;
+	QString _name;
+	QString _file;
+	QString _desc;
+	QString _comment;
+	QVector<Link> _links;
+
 	static Units _units;
 	static QTimeZone _timeZone;
 
@@ -81,7 +91,6 @@ private:
 	void updateWidth();
 	void updatePenStyle();
 	qreal width() const;
-	const QColor &color() const;
 	Qt::PenStyle penStyle() const;
 
 	qreal xInM() const;

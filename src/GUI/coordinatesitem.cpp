@@ -14,7 +14,6 @@ CoordinatesItem::CoordinatesItem(QGraphicsItem *parent) : QGraphicsItem(parent)
 	_drawBackground = false;
 	_font.setPixelSize(FONT_SIZE);
 	_font.setFamily(FONT_FAMILY);
-	_digitalZoom = 0;
 
 	setAcceptHoverEvents(true);
 
@@ -77,8 +76,7 @@ void CoordinatesItem::setUnits(Units units)
 
 void CoordinatesItem::setDigitalZoom(qreal zoom)
 {
-	_digitalZoom = zoom;
-	setScale(pow(2, -_digitalZoom));
+	setScale(pow(2, -zoom));
 }
 
 QString CoordinatesItem::text() const

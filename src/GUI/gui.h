@@ -293,6 +293,7 @@ private:
 	QAction *_showMarkerDateAction;
 	QAction *_showMarkerCoordinatesAction;
 	QAction *_showTicksAction;
+	QAction *_showLegendAction;
 	QAction *_useStylesAction;
 	QAction *_showCoordinatesAction;
 	QAction *_openOptionsAction;

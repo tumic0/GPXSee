@@ -13,6 +13,7 @@
 #include "units.h"
 #include "format.h"
 #include "markerinfoitem.h"
+#include "legenditem.h"
 #include "palette.h"
 #include "graphicsscene.h"
 
@@ -134,6 +135,7 @@ public slots:
 	void setMarkerPosition(qreal pos);
 	void followPosition(bool follow);
 	void showMotionInfo(bool show);
+	void showLegend(bool show);
 	void useStyles(bool use);
 	void drawHillShading(bool draw);
 	void selectLayers(MapView::Layers layers);
@@ -166,6 +168,8 @@ private:
 	void pinchGesture(QPinchGesture *gesture);
 	void skipColor() {_palette.nextColor();}
 	void setHidpi(bool hidpi);
+	void addLegendEntry(const PathItem *path);
+	void updateLegend();
 
 	void mouseMoveEvent(QMouseEvent *event);
 	void mousePressEvent(QMouseEvent *event);
@@ -185,6 +189,7 @@ private:
 	CoordinatesItem *_cursorCoordinates, *_positionCoordinates;
 	CrosshairItem *_crosshair;
 	MotionInfoItem *_motionInfo;
+	LegendItem *_legend;
 	QList<TrackItem*> _tracks;
 	QList<RouteItem*> _routes;
 	QList<WaypointItem*> _waypoints;

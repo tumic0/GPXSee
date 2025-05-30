@@ -35,7 +35,6 @@ private:
 	Units _units;
 	QRectF _boundingRect;
 	QFont _font;
-	qreal _digitalZoom;
 	QColor _color, _bgColor;
 	bool _drawBackground;
 };

@@ -2,7 +2,6 @@
 #define TRACKITEM_H
 
 #include <QDateTime>
-#include "data/link.h"
 #include "pathitem.h"
 
 class Map;
@@ -16,17 +15,10 @@ public:
 	TrackItem(const Track &track, Map *map, QGraphicsItem *parent = 0);
 
 	ToolTip info(bool extended) const;
-	QDateTime date() const {return _date;}
 
 private:
-	QString _name;
-	QString _desc;
-	QString _comment;
-	QVector<Link> _links;
-	QDateTime _date;
 	qreal _time;
 	qreal _movingTime;
-	QString _file;
 };
 
 #endif // TRACKITEM_H
