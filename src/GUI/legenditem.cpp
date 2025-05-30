@@ -1,3 +1,4 @@
+#include <cmath>
 #include <QPainter>
 #include "font.h"
 #include "legenditem.h"

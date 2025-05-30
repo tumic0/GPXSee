@@ -1,3 +1,4 @@
+#include <cmath>
 #include <QFontMetrics>
 #include <QPainter>
 #include "font.h"
