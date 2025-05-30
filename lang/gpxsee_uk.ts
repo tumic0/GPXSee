@@ -579,7 +579,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="451"/>
         <source>Legend</source>
-        <translation type="unfinished"></translation>
+        <translation>Легенда</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="459"/>
