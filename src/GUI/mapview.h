@@ -169,6 +169,7 @@ private:
 	void skipColor() {_palette.nextColor();}
 	void setHidpi(bool hidpi);
 	void addLegendEntry(const PathItem *path);
+	void addLegendEntry(const PlaneItem *plane);
 	void updateLegend();
 
 	void mouseMoveEvent(QMouseEvent *event);

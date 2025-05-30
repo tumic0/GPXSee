@@ -28,6 +28,9 @@ public:
 
 	ToolTip info(bool extended) const;
 
+	const QColor color() const {return _pen.color();}
+	const QString &name() const {return _area.name();}
+
 protected:
 	void hoverEnterEvent(QGraphicsSceneHoverEvent *event);
 	void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);

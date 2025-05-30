@@ -29,6 +29,9 @@ public:
 
 	ToolTip info(bool extended) const;
 
+	const QColor color() const {return _pen.color();}
+	const QString &name() const {return _name;}
+
 signals:
 	void triggered();
 

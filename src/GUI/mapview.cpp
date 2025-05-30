@@ -159,12 +159,22 @@ void MapView::updateLegend()
 		for (int i = 0; i < _routes.size(); i++)
 			addLegendEntry(_routes.at(i));
 	}
+	if (_showAreas) {
+		for (int i = 0; i < _areas.size(); i++)
+			addLegendEntry(_areas.at(i));
+	}
 }
 
 void MapView::addLegendEntry(const PathItem *ti)
 {
 	_legend->addItem(ti->color(), ti->name().isEmpty()
 	  ? QFileInfo(ti->file()).fileName() : ti->name());
+}
+
+void MapView::addLegendEntry(const PlaneItem *plane)
+{
+	if (!plane->name().isEmpty())
+		_legend->addItem(plane->color(), plane->name());
 }
 
 PathItem *MapView::addTrack(const Track &track)
@@ -254,8 +264,10 @@ void MapView::addArea(const Area &area)
 	_ar |= ai->bounds();
 	_areas.append(ai);
 
-	if (_showAreas)
+	if (_showAreas) {
 		addPOI(_poi->points(ai->bounds()));
+		addLegendEntry(ai);
+	}
 }
 
 void MapView::addWaypoints(const QVector<Waypoint> &waypoints)
@@ -295,8 +307,10 @@ MapItem *MapView::addMap(MapAction *map)
 	_ar |= mi->bounds();
 	_areas.append(mi);
 
-	if (_showAreas)
+	if (_showAreas) {
 		addPOI(_poi->points(mi->bounds()));
+		addLegendEntry(mi);
+	}
 
 	return mi;
 }
@@ -1330,6 +1344,8 @@ void MapView::useStyles(bool use)
 		_areas.at(i)->updateStyle();
 	for (int i = 0; i < _waypoints.size(); i++)
 		_waypoints.at(i)->updateStyle();
+
+	updateLegend();
 }
 
 void MapView::setMarkerColor(const QColor &color)

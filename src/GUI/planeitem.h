@@ -20,6 +20,9 @@ public:
 	virtual void setPenStyle(Qt::PenStyle style) = 0;
 	virtual void setDigitalZoom(int zoom) = 0;
 	virtual void updateStyle() {}
+
+	virtual const QColor color() const = 0;
+	virtual const QString &name() const = 0;
 };
 
 #endif // PLANEITEM_H
