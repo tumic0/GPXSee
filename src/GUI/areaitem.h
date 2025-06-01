@@ -6,6 +6,8 @@
 
 class AreaItem : public PlaneItem
 {
+	Q_OBJECT
+
 public:
 	AreaItem(const Area &area, Map *map, GraphicsItem *parent = 0);
 
@@ -30,6 +32,9 @@ public:
 
 	const QColor color() const {return _pen.color();}
 	const QString &name() const {return _area.name();}
+
+public slots:
+	void hover(bool hvr);
 
 protected:
 	void hoverEnterEvent(QGraphicsSceneHoverEvent *event);

@@ -6,8 +6,10 @@
 
 class Map;
 
-class PlaneItem : public GraphicsItem
+class PlaneItem : public QObject, public GraphicsItem
 {
+	Q_OBJECT
+
 public:
 	PlaneItem(GraphicsItem *parent = 0) : GraphicsItem(parent) {}
 
@@ -23,6 +25,9 @@ public:
 
 	virtual const QColor color() const = 0;
 	virtual const QString &name() const = 0;
+
+public slots:
+	virtual void hover(bool hvr) = 0;
 };
 
 #endif // PLANEITEM_H

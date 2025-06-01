@@ -6,7 +6,7 @@
 class MapAction;
 class Projection;
 
-class MapItem : public QObject, public PlaneItem
+class MapItem : public PlaneItem
 {
 	Q_OBJECT
 
@@ -31,6 +31,9 @@ public:
 
 	const QColor color() const {return _pen.color();}
 	const QString &name() const {return _name;}
+
+public slots:
+	void hover(bool hvr);
 
 signals:
 	void triggered();

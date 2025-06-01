@@ -205,6 +205,16 @@ void MapItem::setDigitalZoom(int zoom)
 	_pen.setWidthF(_width * pow(2, -_digitalZoom));
 }
 
+void MapItem::hover(bool hvr)
+{
+	if (hvr)
+		_pen.setWidthF((_width + 1) * pow(2, -_digitalZoom));
+	else
+		_pen.setWidthF(_width * pow(2, -_digitalZoom));
+
+	update();
+}
+
 void MapItem::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 {
 	Q_UNUSED(event);

@@ -66,6 +66,8 @@ void LegendItem::addItem(PlaneItem *item)
 
 	_boundingRect = QRectF(0, 0, qMax(_boundingRect.width(),
 	  li->boundingRect().width()), _items.size() * li->boundingRect().height());
+
+	QObject::connect(li, &LegendEntryItem::selected, item, &PlaneItem::hover);
 }
 
 void LegendItem::setColor(const QColor &color)
