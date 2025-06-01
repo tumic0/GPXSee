@@ -1,12 +1,14 @@
 #ifndef LEGENDENTRYITEM_H
 #define LEGENDENTRYITEM_H
 
+#include <QObject>
 #include <QGraphicsItem>
 #include <QFont>
 
 class LegendEntryItem : public QObject, public QGraphicsItem
 {
 	Q_OBJECT
+	Q_INTERFACES(QGraphicsItem)
 
 public:
 	LegendEntryItem(const QColor &color, const QString &text,
