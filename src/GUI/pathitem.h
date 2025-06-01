@@ -60,7 +60,8 @@ public:
 	static void setTimeZone(const QTimeZone &zone) {_timeZone = zone;}
 
 public slots:
-	void hover(bool hover);
+	void hover(bool hvr);
+	void hoverAll(bool hvr);
 
 signals:
 	void selected(bool);

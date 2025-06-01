@@ -3,7 +3,11 @@
 
 #include <QGraphicsItem>
 
-class LegendItem  : public QGraphicsItem
+class LegendEntryItem;
+class PathItem;
+class PlaneItem;
+
+class LegendItem : public QGraphicsItem
 {
 public:
 	LegendItem(QGraphicsItem *parent = 0);
@@ -12,27 +16,18 @@ public:
 	void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 	  QWidget *widget);
 
+	void addItem(PathItem *item);
+	void addItem(PlaneItem *item);
 	void setDigitalZoom(qreal zoom);
-	void addItem(const QColor &color, const QString &text);
 	void setColor(const QColor &color);
 	void setBackgroundColor(const QColor &color);
 	void drawBackground(bool draw);
 	void clear();
 
 private:
-	struct Item
-	{
-		Item(const QColor &color, const QString &text)
-		  : color(color), text(text) {}
-
-		QColor color;
-		QString text;
-	};
-
-	QList<Item> _items;
+	QList<LegendEntryItem*> _items;
 	QRectF _boundingRect;
-	QColor _color, _bgColor;
-	QFont _font;
+	QColor _bgColor;
 	bool _drawBackground;
 };
 

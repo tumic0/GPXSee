@@ -23,6 +23,7 @@ greaterThan(QT_MAJOR_VERSION, 5) {
 CONFIG += object_parallel_to_source
 INCLUDEPATH += ./src
 HEADERS += src/common/config.h \
+    src/GUI/legendentryitem.h \
     src/GUI/legenditem.h \
     src/common/garmin.h \
     src/common/coordinates.h \
@@ -277,6 +278,7 @@ HEADERS += src/common/config.h \
     src/data/geojsonparser.h
 
 SOURCES += src/main.cpp \
+    src/GUI/legendentryitem.cpp \
     src/GUI/legenditem.cpp \
     src/common/coordinates.cpp \
     src/common/rectc.cpp \

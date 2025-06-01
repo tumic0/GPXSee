@@ -388,9 +388,9 @@ void PathItem::drawMarkerBackground(bool draw)
 	_markerInfo->drawBackground(draw);
 }
 
-void PathItem::hover(bool hover)
+void PathItem::hover(bool hvr)
 {
-	if (hover) {
+	if (hvr) {
 		_pen.setWidth((width() + 1) * pow(2, -_digitalZoom));
 		setZValue(zValue() + 1.0);
 	} else {
@@ -399,6 +399,12 @@ void PathItem::hover(bool hover)
 	}
 
 	update();
+}
+
+void PathItem::hoverAll(bool hvr)
+{
+	hover(hvr);
+	emit selected(hvr);
 }
 
 void PathItem::showMarker(bool show)

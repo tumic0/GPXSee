@@ -1,17 +1,17 @@
 #include <cmath>
 #include <QPainter>
+#include <QFileInfo>
 #include "font.h"
+#include "pathitem.h"
+#include "graphitem.h"
+#include "planeitem.h"
+#include "legendentryitem.h"
 #include "legenditem.h"
-
-#define PADDING 4
 
 LegendItem::LegendItem(QGraphicsItem *parent) : QGraphicsItem(parent)
 {
-	_color = Qt::black;
 	_bgColor = Qt::white;
 	_drawBackground = false;
-	_font.setPixelSize(FONT_SIZE);
-	_font.setFamily(FONT_FAMILY);
 }
 
 void LegendItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
@@ -28,21 +28,6 @@ void LegendItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
 		bc.setAlpha(196);
 		painter->setBrush(QBrush(bc));
 		painter->drawRect(_boundingRect);
-		painter->setBrush(Qt::NoBrush);
-	}
-
-	QFontMetrics fm(_font);
-	painter->setFont(_font);
-
-	for (int i = 0; i < _items.size(); i++) {
-		const Item &itm = _items.at(i);
-
-		painter->setBrush(itm.color);
-		painter->setPen(QPen(Qt::black));
-		painter->drawRect(0, i * (FONT_SIZE + PADDING), FONT_SIZE * 2, FONT_SIZE);
-		painter->setPen(QPen(_color));
-		painter->drawText(FONT_SIZE * 2 + PADDING, i * (FONT_SIZE + PADDING)
-		  + fm.ascent(), itm.text);
 	}
 
 	//painter->setPen(Qt::red);
@@ -50,23 +35,43 @@ void LegendItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
 	//painter->drawRect(boundingRect());
 }
 
-void LegendItem::addItem(const QColor &color, const QString &text)
+void LegendItem::addItem(PathItem *item)
 {
 	prepareGeometryChange();
 
-	_items.append(Item(color, text));
+	LegendEntryItem *li = new LegendEntryItem(item->color(),
+	  item->name().isEmpty() ? QFileInfo(item->file()).fileName() : item->name(),
+	  this);
+	li->setPos(0, _items.size() * li->boundingRect().height());
 
-	QFontMetrics fm(_font);
-	qreal maxWidth = qMax((int)_boundingRect.width() - (FONT_SIZE * 2 + PADDING),
-	  fm.tightBoundingRect(text).width());
-	_boundingRect = QRectF(0, 0, FONT_SIZE * 2 + PADDING + maxWidth,
-	  _items.size() * (FONT_SIZE + PADDING) - (PADDING - 1));
+	_items.append(li);
+
+	_boundingRect = QRectF(0, 0, qMax(_boundingRect.width(),
+	  li->boundingRect().width()), _items.size() * li->boundingRect().height());
+
+	QObject::connect(li, &LegendEntryItem::selected, item, &PathItem::hoverAll);
+}
+
+void LegendItem::addItem(PlaneItem *item)
+{
+	if (item->name().isEmpty())
+		return;
+
+	prepareGeometryChange();
+
+	LegendEntryItem *li = new LegendEntryItem(item->color(), item->name(), this);
+	li->setPos(0, _items.size() * li->boundingRect().height());
+
+	_items.append(li);
+
+	_boundingRect = QRectF(0, 0, qMax(_boundingRect.width(),
+	  li->boundingRect().width()), _items.size() * li->boundingRect().height());
 }
 
 void LegendItem::setColor(const QColor &color)
 {
-	_color = color;
-	update();
+	for (int i = 0; i < _items.size(); i++)
+		_items.at(i)->setTextColor(color);
 }
 
 void LegendItem::setBackgroundColor(const QColor &color)
@@ -84,6 +89,8 @@ void LegendItem::drawBackground(bool draw)
 void LegendItem::clear()
 {
 	prepareGeometryChange();
+
+	qDeleteAll(_items);
 	_items.clear();
 	_boundingRect = QRectF();
 }

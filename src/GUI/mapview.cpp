@@ -153,28 +153,16 @@ void MapView::updateLegend()
 
 	if (_showTracks) {
 		for (int i = 0; i < _tracks.size(); i++)
-			addLegendEntry(_tracks.at(i));
+			_legend->addItem(_tracks.at(i));
 	}
 	if (_showRoutes) {
 		for (int i = 0; i < _routes.size(); i++)
-			addLegendEntry(_routes.at(i));
+			_legend->addItem(_routes.at(i));
 	}
 	if (_showAreas) {
 		for (int i = 0; i < _areas.size(); i++)
-			addLegendEntry(_areas.at(i));
+			_legend->addItem(_areas.at(i));
 	}
-}
-
-void MapView::addLegendEntry(const PathItem *ti)
-{
-	_legend->addItem(ti->color(), ti->name().isEmpty()
-	  ? QFileInfo(ti->file()).fileName() : ti->name());
-}
-
-void MapView::addLegendEntry(const PlaneItem *plane)
-{
-	if (!plane->name().isEmpty())
-		_legend->addItem(plane->color(), plane->name());
 }
 
 PathItem *MapView::addTrack(const Track &track)
@@ -204,7 +192,7 @@ PathItem *MapView::addTrack(const Track &track)
 
 	if (_showTracks) {
 		addPOI(_poi->points(ti->path()));
-		addLegendEntry(ti);
+		_legend->addItem(ti);
 	}
 
 	return ti;
@@ -238,7 +226,7 @@ PathItem *MapView::addRoute(const Route &route)
 
 	if (_showRoutes) {
 		addPOI(_poi->points(ri->path()));
-		addLegendEntry(ri);
+		_legend->addItem(ri);
 	}
 
 	return ri;
@@ -266,7 +254,7 @@ void MapView::addArea(const Area &area)
 
 	if (_showAreas) {
 		addPOI(_poi->points(ai->bounds()));
-		addLegendEntry(ai);
+		_legend->addItem(ai);
 	}
 }
 
@@ -309,7 +297,7 @@ MapItem *MapView::addMap(MapAction *map)
 
 	if (_showAreas) {
 		addPOI(_poi->points(mi->bounds()));
-		addLegendEntry(mi);
+		_legend->addItem(mi);
 	}
 
 	return mi;
