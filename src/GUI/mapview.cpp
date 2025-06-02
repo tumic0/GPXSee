@@ -613,6 +613,7 @@ void MapView::digitalZoom(int zoom)
 	_positionCoordinates->setDigitalZoom(_digitalZoom);
 	_motionInfo->setDigitalZoom(_digitalZoom);
 	_crosshair->setDigitalZoom(_digitalZoom);
+	_legend->setDigitalZoom(_digitalZoom);
 }
 
 void MapView::zoom(int zoom, const QPoint &pos, bool shift)
