@@ -215,7 +215,7 @@ static bool polygonPointCb(const MapData::Poly *polygon, void *context)
 	  || type == SUBTYPE(RESARE, 25) || type == SUBTYPE(I_RESARE, 25)
 	  || type == SUBTYPE(RESARE, 26) || type == SUBTYPE(I_RESARE, 26))
 		points->append(MapData::Point(baseType, polygon->bounds().center(),
-		  polygon->attributes(), polygon->HUNI(), true));
+		  polygon->attributes(), polygon->huni(), true));
 
 	return true;
 }
@@ -466,7 +466,7 @@ MapData::Point::Point(uint type, const Coordinates &c, const Attributes &attr,
 }
 
 MapData::Poly::Poly(uint type, const Polygon &path, const Attributes &attr,
-  uint HUNI) : _path(path), _attr(attr), _HUNI(HUNI)
+  uint HUNI) : _path(path), _attr(attr), _huni(HUNI)
 {
 	uint subtype = 0;
 

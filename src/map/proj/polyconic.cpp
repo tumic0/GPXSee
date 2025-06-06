@@ -84,7 +84,7 @@ Polyconic::Polyconic(const Ellipsoid &ellipsoid, double latitudeOrigin,
 	sin2lat = POLY_COEFF_TIMES_SIN(_c1, 2.0, _latitudeOrigin);
 	sin4lat = POLY_COEFF_TIMES_SIN(_c2, 4.0, _latitudeOrigin);
 	sin6lat = POLY_COEFF_TIMES_SIN(_c3, 6.0, _latitudeOrigin);
-	_M0 = POLY_M(lat, sin2lat, sin4lat, sin6lat);
+	_m0 = POLY_M(lat, sin2lat, sin4lat, sin6lat);
 }
 
 PointD Polyconic::ll2xy(const Coordinates &c) const
@@ -107,7 +107,7 @@ PointD Polyconic::ll2xy(const Coordinates &c) const
 
 	if (Latitude == 0.0) {
 		return PointD(_a * dlam + _falseEasting,
-		  -_M0 + _falseNorthing);
+		  -_m0 + _falseNorthing);
 	} else {
 		NN = _a / sqrt(1.0 - _es2 * (slat * slat));
 		NN_OVER_tlat = NN  / tan(Latitude);
@@ -118,7 +118,7 @@ PointD Polyconic::ll2xy(const Coordinates &c) const
 		MM = POLY_M(lat, sin2lat, sin4lat, sin6lat);
 		EE = dlam * slat;
 		return PointD(NN_OVER_tlat * sin(EE) + _falseEasting,
-		  MM - _M0 + NN_OVER_tlat * (1.0 - cos(EE)) + _falseNorthing);
+		  MM - _m0 + NN_OVER_tlat * (1.0 - cos(EE)) + _falseNorthing);
 	}
 }
 
@@ -146,11 +146,11 @@ Coordinates Polyconic::xy2ll(const PointD &p) const
 	dx = p.x() - _falseEasting;
 	dx_OVER_Poly_a = dx / _a;
 
-	if (FLOAT_EQ(dy,-_M0,1)) {
+	if (FLOAT_EQ(dy,-_m0,1)) {
 		Latitude = 0.0;
 		Longitude = dx_OVER_Poly_a + _longitudeOrigin;
 	} else {
-		AA = (_M0 + dy) / _a;
+		AA = (_m0 + dy) / _a;
 		BB = dx_OVER_Poly_a * dx_OVER_Poly_a + (AA * AA);
 		PHIn = AA;
 

@@ -23,7 +23,7 @@ private:
 	double _es2;
 	double _es4;
 	double _es6;
-	double _M0;
+	double _m0;
 	double _c0;
 	double _c1;
 	double _c2;

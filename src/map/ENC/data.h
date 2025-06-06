@@ -19,13 +19,13 @@ public:
 		const Polygon &path() const {return _path;}
 		uint type() const {return _type;}
 		const Attributes &attributes() const {return _attr;}
-		uint HUNI() const {return _HUNI;}
+		uint huni() const {return _huni;}
 
 	private:
 		uint _type;
 		Polygon _path;
 		Attributes _attr;
-		uint _HUNI;
+		uint _huni;
 	};
 
 	class Line {
