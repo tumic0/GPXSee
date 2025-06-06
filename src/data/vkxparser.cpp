@@ -146,6 +146,7 @@ bool VKXParser::parse(QFile *file, QList<TrackData> &tracks,
 	}
 
 	tracks.append(segment);
+	tracks.last().setFile(file->fileName());
 
 	return true;
 }
