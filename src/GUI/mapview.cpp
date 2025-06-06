@@ -172,12 +172,10 @@ PathItem *MapView::addTrack(const Track &track)
 		return 0;
 	}
 
-	QColor color(_palette.nextColor());
-
 	TrackItem *ti = new TrackItem(track, _map);
 	_tracks.append(ti);
 	_tr |= ti->path().boundingRect();
-	ti->setColor(color);
+	ti->setColor(_palette.nextColor());
 	ti->setWidth(_trackWidth);
 	ti->setPenStyle(_trackStyle);
 	ti->setVisible(_showTracks);
