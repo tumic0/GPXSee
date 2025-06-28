@@ -42,7 +42,7 @@
     <rule e="way" closed="yes" k="landuse" v="comercial|residential|retail" zoom-min="10">
         <area fill="#e6e2d9"/>
     </rule>
-    <rule e="way" closed="yes" k="landuse" v="forest|wood" zoom-min="10">
+    <rule e="way" closed="yes" k="landuse" v="forest|wood" zoom-min="9">
         <area fill="#cadfaf"/>
     </rule>
     <rule e="way" closed="yes" k="landuse" v="meadow|grass|greenfield|village_green" zoom-min="10">
@@ -56,7 +56,7 @@
     </rule>
 
     <!-- Hillshading -->
-    <hillshading zoom-min="10" zoom-max="15"/>
+    <hillshading zoom-min="9" zoom-max="15"/>
 
     <!-- Contour lines -->
     <rule e="way" k="contour_ext" v="*">
@@ -198,13 +198,13 @@
     </rule>
 
     <!-- Area overlays -->
-    <rule e="way" closed="yes" k="landuse" v="military" zoom-min="10">
+    <rule e="way" closed="yes" k="landuse" v="military" zoom-min="9">
         <area src=":/patterns/military-area.svg" symbol-height="4"/>
         <rule e="way" k="*" v="*" zoom-min="16">
             <caption fill="#ff4040" font-size="10" font-style="italic" text-transform="uppercase" k="name" stroke="#ffffff" stroke-width="2"/>
         </rule>
     </rule>
-    <rule e="way" closed="yes" k="boundary" v="protected_area|national_park" zoom-min="10" zoom-max="14">
+    <rule e="way" closed="yes" k="boundary" v="protected_area|national_park" zoom-min="9" zoom-max="14">
         <rule e="way" k="protect_class" v="pr_2">
             <area src=":/patterns/nature-reserve.svg" symbol-height="4"/>
             <rule e="way" k="*" v="*" zoom-max="11">

@@ -652,7 +652,7 @@ MatrixD RasterTile::elevation(int extend) const
 
 void RasterTile::drawHillShading(QPainter *painter) const
 {
-	if (_hillShading && _zoom >= 18 && _zoom <= 24) {
+	if (_hillShading && _zoom >= 17 && _zoom <= 24) {
 		if (HillShading::blur()) {
 			MatrixD dem(Filter::blur(elevation(HillShading::blur() + 1),
 			  HillShading::blur()));
