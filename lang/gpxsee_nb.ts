@@ -172,12 +172,12 @@
     <message>
         <location filename="../src/data/data.cpp" line="254"/>
         <source>VKX files</source>
-        <translation type="unfinished"></translation>
+        <translation>VKX-filer</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="255"/>
         <source>VTK files</source>
-        <translation type="unfinished"></translation>
+        <translation>VTK-filer</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="256"/>
@@ -579,7 +579,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="451"/>
         <source>Legend</source>
-        <translation type="unfinished"></translation>
+        <translation>Forklaring</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="459"/>
