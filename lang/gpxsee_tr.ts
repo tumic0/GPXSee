@@ -172,12 +172,12 @@
     <message>
         <location filename="../src/data/data.cpp" line="254"/>
         <source>VKX files</source>
-        <translation type="unfinished"></translation>
+        <translation>VKX dosyaları</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="255"/>
         <source>VTK files</source>
-        <translation type="unfinished"></translation>
+        <translation>VTK dosyaları</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="256"/>
