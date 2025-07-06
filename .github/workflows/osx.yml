@@ -26,7 +26,8 @@ jobs:
       - name: Get latest QtPBFImagePlugin run-id
         id: runid
         run: echo "runid=$(gh run list --repo tumic0/QtPBFImagePlugin --workflow 'OS X' --limit 1 --json databaseId -q '.[0].databaseId')" >> $GITHUB_OUTPUT
-        env: GH_TOKEN: ${{ github.token }}
+        env:
+          GH_TOKEN: ${{ github.token }}
       - name: Download QtPBFImagePlugin
         uses: actions/download-artifact@v4
         with:
