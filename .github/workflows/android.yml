@@ -44,20 +44,20 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
       - name: Create the plugins dir
-        run: mkdir -p QtPBFImagePlugin/plugins
+        run: mkdir plugins
       - name: Download QtPBFImagePlugin
         uses: actions/download-artifact@v4
         with:
           name: libplugins_imageformats_libpbf_arm64-v8a.so
           github-token: ${{ github.token }}
           repository: tumic0/QtPBFImagePlugin
-          path: QtPBFImagePlugin/plugins
+          path: plugins
           merge-multiple: true
           run-id: ${{steps.runid.outputs.runid}}
       - name: Create localization
         run:  lrelease gpxsee.pro
       - name: Configure build
-        run:  qmake gpxsee.pro OPENSSL_PATH=android_openssl ANDROID_EXTRA_PLUGINS=${{ github.workspace }}/QtPBFImagePlugin
+        run:  qmake gpxsee.pro OPENSSL_PATH=android_openssl ANDROID_EXTRA_PLUGINS=${{ github.workspace }}/plugins
       - name: Build project
         run:  make -j4 apk
       - name: Upload artifacts
