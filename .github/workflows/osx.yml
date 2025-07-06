@@ -26,10 +26,11 @@ jobs:
       - name: Download QtPBFImagePlugin
         uses: actions/download-artifact@v4
         with:
-          artifact-ids: 3472010438
+          name: libpbf.dylib
           github-token: ${{ github.token }}
           repository: tumic0/QtPBFImagePlugin
           path: GPXSee.app/Contents/Plugins/imageformats
+          merge-multiple: true
           run-id: 15603784426
       - name: Create DMG
         run: macdeployqt GPXSee.app -dmg -appstore-compliant
