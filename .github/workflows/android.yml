@@ -38,10 +38,23 @@ jobs:
           modules: qtimageformats qtpositioning qtserialport qt5compat
       - name: Install Android OpenSSL
         run:  git clone https://github.com/KDAB/android_openssl.git
+      - name: Get latest QtPBFImagePlugin run-id
+        id: runid
+        run: echo "runid=$(gh run list --repo tumic0/QtPBFImagePlugin --workflow 'Android' --limit 1 --json databaseId -q '.[0].databaseId')" >> $GITHUB_
+        env:
+          GH_TOKEN: ${{ github.token }}
+      - name: Download QtPBFImagePlugin
+        uses: actions/download-artifact@v4
+        with:
+          name: libplugins_imageformats_libpbf_arm64-v8a.so
+          github-token: ${{ github.token }}
+          repository: tumic0/QtPBFImagePlugin
+          merge-multiple: true
+          run-id: ${{steps.runid.outputs.runid}}
       - name: Create localization
         run:  lrelease gpxsee.pro
       - name: Configure build
-        run:  qmake gpxsee.pro OPENSSL_PATH=android_openssl 
+        run:  qmake gpxsee.pro OPENSSL_PATH=android_openssl ANDROID_EXTRA_PLUGINS=libplugins_imageformats_libpbf_arm64-v8a.so
       - name: Build project
         run:  make -j4 apk
       - name: Upload artifacts
