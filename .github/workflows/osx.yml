@@ -26,8 +26,8 @@ jobs:
       - name: Download QtPBFImagePlugin
         uses: actions/download-artifact@v4
         with:
-          artifact-ids: 3311872364
-          github-token: ${{ secrets.GPXsee }}
+          artifact-ids: 3472010438
+          github-token: ${{ github.token }}
           repository: tumic0/QtPBFImagePlugin
           path: GPXSee.app/Contents/Plugins/imageformats
           run-id: 15603784426
