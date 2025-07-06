@@ -23,6 +23,9 @@ jobs:
         run: qmake gpxsee.pro QMAKE_APPLE_DEVICE_ARCHS="x86_64h arm64"
       - name: Build project
         run: make -j3
+      - name: Get latest QtPBFImagePlugin run-id
+        id: runid
+        run: echo "::set-output name=runid::$(gh run list --repo tumic0/QtPBFImagePlugin --workflow 'OS X' --limit 1 --json databaseId -q '.[0].databaseId')"
       - name: Download QtPBFImagePlugin
         uses: actions/download-artifact@v4
         with:
@@ -31,7 +34,7 @@ jobs:
           repository: tumic0/QtPBFImagePlugin
           path: GPXSee.app/Contents/Plugins/imageformats
           merge-multiple: true
-          run-id: $(gh run list --repo tumic0/QtPBFImagePlugin --workflow 'OS X' --limit 1 --json databaseId -q '.[0].databaseId')
+          run-id: ${{steps.runid.outputs.runid}}
       - name: Create DMG
         run: macdeployqt GPXSee.app -dmg -appstore-compliant
       - name: Upload artifacts
