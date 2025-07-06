@@ -30,7 +30,7 @@ jobs:
           github-token: ${{ secrets.GPXsee }}
           repository: tumic0/QtPBFImagePlugin
           path: GPXSee.app/Contents/Plugins/imageformats
-          run-id: 97
+          run-id: 15603784426
       - name: Create DMG
         run: macdeployqt GPXSee.app -dmg -appstore-compliant
       - name: Upload artifacts
