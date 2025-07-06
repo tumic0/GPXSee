@@ -57,7 +57,7 @@ jobs:
       - name: Create localization
         run:  lrelease gpxsee.pro
       - name: Configure build
-        run:  qmake gpxsee.pro OPENSSL_PATH=android_openssl ANDROID_EXTRA_PLUGINS=plugins
+        run:  qmake gpxsee.pro OPENSSL_PATH=android_openssl ANDROID_EXTRA_PLUGINS=$GITHUB_WORKSPACE
       - name: Build project
         run:  make -j4 apk
       - name: Upload artifacts
