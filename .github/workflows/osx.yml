@@ -23,6 +23,15 @@ jobs:
         run: qmake gpxsee.pro QMAKE_APPLE_DEVICE_ARCHS="x86_64h arm64"
       - name: Build project
         run: make -j3
+      - name Download QtPBFImagePlugin
+        uses: actions/download-artifact@v4
+        with:
+          name: QtPBFImagePlugin
+          github-token: ${{ secrets.GPXsee }}
+          repository: tumic0/QtPBFImagePlugin
+          path: GPXSee.app/Contents/Plugins/imageformats
+          pattern: libpbf.dylib
+          run-id: 97
       - name: Create DMG
         run: macdeployqt GPXSee.app -dmg -appstore-compliant
       - name: Upload artifacts
