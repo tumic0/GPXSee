@@ -34,7 +34,7 @@ after_build:
     md installer
     copy release\GPXSee.exe installer
     windeployqt --release installer\GPXSee.exe
-    curl -o installer\imageformats\pbf4.dll https://ci.appveyor.com/api/projects/tumic0/QtPBFImagePlugin/artifacts/release/pbf4.dll?job=%APPVEYOR_JOB_NAME%
+    curl -L -o installer\imageformats\pbf4.dll https://ci.appveyor.com/api/projects/tumic0/QtPBFImagePlugin/artifacts/release/pbf4.dll?job=%APPVEYOR_JOB_NAME%
     copy pkg\windows\gpxsee64.nsi installer
     xcopy data\CRS installer\CRS /i
     xcopy data\maps installer\maps /i
