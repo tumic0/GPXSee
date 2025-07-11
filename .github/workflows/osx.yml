@@ -39,7 +39,8 @@ jobs:
           run-id: ${{ steps.runid.outputs.runid }}
       - name: Install codesigning certificate
         env:
-          MACOS_CERTIFICATE: ${{ secrets.CODESIGN_MAC }}
+          MACOS_CERTIFICATE: ${{ secrets.CODESIGN_CERT }}
+          MACOS_CERTIFICATE_PWD: ${{ secrets.CODESIGN_PWD }}
           KEYCHAIN_NAME: gpxsee
           KEYCHAIN_PWD: password
         run: |
@@ -47,7 +48,7 @@ jobs:
           security create-keychain -p $KEYCHAIN_PWD $KEYCHAIN_NAME
           security default-keychain -s $KEYCHAIN_NAME
           security unlock-keychain -p $KEYCHAIN_PWD $KEYCHAIN_NAME
-          security import certificate.p12 -k $KEYCHAIN_NAME -T /usr/bin/codesign
+          security import certificate.p12 -k $KEYCHAIN_NAME -P $MACOS_CERTIFICATE_PWD -T /usr/bin/codesign
           security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k $KEYCHAIN_PWD $KEYCHAIN_NAME
       - name: Create DMG
         run: macdeployqt GPXSee.app -dmg -appstore-compliant -codesign=GPXSee
