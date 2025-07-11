@@ -38,7 +38,8 @@ jobs:
           merge-multiple: true
           run-id: ${{ steps.runid.outputs.runid }}
       - name: Install codesigning certificate
-        env: CODESIGN_MAC: ${{ secrets.CODESIGN_MAC }}
+        env:
+          CODESIGN_MAC: ${{ secrets.CODESIGN_MAC }}
         run: |
           CERTIFICATE_PATH=$RUNNER_TEMP/build_certificate.p12
           KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
