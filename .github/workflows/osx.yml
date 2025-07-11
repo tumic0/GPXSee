@@ -39,17 +39,16 @@ jobs:
           run-id: ${{ steps.runid.outputs.runid }}
       - name: Install codesigning certificate
         env:
-          CODESIGN_MAC: ${{ secrets.CODESIGN_MAC }}
+          MACOS_CERTIFICATE: ${{ secrets.CODESIGN_MAC }}
+          KEYCHAIN_NAME: gpxsee
+          KEYCHAIN_PWD: password
         run: |
-          CERTIFICATE_PATH=$RUNNER_TEMP/build_certificate.p12
-          KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
-          echo -n "$CODESIGN_MAC" | base64 --decode -o $CERTIFICATE_PATH
-          security create-keychain -p password $KEYCHAIN_PATH
-          security set-keychain-settings -lut 21600 $KEYCHAIN_PATH
-          security unlock-keychain -p password $KEYCHAIN_PATH
-          security import $CERTIFICATE_PATH -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
-          security set-key-partition-list -S apple-tool:,apple: -k password $KEYCHAIN_PATH
-          security list-keychain -d user -s $KEYCHAIN_PATH
+          echo $MACOS_CERTIFICATE | base64 --decode > certificate.p12
+          security create-keychain -p $KEYCHAIN_PWD $KEYCHAIN_NAME
+          security default-keychain -s $KEYCHAIN_NAME
+          security unlock-keychain -p $KEYCHAIN_PWD $KEYCHAIN_NAME
+          security import certificate.p12 -k $KEYCHAIN_NAME -T /usr/bin/codesign
+          security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k $KEYCHAIN_PWD $KEYCHAIN_NAME
       - name: Create DMG
         run: macdeployqt GPXSee.app -dmg -appstore-compliant -codesign=GPXSee
       - name: Upload artifacts
