@@ -109,7 +109,7 @@
             <li>HiDPI/Retina displays and maps support.</li>
             <li>Real-time GPS position.</li>
             <li>Available for Windows, macOS, Linux and Android.</li>
-            <li><b>Free software</b> (GPLv3 open-source license).</li>
+            <li>Free software (GPLv3 open-source license).</li>
           </ul>
 
           <p>GPXSee is designed as a small (no dependencies except of Qt), fast
@@ -121,7 +121,7 @@
 
           <ul id="download">
             <li><a href="https://sourceforge.net/projects/gpxsee/files/Windows/">Windows installer</a></li>
-            <li><a href="https://sourceforge.net/projects/gpxsee/files/Mac%20OS%20X/">Mac OS X bundle</a></li>
+            <li><a href="https://sourceforge.net/projects/gpxsee/files/Mac%20OS%20X/">Mac application bundle</a></li>
             <li><a href="https://software.opensuse.org/download.html?project=home%3Atumic%3AGPXSee&amp;package=gpxsee">
                 Linux repos/packages</a></li>
             <li><a href="https://play.google.com/store/apps/details?id=org.gpxsee.gpxsee">Android app (Google Play)</a>
@@ -129,32 +129,25 @@
           </ul>
 
           <p>Additionally to the source codes, GPXSee is available as a Windows
-          installer and an OS X dmg from the project's Sourceforge page and in
+          installer and a Mac dmg from the project's Sourceforge page and in
           form of various Linux packages from the project's openSUSE Build Service
           page. Most Linux distributions (Archlinux, Fedora, Gentoo, openSUSE, ...)
           as well as BSD distributions (FreeBSD, NetBSD, OpenBSD) also provide
           GPXSee in their official repositories, however not always in the latest
-          version. On OS X you can also use the MacPorts or Homebrew packaging systems
+          version. On Mac you can also use the MacPorts or Homebrew packaging systems
           to install GPXSee and on Windows you can use the Windows Package Manager
           (winget).</p>
 
           <p>On Android, you can install GPXSee from the Google Play app store.</p>
 
-          <p><i>The official Windows &amp; OS X installers are always signed using
+          <p><b>The official Windows and Mac installers are always signed using
           <a href="https://github.com/tumic0/GPXSee/tree/master/cert">certificates</a>
-          available at the GitHub project page. As the certificates are non-commercial
-          (self-signed) you have to import the certificate on Windows first if you want
-          your OS automatically check the installer when installing GPXSee. On OS X,
-          Apple does not allow software that does not generate them profit like GPXSee
-          to pass OS X's Gatekeeper (you can't import custom certificates) so <b>on Mac
-          you need to run the application using the "right click menu" when opening it
-          for the first time.</b></i></p>
-
-          <p><i><b>If you have a M1/M2 Mac, it is strongly recommended that you use
-          the Macports package</b> instead of the dmg from Sourceforge (or the Homebrew
-          package which is based on the dmg). The Macports packages provide native
-          ARM64 binaries while the dmg is x86_64-only and requires emulation on
-          M1/M2 Macs.</i></p>
+          available at the GitHub project page. Due to lack of project funding the
+          certificates are non-commercial (self-signed) and you have to import the
+          certificate (on Windows) or modify gatekeeper rules (on Mac) first if you
+          want your OS automatically check/accept the installer. Recent versions of
+          macOS will even not allow you to run the program at all until you fiddle
+          with gatekeeper!</b></p>
 
           <h2 id="maps">GPXSee maps</h2>
 

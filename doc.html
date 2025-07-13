@@ -48,7 +48,7 @@
               <td class="os">Linux:</td>
               <td class="file">/usr/share/gpxsee/</td>
             </tr><tr>
-              <td class="os">OS X:</td>
+              <td class="os">Mac:</td>
               <td class="file">/Applications/GPXSee.app/Contents/Resources/</td>
             </tr><tr>
               <td class="os">Android<sup><a href="#androidGlobalConfig">1</a></sup>:</td>
@@ -67,7 +67,7 @@
               <td class="os">Linux:</td>
               <td class="file">~/.local/share/gpxsee/</td>
             </tr><tr>
-              <td class="os">OS X:</td>
+              <td class="os">Mac:</td>
               <td class="file">~/Library/Application Support/GPXSee/</td>
             </tr><tr>
               <td class="os">Android:</td>
@@ -423,7 +423,7 @@ $ gpxsee 'geo:323482,4306480;crs=EPSG:32618'
           <a href="https://doc.qt.io/qt-5/qtpositioning-plugins.html">documentation</a>
           for more info.</p>
 
-          <h3 id="positioning_winmac">Windows &amp; OS X</h3>
+          <h3 id="positioning_winmac">Windows &amp; Mac</h3>
           <p>If your device/OS supports the platform positioning API (Core Location
           / Windows.Devices.Geolocation) you may try that first. If you have an external
           USB/serial GPS device connected, you can use the <code>serialnmea</code> plugin.
@@ -449,6 +449,27 @@ $ gpxsee 'geo:323482,4306480;crs=EPSG:32618'
 
           <h2 id="issues">Known issues</h2>
 
+          <h3>Code signing</h3>
+          <p>Due to lack of project funding GPXSee uses self-signed certificates for code signing on
+          Windows and Mac. Even though you will see messages from your OS that are designed to scare
+          you as much as possible, in reality this does not pose any security problem (you can check
+          the certificate issuer yourself in the git repository instead of trusting the bureaucratic
+          process of a corporation like Apple or DigiCert).</p>
+
+          <p>If you want a "clean user experience" like with the commercial certificates, you have
+          to:</p>
+
+          <h4>Windows</h4>
+          <p>Import the <a href="https://github.com/tumic0/GPXSee/blob/master/cert/win/gpxsee.cer">
+          certificate</a> into the Local Machine certificate store.</p>
+
+          <h4>Mac</h4>
+          <p>Modify gatekeeper rules using spctl:</p>
+<pre>
+sudo spctl --add --type execute --label 'GPXSee' --requirement \
+  'certificate leaf H"F45CCC1FF42FDF031C949BD8DC47412E8D3826D8"'
+</pre>
+
           <h3>Android file system</h3>
           <p>Due to the limited file system access on Android, all map formats that consist of
           multiple files (eg. OziExplorer maps or World-file georeferenced images) will not load
@@ -468,10 +489,6 @@ $ gpxsee 'geo:323482,4306480;crs=EPSG:32618'
           or even an application crash. OpenGL is thus disabled by default even if it can
           significantly speed up rendering of big data sets. You may enable OpenGL in
           the preferences, but be prepared that "strange things" may happen...</p>
-
-          <h3>Qt6</h3>
-          <p>Many Linux distributions compile GPXSee using Qt6, but Qt6 has serious rendering issues
-          that affect GPXSee. See the following Qt bugs list for details.</p>
 
           <h3>Qt bugs</h3>
           <p>This is the list of the most severe Qt bugs that affect GPXSee (some of them are
@@ -541,7 +558,7 @@ $ gpxsee 'geo:323482,4306480;crs=EPSG:32618'
             <div class="h5l"><a href="#dem_downloads">DEM downloads</a></div>
             <div class="h5l"><a href="#hillshading">Hillshading</a></div>
           <div class="h4l"><a href="#positioning">Positioning</a></div>
-            <div class="h5l"><a href="#positioning_winmac">Windows &amp; OS X</a></div>
+            <div class="h5l"><a href="#positioning_winmac">Windows &amp; Mac</a></div>
             <div class="h5l"><a href="#positioning_linux">Linux</a></div>
           <div class="h4l"><a href="#issues">Known issues</a></div>
         </div>
