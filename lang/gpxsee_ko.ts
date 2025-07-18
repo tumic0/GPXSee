@@ -167,17 +167,17 @@
     <message>
         <location filename="../src/data/data.cpp" line="253"/>
         <source>70mai GPS log files</source>
-        <translation type="unfinished"></translation>
+        <translation>70mai GPS 로그 파일</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="254"/>
         <source>VKX files</source>
-        <translation type="unfinished"></translation>
+        <translation>VKX 파일</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="255"/>
         <source>VTK files</source>
-        <translation type="unfinished"></translation>
+        <translation>VTK 파일</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="256"/>
@@ -579,7 +579,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="451"/>
         <source>Legend</source>
-        <translation type="unfinished"></translation>
+        <translation>범례</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="459"/>
@@ -971,7 +971,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="1129"/>
         <source>Error loading geo URI:</source>
-        <translation type="unfinished"></translation>
+        <translation>지리적 URI를 로드하는 중 오류 발생:</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1167"/>
