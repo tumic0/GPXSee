@@ -237,9 +237,9 @@ bool FITParser::parseData(CTX &ctx, const MessageDefinition *def)
 {
 	QVariant val;
 	bool valid;
+	Lap lap;
 	Event event;
 	Waypoint waypoint;
-	int trigger = -1;
 
 	if (!def->fields.size() && !def->devFields.size()) {
 		_errorString = "Undefined data message";
@@ -350,6 +350,12 @@ bool FITParser::parseData(CTX &ctx, const MessageDefinition *def)
 			}
 		} else if (def->globalId == LAP) {
 			switch (field->id) {
+				case 0:
+					lap.event = val.toUInt();
+					break;
+				case 1:
+					lap.eventType = val.toUInt();
+					break;
 				case 5:
 					waypoint.rcoordinates().setLat(
 					  (val.toInt() / (double)0x7fffffff) * 180);
@@ -362,7 +368,7 @@ bool FITParser::parseData(CTX &ctx, const MessageDefinition *def)
 					waypoint.setDescription(Format::timeSpan(val.toUInt() / 1000));
 					break;
 				case 24:
-					trigger = val.toInt();
+					lap.trigger = val.toInt();
 					break;
 			}
 		}
@@ -383,7 +389,11 @@ bool FITParser::parseData(CTX &ctx, const MessageDefinition *def)
 			ctx.trackpoint.setTimestamp(QDateTime::fromSecsSinceEpoch(
 			  ctx.timestamp + 631065600, QTimeZone::utc()));
 			ctx.trackpoint.setRatio(ctx.ratio);
-			ctx.segment.append(ctx.trackpoint);
+			if (!ctx.segment) {
+				ctx.track.append(SegmentData());
+				ctx.segment = true;
+			}
+			ctx.track.last().append(ctx.trackpoint);
 			ctx.trackpoint = Trackpoint();
 		}
 	} else if (def->globalId == COURSEPOINT) {
@@ -395,17 +405,19 @@ bool FITParser::parseData(CTX &ctx, const MessageDefinition *def)
 			  + 631065600, QTimeZone::utc()));
 			ctx.waypoints.append(waypoint);
 		}
-	} else if (def->globalId == LAP && trigger >= 0) {
-		if (waypoint.coordinates().isValid()) {
-			if (trigger == 7)
+	} else if (def->globalId == LAP) {
+		if (waypoint.coordinates().isValid() && lap.trigger != 0xff) {
+			if (lap.trigger == 7)
 				waypoint.setName("Finish");
 			else
 				waypoint.setName("Lap " + QString::number(++ctx.laps));
 			waypoint.setTimestamp(QDateTime::fromSecsSinceEpoch(ctx.timestamp
 			  + 631065600, QTimeZone::utc()));
-			if (trigger != 7 || ctx.laps > 1)
+			if (lap.trigger != 7 || ctx.laps > 1)
 				ctx.waypoints.append(waypoint);
 		}
+		if (lap.event == 9 && lap.eventType == 1)
+			ctx.segment = false;
 	}
 
 	return true;
@@ -480,7 +492,7 @@ bool FITParser::parse(QFile *file, QList<TrackData> &tracks,
 		if (!parseRecord(ctx))
 			return false;
 
-	tracks.append(ctx.segment);
+	tracks.append(ctx.track);
 	tracks.last().setFile(file->fileName());
 
 	return true;

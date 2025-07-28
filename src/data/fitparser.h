@@ -18,9 +18,17 @@ public:
 	int errorLine() const {return 0;}
 
 private:
+	struct Lap
+	{
+		Lap() : trigger(0xff), event(0xff), eventType(0xff) {}
+
+		quint8 trigger;
+		quint8 event;
+		quint8 eventType;
+	};
 	struct Event
 	{
-		Event() : data(0), id(0), type(0) {}
+		Event() : data(0), id(0xff), type(0xff) {}
 
 		quint32 data;
 		quint8 id;
@@ -52,18 +60,19 @@ private:
 	struct CTX {
 		CTX(QFile *file, QVector<Waypoint> &waypoints)
 		  : file(file), waypoints(waypoints), len(0), endian(0), timestamp(0),
-		  ratio(NAN), laps(0) {}
+		  ratio(NAN), laps(0), segment(false) {}
 
 		QFile *file;
 		QVector<Waypoint> &waypoints;
+		TrackData track;
 		quint32 len;
 		quint8 endian;
 		quint32 timestamp;
 		MessageDefinition defs[16];
 		qreal ratio;
 		Trackpoint trackpoint;
-		SegmentData segment;
 		unsigned laps;
+		bool segment;
 	};
 
 	bool readData(QFile *file, char *data, size_t size);
