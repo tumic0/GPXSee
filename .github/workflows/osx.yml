@@ -41,15 +41,13 @@ jobs:
         env:
           MACOS_CERTIFICATE: ${{ secrets.CODESIGN_CERT }}
           MACOS_CERTIFICATE_PWD: ${{ secrets.CODESIGN_PWD }}
-          KEYCHAIN_NAME: gpxsee
-          KEYCHAIN_PWD: password
         run: |
           echo $MACOS_CERTIFICATE | base64 --decode > certificate.p12
-          security create-keychain -p $KEYCHAIN_PWD $KEYCHAIN_NAME
-          security default-keychain -s $KEYCHAIN_NAME
-          security unlock-keychain -p $KEYCHAIN_PWD $KEYCHAIN_NAME
-          security import certificate.p12 -k $KEYCHAIN_NAME -P $MACOS_CERTIFICATE_PWD -T /usr/bin/codesign
-          security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k $KEYCHAIN_PWD $KEYCHAIN_NAME
+          security create-keychain -p password keychain
+          security default-keychain -s keychain
+          security unlock-keychain -p password keychain
+          security import certificate.p12 -k keychain -P $MACOS_CERTIFICATE_PWD -T /usr/bin/codesign
+          security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k $KEYCHAIN_PWD keychain
       - name: Create DMG
         run: macdeployqt GPXSee.app -dmg -appstore-compliant -codesign=GPXSee
       - name: Upload artifacts
