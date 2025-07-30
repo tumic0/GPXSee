@@ -449,7 +449,7 @@ $ gpxsee 'geo:323482,4306480;crs=EPSG:32618'
 
           <h2 id="issues">Known issues</h2>
 
-          <h3>Code signing</h3>
+          <h3 id="codesign">Code signing</h3>
           <p>Due to lack of project funding GPXSee uses self-signed certificates for code signing on
           Windows and Mac. Even though you will see messages from your OS that are designed to scare
           you as much as possible, in reality this does not pose any security problem (you can check
@@ -461,7 +461,10 @@ $ gpxsee 'geo:323482,4306480;crs=EPSG:32618'
 
           <h4>Windows</h4>
           <p>Import the <a href="https://github.com/tumic0/GPXSee/blob/master/cert/win/gpxsee.cer">
-          certificate</a> into the Local Machine certificate store.</p>
+          certificate</a> into the Local Machine certificate store:</p>
+<pre>
+certutil -addstore "Root" gpxsee.cer
+</pre>
 
           <h4>Mac</h4>
           <p>Modify gatekeeper rules using spctl:</p>
