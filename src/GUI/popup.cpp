@@ -212,14 +212,15 @@ void Popup::show(const QPoint &pos, const ToolTip &toolTip, QWidget *w)
 		return;
 
 	if (PopupFrame::_instance) {
-		if (toolTip == PopupFrame::_instance->toolTip())
+		if (toolTip == PopupFrame::_instance->toolTip()
+		  && PopupFrame::_instance->parent() == w)
 			PopupFrame::_instance->stopTimer();
 		else {
 			delete PopupFrame::_instance;
-			PopupFrame::_instance = new PopupFrame(toolTip);
+			PopupFrame::_instance = new PopupFrame(toolTip, w);
 		}
 	} else
-		PopupFrame::_instance = new PopupFrame(toolTip);
+		PopupFrame::_instance = new PopupFrame(toolTip, w);
 
 	PopupFrame::_instance->resize(PopupFrame::_instance->sizeHint());
 	PopupFrame::_instance->place(pos, w);
