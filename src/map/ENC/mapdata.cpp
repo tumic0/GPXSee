@@ -70,6 +70,7 @@ static QMap<uint,uint> orderMapInit()
 	map.insert(TYPE(I_TRNBSN), 32);
 	map.insert(TYPE(HRBFAC), 33);
 	map.insert(TYPE(I_HRBFAC), 33);
+	map.insert(TYPE(I_TERMNL), 33);
 	map.insert(TYPE(RADRFL), 34);
 	map.insert(TYPE(PILPNT), 35);
 	map.insert(TYPE(ACHBRT), 36);
@@ -363,7 +364,7 @@ MapData::Point::Point(uint type, const Coordinates &c, const Attributes &attr,
 
 	if (type == HRBFAC)
 		subtype = CATHAF;
-	else if (type == I_HRBFAC)
+	else if (type == I_HRBFAC || type == I_TERMNL)
 		subtype = I_CATHAF;
 	else if (type == LNDMRK)
 		subtype = CATLMK;
@@ -462,6 +463,26 @@ MapData::Point::Point(uint type, const Coordinates &c, const Attributes &attr,
 	} else if (_type == SUBTYPE(RESARE, 8)) {
 		if (_label.isEmpty())
 			_label = "Degaussing Range";
+	} else if (_type == SUBTYPE(I_TERMNL, 1) || _type == SUBTYPE(I_HRBFAC, 1)
+	  || _type == SUBTYPE(HRBFAC, 1)) {
+		if (_label.isEmpty())
+			_label = "RoRo";
+	} else if (_type == SUBTYPE(I_TERMNL, 2) || _type == SUBTYPE(I_HRBFAC, 2)
+	  || _type == SUBTYPE(HRBFAC, 2)) {
+		if (_label.isEmpty())
+			_label = "Ferry Terminal";
+	} else if (_type == SUBTYPE(I_TERMNL, 6) || _type == SUBTYPE(I_HRBFAC, 6)
+	  || _type == SUBTYPE(HRBFAC, 6)) {
+		if (_label.isEmpty())
+			_label = "Tanker Terminal";
+	} else if (_type == SUBTYPE(I_TERMNL, 9) || _type == SUBTYPE(I_HRBFAC, 9)
+	  || _type == SUBTYPE(HRBFAC, 9)) {
+		if (_label.isEmpty())
+			_label = "Container Terminal";
+	} else if (_type == SUBTYPE(I_TERMNL, 10) || _type == SUBTYPE(I_HRBFAC, 10)
+	  || _type == SUBTYPE(HRBFAC, 10)) {
+		if (_label.isEmpty())
+			_label = "Bulk Terminal";
 	}
 }
 
