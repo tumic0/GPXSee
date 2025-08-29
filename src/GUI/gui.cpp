@@ -350,16 +350,16 @@ void GUI::createActions()
 	_clearMapCacheAction->setMenuRole(QAction::NoRole);
 	connect(_clearMapCacheAction, &QAction::triggered, this,
 	  &GUI::clearMapCache);
-	_nextMapAction = new QAction(tr("Next map"), this);
-	_nextMapAction->setMenuRole(QAction::NoRole);
-	_nextMapAction->setShortcut(NEXT_MAP_SHORTCUT);
-	connect(_nextMapAction, &QAction::triggered, this, &GUI::nextMap);
-	addAction(_nextMapAction);
-	_prevMapAction = new QAction(tr("Next map"), this);
-	_prevMapAction->setMenuRole(QAction::NoRole);
-	_prevMapAction->setShortcut(PREV_MAP_SHORTCUT);
-	connect(_prevMapAction, &QAction::triggered, this, &GUI::prevMap);
-	addAction(_prevMapAction);
+	QAction *nextMapAction = new QAction(tr("Next map"), this);
+	nextMapAction->setMenuRole(QAction::NoRole);
+	nextMapAction->setShortcut(NEXT_MAP_SHORTCUT);
+	connect(nextMapAction, &QAction::triggered, this, &GUI::nextMap);
+	addAction(nextMapAction);
+	QAction *prevMapAction = new QAction(tr("Previous map"), this);
+	prevMapAction->setMenuRole(QAction::NoRole);
+	prevMapAction->setShortcut(PREV_MAP_SHORTCUT);
+	connect(prevMapAction, &QAction::triggered, this, &GUI::prevMap);
+	addAction(prevMapAction);
 	_showCoordinatesAction = new QAction(tr("Show cursor coordinates"), this);
 	_showCoordinatesAction->setMenuRole(QAction::NoRole);
 	_showCoordinatesAction->setCheckable(true);
@@ -539,6 +539,16 @@ void GUI::createActions()
 	connect(_showGraphTabsAction, &QAction::triggered, this,
 	  &GUI::showGraphTabs);
 #endif // Q_OS_ANDROID
+	QAction *nextTabAction = new QAction(tr("Next graph tab"), this);
+	nextTabAction->setMenuRole(QAction::NoRole);
+	nextTabAction->setShortcut(NEXT_TAB_SHORTCUT);
+	connect(nextTabAction, &QAction::triggered, this, &GUI::nextTab);
+	addAction(nextTabAction);
+	QAction *prevTabAction = new QAction(tr("Previous graph tab"), this);
+	prevTabAction->setMenuRole(QAction::NoRole);
+	prevTabAction->setShortcut(PREV_TAB_SHORTCUT);
+	connect(prevTabAction, &QAction::triggered, this, &GUI::prevTab);
+	addAction(prevTabAction);
 
 	// Settings actions
 #ifndef Q_OS_ANDROID
@@ -957,9 +967,12 @@ void GUI::keys()
 	  + QKeySequence(TOGGLE_TIME_TYPE_KEY).toString() + "</i></td></tr><tr><td>"
 	  + tr("Toggle position info") + "</td><td><i>"
 	  + QKeySequence(TOGGLE_MARKER_INFO_KEY).toString() + "</i></td></tr>"
-	  + "<tr><td></td><td></td></tr><tr><td>" + tr("Next map")
-	  + "</td><td><i>" + NEXT_MAP_SHORTCUT.toString() + "</i></td></tr><tr><td>"
+	  + "<tr><td></td><td></td></tr><tr><td>" + tr("Next map") + "</td><td><i>"
+	  + NEXT_MAP_SHORTCUT.toString() + "</i></td></tr><tr><td>"
 	  + tr("Previous map") + "</td><td><i>" + PREV_MAP_SHORTCUT.toString()
+	  + "</i></td></tr><tr><td>" + tr("Next graph tab") + "</td><td><i>"
+	  + NEXT_TAB_SHORTCUT.toString() + "</i></td></tr><tr><td>"
+	  + tr("Previous graph tab") + "</td><td><i>" + PREV_TAB_SHORTCUT.toString()
 	  + "</i></td></tr><tr><td></td><td></td></tr><tr><td>" + tr("Zoom in")
 	  + "</td><td><i>" + QKeySequence(ZOOM_IN).toString()
 	  + "</i></td></tr><tr><td>" + tr("Zoom out") + "</td><td><i>"
@@ -2215,6 +2228,24 @@ void GUI::prevMap()
 			maps.at(prev)->trigger();
 			break;
 		}
+	}
+}
+
+void GUI::nextTab()
+{
+	int ci = _graphTabWidget->currentIndex();
+	if (ci >= 0) {
+		ci = ((ci + 1) >= _graphTabWidget->count()) ? 0 : ci + 1;
+		_graphTabWidget->setCurrentIndex(ci);
+	}
+}
+
+void GUI::prevTab()
+{
+	int ci = _graphTabWidget->currentIndex();
+	if (ci >= 0) {
+		ci = ((ci - 1) < 0) ? _graphTabWidget->count() - 1 : ci - 1;
+		_graphTabWidget->setCurrentIndex(ci);
 	}
 }
 

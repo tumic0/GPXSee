@@ -99,6 +99,9 @@ private slots:
 	void clearRecentFiles();
 #endif // Q_OS_ANDROID
 
+	void nextTab();
+	void prevTab();
+
 	void next();
 	void prev();
 	void last();
@@ -279,8 +282,6 @@ private:
 	QAction *_dmsAction;
 	QAction *_totalTimeAction;
 	QAction *_movingTimeAction;
-	QAction *_nextMapAction;
-	QAction *_prevMapAction;
 	QAction *_showTracksAction;
 	QAction *_showRoutesAction;
 	QAction *_showWaypointsAction;
