@@ -1268,7 +1268,7 @@
     <message>
         <location filename="../src/GUI/heartrategraph.cpp" line="35"/>
         <source>Maximum</source>
-        <translation>Max</translation>
+        <translation>Maximum</translation>
     </message>
 </context>
 <context>
@@ -2314,7 +2314,7 @@
     <message>
         <location filename="../src/GUI/powergraph.cpp" line="35"/>
         <source>Maximum</source>
-        <translation>Max</translation>
+        <translation>Maximum</translation>
     </message>
 </context>
 <context>
@@ -2444,7 +2444,7 @@
     <message>
         <location filename="../src/GUI/speedgraph.cpp" line="41"/>
         <source>Maximum</source>
-        <translation>Max</translation>
+        <translation>Maximum</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraph.cpp" line="44"/>
@@ -2546,7 +2546,7 @@
     <message>
         <location filename="../src/GUI/temperaturegraph.cpp" line="39"/>
         <source>Maximum</source>
-        <translation>Max</translation>
+        <translation>Maximum</translation>
     </message>
     <message>
         <location filename="../src/GUI/temperaturegraph.cpp" line="112"/>
