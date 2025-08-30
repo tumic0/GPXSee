@@ -652,13 +652,13 @@
         <location filename="../src/GUI/gui.cpp" line="542"/>
         <location filename="../src/GUI/gui.cpp" line="973"/>
         <source>Next graph tab</source>
-        <translation type="unfinished"></translation>
+        <translation>Onglet du graphique suivant</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="547"/>
         <location filename="../src/GUI/gui.cpp" line="975"/>
         <source>Previous graph tab</source>
-        <translation type="unfinished"></translation>
+        <translation>Onglet du graphique précédent</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="555"/>
