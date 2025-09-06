@@ -33,7 +33,7 @@ public:
 	int zoomOut();
 
 	void load(const Projection &in, const Projection &out, qreal deviceRatio,
-	  bool hidpi);
+	  bool hidpi, int layer);
 	void unload();
 
 	QPointF ll2xy(const Coordinates &c)

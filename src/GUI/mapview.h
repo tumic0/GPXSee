@@ -54,13 +54,6 @@ public:
 	};
 	Q_DECLARE_FLAGS(Flags, Flag)
 
-	enum Layer {
-		NoLayers = 0,
-		Raster = 1,
-		Vector = 2
-	};
-	Q_DECLARE_FLAGS(Layers, Layer)
-
 	MapView(Map *map, POI *poi, QWidget *parent = 0);
 
 	QList<PathItem *> loadData(const Data &data);
@@ -104,6 +97,7 @@ public:
 	void setDevicePixelRatio(qreal ratio);
 	void clearMapCache();
 	void fitContentToSize();
+	void selectLayer(int layer);
 
 	RectC boundingRect() const;
 	const Projection &inputProjection() const {return _inputProjection;}
@@ -138,7 +132,6 @@ public slots:
 	void showLegend(bool show);
 	void useStyles(bool use);
 	void drawHillShading(bool draw);
-	void selectLayers(MapView::Layers layers);
 
 private slots:
 	void updatePOI();
@@ -220,7 +213,7 @@ private:
 	bool _infoBackground;
 
 	bool _hillShading;
-	Layers _layers;
+	int _layer;
 
 	int _digitalZoom;
 	bool _plot;
@@ -233,7 +226,5 @@ private:
 	int _pinchZoom;
 	int _wheelDelta;
 };
-
-Q_DECLARE_OPERATORS_FOR_FLAGS(MapView::Layers)
 
 #endif // MAPVIEW_H

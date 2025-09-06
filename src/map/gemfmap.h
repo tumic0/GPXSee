@@ -27,7 +27,7 @@ public:
 	Coordinates xy2ll(const QPointF &p);
 
 	void load(const Projection &in, const Projection &out, qreal deviceRatio,
-	  bool hidpi);
+	  bool hidpi, int layer);
 	void unload();
 
 	void draw(QPainter *painter, const QRectF &rect, Flags flags);

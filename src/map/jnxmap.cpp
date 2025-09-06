@@ -155,9 +155,10 @@ JNXMap::~JNXMap()
 }
 
 void JNXMap::load(const Projection &in, const Projection &out,
-  qreal deviceRatio, bool hidpi)
+  qreal deviceRatio, bool hidpi, int layer)
 {
 	Q_UNUSED(out);
+	Q_UNUSED(layer);
 
 	_projection = in;
 	_mapRatio = hidpi ? deviceRatio : 1.0;

@@ -42,7 +42,7 @@ class GUI : public QMainWindow
 	Q_OBJECT
 
 public:
-	GUI();
+	GUI(const QString &lang);
 
 	bool openFile(const QString &fileName, bool tryUnknown, int &showError);
 	bool loadMap(const QString &fileName, MapAction *&action, int &showError);
@@ -172,6 +172,7 @@ private:
 	bool updateGraphTabs();
 	void updateDataDEMDownloadAction();
 	void updateMapDEMDownloadAction();
+	void updateMapLayers();
 #ifndef Q_OS_ANDROID
 	void updateRecentFiles(const QString &fileName);
 #endif // Q_OS_ANDROID
@@ -210,6 +211,8 @@ private:
 	void dragEnterEvent(QDragEnterEvent *event);
 	void dropEvent(QDropEvent *event);
 
+	QString _lang;
+
 #ifdef Q_OS_ANDROID
 	NavigationWidget *_navigation;
 #else // Q_OS_ANDROID
@@ -219,6 +222,7 @@ private:
 #endif // Q_OS_ANDROID
 	QMenu *_poiMenu;
 	QMenu *_mapMenu;
+	QMenu *_mapLayersMenu;
 #ifndef Q_OS_ANDROID
 	QMenu *_recentFilesMenu;
 #endif // Q_OS_ANDROID
@@ -302,15 +306,13 @@ private:
 	QAction *_downloadMapDEMAction;
 	QAction *_showDEMTilesAction;
 	QAction *_drawHillShadingAction;
-	QAction *_drawRastersAction;
-	QAction *_drawVectorsAction;
-	QAction *_drawAllAction;
 	QAction *_mapsEnd;
 	QAction *_poisEnd;
 #ifndef Q_OS_ANDROID
 	QAction *_clearRecentFilesAction;
 	QAction *_recentFilesEnd;
 #endif // Q_OS_ANDROID
+	QActionGroup *_mapLayersActionGroup;
 
 	QLabel *_fileNameLabel;
 	QLabel *_distanceLabel;

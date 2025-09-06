@@ -23,8 +23,6 @@ public:
 		Block = 1,
 		OpenGL = 2,
 		HillShading = 4,
-		Rasters = 8,
-		Vectors = 16
 	};
 	Q_DECLARE_FLAGS(Flags, Flag)
 
@@ -39,7 +37,7 @@ public:
 	virtual bool isReady() const {return true;}
 	virtual QString errorString() const {return QString();}
 
-	virtual void load(const Projection &, const Projection &, qreal, bool) {}
+	virtual void load(const Projection &, const Projection &, qreal, bool, int) {}
 	virtual void unload() {}
 
 	/* llBounds() is mandatory for maps that do not provide bounds() until
@@ -60,6 +58,9 @@ public:
 	virtual void draw(QPainter *painter, const QRectF &rect, Flags flags) = 0;
 
 	virtual double elevation(const Coordinates &c) {return DEM::elevation(c);}
+
+	virtual QStringList layers(const QString &, int &) const
+	  {return QStringList();}
 
 	virtual void clearCache() {}
 

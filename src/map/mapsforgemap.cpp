@@ -20,7 +20,7 @@ MapsforgeMap::MapsforgeMap(const QString &fileName, QObject *parent)
 }
 
 void MapsforgeMap::load(const Projection &in, const Projection &out,
-  qreal deviceRatio, bool hidpi)
+  qreal deviceRatio, bool hidpi, int layer)
 {
 	Q_UNUSED(in);
 	Q_UNUSED(hidpi);
@@ -29,7 +29,7 @@ void MapsforgeMap::load(const Projection &in, const Projection &out,
 	_projection = out;
 
 	_data.load();
-	_style.load(_data, _tileRatio);
+	_style.load(_data, _tileRatio, layer);
 
 	updateTransform();
 
@@ -210,6 +210,11 @@ void MapsforgeMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 		} else
 			runJob(new MapsforgeMapJob(tiles));
 	}
+}
+
+QStringList MapsforgeMap::layers(const QString &lang, int &defaultLayer) const
+{
+	return _style.layers(lang, defaultLayer);
 }
 
 Map *MapsforgeMap::create(const QString &path, const Projection &proj,

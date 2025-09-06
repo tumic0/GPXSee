@@ -61,7 +61,7 @@ public:
 	int zoomOut();
 
 	void load(const Projection &in, const Projection &out, qreal deviceRatio,
-	  bool hidpi);
+	  bool hidpi, int layer);
 	void unload();
 
 	QPointF ll2xy(const Coordinates &c)
@@ -70,6 +70,8 @@ public:
 	  {return _projection.xy2ll(_transform.img2proj(p));}
 
 	void draw(QPainter *painter, const QRectF &rect, Flags flags);
+
+	QStringList layers(const QString &lang, int &defaultLayer) const;
 
 	bool isValid() const {return _data.isValid();}
 	QString errorString() const {return _data.errorString();}

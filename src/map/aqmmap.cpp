@@ -252,10 +252,11 @@ AQMMap::AQMMap(const QString &fileName, QObject *parent)
 }
 
 void AQMMap::load(const Projection &in, const Projection &out,
-  qreal deviceRatio, bool hidpi)
+  qreal deviceRatio, bool hidpi, int layer)
 {
 	Q_UNUSED(in);
 	Q_UNUSED(out);
+	Q_UNUSED(layer);
 
 	_mapRatio = hidpi ? deviceRatio : 1.0;
 	if (!_file.open(QIODevice::ReadOnly))
