@@ -142,8 +142,7 @@ QStringList Style::Menu::layers(const QString &lang, int &defaultLayer) const
 				defaultLayer = list.size();
 
 			const QMap<QString, QString> &names = _layers.at(i).names();
-			QMap<QString, QString>::const_iterator it
-			  = names.find(lang.right(2).toLower());
+			QMap<QString, QString>::const_iterator it = names.find(lang.left(2));
 			QString name((it == names.constEnd())
 			  ? names.value(_defaultlang) : *it);
 			list.append(name.isEmpty() ? _layers.at(i).id() : name);
