@@ -365,452 +365,437 @@
 <context>
     <name>GUI</name>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="200"/>
+        <location filename="../src/GUI/gui.cpp" line="202"/>
         <source>Quit</source>
         <translation>Ĉesi</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="208"/>
-        <location filename="../src/GUI/gui.cpp" line="994"/>
-        <location filename="../src/GUI/gui.cpp" line="1012"/>
+        <location filename="../src/GUI/gui.cpp" line="210"/>
+        <location filename="../src/GUI/gui.cpp" line="982"/>
+        <location filename="../src/GUI/gui.cpp" line="1000"/>
         <source>Paths</source>
         <translation>Vojprefiksoj</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="212"/>
-        <location filename="../src/GUI/gui.cpp" line="951"/>
-        <location filename="../src/GUI/gui.cpp" line="952"/>
+        <location filename="../src/GUI/gui.cpp" line="214"/>
+        <location filename="../src/GUI/gui.cpp" line="939"/>
+        <location filename="../src/GUI/gui.cpp" line="940"/>
         <source>Keyboard controls</source>
         <translation>Klavarokomandoj</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="216"/>
-        <location filename="../src/GUI/gui.cpp" line="918"/>
+        <location filename="../src/GUI/gui.cpp" line="218"/>
+        <location filename="../src/GUI/gui.cpp" line="906"/>
         <source>About GPXSee</source>
         <translation>Pri GPXSee</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="222"/>
+        <location filename="../src/GUI/gui.cpp" line="224"/>
         <source>Open...</source>
         <translation>Malfermi...</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="229"/>
+        <location filename="../src/GUI/gui.cpp" line="231"/>
         <source>Open directory...</source>
         <translation>Malfermi dosierujon…</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="234"/>
+        <location filename="../src/GUI/gui.cpp" line="236"/>
         <source>Print...</source>
         <translation>Presi...</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="240"/>
+        <location filename="../src/GUI/gui.cpp" line="242"/>
         <source>Export to PDF...</source>
         <translation>Eksporti kiel PDF...</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="247"/>
+        <location filename="../src/GUI/gui.cpp" line="249"/>
         <source>Export to PNG...</source>
         <translation>Eksporti kiel PNG...</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="254"/>
+        <location filename="../src/GUI/gui.cpp" line="256"/>
         <source>Close</source>
         <translation>Fermi</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="261"/>
+        <location filename="../src/GUI/gui.cpp" line="263"/>
         <source>Reload</source>
         <translation>Reŝargi</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="267"/>
+        <location filename="../src/GUI/gui.cpp" line="269"/>
         <source>Statistics...</source>
         <translation>Statistiko...</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="277"/>
+        <location filename="../src/GUI/gui.cpp" line="279"/>
         <source>Clear list</source>
         <translation>Vakigi liston</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="289"/>
+        <location filename="../src/GUI/gui.cpp" line="291"/>
         <source>Load POI file...</source>
         <translation>Ŝargi POI-dosieron...</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="293"/>
+        <location filename="../src/GUI/gui.cpp" line="295"/>
         <source>Select all files</source>
         <translation>Elekti ĉiujn dosierojn</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="298"/>
+        <location filename="../src/GUI/gui.cpp" line="300"/>
         <source>Unselect all files</source>
         <translation>Malelekti ĉiujn dosierojn</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="303"/>
+        <location filename="../src/GUI/gui.cpp" line="305"/>
         <source>Overlap POIs</source>
         <translation>Kovri POI-punktojn</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="308"/>
+        <location filename="../src/GUI/gui.cpp" line="310"/>
         <source>Show POI icons</source>
         <translation>Montri POI-bildsimbolojn</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="313"/>
+        <location filename="../src/GUI/gui.cpp" line="315"/>
         <source>Show POI labels</source>
         <translation>Montri POI-nomojn</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="319"/>
+        <location filename="../src/GUI/gui.cpp" line="321"/>
         <source>Show POIs</source>
         <translation>Montri POI-punktojn</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="331"/>
+        <location filename="../src/GUI/gui.cpp" line="333"/>
         <source>Show map</source>
         <translation>Montri mapon</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="340"/>
+        <location filename="../src/GUI/gui.cpp" line="342"/>
         <source>Load map...</source>
         <translation>Ŝargi mapon...</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="345"/>
+        <location filename="../src/GUI/gui.cpp" line="347"/>
         <source>Load map directory...</source>
         <translation>Ŝargi dosierujon de mapoj…</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="348"/>
+        <location filename="../src/GUI/gui.cpp" line="350"/>
         <source>Clear tile cache</source>
         <translation>Vakigi kaŝmemoron</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="353"/>
-        <location filename="../src/GUI/gui.cpp" line="970"/>
+        <location filename="../src/GUI/gui.cpp" line="355"/>
+        <location filename="../src/GUI/gui.cpp" line="958"/>
         <source>Next map</source>
         <translation>Sekva mapo</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="363"/>
+        <location filename="../src/GUI/gui.cpp" line="365"/>
         <source>Show cursor coordinates</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="371"/>
-        <source>All</source>
-        <translation>Ĉiuj</translation>
-    </message>
-    <message>
-        <location filename="../src/GUI/gui.cpp" line="375"/>
-        <source>Raster only</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/GUI/gui.cpp" line="379"/>
-        <source>Vector only</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/GUI/gui.cpp" line="386"/>
+        <location filename="../src/GUI/gui.cpp" line="376"/>
         <source>Show position</source>
         <translation>Montri pozicion</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="392"/>
+        <location filename="../src/GUI/gui.cpp" line="382"/>
         <source>Follow position</source>
         <translation>Sekvi pozicion</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="397"/>
+        <location filename="../src/GUI/gui.cpp" line="387"/>
         <source>Show coordinates</source>
         <translation>Montri koordinatojn</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="403"/>
+        <location filename="../src/GUI/gui.cpp" line="393"/>
         <source>Show motion info</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="410"/>
+        <location filename="../src/GUI/gui.cpp" line="400"/>
         <source>Show tracks</source>
         <translation>Montri vojojn</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="415"/>
+        <location filename="../src/GUI/gui.cpp" line="405"/>
         <source>Show routes</source>
         <translation>Montri itinerojn</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="420"/>
+        <location filename="../src/GUI/gui.cpp" line="410"/>
         <source>Show waypoints</source>
         <translation>Montri vojpunktojn</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="426"/>
+        <location filename="../src/GUI/gui.cpp" line="416"/>
         <source>Show areas</source>
         <translation>Montri areojn</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="431"/>
+        <location filename="../src/GUI/gui.cpp" line="421"/>
         <source>Waypoint icons</source>
         <translation>Vojpunktaj bildsimboloj</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="436"/>
+        <location filename="../src/GUI/gui.cpp" line="426"/>
         <source>Waypoint labels</source>
         <translation>Vojpunktaj etikedoj</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="441"/>
+        <location filename="../src/GUI/gui.cpp" line="431"/>
         <source>Route waypoints</source>
         <translation>Itinerpunktoj</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="446"/>
+        <location filename="../src/GUI/gui.cpp" line="436"/>
         <source>km/mi markers</source>
         <translation>km/mi markoj</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="451"/>
+        <location filename="../src/GUI/gui.cpp" line="441"/>
         <source>Legend</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="459"/>
+        <location filename="../src/GUI/gui.cpp" line="449"/>
         <source>Do not show</source>
         <translation>Ne montri</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="463"/>
+        <location filename="../src/GUI/gui.cpp" line="453"/>
         <source>Marker only</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="467"/>
+        <location filename="../src/GUI/gui.cpp" line="457"/>
         <source>Date/time</source>
         <translation>Dato/tempo</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="471"/>
+        <location filename="../src/GUI/gui.cpp" line="461"/>
         <source>Coordinates</source>
         <translation>Koordinatoj</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="475"/>
+        <location filename="../src/GUI/gui.cpp" line="465"/>
         <source>Use styles</source>
         <translation>Uzi stilojn</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="493"/>
+        <location filename="../src/GUI/gui.cpp" line="483"/>
         <source>Show local DEM tiles</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="496"/>
+        <location filename="../src/GUI/gui.cpp" line="486"/>
         <source>Show hillshading</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="504"/>
+        <location filename="../src/GUI/gui.cpp" line="494"/>
         <source>Show graphs</source>
         <translation>Montri grafikaĵojn</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="512"/>
-        <location filename="../src/GUI/gui.cpp" line="1461"/>
-        <location filename="../src/GUI/gui.cpp" line="1521"/>
+        <location filename="../src/GUI/gui.cpp" line="502"/>
+        <location filename="../src/GUI/gui.cpp" line="1449"/>
+        <location filename="../src/GUI/gui.cpp" line="1509"/>
         <source>Distance</source>
         <translation>Distanco</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="519"/>
-        <location filename="../src/GUI/gui.cpp" line="780"/>
-        <location filename="../src/GUI/gui.cpp" line="1463"/>
-        <location filename="../src/GUI/gui.cpp" line="1523"/>
+        <location filename="../src/GUI/gui.cpp" line="509"/>
+        <location filename="../src/GUI/gui.cpp" line="768"/>
+        <location filename="../src/GUI/gui.cpp" line="1451"/>
+        <location filename="../src/GUI/gui.cpp" line="1511"/>
         <source>Time</source>
         <translation>Tempo</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="525"/>
+        <location filename="../src/GUI/gui.cpp" line="515"/>
         <source>Show grid</source>
         <translation>Montri kradon</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="530"/>
+        <location filename="../src/GUI/gui.cpp" line="520"/>
         <source>Show slider info</source>
         <translation>Montri valoron de la ŝovilo</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="536"/>
+        <location filename="../src/GUI/gui.cpp" line="526"/>
         <source>Show tabs</source>
         <translation>Montri langetojn</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="542"/>
-        <location filename="../src/GUI/gui.cpp" line="973"/>
+        <location filename="../src/GUI/gui.cpp" line="532"/>
+        <location filename="../src/GUI/gui.cpp" line="961"/>
         <source>Next graph tab</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="547"/>
-        <location filename="../src/GUI/gui.cpp" line="975"/>
+        <location filename="../src/GUI/gui.cpp" line="537"/>
+        <location filename="../src/GUI/gui.cpp" line="963"/>
         <source>Previous graph tab</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="555"/>
+        <location filename="../src/GUI/gui.cpp" line="545"/>
         <source>Show toolbars</source>
         <translation>Montri ilobretojn</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="562"/>
+        <location filename="../src/GUI/gui.cpp" line="552"/>
         <source>Total time</source>
         <translation>Totala tempo</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="567"/>
-        <location filename="../src/GUI/gui.cpp" line="1464"/>
-        <location filename="../src/GUI/gui.cpp" line="1525"/>
+        <location filename="../src/GUI/gui.cpp" line="557"/>
+        <location filename="../src/GUI/gui.cpp" line="1452"/>
+        <location filename="../src/GUI/gui.cpp" line="1513"/>
         <source>Moving time</source>
         <translation>Movada tempo</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="574"/>
+        <location filename="../src/GUI/gui.cpp" line="564"/>
         <source>Metric</source>
         <translation>Metraj</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="579"/>
+        <location filename="../src/GUI/gui.cpp" line="569"/>
         <source>Imperial</source>
         <translation>Britimperiaj</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="585"/>
+        <location filename="../src/GUI/gui.cpp" line="575"/>
         <source>Nautical</source>
         <translation>Maraj</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="593"/>
+        <location filename="../src/GUI/gui.cpp" line="583"/>
         <source>Decimal degrees (DD)</source>
         <translation>Decimalaj gradoj (DG)</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="599"/>
+        <location filename="../src/GUI/gui.cpp" line="589"/>
         <source>Degrees and decimal minutes (DMM)</source>
         <translation>Gradoj kaj decimalaj minutoj (GDM)</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="606"/>
+        <location filename="../src/GUI/gui.cpp" line="596"/>
         <source>Degrees, minutes, seconds (DMS)</source>
         <translation>Gradoj, minutoj, sekundoj (GMS)</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="613"/>
+        <location filename="../src/GUI/gui.cpp" line="603"/>
         <source>Fullscreen mode</source>
         <translation>Plenekrana reĝimo</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="620"/>
+        <location filename="../src/GUI/gui.cpp" line="610"/>
         <source>Options...</source>
         <translation>Opcioj...</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="627"/>
+        <location filename="../src/GUI/gui.cpp" line="617"/>
         <source>Next</source>
         <translation>Sekva</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="632"/>
+        <location filename="../src/GUI/gui.cpp" line="622"/>
         <source>Previous</source>
         <translation>Antaŭa</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="637"/>
+        <location filename="../src/GUI/gui.cpp" line="627"/>
         <source>Last</source>
         <translation>Lasta</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="642"/>
+        <location filename="../src/GUI/gui.cpp" line="632"/>
         <source>First</source>
         <translation>Unua</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="677"/>
+        <location filename="../src/GUI/gui.cpp" line="667"/>
         <source>&amp;File</source>
         <translation>&amp;Dosiero</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="680"/>
+        <location filename="../src/GUI/gui.cpp" line="670"/>
         <source>Open recent</source>
         <translation>Malfermi lastatempajn</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="705"/>
+        <location filename="../src/GUI/gui.cpp" line="695"/>
         <source>&amp;Map</source>
         <translation>&amp;Mapo</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="711"/>
+        <location filename="../src/GUI/gui.cpp" line="701"/>
         <source>Layers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="720"/>
+        <location filename="../src/GUI/gui.cpp" line="708"/>
         <source>&amp;Graph</source>
         <translation>&amp;Grafikaĵo</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="752"/>
+        <location filename="../src/GUI/gui.cpp" line="740"/>
         <source>&amp;POI</source>
         <translation>&amp;POI</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="772"/>
+        <location filename="../src/GUI/gui.cpp" line="760"/>
         <source>Position</source>
         <translation>Pozicio</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1001"/>
-        <location filename="../src/GUI/gui.cpp" line="1019"/>
+        <location filename="../src/GUI/gui.cpp" line="989"/>
+        <location filename="../src/GUI/gui.cpp" line="1007"/>
         <source>CRS directory:</source>
         <translation>CRS-dosierujo:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1007"/>
-        <location filename="../src/GUI/gui.cpp" line="1025"/>
+        <location filename="../src/GUI/gui.cpp" line="995"/>
+        <location filename="../src/GUI/gui.cpp" line="1013"/>
         <source>Symbols directory:</source>
         <translation>Dosierujo de simboloj:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1073"/>
+        <location filename="../src/GUI/gui.cpp" line="1061"/>
         <source>Open directory</source>
         <translation>Malfermi dosierujon</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1142"/>
+        <location filename="../src/GUI/gui.cpp" line="1130"/>
         <source>Error loading geo URI:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1148"/>
-        <location filename="../src/GUI/gui.cpp" line="1188"/>
-        <location filename="../src/GUI/gui.cpp" line="1881"/>
-        <location filename="../src/GUI/gui.cpp" line="1987"/>
+        <location filename="../src/GUI/gui.cpp" line="1136"/>
+        <location filename="../src/GUI/gui.cpp" line="1176"/>
+        <location filename="../src/GUI/gui.cpp" line="1864"/>
+        <location filename="../src/GUI/gui.cpp" line="1969"/>
         <source>Don&apos;t show again</source>
         <translation>Ne montri denove</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="2049"/>
+        <location filename="../src/GUI/gui.cpp" line="2031"/>
         <source>Clear &quot;%1&quot; tile cache?</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/GUI/gui.cpp" line="2072"/>
+        <location filename="../src/GUI/gui.cpp" line="2054"/>
         <source>Download %n DEM tiles?</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -818,301 +803,301 @@
         </translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="732"/>
+        <location filename="../src/GUI/gui.cpp" line="720"/>
         <source>&amp;Data</source>
         <translation>Da&amp;teno</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="482"/>
+        <location filename="../src/GUI/gui.cpp" line="472"/>
         <source>Download data DEM</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="488"/>
+        <location filename="../src/GUI/gui.cpp" line="478"/>
         <source>Download map DEM</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="738"/>
+        <location filename="../src/GUI/gui.cpp" line="726"/>
         <source>Position info</source>
         <translation>Informo pri pozicio</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="764"/>
+        <location filename="../src/GUI/gui.cpp" line="752"/>
         <source>DEM</source>
         <translation>DEM</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="779"/>
+        <location filename="../src/GUI/gui.cpp" line="767"/>
         <source>&amp;Settings</source>
         <translation>&amp;Agordoj</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="784"/>
+        <location filename="../src/GUI/gui.cpp" line="772"/>
         <source>Units</source>
         <translation>Unuoj</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="789"/>
+        <location filename="../src/GUI/gui.cpp" line="777"/>
         <source>Coordinates format</source>
         <translation>Koordinata formato</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="802"/>
+        <location filename="../src/GUI/gui.cpp" line="790"/>
         <source>&amp;Help</source>
         <translation>&amp;Helpo</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="829"/>
+        <location filename="../src/GUI/gui.cpp" line="817"/>
         <source>File</source>
         <translation>Dosiero</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="839"/>
+        <location filename="../src/GUI/gui.cpp" line="827"/>
         <source>Show</source>
         <translation>Montri</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="847"/>
+        <location filename="../src/GUI/gui.cpp" line="835"/>
         <source>Navigation</source>
         <translation>Navigado</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="920"/>
-        <location filename="../src/GUI/gui.cpp" line="928"/>
+        <location filename="../src/GUI/gui.cpp" line="908"/>
+        <location filename="../src/GUI/gui.cpp" line="916"/>
         <source>Version %1</source>
         <translation>Versio %1</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="923"/>
-        <location filename="../src/GUI/gui.cpp" line="932"/>
+        <location filename="../src/GUI/gui.cpp" line="911"/>
+        <location filename="../src/GUI/gui.cpp" line="920"/>
         <source>GPXSee is distributed under the terms of the GNU General Public License version 3. For more info about GPXSee visit the project homepage at %1.</source>
         <translation>GPXSee estas distribuita laŭ la kondiĉoj de la GNU Ĝenerala Publika Permesilo, la versio 3. Por pliaj informoj pri GPXSee, vizitu la hejmpaĝo de projekto %1.</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="955"/>
+        <location filename="../src/GUI/gui.cpp" line="943"/>
         <source>Next file</source>
         <translation>Sekva dosiero</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="956"/>
+        <location filename="../src/GUI/gui.cpp" line="944"/>
         <source>Previous file</source>
         <translation>Antaŭa dosiero</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="958"/>
+        <location filename="../src/GUI/gui.cpp" line="946"/>
         <source>First file</source>
         <translation>Unua dosiero</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="960"/>
+        <location filename="../src/GUI/gui.cpp" line="948"/>
         <source>Last file</source>
         <translation>Lasta dosiero</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="961"/>
+        <location filename="../src/GUI/gui.cpp" line="949"/>
         <source>Append file</source>
         <translation>Postaldoni dosieron</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="962"/>
+        <location filename="../src/GUI/gui.cpp" line="950"/>
         <source>Next/Previous</source>
         <translation>Sekva/Antaŭa</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="964"/>
+        <location filename="../src/GUI/gui.cpp" line="952"/>
         <source>Toggle graph type</source>
         <translation>Baskuligi tipon de la grafikaĵo</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="966"/>
+        <location filename="../src/GUI/gui.cpp" line="954"/>
         <source>Toggle time type</source>
         <translation>Baskuligi tipon de la tempo</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="968"/>
+        <location filename="../src/GUI/gui.cpp" line="956"/>
         <source>Toggle position info</source>
         <translation>Baskuligi informon pr pozicio</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="358"/>
-        <location filename="../src/GUI/gui.cpp" line="972"/>
+        <location filename="../src/GUI/gui.cpp" line="360"/>
+        <location filename="../src/GUI/gui.cpp" line="960"/>
         <source>Previous map</source>
         <translation>Antaŭa mapo</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="976"/>
+        <location filename="../src/GUI/gui.cpp" line="964"/>
         <source>Zoom in</source>
         <translation>Zomi</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="978"/>
+        <location filename="../src/GUI/gui.cpp" line="966"/>
         <source>Zoom out</source>
         <translation>Malzomi</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="980"/>
+        <location filename="../src/GUI/gui.cpp" line="968"/>
         <source>Digital zoom</source>
         <translation>Diĝita zomo</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="981"/>
+        <location filename="../src/GUI/gui.cpp" line="969"/>
         <source>Zoom</source>
         <translation>Zoom</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="982"/>
+        <location filename="../src/GUI/gui.cpp" line="970"/>
         <source>Copy coordinates</source>
         <translation>Kopii koordinatojn</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="983"/>
+        <location filename="../src/GUI/gui.cpp" line="971"/>
         <source>Left Click</source>
         <translation>Maldekstra klako</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="997"/>
-        <location filename="../src/GUI/gui.cpp" line="1015"/>
+        <location filename="../src/GUI/gui.cpp" line="985"/>
+        <location filename="../src/GUI/gui.cpp" line="1003"/>
         <source>Map directory:</source>
         <translation>Dosierujo kun mapoj:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="999"/>
-        <location filename="../src/GUI/gui.cpp" line="1017"/>
+        <location filename="../src/GUI/gui.cpp" line="987"/>
+        <location filename="../src/GUI/gui.cpp" line="1005"/>
         <source>POI directory:</source>
         <translation>Dosierujo kun POI:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1003"/>
-        <location filename="../src/GUI/gui.cpp" line="1021"/>
+        <location filename="../src/GUI/gui.cpp" line="991"/>
+        <location filename="../src/GUI/gui.cpp" line="1009"/>
         <source>DEM directory:</source>
         <translation>Dosierujo kun DEM-dateno:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1005"/>
-        <location filename="../src/GUI/gui.cpp" line="1023"/>
+        <location filename="../src/GUI/gui.cpp" line="993"/>
+        <location filename="../src/GUI/gui.cpp" line="1011"/>
         <source>Styles directory:</source>
         <translation>Dosierujo kun stildosieroj:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1009"/>
-        <location filename="../src/GUI/gui.cpp" line="1027"/>
+        <location filename="../src/GUI/gui.cpp" line="997"/>
+        <location filename="../src/GUI/gui.cpp" line="1015"/>
         <source>Tile cache directory:</source>
         <translation>Kaŝmemora dosierujo:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1038"/>
-        <location filename="../src/GUI/gui.cpp" line="1041"/>
+        <location filename="../src/GUI/gui.cpp" line="1026"/>
+        <location filename="../src/GUI/gui.cpp" line="1029"/>
         <source>Open file</source>
         <translation>Malfermi dosieron</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1180"/>
+        <location filename="../src/GUI/gui.cpp" line="1168"/>
         <source>Error loading data file:</source>
         <translation>Eraro dum la ŝargado de la datumdosiero:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1183"/>
-        <location filename="../src/GUI/gui.cpp" line="1299"/>
+        <location filename="../src/GUI/gui.cpp" line="1171"/>
+        <location filename="../src/GUI/gui.cpp" line="1287"/>
         <source>Line: %1</source>
         <translation>Linio: %1</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1266"/>
-        <location filename="../src/GUI/gui.cpp" line="1269"/>
+        <location filename="../src/GUI/gui.cpp" line="1254"/>
+        <location filename="../src/GUI/gui.cpp" line="1257"/>
         <source>Open POI file</source>
         <translation>Malfermi POI-dosieron</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1296"/>
+        <location filename="../src/GUI/gui.cpp" line="1284"/>
         <source>Error loading POI file:</source>
         <translation>Eraro dum la ŝargado de la POI-dosiero:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1443"/>
-        <location filename="../src/GUI/gui.cpp" line="1501"/>
+        <location filename="../src/GUI/gui.cpp" line="1431"/>
+        <location filename="../src/GUI/gui.cpp" line="1489"/>
         <source>Tracks</source>
         <translation>Vojoj</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1445"/>
-        <location filename="../src/GUI/gui.cpp" line="1503"/>
+        <location filename="../src/GUI/gui.cpp" line="1433"/>
+        <location filename="../src/GUI/gui.cpp" line="1491"/>
         <source>Routes</source>
         <translation>Itineroj</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1447"/>
-        <location filename="../src/GUI/gui.cpp" line="1505"/>
+        <location filename="../src/GUI/gui.cpp" line="1435"/>
+        <location filename="../src/GUI/gui.cpp" line="1493"/>
         <source>Waypoints</source>
         <translation>Vojpunktoj</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1449"/>
-        <location filename="../src/GUI/gui.cpp" line="1507"/>
+        <location filename="../src/GUI/gui.cpp" line="1437"/>
+        <location filename="../src/GUI/gui.cpp" line="1495"/>
         <source>Areas</source>
         <translation>Areoj</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1453"/>
-        <location filename="../src/GUI/gui.cpp" line="1455"/>
-        <location filename="../src/GUI/gui.cpp" line="1512"/>
-        <location filename="../src/GUI/gui.cpp" line="1514"/>
+        <location filename="../src/GUI/gui.cpp" line="1441"/>
+        <location filename="../src/GUI/gui.cpp" line="1443"/>
+        <location filename="../src/GUI/gui.cpp" line="1500"/>
+        <location filename="../src/GUI/gui.cpp" line="1502"/>
         <source>Date</source>
         <translation>Dato</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1476"/>
-        <location filename="../src/GUI/gui.cpp" line="1479"/>
-        <location filename="../src/GUI/gui.cpp" line="1480"/>
+        <location filename="../src/GUI/gui.cpp" line="1464"/>
+        <location filename="../src/GUI/gui.cpp" line="1467"/>
+        <location filename="../src/GUI/gui.cpp" line="1468"/>
         <source>Statistics</source>
         <translation>Statistiko</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1497"/>
+        <location filename="../src/GUI/gui.cpp" line="1485"/>
         <source>Name</source>
         <translation>Nomo</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1820"/>
-        <location filename="../src/GUI/gui.cpp" line="1823"/>
+        <location filename="../src/GUI/gui.cpp" line="1803"/>
+        <location filename="../src/GUI/gui.cpp" line="1806"/>
         <source>Open map file</source>
         <translation>Malfermi mapdosieron</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1875"/>
-        <location filename="../src/GUI/gui.cpp" line="1938"/>
-        <location filename="../src/GUI/gui.cpp" line="1957"/>
-        <location filename="../src/GUI/gui.cpp" line="1981"/>
+        <location filename="../src/GUI/gui.cpp" line="1858"/>
+        <location filename="../src/GUI/gui.cpp" line="1920"/>
+        <location filename="../src/GUI/gui.cpp" line="1939"/>
+        <location filename="../src/GUI/gui.cpp" line="1963"/>
         <source>Error loading map:</source>
         <translation>Eraro dum la ŝargado de la mapo:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="2021"/>
+        <location filename="../src/GUI/gui.cpp" line="2003"/>
         <source>Select map directory</source>
         <translation>Elekti dosierujon kun mapoj</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="2069"/>
+        <location filename="../src/GUI/gui.cpp" line="2051"/>
         <source>DEM tiles download limit exceeded. If you really need data for such a huge area, download the files manually.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="2085"/>
+        <location filename="../src/GUI/gui.cpp" line="2067"/>
         <source>Could not download all required DEM files.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="2102"/>
+        <location filename="../src/GUI/gui.cpp" line="2084"/>
         <source>No local DEM tiles found.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="2113"/>
+        <location filename="../src/GUI/gui.cpp" line="2095"/>
         <source>No files loaded</source>
         <translation>Neniuj dosieroj estas ŝargitaj</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/GUI/gui.cpp" line="2117"/>
+        <location filename="../src/GUI/gui.cpp" line="2099"/>
         <source>%n files</source>
         <translation>
             <numerusform>%n dosiero</numerusform>
@@ -1288,6 +1273,24 @@
         <location filename="../src/GUI/heartrategraphitem.cpp" line="21"/>
         <source>Average</source>
         <translation>Mezumo</translation>
+    </message>
+</context>
+<context>
+    <name>IMGMap</name>
+    <message>
+        <location filename="../src/map/imgmap.cpp" line="305"/>
+        <source>All</source>
+        <translation type="unfinished">Ĉiuj</translation>
+    </message>
+    <message>
+        <location filename="../src/map/imgmap.cpp" line="305"/>
+        <source>Vector only</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/map/imgmap.cpp" line="305"/>
+        <source>Raster only</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
