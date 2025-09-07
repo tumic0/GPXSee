@@ -4,15 +4,25 @@
     <!-- Menu -->
     <stylemenu id="menu" defaultvalue="basic" defaultlang="en">
         <layer id="basic" visible="true">
-            <name lang="en" value="Basic"/>
             <name lang="cs" value="Základní"/>
+            <name lang="de" value="Basis"/>
+            <name lang="en" value="Basic"/>
+            <name lang="it" value="Base"/>
+            <name lang="pl" value="Podstawowa"/>
+            <name lang="ru" value="Базовая"/>
+            <name lang="uk" value="Базова"/>
             <cat id="background"/>
             <cat id="natural"/>
             <cat id="landuse"/>
         </layer>
         <layer id="outdoor" visible="true">
-            <name lang="en" value="Outdoor"/>
             <name lang="cs" value="Turistická"/>
+            <name lang="de" value="Outdoor"/>
+            <name lang="en" value="Outdoor"/>
+            <name lang="it" value="Turistica"/>
+            <name lang="pl" value="Turystyczna"/>
+            <name lang="ru" value="Туристическая"/>
+            <name lang="uk" value="Туристична"/>
             <cat id="background"/>
             <cat id="natural"/>
             <cat id="landuse"/>
@@ -20,8 +30,13 @@
             <cat id="cycling"/>
         </layer>
         <layer id="winter" visible="true">
-            <name lang="en" value="Winter"/>
             <name lang="cs" value="Zimní"/>
+            <name lang="de" value="Winter"/>
+            <name lang="en" value="Winter"/>
+            <name lang="it" value="Invernale"/>
+            <name lang="pl" value="Zimowa"/>
+            <name lang="ru" value="Зимняя"/>
+            <name lang="uk" value="Зимова"/>
             <cat id="background-winter"/>
             <cat id="natural-winter"/>
             <cat id="landuse-winter"/>
