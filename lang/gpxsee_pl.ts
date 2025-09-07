@@ -728,7 +728,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="752"/>
         <source>DEM</source>
-        <translation type="unfinished"></translation>
+        <translation>DEM</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="760"/>
@@ -839,7 +839,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="1061"/>
         <source>Open directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Otwórz katalog</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1130"/>
@@ -2109,7 +2109,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="889"/>
         <source>Position</source>
-        <translation type="unfinished"></translation>
+        <translation>Pozycja</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="891"/>
