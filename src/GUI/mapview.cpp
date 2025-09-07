@@ -441,7 +441,8 @@ void MapView::setMap(Map *map)
 
 	disconnect(_map, &Map::tilesLoaded, this, &MapView::reloadMap);
 	_map->unload();
-	_layer = -1;
+	if (map != _map)
+		_layer = -1;
 
 	_map = map;
 	_map->load(_inputProjection, _outputProjection, _deviceRatio, _hidpi, _layer);
