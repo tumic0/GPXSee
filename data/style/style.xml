@@ -1255,36 +1255,36 @@
     <rule cat="downhill" e="way" k="piste:type" v="downhill" zoom-min="13">
         <rule e="way" k="*" v="*" closed="no">
             <rule e="way" k="piste:difficulty" v="novice">
-                <line stroke="#9940ff40" stroke-width="3"/>
+                <line stroke="#dc40ff40" stroke-width="3"/>
             </rule>
             <rule e="way" k="piste:difficulty" v="easy">
-                <line stroke="#9974cdfe" stroke-width="3"/>
+                <line stroke="#dc5ed1f3" stroke-width="3"/>
             </rule>
             <rule e="way" k="piste:difficulty" v="intermediate">
-                <line stroke="#99ff6e6e" stroke-width="3"/>
+                <line stroke="#dcff6e6e" stroke-width="3"/>
             </rule>
             <rule e="way" k="piste:difficulty" v="advanced|expert">
-                <line stroke="#99333333" stroke-width="3"/>
+                <line stroke="#dc333333" stroke-width="3"/>
             </rule>
             <rule e="way" k="piste:difficulty" v="freeride">
-                <line stroke="#99f7e337" stroke-width="3"/>
+                <line stroke="#dcf7e337" stroke-width="3"/>
             </rule>
         </rule>
         <rule e="way" k="*" v="*" closed="yes">
             <rule e="way" k="piste:difficulty" v="novice">
-                <area fill="#9940ff40"/>
+                <area fill="#dc40ff40"/>
             </rule>
             <rule e="way" k="piste:difficulty" v="easy">
-                <area fill="#9974cdfe"/>
+                <area fill="#dc5ed1f3"/>
             </rule>
             <rule e="way" k="piste:difficulty" v="intermediate">
-                <area fill="#99ff6e6e"/>
+                <area fill="#dcff6e6e"/>
             </rule>
             <rule e="way" k="piste:difficulty" v="advanced|expert">
-                <area fill="#99333333"/>
+                <area fill="#dc333333"/>
             </rule>
             <rule e="way" k="piste:difficulty" v="freeride">
-                <area fill="#99f7e337"/>
+                <area fill="#dcf7e337"/>
             </rule>
         </rule>
     </rule>
