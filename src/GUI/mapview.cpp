@@ -1307,7 +1307,10 @@ void MapView::drawHillShading(bool draw)
 {
 	_hillShading = draw;
 
-	setMap(_map);
+	_map->unload();
+	_map->load(_inputProjection, _outputProjection, _deviceRatio, _hidpi, _layer);
+
+	reloadMap();
 }
 
 void MapView::selectLayer(int layer)
