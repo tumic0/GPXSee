@@ -448,7 +448,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="231"/>
         <source>Open directory...</source>
-        <translation type="unfinished"></translation>
+        <translation>Otwórz katalog...</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="249"/>
@@ -483,7 +483,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="310"/>
         <source>Show POI icons</source>
-        <translation type="unfinished"></translation>
+        <translation>Pokaż ikony POI</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="342"/>
@@ -549,7 +549,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="421"/>
         <source>Waypoint icons</source>
-        <translation type="unfinished"></translation>
+        <translation>Ikony punktów nawigacyjnych</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="426"/>
@@ -564,7 +564,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="441"/>
         <source>Legend</source>
-        <translation type="unfinished"></translation>
+        <translation>Legenda</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="449"/>
@@ -589,7 +589,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="465"/>
         <source>Use styles</source>
-        <translation type="unfinished"></translation>
+        <translation>Użyj stylów</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="483"/>
@@ -713,12 +713,12 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="670"/>
         <source>Open recent</source>
-        <translation type="unfinished"></translation>
+        <translation>Otwórz ostatnie</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="701"/>
         <source>Layers</source>
-        <translation type="unfinished"></translation>
+        <translation>Warstwy</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="726"/>
@@ -733,7 +733,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="760"/>
         <source>Position</source>
-        <translation type="unfinished"></translation>
+        <translation>Pozycja</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="772"/>
@@ -1816,7 +1816,7 @@
         <location filename="../src/GUI/optionsdialog.cpp" line="273"/>
         <location filename="../src/GUI/optionsdialog.cpp" line="639"/>
         <source>px</source>
-        <translation type="unfinished">px</translation>
+        <translation>px</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="183"/>
@@ -2023,7 +2023,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="771"/>
         <source>Use OpenGL</source>
-        <translation>Używaj OpenGL</translation>
+        <translation>Użyj OpenGL</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="773"/>

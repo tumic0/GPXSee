@@ -397,7 +397,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="231"/>
         <source>Open directory...</source>
-        <translation type="unfinished"></translation>
+        <translation>Apri directory...</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="236"/>
@@ -563,7 +563,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="441"/>
         <source>Legend</source>
-        <translation type="unfinished"></translation>
+        <translation>Legenda</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="449"/>
@@ -588,7 +588,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="465"/>
         <source>Use styles</source>
-        <translation type="unfinished"></translation>
+        <translation>Usa stili</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="483"/>
@@ -732,7 +732,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="670"/>
         <source>Open recent</source>
-        <translation type="unfinished"></translation>
+        <translation>Apri recenti</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="695"/>
@@ -742,7 +742,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="701"/>
         <source>Layers</source>
-        <translation type="unfinished"></translation>
+        <translation>Livelli</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="708"/>
@@ -769,12 +769,12 @@
         <location filename="../src/GUI/gui.cpp" line="995"/>
         <location filename="../src/GUI/gui.cpp" line="1013"/>
         <source>Symbols directory:</source>
-        <translation>Cartella simboli</translation>
+        <translation>Cartella simboli:</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1061"/>
         <source>Open directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Apri directory</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1130"/>
