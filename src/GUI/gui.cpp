@@ -2338,7 +2338,7 @@ void GUI::updateMapLayers()
 	QStringList layers(_map->layers(_lang, dflt));
 
 	for (int i = 0; i < layers.size(); i++) {
-		QAction *a = new QAction(layers.at(i));
+		QAction *a = new QAction(layers.at(i), _mapLayersMenu);
 		a->setActionGroup(_mapLayersActionGroup);
 		a->setMenuRole(QAction::NoRole);
 		a->setData(i);
