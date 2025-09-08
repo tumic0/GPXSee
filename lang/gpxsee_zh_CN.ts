@@ -649,13 +649,13 @@
         <location filename="../src/GUI/gui.cpp" line="532"/>
         <location filename="../src/GUI/gui.cpp" line="961"/>
         <source>Next graph tab</source>
-        <translation type="unfinished"></translation>
+        <translation>下一个图表选项卡</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="537"/>
         <location filename="../src/GUI/gui.cpp" line="963"/>
         <source>Previous graph tab</source>
-        <translation type="unfinished"></translation>
+        <translation>上一个图表选项卡</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="545"/>
