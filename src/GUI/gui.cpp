@@ -65,10 +65,12 @@
 #define MAX_RECENT_FILES  10
 #define TOOLBAR_ICON_SIZE 22
 
-GUI::GUI()
+GUI::GUI(const QString &lang)
 {
 	QString activeMap;
 	QStringList disabledPOIs, recentFiles;
+
+	_lang = lang;
 
 	_poi = new POI(this);
 	_dem = new DEMLoader(ProgramPaths::demDir(true), this);
@@ -350,36 +352,24 @@ void GUI::createActions()
 	_clearMapCacheAction->setMenuRole(QAction::NoRole);
 	connect(_clearMapCacheAction, &QAction::triggered, this,
 	  &GUI::clearMapCache);
-	_nextMapAction = new QAction(tr("Next map"), this);
-	_nextMapAction->setMenuRole(QAction::NoRole);
-	_nextMapAction->setShortcut(NEXT_MAP_SHORTCUT);
-	connect(_nextMapAction, &QAction::triggered, this, &GUI::nextMap);
-	addAction(_nextMapAction);
-	_prevMapAction = new QAction(tr("Next map"), this);
-	_prevMapAction->setMenuRole(QAction::NoRole);
-	_prevMapAction->setShortcut(PREV_MAP_SHORTCUT);
-	connect(_prevMapAction, &QAction::triggered, this, &GUI::prevMap);
-	addAction(_prevMapAction);
+	QAction *nextMapAction = new QAction(tr("Next map"), this);
+	nextMapAction->setMenuRole(QAction::NoRole);
+	nextMapAction->setShortcut(NEXT_MAP_SHORTCUT);
+	connect(nextMapAction, &QAction::triggered, this, &GUI::nextMap);
+	addAction(nextMapAction);
+	QAction *prevMapAction = new QAction(tr("Previous map"), this);
+	prevMapAction->setMenuRole(QAction::NoRole);
+	prevMapAction->setShortcut(PREV_MAP_SHORTCUT);
+	connect(prevMapAction, &QAction::triggered, this, &GUI::prevMap);
+	addAction(prevMapAction);
 	_showCoordinatesAction = new QAction(tr("Show cursor coordinates"), this);
 	_showCoordinatesAction->setMenuRole(QAction::NoRole);
 	_showCoordinatesAction->setCheckable(true);
 	connect(_showCoordinatesAction, &QAction::triggered, _mapView,
 	  &MapView::showCursorCoordinates);
-	QActionGroup *mapLayersGroup = new QActionGroup(this);
-	connect(mapLayersGroup, &QActionGroup::triggered, this,
+	_mapLayersActionGroup = new QActionGroup(this);
+	connect(_mapLayersActionGroup, &QActionGroup::triggered, this,
 	  &GUI::selectMapLayers);
-	_drawAllAction = new QAction(tr("All"), this);
-	_drawAllAction->setMenuRole(QAction::NoRole);
-	_drawAllAction->setCheckable(true);
-	_drawAllAction->setActionGroup(mapLayersGroup);
-	_drawRastersAction = new QAction(tr("Raster only"), this);
-	_drawRastersAction->setMenuRole(QAction::NoRole);
-	_drawRastersAction->setCheckable(true);
-	_drawRastersAction->setActionGroup(mapLayersGroup);
-	_drawVectorsAction = new QAction(tr("Vector only"), this);
-	_drawVectorsAction->setMenuRole(QAction::NoRole);
-	_drawVectorsAction->setCheckable(true);
-	_drawVectorsAction->setActionGroup(mapLayersGroup);
 
 	// Position
 	_showPositionAction = new QAction(QIcon::fromTheme(SHOW_POS_NAME,
@@ -539,6 +529,16 @@ void GUI::createActions()
 	connect(_showGraphTabsAction, &QAction::triggered, this,
 	  &GUI::showGraphTabs);
 #endif // Q_OS_ANDROID
+	QAction *nextTabAction = new QAction(tr("Next graph tab"), this);
+	nextTabAction->setMenuRole(QAction::NoRole);
+	nextTabAction->setShortcut(NEXT_TAB_SHORTCUT);
+	connect(nextTabAction, &QAction::triggered, this, &GUI::nextTab);
+	addAction(nextTabAction);
+	QAction *prevTabAction = new QAction(tr("Previous graph tab"), this);
+	prevTabAction->setMenuRole(QAction::NoRole);
+	prevTabAction->setShortcut(PREV_TAB_SHORTCUT);
+	connect(prevTabAction, &QAction::triggered, this, &GUI::prevTab);
+	addAction(prevTabAction);
 
 	// Settings actions
 #ifndef Q_OS_ANDROID
@@ -698,11 +698,9 @@ void GUI::createMenus()
 	_mapMenu->addAction(_loadMapDirAction);
 	_mapMenu->addAction(_clearMapCacheAction);
 	_mapMenu->addSeparator();
-	QMenu *layersMenu = _mapMenu->addMenu(tr("Layers"));
-	layersMenu->menuAction()->setMenuRole(QAction::NoRole);
-	layersMenu->addAction(_drawAllAction);
-	layersMenu->addAction(_drawRastersAction);
-	layersMenu->addAction(_drawVectorsAction);
+	_mapLayersMenu = _mapMenu->addMenu(tr("Layers"));
+	_mapLayersMenu->menuAction()->setMenuRole(QAction::NoRole);
+	_mapLayersMenu->setEnabled(false);
 	_mapMenu->addAction(_showCoordinatesAction);
 	_mapMenu->addSeparator();
 	_mapMenu->addAction(_showMapAction);
@@ -957,9 +955,12 @@ void GUI::keys()
 	  + QKeySequence(TOGGLE_TIME_TYPE_KEY).toString() + "</i></td></tr><tr><td>"
 	  + tr("Toggle position info") + "</td><td><i>"
 	  + QKeySequence(TOGGLE_MARKER_INFO_KEY).toString() + "</i></td></tr>"
-	  + "<tr><td></td><td></td></tr><tr><td>" + tr("Next map")
-	  + "</td><td><i>" + NEXT_MAP_SHORTCUT.toString() + "</i></td></tr><tr><td>"
+	  + "<tr><td></td><td></td></tr><tr><td>" + tr("Next map") + "</td><td><i>"
+	  + NEXT_MAP_SHORTCUT.toString() + "</i></td></tr><tr><td>"
 	  + tr("Previous map") + "</td><td><i>" + PREV_MAP_SHORTCUT.toString()
+	  + "</i></td></tr><tr><td>" + tr("Next graph tab") + "</td><td><i>"
+	  + NEXT_TAB_SHORTCUT.toString() + "</i></td></tr><tr><td>"
+	  + tr("Previous graph tab") + "</td><td><i>" + PREV_TAB_SHORTCUT.toString()
 	  + "</i></td></tr><tr><td></td><td></td></tr><tr><td>" + tr("Zoom in")
 	  + "</td><td><i>" + QKeySequence(ZOOM_IN).toString()
 	  + "</i></td></tr><tr><td>" + tr("Zoom out") + "</td><td><i>"
@@ -1793,12 +1794,7 @@ void GUI::showPathMarkerInfo(QAction *action)
 
 void GUI::selectMapLayers(QAction *action)
 {
-	if (action == _drawVectorsAction)
-		_mapView->selectLayers(MapView::Layer::Vector);
-	else if (action == _drawRastersAction)
-		_mapView->selectLayers(MapView::Layer::Raster);
-	else
-		_mapView->selectLayers(MapView::Layer::Raster | MapView::Layer::Vector);
+	_mapView->selectLayer(action->data().toInt());
 }
 
 void GUI::loadMap()
@@ -1904,7 +1900,6 @@ bool GUI::loadMap(const QString &fileName, MapAction *&action, int &showError)
 	QUrl url(fileName);
 
 	path = url.isLocalFile() ? url.toLocalFile() : fileName;
-
 
 	TreeNode<Map*> maps(MapList::loadMaps(path, _mapView->inputProjection()));
 	QList<QAction*> existingActions(_mapsActionGroup->actions());
@@ -2184,6 +2179,7 @@ void GUI::mapChanged(QAction *action)
 	_map = action->data().value<Map*>();
 	_mapView->setMap(_map);
 	updateMapDEMDownloadAction();
+	updateMapLayers();
 }
 
 void GUI::nextMap()
@@ -2215,6 +2211,24 @@ void GUI::prevMap()
 			maps.at(prev)->trigger();
 			break;
 		}
+	}
+}
+
+void GUI::nextTab()
+{
+	int ci = _graphTabWidget->currentIndex();
+	if (ci >= 0) {
+		ci = ((ci + 1) >= _graphTabWidget->count()) ? 0 : ci + 1;
+		_graphTabWidget->setCurrentIndex(ci);
+	}
+}
+
+void GUI::prevTab()
+{
+	int ci = _graphTabWidget->currentIndex();
+	if (ci >= 0) {
+		ci = ((ci - 1) < 0) ? _graphTabWidget->count() - 1 : ci - 1;
+		_graphTabWidget->setCurrentIndex(ci);
 	}
 }
 
@@ -2314,6 +2328,27 @@ void GUI::updateMapDEMDownloadAction()
 {
 	_downloadMapDEMAction->setEnabled(!_dem->url().isEmpty()
 	  && !_dem->checkTiles(_map->llBounds()));
+}
+
+void GUI::updateMapLayers()
+{
+	_mapLayersMenu->clear();
+
+	int dflt = 0;
+	QStringList layers(_map->layers(_lang, dflt));
+
+	for (int i = 0; i < layers.size(); i++) {
+		QAction *a = new QAction(layers.at(i), _mapLayersMenu);
+		a->setActionGroup(_mapLayersActionGroup);
+		a->setMenuRole(QAction::NoRole);
+		a->setData(i);
+		a->setCheckable(true);
+		if (i == dflt)
+			a->setChecked(true);
+		_mapLayersMenu->addAction(a);
+	}
+
+	_mapLayersMenu->setEnabled(!layers.isEmpty());
 }
 
 void GUI::setTimeType(TimeType type)
@@ -2556,19 +2591,10 @@ void GUI::writeSettings()
 #endif // Q_OS_ANDROID
 
 	/* Map */
-	MapView::Layers ml;
-	if (_drawRastersAction->isChecked())
-		ml = MapView::Layer::Raster;
-	else if (_drawVectorsAction->isChecked())
-		ml = MapView::Layer::Vector;
-	else
-		ml = MapView::Layer::Raster | MapView::Layer::Vector;
-
 	settings.beginGroup(SETTINGS_MAP);
 	WRITE(activeMap, _map->name());
 	WRITE(showMap, _showMapAction->isChecked());
 	WRITE(cursorCoordinates, _showCoordinatesAction->isChecked());
-	WRITE(layers, (int)ml);
 	settings.endGroup();
 
 	/* Graph */
@@ -2804,15 +2830,6 @@ void GUI::readSettings(QString &activeMap, QStringList &disabledPOIs,
 		_showCoordinatesAction->setChecked(true);
 		_mapView->showCursorCoordinates(true);
 	}
-	int layers = READ(layers).toInt();
-	if (layers == MapView::Layer::Raster) {
-		_drawRastersAction->setChecked(true);
-		_mapView->selectLayers(MapView::Layer::Raster);
-	} else if (layers == MapView::Layer::Vector) {
-		_drawVectorsAction->setChecked(true);
-		_mapView->selectLayers(MapView::Layer::Vector);
-	} else
-		_drawAllAction->setChecked(true);
 	activeMap = READ(activeMap).toString();
 	settings.endGroup();
 

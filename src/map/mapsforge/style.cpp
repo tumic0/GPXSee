@@ -90,6 +90,20 @@ const Style::Menu::Layer *Style::Menu::findLayer(const QString &id) const
 	return 0;
 }
 
+const Style::Menu::Layer *Style::Menu::layerAt(int index) const
+{
+	int idx = -1;
+
+	for (int i = 0; i < _layers.size(); i++) {
+		if (_layers.at(i).visible()) {
+			if (++idx == index)
+				return &_layers.at(i);
+		}
+	}
+
+	return 0;
+}
+
 void Style::Menu::addCats(const Layer *layer, QSet<QString> &cats) const
 {
 	if (!layer)
@@ -108,11 +122,34 @@ void Style::Menu::addCats(const Layer *layer, QSet<QString> &cats) const
 	}
 }
 
-QSet<QString> Style::Menu::cats() const
+QSet<QString> Style::Menu::cats(int layer) const
 {
 	QSet<QString> c;
-	addCats(findLayer(_defaultvalue), c);
+	const Layer *l = (layer < 0) ? findLayer(_defaultvalue) : layerAt(layer);
+
+	addCats(l, c);
+
 	return c;
+}
+
+QStringList Style::Menu::layers(const QString &lang, int &defaultLayer) const
+{
+	QStringList list;
+
+	for (int i = 0; i < _layers.size(); i++) {
+		if (_layers.at(i).visible()) {
+			if (_layers.at(i).id() == _defaultvalue)
+				defaultLayer = list.size();
+
+			const QMap<QString, QString> &names = _layers.at(i).names();
+			QMap<QString, QString>::const_iterator it = names.find(lang.left(2));
+			QString name((it == names.constEnd())
+			  ? names.value(_defaultlang) : *it);
+			list.append(name.isEmpty() ? _layers.at(i).id() : name);
+		}
+	}
+
+	return list;
 }
 
 Style::Rule::Filter::Filter(const MapData &data, const QList<QByteArray> &keys,
@@ -702,6 +739,24 @@ QString Style::cat(QXmlStreamReader &reader)
 	return id;
 }
 
+void Style::name(QXmlStreamReader &reader, Menu::Layer &layer)
+{
+	const QXmlStreamAttributes &attr = reader.attributes();
+
+	if (!attr.hasAttribute("lang")) {
+		reader.raiseError("Missing lang attribute");
+		return;
+	}
+	if (!attr.hasAttribute("value")) {
+		reader.raiseError("Missing value attribute");
+		return;
+	}
+
+	layer.addName(attr.value("value").toString(), attr.value("lang").toString());
+
+	reader.skipCurrentElement();
+}
+
 Style::Menu::Layer Style::layer(QXmlStreamReader &reader)
 {
 	const QXmlStreamAttributes &attr = reader.attributes();
@@ -711,13 +766,16 @@ Style::Menu::Layer Style::layer(QXmlStreamReader &reader)
 	}
 
 	Menu::Layer l(attr.value("id").toString(),
-	  attr.value("enabled").toString() == "true");
+	  attr.value("enabled").toString() == "true",
+	  attr.value("visible").toString() == "true");
 
 	if (attr.hasAttribute("parent"))
 		l.setParent(attr.value("parent").toString());
 
 	while (reader.readNextStartElement()) {
-		if (reader.name() == QLatin1String("cat"))
+		if (reader.name() == QLatin1String("name"))
+			name(reader, l);
+		else if (reader.name() == QLatin1String("cat"))
 			l.addCat(cat(reader));
 		else if (reader.name() == QLatin1String("overlay"))
 			l.addOverlay(cat(reader));
@@ -735,8 +793,13 @@ Style::Menu Style::stylemenu(QXmlStreamReader &reader)
 		reader.raiseError("Missing defaultvalue attribute");
 		return Menu();
 	}
+	if (!attr.hasAttribute("defaultlang")) {
+		reader.raiseError("Missing defaultlang attribute");
+		return Menu();
+	}
 
-	Style::Menu menu(attr.value("defaultvalue").toString());
+	Style::Menu menu(attr.value("defaultvalue").toString(),
+	  attr.value("defaultlang").toString());
 
 	while (reader.readNextStartElement()) {
 		if (reader.name() == QLatin1String("layer"))
@@ -749,7 +812,7 @@ Style::Menu Style::stylemenu(QXmlStreamReader &reader)
 }
 
 void Style::rendertheme(QXmlStreamReader &reader, const QString &dir,
-  const MapData &data, qreal ratio)
+  const MapData &data, qreal ratio, int layer)
 {
 	Rule r;
 	QSet<QString> cats;
@@ -771,14 +834,15 @@ void Style::rendertheme(QXmlStreamReader &reader, const QString &dir,
 		else if (reader.name() == QLatin1String("hillshading"))
 			hillshading(reader, cats);
 		else if (reader.name() == QLatin1String("stylemenu")) {
-			Menu menu(stylemenu(reader));
-			cats = menu.cats();
+			_menu = stylemenu(reader);
+			cats = _menu.cats(layer);
 		} else
 			reader.skipCurrentElement();
 	}
 }
 
-bool Style::loadXml(const QString &path, const MapData &data, qreal ratio)
+bool Style::loadXml(const QString &path, const MapData &data, qreal ratio,
+  int layer)
 {
 	QFile file(path);
 	if (!file.open(QFile::ReadOnly))
@@ -788,7 +852,7 @@ bool Style::loadXml(const QString &path, const MapData &data, qreal ratio)
 
 	if (reader.readNextStartElement()) {
 		if (reader.name() == QLatin1String("rendertheme"))
-			rendertheme(reader, fi.absolutePath(), data, ratio);
+			rendertheme(reader, fi.absolutePath(), data, ratio, layer);
 		else
 			reader.raiseError("Not a Mapsforge style file");
 	}
@@ -800,12 +864,12 @@ bool Style::loadXml(const QString &path, const MapData &data, qreal ratio)
 	return !reader.error();
 }
 
-void Style::load(const MapData &data, qreal ratio)
+void Style::load(const MapData &data, qreal ratio, int layer)
 {
 	QString path(ProgramPaths::renderthemeFile());
 
-	if (!QFileInfo::exists(path) || !loadXml(path, data, ratio))
-		loadXml(":/style/style.xml", data, ratio);
+	if (!QFileInfo::exists(path) || !loadXml(path, data, ratio, layer))
+		loadXml(":/style/style.xml", data, ratio, layer);
 
 	std::sort(_symbols.begin(), _symbols.end());
 	std::sort(_lineSymbols.begin(), _lineSymbols.end());
@@ -822,6 +886,7 @@ void Style::clear()
 	_symbols = QList<Symbol>();
 	_lineSymbols = QList<Symbol>();
 	_hillShading = HillShadingRender();
+	_menu = Menu();
 }
 
 QList<const Style::PathRender *> Style::paths(int zoom, bool closed,
@@ -934,4 +999,9 @@ qreal Style::PathRender::dy(int zoom) const
 qreal Style::CircleRender::radius(int zoom) const
 {
 	return (_scale && zoom >= 12) ? pow(1.5, zoom - 12) * _radius : _radius;
+}
+
+QStringList Style::layers(const QString &lang, int &defaultLayer) const
+{
+	return _menu.layers(lang, defaultLayer);
 }

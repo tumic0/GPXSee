@@ -32,8 +32,6 @@
 	  ? QPageSize::PageSizeId::Letter \
 	  : QPageSize::PageSizeId::A4)
 
-#define ALL_LAYERS (int)(MapView::Layer::Raster | MapView::Layer::Vector)
-
 #ifdef Q_OS_ANDROID
 #define PIXMAP_CACHE 384
 #define DEM_CACHE    128
@@ -147,7 +145,6 @@ SETTING(showToolbars,        "toolbar",                true                   );
 SETTING(activeMap,           "map",                    "Open Street Map"      );
 SETTING(showMap,             "show",                   true                   );
 SETTING(cursorCoordinates,   "coordinates",            false                  );
-SETTING(layers,              "layers",                 ALL_LAYERS             );
 
 /* Graph */
 SETTING(showGraphs,          "show",                   true                   );

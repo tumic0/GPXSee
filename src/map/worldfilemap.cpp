@@ -94,9 +94,10 @@ void WorldFileMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 }
 
 void WorldFileMap::load(const Projection &in, const Projection &out,
-  qreal deviceRatio, bool hidpi)
+  qreal deviceRatio, bool hidpi, int layer)
 {
 	Q_UNUSED(out);
+	Q_UNUSED(layer);
 
 	if (!_hasPRJ)
 		_projection = in;

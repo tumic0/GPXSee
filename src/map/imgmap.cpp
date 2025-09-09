@@ -59,7 +59,7 @@ static QList<MapData*> overlays(const QString &fileName)
 
 IMGMap::IMGMap(const QString &fileName, bool GMAP, QObject *parent)
   : Map(fileName, parent), _projection(PCS::pcs(3857)), _tileRatio(1.0),
-  _valid(false)
+  _layer(All), _valid(false)
 {
 	if (GMAP)
 		_data.append(new GMAPData(fileName));
@@ -79,7 +79,7 @@ IMGMap::IMGMap(const QString &fileName, bool GMAP, QObject *parent)
 }
 
 void IMGMap::load(const Projection &in, const Projection &out,
-  qreal devicelRatio, bool hidpi)
+  qreal devicelRatio, bool hidpi, int layer)
 {
 	Q_UNUSED(in);
 	Q_UNUSED(hidpi);
@@ -87,6 +87,17 @@ void IMGMap::load(const Projection &in, const Projection &out,
 	_tileRatio = devicelRatio;
 	_projection = out;
 	_dataBounds = limitBounds(_data.first()->bounds(), _projection);
+
+	switch (layer) {
+		case 1:
+			_layer = Vector;
+			break;
+		case 2:
+			_layer = Raster;
+			break;
+		default:
+			_layer = All;
+	}
 
 	for (int i = 0; i < _data.size(); i++)
 		_data.at(i)->load(devicelRatio);
@@ -246,8 +257,8 @@ void IMGMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 				else {
 					tiles.append(RasterTile(_projection, _transform, _data.at(n),
 					  _zoom, QRect(ttl, QSize(TILE_SIZE, TILE_SIZE)), _tileRatio,
-					  key, !n && flags & Map::HillShading, flags & Map::Rasters,
-					  flags & Map::Vectors));
+					  key, !n && flags & Map::HillShading, _layer & Raster,
+					  _layer & Vector));
 				}
 			}
 		}
@@ -283,6 +294,15 @@ double IMGMap::elevation(const Coordinates &c)
 		return tree.elevation(c);
 	} else
 		return Map::elevation(c);
+}
+
+QStringList IMGMap::layers(const QString &lang, int &defaultLayer) const
+{
+	Q_UNUSED(lang);
+
+	defaultLayer = 0;
+
+	return QStringList() << tr("All") << tr("Vector only") << tr("Raster only");
 }
 
 Map* IMGMap::createIMG(const QString &path, const Projection &proj, bool *isDir)

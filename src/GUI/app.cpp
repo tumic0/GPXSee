@@ -75,7 +75,7 @@ App::App(int &argc, char **argv) : QApplication(argc, argv)
 #endif // Q_OS_WIN32 || Q_OS_MAC
 	QIcon::setFallbackThemeName(APP_NAME);
 
-	_gui = new GUI();
+	_gui = new GUI(app->language());
 
 #ifdef Q_OS_ANDROID
 	connect(this, &App::applicationStateChanged, this, &App::appStateChanged);

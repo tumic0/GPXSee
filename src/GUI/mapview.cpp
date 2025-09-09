@@ -64,9 +64,9 @@ MapView::MapView(Map *map, POI *poi, QWidget *parent) : QGraphicsView(parent)
 	_inputProjection = GCS::gcs(4326);
 	_hidpi = true;
 	_hillShading = true;
-	_layers = Layer::Raster | Layer::Vector;
+	_layer = -1;
 	_map = map;
-	_map->load(_inputProjection, _outputProjection, _deviceRatio, _hidpi);
+	_map->load(_inputProjection, _outputProjection, _deviceRatio, _hidpi, _layer);
 	connect(_map, &Map::tilesLoaded, this, &MapView::reloadMap);
 
 	_poi = poi;
@@ -441,9 +441,11 @@ void MapView::setMap(Map *map)
 
 	disconnect(_map, &Map::tilesLoaded, this, &MapView::reloadMap);
 	_map->unload();
+	if (map != _map)
+		_layer = -1;
 
 	_map = map;
-	_map->load(_inputProjection, _outputProjection, _deviceRatio, _hidpi);
+	_map->load(_inputProjection, _outputProjection, _deviceRatio, _hidpi, _layer);
 	connect(_map, &Map::tilesLoaded, this, &MapView::reloadMap);
 
 	digitalZoom(0);
@@ -1167,10 +1169,6 @@ void MapView::drawBackground(QPainter *painter, const QRectF &rect)
 			flags = Map::OpenGL;
 		if (_hillShading)
 			flags |= Map::HillShading;
-		if (_layers & Layer::Raster)
-			flags |= Map::Rasters;
-		if (_layers & Layer::Vector)
-			flags |= Map::Vectors;
 
 		_map->draw(painter, ir, flags);
 	}
@@ -1309,14 +1307,20 @@ void MapView::drawHillShading(bool draw)
 {
 	_hillShading = draw;
 
-	setMap(_map);
+	_map->unload();
+	_map->load(_inputProjection, _outputProjection, _deviceRatio, _hidpi, _layer);
+
+	reloadMap();
 }
 
-void MapView::selectLayers(MapView::Layers layers)
+void MapView::selectLayer(int layer)
 {
-	_layers = layers;
+	_layer = layer;
 
-	setMap(_map);
+	_map->unload();
+	_map->load(_inputProjection, _outputProjection, _deviceRatio, _hidpi, layer);
+
+	reloadMap();
 }
 
 void MapView::useStyles(bool use)
@@ -1486,7 +1490,7 @@ void MapView::setHidpi(bool hidpi)
 	RectC cr(_map->xy2ll(vr.topLeft()), _map->xy2ll(vr.bottomRight()));
 
 	_map->unload();
-	_map->load(_inputProjection, _outputProjection, _deviceRatio, hidpi);
+	_map->load(_inputProjection, _outputProjection, _deviceRatio, hidpi, _layer);
 	rescale();
 
 	QPointF nc = QRectF(_map->ll2xy(cr.topLeft()),

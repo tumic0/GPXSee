@@ -1,25 +1,78 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rendertheme xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="5" xmlns="http://mapsforge.org/renderTheme" xsi:schemaLocation="http://mapsforge.org/renderTheme https://raw.githubusercontent.com/mapsforge/mapsforge/master/resources/renderTheme.xsd">
 
+    <!-- Menu -->
+    <stylemenu id="menu" defaultvalue="basic" defaultlang="en">
+        <layer id="basic" visible="true">
+            <name lang="cs" value="Základní"/>
+            <name lang="de" value="Basis"/>
+            <name lang="en" value="Basic"/>
+            <name lang="it" value="Base"/>
+            <name lang="pl" value="Podstawowa"/>
+            <name lang="ru" value="Базовая"/>
+            <name lang="uk" value="Базова"/>
+            <cat id="background"/>
+            <cat id="natural"/>
+            <cat id="landuse"/>
+        </layer>
+        <layer id="outdoor" visible="true">
+            <name lang="cs" value="Turistická"/>
+            <name lang="de" value="Outdoor"/>
+            <name lang="en" value="Outdoor"/>
+            <name lang="it" value="Turistica"/>
+            <name lang="pl" value="Turystyczna"/>
+            <name lang="ru" value="Туристическая"/>
+            <name lang="uk" value="Туристична"/>
+            <cat id="background"/>
+            <cat id="natural"/>
+            <cat id="landuse"/>
+            <cat id="hiking"/>
+            <cat id="cycling"/>
+        </layer>
+        <layer id="winter" visible="true">
+            <name lang="cs" value="Zimní"/>
+            <name lang="de" value="Winter"/>
+            <name lang="en" value="Winter"/>
+            <name lang="it" value="Invernale"/>
+            <name lang="pl" value="Zimowa"/>
+            <name lang="ru" value="Зимняя"/>
+            <name lang="uk" value="Зимова"/>
+            <cat id="background-winter"/>
+            <cat id="natural-winter"/>
+            <cat id="landuse-winter"/>
+            <cat id="downhill"/>
+            <cat id="cross-country"/>
+            <cat id="alpine"/>
+        </layer>
+    </stylemenu>
+
     <!-- Background -->
     <rule e="way" closed="yes" k="natural" v="issea|sea">
         <area fill="#9fc4e1"/>
     </rule>
-    <rule e="way" closed="yes" k="natural" v="nosea|land">
+    <rule cat="background" e="way" closed="yes" k="natural" v="nosea|land">
         <area fill="#f1f0e5"/>
+    </rule>
+    <rule cat="background-winter" e="way" closed="yes" k="natural" v="nosea|land">
+        <area fill="#ffffff"/>
     </rule>
 
     <!-- Natural areas -->
-    <rule e="way" closed="yes" k="natural" v="wood" zoom-min="10">
+    <rule cat="natural" e="way" closed="yes" k="natural" v="wood" zoom-min="10">
         <area fill="#cadfaf"/>
     </rule>
-    <rule e="way" closed="yes" k="natural" v="scrub" zoom-min="10">
+    <rule cat="natural-winter" e="way" closed="yes" k="natural" v="wood" zoom-min="10">
+        <area fill="#dcf6ff"/>
+    </rule>
+    <rule cat="natural" e="way" closed="yes" k="natural" v="scrub" zoom-min="10">
         <area fill="#e4efcf"/>
+    </rule>
+    <rule cat="natural-winter" e="way" closed="yes" k="natural" v="scrub" zoom-min="10">
+        <area fill="#f6fbff"/>
     </rule>
     <rule e="way" closed="yes" k="natural" v="beach" zoom-min="10">
         <area fill="#fff3c7"/>
     </rule>
-
     <rule e="way" closed="yes" k="natural" v="rock|stone|bare_rock|bedrock" zoom-min="14">
         <area fill="#96968f"/>
     </rule>
@@ -28,25 +81,32 @@
     </rule>
 
     <!-- Landuse -->
-    <rule e="way" closed="yes" k="leisure" v="park|garden" zoom-min="10">
+    <rule cat="landuse" e="way" closed="yes" k="leisure" v="park|garden" zoom-min="10">
         <area fill="#e4efcf"/>
     </rule>
-
+    <rule cat="landuse-winter" e="way" closed="yes" k="leisure" v="park|garden" zoom-min="10">
+        <area fill="#f6fbff"/>
+    </rule>
     <rule e="way" closed="yes" k="landuse" v="construction|quarry|landfill|industrial|farm|farmyard|railway" zoom-min="10">
         <area fill="#d6d4ce"/>
     </rule>
     <rule e="way" closed="yes" k="landuse" v="allotments" zoom-min="10">
         <area fill="#f0e7d5"/>
     </rule>
-
     <rule e="way" closed="yes" k="landuse" v="comercial|residential|retail" zoom-min="10">
         <area fill="#e6e2d9"/>
     </rule>
-    <rule e="way" closed="yes" k="landuse" v="forest|wood" zoom-min="9">
+    <rule cat="landuse" e="way" closed="yes" k="landuse" v="forest|wood" zoom-min="9">
         <area fill="#cadfaf"/>
     </rule>
-    <rule e="way" closed="yes" k="landuse" v="meadow|grass|greenfield|village_green" zoom-min="10">
+    <rule cat="landuse-winter" e="way" closed="yes" k="landuse" v="forest|wood" zoom-min="9">
+        <area fill="#dcf6ff"/>
+    </rule>
+    <rule cat="landuse" e="way" closed="yes" k="landuse" v="meadow|grass|greenfield|village_green" zoom-min="10">
         <area fill="#e4efcf"/>
+    </rule>
+    <rule cat="landuse-winter" e="way" closed="yes" k="landuse" v="meadow|grass|greenfield|village_green" zoom-min="10">
+        <area fill="#f6fbff"/>
     </rule>
     <rule e="way" closed="yes" k="landuse" v="orchard" zoom-min="10">
         <area src=":/patterns/orchard.svg" symbol-width="7"/>
@@ -1132,6 +1192,116 @@
     </rule>
     <rule e="any" k="emergency" v="defibrillator" zoom-min="16">
         <symbol id="defibrillator" src=":/POI/defibrillator-11.svg" symbol-width="11"/>
+    </rule>
+
+    <!-- Hiking trails -->
+    <rule cat="hiking" e="way" closed="no" k="osmc_color" v="*">
+        <rule e="way" k="*" v="*" zoom-min="13" zoom-max="14">
+            <rule e="way" k="osmc_color" v="wmco_yellow">
+                <line stroke="#e5cb15" stroke-width="0.9" dy="1"/>
+            </rule>
+            <rule e="way" k="osmc_color" v="wmco_green">
+                <line stroke="#1b8a01" stroke-width="0.9" dy="1"/>
+            </rule>
+            <rule e="way" k="osmc_color" v="wmco_red">
+                <line stroke="#c90000" stroke-width="0.9" dy="1"/>
+            </rule>
+            <rule e="way" k="osmc_color" v="wmco_blue">
+                <line stroke="#021dc1" stroke-width="0.9" dy="1"/>
+            </rule>
+        </rule>
+        <rule e="way" k="*" v="*" zoom-min="15">
+            <rule e="way" k="osmc_color" v="wmco_yellow">
+                <line stroke="#e5cb15" stroke-width="0.5" dy="0.6"/>
+                <pathText fill="#e5cb15" font-size="10" k="ref_hike" stroke="#ffffff" stroke-width="2"/>
+            </rule>
+            <rule e="way" k="osmc_color" v="wmco_green">
+                <line stroke="#1b8a01" stroke-width="0.5" dy="0.6"/>
+                <pathText fill="#1b8a01" font-size="10" k="ref_hike" stroke="#ffffff" stroke-width="2"/>
+            </rule>
+            <rule e="way" k="osmc_color" v="wmco_red">
+                <line stroke="#c90000" stroke-width="0.5" dy="0.6"/>
+                <pathText fill="#c90000" font-size="10" k="ref_hike" stroke="#ffffff" stroke-width="2"/>
+            </rule>
+            <rule e="way" k="osmc_color" v="wmco_blue">
+                <line stroke="#021dc1" stroke-width="0.5" dy="0.6"/>
+                <pathText fill="#021dc1" font-size="10" k="ref_hike" stroke="#ffffff" stroke-width="2"/>
+            </rule>
+        </rule>
+    </rule>
+    <!-- Cycling routes -->
+    <rule cat="cycling" e="way" closed="no" k="network" v="icn|ncn|rcn">
+        <rule e="way" k="*" v="*" zoom-min="13" zoom-max="14">
+            <rule e="way" k="network" v="icn">
+                <line stroke="#ec4bc7" stroke-width="0.9" dy="-1"/>
+            </rule>
+            <rule e="way" k="network" v="ncn|rcn">
+                <line stroke="#ec4bc7" stroke-width="0.9" stroke-dasharray="6,4" dy="-1"/>
+            </rule>
+        </rule>
+        <rule e="way" k="*" v="*" zoom-min="15">
+            <rule e="way" k="network" v="icn">
+                <line stroke="#ec4bc7" stroke-width="0.5" dy="-0.6"/>
+            </rule>
+            <rule e="way" k="network" v="ncn|rcn">
+                <line stroke="#ec4bc7" stroke-width="0.5" stroke-dasharray="8,6" dy="-0.6"/>
+            </rule>
+            <pathText fill="#ec4bc7" font-size="10" k="ref_cycle" stroke="#ffffff" stroke-width="2"/>
+        </rule>
+    </rule>
+
+    <!-- Pistes -->
+    <rule cat="cross-country" e="way" closed="no" k="piste:type" v="nordic">
+        <rule e="way" k="piste:grooming" v="~|-|backcountry" zoom-min="13" zoom-max="14">
+            <line stroke="#377bf0" stroke-width="1.0" dy="-1.1"/>
+        </rule>
+        <rule e="way" k="piste:grooming" v="~|-|backcountry" zoom-min="15">
+            <line stroke="#377bf0" stroke-width="0.6" dy="-0.7"/>
+        </rule>
+    </rule>
+    <rule cat="alpine" e="way" closed="no" k="piste:type" v="skitour">
+        <rule e="way" k="*" v="*" zoom-min="13" zoom-max="14">
+            <line stroke="#377bf0" stroke-width="1.0" stroke-dasharray="6,4" dy="-1.1"/>
+        </rule>
+        <rule e="way" k="*" v="*" zoom-min="15">
+            <line stroke="#377bf0" stroke-width="0.6" stroke-dasharray="8,6" dy="-0.7"/>
+        </rule>
+    </rule>
+    <rule cat="downhill" e="way" k="piste:type" v="downhill" zoom-min="13">
+        <rule e="way" k="*" v="*" closed="no">
+            <rule e="way" k="piste:difficulty" v="novice">
+                <line stroke="#dc40ff40" stroke-width="3"/>
+            </rule>
+            <rule e="way" k="piste:difficulty" v="easy">
+                <line stroke="#dc5ed1f3" stroke-width="3"/>
+            </rule>
+            <rule e="way" k="piste:difficulty" v="intermediate">
+                <line stroke="#dcff6e6e" stroke-width="3"/>
+            </rule>
+            <rule e="way" k="piste:difficulty" v="advanced|expert">
+                <line stroke="#dc333333" stroke-width="3"/>
+            </rule>
+            <rule e="way" k="piste:difficulty" v="freeride">
+                <line stroke="#dcf7e337" stroke-width="3"/>
+            </rule>
+        </rule>
+        <rule e="way" k="*" v="*" closed="yes">
+            <rule e="way" k="piste:difficulty" v="novice">
+                <area fill="#dc40ff40"/>
+            </rule>
+            <rule e="way" k="piste:difficulty" v="easy">
+                <area fill="#dc5ed1f3"/>
+            </rule>
+            <rule e="way" k="piste:difficulty" v="intermediate">
+                <area fill="#dcff6e6e"/>
+            </rule>
+            <rule e="way" k="piste:difficulty" v="advanced|expert">
+                <area fill="#dc333333"/>
+            </rule>
+            <rule e="way" k="piste:difficulty" v="freeride">
+                <area fill="#dcf7e337"/>
+            </rule>
+        </rule>
     </rule>
 
 </rendertheme>

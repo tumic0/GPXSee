@@ -260,7 +260,7 @@ public:
 		QImage _img;
 	};
 
-	void load(const MapData &data, qreal ratio);
+	void load(const MapData &data, qreal ratio, int layer);
 	void clear();
 
 	QList<const PathRender *> paths(int zoom, bool closed,
@@ -275,44 +275,56 @@ public:
 	QList<const Symbol*> lineSymbols(int zoom) const;
 	const HillShadingRender *hillShading(int zoom) const;
 
+	QStringList layers(const QString &lang, int &defaultLayer) const;
+
 private:
 	class Menu {
 	public:
 		class Layer {
 		public:
-			Layer() : _enabled(false) {}
-			Layer(const QString &id, bool enabled)
-			  : _id(id), _enabled(enabled) {}
+			Layer() : _enabled(false), _visible(false) {}
+			Layer(const QString &id, bool enabled, bool visible)
+			  : _id(id), _enabled(enabled), _visible(visible) {}
 
+			const QMap<QString, QString> &names() const {return _names;}
 			const QStringList &cats() const {return _cats;}
 			const QStringList &overlays() const {return _overlays;}
 			const QString &id() const {return _id;}
 			const QString &parent() const {return _parent;}
 			bool enabled() const {return _enabled;}
+			bool visible() const {return _visible;}
 
 			void setParent(const QString &parent) {_parent = parent;}
 			void addCat(const QString &cat) {_cats.append(cat);}
 			void addOverlay(const QString &overlay) {_overlays.append(overlay);}
+			void addName(const QString &name, const QString &lang)
+			  {_names.insert(lang, name);}
 
 		private:
 			QStringList _cats;
 			QStringList _overlays;
 			QString _id;
 			QString _parent;
+			QMap<QString, QString> _names;
 			bool _enabled;
+			bool _visible;
 		};
 
 		Menu() {}
-		Menu(const QString &defaultValue) : _defaultvalue(defaultValue) {}
+		Menu(const QString &defaultValue, const QString &defaultLang)
+		  : _defaultvalue(defaultValue), _defaultlang(defaultLang) {}
 
 		void addLayer(const Layer &layer) {_layers.append(layer);}
-		QSet<QString> cats() const;
+		QSet<QString> cats(int layer) const;
+		QStringList layers(const QString &lang, int &defaultLayer) const;
 
 	private:
 		const Layer *findLayer(const QString &id) const;
+		const Layer *layerAt(int index) const;
 		void addCats(const Layer *layer, QSet<QString> &cats) const;
 
 		QString _defaultvalue;
+		QString _defaultlang;
 		QList<Layer> _layers;
 	};
 
@@ -321,13 +333,16 @@ private:
 	QList<CircleRender> _circles;
 	QList<TextRender> _labels, _pathLabels;
 	QList<Symbol> _symbols, _lineSymbols;
+	Menu _menu;
 
-	bool loadXml(const QString &path, const MapData &data, qreal ratio);
+	bool loadXml(const QString &path, const MapData &data, qreal ratio,
+	  int layer);
 	void rendertheme(QXmlStreamReader &reader, const QString &dir,
-	  const MapData &data, qreal ratio);
+	  const MapData &data, qreal ratio, int layer);
 	Menu::Layer layer(QXmlStreamReader &reader);
 	Menu stylemenu(QXmlStreamReader &reader);
 	QString cat(QXmlStreamReader &reader);
+	void name(QXmlStreamReader &reader, Menu::Layer &layer);
 	void rule(QXmlStreamReader &reader, const QString &dir, const MapData &data,
 	  qreal ratio, qreal baseStrokeWidth, const QSet<QString> &cats,
 	  const Rule &parent);

@@ -297,9 +297,10 @@ bool OziMap::setTileInfo(const QStringList &tiles, const QString &path)
 }
 
 void OziMap::load(const Projection &in, const Projection &out,
-  qreal deviceRatio, bool hidpi)
+  qreal deviceRatio, bool hidpi, int layer)
 {
 	Q_UNUSED(out);
+	Q_UNUSED(layer);
 
 	_mapRatio = hidpi ? deviceRatio : 1.0;
 	if (!_calibrationPoints.isEmpty()) {

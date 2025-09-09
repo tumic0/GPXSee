@@ -183,10 +183,11 @@ Coordinates GEMFMap::xy2ll(const QPointF &p)
 }
 
 void GEMFMap::load(const Projection &in, const Projection &out,
-  qreal deviceRatio, bool hidpi)
+  qreal deviceRatio, bool hidpi, int layer)
 {
 	Q_UNUSED(in);
 	Q_UNUSED(out);
+	Q_UNUSED(layer);
 
 	_mapRatio = hidpi ? deviceRatio : 1.0;
 	if (!_file.open(QIODevice::ReadOnly))

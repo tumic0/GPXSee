@@ -71,10 +71,12 @@ public:
 	void draw(QPainter *painter, const QRectF &rect, Flags flags);
 
 	void load(const Projection &in, const Projection &out, qreal devicelRatio,
-	  bool hidpi);
+	  bool hidpi, int layer);
 	void unload();
 
 	double elevation(const Coordinates &c);
+
+	QStringList layers(const QString &lang, int &defaultLayer) const;
 
 	bool isValid() const {return _valid;}
 	QString errorString() const {return _errorString;}
@@ -88,6 +90,12 @@ private slots:
 	void jobFinished(IMGMapJob *job);
 
 private:
+	enum Layer {
+		Vector = 1,
+		Raster = 2,
+		All = 3
+	};
+
 	Transform transform(int zoom) const;
 	void updateTransform();
 	bool isRunning(const QString &key) const;
@@ -102,6 +110,7 @@ private:
 	QRectF _bounds;
 	RectC _dataBounds;
 	qreal _tileRatio;
+	Layer _layer;
 
 	QList<IMGMapJob*> _jobs;
 
