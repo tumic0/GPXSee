@@ -173,6 +173,7 @@ private:
 	void updateDataDEMDownloadAction();
 	void updateMapDEMDownloadAction();
 	void updateMapLayers();
+	void updateHillShading();
 #ifndef Q_OS_ANDROID
 	void updateRecentFiles(const QString &fileName);
 #endif // Q_OS_ANDROID

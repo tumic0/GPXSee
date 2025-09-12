@@ -77,6 +77,7 @@ public:
 	double elevation(const Coordinates &c);
 
 	QStringList layers(const QString &lang, int &defaultLayer) const;
+	bool hillShading() const {return true;}
 
 	bool isValid() const {return _valid;}
 	QString errorString() const {return _errorString;}

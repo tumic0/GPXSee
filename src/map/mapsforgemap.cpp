@@ -217,6 +217,11 @@ QStringList MapsforgeMap::layers(const QString &lang, int &defaultLayer) const
 	return _style.layers(lang, defaultLayer);
 }
 
+bool MapsforgeMap::hillShading() const
+{
+	return _style.hasHillShading();
+}
+
 Map *MapsforgeMap::create(const QString &path, const Projection &proj,
   bool *isMap)
 {
