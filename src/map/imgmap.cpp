@@ -16,9 +16,9 @@
 
 using namespace IMG;
 
-#define EPSILON           1e-6
-#define TILE_SIZE         384
-#define DELTA             1e-3
+#define EPSILON    1e-6
+#define TILE_SIZE  384
+#define DELTA      1e-3
 
 static RectC limitBounds(const RectC &bounds, const Projection &proj)
 {
