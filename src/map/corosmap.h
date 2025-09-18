@@ -72,6 +72,8 @@ public:
 	  bool hidpi, int layer);
 	void unload();
 
+	double elevation(const Coordinates &c);
+
 	QStringList layers(const QString &lang, int &defaultLayer) const;
 	bool hillShading() const {return true;}
 

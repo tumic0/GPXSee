@@ -3,12 +3,14 @@
 #include <QPixmapCache>
 #include "common/wgs84.h"
 #include "common/programpaths.h"
+#include "IMG/demtree.h"
 #include "rectd.h"
 #include "pcs.h"
 #include "corosmap.h"
 
-#define EPSILON           1e-6
-#define TILE_SIZE         384
+#define EPSILON    1e-6
+#define TILE_SIZE  384
+#define DELTA      1e-3
 
 void CorosMap::loadDir(const QString &path, MapTree &tree)
 {
@@ -317,6 +319,46 @@ void CorosMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 		} else
 			runJob(new CorosMapJob(tiles));
 	}
+}
+
+static bool ecb(IMG::IMGData *data, void *context)
+{
+	QList<IMG::IMGData*> *list = (QList<IMG::IMGData*>*)context;
+
+	if (data->hasDEM())
+		list->append(data);
+
+	return true;
+}
+
+double CorosMap::elevation(const Coordinates &c)
+{
+	double min[2], max[2];
+	QList<IMG::MapData*> maps;
+
+	min[0] = c.lon();
+	min[1] = c.lat();
+	max[0] = c.lon();
+	max[1] = c.lat();
+
+	_osm.Search(min, max, ecb, &maps);
+	if (maps.isEmpty())
+		_cm.Search(min, max, ecb, &maps);
+
+	for (int i = 0; i < maps.size(); i++) {
+		QList<IMG::MapData::Elevation> tiles;
+		IMG::MapData *map = maps.at(i);
+
+		map->elevations(0, RectC(c, Coordinates(c.lon() + DELTA,
+		  c.lat() - DELTA)), map->zooms().max(), &tiles);
+		IMG::DEMTree tree(tiles);
+		double ele = tree.elevation(c);
+
+		if (!std::isnan(ele))
+			return ele;
+	}
+
+	return Map::elevation(c);
 }
 
 QStringList CorosMap::layers(const QString &lang, int &defaultLayer) const
