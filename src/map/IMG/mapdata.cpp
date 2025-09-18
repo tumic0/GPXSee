@@ -4,11 +4,10 @@
 #include "style.h"
 #include "mapdata.h"
 
-
 using namespace IMG;
 
-#define CACHED_SUBDIVS_COUNT  2048 // ~32MB for both caches together
-#define CACHED_DEMTILES_COUNT 1024 // ~32MB
+#define SUBDIV_CACHE_SIZE 2048 // ~32MB for both caches together
+#define DEM_CACHE_SIZE    1024 // ~32MB
 
 bool MapData::polyCb(VectorTile *tile, void *context)
 {
@@ -34,12 +33,16 @@ bool MapData::elevationCb(VectorTile *tile, void *context)
 	return true;
 }
 
-MapData::MapData(const QString &fileName)
-  : _fileName(fileName), _typ(0), _style(0), _hasDEM(false), _valid(false)
+MapData::MapData(const QString &fileName, PolyCache &polyCache,
+  PointCache &pointCache, ElevationCache &demCache, QMutex &lock,
+  QMutex &demLock)
+  : _fileName(fileName), _typ(0), _style(0), _hasDEM(false), _valid(false),
+  _polyCache(polyCache), _pointCache(pointCache), _demCache(demCache),
+  _lock(lock), _demLock(demLock)
 {
-	_polyCache.setMaxCost(CACHED_SUBDIVS_COUNT);
-	_pointCache.setMaxCost(CACHED_SUBDIVS_COUNT);
-	_demCache.setMaxCost(CACHED_DEMTILES_COUNT);
+	_polyCache.setMaxCost(SUBDIV_CACHE_SIZE);
+	_pointCache.setMaxCost(SUBDIV_CACHE_SIZE);
+	_demCache.setMaxCost(DEM_CACHE_SIZE);
 }
 
 MapData::~MapData()
@@ -94,7 +97,7 @@ void MapData::elevations(QFile *file, const RectC &rect, int bits,
 	_tileTree.Search(min, max, elevationCb, &ctx);
 }
 
-void MapData::load(qreal ratio)
+void MapData::loadStyle(qreal ratio)
 {
 	Q_ASSERT(!_style);
 

@@ -1,5 +1,5 @@
-#ifndef IMGMAP_H
-#define IMGMAP_H
+#ifndef COROSMAP_H
+#define COROSMAP_H
 
 #include <QtConcurrent>
 #include "map.h"
@@ -7,20 +7,20 @@
 #include "transform.h"
 #include "IMG/mapdata.h"
 #include "IMG/rastertile.h"
+#include "IMG/style.h"
 
-
-class IMGMapJob : public QObject
+class CorosMapJob : public QObject
 {
 	Q_OBJECT
 
 public:
-	IMGMapJob(const QList<IMG::RasterTile> &tiles)
+	CorosMapJob(const QList<IMG::RasterTile> &tiles)
 	  : _tiles(tiles) {}
 
 	void run()
 	{
 		connect(&_watcher, &QFutureWatcher<void>::finished, this,
-		  &IMGMapJob::handleFinished);
+		  &CorosMapJob::handleFinished);
 		_future = QtConcurrent::map(_tiles, &IMG::RasterTile::render);
 		_watcher.setFuture(_future);
 	}
@@ -33,7 +33,7 @@ public:
 	const QList<IMG::RasterTile> &tiles() const {return _tiles;}
 
 signals:
-	void finished(IMGMapJob *job);
+	void finished(CorosMapJob *job);
 
 private slots:
 	void handleFinished() {emit finished(this);}
@@ -44,18 +44,16 @@ private:
 	QList<IMG::RasterTile> _tiles;
 };
 
-class IMGMap : public Map
+class CorosMap : public Map
 {
 	Q_OBJECT
 
 public:
-	IMGMap(const QString &fileName, bool GMAP, QObject *parent = 0);
-	~IMGMap() {qDeleteAll(_data);}
-
-	QString name() const {return _data.first()->name();}
+	CorosMap(const QString &fileName, QObject *parent = 0);
+	~CorosMap();
 
 	QRectF bounds() {return _bounds;}
-	RectC llBounds() {return _data.first()->bounds();}
+	RectC llBounds() {return _dataBounds;}
 
 	int zoom() const {return _zoom;}
 	void setZoom(int zoom);
@@ -74,43 +72,36 @@ public:
 	  bool hidpi, int layer);
 	void unload();
 
-	double elevation(const Coordinates &c);
-
 	QStringList layers(const QString &lang, int &defaultLayer) const;
 	bool hillShading() const {return true;}
 
 	bool isValid() const {return _valid;}
 	QString errorString() const {return _errorString;}
 
-	static Map* createIMG(const QString &path, const Projection &proj,
-	  bool *isDir);
-	static Map* createGMAP(const QString &path, const Projection &proj,
-	  bool *isDir);
+	static Map* create(const QString &path, const Projection &proj, bool *isDir);
 
 private slots:
-	void jobFinished(IMGMapJob *job);
+	void jobFinished(CorosMapJob *job);
 
 private:
 	enum Layer {
-		Vector = 1,
-		Raster = 2,
+		Landscape = 1,
+		Topo = 2,
 		All = 3
 	};
+	typedef RTree<IMG::IMGData*, double, 2> MapTree;
 
 	Transform transform(int zoom) const;
 	void updateTransform();
 	bool isRunning(const QString &key) const;
-	void runJob(IMGMapJob *job);
-	void removeJob(IMGMapJob *job);
+	void runJob(CorosMapJob *job);
+	void removeJob(CorosMapJob *job);
 	void cancelJobs(bool wait);
 
-	QList<IMG::MapData*> overlays(const QString &fileName);
+	void loadDir(const QString &path, MapTree &tree);
 
-	QList<IMG::MapData *> _data;
-	IMG::MapData::PolyCache _polyCache;
-	IMG::MapData::PointCache _pointCache;
-	IMG::MapData::ElevationCache _demCache;
-	QMutex _lock, _demLock;
+	MapTree _osm, _cm;
+	Range _zooms;
 	int _zoom;
 	Projection _projection;
 	Transform _transform;
@@ -118,11 +109,16 @@ private:
 	RectC _dataBounds;
 	qreal _tileRatio;
 	Layer _layer;
+	IMG::Style *_style;
+	IMG::MapData::PolyCache _polyCache;
+	IMG::MapData::PointCache _pointCache;
+	IMG::MapData::ElevationCache _demCache;
+	QMutex _lock, _demLock;
 
-	QList<IMGMapJob*> _jobs;
+	QList<CorosMapJob*> _jobs;
 
 	bool _valid;
 	QString _errorString;
 };
 
-#endif // IMGMAP_H
+#endif // COROSMAP_H

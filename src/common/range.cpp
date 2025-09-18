@@ -1,5 +1,15 @@
 #include "range.h"
 
+Range Range::operator|(const Range &r) const
+{
+	if (isNull())
+		return r;
+	if (r.isNull())
+		return *this;
+
+	return Range(qMin(_min, r._min), qMax(_max, r._max));
+}
+
 void RangeF::resize(qreal size)
 {
 	qreal adj = (size/2 - this->size()/2);

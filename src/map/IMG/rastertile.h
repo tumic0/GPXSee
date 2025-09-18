@@ -16,13 +16,22 @@ namespace IMG {
 class RasterTile
 {
 public:
-	RasterTile(const Projection &proj, const Transform &transform, MapData *data,
-	  int zoom, const QRect &rect, qreal ratio, const QString &key,
-	  bool hillShading, bool rasters, bool vectors)
-		: _proj(proj), _transform(transform), _data(data), _zoom(zoom),
+	RasterTile(const Projection &proj, const Transform &transform,
+	  MapData *data, int zoom, const QRect &rect, qreal ratio,
+	  const QString &key, bool hillShading, bool rasters, bool vectors)
+		: _proj(proj), _transform(transform), _style(data->style()), _zoom(zoom),
 		_rect(rect), _ratio(ratio), _key(key), _hillShading(hillShading),
-		_rasters(rasters), _vectors(vectors), _file(0) {}
-	~RasterTile() {delete _file;}
+		_rasters(rasters), _vectors(vectors)
+	{
+		_data.append(data);
+	}
+	RasterTile(const Projection &proj, const Transform &transform,
+	  const QList<MapData*> &data, const Style *style, int zoom,
+	  const QRect &rect, qreal ratio, const QString &key, bool hillShading,
+	  bool rasters, bool vectors)
+		: _proj(proj), _transform(transform), _data(data), _style(style),
+		_zoom(zoom), _rect(rect), _ratio(ratio), _key(key),
+		_hillShading(hillShading), _rasters(rasters), _vectors(vectors) {}
 
 	const QString &key() const {return _key;}
 	QPoint xy() const {return _rect.topLeft();}
@@ -58,7 +67,7 @@ private:
 	};
 
 	void fetchData(QList<MapData::Poly> &polygons, QList<MapData::Poly> &lines,
-	  QList<MapData::Point> &points);
+	  QList<MapData::Point> &points, MatrixD &dem);
 	QPointF ll2xy(const Coordinates &c) const
 	  {return _transform.proj2img(_proj.ll2xy(c));}
 	Coordinates xy2ll(const QPointF &p) const
@@ -71,7 +80,7 @@ private:
 	void drawLines(QPainter *painter, const QList<MapData::Poly> &lines) const;
 	void drawTextItems(QPainter *painter,
 	  const QList<TextItem*> &textItems) const;
-	void drawHillShading(QPainter *painter) const;
+	void drawHillShading(QPainter *painter, const MatrixD &dem) const;
 	void drawSectorLights(QPainter *painter,
 	  const QList<const MapData::Point*> &lights) const;
 
@@ -90,11 +99,12 @@ private:
 	const QFont *poiFont(Style::FontSize size = Style::Normal,
 	  int zoom = -1, bool extended = false) const;
 
-	MatrixD elevation(int extend) const;
+	bool hasDEM() const;
 
 	Projection _proj;
 	Transform _transform;
-	MapData *_data;
+	QList<MapData*> _data;
+	const Style *_style;
 	int _zoom;
 	QRect _rect;
 	qreal _ratio;
@@ -102,7 +112,6 @@ private:
 	QPixmap _pixmap;
 	bool _hillShading;
 	bool _rasters, _vectors;
-	QFile *_file;
 };
 
 }

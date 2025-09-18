@@ -124,6 +124,7 @@ HEADERS += src/common/config.h \
     src/data/vtkparser.h \
     src/map/ENC/data.h \
     src/map/IMG/light.h \
+    src/map/corosmap.h \
     src/map/downloader.h \
     src/map/demloader.h \
     src/map/ENC/attributes.h \
@@ -354,6 +355,7 @@ SOURCES += src/main.cpp \
     src/data/txtparser.cpp \
     src/data/vkxparser.cpp \
     src/data/vtkparser.cpp \
+    src/map/corosmap.cpp \
     src/map/downloader.cpp \
     src/map/demloader.cpp \
     src/map/ENC/atlasdata.cpp \

@@ -107,7 +107,7 @@ const QFont *RasterTile::poiFont(Style::FontSize size, int zoom,
 		case Style::None:
 			return 0;
 		default:
-			return _data->style()->font(Style::ExtraSmall);
+			return _style->font(Style::ExtraSmall);
 	}
 }
 
@@ -133,12 +133,10 @@ void RasterTile::ll2xy(QList<MapData::Point> &points) const
 void RasterTile::drawPolygons(QPainter *painter,
   const QList<MapData::Poly> &polygons) const
 {
-	QCache<const LBLFile *, SubFile::Handle> hc(16);
-
-	for (int n = 0; n < _data->style()->drawOrder().size(); n++) {
+	for (int n = 0; n < _style->drawOrder().size(); n++) {
 		for (int i = 0; i < polygons.size(); i++) {
 			const MapData::Poly &poly = polygons.at(i);
-			if (poly.type != _data->style()->drawOrder().at(n))
+			if (poly.type != _style->drawOrder().at(n))
 				continue;
 
 			if (poly.raster.isValid()) {
@@ -150,15 +148,9 @@ void RasterTile::drawPolygons(QPainter *painter,
 				QPointF br(ll2xy(r.bottomRight()));
 				QSizeF size(QRectF(tl, br).size());
 
-				bool insert = false;
-				SubFile::Handle *hdl = hc.object(poly.raster.lbl());
-				if (!hdl) {
-					hdl = new SubFile::Handle(poly.raster.lbl(), _file);
-					insert = true;
-				}
-				QPixmap pm(poly.raster.lbl()->image(*hdl, poly.raster.id()));
-				if (insert)
-					hc.insert(poly.raster.lbl(), hdl);
+				QPixmap pm;
+				if (!pm.loadFromData(poly.raster.img(), "jpeg"))
+					continue;
 				qreal sx = size.width() / (qreal)pm.width();
 				qreal sy = size.height() / (qreal)pm.height();
 
@@ -176,7 +168,7 @@ void RasterTile::drawPolygons(QPainter *painter,
 				if (!_vectors)
 					continue;
 
-				const Style::Polygon &style = _data->style()->polygon(poly.type);
+				const Style::Polygon &style = _style->polygon(poly.type);
 
 				painter->setPen(style.pen());
 				painter->setBrush(style.brush());
@@ -208,7 +200,7 @@ void RasterTile::drawLines(QPainter *painter,
 
 	for (int i = 0; i < lines.size(); i++) {
 		const MapData::Poly &poly = lines.at(i);
-		const Style::Line &style = _data->style()->line(poly.type);
+		const Style::Line &style = _style->line(poly.type);
 
 		if (style.background() == Qt::NoPen)
 			continue;
@@ -219,8 +211,7 @@ void RasterTile::drawLines(QPainter *painter,
 
 	for (int i = 0; i < lines.size(); i++) {
 		const MapData::Poly &poly = lines.at(i);
-		const Style::Line &style = _data->style()->line(
-		  lineType(poly.type, poly.flags));
+		const Style::Line &style = _style->line(lineType(poly.type, poly.flags));
 
 		if (!style.img().isNull()) {
 			if (poly.flags & MapData::Poly::Invert)
@@ -355,7 +346,7 @@ void RasterTile::processPolygons(const QList<MapData::Poly> &polygons,
 		if (_zoom <= 23 && (Style::isWaterArea(poly.type)
 		  || Style::isMilitaryArea(poly.type)
 		  || Style::isNatureReserve(poly.type))) {
-			const Style::Polygon &style = _data->style()->polygon(poly.type);
+			const Style::Polygon &style = _style->polygon(poly.type);
 			TextPointItem *item = new TextPointItem(
 			  centroid(poly.points).toPoint(), &poly.label.text(), poiFont(),
 			  0, &style.brush().color(), &haloColor);
@@ -391,12 +382,12 @@ void RasterTile::processStreetNames(const QList<MapData::Poly> &lines,
 {
 	for (int i = 0; i < lines.size(); i++) {
 		const MapData::Poly &poly = lines.at(i);
-		const Style::Line &style = _data->style()->line(poly.type);
+		const Style::Line &style = _style->line(poly.type);
 
 		if (style.img().isNull() && style.foreground() == Qt::NoPen)
 			continue;
 
-		const QFont *fnt = _data->style()->font(style.text().size(),
+		const QFont *fnt = _style->font(style.text().size(),
 		  Style::Small);
 		const QColor *color = style.text().color().isValid()
 		  ? &style.text().color() : Style::isContourLine(poly.type)
@@ -550,8 +541,7 @@ void RasterTile::processPoints(QList<MapData::Point> &points,
 
 	for (int i = 0; i < points.size(); i++) {
 		const MapData::Point &point = points.at(i);
-		const Style *style = _data->style();
-		const Style::Point &ps = style->point(pointType(point.type, point.flags));
+		const Style::Point &ps = _style->point(pointType(point.type, point.flags));
 		bool poi = Style::isPOI(point.type);
 		bool sl = sectorLight(point.lights);
 
@@ -564,7 +554,7 @@ void RasterTile::processPoints(QList<MapData::Point> &points,
 		const QFont *fnt = poi
 		  ? poiFont(ps.text().size(), _zoom, point.flags
 			& MapData::Point::ClassLabel)
-		  : style->font(ps.text().size());
+		  : _style->font(ps.text().size());
 		const QColor *color = ps.text().color().isValid()
 		  ? &ps.text().color() : &textColor;
 		const QColor *hcolor = Style::isDepthPoint(point.type)
@@ -582,86 +572,111 @@ void RasterTile::processPoints(QList<MapData::Point> &points,
 			textItems.append(item);
 			Light::Color color = ordinaryLight(point.lights);
 			if (color)
-				lights.append(new TextPointItem(pos + style->lightOffset(),
-				  0, 0, style->light(color), 0, 0, 0, 0));
+				lights.append(new TextPointItem(pos + _style->lightOffset(),
+				  0, 0, _style->light(color), 0, 0, 0, 0));
 		} else
 			delete item;
 	}
 }
 
+bool RasterTile::hasDEM() const
+{
+	for (int i = 0; i < _data.size(); i++)
+		if (_data.at(i)->hasDEM())
+			return true;
+
+	return false;
+}
+
 void RasterTile::fetchData(QList<MapData::Poly> &polygons,
-  QList<MapData::Poly> &lines, QList<MapData::Point> &points)
+  QList<MapData::Poly> &lines, QList<MapData::Point> &points, MatrixD &dem)
 {
 	QPoint ttl(_rect.topLeft());
-
-	if (dynamic_cast<IMGData*>(_data)) {
-		_file = new QFile(_data->fileName());
-		if (!_file->open(QIODevice::ReadOnly | QIODevice::Unbuffered)) {
-			qWarning("%s: %s", qUtf8Printable(_file->fileName()),
-			  qUtf8Printable(_file->errorString()));
-			return;
-		}
-	}
-
 	QRectF polyRect(ttl, QPointF(ttl.x() + _rect.width(), ttl.y()
 	  + _rect.height()));
 	RectD polyRectD(_transform.img2proj(polyRect.topLeft()),
 	  _transform.img2proj(polyRect.bottomRight()));
-	_data->polys(_file, polyRectD.toRectC(_proj, 20), _zoom,
-	  &polygons, _vectors ? &lines : 0);
-
+	RectC polyRectC(polyRectD.toRectC(_proj, 20));
+	RectC pointRectC;
 	if (_vectors) {
 		QRectF pointRect(QPointF(ttl.x() - TEXT_EXTENT, ttl.y() - TEXT_EXTENT),
 		  QPointF(ttl.x() + _rect.width() + TEXT_EXTENT, ttl.y() + _rect.height()
 		  + TEXT_EXTENT));
 		RectD pointRectD(_transform.img2proj(pointRect.topLeft()),
 		  _transform.img2proj(pointRect.bottomRight()));
-		_data->points(_file, pointRectD.toRectC(_proj, 20), _zoom, &points);
+		pointRectC = pointRectD.toRectC(_proj, 20);
 	}
+
+	RectC demRectC;
+	MatrixC demLL;
+	QList<MapData::Elevation> tiles;
+	if (_hillShading) {
+		int extend = HillShading::blur() + 1;
+		int left = _rect.left() - extend;
+		int right = _rect.right() + extend;
+		int top = _rect.top() - extend;
+		int bottom = _rect.bottom() + extend;
+
+		demLL = MatrixC(_rect.height() + 2 * extend, _rect.width() + 2 * extend);
+		for (int y = top, i = 0; y <= bottom; y++)
+			for (int x = left; x <= right; x++, i++)
+				demLL.at(i) = xy2ll(QPointF(x, y));
+
+		if (hasDEM()) {
+			RectC rect;
+			for (int i = 0; i < demLL.size(); i++)
+				rect = rect.united(demLL.at(i));
+			/* Extra margin for always including the next DEM tile on the map
+			   tile edges (the DEM tile resolution is usally 0.5-15% of the map
+			   tile) */
+			double factor = 6 - (_zoom - 24) * 1.7;
+			demRectC = rect.adjusted(0, 0, rect.width() / factor, -rect.height()
+			  / factor);
+		}
+	}
+
+	for (int i = 0; i < _data.size(); i++) {
+		MapData *data = _data.at(i);
+		QFile *file = 0;
+
+		if (dynamic_cast<IMGData*>(data)) {
+			file = new QFile(data->fileName());
+			if (!file->open(QIODevice::ReadOnly | QIODevice::Unbuffered)) {
+				qWarning("%s: %s", qUtf8Printable(file->fileName()),
+				  qUtf8Printable(file->errorString()));
+				delete file;
+				continue;
+			}
+		}
+
+		data->polys(file, polyRectC, _zoom, &polygons, _vectors ? &lines : 0);
+		if (_vectors)
+			data->points(file, pointRectC, _zoom, &points);
+
+		if (!demRectC.isNull())
+			data->elevations(file, demRectC, _zoom, &tiles);
+
+		delete file;
+	}
+
+	ll2xy(polygons);
+	ll2xy(lines);
+	ll2xy(points);
+
+	if (_hillShading)
+		dem = demRectC.isNull()
+		  ? DEM::elevation(demLL) : DEMTree(tiles).elevation(demLL);
 }
 
-MatrixD RasterTile::elevation(int extend) const
+void RasterTile::drawHillShading(QPainter *painter, const MatrixD &dem) const
 {
-	int left = _rect.left() - extend;
-	int right = _rect.right() + extend;
-	int top = _rect.top() - extend;
-	int bottom = _rect.bottom() + extend;
-
-	MatrixC ll(_rect.height() + 2 * extend, _rect.width() + 2 * extend);
-	for (int y = top, i = 0; y <= bottom; y++)
-		for (int x = left; x <= right; x++, i++)
-			ll.at(i) = xy2ll(QPointF(x, y));
-
-	if (_data->hasDEM()) {
-		RectC rect;
-		for (int i = 0; i < ll.size(); i++)
-			rect = rect.united(ll.at(i));
-		/* Extra margin for always including the next DEM tile on the map tile
-		   edges (the DEM tile resolution is usally 0.5-15% of the map tile) */
-		double factor = 6 - (_zoom - 24) * 1.7;
-		RectC br(rect.adjusted(0, 0, rect.width() / factor, -rect.height()
-		  / factor));
-
-		QList<MapData::Elevation> tiles;
-		_data->elevations(_file, br, _zoom, &tiles);
-
-		return DEMTree(tiles).elevation(ll);
+	if (HillShading::blur()) {
+		MatrixD filtered(Filter::blur(dem, HillShading::blur()));
+		painter->drawImage(_rect.x(), _rect.y(), HillShading::render(
+		  filtered, HillShading::blur() + 1));
 	} else
-		return DEM::elevation(ll);
-}
-
-void RasterTile::drawHillShading(QPainter *painter) const
-{
-	if (_hillShading && _zoom >= 17 && _zoom <= 24) {
-		if (HillShading::blur()) {
-			MatrixD dem(Filter::blur(elevation(HillShading::blur() + 1),
-			  HillShading::blur()));
-			QImage img(HillShading::render(dem, HillShading::blur() + 1));
-			painter->drawImage(_rect.x(), _rect.y(), img);
-		} else
-			painter->drawImage(_rect.x(), _rect.y(),
-			  HillShading::render(elevation(1), 1));
-	}
+		painter->drawImage(_rect.x(), _rect.y(), HillShading::render(
+		  dem, HillShading::blur() + 1));
 }
 
 void RasterTile::render()
@@ -671,6 +686,7 @@ void RasterTile::render()
 	QList<MapData::Poly> polygons;
 	QList<MapData::Poly> lines;
 	QList<MapData::Point> points;
+	MatrixD dem;
 	QList<TextItem*> textItems, lights;
 	QList<const MapData::Point*> sectorLights;
 	QImage arrows[2];
@@ -678,10 +694,7 @@ void RasterTile::render()
 	arrows[ROAD] = Util::svg2img(":/symbols/oneway.svg", _ratio);
 	arrows[WATER] = Util::svg2img(":/symbols/flow.svg", _ratio);
 
-	fetchData(polygons, lines, points);
-	ll2xy(polygons);
-	ll2xy(lines);
-	ll2xy(points);
+	fetchData(polygons, lines, points, dem);
 
 	processPoints(points, textItems, lights, sectorLights);
 	processPolygons(polygons, textItems);
@@ -696,7 +709,8 @@ void RasterTile::render()
 	painter.translate(-_rect.x(), -_rect.y());
 
 	drawPolygons(&painter, polygons);
-	drawHillShading(&painter);
+	if (_hillShading)
+		drawHillShading(&painter, dem);
 	drawLines(&painter, lines);
 	drawTextItems(&painter, lights);
 	drawSectorLights(&painter, sectorLights);

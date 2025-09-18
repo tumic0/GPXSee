@@ -29,6 +29,9 @@ TextCodec::TextCodec() : _codec(0)
 TextCodec::TextCodec(int codepage)
 {
 	switch (codepage) {
+		case 0:
+			_codec = codec(3);
+			break;
 		case 874:
 			_codec = codec(2109);
 			break;
@@ -93,7 +96,10 @@ TextCodec::TextCodec()
 
 TextCodec::TextCodec(int codepage)
 {
-	if (codepage == 65001)
+	if (codepage == 0)
+		// There is no QStringConverter::Encoding for US-ASCII
+		_decoder = QStringDecoder(QStringDecoder::Latin1);
+	else if (codepage == 65001)
 		_decoder = QStringDecoder(QStringDecoder::Utf8);
 	else {
 		QByteArray cp(QByteArray("CP") + QByteArray::number(codepage));
