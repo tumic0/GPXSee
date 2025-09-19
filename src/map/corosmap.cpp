@@ -79,6 +79,8 @@ CorosMap::~CorosMap()
 		delete _osm.GetAt(it);
 	for (_cm.GetFirst(it); !_cm.IsNull(it); _cm.GetNext(it))
 		delete _cm.GetAt(it);
+
+	delete _style;
 }
 
 void CorosMap::load(const Projection &in, const Projection &out,
@@ -131,6 +133,7 @@ void CorosMap::unload()
 		_cm.GetAt(it)->clear();
 
 	delete _style;
+	_style = 0;
 }
 
 int CorosMap::zoomFit(const QSize &size, const RectC &rect)
