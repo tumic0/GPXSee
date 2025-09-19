@@ -406,4 +406,11 @@
 		<glob pattern="*.gmi"/>
 	</mime-type>
 
+	<mime-type type="application/vnd.coros.cra">
+		<comment>COROS Map Atlas</comment>
+		<sub-class-of type="text/plain"/>
+		<generic-icon name="text/plain"/>
+		<glob pattern="*.cra"/>
+	</mime-type>
+
 </mime-info>

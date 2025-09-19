@@ -24,7 +24,7 @@
 				TwoNav RMaps, Garmin IMG &amp; JNX maps, GeoTIFF images,
 				BSB nautical charts, KMZ maps, AlpineQuest maps,
 				Locus/OsmAnd/RMaps SQLite maps, Osmdroid SQLite maps,
-				Mapsforge maps, QCT maps, GEMF maps, Orux maps,
+				Mapsforge maps, QCT maps, GEMF maps, Orux maps, COROS maps,
 				ESRI world files, ENC charts).</li>
 			<li>Elevation, speed, heart rate, cadence, power, temperature and
 				gear ratio graphs.</li>
@@ -116,6 +116,7 @@
 		<mimetype>application/vnd.70mai.txt</mimetype>
 		<mimetype>application/vnd.velocitek.vtk</mimetype>
 		<mimetype>application/vnd.vakaros.vkx</mimetype>
+		<mimetype>application/vnd.coros.cra</mimetype>
 		<mimetype>x-scheme-handler/geo</mimetype>
 	</mimetypes>
 </component>
