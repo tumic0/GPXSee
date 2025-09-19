@@ -162,7 +162,7 @@ QString MapList::formats()
 	  + qApp->translate("MapList", "Electronic Navigational Charts")
 		+ " (*.000 *.031);;"
 	  + qApp->translate("MapList", "AlpineQuest maps") + " (*.aqm);;"
-	  + qApp->translate("MapList", "COROS maps") + " (*.coros);;"
+	  + qApp->translate("MapList", "COROS maps") + " (*.cra);;"
 	  + qApp->translate("MapList", "GEMF maps") + " (*.gemf);;"
 	  + qApp->translate("MapList", "Garmin IMG maps")
 		+ " (*.gmap *.gmapi *.img *.xml);;"
