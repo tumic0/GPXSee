@@ -60,7 +60,7 @@ MapList::ParserMap MapList::parsers()
 	map.insert("otrk2.xml", &OruxMap::create);
 	map.insert("000", &ENCMap::create);
 	map.insert("031", &ENCAtlas::create);
-	map.insert("coros", &CorosMap::create);
+	map.insert("cra", &CorosMap::create);
 
 	return map;
 }
