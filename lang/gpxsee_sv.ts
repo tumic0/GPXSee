@@ -72,17 +72,17 @@
     <message>
         <location filename="../src/map/corosmap.cpp" line="328"/>
         <source>All</source>
-        <translation type="unfinished">Alla</translation>
+        <translation>Alla</translation>
     </message>
     <message>
         <location filename="../src/map/corosmap.cpp" line="328"/>
         <source>Landscape</source>
-        <translation type="unfinished">Liggande</translation>
+        <translation>Liggande</translation>
     </message>
     <message>
         <location filename="../src/map/corosmap.cpp" line="328"/>
         <source>Topo</source>
-        <translation type="unfinished"></translation>
+        <translation>Topo</translation>
     </message>
 </context>
 <context>
@@ -1369,7 +1369,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="165"/>
         <source>COROS maps</source>
-        <translation type="unfinished"></translation>
+        <translation>COROS-kartor</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="171"/>

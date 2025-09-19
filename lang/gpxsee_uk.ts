@@ -72,17 +72,17 @@
     <message>
         <location filename="../src/map/corosmap.cpp" line="328"/>
         <source>All</source>
-        <translation type="unfinished">Все</translation>
+        <translation>Все</translation>
     </message>
     <message>
         <location filename="../src/map/corosmap.cpp" line="328"/>
         <source>Landscape</source>
-        <translation type="unfinished">Ландшафтна</translation>
+        <translation>Пейзаж</translation>
     </message>
     <message>
         <location filename="../src/map/corosmap.cpp" line="328"/>
         <source>Topo</source>
-        <translation type="unfinished"></translation>
+        <translation>Топо</translation>
     </message>
 </context>
 <context>
@@ -1366,7 +1366,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="165"/>
         <source>COROS maps</source>
-        <translation type="unfinished"></translation>
+        <translation>Карти COROS</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="171"/>
