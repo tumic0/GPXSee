@@ -77,7 +77,7 @@
     <message>
         <location filename="../src/map/corosmap.cpp" line="328"/>
         <source>Landscape</source>
-        <translation type="unfinished">Liggende</translation>
+        <translation>Landskap</translation>
     </message>
     <message>
         <location filename="../src/map/corosmap.cpp" line="328"/>
@@ -657,13 +657,13 @@
         <location filename="../src/GUI/gui.cpp" line="532"/>
         <location filename="../src/GUI/gui.cpp" line="961"/>
         <source>Next graph tab</source>
-        <translation type="unfinished"></translation>
+        <translation>Neste diagramfane</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="537"/>
         <location filename="../src/GUI/gui.cpp" line="963"/>
         <source>Previous graph tab</source>
-        <translation type="unfinished"></translation>
+        <translation>Forrige diagramfane</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="545"/>
@@ -1369,7 +1369,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="165"/>
         <source>COROS maps</source>
-        <translation type="unfinished"></translation>
+        <translation>COROS-kart</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="171"/>
