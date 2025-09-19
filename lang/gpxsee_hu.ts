@@ -72,17 +72,17 @@
     <message>
         <location filename="../src/map/corosmap.cpp" line="328"/>
         <source>All</source>
-        <translation type="unfinished">Mind</translation>
+        <translation>Mind</translation>
     </message>
     <message>
         <location filename="../src/map/corosmap.cpp" line="328"/>
         <source>Landscape</source>
-        <translation type="unfinished">Fekvő</translation>
+        <translation>Fekvő</translation>
     </message>
     <message>
         <location filename="../src/map/corosmap.cpp" line="328"/>
         <source>Topo</source>
-        <translation type="unfinished"></translation>
+        <translation>Topo</translation>
     </message>
 </context>
 <context>
@@ -1362,7 +1362,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="165"/>
         <source>COROS maps</source>
-        <translation type="unfinished"></translation>
+        <translation>COROS térképek</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="171"/>

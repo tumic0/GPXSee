@@ -82,7 +82,7 @@
     <message>
         <location filename="../src/map/corosmap.cpp" line="328"/>
         <source>Topo</source>
-        <translation type="unfinished"></translation>
+        <translation>Topo</translation>
     </message>
 </context>
 <context>
@@ -1369,7 +1369,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="165"/>
         <source>COROS maps</source>
-        <translation type="unfinished"></translation>
+        <translation>Cartes COROS</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="171"/>
