@@ -147,6 +147,7 @@ HEADERS += src/common/config.h \
     src/map/filter.h \
     src/map/gemfmap.h \
     src/map/gmifile.h \
+    src/map/imgjob.h \
     src/map/metatype.h \
     src/map/oruxmap.h \
     src/map/osmdroidmap.h \

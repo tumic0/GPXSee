@@ -1,48 +1,12 @@
 #ifndef IMGMAP_H
 #define IMGMAP_H
 
-#include <QtConcurrent>
 #include "map.h"
 #include "projection.h"
 #include "transform.h"
 #include "IMG/mapdata.h"
-#include "IMG/rastertile.h"
 
-
-class IMGMapJob : public QObject
-{
-	Q_OBJECT
-
-public:
-	IMGMapJob(const QList<IMG::RasterTile> &tiles)
-	  : _tiles(tiles) {}
-
-	void run()
-	{
-		connect(&_watcher, &QFutureWatcher<void>::finished, this,
-		  &IMGMapJob::handleFinished);
-		_future = QtConcurrent::map(_tiles, &IMG::RasterTile::render);
-		_watcher.setFuture(_future);
-	}
-	void cancel(bool wait)
-	{
-		_future.cancel();
-		if (wait)
-			_future.waitForFinished();
-	}
-	const QList<IMG::RasterTile> &tiles() const {return _tiles;}
-
-signals:
-	void finished(IMGMapJob *job);
-
-private slots:
-	void handleFinished() {emit finished(this);}
-
-private:
-	QFutureWatcher<void> _watcher;
-	QFuture<void> _future;
-	QList<IMG::RasterTile> _tiles;
-};
+class IMGJob;
 
 class IMGMap : public Map
 {
@@ -88,7 +52,7 @@ public:
 	  bool *isDir);
 
 private slots:
-	void jobFinished(IMGMapJob *job);
+	void jobFinished(IMGJob *job);
 
 private:
 	enum Layer {
@@ -100,13 +64,13 @@ private:
 	Transform transform(int zoom) const;
 	void updateTransform();
 	bool isRunning(const QString &key) const;
-	void runJob(IMGMapJob *job);
-	void removeJob(IMGMapJob *job);
+	void runJob(IMGJob *job);
+	void removeJob(IMGJob *job);
 	void cancelJobs(bool wait);
 
 	QList<IMG::MapData*> overlays(const QString &fileName);
 
-	QList<IMG::MapData *> _data;
+	QList<IMG::MapData*> _data;
 	IMG::MapData::PolyCache _polyCache;
 	IMG::MapData::PointCache _pointCache;
 	IMG::MapData::ElevationCache _demCache;
@@ -119,7 +83,7 @@ private:
 	qreal _tileRatio;
 	Layer _layer;
 
-	QList<IMGMapJob*> _jobs;
+	QList<IMGJob*> _jobs;
 
 	bool _valid;
 	QString _errorString;

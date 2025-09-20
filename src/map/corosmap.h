@@ -1,48 +1,12 @@
 #ifndef COROSMAP_H
 #define COROSMAP_H
 
-#include <QtConcurrent>
 #include "map.h"
 #include "projection.h"
 #include "transform.h"
 #include "IMG/mapdata.h"
-#include "IMG/rastertile.h"
-#include "IMG/style.h"
 
-class CorosMapJob : public QObject
-{
-	Q_OBJECT
-
-public:
-	CorosMapJob(const QList<IMG::RasterTile> &tiles)
-	  : _tiles(tiles) {}
-
-	void run()
-	{
-		connect(&_watcher, &QFutureWatcher<void>::finished, this,
-		  &CorosMapJob::handleFinished);
-		_future = QtConcurrent::map(_tiles, &IMG::RasterTile::render);
-		_watcher.setFuture(_future);
-	}
-	void cancel(bool wait)
-	{
-		_future.cancel();
-		if (wait)
-			_future.waitForFinished();
-	}
-	const QList<IMG::RasterTile> &tiles() const {return _tiles;}
-
-signals:
-	void finished(CorosMapJob *job);
-
-private slots:
-	void handleFinished() {emit finished(this);}
-
-private:
-	QFutureWatcher<void> _watcher;
-	QFuture<void> _future;
-	QList<IMG::RasterTile> _tiles;
-};
+class IMGJob;
 
 class CorosMap : public Map
 {
@@ -83,7 +47,7 @@ public:
 	static Map* create(const QString &path, const Projection &proj, bool *isDir);
 
 private slots:
-	void jobFinished(CorosMapJob *job);
+	void jobFinished(IMGJob *job);
 
 private:
 	enum Layer {
@@ -91,13 +55,13 @@ private:
 		Topo = 2,
 		All = 3
 	};
-	typedef RTree<IMG::IMGData*, double, 2> MapTree;
+	typedef RTree<IMG::MapData*, double, 2> MapTree;
 
 	Transform transform(int zoom) const;
 	void updateTransform();
 	bool isRunning(const QString &key) const;
-	void runJob(CorosMapJob *job);
-	void removeJob(CorosMapJob *job);
+	void runJob(IMGJob *job);
+	void removeJob(IMGJob *job);
 	void cancelJobs(bool wait);
 
 	void loadDir(const QString &path, MapTree &tree);
@@ -117,7 +81,7 @@ private:
 	IMG::MapData::ElevationCache _demCache;
 	QMutex _lock, _demLock;
 
-	QList<CorosMapJob*> _jobs;
+	QList<IMGJob*> _jobs;
 
 	bool _valid;
 	QString _errorString;

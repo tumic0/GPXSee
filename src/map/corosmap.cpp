@@ -6,6 +6,7 @@
 #include "IMG/demtree.h"
 #include "rectd.h"
 #include "pcs.h"
+#include "imgjob.h"
 #include "corosmap.h"
 
 #define EPSILON    1e-6
@@ -217,21 +218,21 @@ bool CorosMap::isRunning(const QString &key) const
 	return false;
 }
 
-void CorosMap::runJob(CorosMapJob *job)
+void CorosMap::runJob(IMGJob *job)
 {
 	_jobs.append(job);
 
-	connect(job, &CorosMapJob::finished, this, &CorosMap::jobFinished);
+	connect(job, &IMGJob::finished, this, &CorosMap::jobFinished);
 	job->run();
 }
 
-void CorosMap::removeJob(CorosMapJob *job)
+void CorosMap::removeJob(IMGJob *job)
 {
 	_jobs.removeOne(job);
 	job->deleteLater();
 }
 
-void CorosMap::jobFinished(CorosMapJob *job)
+void CorosMap::jobFinished(IMGJob *job)
 {
 	const QList<IMG::RasterTile> &tiles = job->tiles();
 
@@ -252,9 +253,9 @@ void CorosMap::cancelJobs(bool wait)
 		_jobs.at(i)->cancel(wait);
 }
 
-static bool cb(IMG::IMGData *data, void *context)
+static bool cb(IMG::MapData *data, void *context)
 {
-	QList<IMG::IMGData*> *list = (QList<IMG::IMGData*>*)context;
+	QList<IMG::MapData*> *list = (QList<IMG::MapData*>*)context;
 	list->append(data);
 	return true;
 }
@@ -320,13 +321,13 @@ void CorosMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 				QPixmapCache::insert(mt.key(), pm);
 			}
 		} else
-			runJob(new CorosMapJob(tiles));
+			runJob(new IMGJob(tiles));
 	}
 }
 
-static bool ecb(IMG::IMGData *data, void *context)
+static bool ecb(IMG::MapData *data, void *context)
 {
-	QList<IMG::IMGData*> *list = (QList<IMG::IMGData*>*)context;
+	QList<IMG::MapData*> *list = (QList<IMG::MapData*>*)context;
 
 	if (data->hasDEM())
 		list->append(data);

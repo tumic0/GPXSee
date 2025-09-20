@@ -12,6 +12,7 @@
 #include "osm.h"
 #include "pcs.h"
 #include "rectd.h"
+#include "imgjob.h"
 #include "imgmap.h"
 
 using namespace IMG;
@@ -199,21 +200,21 @@ bool IMGMap::isRunning(const QString &key) const
 	return false;
 }
 
-void IMGMap::runJob(IMGMapJob *job)
+void IMGMap::runJob(IMGJob *job)
 {
 	_jobs.append(job);
 
-	connect(job, &IMGMapJob::finished, this, &IMGMap::jobFinished);
+	connect(job, &IMGJob::finished, this, &IMGMap::jobFinished);
 	job->run();
 }
 
-void IMGMap::removeJob(IMGMapJob *job)
+void IMGMap::removeJob(IMGJob *job)
 {
 	_jobs.removeOne(job);
 	job->deleteLater();
 }
 
-void IMGMap::jobFinished(IMGMapJob *job)
+void IMGMap::jobFinished(IMGJob *job)
 {
 	const QList<IMG::RasterTile> &tiles = job->tiles();
 
@@ -279,7 +280,7 @@ void IMGMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 				QPixmapCache::insert(mt.key(), pm);
 			}
 		} else
-			runJob(new IMGMapJob(tiles));
+			runJob(new IMGJob(tiles));
 	}
 }
 
