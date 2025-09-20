@@ -334,34 +334,6 @@ $ gpxsee 'geo:323482,4306480;crs=EPSG:32618'
           <p>You may easily create offline atlases from online map services by using
           <a href="http://mobac.sourceforge.net/">Mobile Atlas Creator (MOBAC)</a>.</p>
 
-          <h4 id="IMG">IMG maps</h4>
-          <p>There is support for IMG maps overlay in GPXSee since version 7.30. If the map
-          name is <i>mapname.img</i> and there is also a file named <i>mapname.img.1</i>
-          (.2, .3, ... for additional layers) in the same path, than it will be automatically
-          loaded as an overlay of <i>mapname.img</i>.</p>
-          <p>See also <a href="#COROS">COROS maps</a> for a different way how to aggregate
-          IMG maps.</p>
-
-          <h4 id="JNXKML">JNX &amp; KMZ maps</h4>
-          <p>JNX &amp; KMZ maps do not contain any info about the projection of their
-          tile images, so it has to be provided externaly<sup><a href="#garmin">3</a></sup>.
-          Generally, only two projections are used for JNX/KMZ maps - EPSG:4326 and
-          EPSG:3857. If you see <a href="img/wrong_proj.png">background color stripes</a>
-          in your JNX/KMZ map, you have to switch to the propper input projection
-          in the preferences.</p>
-
-          <h4 id="worldfiles">World Files</h4>
-          <p>World-File georeferenced images require the projection info to be provided
-          additionaly to the world file. This can be done either using a separete PRJ
-          file in <a href="https://portal.ogc.org/files/?artifact_id=999">WKT1 format</a>
-          or by selecting the input projection in the preferences. If a PRJ file
-          exists, it takes precedence.</p>
-          <p>Note, that the WKT datum entry must contain at least one of the
-          <code>TOWGS84</code> or <code>AUTHORITY</code> keys to provide a valid projection
-          info (the <code>AUTHORITY</code> info overrides any parameter values). The
-          WKT data must follow the OGC naming convention. Generally, the OGC WKT entries
-          from <a href="https://epsg.io/">epsg.io</a> should work.</p>
-
           <h4 id="COROS">COROS maps</h4>
           <p>COROS maps as provided by the watch manufacturer are simply a set (atlas) of
           GARMIN IMG maps and the directory structure does not provide any "index" file. As
@@ -396,6 +368,35 @@ Czechoslovakia
           <p>If there is a TYP file with the same basename as the ".cra" index file, like in the
           example above, it is used for the whole atlas (individual map TYP files are ignored
           in the COROS atlases).</p>
+
+          <h4 id="IMG">IMG maps</h4>
+          <p>There is support for IMG maps overlay in GPXSee since version 7.30. If the map
+          name is <i>mapname.img</i> and there is also a file named <i>mapname.img.1</i>
+          (.2, .3, ... for additional layers) in the same path, than it will be automatically
+          loaded as an overlay of <i>mapname.img</i>.</p>
+          <p>See also <a href="#COROS">COROS maps</a> for a different way how to aggregate
+          IMG maps.</p>
+
+          <h4 id="JNXKML">JNX &amp; KMZ maps</h4>
+          <p>JNX &amp; KMZ maps do not contain any info about the projection of their
+          tile images, so it has to be provided externaly<sup><a href="#garmin">3</a></sup>.
+          Generally, only two projections are used for JNX/KMZ maps - EPSG:4326 and
+          EPSG:3857. If you see <a href="img/wrong_proj.png">background color stripes</a>
+          in your JNX/KMZ map, you have to switch to the propper input projection
+          in the preferences.</p>
+
+          <h4 id="worldfiles">World Files</h4>
+          <p>World-File georeferenced images require the projection info to be provided
+          additionaly to the world file. This can be done either using a separete PRJ
+          file in <a href="https://portal.ogc.org/files/?artifact_id=999">WKT1 format</a>
+          or by selecting the input projection in the preferences. If a PRJ file
+          exists, it takes precedence.</p>
+          <p>Note, that the WKT datum entry must contain at least one of the
+          <code>TOWGS84</code> or <code>AUTHORITY</code> keys to provide a valid projection
+          info (the <code>AUTHORITY</code> info overrides any parameter values). The
+          WKT data must follow the OGC naming convention. Generally, the OGC WKT entries
+          from <a href="https://epsg.io/">epsg.io</a> should work.</p>
+
 
           <h3 id="styles">Map styles</h3>
           <p>MVT(PBF), Mapsforge and Garmin IMG maps can be styled with user defined styles.
@@ -595,9 +596,9 @@ sudo spctl --add --type execute --label 'GPXSee' --requirement \
               <div class="h6l"><a href="#WMS">WMS</a></div>
               <div class="h6l"><a href="#headers">Server access</a></div>
             <div class="h5l"><a href="#offline">Offline maps</a></div>
+              <div class="h6l"><a href="#COROS">COROS maps</a></div>
               <div class="h6l"><a href="#IMG">IMG maps</a></div>
               <div class="h6l"><a href="#JNXKML">JNX &amp; KMZ maps</a></div>
-              <div class="h6l"><a href="#COROS">COROS maps</a></div>
               <div class="h6l"><a href="#worldfiles">World Files</a></div>
             <div class="h5l"><a href="#styles">Map styles</a></div>
           <div class="h4l"><a href="#poi">POI files</a></div>
