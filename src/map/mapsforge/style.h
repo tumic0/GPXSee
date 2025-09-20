@@ -276,6 +276,7 @@ public:
 	const HillShadingRender *hillShading(int zoom) const;
 
 	QStringList layers(const QString &lang, int &defaultLayer) const;
+	bool hasHillShading() const {return _hillShading.isValid();}
 
 private:
 	class Menu {

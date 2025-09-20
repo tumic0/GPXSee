@@ -14,6 +14,8 @@ public:
 	  {return _min == other._min && _max == other._max;}
 	bool operator!=(const Range &other) const
 	  {return _min != other._min || _max != other._max;}
+	Range operator|(const Range &r) const;
+	Range &operator|=(const Range &r) {*this = *this | r; return *this;}
 
 	int size() const {return (_max - _min);}
 	int min() const {return _min;}

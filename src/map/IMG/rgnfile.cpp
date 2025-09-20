@@ -53,8 +53,8 @@ bool RGNFile::readRasterInfo(Handle &hdl, const LBLFile *lbl, quint32 size,
 	  && readUInt32(hdl, bottom) && readUInt32(hdl, left)))
 		return false;
 
-	poly->raster = Raster(lbl, id, QRect(QPoint(left, top), QPoint(right,
-	  bottom)));
+	poly->raster = Raster(lbl->image(hdl, id), QRect(QPoint(left, top),
+	  QPoint(right, bottom)));
 
 	return true;
 }

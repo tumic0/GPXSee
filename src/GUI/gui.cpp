@@ -2180,6 +2180,7 @@ void GUI::mapChanged(QAction *action)
 	_mapView->setMap(_map);
 	updateMapDEMDownloadAction();
 	updateMapLayers();
+	updateHillShading();
 }
 
 void GUI::nextMap()
@@ -2349,6 +2350,11 @@ void GUI::updateMapLayers()
 	}
 
 	_mapLayersMenu->setEnabled(!layers.isEmpty());
+}
+
+void GUI::updateHillShading()
+{
+	_drawHillShadingAction->setEnabled(_map->hillShading());
 }
 
 void GUI::setTimeType(TimeType type)

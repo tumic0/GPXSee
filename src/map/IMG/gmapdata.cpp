@@ -115,7 +115,10 @@ bool GMAPData::loadTile(const QDir &dir)
 	return true;
 }
 
-GMAPData::GMAPData(const QString &fileName) : MapData(fileName)
+GMAPData::GMAPData(const QString &fileName, PolyCache &polyCache,
+  PointCache &pointCache, ElevationCache &demCache, QMutex &lock,
+  QMutex &demLock)
+  : MapData(fileName, polyCache, pointCache, demCache, lock, demLock)
 {
 	QString dataDirPath, typFilePath;
 	if (!readXML(fileName, dataDirPath, typFilePath))

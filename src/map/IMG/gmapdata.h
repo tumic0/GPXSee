@@ -11,7 +11,9 @@ namespace IMG {
 class GMAPData : public MapData
 {
 public:
-	GMAPData(const QString &fileName);
+	GMAPData(const QString &fileName, PolyCache &polyCache,
+	  PointCache &pointCache, ElevationCache &demCache, QMutex &lock,
+	  QMutex &demLock);
 
 private:
 	bool readXML(const QString &path, QString &dataDir, QString &typFile);

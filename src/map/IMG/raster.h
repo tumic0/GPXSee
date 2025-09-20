@@ -2,6 +2,7 @@
 #define IMG_RASTER_H
 
 #include <QRect>
+#include <QByteArray>
 #include <QDebug>
 #include "common/rectc.h"
 #include "common/garmin.h"
@@ -12,23 +13,21 @@ class LBLFile;
 
 class Raster {
 public:
-	Raster() : _lbl(0) {}
-	Raster(const LBLFile *lbl, quint32 id, const QRect &rect)
-	  : _lbl(lbl), _id(id), _rect(rect) {}
+	Raster() {}
+	Raster(const QByteArray &img, const QRect &rect)
+	  : _img(img), _rect(rect) {}
 
-	const LBLFile *lbl() const {return _lbl;}
-	quint32 id() const {return _id;}
+	const QByteArray &img() const {return _img;}
 	const RectC rect() const
 	{
 		return RectC(Coordinates(Garmin::toWGS32(_rect.left()),
 		  Garmin::toWGS32(_rect.top())), Coordinates(
 		  Garmin::toWGS32(_rect.right()), Garmin::toWGS32(_rect.bottom())));
 	}
-	bool isValid() const {return (_lbl != 0);}
+	bool isValid() const {return !_img.isNull();}
 
 private:
-	const LBLFile *_lbl;
-	quint32 _id;
+	QByteArray _img;
 	QRect _rect;
 };
 

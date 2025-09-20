@@ -14,7 +14,7 @@ GPS log file formats.
   Garmin IMG/GMAP & JNX maps, TwoNav RMaps, GeoTIFF images, BSB charts,
   ENC charts, KMZ maps, AlpineQuest maps, Locus/OsmAnd/RMaps SQLite maps,
   Mapsforge vector maps, QCT maps, GEMF maps, Osmdroid SQLite maps, Orux maps,
-  ESRI World-File georeferenced images).
+  COROS maps, ESRI World-File georeferenced images).
 * Elevation, speed, heart rate, cadence, power, temperature and gear ratio/shifts
   graphs.
 * Support for DEM files (SRTM HGT).

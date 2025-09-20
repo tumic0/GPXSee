@@ -61,6 +61,7 @@ public:
 
 	virtual QStringList layers(const QString &, int &) const
 	  {return QStringList();}
+	virtual bool hillShading() const {return false;}
 
 	virtual void clearCache() {}
 

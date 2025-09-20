@@ -7,18 +7,18 @@
 #include "common/wgs84.h"
 #include "IMG/imgdata.h"
 #include "IMG/gmapdata.h"
-#include "IMG/rastertile.h"
 #include "IMG/demtree.h"
 #include "osm.h"
 #include "pcs.h"
 #include "rectd.h"
+#include "imgjob.h"
 #include "imgmap.h"
 
 using namespace IMG;
 
-#define EPSILON     1e-6
-#define TILE_SIZE   384
-#define DELTA       1e-3
+#define EPSILON    1e-6
+#define TILE_SIZE  384
+#define DELTA      1e-3
 
 static RectC limitBounds(const RectC &bounds, const Projection &proj)
 {
@@ -35,14 +35,15 @@ static RectC limitBounds(const RectC &bounds, const Projection &proj)
 		return bounds;
 }
 
-static QList<MapData*> overlays(const QString &fileName)
+QList<MapData*> IMGMap::overlays(const QString &fileName)
 {
 	QList<MapData*> list;
 
 	for (int i = 1; i < 32; i++) {
 		QString ol(fileName + "." + QString::number(i));
 		if (QFileInfo(ol).isFile()) {
-			MapData *data = new IMGData(ol);
+			MapData *data = new IMGData(ol, _polyCache, _pointCache, _demCache,
+			  _lock, _demLock);
 			if (data->isValid())
 				list.append(data);
 			else {
@@ -62,9 +63,11 @@ IMGMap::IMGMap(const QString &fileName, bool GMAP, QObject *parent)
   _layer(All), _valid(false)
 {
 	if (GMAP)
-		_data.append(new GMAPData(fileName));
+		_data.append(new GMAPData(fileName, _polyCache, _pointCache, _demCache,
+		  _lock, _demLock));
 	else {
-		_data.append(new IMGData(fileName));
+		_data.append(new IMGData(fileName, _polyCache, _pointCache, _demCache,
+		  _lock, _demLock));
 		_data.append(overlays(fileName));
 	}
 
@@ -100,7 +103,7 @@ void IMGMap::load(const Projection &in, const Projection &out,
 	}
 
 	for (int i = 0; i < _data.size(); i++)
-		_data.at(i)->load(devicelRatio);
+		_data.at(i)->loadStyle(devicelRatio);
 
 	updateTransform();
 
@@ -196,21 +199,21 @@ bool IMGMap::isRunning(const QString &key) const
 	return false;
 }
 
-void IMGMap::runJob(IMGMapJob *job)
+void IMGMap::runJob(IMGJob *job)
 {
 	_jobs.append(job);
 
-	connect(job, &IMGMapJob::finished, this, &IMGMap::jobFinished);
+	connect(job, &IMGJob::finished, this, &IMGMap::jobFinished);
 	job->run();
 }
 
-void IMGMap::removeJob(IMGMapJob *job)
+void IMGMap::removeJob(IMGJob *job)
 {
 	_jobs.removeOne(job);
 	job->deleteLater();
 }
 
-void IMGMap::jobFinished(IMGMapJob *job)
+void IMGMap::jobFinished(IMGJob *job)
 {
 	const QList<IMG::RasterTile> &tiles = job->tiles();
 
@@ -233,8 +236,8 @@ void IMGMap::cancelJobs(bool wait)
 
 void IMGMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 {
-	QPointF tl(floor(rect.left() / TILE_SIZE)
-	  * TILE_SIZE, floor(rect.top() / TILE_SIZE) * TILE_SIZE);
+	QPoint tl(qFloor(rect.left() / TILE_SIZE)
+	  * TILE_SIZE, qFloor(rect.top() / TILE_SIZE) * TILE_SIZE);
 	QSizeF s(rect.right() - tl.x(), rect.bottom() - tl.y());
 	int width = ceil(s.width() / TILE_SIZE);
 	int height = ceil(s.height() / TILE_SIZE);
@@ -257,8 +260,8 @@ void IMGMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 				else {
 					tiles.append(RasterTile(_projection, _transform, _data.at(n),
 					  _zoom, QRect(ttl, QSize(TILE_SIZE, TILE_SIZE)), _tileRatio,
-					  key, !n && flags & Map::HillShading, _layer & Raster,
-					  _layer & Vector));
+					  key, !n && flags & Map::HillShading && _zoom >= 17
+					  && _zoom <= 24, _layer & Raster, _layer & Vector));
 				}
 			}
 		}
@@ -276,7 +279,7 @@ void IMGMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 				QPixmapCache::insert(mt.key(), pm);
 			}
 		} else
-			runJob(new IMGMapJob(tiles));
+			runJob(new IMGJob(tiles));
 	}
 }
 

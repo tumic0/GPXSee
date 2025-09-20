@@ -78,7 +78,18 @@ public:
 		double yr;
 	};
 
-	MapData(const QString &fileName);
+	struct Polys {
+		QList<Poly> polygons;
+		QList<Poly> lines;
+	};
+
+	typedef QCache<const SubDiv*, Polys> PolyCache;
+	typedef QCache<const SubDiv*, QList<Point> > PointCache;
+	typedef QCache<const DEMTile*, Elevation> ElevationCache;
+
+	MapData(const QString &fileName, PolyCache &polyCache,
+	  PointCache &pointCache, ElevationCache &demCache, QMutex &lock,
+	  QMutex &demLock);
 	virtual ~MapData();
 
 	const QString &name() const {return _name;}
@@ -91,7 +102,7 @@ public:
 	void elevations(QFile *file, const RectC &rect, int bits,
 	  QList<Elevation> *elevations);
 
-	void load(qreal ratio);
+	void loadStyle(qreal ratio);
 	void clear();
 
 	bool hasDEM() const {return _hasDEM;}
@@ -120,15 +131,6 @@ protected:
 	QString _errorString;
 
 private:
-	struct Polys {
-		QList<Poly> polygons;
-		QList<Poly> lines;
-	};
-
-	typedef QCache<const SubDiv*, Polys> PolyCache;
-	typedef QCache<const SubDiv*, QList<Point> > PointCache;
-	typedef QCache<const DEMTile*, Elevation> ElevationCache;
-
 	struct PolyCTX
 	{
 		PolyCTX(QFile *file, const RectC &rect, const Zoom &zoom,
@@ -182,10 +184,10 @@ private:
 	static bool pointCb(VectorTile *tile, void *context);
 	static bool elevationCb(VectorTile *tile, void *context);
 
-	PolyCache _polyCache;
-	PointCache _pointCache;
-	ElevationCache _demCache;
-	QMutex _lock, _demLock;
+	PolyCache &_polyCache;
+	PointCache &_pointCache;
+	ElevationCache &_demCache;
+	QMutex &_lock, &_demLock;
 
 	friend class VectorTile;
 };

@@ -782,6 +782,22 @@
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>
 		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>cra</string>
+			</array>
+			<key>CFBundleTypeMIMETypes</key>
+			<array>
+				<string>application/vnd.coros.cra</string>
+			</array>
+			<key>CFBundleTypeIconFile</key>
+			<string>icons/cra.icns</string>
+			<key>CFBundleTypeName</key>
+			<string>COROS Map Atlas</string>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+		</dict>
 	</array>
 
 	<key>CFBundleURLTypes</key>
@@ -1833,6 +1849,29 @@
 				</array>
 				<key>public.mime-type</key>
 				<string>application/vnd.vakaros.vkx</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeIdentifier</key>
+			<string>com.coros.cra</string>
+			<key>UTTypeReferenceURL</key>
+			<string>https://www.gpxsee.org/doc.html#COROS</string>
+			<key>UTTypeDescription</key>
+			<string>COROS Map Atlas</string>
+			<key>UTTypeIconFile</key>
+			<string>icons/cra.icns</string>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>cra</string>
+				</array>
+				<key>public.mime-type</key>
+				<string>application/vnd.coros.cra</string>
 			</dict>
 		</dict>
 	</array>

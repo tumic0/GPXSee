@@ -1,5 +1,5 @@
-#ifndef IMGMAP_H
-#define IMGMAP_H
+#ifndef COROSMAP_H
+#define COROSMAP_H
 
 #include "map.h"
 #include "projection.h"
@@ -8,18 +8,16 @@
 
 class IMGJob;
 
-class IMGMap : public Map
+class CorosMap : public Map
 {
 	Q_OBJECT
 
 public:
-	IMGMap(const QString &fileName, bool GMAP, QObject *parent = 0);
-	~IMGMap() {qDeleteAll(_data);}
-
-	QString name() const {return _data.first()->name();}
+	CorosMap(const QString &fileName, QObject *parent = 0);
+	~CorosMap();
 
 	QRectF bounds() {return _bounds;}
-	RectC llBounds() {return _data.first()->bounds();}
+	RectC llBounds() {return _dataBounds;}
 
 	int zoom() const {return _zoom;}
 	void setZoom(int zoom);
@@ -46,20 +44,18 @@ public:
 	bool isValid() const {return _valid;}
 	QString errorString() const {return _errorString;}
 
-	static Map* createIMG(const QString &path, const Projection &proj,
-	  bool *isDir);
-	static Map* createGMAP(const QString &path, const Projection &proj,
-	  bool *isDir);
+	static Map* create(const QString &path, const Projection &proj, bool *isDir);
 
 private slots:
 	void jobFinished(IMGJob *job);
 
 private:
 	enum Layer {
-		Vector = 1,
-		Raster = 2,
+		Landscape = 1,
+		Topo = 2,
 		All = 3
 	};
+	typedef RTree<IMG::MapData*, double, 2> MapTree;
 
 	Transform transform(int zoom) const;
 	void updateTransform();
@@ -68,13 +64,10 @@ private:
 	void removeJob(IMGJob *job);
 	void cancelJobs(bool wait);
 
-	QList<IMG::MapData*> overlays(const QString &fileName);
+	void loadDir(const QString &path, MapTree &tree);
 
-	QList<IMG::MapData*> _data;
-	IMG::MapData::PolyCache _polyCache;
-	IMG::MapData::PointCache _pointCache;
-	IMG::MapData::ElevationCache _demCache;
-	QMutex _lock, _demLock;
+	MapTree _osm, _cm;
+	Range _zooms;
 	int _zoom;
 	Projection _projection;
 	Transform _transform;
@@ -82,6 +75,11 @@ private:
 	RectC _dataBounds;
 	qreal _tileRatio;
 	Layer _layer;
+	IMG::Style *_style;
+	IMG::MapData::PolyCache _polyCache;
+	IMG::MapData::PointCache _pointCache;
+	IMG::MapData::ElevationCache _demCache;
+	QMutex _lock, _demLock;
 
 	QList<IMGJob*> _jobs;
 
@@ -89,4 +87,4 @@ private:
 	QString _errorString;
 };
 
-#endif // IMGMAP_H
+#endif // COROSMAP_H

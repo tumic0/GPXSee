@@ -21,6 +21,7 @@
 #include "oruxmap.h"
 #include "encmap.h"
 #include "encatlas.h"
+#include "corosmap.h"
 #include "invalidmap.h"
 #include "maplist.h"
 
@@ -59,6 +60,7 @@ MapList::ParserMap MapList::parsers()
 	map.insert("otrk2.xml", &OruxMap::create);
 	map.insert("000", &ENCMap::create);
 	map.insert("031", &ENCAtlas::create);
+	map.insert("cra", &CorosMap::create);
 
 	return map;
 }
@@ -160,6 +162,7 @@ QString MapList::formats()
 	  + qApp->translate("MapList", "Electronic Navigational Charts")
 		+ " (*.000 *.031);;"
 	  + qApp->translate("MapList", "AlpineQuest maps") + " (*.aqm);;"
+	  + qApp->translate("MapList", "COROS maps") + " (*.cra);;"
 	  + qApp->translate("MapList", "GEMF maps") + " (*.gemf);;"
 	  + qApp->translate("MapList", "Garmin IMG maps")
 		+ " (*.gmap *.gmapi *.img *.xml);;"
