@@ -328,8 +328,8 @@ $ gpxsee 'geo:323482,4306480;crs=EPSG:32618'
           <p>OziExplorer maps, TrekBuddy maps/atlases, Garmin JNX &amp; IMG/GMAP maps,
           TwoNav RMaps, MBTiles, KMZ maps, AlpineQuest AQM maps, Locus/OsmAnd/RMaps SQLite
           maps, Mapsforge maps, BSB charts, ENC charts, QCT maps, GEMF maps,
-          Osmdroid SQLite maps, Orux maps and GeoTIFF and World-File georeferenced images
-          are supported by GPXSee.</p>
+          Osmdroid SQLite maps, Orux maps, COROS maps and GeoTIFF and World-File georeferenced
+          images are supported by GPXSee.</p>
 
           <p>You may easily create offline atlases from online map services by using
           <a href="http://mobac.sourceforge.net/">Mobile Atlas Creator (MOBAC)</a>.</p>
@@ -339,6 +339,8 @@ $ gpxsee 'geo:323482,4306480;crs=EPSG:32618'
           name is <i>mapname.img</i> and there is also a file named <i>mapname.img.1</i>
           (.2, .3, ... for additional layers) in the same path, than it will be automatically
           loaded as an overlay of <i>mapname.img</i>.</p>
+          <p>See also <a href="#COROS">COROS maps</a> for a different way how to aggregate
+          IMG maps.</p>
 
           <h4 id="JNXKML">JNX &amp; KMZ maps</h4>
           <p>JNX &amp; KMZ maps do not contain any info about the projection of their
@@ -359,6 +361,41 @@ $ gpxsee 'geo:323482,4306480;crs=EPSG:32618'
           info (the <code>AUTHORITY</code> info overrides any parameter values). The
           WKT data must follow the OGC naming convention. Generally, the OGC WKT entries
           from <a href="https://epsg.io/">epsg.io</a> should work.</p>
+
+          <h4 id="COROS">COROS maps</h4>
+          <p>COROS maps as provided by the watch manufacturer are simply a set (atlas) of
+          GARMIN IMG maps and the directory structure does not provide any "index" file. As
+          GPXSee needs a file when opening a map, you have to create such a index file after
+          unzipping the map archive. Only the file extension - which must be ".cra" - matters,
+          the basename is arbitrary and used as the map name in the GPXSee map menu. The
+          file does not need to have any content, but must be at the same level as the "Map"
+          directory.</p>
+
+          <p>While the COROS watches rely on the obscure directory structure of the atlas and
+          the maps must be one minute tiles, GPXSee is much more versatile when handling
+          the atlases which allows users to create their own atlases from aggregated IMG files.
+          The "Map" directory and it's "OSM" and "CM" subdirectories for the "landscape" and
+          "topo" layers are mandatory, but the structure/content of the two directories is
+          arbitrary and can be a flat list of maps. For example to merge multiple GARMIN
+          <a href="https://garmin.opentopomap.org/">OpenTopoMaps</a>, you can create the following
+          directory structure:</p>
+
+<pre>
+Czechoslovakia
+├── Czechoslovakia.cra
+├── Czechoslovakia.typ
+└── Map
+    ├── CM
+    │   ├── otm-czech-republic-contours.img
+    │   └── otm-slovakia-contours.img
+    └── OSM
+        ├── otm-czech-republic.img
+        └── otm-slovakia.img
+</pre>
+
+          <p>If there is a TYP file with the same basename as the ".cra" index file, like in the
+          example above, it is used for the whole atlas (individual map TYP files are ignored
+          in the COROS atlases).</p>
 
           <h3 id="styles">Map styles</h3>
           <p>MVT(PBF), Mapsforge and Garmin IMG maps can be styled with user defined styles.
@@ -560,6 +597,7 @@ sudo spctl --add --type execute --label 'GPXSee' --requirement \
             <div class="h5l"><a href="#offline">Offline maps</a></div>
               <div class="h6l"><a href="#IMG">IMG maps</a></div>
               <div class="h6l"><a href="#JNXKML">JNX &amp; KMZ maps</a></div>
+              <div class="h6l"><a href="#COROS">COROS maps</a></div>
               <div class="h6l"><a href="#worldfiles">World Files</a></div>
             <div class="h5l"><a href="#styles">Map styles</a></div>
           <div class="h4l"><a href="#poi">POI files</a></div>
