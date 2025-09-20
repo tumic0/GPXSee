@@ -3,11 +3,14 @@
 #include <QPixmapCache>
 #include "common/wgs84.h"
 #include "common/programpaths.h"
+#include "IMG/imgdata.h"
 #include "IMG/demtree.h"
 #include "rectd.h"
 #include "pcs.h"
 #include "imgjob.h"
 #include "corosmap.h"
+
+using namespace IMG;
 
 #define EPSILON    1e-6
 #define TILE_SIZE  384
@@ -26,8 +29,8 @@ void CorosMap::loadDir(const QString &path, MapTree &tree)
 		if (fi.isDir())
 			loadDir(fi.absoluteFilePath(), tree);
 		else {
-			IMG::IMGData *data = new IMG::IMGData(fi.absoluteFilePath(),
-			  _polyCache, _pointCache, _demCache, _lock, _demLock);
+			IMGData *data = new IMGData(fi.absoluteFilePath(), _polyCache,
+			  _pointCache, _demCache, _lock, _demLock);
 			if (data->isValid()) {
 				min[0] = data->bounds().left();
 				min[1] = data->bounds().bottom();
@@ -107,15 +110,15 @@ void CorosMap::load(const Projection &in, const Projection &out,
 	QFileInfo fi(path());
 	QString mapTYP(fi.absoluteDir().absoluteFilePath(fi.baseName() + ".typ"));
 	if (QFileInfo::exists(mapTYP)) {
-		IMG::SubFile typ(mapTYP);
-		_style = new IMG::Style(devicelRatio, &typ);
+		SubFile typ(mapTYP);
+		_style = new Style(devicelRatio, &typ);
 	} else {
 		QString globalTYP(ProgramPaths::typFile());
 		if (QFileInfo::exists(globalTYP)) {
-			IMG::SubFile typ(globalTYP);
-			_style = new IMG::Style(devicelRatio, &typ);
+			SubFile typ(globalTYP);
+			_style = new Style(devicelRatio, &typ);
 		} else
-			_style = new IMG::Style(devicelRatio);
+			_style = new Style(devicelRatio);
 	}
 
 	updateTransform();
@@ -209,7 +212,7 @@ void CorosMap::updateTransform()
 bool CorosMap::isRunning(const QString &key) const
 {
 	for (int i = 0; i < _jobs.size(); i++) {
-		const QList<IMG::RasterTile> &tiles = _jobs.at(i)->tiles();
+		const QList<RasterTile> &tiles = _jobs.at(i)->tiles();
 		for (int j = 0; j < tiles.size(); j++)
 			if (tiles.at(j).key() == key)
 				return true;
@@ -234,10 +237,10 @@ void CorosMap::removeJob(IMGJob *job)
 
 void CorosMap::jobFinished(IMGJob *job)
 {
-	const QList<IMG::RasterTile> &tiles = job->tiles();
+	const QList<RasterTile> &tiles = job->tiles();
 
 	for (int i = 0; i < tiles.size(); i++) {
-		const IMG::RasterTile &mt = tiles.at(i);
+		const RasterTile &mt = tiles.at(i);
 		if (!mt.pixmap().isNull())
 			QPixmapCache::insert(mt.key(), mt.pixmap());
 	}
@@ -253,9 +256,9 @@ void CorosMap::cancelJobs(bool wait)
 		_jobs.at(i)->cancel(wait);
 }
 
-static bool cb(IMG::MapData *data, void *context)
+static bool cb(MapData *data, void *context)
 {
-	QList<IMG::MapData*> *list = (QList<IMG::MapData*>*)context;
+	QList<MapData*> *list = (QList<MapData*>*)context;
 	list->append(data);
 	return true;
 }
@@ -269,7 +272,7 @@ void CorosMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 	int width = ceil(s.width() / TILE_SIZE);
 	int height = ceil(s.height() / TILE_SIZE);
 
-	QList<IMG::RasterTile> tiles;
+	QList<RasterTile> tiles;
 
 	for (int i = 0; i < width; i++) {
 		for (int j = 0; j < height; j++) {
@@ -287,7 +290,7 @@ void CorosMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 				RectD rectD(_transform.img2proj(ttl), _transform.img2proj(
 				  QPoint(ttl.x() + TILE_SIZE, ttl.y() + TILE_SIZE)));
 				RectC rectC(rectD.toRectC(_projection, 20));
-				QList<IMG::MapData*> data;
+				QList<MapData*> data;
 
 				min[0] = rectC.topLeft().lon();
 				min[1] = rectC.bottomRight().lat();
@@ -300,7 +303,7 @@ void CorosMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 					_cm.Search(min, max, cb, &data);
 
 				if (!data.isEmpty())
-					tiles.append(IMG::RasterTile(_projection, _transform, data,
+					tiles.append(RasterTile(_projection, _transform, data,
 					  _style, _zoom, QRect(ttl, QSize(TILE_SIZE, TILE_SIZE)),
 					  _tileRatio, key, flags & Map::HillShading && _zoom >= 17
 					  && _zoom <= 24, false, true));
@@ -310,12 +313,11 @@ void CorosMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 
 	if (!tiles.isEmpty()) {
 		if (flags & Map::Block) {
-			QFuture<void> future = QtConcurrent::map(tiles,
-			  &IMG::RasterTile::render);
+			QFuture<void> future = QtConcurrent::map(tiles, &RasterTile::render);
 			future.waitForFinished();
 
 			for (int i = 0; i < tiles.size(); i++) {
-				const IMG::RasterTile &mt = tiles.at(i);
+				const RasterTile &mt = tiles.at(i);
 				const QPixmap &pm = mt.pixmap();
 				painter->drawPixmap(mt.xy(), pm);
 				QPixmapCache::insert(mt.key(), pm);
@@ -325,9 +327,9 @@ void CorosMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 	}
 }
 
-static bool ecb(IMG::MapData *data, void *context)
+static bool ecb(MapData *data, void *context)
 {
-	QList<IMG::MapData*> *list = (QList<IMG::MapData*>*)context;
+	QList<MapData*> *list = (QList<MapData*>*)context;
 
 	if (data->hasDEM())
 		list->append(data);
@@ -338,7 +340,7 @@ static bool ecb(IMG::MapData *data, void *context)
 double CorosMap::elevation(const Coordinates &c)
 {
 	double min[2], max[2];
-	QList<IMG::MapData*> maps;
+	QList<MapData*> maps;
 
 	min[0] = c.lon();
 	min[1] = c.lat();
@@ -350,12 +352,12 @@ double CorosMap::elevation(const Coordinates &c)
 		_cm.Search(min, max, ecb, &maps);
 
 	for (int i = 0; i < maps.size(); i++) {
-		QList<IMG::MapData::Elevation> tiles;
-		IMG::MapData *map = maps.at(i);
+		QList<MapData::Elevation> tiles;
+		MapData *map = maps.at(i);
 
 		map->elevations(0, RectC(c, Coordinates(c.lon() + DELTA,
 		  c.lat() - DELTA)), map->zooms().max(), &tiles);
-		IMG::DEMTree tree(tiles);
+		DEMTree tree(tiles);
 		double ele = tree.elevation(c);
 
 		if (!std::isnan(ele))

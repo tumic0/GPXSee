@@ -7,7 +7,6 @@
 #include "common/wgs84.h"
 #include "IMG/imgdata.h"
 #include "IMG/gmapdata.h"
-#include "IMG/rastertile.h"
 #include "IMG/demtree.h"
 #include "osm.h"
 #include "pcs.h"

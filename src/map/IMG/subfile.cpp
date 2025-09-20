@@ -1,5 +1,4 @@
 #include <cstring>
-#include "imgdata.h"
 #include "subfile.h"
 
 using namespace IMG;
