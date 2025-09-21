@@ -340,6 +340,7 @@
 			<key>CFBundleTypeExtensions</key>
 			<array>
 				<string>img</string>
+				<string>csm</string>
 			</array>
 			<key>CFBundleTypeMIMETypes</key>
 			<array>
@@ -1246,6 +1247,7 @@
 				<key>public.filename-extension</key>
 				<array>
 					<string>img</string>
+					<string>csm</string>
 				</array>
 				<key>public.mime-type</key>
 				<string>application/vnd.garmin.img</string>

@@ -230,6 +230,7 @@
 			<match type="string" offset="16" value="DSKIMG"/>
 		</magic>
 		<glob pattern="*.img"/>
+		<glob pattern="*.csm"/>
 	</mime-type>
 
 	<mime-type type="application/vnd.garmin.jnx">

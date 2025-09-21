@@ -178,6 +178,7 @@ Section "GPXSee" SEC_APP
   !insertmacro FILE_ASSOCIATION_ADD "gpi" "Garmin POI File" 6
   !insertmacro FILE_ASSOCIATION_ADD "sml" "Suunto Markup Language" 7
   !insertmacro FILE_ASSOCIATION_ADD "img" "Garmin IMG Map" 8
+  !insertmacro FILE_ASSOCIATION_ADD "csm" "Garmin IMG Map" 8
   !insertmacro FILE_ASSOCIATION_ADD "jnx" "Garmin JNX Map" 9
   !insertmacro FILE_ASSOCIATION_ADD "kap" "BSB Nautical Chart" 10
   !insertmacro FILE_ASSOCIATION_ADD "gpx" "GPS Exchange Format" 11
@@ -240,6 +241,7 @@ Section "GPXSee" SEC_APP
   WriteRegStr HKCR ".jpg\OpenWithList" "GPXSee.exe" ""
   WriteRegStr HKCR ".jpeg\OpenWithList" "GPXSee.exe" ""
   WriteRegStr HKCR ".img\OpenWithList" "GPXSee.exe" ""
+  WriteRegStr HKCR ".csm\OpenWithList" "GPXSee.exe" ""
   WriteRegStr HKCR ".jnx\OpenWithList" "GPXSee.exe" ""
   WriteRegStr HKCR ".kap\OpenWithList" "GPXSee.exe" ""
   WriteRegStr HKCR ".map\OpenWithList" "GPXSee.exe" ""
@@ -421,6 +423,7 @@ Section "Uninstall"
   !insertmacro FILE_ASSOCIATION_REMOVE "gpi"
   !insertmacro FILE_ASSOCIATION_REMOVE "sml"
   !insertmacro FILE_ASSOCIATION_REMOVE "img"
+  !insertmacro FILE_ASSOCIATION_REMOVE "csm"
   !insertmacro FILE_ASSOCIATION_REMOVE "jnx"
   !insertmacro FILE_ASSOCIATION_REMOVE "kap"
   !insertmacro FILE_ASSOCIATION_REMOVE "map"
@@ -474,6 +477,7 @@ Section "Uninstall"
   DeleteRegValue HKCR ".jpg\OpenWithList" "GPXSee.exe"
   DeleteRegValue HKCR ".jpeg\OpenWithList" "GPXSee.exe"
   DeleteRegValue HKCR ".img\OpenWithList" "GPXSee.exe"
+  DeleteRegValue HKCR ".csm\OpenWithList" "GPXSee.exe"
   DeleteRegValue HKCR ".jnx\OpenWithList" "GPXSee.exe"
   DeleteRegValue HKCR ".kap\OpenWithList" "GPXSee.exe"
   DeleteRegValue HKCR ".map\OpenWithList" "GPXSee.exe"

@@ -36,6 +36,7 @@ MapList::ParserMap MapList::parsers()
 	map.insert("xml", &MapSource::create);
 	map.insert("xml", &IMGMap::createGMAP);
 	map.insert("img", &IMGMap::createIMG);
+	map.insert("csm", &IMGMap::createIMG);
 	map.insert("jnx", &JNXMap::create);
 	map.insert("tif", &GeoTIFFMap::create);
 	map.insert("tiff", &GeoTIFFMap::create);
