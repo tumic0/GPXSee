@@ -166,7 +166,7 @@ QString MapList::formats()
 	  + qApp->translate("MapList", "COROS maps") + " (*.cra);;"
 	  + qApp->translate("MapList", "GEMF maps") + " (*.gemf);;"
 	  + qApp->translate("MapList", "Garmin IMG maps")
-		+ " (*.gmap *.gmapi *.img *.xml);;"
+		+ " (*.csm *.gmap *.gmapi *.img *.xml);;"
 	  + qApp->translate("MapList", "Garmin JNX maps") + " (*.jnx);;"
 	  + qApp->translate("MapList", "BSB nautical charts") + " (*.kap);;"
 	  + qApp->translate("MapList", "KMZ maps") + " (*.kmz);;"
