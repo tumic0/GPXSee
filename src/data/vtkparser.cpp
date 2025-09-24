@@ -33,7 +33,7 @@ static bool varint(CTX &ctx, T &val)
 	val = 0;
 
 	while (ctx.bp < ctx.be) {
-		val |= ((quint8)*ctx.bp & 0x7F) << shift;
+		val |= static_cast<T>((quint8)*ctx.bp & 0x7F) << shift;
 		shift += 7;
 		if (!((quint8)*ctx.bp++ & 0x80))
 			return true;
