@@ -70,17 +70,17 @@
 <context>
     <name>CorosMap</name>
     <message>
-        <location filename="../src/map/corosmap.cpp" line="328"/>
+        <location filename="../src/map/corosmap.cpp" line="376"/>
         <source>All</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/map/corosmap.cpp" line="328"/>
+        <location filename="../src/map/corosmap.cpp" line="376"/>
         <source>Landscape</source>
         <translation type="unfinished">Paesaggio</translation>
     </message>
     <message>
-        <location filename="../src/map/corosmap.cpp" line="328"/>
+        <location filename="../src/map/corosmap.cpp" line="376"/>
         <source>Topo</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1327,112 +1327,117 @@
 <context>
     <name>MapList</name>
     <message>
-        <location filename="../src/map/maplist.cpp" line="160"/>
+        <location filename="../src/map/maplist.cpp" line="164"/>
         <source>Supported files</source>
         <translation>File supportati</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="164"/>
+        <location filename="../src/map/maplist.cpp" line="168"/>
         <source>AlpineQuest maps</source>
         <translation>Mappe AlpineQuest</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="167"/>
+        <location filename="../src/map/maplist.cpp" line="171"/>
         <source>Garmin IMG maps</source>
         <translation>Mappe Garmin IMG</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="169"/>
+        <location filename="../src/map/maplist.cpp" line="173"/>
         <source>Garmin JNX maps</source>
         <translation>Mappe Garmin JNX</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="170"/>
+        <location filename="../src/map/maplist.cpp" line="174"/>
         <source>BSB nautical charts</source>
         <translation>Carte nautiche BSB</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="166"/>
+        <location filename="../src/map/maplist.cpp" line="170"/>
         <source>GEMF maps</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="162"/>
+        <location filename="../src/map/maplist.cpp" line="166"/>
         <source>Electronic Navigational Charts</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="165"/>
+        <location filename="../src/map/maplist.cpp" line="169"/>
         <source>COROS maps</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="171"/>
+        <location filename="../src/map/maplist.cpp" line="175"/>
         <source>KMZ maps</source>
         <translation>Mappe KMZ</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="172"/>
+        <location filename="../src/map/maplist.cpp" line="176"/>
         <source>Mapsforge maps</source>
         <translation>Mappe Mapsforge</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="173"/>
+        <location filename="../src/map/maplist.cpp" line="177"/>
         <source>OziExplorer maps</source>
         <translation>Mappe OziExplorer</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="174"/>
+        <location filename="../src/map/maplist.cpp" line="178"/>
         <source>MBTiles maps</source>
         <translation>Mappe MBTiles</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="175"/>
+        <location filename="../src/map/maplist.cpp" line="179"/>
         <source>Orux maps</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="176"/>
-        <source>QuickChart maps</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/map/maplist.cpp" line="178"/>
-        <source>Osmdroid SQLite maps</source>
+        <location filename="../src/map/maplist.cpp" line="180"/>
+        <source>PMTiles maps</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="181"/>
-        <source>TrekBuddy maps/atlases</source>
-        <translation>Mappe/Atlanti TrekBuddy</translation>
+        <source>QuickChart maps</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="183"/>
-        <source>GeoTIFF images</source>
-        <translation>Immagini GeoTIFF</translation>
-    </message>
-    <message>
-        <location filename="../src/map/maplist.cpp" line="187"/>
-        <source>All files</source>
-        <translation>Tutti i file</translation>
-    </message>
-    <message>
-        <location filename="../src/map/maplist.cpp" line="177"/>
-        <source>TwoNav maps</source>
-        <translation>Mappe TwoNav</translation>
-    </message>
-    <message>
-        <location filename="../src/map/maplist.cpp" line="179"/>
-        <source>Locus/OsmAnd/RMaps SQLite maps</source>
-        <translation>Mappe Locus/OsmAnd/RMaps o SQLite</translation>
-    </message>
-    <message>
-        <location filename="../src/map/maplist.cpp" line="184"/>
-        <source>World-file georeferenced images</source>
+        <source>Osmdroid SQLite maps</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="186"/>
+        <source>TrekBuddy maps/atlases</source>
+        <translation>Mappe/Atlanti TrekBuddy</translation>
+    </message>
+    <message>
+        <location filename="../src/map/maplist.cpp" line="188"/>
+        <source>GeoTIFF images</source>
+        <translation>Immagini GeoTIFF</translation>
+    </message>
+    <message>
+        <location filename="../src/map/maplist.cpp" line="192"/>
+        <source>All files</source>
+        <translation>Tutti i file</translation>
+    </message>
+    <message>
+        <location filename="../src/map/maplist.cpp" line="182"/>
+        <source>TwoNav maps</source>
+        <translation>Mappe TwoNav</translation>
+    </message>
+    <message>
+        <location filename="../src/map/maplist.cpp" line="184"/>
+        <source>Locus/OsmAnd/RMaps SQLite maps</source>
+        <translation>Mappe Locus/OsmAnd/RMaps o SQLite</translation>
+    </message>
+    <message>
+        <location filename="../src/map/maplist.cpp" line="189"/>
+        <source>World-file georeferenced images</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/map/maplist.cpp" line="191"/>
         <source>Online map sources</source>
         <translation>Mappe online</translation>
     </message>
