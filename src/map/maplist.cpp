@@ -22,6 +22,7 @@
 #include "encmap.h"
 #include "encatlas.h"
 #include "corosmap.h"
+#include "pmtilesmap.h"
 #include "invalidmap.h"
 #include "maplist.h"
 
@@ -62,6 +63,8 @@ MapList::ParserMap MapList::parsers()
 	map.insert("000", &ENCMap::create);
 	map.insert("031", &ENCAtlas::create);
 	map.insert("cra", &CorosMap::create);
+	map.insert("pmtiles", &PMTilesMap::create);
+	map.insert("t", &PMTilesMap::create);
 
 	return map;
 }
@@ -174,6 +177,7 @@ QString MapList::formats()
 	  + qApp->translate("MapList", "OziExplorer maps") + " (*.map);;"
 	  + qApp->translate("MapList", "MBTiles maps") + " (*.mbtiles);;"
 	  + qApp->translate("MapList", "Orux maps") + " (*.otrk2.xml);;"
+	  + qApp->translate("MapList", "PMTiles maps") + " (*.pmtiles *.t);;"
 	  + qApp->translate("MapList", "QuickChart maps") + " (*.qct);;"
 	  + qApp->translate("MapList", "TwoNav maps") + " (*.rmap *.rtmap);;"
 	  + qApp->translate("MapList", "Osmdroid SQLite maps") + " (*.sqlite);;"

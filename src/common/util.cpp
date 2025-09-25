@@ -9,9 +9,11 @@
 #include <QJniEnvironment>
 #include <QJniObject>
 #endif // Q_OS_ANDROID
+#include <zlib.h>
 #include "util.h"
 
 #define SQLITE_DB_MAGIC "SQLite format 3"
+#define CHUNK 16384
 
 #ifdef Q_OS_ANDROID
 static QString documentName(const QString &path)
@@ -187,4 +189,30 @@ QImage Util::svg2img(const QString &path, qreal ratio)
 	img.setDevicePixelRatio(ratio);
 
 	return img;
+}
+
+QByteArray Util::gunzip(const QByteArray &data)
+{
+	QByteArray uba;
+	const quint8 *isp = (const quint8*)data.constData() + data.size() - 4;
+	quint32 size = 0;
+	for (quint32 i = 0; i < sizeof(size); i++)
+		size |= ((quint32)*(isp + i)) << (i * 8);
+	uba.resize(size);
+
+	z_stream strm;
+	strm.zalloc = Z_NULL;
+	strm.zfree = Z_NULL;
+	strm.opaque = Z_NULL;
+	strm.avail_in = data.size();
+	strm.next_in = (Bytef*)data.constData();
+	strm.avail_out = uba.size();
+	strm.next_out = (Bytef*)uba.data();
+
+	if (inflateInit2(&strm, MAX_WBITS + 16) != Z_OK)
+		return QByteArray();
+	int ret = inflate(&strm, Z_NO_FLUSH);
+	(void)inflateEnd(&strm);
+
+	return (ret == Z_STREAM_END) ? uba : QByteArray();
 }

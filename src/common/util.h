@@ -5,6 +5,7 @@
 #include <QImage>
 
 class QTemporaryDir;
+class QIODevice;
 
 #define ARRAY_SIZE(array) \
   (sizeof(array) / sizeof(array[0]))
@@ -19,6 +20,7 @@ namespace Util
 	const QTemporaryDir &tempDir();
 	bool isSQLiteDB(const QString &path, QString &errorString);
 	QImage svg2img(const QString &path, qreal ratio);
+	QByteArray gunzip(const QByteArray &data);
 }
 
 #endif // UTIL_H

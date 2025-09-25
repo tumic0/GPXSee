@@ -151,6 +151,7 @@ HEADERS += src/common/config.h \
     src/map/metatype.h \
     src/map/oruxmap.h \
     src/map/osmdroidmap.h \
+    src/map/pmtilesmap.h \
     src/map/proj/polyconic.h \
     src/map/proj/webmercator.h \
     src/map/proj/transversemercator.h \
@@ -375,6 +376,7 @@ SOURCES += src/main.cpp \
     src/map/gmifile.cpp \
     src/map/oruxmap.cpp \
     src/map/osmdroidmap.cpp \
+    src/map/pmtilesmap.cpp \
     src/map/proj/polyconic.cpp \
     src/map/proj/webmercator.cpp \
     src/map/proj/transversemercator.cpp \
@@ -513,6 +515,7 @@ TRANSLATIONS = lang/gpxsee_en.ts \
     lang/gpxsee_ko.ts
 
 macx {
+    LIBS += -lz
     RESOURCES += theme-grayscale.qrc
 
     ICON = icons/app/gpxsee.icns
@@ -534,6 +537,8 @@ macx {
 
 win32 {
     CONFIG += no_batch
+    INCLUDEPATH += $$ZLIB/include
+    LIBS += $$ZLIB/lib/zlibstatic.lib
     RESOURCES += theme-color.qrc
 
     QMAKE_TARGET_DESCRIPTION = GPXSee
@@ -581,6 +586,7 @@ win32 {
 }
 
 unix:!macx:!android {
+    LIBS += -lz
     RESOURCES += theme-grayscale.qrc
 
     isEmpty(PREFIX):PREFIX = /usr/local
@@ -609,6 +615,7 @@ android {
 
     HEADERS += src/GUI/navigationwidget.h
     SOURCES += src/GUI/navigationwidget.cpp
+	LIBS += -lz
 
     RESOURCES += theme-color.qrc
 

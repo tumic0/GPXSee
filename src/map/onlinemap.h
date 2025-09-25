@@ -24,7 +24,7 @@ public:
 		QImageReader reader(_file, format);
 		if (_scaledSize)
 			reader.setScaledSize(QSize(_scaledSize, _scaledSize));
-		_pixmap = QPixmap::fromImage(reader.read());
+		_pixmap = QPixmap::fromImageReader(&reader);
 	}
 
 	const QPoint &xy() const {return _xy;}
