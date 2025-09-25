@@ -3,7 +3,7 @@ unix:!macx:!android {
 } else {
     TARGET = GPXSee
 }
-VERSION = 13.49
+VERSION = 14.0
 
 QT += core \
     gui \
@@ -615,7 +615,7 @@ android {
 
     HEADERS += src/GUI/navigationwidget.h
     SOURCES += src/GUI/navigationwidget.cpp
-	LIBS += -lz
+    LIBS += -lz
 
     RESOURCES += theme-color.qrc
 
