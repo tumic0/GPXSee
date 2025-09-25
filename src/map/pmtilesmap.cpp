@@ -371,7 +371,7 @@ QByteArray PMTilesMap::tileData(quint64 id)
 	if (!d->runLength) {
 		QVector<Directory> *leaf = _cache.object(d->offset);
 		if (!leaf) {
-			leaf = new QList<Directory>(readDir(_leafOffset + d->offset,
+			leaf = new QVector<Directory>(readDir(_leafOffset + d->offset,
 			  d->length, _ic));
 			_cache.insert(d->offset, leaf);
 		}
