@@ -1396,7 +1396,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="180"/>
         <source>PMTiles maps</source>
-        <translation type="unfinished"></translation>
+        <translation>PMTiles mapy</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="181"/>
