@@ -29,17 +29,18 @@ GPS log file formats.
 ![GPXSee - Linux](https://www.gpxsee.org/gallery/linux.png)
 
 ## Build
-Build requirements:
+### Prerequisites
 * Qt5 >= 5.15 or Qt6 >= 6.2 (Android builds require Qt6)
 * Zlib
 
-### Linux, OS X and Android
+### Steps
+#### Linux, OS X and Android
 ```shell
 lrelease gpxsee.pro
 qmake gpxsee.pro
 make
 ```
-### Windows
+#### Windows
 ```shell
 lrelease gpxsee.pro
 qmake ZLIB=path/to/zlib gpxsee.pro
