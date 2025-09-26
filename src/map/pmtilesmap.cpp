@@ -150,7 +150,7 @@ PMTilesMap::PMTilesMap(const QString &fileName, QObject *parent)
 	  >> hdr.c >> hdr.ic >> hdr.tc >> hdr.tt >> hdr.minZ >> hdr.maxZ
 	  >> hdr.minLon >> hdr.minLat >> hdr.maxLon >> hdr.maxLat;
 
-	if ((hdr.magic & 0xFFFFFFFFFFFFFF) != 0x73656c69544d50) {
+	if (stream.status() || (hdr.magic & 0xFFFFFFFFFFFFFF) != 0x73656c69544d50) {
 		_errorString = "Not a PMTiles file";
 		return;
 	}
