@@ -39,7 +39,7 @@ lrelease gpxsee.pro
 qmake gpxsee.pro
 make
 ```
-#### Windows
+### Windows
 ```shell
 lrelease gpxsee.pro
 qmake ZLIB=path/to/zlib gpxsee.pro
