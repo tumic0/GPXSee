@@ -193,11 +193,13 @@ QImage Util::svg2img(const QString &path, qreal ratio)
 
 QByteArray Util::gunzip(const QByteArray &data)
 {
-	QByteArray uba;
-	const quint8 *isp = (const quint8*)data.constData() + data.size() - 4;
 	quint32 size = 0;
+	const quint8 *isp = (const quint8*)data.constData() + data.size()
+	  - sizeof(size);
 	for (quint32 i = 0; i < sizeof(size); i++)
 		size |= ((quint32)*(isp + i)) << (i * 8);
+
+	QByteArray uba;
 	uba.resize(size);
 
 	z_stream strm;
