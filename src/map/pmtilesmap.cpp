@@ -168,6 +168,7 @@ PMTilesMap::PMTilesMap(const QString &fileName, QObject *parent)
 		_errorString = QString("%1: unsupported tile compression").arg(hdr.ic);
 		return;
 	}
+
 	_bounds = RectC(Coordinates(hdr.minLon / 10000000.0, hdr.maxLat / 10000000.0),
 	  Coordinates(hdr.maxLon / 10000000.0, hdr.minLat / 10000000.0));
 	if (!_bounds.isValid()) {
@@ -177,11 +178,13 @@ PMTilesMap::PMTilesMap(const QString &fileName, QObject *parent)
 
 	for (int i = hdr.minZ; i <= hdr.maxZ; i++)
 		_zoomsBase.append(Zoom(i, i));
+	_zi = _zoomsBase.size() - 1;
 
 	_tileOffset = hdr.tileOffset;
 	_leafOffset = hdr.leafOffset;
 	_tc = hdr.tc;
 	_ic = hdr.ic;
+	_scalable = (hdr.tt == 1);
 
 	// metadata
 	if (hdr.metadataLength) {
@@ -207,8 +210,6 @@ PMTilesMap::PMTilesMap(const QString &fileName, QObject *parent)
 		_errorString = "Error reading root directory";
 		return;
 	}
-	_zi = _zoomsBase.size() - 1;
-	_scalable = (hdr.tt == 1);
 
 	// tile size
 	QSize tileSize;
