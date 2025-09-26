@@ -336,28 +336,28 @@ qreal PMTilesMap::tileSize() const
 	return (_tileSize / coordinatesRatio());
 }
 
-const PMTilesMap::Directory *PMTilesMap::findTile(const QVector<Directory> &dir,
+const PMTilesMap::Directory *PMTilesMap::findDir(const QVector<Directory> &list,
   quint64 tileId)
 {
 	qint64 m = 0;
-	qint64 n = dir.size() - 1;
+	qint64 n = list.size() - 1;
 
 	while (m <= n) {
 		quint64 k = (n + m) >> 1;
-		qint64 cmp = (qint64)tileId - (qint64)dir.at(k).tileId;
+		qint64 cmp = (qint64)tileId - (qint64)list.at(k).tileId;
 		if (cmp > 0)
 			m = k + 1;
 		else if (cmp < 0)
 			n = k - 1;
 		else
-			return &dir.at(k);
+			return &list.at(k);
 	}
 
 	if (n >= 0) {
-		if (!dir.at(n).runLength)
-			return &dir.at(n);
-		if (tileId - dir.at(n).tileId < (quint64)dir.at(n).runLength)
-			return &dir.at(n);
+		if (!list.at(n).runLength)
+			return &list.at(n);
+		if (tileId - list.at(n).tileId < (quint64)list.at(n).runLength)
+			return &list.at(n);
 	}
 
 	return 0;
@@ -365,7 +365,7 @@ const PMTilesMap::Directory *PMTilesMap::findTile(const QVector<Directory> &dir,
 
 QByteArray PMTilesMap::tileData(quint64 id)
 {
-	const Directory *d = findTile(_root, id);
+	const Directory *d = findDir(_root, id);
 	if (!d)
 		return QByteArray();
 	if (!d->runLength) {
@@ -375,7 +375,7 @@ QByteArray PMTilesMap::tileData(quint64 id)
 			  d->length, _ic));
 			_cache.insert(d->offset, leaf);
 		}
-		const Directory *l = findTile(*leaf, id);
+		const Directory *l = findDir(*leaf, id);
 		return (l)
 		  ? readData(_tileOffset + l->offset, l->length, 1) : QByteArray();
 	} else

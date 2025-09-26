@@ -153,7 +153,7 @@ private:
 	void removeJob(PMTilesMapJob *job);
 	void cancelJobs(bool wait);
 
-	static const Directory *findTile(const QVector<Directory> &dir,
+	static const Directory *findDir(const QVector<Directory> &dir,
 	  quint64 tileId);
 
 	QFile _file;
