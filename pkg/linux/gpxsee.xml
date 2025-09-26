@@ -414,4 +414,13 @@
 		<glob pattern="*.cra"/>
 	</mime-type>
 
+	<mime-type type="application/vnd.pmtiles">
+		<comment>PMTiles Map File</comment>
+		<sub-class-of type="application/octet-stream"/>
+		<generic-icon name="application/octet-stream"/>
+		<magic>
+			<match type="string" offset="0" value="PMTiles"/>
+		</magic>
+		<glob pattern="*.pmtiles"/>
+	</mime-type>
 </mime-info>
