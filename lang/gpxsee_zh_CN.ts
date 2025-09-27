@@ -1392,7 +1392,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="180"/>
         <source>PMTiles maps</source>
-        <translation type="unfinished"></translation>
+        <translation>PMTiles 地图</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="181"/>
