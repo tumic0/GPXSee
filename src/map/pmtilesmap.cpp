@@ -178,6 +178,10 @@ PMTilesMap::PMTilesMap(const QString &fileName, QObject *parent)
 
 	for (int i = hdr.minZ; i <= hdr.maxZ; i++)
 		_zoomsBase.append(Zoom(i, i));
+	if (_zoomsBase.isEmpty()) {
+		_errorString = "Invalid zoom levels range";
+		return;
+	}
 	_zi = _zoomsBase.size() - 1;
 
 	_tileOffset = hdr.tileOffset;
