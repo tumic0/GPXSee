@@ -12,11 +12,12 @@
 
 OnlineMap::OnlineMap(const QString &fileName, const QString &name,
   const QString &url, const Range &zooms, const RectC &bounds, qreal tileRatio,
-  const QList<HTTPHeader> &headers, int tileSize, bool scalable, bool invertY,
-  bool quadTiles, QObject *parent)
+  const QList<HTTPHeader> &headers, int tileSize, bool mvt, bool invertY,
+  bool quadTiles, const QStringList &layers, QObject *parent)
     : Map(fileName, parent), _name(name), _zooms(zooms), _bounds(bounds),
 	_zoom(_zooms.max()), _tileSize(tileSize), _baseZoom(0), _mapRatio(1.0),
-	_tileRatio(tileRatio), _scalable(scalable), _scaledSize(0), _invertY(invertY)
+	_tileRatio(tileRatio), _mvt(mvt), _scaledSize(0),
+	_invertY(invertY), _style(0)
 {
 	_tileLoader = new TileLoader(QDir(ProgramPaths::tilesDir()).filePath(_name),
 	  this);
@@ -25,6 +26,25 @@ OnlineMap::OnlineMap(const QString &fileName, const QString &name,
 	connect(_tileLoader, &TileLoader::finished, this, &OnlineMap::tilesLoaded);
 
 	_baseZoom = _zooms.max();
+
+	if (_mvt) {
+		QByteArray ba(1, 0x1a);
+		QBuffer buffer(&ba);
+		QImageReader reader(&buffer);
+		_styles = MVTStyle::fromJSON(reader.text("Description").toUtf8());
+		_style = defaultStyle(layers);
+	}
+}
+
+int OnlineMap::defaultStyle(const QStringList &vectorLayers)
+{
+	for (int i = 0; i < _styles.size(); i++)
+		if (Util::contains(vectorLayers, _styles.at(i).layers()))
+			return i;
+
+	qWarning("%s: no matching MVT style found", qUtf8Printable(path()));
+
+	return 0;
 }
 
 QRectF OnlineMap::bounds()
@@ -78,7 +98,7 @@ int OnlineMap::zoomOut()
 }
 
 void OnlineMap::load(const Projection &in, const Projection &out,
-  qreal deviceRatio, bool hidpi, int layer)
+  qreal deviceRatio, bool hidpi, int style, int layer)
 {
 	Q_UNUSED(in);
 	Q_UNUSED(out);
@@ -87,15 +107,19 @@ void OnlineMap::load(const Projection &in, const Projection &out,
 	_mapRatio = hidpi ? deviceRatio : 1.0;
 	_zooms.setMax(_baseZoom);
 
-	if (_scalable) {
+	if (_mvt) {
 		_scaledSize = _tileSize * deviceRatio;
 		_tileRatio = deviceRatio;
+		if (style >= 0 && style < _styles.size())
+			_style = style;
 
 		for (int i = _baseZoom + 1; i <= OSM::ZOOMS.max(); i++) {
 			if (_tileSize * _tileRatio * (1U<<(i - _baseZoom)) > MAX_TILE_SIZE)
 				break;
 			_zooms.setMax(i);
 		}
+
+		QPixmapCache::clear();
 	}
 }
 
@@ -225,11 +249,11 @@ void OnlineMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 			drawTile(painter, pm, tp);
 		} else
 			renderTiles.append(OnlineMapTile(t.xy(), t.file(), _zoom, overzoom,
-			  _scaledSize, key));
+			  _scaledSize, _style, key));
 	}
 
 	if (!renderTiles.isEmpty()) {
-		if (flags & Map::Block || !_scalable) {
+		if (flags & Map::Block || !_mvt) {
 			QFuture<void> future = QtConcurrent::map(renderTiles,
 			  &OnlineMapTile::load);
 			future.waitForFinished();
@@ -275,4 +299,17 @@ void OnlineMap::clearCache()
 {
 	_tileLoader->clearCache();
 	QPixmapCache::clear();
+}
+
+QStringList OnlineMap::styles(int &defaultStyle) const
+{
+	QStringList list;
+	list.reserve(_styles.size());
+
+	for (int i = 0; i < _styles.size(); i++)
+		list.append(_styles.at(i).name());
+
+	defaultStyle = _style;
+
+	return list;
 }

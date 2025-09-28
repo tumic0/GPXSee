@@ -8,15 +8,16 @@
 #include <QBuffer>
 #include <QPixmap>
 #include <QtConcurrent>
+#include "mvtstyle.h"
 #include "map.h"
 
 class MBTile
 {
 public:
-	MBTile(int zoom, int overzoom, int scaledSize, const QPoint &xy,
+	MBTile(int zoom, int overzoom, int scaledSize, int style, const QPoint &xy,
 	  const QByteArray &data, const QString &key) : _zoom(zoom),
-	  _overzoom(overzoom), _scaledSize(scaledSize), _xy(xy), _data(data),
-	  _key(key) {}
+	  _overzoom(overzoom), _scaledSize(scaledSize), _style(style), _xy(xy),
+	  _data(data), _key(key) {}
 
 	const QPoint &xy() const {return _xy;}
 	const QString &key() const {return _key;}
@@ -24,9 +25,9 @@ public:
 
 	void load() {
 		if (_scaledSize) {
-			QByteArray format(_overzoom
-			  ? QByteArray::number(_zoom) + ';' + QByteArray::number(_overzoom)
-			  : QByteArray::number(_zoom));
+			QByteArray format(QByteArray::number(_zoom)
+			  + ';' + QByteArray::number(_overzoom)
+			  + ';' + QByteArray::number(_style));
 			QByteArray data(Util::gunzip(_data));
 			QBuffer buffer(&data);
 			QImageReader reader(&buffer, format);
@@ -43,6 +44,7 @@ private:
 	int _zoom;
 	int _overzoom;
 	int _scaledSize;
+	int _style;
 	QPoint _xy;
 	QByteArray _data;
 	QString _key;
@@ -96,8 +98,8 @@ public:
 	RectC llBounds() {return _bounds;}
 	qreal resolution(const QRectF &rect);
 
-	int zoom() const {return _zi;}
-	void setZoom(int zoom) {_zi = zoom;}
+	int zoom() const {return _zoom;}
+	void setZoom(int zoom) {_zoom = zoom;}
 	int zoomFit(const QSize &size, const RectC &rect);
 	int zoomIn();
 	int zoomOut();
@@ -108,8 +110,10 @@ public:
 	void draw(QPainter *painter, const QRectF &rect, Flags flags);
 
 	void load(const Projection &in, const Projection &out, qreal deviceRatio,
-	  bool hidpi, int layer);
+	  bool hidpi, int style, int layer);
 	void unload();
+
+	QStringList styles(int &defaultStyle) const;
 
 	bool isValid() const {return _valid;}
 	QString errorString() const {return _errorString;}
@@ -132,10 +136,11 @@ private:
 	bool getMaxZoom(int &zoom);
 	bool getZooms();
 	bool getBounds();
-	bool getTileSize();
+	bool getTileSizeAndStyle();
 	void getTileFormat();
 	void getTilePixelRatio();
 	void getName();
+	int defaultStyle(const QStringList &vectorLayers);
 	qreal tileSize() const;
 	qreal coordinatesRatio() const;
 	qreal imageRatio() const;
@@ -155,10 +160,12 @@ private:
 	QString _name;
 	RectC _bounds;
 	QVector<Zoom> _zooms, _zoomsBase;
-	int _zi;
+	QList<MVTStyle> _styles;
+	int _zoom;
 	int _tileSize;
+	int _style;
 	qreal _mapRatio, _tileRatio;
-	bool _scalable;
+	bool _mvt;
 	int _scaledSize;
 
 	QList<MBTilesMapJob*> _jobs;

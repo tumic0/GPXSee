@@ -7,24 +7,30 @@
 #include "common/range.h"
 #include "common/rectc.h"
 #include "map.h"
+#include "mvtstyle.h"
 #include "tileloader.h"
 
 class OnlineMapTile
 {
 public:
 	OnlineMapTile(const QPoint &xy, const QString &file, int zoom, int overzoom,
-	  int scaledSize, const QString &key) : _zoom(zoom), _overzoom(overzoom),
-	  _scaledSize(scaledSize), _xy(xy), _file(file), _key(key) {}
+	  int scaledSize, int style, const QString &key) : _zoom(zoom),
+	  _overzoom(overzoom), _scaledSize(scaledSize), _style(style), _xy(xy),
+	  _file(file), _key(key) {}
 
 	void load()
 	{
-		QByteArray format(_overzoom
-		  ? QByteArray::number(_zoom) + ';' + QByteArray::number(_overzoom)
-		  : QByteArray::number(_zoom));
-		QImageReader reader(_file, format);
-		if (_scaledSize)
+		if (_scaledSize) {
+			QByteArray format(QByteArray::number(_zoom)
+			  + ';' + QByteArray::number(_overzoom)
+			  + ';' + QByteArray::number(_style));
+			QImageReader reader(_file, format);
 			reader.setScaledSize(QSize(_scaledSize, _scaledSize));
-		_pixmap = QPixmap::fromImageReader(&reader);
+			_pixmap = QPixmap::fromImageReader(&reader);
+		} else {
+			QImageReader reader(_file);
+			_pixmap = QPixmap::fromImageReader(&reader);
+		}
 	}
 
 	const QPoint &xy() const {return _xy;}
@@ -35,6 +41,7 @@ private:
 	int _zoom;
 	int _overzoom;
 	int _scaledSize;
+	int _style;
 	QPoint _xy;
 	QString _file;
 	QString _key;
@@ -82,8 +89,8 @@ class OnlineMap : public Map
 public:
 	OnlineMap(const QString &fileName, const QString &name, const QString &url,
 	  const Range &zooms, const RectC &bounds, qreal tileRatio,
-	  const QList<HTTPHeader> &headers, int tileSize, bool scalable,
-	  bool invertY, bool quadTiles, QObject *parent = 0);
+	  const QList<HTTPHeader> &headers, int tileSize, bool mvt, bool invertY,
+	  bool quadTiles, const QStringList &layers, QObject *parent = 0);
 
 	QString name() const {return _name;}
 
@@ -103,14 +110,17 @@ public:
 	void draw(QPainter *painter, const QRectF &rect, Flags flags);
 
 	void load(const Projection &in, const Projection &out, qreal deviceRatio,
-	  bool hidpi, int layer);
+	  bool hidpi, int style, int layer);
 	void unload();
 	void clearCache();
+
+	QStringList styles(int &defaultStyle) const;
 
 private slots:
 	void jobFinished(OnlineMapJob *job);
 
 private:
+	int defaultStyle(const QStringList &vectorLayers);
 	int limitZoom(int zoom) const;
 	qreal tileSize() const;
 	qreal coordinatesRatio() const;
@@ -132,9 +142,11 @@ private:
 	int _tileSize;
 	int _baseZoom;
 	qreal _mapRatio, _tileRatio;
-	bool _scalable;
+	bool _mvt;
 	int _scaledSize;
 	bool _invertY;
+	QList<MVTStyle> _styles;
+	int _style;
 
 	QList<OnlineMapJob*> _jobs;
 };

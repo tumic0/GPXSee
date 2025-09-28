@@ -149,6 +149,7 @@ HEADERS += src/common/config.h \
     src/map/gmifile.h \
     src/map/imgjob.h \
     src/map/metatype.h \
+    src/map/mvtstyle.h \
     src/map/oruxmap.h \
     src/map/osmdroidmap.h \
     src/map/pmtilesmap.h \
@@ -374,6 +375,7 @@ SOURCES += src/main.cpp \
     src/map/filter.cpp \
     src/map/gemfmap.cpp \
     src/map/gmifile.cpp \
+    src/map/mvtstyle.cpp \
     src/map/oruxmap.cpp \
     src/map/osmdroidmap.cpp \
     src/map/pmtilesmap.cpp \

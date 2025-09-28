@@ -10,7 +10,7 @@
 
 MapSource::Config::Config() : type(OSM), zooms(OSM::ZOOMS), bounds(OSM::BOUNDS),
   format("image/png"), rest(false), tileRatio(1.0), tileSize(256),
-  scalable(false) {}
+  mvt(false) {}
 
 
 static CoordinateSystem coordinateSystem(QXmlStreamReader &reader)
@@ -122,9 +122,9 @@ void MapSource::tile(QXmlStreamReader &reader, Config &config)
 	}
 	if (attr.hasAttribute("type")) {
 		if (attr.value("type") == QLatin1String("raster"))
-			config.scalable = false;
+			config.mvt = false;
 		else if (attr.value("type") == QLatin1String("vector"))
-			config.scalable = true;
+			config.mvt = true;
 		else {
 			reader.raiseError("Invalid tile type");
 			return;
@@ -137,6 +137,14 @@ void MapSource::tile(QXmlStreamReader &reader, Config &config)
 			return;
 		} else
 			config.tileRatio = ratio;
+	}
+	if (attr.hasAttribute("vectorLayers")) {
+		QStringList layers(attr.value("vectorLayers").toString().split(','));
+		if (layers.isEmpty()) {
+			reader.raiseError("Invalid tile type");
+			return;
+		} else
+			config.layers = layers;
 	}
 }
 
@@ -271,15 +279,15 @@ Map *MapSource::create(const QString &path, const Projection &proj, bool *isDir)
 		case TMS:
 			return new OnlineMap(path, config.name, config.url, config.zooms,
 			  config.bounds, config.tileRatio, config.headers,
-			  config.tileSize, config.scalable, true, false);
+			  config.tileSize, config.mvt, true, false, config.layers);
 		case OSM:
 			return new OnlineMap(path, config.name, config.url, config.zooms,
 			 config.bounds, config.tileRatio, config.headers,
-			 config.tileSize, config.scalable, false, false);
+			 config.tileSize, config.mvt, false, false, config.layers);
 		case QuadTiles:
 			return new OnlineMap(path, config.name, config.url, config.zooms,
 			 config.bounds, config.tileRatio, config.headers,
-			 config.tileSize, config.scalable, false, true);
+			 config.tileSize, config.mvt, false, true, config.layers);
 		default:
 			return new InvalidMap(path, "Invalid map type");
 	}

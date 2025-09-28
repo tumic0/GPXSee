@@ -20,10 +20,11 @@ MapsforgeMap::MapsforgeMap(const QString &fileName, QObject *parent)
 }
 
 void MapsforgeMap::load(const Projection &in, const Projection &out,
-  qreal deviceRatio, bool hidpi, int layer)
+  qreal deviceRatio, bool hidpi, int style, int layer)
 {
 	Q_UNUSED(in);
 	Q_UNUSED(hidpi);
+	Q_UNUSED(style);
 
 	_tileRatio = deviceRatio;
 	_projection = out;

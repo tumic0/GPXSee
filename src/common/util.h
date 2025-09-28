@@ -21,6 +21,7 @@ namespace Util
 	bool isSQLiteDB(const QString &path, QString &errorString);
 	QImage svg2img(const QString &path, qreal ratio);
 	QByteArray gunzip(const QByteArray &data);
+	bool contains(const QStringList &list, const QStringList &values);
 }
 
 #endif // UTIL_H

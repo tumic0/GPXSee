@@ -5,36 +5,37 @@
 #include <QtConcurrent>
 #include <QImageReader>
 #include "common/rectc.h"
+#include "mvtstyle.h"
 #include "map.h"
 
 class PMTile
 {
 public:
-	PMTile(int zoom, int overzoom, int scaledSize, const QPoint &xy,
+	PMTile(int zoom, int overzoom, int scaledSize, int style, const QPoint &xy,
 	  const QByteArray &data, quint8 tc, const QString &key)
-	  : _zoom(zoom), _overzoom(overzoom), _scaledSize(scaledSize), _xy(xy),
-	  _data(data), _key(key), _tc(tc) {}
+	  : _zoom(zoom), _overzoom(overzoom), _scaledSize(scaledSize),
+	  _style(style), _xy(xy), _data(data), _key(key), _tc(tc) {}
 
 	const QPoint &xy() const {return _xy;}
 	const QString &key() const {return _key;}
 	const QPixmap &pixmap() const {return _pixmap;}
 
 	void load() {
-		QByteArray format(_overzoom
-		  ? QByteArray::number(_zoom) + ';' + QByteArray::number(_overzoom)
-		  : QByteArray::number(_zoom));
-		if (_tc == 2) {
-			QByteArray data(Util::gunzip(_data));
+		QByteArray data;
+
+		if (_scaledSize) {
+			QByteArray format(QByteArray::number(_zoom)
+			  + ';' + QByteArray::number(_overzoom)
+			  + ';' + QByteArray::number(_style));
+			data = (_tc == 2) ? Util::gunzip(_data) : _data;
 			QBuffer buffer(&data);
 			QImageReader reader(&buffer, format);
-			if (_scaledSize)
-				reader.setScaledSize(QSize(_scaledSize, _scaledSize));
+			reader.setScaledSize(QSize(_scaledSize, _scaledSize));
 			_pixmap = QPixmap::fromImageReader(&reader);
 		} else {
-			QBuffer buffer(&_data);
-			QImageReader reader(&buffer, format);
-			if (_scaledSize)
-				reader.setScaledSize(QSize(_scaledSize, _scaledSize));
+			data = (_tc == 2) ? Util::gunzip(_data) : _data;
+			QBuffer buffer(&data);
+			QImageReader reader(&buffer);
 			_pixmap = QPixmap::fromImageReader(&reader);
 		}
 	}
@@ -43,6 +44,7 @@ private:
 	int _zoom;
 	int _overzoom;
 	int _scaledSize;
+	int _style;
 	QPoint _xy;
 	QByteArray _data;
 	QString _key;
@@ -99,8 +101,8 @@ public:
 	RectC llBounds() {return _bounds;}
 	qreal resolution(const QRectF &rect);
 
-	int zoom() const {return _zi;}
-	void setZoom(int zoom) {_zi = zoom;}
+	int zoom() const {return _zoom;}
+	void setZoom(int zoom) {_zoom = zoom;}
 	int zoomFit(const QSize &size, const RectC &rect);
 	int zoomIn();
 	int zoomOut();
@@ -111,8 +113,10 @@ public:
 	void draw(QPainter *painter, const QRectF &rect, Flags flags);
 
 	void load(const Projection &in, const Projection &out, qreal deviceRatio,
-	  bool hidpi, int layer);
+	  bool hidpi, int style, int layer);
 	void unload();
+
+	QStringList styles(int &defaultStyle) const;
 
 	bool isValid() const {return _valid;}
 	QString errorString() const {return _errorString;}
@@ -141,6 +145,8 @@ private:
 	QByteArray readData(quint64 offset, quint64 size, quint8 compression);
 	QVector<Directory> readDir(quint64 offset, quint64 size, quint8 compression);
 
+	int defaultStyle(const QStringList &vectorLayers);
+
 	QPointF tilePos(const QPointF &tl, const QPoint &tc, const QPoint &tile,
 	  unsigned overzoom) const;
 	qreal tileSize() const;
@@ -164,10 +170,12 @@ private:
 	quint64 _tileOffset, _leafOffset;
 	quint8 _tc, _ic;
 	QVector<Zoom> _zooms, _zoomsBase;
-	int _zi;
+	QList<MVTStyle> _styles;
+	int _zoom;
 	int _tileSize;
+	int _style;
 	qreal _mapRatio, _tileRatio;
-	bool _scalable;
+	bool _mvt;
 	int _scaledSize;
 
 	QList<PMTilesMapJob*> _jobs;

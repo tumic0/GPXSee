@@ -82,10 +82,11 @@ IMGMap::IMGMap(const QString &fileName, bool GMAP, QObject *parent)
 }
 
 void IMGMap::load(const Projection &in, const Projection &out,
-  qreal devicelRatio, bool hidpi, int layer)
+  qreal devicelRatio, bool hidpi, int style, int layer)
 {
 	Q_UNUSED(in);
 	Q_UNUSED(hidpi);
+	Q_UNUSED(style);
 
 	_tileRatio = devicelRatio;
 	_projection = out;

@@ -43,7 +43,8 @@ private:
 		QList<HTTPHeader> headers;
 		qreal tileRatio;
 		int tileSize;
-		bool scalable;
+		bool mvt;
+		QStringList layers;
 
 		Config();
 	};

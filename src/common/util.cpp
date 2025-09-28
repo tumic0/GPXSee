@@ -218,3 +218,12 @@ QByteArray Util::gunzip(const QByteArray &data)
 
 	return (ret == Z_STREAM_END) ? uba : QByteArray();
 }
+
+bool Util::contains(const QStringList &list, const QStringList &values)
+{
+	for (int i = 0; i < values.size(); i++)
+		if (!list.contains(values.at(i)))
+			return false;
+
+	return true;
+}

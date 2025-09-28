@@ -97,6 +97,7 @@ public:
 	void setDevicePixelRatio(qreal ratio);
 	void clearMapCache();
 	void fitContentToSize();
+	void selectStyle(int style);
 	void selectLayer(int layer);
 
 	RectC boundingRect() const;
@@ -213,6 +214,7 @@ private:
 	bool _infoBackground;
 
 	bool _hillShading;
+	int _style;
 	int _layer;
 
 	int _digitalZoom;

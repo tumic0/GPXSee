@@ -68,7 +68,8 @@ private slots:
 	void showGraphGrids(bool show);
 	void showGraphSliderInfo(bool show);
 	void showPathMarkerInfo(QAction *action);
-	void selectMapLayers(QAction *action);
+	void selectMapStyle(QAction *action);
+	void selectMapLayer(QAction *action);
 #ifdef Q_OS_ANDROID
 	void showGraphTabs(bool show);
 #else // Q_OS_ANDROID
@@ -173,6 +174,7 @@ private:
 	void updateDataDEMDownloadAction();
 	void updateMapDEMDownloadAction();
 	void updateMapLayers();
+	void updateMapStyles();
 	void updateHillShading();
 #ifndef Q_OS_ANDROID
 	void updateRecentFiles(const QString &fileName);
@@ -223,6 +225,7 @@ private:
 #endif // Q_OS_ANDROID
 	QMenu *_poiMenu;
 	QMenu *_mapMenu;
+	QMenu *_mapStylesMenu;
 	QMenu *_mapLayersMenu;
 #ifndef Q_OS_ANDROID
 	QMenu *_recentFilesMenu;
@@ -313,6 +316,7 @@ private:
 	QAction *_clearRecentFilesAction;
 	QAction *_recentFilesEnd;
 #endif // Q_OS_ANDROID
+	QActionGroup *_mapStylesActionGroup;
 	QActionGroup *_mapLayersActionGroup;
 
 	QLabel *_fileNameLabel;
