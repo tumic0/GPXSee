@@ -33,7 +33,7 @@ void MapsforgeMap::load(const Projection &in, const Projection &out,
 	_data.load();
 
 	if (style < 0 || style >= styles().size())
-		style = styles().size() - 1;
+		style = 0;
 	_style = new Style(styles().at(style), _data, _tileRatio, layer);
 
 	updateTransform();
@@ -226,7 +226,7 @@ QStringList MapsforgeMap::styles(int &defaultStyle) const
 	for (int i = 0; i < styles().size(); i++)
 		list.append(QFileInfo(styles().at(i)).baseName());
 
-	defaultStyle = list.size() - 1;
+	defaultStyle = 0;
 
 	return list;
 }
@@ -254,8 +254,6 @@ Map *MapsforgeMap::create(const QString &path, const Projection &proj,
 
 MapsforgeMap::StyleList::StyleList()
 {
-	append(":/style/GPXSee.xml");
-
 	QDir dir(ProgramPaths::styleDir());
 	QFileInfoList styles(dir.entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot));
 
@@ -266,6 +264,9 @@ MapsforgeMap::StyleList::StyleList()
 		for (int j = 0; j < files.size(); j++)
 			append(files.at(j).absoluteFilePath());
 	}
+
+	if (isEmpty())
+		append(":/style/GPXSee.xml");
 }
 
 MapsforgeMap::StyleList &MapsforgeMap::styles()
