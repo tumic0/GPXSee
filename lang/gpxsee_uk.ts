@@ -760,7 +760,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="704"/>
         <source>Styles</source>
-        <translation type="unfinished"></translation>
+        <translation>Стилі</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="707"/>
