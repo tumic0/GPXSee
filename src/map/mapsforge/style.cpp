@@ -864,29 +864,23 @@ bool Style::loadXml(const QString &path, const MapData &data, qreal ratio,
 	return !reader.error();
 }
 
-void Style::load(const MapData &data, qreal ratio, int layer)
+Style::Style(const QString &path, const MapData &data, qreal ratio, int layer)
 {
-	QString path(ProgramPaths::renderthemeFile());
-
-	if (!QFileInfo::exists(path) || !loadXml(path, data, ratio, layer))
-		loadXml(":/style/style.xml", data, ratio, layer);
-
-	std::sort(_symbols.begin(), _symbols.end());
-	std::sort(_lineSymbols.begin(), _lineSymbols.end());
-	std::stable_sort(_labels.begin(), _labels.end());
-	std::stable_sort(_pathLabels.begin(), _pathLabels.end());
-}
-
-void Style::clear()
-{
-	_paths = QList<PathRender>();
-	_circles = QList<CircleRender>();
-	_pathLabels = QList<TextRender>();
-	_labels = QList<TextRender>();
-	_symbols = QList<Symbol>();
-	_lineSymbols = QList<Symbol>();
-	_hillShading = HillShadingRender();
-	_menu = Menu();
+	if (!loadXml(path, data, ratio, layer)) {
+		_paths = QList<PathRender>();
+		_circles = QList<CircleRender>();
+		_pathLabels = QList<TextRender>();
+		_labels = QList<TextRender>();
+		_symbols = QList<Symbol>();
+		_lineSymbols = QList<Symbol>();
+		_hillShading = HillShadingRender();
+		_menu = Menu();
+	} else {
+		std::sort(_symbols.begin(), _symbols.end());
+		std::sort(_lineSymbols.begin(), _lineSymbols.end());
+		std::stable_sort(_labels.begin(), _labels.end());
+		std::stable_sort(_pathLabels.begin(), _pathLabels.end());
+	}
 }
 
 QList<const Style::PathRender *> Style::paths(int zoom, bool closed,

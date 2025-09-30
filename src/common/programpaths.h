@@ -18,7 +18,6 @@ namespace ProgramPaths
 	QString projectionsFile();
 	QString pcsFile();
 	QString typFile();
-	QString renderthemeFile();
 }
 
 #endif // PROGRAMPATHS_H

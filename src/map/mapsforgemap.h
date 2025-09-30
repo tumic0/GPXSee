@@ -71,6 +71,7 @@ public:
 
 	void draw(QPainter *painter, const QRectF &rect, Flags flags);
 
+	QStringList styles(int &defaultStyle) const;
 	QStringList layers(const QString &lang, int &defaultLayer) const;
 	bool hillShading() const;
 
@@ -83,6 +84,12 @@ private slots:
 	void jobFinished(MapsforgeMapJob *job);
 
 private:
+	class StyleList : public QStringList
+	{
+	public:
+		StyleList();
+	};
+
 	QString key(int zoom, const QPoint &xy) const;
 	Transform transform(int zoom) const;
 	void updateTransform();
@@ -91,8 +98,11 @@ private:
 	void removeJob(MapsforgeMapJob *job);
 	void cancelJobs(bool wait);
 
+	static StyleList &styles();
+
 	Mapsforge::MapData _data;
-	Mapsforge::Style _style;
+	Mapsforge::Style *_style;
+	int _styleId;
 	int _zoom;
 
 	Projection _projection;

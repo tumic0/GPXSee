@@ -260,8 +260,7 @@ public:
 		QImage _img;
 	};
 
-	void load(const MapData &data, qreal ratio, int layer);
-	void clear();
+	Style(const QString &path, const MapData &data, qreal ratio, int layer);
 
 	QList<const PathRender *> paths(int zoom, bool closed,
 	  const QVector<MapData::Tag> &tags) const;

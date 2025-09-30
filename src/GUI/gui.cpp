@@ -1801,6 +1801,8 @@ void GUI::showPathMarkerInfo(QAction *action)
 void GUI::selectMapStyle(QAction *action)
 {
 	_mapView->selectStyle(action->data().toInt());
+	updateMapLayers();
+	updateHillShading();
 }
 
 void GUI::selectMapLayer(QAction *action)

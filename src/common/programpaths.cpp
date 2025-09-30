@@ -18,7 +18,6 @@
 #define GCS_FILE         "gcs.csv"
 #define PCS_FILE         "pcs.csv"
 #define TYP_FILE         "style.typ"
-#define RENDERTHEME_FILE "style.xml"
 
 #ifdef Q_OS_ANDROID
 #define DATA_LOCATION QStandardPaths::GenericDataLocation
@@ -153,9 +152,4 @@ QString ProgramPaths::pcsFile()
 QString ProgramPaths::typFile()
 {
 	return QDir(styleDir()).filePath(TYP_FILE);
-}
-
-QString ProgramPaths::renderthemeFile()
-{
-	return QDir(styleDir()).filePath(RENDERTHEME_FILE);
 }
