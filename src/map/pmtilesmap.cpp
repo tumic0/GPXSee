@@ -55,9 +55,8 @@ static quint64 id(unsigned z, const QPoint &p)
 	unsigned x = p.x();
 	unsigned y = p.y();
 	quint64 acc = ((1 << (z * 2)) - 1) / 3;
-	int a = z - 1;
 
-	while (a >= 0) {
+	for (int a = z - 1; a >= 0; a--) {
 		quint64 s = 1 << a;
 		quint64 rx = s & x;
 		quint64 ry = s & y;
@@ -70,7 +69,6 @@ static quint64 id(unsigned z, const QPoint &p)
 			}
 			std::swap(x, y);
 		}
-		a--;
 	}
 
 	return acc;
