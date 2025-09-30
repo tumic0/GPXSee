@@ -14,7 +14,7 @@ using namespace Mapsforge;
 #define EPSILON     1e-6
 
 MapsforgeMap::MapsforgeMap(const QString &fileName, QObject *parent)
-  : Map(fileName, parent), _data(fileName), _style(0), _styleId(0), _zoom(0),
+  : Map(fileName, parent), _data(fileName), _style(0), _zoom(0),
   _projection(PCS::pcs(3857)), _tileRatio(1.0)
 {
 	if (_data.isValid())
@@ -26,15 +26,15 @@ void MapsforgeMap::load(const Projection &in, const Projection &out,
 {
 	Q_UNUSED(in);
 	Q_UNUSED(hidpi);
-	Q_UNUSED(style);
 
 	_tileRatio = deviceRatio;
 	_projection = out;
 
 	_data.load();
 
-	_styleId = (style < 0 || style >= styles().size()) ? 0 : style;
-	_style = new Style(styles().at(_styleId), _data, _tileRatio, layer);
+	if (style < 0 || style >= styles().size())
+		style = styles().size() - 1;
+	_style = new Style(styles().at(style), _data, _tileRatio, layer);
 
 	updateTransform();
 
@@ -226,7 +226,7 @@ QStringList MapsforgeMap::styles(int &defaultStyle) const
 	for (int i = 0; i < styles().size(); i++)
 		list.append(QFileInfo(styles().at(i)).baseName());
 
-	defaultStyle = _styleId;
+	defaultStyle = list.size() - 1;
 
 	return list;
 }

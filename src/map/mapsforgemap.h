@@ -102,7 +102,6 @@ private:
 
 	Mapsforge::MapData _data;
 	Mapsforge::Style *_style;
-	int _styleId;
 	int _zoom;
 
 	Projection _projection;
