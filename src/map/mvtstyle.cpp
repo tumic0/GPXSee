@@ -13,6 +13,15 @@ static QStringList stringlist(const QJsonArray &array)
 	return list;
 }
 
+bool MVTStyle::matches(const QStringList &layers) const
+{
+	for (int i = 0; i < _layers.size(); i++)
+		if (!layers.contains(_layers.at(i)))
+			return false;
+
+	return true;
+}
+
 QList<MVTStyle> MVTStyle::fromJSON(const QByteArray &json)
 {
 	QList<MVTStyle> list;

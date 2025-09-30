@@ -39,7 +39,7 @@ OnlineMap::OnlineMap(const QString &fileName, const QString &name,
 int OnlineMap::defaultStyle(const QStringList &vectorLayers)
 {
 	for (int i = 0; i < _styles.size(); i++)
-		if (Util::contains(vectorLayers, _styles.at(i).layers()))
+		if (_styles.at(i).matches(vectorLayers))
 			return i;
 
 	qWarning("%s: no matching MVT style found", qUtf8Printable(path()));

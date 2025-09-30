@@ -10,7 +10,7 @@ public:
 	  : _name(name), _layers(layers) {}
 
 	const QString &name() const {return _name;}
-	const QStringList &layers() const {return _layers;}
+	bool matches(const QStringList &layers) const;
 
 	static QList<MVTStyle> fromJSON(const QByteArray &json);
 
