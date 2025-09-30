@@ -70,17 +70,17 @@
 <context>
     <name>CorosMap</name>
     <message>
-        <location filename="../src/map/corosmap.cpp" line="376"/>
+        <location filename="../src/map/corosmap.cpp" line="377"/>
         <source>All</source>
         <translation type="unfinished">Все</translation>
     </message>
     <message>
-        <location filename="../src/map/corosmap.cpp" line="376"/>
+        <location filename="../src/map/corosmap.cpp" line="377"/>
         <source>Landscape</source>
         <translation type="unfinished">Ландшафтная</translation>
     </message>
     <message>
-        <location filename="../src/map/corosmap.cpp" line="376"/>
+        <location filename="../src/map/corosmap.cpp" line="377"/>
         <source>Topo</source>
         <translation type="unfinished"></translation>
     </message>
@@ -383,14 +383,14 @@
 <context>
     <name>GUI</name>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1026"/>
-        <location filename="../src/GUI/gui.cpp" line="1029"/>
+        <location filename="../src/GUI/gui.cpp" line="1032"/>
+        <location filename="../src/GUI/gui.cpp" line="1035"/>
         <source>Open file</source>
         <translation>Открыть файл</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1254"/>
-        <location filename="../src/GUI/gui.cpp" line="1257"/>
+        <location filename="../src/GUI/gui.cpp" line="1260"/>
+        <location filename="../src/GUI/gui.cpp" line="1263"/>
         <source>Open POI file</source>
         <translation>Открыть файл с точками POI</translation>
     </message>
@@ -401,8 +401,8 @@
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="214"/>
-        <location filename="../src/GUI/gui.cpp" line="939"/>
-        <location filename="../src/GUI/gui.cpp" line="940"/>
+        <location filename="../src/GUI/gui.cpp" line="945"/>
+        <location filename="../src/GUI/gui.cpp" line="946"/>
         <source>Keyboard controls</source>
         <translation>Управление с помощью клавиатуры</translation>
     </message>
@@ -417,12 +417,12 @@
         <translation>Обновить</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="827"/>
+        <location filename="../src/GUI/gui.cpp" line="833"/>
         <source>Show</source>
         <translation>Показать</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="817"/>
+        <location filename="../src/GUI/gui.cpp" line="823"/>
         <source>File</source>
         <translation>Файл</translation>
     </message>
@@ -458,8 +458,8 @@
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="210"/>
-        <location filename="../src/GUI/gui.cpp" line="982"/>
-        <location filename="../src/GUI/gui.cpp" line="1000"/>
+        <location filename="../src/GUI/gui.cpp" line="988"/>
+        <location filename="../src/GUI/gui.cpp" line="1006"/>
         <source>Paths</source>
         <translation>Пути</translation>
     </message>
@@ -515,7 +515,7 @@
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="355"/>
-        <location filename="../src/GUI/gui.cpp" line="958"/>
+        <location filename="../src/GUI/gui.cpp" line="964"/>
         <source>Next map</source>
         <translation>Следующая карта</translation>
     </message>
@@ -525,490 +525,495 @@
         <translation>Показывать координаты курсора</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="376"/>
+        <location filename="../src/GUI/gui.cpp" line="379"/>
         <source>Show position</source>
         <translation>Показать позицию</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="382"/>
+        <location filename="../src/GUI/gui.cpp" line="385"/>
         <source>Follow position</source>
         <translation>Следовать позиции</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="387"/>
+        <location filename="../src/GUI/gui.cpp" line="390"/>
         <source>Show coordinates</source>
         <translation>Показать координаты</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="393"/>
+        <location filename="../src/GUI/gui.cpp" line="396"/>
         <source>Show motion info</source>
         <translation>Показать информацию о движении</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="400"/>
+        <location filename="../src/GUI/gui.cpp" line="403"/>
         <source>Show tracks</source>
         <translation>Показывать треки</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="405"/>
+        <location filename="../src/GUI/gui.cpp" line="408"/>
         <source>Show routes</source>
         <translation>Показывать маршруты</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="410"/>
+        <location filename="../src/GUI/gui.cpp" line="413"/>
         <source>Show waypoints</source>
         <translation>Показывать точки</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="416"/>
+        <location filename="../src/GUI/gui.cpp" line="419"/>
         <source>Show areas</source>
         <translation>Показывать области</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="421"/>
+        <location filename="../src/GUI/gui.cpp" line="424"/>
         <source>Waypoint icons</source>
         <translation>Иконки путевых точек</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="426"/>
+        <location filename="../src/GUI/gui.cpp" line="429"/>
         <source>Waypoint labels</source>
         <translation>Подписи точек</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="436"/>
+        <location filename="../src/GUI/gui.cpp" line="439"/>
         <source>km/mi markers</source>
         <translation>км/мл отметки</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="441"/>
+        <location filename="../src/GUI/gui.cpp" line="444"/>
         <source>Legend</source>
         <translation>Легенда</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="449"/>
+        <location filename="../src/GUI/gui.cpp" line="452"/>
         <source>Do not show</source>
         <translation>Не показывать</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="453"/>
+        <location filename="../src/GUI/gui.cpp" line="456"/>
         <source>Marker only</source>
         <translation>Только отметки</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="457"/>
+        <location filename="../src/GUI/gui.cpp" line="460"/>
         <source>Date/time</source>
         <translation>Дата/время</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="461"/>
+        <location filename="../src/GUI/gui.cpp" line="464"/>
         <source>Coordinates</source>
         <translation>Координаты</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="465"/>
+        <location filename="../src/GUI/gui.cpp" line="468"/>
         <source>Use styles</source>
         <translation>Использовать стили</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="483"/>
+        <location filename="../src/GUI/gui.cpp" line="486"/>
         <source>Show local DEM tiles</source>
         <translation>Показать локальные DEM тайлы</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="486"/>
+        <location filename="../src/GUI/gui.cpp" line="489"/>
         <source>Show hillshading</source>
         <translation>Показывать отмывку рельефа</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="494"/>
+        <location filename="../src/GUI/gui.cpp" line="497"/>
         <source>Show graphs</source>
         <translation>Показывать графики</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="515"/>
+        <location filename="../src/GUI/gui.cpp" line="518"/>
         <source>Show grid</source>
         <translation>Показывать сетку</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="520"/>
+        <location filename="../src/GUI/gui.cpp" line="523"/>
         <source>Show slider info</source>
         <translation>Показывать значение на слайдере</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="526"/>
+        <location filename="../src/GUI/gui.cpp" line="529"/>
         <source>Show tabs</source>
         <translation>Показать вкладки</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="532"/>
-        <location filename="../src/GUI/gui.cpp" line="961"/>
+        <location filename="../src/GUI/gui.cpp" line="535"/>
+        <location filename="../src/GUI/gui.cpp" line="967"/>
         <source>Next graph tab</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="537"/>
-        <location filename="../src/GUI/gui.cpp" line="963"/>
+        <location filename="../src/GUI/gui.cpp" line="540"/>
+        <location filename="../src/GUI/gui.cpp" line="969"/>
         <source>Previous graph tab</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="545"/>
+        <location filename="../src/GUI/gui.cpp" line="548"/>
         <source>Show toolbars</source>
         <translation>Показывать панель инструментов</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="552"/>
+        <location filename="../src/GUI/gui.cpp" line="555"/>
         <source>Total time</source>
         <translation>Общее время</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="557"/>
-        <location filename="../src/GUI/gui.cpp" line="1452"/>
-        <location filename="../src/GUI/gui.cpp" line="1513"/>
+        <location filename="../src/GUI/gui.cpp" line="560"/>
+        <location filename="../src/GUI/gui.cpp" line="1458"/>
+        <location filename="../src/GUI/gui.cpp" line="1519"/>
         <source>Moving time</source>
         <translation>Время движения</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="564"/>
+        <location filename="../src/GUI/gui.cpp" line="567"/>
         <source>Metric</source>
         <translation>Метрические</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="569"/>
+        <location filename="../src/GUI/gui.cpp" line="572"/>
         <source>Imperial</source>
         <translation>Британские</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="575"/>
+        <location filename="../src/GUI/gui.cpp" line="578"/>
         <source>Nautical</source>
         <translation>Морские</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="583"/>
+        <location filename="../src/GUI/gui.cpp" line="586"/>
         <source>Decimal degrees (DD)</source>
         <translation>Десятичные градусы (DD)</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="589"/>
+        <location filename="../src/GUI/gui.cpp" line="592"/>
         <source>Degrees and decimal minutes (DMM)</source>
         <translation>Градусы, десятичные минуты (DMM)</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="596"/>
+        <location filename="../src/GUI/gui.cpp" line="599"/>
         <source>Degrees, minutes, seconds (DMS)</source>
         <translation>Градусы, минуты, секунды (DMS)</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="603"/>
+        <location filename="../src/GUI/gui.cpp" line="606"/>
         <source>Fullscreen mode</source>
         <translation>Полноэкранный режим</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="610"/>
+        <location filename="../src/GUI/gui.cpp" line="613"/>
         <source>Options...</source>
         <translation>Параметры…</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="617"/>
+        <location filename="../src/GUI/gui.cpp" line="620"/>
         <source>Next</source>
         <translation>Следующий</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="622"/>
+        <location filename="../src/GUI/gui.cpp" line="625"/>
         <source>Previous</source>
         <translation>Предыдущий</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="627"/>
+        <location filename="../src/GUI/gui.cpp" line="630"/>
         <source>Last</source>
         <translation>Последний</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="632"/>
+        <location filename="../src/GUI/gui.cpp" line="635"/>
         <source>First</source>
         <translation>Первый</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="670"/>
+        <location filename="../src/GUI/gui.cpp" line="673"/>
         <source>Open recent</source>
         <translation>Открыть недавние</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="701"/>
+        <location filename="../src/GUI/gui.cpp" line="704"/>
+        <source>Styles</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/GUI/gui.cpp" line="707"/>
         <source>Layers</source>
         <translation>Слои</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="726"/>
+        <location filename="../src/GUI/gui.cpp" line="732"/>
         <source>Position info</source>
         <translation>Информация о позиции</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="752"/>
+        <location filename="../src/GUI/gui.cpp" line="758"/>
         <source>DEM</source>
         <translation>DEM</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="760"/>
+        <location filename="../src/GUI/gui.cpp" line="766"/>
         <source>Position</source>
         <translation>Позиция</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="772"/>
+        <location filename="../src/GUI/gui.cpp" line="778"/>
         <source>Units</source>
         <translation>Единицы</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="777"/>
+        <location filename="../src/GUI/gui.cpp" line="783"/>
         <source>Coordinates format</source>
         <translation>Формат координат</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="908"/>
-        <location filename="../src/GUI/gui.cpp" line="916"/>
+        <location filename="../src/GUI/gui.cpp" line="914"/>
+        <location filename="../src/GUI/gui.cpp" line="922"/>
         <source>Version %1</source>
         <translation>Версия %1</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="911"/>
-        <location filename="../src/GUI/gui.cpp" line="920"/>
+        <location filename="../src/GUI/gui.cpp" line="917"/>
+        <location filename="../src/GUI/gui.cpp" line="926"/>
         <source>GPXSee is distributed under the terms of the GNU General Public License version 3. For more info about GPXSee visit the project homepage at %1.</source>
         <translation>GPXSee распространяется в соответствии с условиями GNU General Public License 3 версии. Для получения дополнительной информации о GPXSee посетите страницу проекта %1.</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="949"/>
+        <location filename="../src/GUI/gui.cpp" line="955"/>
         <source>Append file</source>
         <translation>Добавить файл</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="950"/>
+        <location filename="../src/GUI/gui.cpp" line="956"/>
         <source>Next/Previous</source>
         <translation>Следующий/предыдущий</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="952"/>
+        <location filename="../src/GUI/gui.cpp" line="958"/>
         <source>Toggle graph type</source>
         <translation>Переключить тип графика</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="954"/>
+        <location filename="../src/GUI/gui.cpp" line="960"/>
         <source>Toggle time type</source>
         <translation>Переключить тип времени</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="956"/>
+        <location filename="../src/GUI/gui.cpp" line="962"/>
         <source>Toggle position info</source>
         <translation>Переключить информацию о позиции</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="360"/>
-        <location filename="../src/GUI/gui.cpp" line="960"/>
+        <location filename="../src/GUI/gui.cpp" line="966"/>
         <source>Previous map</source>
         <translation>Предыдущая карта</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="964"/>
+        <location filename="../src/GUI/gui.cpp" line="970"/>
         <source>Zoom in</source>
         <translation>Увеличить</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="966"/>
+        <location filename="../src/GUI/gui.cpp" line="972"/>
         <source>Zoom out</source>
         <translation>Уменьшить</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="968"/>
+        <location filename="../src/GUI/gui.cpp" line="974"/>
         <source>Digital zoom</source>
         <translation>Цифровой зум</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="969"/>
+        <location filename="../src/GUI/gui.cpp" line="975"/>
         <source>Zoom</source>
         <translation>Zoom</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="970"/>
+        <location filename="../src/GUI/gui.cpp" line="976"/>
         <source>Copy coordinates</source>
         <translation>Скопировать координаты</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="971"/>
+        <location filename="../src/GUI/gui.cpp" line="977"/>
         <source>Left Click</source>
         <translation>Левый клик мышью</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="991"/>
-        <location filename="../src/GUI/gui.cpp" line="1009"/>
+        <location filename="../src/GUI/gui.cpp" line="997"/>
+        <location filename="../src/GUI/gui.cpp" line="1015"/>
         <source>DEM directory:</source>
         <translation>Каталог с DEM данными:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="993"/>
-        <location filename="../src/GUI/gui.cpp" line="1011"/>
+        <location filename="../src/GUI/gui.cpp" line="999"/>
+        <location filename="../src/GUI/gui.cpp" line="1017"/>
         <source>Styles directory:</source>
         <translation>Каталог со стилями:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="995"/>
-        <location filename="../src/GUI/gui.cpp" line="1013"/>
+        <location filename="../src/GUI/gui.cpp" line="1001"/>
+        <location filename="../src/GUI/gui.cpp" line="1019"/>
         <source>Symbols directory:</source>
         <translation>Каталог символов:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1061"/>
+        <location filename="../src/GUI/gui.cpp" line="1067"/>
         <source>Open directory</source>
         <translation>Открыть каталог</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1130"/>
+        <location filename="../src/GUI/gui.cpp" line="1136"/>
         <source>Error loading geo URI:</source>
         <translation>Ошибка загрузки гео URI:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1136"/>
-        <location filename="../src/GUI/gui.cpp" line="1176"/>
-        <location filename="../src/GUI/gui.cpp" line="1864"/>
-        <location filename="../src/GUI/gui.cpp" line="1969"/>
+        <location filename="../src/GUI/gui.cpp" line="1142"/>
+        <location filename="../src/GUI/gui.cpp" line="1182"/>
+        <location filename="../src/GUI/gui.cpp" line="1877"/>
+        <location filename="../src/GUI/gui.cpp" line="1982"/>
         <source>Don&apos;t show again</source>
         <translation>Больше не показывать</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1437"/>
-        <location filename="../src/GUI/gui.cpp" line="1495"/>
+        <location filename="../src/GUI/gui.cpp" line="1443"/>
+        <location filename="../src/GUI/gui.cpp" line="1501"/>
         <source>Areas</source>
         <translation>Области</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1464"/>
-        <location filename="../src/GUI/gui.cpp" line="1467"/>
-        <location filename="../src/GUI/gui.cpp" line="1468"/>
+        <location filename="../src/GUI/gui.cpp" line="1470"/>
+        <location filename="../src/GUI/gui.cpp" line="1473"/>
+        <location filename="../src/GUI/gui.cpp" line="1474"/>
         <source>Statistics</source>
         <translation>Статистика</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1803"/>
-        <location filename="../src/GUI/gui.cpp" line="1806"/>
+        <location filename="../src/GUI/gui.cpp" line="1816"/>
+        <location filename="../src/GUI/gui.cpp" line="1819"/>
         <source>Open map file</source>
         <translation>Открыть файл карты</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="2051"/>
+        <location filename="../src/GUI/gui.cpp" line="2064"/>
         <source>DEM tiles download limit exceeded. If you really need data for such a huge area, download the files manually.</source>
         <translation>Превышен лимит загрузки DEM тайлов. Если вам действительно нужны данные для такой огромной области, загрузите файлы вручную.</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="2067"/>
+        <location filename="../src/GUI/gui.cpp" line="2080"/>
         <source>Could not download all required DEM files.</source>
         <translation>Не удалось загрузить все необходимые DEM файлы.</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="2095"/>
+        <location filename="../src/GUI/gui.cpp" line="2108"/>
         <source>No files loaded</source>
         <translation>Нет загруженных файлов</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1441"/>
-        <location filename="../src/GUI/gui.cpp" line="1443"/>
-        <location filename="../src/GUI/gui.cpp" line="1500"/>
-        <location filename="../src/GUI/gui.cpp" line="1502"/>
+        <location filename="../src/GUI/gui.cpp" line="1447"/>
+        <location filename="../src/GUI/gui.cpp" line="1449"/>
+        <location filename="../src/GUI/gui.cpp" line="1506"/>
+        <location filename="../src/GUI/gui.cpp" line="1508"/>
         <source>Date</source>
         <translation>Дата</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="667"/>
+        <location filename="../src/GUI/gui.cpp" line="670"/>
         <source>&amp;File</source>
         <translation>&amp;Файл</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="695"/>
+        <location filename="../src/GUI/gui.cpp" line="698"/>
         <source>&amp;Map</source>
         <translation>&amp;Карты</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="708"/>
+        <location filename="../src/GUI/gui.cpp" line="714"/>
         <source>&amp;Graph</source>
         <translation>&amp;График</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="740"/>
+        <location filename="../src/GUI/gui.cpp" line="746"/>
         <source>&amp;POI</source>
         <translation>&amp;Точки POI</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="720"/>
+        <location filename="../src/GUI/gui.cpp" line="726"/>
         <source>&amp;Data</source>
         <translation>&amp;Данные</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="472"/>
+        <location filename="../src/GUI/gui.cpp" line="475"/>
         <source>Download data DEM</source>
         <translation>Скачать данные DEM</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="478"/>
+        <location filename="../src/GUI/gui.cpp" line="481"/>
         <source>Download map DEM</source>
         <translation>Скачать карту DEM</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="767"/>
+        <location filename="../src/GUI/gui.cpp" line="773"/>
         <source>&amp;Settings</source>
         <translation>&amp;Настройки</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="790"/>
+        <location filename="../src/GUI/gui.cpp" line="796"/>
         <source>&amp;Help</source>
         <translation>&amp;Справка</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="985"/>
-        <location filename="../src/GUI/gui.cpp" line="1003"/>
+        <location filename="../src/GUI/gui.cpp" line="991"/>
+        <location filename="../src/GUI/gui.cpp" line="1009"/>
         <source>Map directory:</source>
         <translation>Каталог с картами:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="987"/>
-        <location filename="../src/GUI/gui.cpp" line="1005"/>
+        <location filename="../src/GUI/gui.cpp" line="993"/>
+        <location filename="../src/GUI/gui.cpp" line="1011"/>
         <source>POI directory:</source>
         <translation>Каталог с POI:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="989"/>
-        <location filename="../src/GUI/gui.cpp" line="1007"/>
+        <location filename="../src/GUI/gui.cpp" line="995"/>
+        <location filename="../src/GUI/gui.cpp" line="1013"/>
         <source>CRS directory:</source>
         <translation>Каталог CRS:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="997"/>
-        <location filename="../src/GUI/gui.cpp" line="1015"/>
+        <location filename="../src/GUI/gui.cpp" line="1003"/>
+        <location filename="../src/GUI/gui.cpp" line="1021"/>
         <source>Tile cache directory:</source>
         <translation>Каталог кеша тайлов:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1433"/>
-        <location filename="../src/GUI/gui.cpp" line="1491"/>
+        <location filename="../src/GUI/gui.cpp" line="1439"/>
+        <location filename="../src/GUI/gui.cpp" line="1497"/>
         <source>Routes</source>
         <translation>Маршруты</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1858"/>
-        <location filename="../src/GUI/gui.cpp" line="1920"/>
-        <location filename="../src/GUI/gui.cpp" line="1939"/>
-        <location filename="../src/GUI/gui.cpp" line="1963"/>
+        <location filename="../src/GUI/gui.cpp" line="1871"/>
+        <location filename="../src/GUI/gui.cpp" line="1933"/>
+        <location filename="../src/GUI/gui.cpp" line="1952"/>
+        <location filename="../src/GUI/gui.cpp" line="1976"/>
         <source>Error loading map:</source>
         <translation>Ошибка загрузки карты:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="2003"/>
+        <location filename="../src/GUI/gui.cpp" line="2016"/>
         <source>Select map directory</source>
         <translation>Выберите каталог с картами</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="2031"/>
+        <location filename="../src/GUI/gui.cpp" line="2044"/>
         <source>Clear &quot;%1&quot; tile cache?</source>
         <translation>Очистить кеш тайлов &quot;%1&quot;?</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/GUI/gui.cpp" line="2054"/>
+        <location filename="../src/GUI/gui.cpp" line="2067"/>
         <source>Download %n DEM tiles?</source>
         <translation>
             <numerusform>Скачать %n DEM тайл?</numerusform>
@@ -1017,12 +1022,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="2084"/>
+        <location filename="../src/GUI/gui.cpp" line="2097"/>
         <source>No local DEM tiles found.</source>
         <translation>Не найдено локальных DEM тайлов.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/GUI/gui.cpp" line="2099"/>
+        <location filename="../src/GUI/gui.cpp" line="2112"/>
         <source>%n files</source>
         <translation>
             <numerusform>%n файл</numerusform>
@@ -1031,7 +1036,7 @@
         </translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="943"/>
+        <location filename="../src/GUI/gui.cpp" line="949"/>
         <source>Next file</source>
         <translation>Следующий файл</translation>
     </message>
@@ -1046,81 +1051,81 @@
         <translation>Экспорт в PDF…</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1435"/>
-        <location filename="../src/GUI/gui.cpp" line="1493"/>
+        <location filename="../src/GUI/gui.cpp" line="1441"/>
+        <location filename="../src/GUI/gui.cpp" line="1499"/>
         <source>Waypoints</source>
         <translation>Путевые точки</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="944"/>
+        <location filename="../src/GUI/gui.cpp" line="950"/>
         <source>Previous file</source>
         <translation>Предыдущий файл</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="431"/>
+        <location filename="../src/GUI/gui.cpp" line="434"/>
         <source>Route waypoints</source>
         <translation>Маршрутные точки</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="946"/>
+        <location filename="../src/GUI/gui.cpp" line="952"/>
         <source>First file</source>
         <translation>Первый файл</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="948"/>
+        <location filename="../src/GUI/gui.cpp" line="954"/>
         <source>Last file</source>
         <translation>Последний файл</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1168"/>
+        <location filename="../src/GUI/gui.cpp" line="1174"/>
         <source>Error loading data file:</source>
         <translation>Ошибка загрузки файла данных:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1171"/>
-        <location filename="../src/GUI/gui.cpp" line="1287"/>
+        <location filename="../src/GUI/gui.cpp" line="1177"/>
+        <location filename="../src/GUI/gui.cpp" line="1293"/>
         <source>Line: %1</source>
         <translation>Строка: %1</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1284"/>
+        <location filename="../src/GUI/gui.cpp" line="1290"/>
         <source>Error loading POI file:</source>
         <translation>Ошибка загрузки файла с точками POI:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1485"/>
+        <location filename="../src/GUI/gui.cpp" line="1491"/>
         <source>Name</source>
         <translation>Имя</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="1431"/>
-        <location filename="../src/GUI/gui.cpp" line="1489"/>
+        <location filename="../src/GUI/gui.cpp" line="1437"/>
+        <location filename="../src/GUI/gui.cpp" line="1495"/>
         <source>Tracks</source>
         <translation>Треки</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="218"/>
-        <location filename="../src/GUI/gui.cpp" line="906"/>
+        <location filename="../src/GUI/gui.cpp" line="912"/>
         <source>About GPXSee</source>
         <translation>О GPXSee</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="835"/>
+        <location filename="../src/GUI/gui.cpp" line="841"/>
         <source>Navigation</source>
         <translation>Навигация</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="502"/>
-        <location filename="../src/GUI/gui.cpp" line="1449"/>
-        <location filename="../src/GUI/gui.cpp" line="1509"/>
+        <location filename="../src/GUI/gui.cpp" line="505"/>
+        <location filename="../src/GUI/gui.cpp" line="1455"/>
+        <location filename="../src/GUI/gui.cpp" line="1515"/>
         <source>Distance</source>
         <translation>Расстояние</translation>
     </message>
     <message>
-        <location filename="../src/GUI/gui.cpp" line="509"/>
-        <location filename="../src/GUI/gui.cpp" line="768"/>
-        <location filename="../src/GUI/gui.cpp" line="1451"/>
-        <location filename="../src/GUI/gui.cpp" line="1511"/>
+        <location filename="../src/GUI/gui.cpp" line="512"/>
+        <location filename="../src/GUI/gui.cpp" line="774"/>
+        <location filename="../src/GUI/gui.cpp" line="1457"/>
+        <location filename="../src/GUI/gui.cpp" line="1517"/>
         <source>Time</source>
         <translation>Время</translation>
     </message>
@@ -1298,17 +1303,17 @@
 <context>
     <name>IMGMap</name>
     <message>
-        <location filename="../src/map/imgmap.cpp" line="308"/>
+        <location filename="../src/map/imgmap.cpp" line="309"/>
         <source>All</source>
         <translation>Все</translation>
     </message>
     <message>
-        <location filename="../src/map/imgmap.cpp" line="308"/>
+        <location filename="../src/map/imgmap.cpp" line="309"/>
         <source>Vector only</source>
         <translation>Только вектор</translation>
     </message>
     <message>
-        <location filename="../src/map/imgmap.cpp" line="308"/>
+        <location filename="../src/map/imgmap.cpp" line="309"/>
         <source>Raster only</source>
         <translation>Только растр</translation>
     </message>
