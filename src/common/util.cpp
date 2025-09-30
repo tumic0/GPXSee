@@ -13,7 +13,6 @@
 #include "util.h"
 
 #define SQLITE_DB_MAGIC "SQLite format 3"
-#define CHUNK 16384
 
 #ifdef Q_OS_ANDROID
 static QString documentName(const QString &path)
