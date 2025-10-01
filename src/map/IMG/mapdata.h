@@ -10,7 +10,6 @@
 #include "common/rectc.h"
 #include "common/rtree.h"
 #include "common/range.h"
-#include "common/hash.h"
 #include "map/matrix.h"
 #include "label.h"
 #include "raster.h"
