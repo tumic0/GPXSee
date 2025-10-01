@@ -125,9 +125,9 @@ void IMGMap::load(const Projection &in, const Projection &out,
 	else
 		typ = &(styles().at(style));
 
-	_styles.resize(_data.size());
+	_styles.reserve(_data.size());
 	for (int i = 0; i < _data.size(); i++)
-		_styles[i] = createStyle(_data.at(i), i ? 0 : typ);
+		_styles.append(createStyle(_data.at(i), i ? 0 : typ));
 
 	updateTransform();
 
