@@ -116,7 +116,7 @@
 		<mimetype>application/vnd.70mai.txt</mimetype>
 		<mimetype>application/vnd.velocitek.vtk</mimetype>
 		<mimetype>application/vnd.vakaros.vkx</mimetype>
-		<mimetype>application/vnd.coros.cra</mimetype>
+		<mimetype>application/vnd.coros.csa</mimetype>
 		<mimetype>application/vnd.pmtiles</mimetype>
 		<mimetype>x-scheme-handler/geo</mimetype>
 	</mimetypes>

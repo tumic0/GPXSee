@@ -207,7 +207,7 @@ Section "GPXSee" SEC_APP
   !insertmacro FILE_ASSOCIATION_ADD "031" "IHO S-57 Electronic Navigation Catalogue" 28
   !insertmacro FILE_ASSOCIATION_ADD "vtk" "Velocitek VTK File" 29
   !insertmacro FILE_ASSOCIATION_ADD "vkx" "Vakaros VKX File" 30
-  !insertmacro FILE_ASSOCIATION_ADD "cra" "COROS Map Atlas" 31
+  !insertmacro FILE_ASSOCIATION_ADD "csa" "COROS Map Atlas" 31
   !insertmacro FILE_ASSOCIATION_ADD "pmtiles" "PMTiles Map File" 32
   !insertmacro FILE_ASSOCIATION_ADD "kml" "Keyhole Markup Language" 33
   !insertmacro FILE_ASSOCIATION_ADD "kmz" "KML geographic compressed data" 33
@@ -274,7 +274,7 @@ Section "GPXSee" SEC_APP
   WriteRegStr HKCR ".txt\OpenWithList" "GPXSee.exe" ""
   WriteRegStr HKCR ".vtk\OpenWithList" "GPXSee.exe" ""
   WriteRegStr HKCR ".vkx\OpenWithList" "GPXSee.exe" ""
-  WriteRegStr HKCR ".cra\OpenWithList" "GPXSee.exe" ""
+  WriteRegStr HKCR ".csa\OpenWithList" "GPXSee.exe" ""
   WriteRegStr HKCR ".pmtiles\OpenWithList" "GPXSee.exe" ""
 
   System::Call 'shell32.dll::SHChangeNotify(i, i, i, i) v (0x08000000, 0, 0, 0)'
@@ -453,7 +453,7 @@ Section "Uninstall"
   !insertmacro FILE_ASSOCIATION_REMOVE "031"
   !insertmacro FILE_ASSOCIATION_REMOVE "vtk"
   !insertmacro FILE_ASSOCIATION_REMOVE "vkx"
-  !insertmacro FILE_ASSOCIATION_REMOVE "cra"
+  !insertmacro FILE_ASSOCIATION_REMOVE "csa"
   !insertmacro FILE_ASSOCIATION_REMOVE "pmtiles"
 
   !insertmacro URI_ASSOCIATION_REMOVE "geo"
@@ -512,7 +512,7 @@ Section "Uninstall"
   DeleteRegValue HKCR ".txt\OpenWithList" "GPXSee.exe"
   DeleteRegValue HKCR ".vtk\OpenWithList" "GPXSee.exe"
   DeleteRegValue HKCR ".vkx\OpenWithList" "GPXSee.exe"
-  DeleteRegValue HKCR ".cra\OpenWithList" "GPXSee.exe"
+  DeleteRegValue HKCR ".csa\OpenWithList" "GPXSee.exe"
   DeleteRegValue HKCR ".pmtiles\OpenWithList" "GPXSee.exe"
   DeleteRegKey HKCR "Applications\GPXSee.exe"   
   
