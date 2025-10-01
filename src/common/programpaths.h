@@ -13,11 +13,11 @@ namespace ProgramPaths
 	QString symbolsDir(bool writable = false);
 	QString tilesDir();
 	QString translationsDir();
+
 	QString ellipsoidsFile();
 	QString gcsFile();
 	QString projectionsFile();
 	QString pcsFile();
-	QString typFile();
 }
 
 #endif // PROGRAMPATHS_H

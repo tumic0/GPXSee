@@ -17,7 +17,6 @@
 #define PROJECTIONS_FILE "projections.csv"
 #define GCS_FILE         "gcs.csv"
 #define PCS_FILE         "pcs.csv"
-#define TYP_FILE         "style.typ"
 
 #ifdef Q_OS_ANDROID
 #define DATA_LOCATION QStandardPaths::GenericDataLocation
@@ -147,9 +146,4 @@ QString ProgramPaths::projectionsFile()
 QString ProgramPaths::pcsFile()
 {
 	return QDir(crsDir()).filePath(PCS_FILE);
-}
-
-QString ProgramPaths::typFile()
-{
-	return QDir(styleDir()).filePath(TYP_FILE);
 }

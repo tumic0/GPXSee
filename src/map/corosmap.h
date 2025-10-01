@@ -38,6 +38,7 @@ public:
 
 	double elevation(const Coordinates &c);
 
+	QStringList styles(int &defaultStyle) const;
 	QStringList layers(const QString &lang, int &defaultLayer) const;
 	bool hillShading() const {return true;}
 
@@ -55,6 +56,13 @@ private:
 		Topo = 2,
 		All = 3
 	};
+
+	class StyleList : public QStringList
+	{
+	public:
+		StyleList();
+	};
+
 	typedef RTree<IMG::MapData*, double, 2> MapTree;
 
 	Transform transform(int zoom) const;
@@ -65,6 +73,8 @@ private:
 	void cancelJobs(bool wait);
 
 	void loadDir(const QString &path, MapTree &tree);
+
+	static StyleList &styles();
 
 	MapTree _osm, _cm;
 	Range _zooms;
@@ -80,6 +90,7 @@ private:
 	IMG::MapData::PointCache _pointCache;
 	IMG::MapData::ElevationCache _demCache;
 	QMutex _lock, _demLock;
+	QString _typ;
 
 	QList<IMGJob*> _jobs;
 

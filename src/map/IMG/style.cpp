@@ -45,7 +45,7 @@ static QFont pixelSizeFont(int pixelSize)
 	return f;
 }
 
-static bool readColor(SubFile *file, SubFile::Handle &hdl, QColor &color)
+static bool readColor(const SubFile *file, SubFile::Handle &hdl, QColor &color)
 {
 	quint8 b, g, r;
 
@@ -58,8 +58,8 @@ static bool readColor(SubFile *file, SubFile::Handle &hdl, QColor &color)
 	return true;
 }
 
-static bool readColorTable(SubFile *file, SubFile::Handle &hdl, QImage& img,
-  int colors, int bpp, bool transparent)
+static bool readColorTable(const SubFile *file, SubFile::Handle &hdl,
+  QImage &img, int colors, int bpp, bool transparent)
 {
 	img.setColorCount(colors);
 
@@ -101,7 +101,7 @@ static bool readColorTable(SubFile *file, SubFile::Handle &hdl, QImage& img,
 	return true;
 }
 
-static bool readBitmap(SubFile *file, SubFile::Handle &hdl, QImage &img,
+static bool readBitmap(const SubFile *file, SubFile::Handle &hdl, QImage &img,
   int bpp)
 {
 	if (!bpp)
@@ -168,7 +168,7 @@ static int colors2bpp(quint8 colors, quint8 flags)
 	}
 }
 
-static bool skipLabel(SubFile *file, SubFile::Handle &hdl)
+static bool skipLabel(const SubFile *file, SubFile::Handle &hdl)
 {
 	quint32 len;
 
@@ -919,7 +919,7 @@ void Style::defaultPointStyle(qreal ratio)
 	_points[0x1070b] = Point(QImage(":/marine/fishing-harbor.png"));
 }
 
-bool Style::itemInfo(SubFile *file, SubFile::Handle &hdl,
+bool Style::itemInfo(const SubFile *file, SubFile::Handle &hdl,
   const Section &section, ItemInfo &info)
 {
 	quint16 t16_1, t16_2;
@@ -949,7 +949,7 @@ bool Style::itemInfo(SubFile *file, SubFile::Handle &hdl,
 	return true;
 }
 
-bool Style::parsePolygon(SubFile *file, SubFile::Handle &hdl,
+bool Style::parsePolygon(const SubFile *file, SubFile::Handle &hdl,
   const Section &section, const ItemInfo &info, quint32 type)
 {
 	quint8 t8, flags;
@@ -1052,7 +1052,7 @@ bool Style::parsePolygon(SubFile *file, SubFile::Handle &hdl,
 	return true;
 }
 
-bool Style::parseLine(SubFile *file, SubFile::Handle &hdl,
+bool Style::parseLine(const SubFile *file, SubFile::Handle &hdl,
   const Section &section, const ItemInfo &info, quint32 type)
 {
 	quint8 t8_1, t8_2, flags, rows;
@@ -1244,7 +1244,7 @@ bool Style::parseLine(SubFile *file, SubFile::Handle &hdl,
 	return true;
 }
 
-bool Style::parsePoint(SubFile *file, SubFile::Handle &hdl,
+bool Style::parsePoint(const SubFile *file, SubFile::Handle &hdl,
   const Section &section, const ItemInfo &info, quint32 type)
 {
 	quint8 t8_1, width, height, numColors, imgType;
@@ -1307,7 +1307,7 @@ bool Style::parsePoint(SubFile *file, SubFile::Handle &hdl,
 	return true;
 }
 
-bool Style::parsePolygons(SubFile *file, SubFile::Handle &hdl,
+bool Style::parsePolygons(const SubFile *file, SubFile::Handle &hdl,
   const Section &section)
 {
 	if (!section.arrayItemSize)
@@ -1330,7 +1330,7 @@ bool Style::parsePolygons(SubFile *file, SubFile::Handle &hdl,
 	return true;
 }
 
-bool Style::parseLines(SubFile *file, SubFile::Handle &hdl,
+bool Style::parseLines(const SubFile *file, SubFile::Handle &hdl,
   const Section &section)
 {
 	if (!section.arrayItemSize)
@@ -1355,7 +1355,7 @@ bool Style::parseLines(SubFile *file, SubFile::Handle &hdl,
 	return true;
 }
 
-bool Style::parsePoints(SubFile *file, SubFile::Handle &hdl,
+bool Style::parsePoints(const SubFile *file, SubFile::Handle &hdl,
   const Section &section)
 {
 	if (!section.arrayItemSize)
@@ -1381,7 +1381,7 @@ bool Style::parsePoints(SubFile *file, SubFile::Handle &hdl,
 	return true;
 }
 
-bool Style::parseDrawOrder(SubFile *file, SubFile::Handle &hdl,
+bool Style::parseDrawOrder(const SubFile *file, SubFile::Handle &hdl,
   const Section &order)
 {
 	QList<quint32> drawOrder;
@@ -1415,7 +1415,7 @@ bool Style::parseDrawOrder(SubFile *file, SubFile::Handle &hdl,
 	return true;
 }
 
-bool Style::parseTYPFile(SubFile *typ)
+bool Style::parseTYPFile(const SubFile *typ)
 {
 	SubFile::Handle hdl(typ);
 	Section points, lines, polygons, order;
@@ -1458,7 +1458,7 @@ bool Style::parseTYPFile(SubFile *typ)
 	return true;
 }
 
-Style::Style(qreal ratio, SubFile *typ)
+Style::Style(qreal ratio, const SubFile *typ)
 {
 	_large = pixelSizeFont(16);
 	_normal = pixelSizeFont(14);
@@ -1476,8 +1476,8 @@ Style::Style(qreal ratio, SubFile *typ)
 	defaultPolygonStyle();
 	defaultPointStyle(ratio);
 
-	if (typ)
-		parseTYPFile(typ);
+	if (typ && !parseTYPFile(typ))
+		qWarning("%s: error parsing TYP file", qUtf8Printable(typ->fileName()));
 }
 
 const Style::Line &Style::line(quint32 type) const

@@ -36,7 +36,7 @@ bool MapData::elevationCb(VectorTile *tile, void *context)
 MapData::MapData(const QString &fileName, PolyCache &polyCache,
   PointCache &pointCache, ElevationCache &demCache, QMutex &lock,
   QMutex &demLock)
-  : _fileName(fileName), _typ(0), _style(0), _hasDEM(false), _valid(false),
+  : _fileName(fileName), _typ(0), _hasDEM(false), _valid(false),
   _polyCache(polyCache), _pointCache(pointCache), _demCache(demCache),
   _lock(lock), _demLock(demLock)
 {
@@ -52,7 +52,6 @@ MapData::~MapData()
 		delete _tileTree.GetAt(it);
 
 	delete _typ;
-	delete _style;
 }
 
 void MapData::polys(QFile *file, const RectC &rect, int bits,
@@ -97,30 +96,11 @@ void MapData::elevations(QFile *file, const RectC &rect, int bits,
 	_tileTree.Search(min, max, elevationCb, &ctx);
 }
 
-void MapData::loadStyle(qreal ratio)
-{
-	Q_ASSERT(!_style);
-
-	if (_typ)
-		_style = new Style(ratio, _typ);
-	else {
-		QString typFile(ProgramPaths::typFile());
-		if (QFileInfo::exists(typFile)) {
-			SubFile typ(typFile);
-			_style = new Style(ratio, &typ);
-		} else
-			_style = new Style(ratio);
-	}
-}
-
 void MapData::clear()
 {
 	TileTree::Iterator it;
 	for (_tileTree.GetFirst(it); !_tileTree.IsNull(it); _tileTree.GetNext(it))
 		_tileTree.GetAt(it)->clear();
-
-	delete _style;
-	_style = 0;
 
 	_polyCache.clear();
 	_pointCache.clear();

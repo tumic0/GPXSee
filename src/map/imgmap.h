@@ -14,7 +14,7 @@ class IMGMap : public Map
 
 public:
 	IMGMap(const QString &fileName, bool GMAP, QObject *parent = 0);
-	~IMGMap() {qDeleteAll(_data);}
+	~IMGMap();
 
 	QString name() const {return _data.first()->name();}
 
@@ -40,6 +40,7 @@ public:
 
 	double elevation(const Coordinates &c);
 
+	QStringList styles(int &defaultStyle) const;
 	QStringList layers(const QString &lang, int &defaultLayer) const;
 	bool hillShading() const {return true;}
 
@@ -61,6 +62,12 @@ private:
 		All = 3
 	};
 
+	class StyleList : public QStringList
+	{
+	public:
+		StyleList();
+	};
+
 	Transform transform(int zoom) const;
 	void updateTransform();
 	bool isRunning(const QString &key) const;
@@ -69,8 +76,12 @@ private:
 	void cancelJobs(bool wait);
 
 	QList<IMG::MapData*> overlays(const QString &fileName);
+	IMG::Style *createStyle(IMG::MapData *data, const QString *typFile);
+
+	static StyleList &styles();
 
 	QList<IMG::MapData*> _data;
+	QList<IMG::Style*> _styles;
 	IMG::MapData::PolyCache _polyCache;
 	IMG::MapData::PointCache _pointCache;
 	IMG::MapData::ElevationCache _demCache;
