@@ -72,12 +72,12 @@
     <message>
         <location filename="../src/map/corosmap.cpp" line="377"/>
         <source>All</source>
-        <translation type="unfinished">Kaikki</translation>
+        <translation>Kaikki</translation>
     </message>
     <message>
         <location filename="../src/map/corosmap.cpp" line="377"/>
         <source>Landscape</source>
-        <translation type="unfinished">Vaakasuunta</translation>
+        <translation>Maisema</translation>
     </message>
     <message>
         <location filename="../src/map/corosmap.cpp" line="377"/>
@@ -736,7 +736,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="704"/>
         <source>Styles</source>
-        <translation type="unfinished"></translation>
+        <translation>Tyylit</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="707"/>
@@ -1374,7 +1374,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="169"/>
         <source>COROS maps</source>
-        <translation type="unfinished"></translation>
+        <translation>COROS-kartat</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="175"/>
@@ -1399,7 +1399,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="180"/>
         <source>PMTiles maps</source>
-        <translation type="unfinished"></translation>
+        <translation>PMTiles-kartat</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="181"/>
