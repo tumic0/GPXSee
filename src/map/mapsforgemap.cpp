@@ -21,6 +21,11 @@ MapsforgeMap::MapsforgeMap(const QString &fileName, QObject *parent)
 		_zoom = _data.zooms().min();
 }
 
+MapsforgeMap::~MapsforgeMap()
+{
+	delete _style;
+}
+
 void MapsforgeMap::load(const Projection &in, const Projection &out,
   qreal deviceRatio, bool hidpi, int style, int layer)
 {

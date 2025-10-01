@@ -50,6 +50,7 @@ class MapsforgeMap : public Map
 
 public:
 	MapsforgeMap(const QString &fileName, QObject *parent = 0);
+	~MapsforgeMap();
 
 	QRectF bounds() {return _bounds;}
 	RectC llBounds() {return _data.bounds();}
