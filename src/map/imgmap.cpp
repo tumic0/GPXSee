@@ -1,9 +1,6 @@
 #include <QFile>
 #include <QPainter>
 #include <QPixmapCache>
-#include <QtConcurrent>
-#include "common/rectc.h"
-#include "common/range.h"
 #include "common/wgs84.h"
 #include "common/programpaths.h"
 #include "IMG/imgdata.h"

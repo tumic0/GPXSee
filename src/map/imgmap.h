@@ -7,6 +7,7 @@
 #include "IMG/mapdata.h"
 
 class IMGJob;
+namespace IMG {class Style;}
 
 class IMGMap : public Map
 {

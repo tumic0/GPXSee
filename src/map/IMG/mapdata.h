@@ -19,7 +19,6 @@
 
 namespace IMG {
 
-class Style;
 class SubDiv;
 class SubFile;
 class VectorTile;
