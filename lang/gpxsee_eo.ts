@@ -72,12 +72,12 @@
     <message>
         <location filename="../src/map/corosmap.cpp" line="377"/>
         <source>All</source>
-        <translation type="unfinished">Ĉiuj</translation>
+        <translation>Ĉiuj</translation>
     </message>
     <message>
         <location filename="../src/map/corosmap.cpp" line="377"/>
         <source>Landscape</source>
-        <translation type="unfinished">Horizontala</translation>
+        <translation>Pejzaĝo</translation>
     </message>
     <message>
         <location filename="../src/map/corosmap.cpp" line="377"/>
@@ -760,7 +760,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="704"/>
         <source>Styles</source>
-        <translation type="unfinished"></translation>
+        <translation>Stiloj</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="707"/>
