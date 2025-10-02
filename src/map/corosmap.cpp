@@ -409,7 +409,11 @@ Map* CorosMap::create(const QString &path, const Projection &proj, bool *isDir)
 
 CorosMap::StyleList::StyleList()
 {
-	QDir dir(ProgramPaths::styleDir());
+	QString path(ProgramPaths::styleDir());
+	if (path.isEmpty())
+		return;
+
+	QDir dir(path);
 	QFileInfoList styles(dir.entryInfoList(QStringList("*.typ"), QDir::Files));
 
 	for (int i = 0; i < styles.size(); i++)

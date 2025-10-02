@@ -259,15 +259,20 @@ Map *MapsforgeMap::create(const QString &path, const Projection &proj,
 
 MapsforgeMap::StyleList::StyleList()
 {
-	QDir dir(ProgramPaths::styleDir());
-	QFileInfoList styles(dir.entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot));
+	QString path(ProgramPaths::styleDir());
+	if (!path.isEmpty()) {
+		QDir dir(path);
+		QFileInfoList styles(dir.entryInfoList(QDir::Dirs
+		  | QDir::NoDotAndDotDot));
 
-	for (int i = 0; i < styles.size(); i++) {
-		QDir d(styles.at(i).absoluteFilePath());
-		QFileInfoList files(d.entryInfoList(QStringList("*.xml"), QDir::Files));
+		for (int i = 0; i < styles.size(); i++) {
+			QDir d(styles.at(i).absoluteFilePath());
+			QFileInfoList files(d.entryInfoList(QStringList("*.xml"),
+			  QDir::Files));
 
-		for (int j = 0; j < files.size(); j++)
-			append(files.at(j).absoluteFilePath());
+			for (int j = 0; j < files.size(); j++)
+				append(files.at(j).absoluteFilePath());
+		}
 	}
 
 	if (isEmpty())
