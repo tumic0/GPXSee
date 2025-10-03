@@ -73,6 +73,10 @@ CorosMap::CorosMap(const QString &fileName, QObject *parent)
 		return;
 	}
 
+	QString typ(dir.absoluteFilePath(fi.baseName() + ".typ"));
+	if (QFileInfo::exists(typ))
+		_typ = typ;
+
 	_valid = true;
 }
 
@@ -88,7 +92,7 @@ CorosMap::~CorosMap()
 }
 
 void CorosMap::load(const Projection &in, const Projection &out,
-  qreal devicelRatio, bool hidpi, int layer)
+  qreal devicelRatio, bool hidpi, int style, int layer)
 {
 	Q_UNUSED(in);
 	Q_UNUSED(hidpi);
@@ -107,19 +111,20 @@ void CorosMap::load(const Projection &in, const Projection &out,
 			_layer = All;
 	}
 
-	QFileInfo fi(path());
-	QString mapTYP(fi.absoluteDir().absoluteFilePath(fi.baseName() + ".typ"));
-	if (QFileInfo::exists(mapTYP)) {
-		SubFile typ(mapTYP);
-		_style = new Style(devicelRatio, &typ);
-	} else {
-		QString globalTYP(ProgramPaths::typFile());
-		if (QFileInfo::exists(globalTYP)) {
-			SubFile typ(globalTYP);
-			_style = new Style(devicelRatio, &typ);
-		} else
-			_style = new Style(devicelRatio);
-	}
+	const QString *typFile = 0;
+	if (style < 0 || style >= styles().size()) {
+		if (!_typ.isEmpty())
+			typFile = &_typ;
+		else if (styles().size())
+			typFile = &(styles().first());
+	} else
+		typFile = &(styles().at(style));
+
+	if (typFile) {
+		SubFile typ(*typFile);
+		_style = new Style(_tileRatio, &typ);
+	} else
+		_style = new Style(_tileRatio);
 
 	updateTransform();
 
@@ -367,6 +372,22 @@ double CorosMap::elevation(const Coordinates &c)
 	return Map::elevation(c);
 }
 
+QStringList CorosMap::styles(int &defaultStyle) const
+{
+	QStringList list;
+	list.reserve(styles().size() + (_typ.isEmpty() ? 0 : 1));
+
+	for (int i = 0; i < styles().size(); i++)
+		list.append(QFileInfo(styles().at(i)).baseName());
+
+	if (!_typ.isEmpty())
+		list.append(QFileInfo(_typ).baseName());
+
+	defaultStyle = _typ.isEmpty() ? 0 : list.size() - 1;
+
+	return list;
+}
+
 QStringList CorosMap::layers(const QString &lang, int &defaultLayer) const
 {
 	Q_UNUSED(lang);
@@ -384,4 +405,23 @@ Map* CorosMap::create(const QString &path, const Projection &proj, bool *isDir)
 		*isDir = true;
 
 	return new CorosMap(path);
+}
+
+CorosMap::StyleList::StyleList()
+{
+	QString path(ProgramPaths::styleDir());
+	if (path.isEmpty())
+		return;
+
+	QDir dir(path);
+	QFileInfoList styles(dir.entryInfoList(QStringList("*.typ"), QDir::Files));
+
+	for (int i = 0; i < styles.size(); i++)
+		append(styles.at(i).absoluteFilePath());
+}
+
+CorosMap::StyleList &CorosMap::styles()
+{
+	static StyleList list;
+	return list;
 }

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map xmlns="http://www.gpxsee.org/map/1.4">
+<map xmlns="http://www.gpxsee.org/map/1.6">
 	<name>OpenFreeMap</name>
 	<url>https://tiles.openfreemap.org/planet/latest/$z/$x/$y.pbf</url>
-	<tile type="vector" size="512"/>
+	<tile type="vector" size="512" vectorLayers="aerodrome_label,aeroway,boundary,building,landcover,landuse,park,place,poi,transportation,transportation_name,water,water_name,waterway"/>
 	<zoom max="14"/>
 	<copyright>© OpenFreeMap © OpenMapTiles © OpenStreetMap contributors</copyright>
 </map>

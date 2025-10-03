@@ -105,7 +105,7 @@ public:
 	};
 
 
-	Style(qreal ratio, SubFile *typ = 0);
+	Style(qreal ratio, const SubFile *typ = 0);
 
 	const Line &line(quint32 type) const;
 	const Polygon &polygon(quint32 type) const;
@@ -188,26 +188,26 @@ private:
 		bool extended;
 	};
 
-	bool parseTYPFile(SubFile *typ);
-	bool parsePoints(SubFile *file, SubFile::Handle &hdl,
+	bool parseTYPFile(const SubFile *typ);
+	bool parsePoints(const SubFile *file, SubFile::Handle &hdl,
 	  const Section &section);
-	bool parsePoint(SubFile *file, SubFile::Handle &hdl,
+	bool parsePoint(const SubFile *file, SubFile::Handle &hdl,
 	  const Section &section, const ItemInfo &info, quint32 type);
-	bool parseLines(SubFile *file, SubFile::Handle &hdl,
+	bool parseLines(const SubFile *file, SubFile::Handle &hdl,
 	  const Section &section);
-	bool parseLine(SubFile *file, SubFile::Handle &hdl,
+	bool parseLine(const SubFile *file, SubFile::Handle &hdl,
 	  const Section &section, const ItemInfo &info, quint32 type);
-	bool parsePolygons(SubFile *file, SubFile::Handle &hdl,
+	bool parsePolygons(const SubFile *file, SubFile::Handle &hdl,
 	  const Section &section);
-	bool parsePolygon(SubFile *file, SubFile::Handle &hdl,
+	bool parsePolygon(const SubFile *file, SubFile::Handle &hdl,
 	  const Section &section, const ItemInfo &info, quint32 type);
-	bool parseDrawOrder(SubFile *file, SubFile::Handle &hdl,
+	bool parseDrawOrder(const SubFile *file, SubFile::Handle &hdl,
 	  const Section &section);
 	void defaultPolygonStyle();
 	void defaultLineStyle(qreal ratio);
 	void defaultPointStyle(qreal ratio);
 
-	static bool itemInfo(SubFile *file, SubFile::Handle &hdl,
+	static bool itemInfo(const SubFile *file, SubFile::Handle &hdl,
 	  const Section &section, ItemInfo &info);
 
 	QMap<quint32, Line> _lines;

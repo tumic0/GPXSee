@@ -340,6 +340,7 @@
 			<key>CFBundleTypeExtensions</key>
 			<array>
 				<string>img</string>
+				<string>csm</string>
 			</array>
 			<key>CFBundleTypeMIMETypes</key>
 			<array>
@@ -785,16 +786,32 @@
 		<dict>
 			<key>CFBundleTypeExtensions</key>
 			<array>
-				<string>cra</string>
+				<string>csa</string>
 			</array>
 			<key>CFBundleTypeMIMETypes</key>
 			<array>
-				<string>application/vnd.coros.cra</string>
+				<string>application/vnd.coros.csa</string>
 			</array>
 			<key>CFBundleTypeIconFile</key>
-			<string>icons/cra.icns</string>
+			<string>icons/csa.icns</string>
 			<key>CFBundleTypeName</key>
 			<string>COROS Map Atlas</string>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>pmtiles</string>
+			</array>
+			<key>CFBundleTypeMIMETypes</key>
+			<array>
+				<string>application/vnd.pmtiles</string>
+			</array>
+			<key>CFBundleTypeIconFile</key>
+			<string>icons/pmts.icns</string>
+			<key>CFBundleTypeName</key>
+			<string>PMTiles Map File</string>
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>
 		</dict>
@@ -1246,6 +1263,7 @@
 				<key>public.filename-extension</key>
 				<array>
 					<string>img</string>
+					<string>csm</string>
 				</array>
 				<key>public.mime-type</key>
 				<string>application/vnd.garmin.img</string>
@@ -1853,13 +1871,13 @@
 		</dict>
 		<dict>
 			<key>UTTypeIdentifier</key>
-			<string>com.coros.cra</string>
+			<string>com.coros.csa</string>
 			<key>UTTypeReferenceURL</key>
 			<string>https://www.gpxsee.org/doc.html#COROS</string>
 			<key>UTTypeDescription</key>
 			<string>COROS Map Atlas</string>
 			<key>UTTypeIconFile</key>
-			<string>icons/cra.icns</string>
+			<string>icons/csa.icns</string>
 			<key>UTTypeConformsTo</key>
 			<array>
 				<string>public.data</string>
@@ -1868,10 +1886,33 @@
 			<dict>
 				<key>public.filename-extension</key>
 				<array>
-					<string>cra</string>
+					<string>csa</string>
 				</array>
 				<key>public.mime-type</key>
-				<string>application/vnd.coros.cra</string>
+				<string>application/vnd.coros.csa</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeIdentifier</key>
+			<string>com.protomaps.pmtiles</string>
+			<key>UTTypeReferenceURL</key>
+			<string>https://docs.protomaps.com/pmtiles/</string>
+			<key>UTTypeDescription</key>
+			<string>PMTiles Map File</string>
+			<key>UTTypeIconFile</key>
+			<string>icons/pmts.icns</string>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>pmtiles</string>
+				</array>
+				<key>public.mime-type</key>
+				<string>application/vnd.pmtiles</string>
 			</dict>
 		</dict>
 	</array>

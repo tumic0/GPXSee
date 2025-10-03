@@ -37,7 +37,8 @@ public:
 	virtual bool isReady() const {return true;}
 	virtual QString errorString() const {return QString();}
 
-	virtual void load(const Projection &, const Projection &, qreal, bool, int) {}
+	virtual void load(const Projection &, const Projection &, qreal, bool, int,
+	  int) {}
 	virtual void unload() {}
 
 	/* llBounds() is mandatory for maps that do not provide bounds() until
@@ -61,6 +62,7 @@ public:
 
 	virtual QStringList layers(const QString &, int &) const
 	  {return QStringList();}
+	virtual QStringList styles(int &) const {return QStringList();}
 	virtual bool hillShading() const {return false;}
 
 	virtual void clearCache() {}

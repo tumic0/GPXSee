@@ -1,7 +1,9 @@
 #include <QPainter>
 #include <QPixmapCache>
+#include <QDir>
 #include "common/wgs84.h"
 #include "common/util.h"
+#include "common/programpaths.h"
 #include "rectd.h"
 #include "pcs.h"
 #include "mapsforgemap.h"
@@ -12,15 +14,20 @@ using namespace Mapsforge;
 #define EPSILON     1e-6
 
 MapsforgeMap::MapsforgeMap(const QString &fileName, QObject *parent)
-  : Map(fileName, parent), _data(fileName), _zoom(0),
+  : Map(fileName, parent), _data(fileName), _style(0), _zoom(0),
   _projection(PCS::pcs(3857)), _tileRatio(1.0)
 {
 	if (_data.isValid())
 		_zoom = _data.zooms().min();
 }
 
+MapsforgeMap::~MapsforgeMap()
+{
+	delete _style;
+}
+
 void MapsforgeMap::load(const Projection &in, const Projection &out,
-  qreal deviceRatio, bool hidpi, int layer)
+  qreal deviceRatio, bool hidpi, int style, int layer)
 {
 	Q_UNUSED(in);
 	Q_UNUSED(hidpi);
@@ -29,7 +36,10 @@ void MapsforgeMap::load(const Projection &in, const Projection &out,
 	_projection = out;
 
 	_data.load();
-	_style.load(_data, _tileRatio, layer);
+
+	if (style < 0 || style >= styles().size())
+		style = 0;
+	_style = new Style(styles().at(style), _data, _tileRatio, layer);
 
 	updateTransform();
 
@@ -41,7 +51,8 @@ void MapsforgeMap::unload()
 	cancelJobs(true);
 
 	_data.clear();
-	_style.clear();
+	delete _style;
+	_style = 0;
 }
 
 int MapsforgeMap::zoomFit(const QSize &size, const RectC &rect)
@@ -189,7 +200,7 @@ void MapsforgeMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 			if (QPixmapCache::find(key(_zoom, ttl), &pm))
 				painter->drawPixmap(ttl, pm);
 			else {
-				tiles.append(RasterTile(_projection, _transform, &_style, &_data,
+				tiles.append(RasterTile(_projection, _transform, _style, &_data,
 				  _zoom, QRect(ttl, QSize(tileSize, tileSize)), _tileRatio,
 				  flags & Map::HillShading));
 			}
@@ -212,14 +223,27 @@ void MapsforgeMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 	}
 }
 
+QStringList MapsforgeMap::styles(int &defaultStyle) const
+{
+	QStringList list;
+	list.reserve(styles().size());
+
+	for (int i = 0; i < styles().size(); i++)
+		list.append(QFileInfo(styles().at(i)).baseName());
+
+	defaultStyle = 0;
+
+	return list;
+}
+
 QStringList MapsforgeMap::layers(const QString &lang, int &defaultLayer) const
 {
-	return _style.layers(lang, defaultLayer);
+	return _style->layers(lang, defaultLayer);
 }
 
 bool MapsforgeMap::hillShading() const
 {
-	return _style.hasHillShading();
+	return _style->hasHillShading();
 }
 
 Map *MapsforgeMap::create(const QString &path, const Projection &proj,
@@ -231,4 +255,32 @@ Map *MapsforgeMap::create(const QString &path, const Projection &proj,
 		*isMap = false;
 
 	return new MapsforgeMap(path);
+}
+
+MapsforgeMap::StyleList::StyleList()
+{
+	QString path(ProgramPaths::styleDir());
+	if (!path.isEmpty()) {
+		QDir dir(path);
+		QFileInfoList styles(dir.entryInfoList(QDir::Dirs
+		  | QDir::NoDotAndDotDot));
+
+		for (int i = 0; i < styles.size(); i++) {
+			QDir d(styles.at(i).absoluteFilePath());
+			QFileInfoList files(d.entryInfoList(QStringList("*.xml"),
+			  QDir::Files));
+
+			for (int j = 0; j < files.size(); j++)
+				append(files.at(j).absoluteFilePath());
+		}
+	}
+
+	if (isEmpty())
+		append(":/style/GPXSee.xml");
+}
+
+MapsforgeMap::StyleList &MapsforgeMap::styles()
+{
+	static StyleList list;
+	return list;
 }

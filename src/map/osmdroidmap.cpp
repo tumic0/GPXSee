@@ -152,10 +152,11 @@ OsmdroidMap::OsmdroidMap(const QString &fileName, QObject *parent)
 }
 
 void OsmdroidMap::load(const Projection &in, const Projection &out,
-  qreal deviceRatio, bool hidpi, int layer)
+  qreal deviceRatio, bool hidpi, int style, int layer)
 {
 	Q_UNUSED(in);
 	Q_UNUSED(out);
+	Q_UNUSED(style);
 	Q_UNUSED(layer);
 
 	_mapRatio = hidpi ? deviceRatio : 1.0;

@@ -1,10 +1,8 @@
 #include <QFile>
 #include <QPainter>
 #include <QPixmapCache>
-#include <QtConcurrent>
-#include "common/rectc.h"
-#include "common/range.h"
 #include "common/wgs84.h"
+#include "common/programpaths.h"
 #include "IMG/imgdata.h"
 #include "IMG/gmapdata.h"
 #include "IMG/demtree.h"
@@ -81,8 +79,23 @@ IMGMap::IMGMap(const QString &fileName, bool GMAP, QObject *parent)
 	_valid = true;
 }
 
+IMGMap::~IMGMap()
+{
+	qDeleteAll(_data);
+	qDeleteAll(_styles);
+}
+
+IMG::Style *IMGMap::createStyle(IMG::MapData *data, const QString *typFile)
+{
+	if (typFile) {
+		SubFile typ(*typFile);
+		return new Style(_tileRatio, &typ);
+	} else
+		return new Style(_tileRatio, data->typ());
+}
+
 void IMGMap::load(const Projection &in, const Projection &out,
-  qreal devicelRatio, bool hidpi, int layer)
+  qreal devicelRatio, bool hidpi, int style, int layer)
 {
 	Q_UNUSED(in);
 	Q_UNUSED(hidpi);
@@ -102,8 +115,16 @@ void IMGMap::load(const Projection &in, const Projection &out,
 			_layer = All;
 	}
 
+	const QString *typ = 0;
+	if (style < 0 || style >= styles().size())
+		typ = (_data.first()->typ() || styles().isEmpty())
+		  ? 0 : &(styles().first());
+	else
+		typ = &(styles().at(style));
+
+	_styles.reserve(_data.size());
 	for (int i = 0; i < _data.size(); i++)
-		_data.at(i)->loadStyle(devicelRatio);
+		_styles.append(createStyle(_data.at(i), i ? 0 : typ));
 
 	updateTransform();
 
@@ -116,6 +137,9 @@ void IMGMap::unload()
 
 	for (int i = 0; i < _data.size(); i++)
 		_data.at(i)->clear();
+
+	qDeleteAll(_styles);
+	_styles = QList<IMG::Style*>();
 }
 
 int IMGMap::zoomFit(const QSize &size, const RectC &rect)
@@ -247,21 +271,24 @@ void IMGMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 	for (int n = 0; n < _data.size(); n++) {
 		for (int i = 0; i < width; i++) {
 			for (int j = 0; j < height; j++) {
-				QPixmap pm;
 				QPoint ttl(tl.x() + i * TILE_SIZE, tl.y() + j * TILE_SIZE);
-				QString key(_data.at(n)->fileName() + "-" + QString::number(_zoom)
-				  + "_" + QString::number(ttl.x()) + "_" + QString::number(ttl.y()));
+				QString key(_data.at(n)->fileName()
+				  + "-" + QString::number(_zoom)
+				  + "_" + QString::number(ttl.x())
+				  + "_" + QString::number(ttl.y()));
 
 				if (isRunning(key))
 					continue;
 
+				QPixmap pm;
 				if (QPixmapCache::find(key, &pm))
 					painter->drawPixmap(ttl, pm);
 				else {
 					tiles.append(RasterTile(_projection, _transform, _data.at(n),
-					  _zoom, QRect(ttl, QSize(TILE_SIZE, TILE_SIZE)), _tileRatio,
-					  key, !n && flags & Map::HillShading && _zoom >= 17
-					  && _zoom <= 24, _layer & Raster, _layer & Vector));
+					  _styles.at(n), _zoom, QRect(ttl, QSize(TILE_SIZE, TILE_SIZE)),
+					  _tileRatio, key, !n && flags & Map::HillShading
+					  && _zoom >= 17 && _zoom <= 24, _layer & Raster,
+					  _layer & Vector));
 				}
 			}
 		}
@@ -299,6 +326,23 @@ double IMGMap::elevation(const Coordinates &c)
 		return Map::elevation(c);
 }
 
+QStringList IMGMap::styles(int &defaultStyle) const
+{
+	QStringList list;
+	MapData *d = _data.first();
+	list.reserve(styles().size() + (d->typ() ? 1 : 0));
+
+	for (int i = 0; i < styles().size(); i++)
+		list.append(QFileInfo(styles().at(i)).baseName());
+
+	if (d->typ())
+		list.append(d->name());
+
+	defaultStyle = d->typ() ? list.size() - 1 : 0;
+
+	return list;
+}
+
 QStringList IMGMap::layers(const QString &lang, int &defaultLayer) const
 {
 	Q_UNUSED(lang);
@@ -326,4 +370,23 @@ Map* IMGMap::createGMAP(const QString &path, const Projection &proj, bool *isDir
 		*isDir = true;
 
 	return new IMGMap(path, true);
+}
+
+IMGMap::StyleList::StyleList()
+{
+	QString path(ProgramPaths::styleDir());
+	if (path.isEmpty())
+		return;
+
+	QDir dir(path);
+	QFileInfoList styles(dir.entryInfoList(QStringList("*.typ"), QDir::Files));
+
+	for (int i = 0; i < styles.size(); i++)
+		append(styles.at(i).absoluteFilePath());
+}
+
+IMGMap::StyleList &IMGMap::styles()
+{
+	static StyleList list;
+	return list;
 }

@@ -19,6 +19,7 @@ namespace Util
 	const QTemporaryDir &tempDir();
 	bool isSQLiteDB(const QString &path, QString &errorString);
 	QImage svg2img(const QString &path, qreal ratio);
+	QByteArray gunzip(const QByteArray &data);
 }
 
 #endif // UTIL_H

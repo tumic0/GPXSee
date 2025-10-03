@@ -323,10 +323,10 @@ void Atlas::draw(QPainter *painter, const QRectF &rect, int mapIndex,
 }
 
 void Atlas::load(const Projection &in, const Projection &out, qreal deviceRatio,
-  bool hidpi, int layer)
+  bool hidpi, int style, int layer)
 {
 	for (int i = 0; i < _maps.count(); i++)
-		_maps.at(i)->load(in, out, deviceRatio, hidpi, layer);
+		_maps.at(i)->load(in, out, deviceRatio, hidpi, style, layer);
 
 	computeZooms();
 	computeBounds();

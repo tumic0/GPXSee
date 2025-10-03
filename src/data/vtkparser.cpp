@@ -32,8 +32,8 @@ static bool varint(CTX &ctx, T &val)
 	unsigned int shift = 0;
 	val = 0;
 
-	while (ctx.bp < ctx.be) {
-		val |= ((quint8)*ctx.bp & 0x7F) << shift;
+	while ((ctx.bp < ctx.be) && (shift < sizeof(T) * 8)) {
+		val |= static_cast<T>((quint8)*ctx.bp & 0x7F) << shift;
 		shift += 7;
 		if (!((quint8)*ctx.bp++ & 0x80))
 			return true;
@@ -42,7 +42,7 @@ static bool varint(CTX &ctx, T &val)
 	return false;
 }
 
-static bool length(CTX &ctx, qint32 &val)
+static bool length(CTX &ctx, quint32 &val)
 {
 	if (TYPE(ctx.tag) != LEN)
 		return false;
@@ -50,12 +50,12 @@ static bool length(CTX &ctx, qint32 &val)
 	if (!varint(ctx, val))
 		return false;
 
-	return (val >= 0);
+	return true;
 }
 
 static bool skip(CTX &ctx)
 {
-	qint32 len = 0;
+	quint32 len = 0;
 
 	switch (TYPE(ctx.tag)) {
 		case VARINT:
@@ -64,7 +64,7 @@ static bool skip(CTX &ctx)
 			len = 8;
 			break;
 		case LEN:
-			if (!varint(ctx, len) || len < 0)
+			if (!varint(ctx, len))
 				return false;
 			break;
 		case I32:
@@ -83,8 +83,8 @@ static bool skip(CTX &ctx)
 
 static bool trackpoint(CTX &ctx, Trackpoint &t)
 {
-	qint32 len, lon = 0xFFFFFFF, lat = 0xFFFFFFF;
-	quint32 val, seconds = 0, centiSeconds = 0, speed = 0;
+	qint32 lon = 0xFFFFFFF, lat = 0xFFFFFFF;
+	quint32 len, val, seconds = 0, centiSeconds = 0, speed = 0;
 
 	if (!length(ctx, len))
 		return false;

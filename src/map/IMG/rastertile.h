@@ -17,9 +17,10 @@ class RasterTile
 {
 public:
 	RasterTile(const Projection &proj, const Transform &transform,
-	  MapData *data, int zoom, const QRect &rect, qreal ratio,
-	  const QString &key, bool hillShading, bool rasters, bool vectors)
-		: _proj(proj), _transform(transform), _style(data->style()), _zoom(zoom),
+	  MapData *data, const Style *style, int zoom, const QRect &rect,
+	  qreal ratio, const QString &key, bool hillShading, bool rasters,
+	  bool vectors)
+		: _proj(proj), _transform(transform), _style(style), _zoom(zoom),
 		_rect(rect), _ratio(ratio), _key(key), _hillShading(hillShading),
 		_rasters(rasters), _vectors(vectors)
 	{

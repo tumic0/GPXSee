@@ -50,6 +50,7 @@ class MapsforgeMap : public Map
 
 public:
 	MapsforgeMap(const QString &fileName, QObject *parent = 0);
+	~MapsforgeMap();
 
 	QRectF bounds() {return _bounds;}
 	RectC llBounds() {return _data.bounds();}
@@ -61,7 +62,7 @@ public:
 	int zoomOut();
 
 	void load(const Projection &in, const Projection &out, qreal deviceRatio,
-	  bool hidpi, int layer);
+	  bool hidpi, int style, int layer);
 	void unload();
 
 	QPointF ll2xy(const Coordinates &c)
@@ -71,6 +72,7 @@ public:
 
 	void draw(QPainter *painter, const QRectF &rect, Flags flags);
 
+	QStringList styles(int &defaultStyle) const;
 	QStringList layers(const QString &lang, int &defaultLayer) const;
 	bool hillShading() const;
 
@@ -83,6 +85,12 @@ private slots:
 	void jobFinished(MapsforgeMapJob *job);
 
 private:
+	class StyleList : public QStringList
+	{
+	public:
+		StyleList();
+	};
+
 	QString key(int zoom, const QPoint &xy) const;
 	Transform transform(int zoom) const;
 	void updateTransform();
@@ -91,8 +99,10 @@ private:
 	void removeJob(MapsforgeMapJob *job);
 	void cancelJobs(bool wait);
 
+	static StyleList &styles();
+
 	Mapsforge::MapData _data;
-	Mapsforge::Style _style;
+	Mapsforge::Style *_style;
 	int _zoom;
 
 	Projection _projection;

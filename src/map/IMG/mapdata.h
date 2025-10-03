@@ -10,7 +10,6 @@
 #include "common/rectc.h"
 #include "common/rtree.h"
 #include "common/range.h"
-#include "common/hash.h"
 #include "map/matrix.h"
 #include "label.h"
 #include "raster.h"
@@ -19,7 +18,6 @@
 
 namespace IMG {
 
-class Style;
 class SubDiv;
 class SubFile;
 class VectorTile;
@@ -95,14 +93,12 @@ public:
 	const QString &name() const {return _name;}
 	const RectC &bounds() const {return _bounds;}
 	const Range &zooms() const {return _zoomLevels;}
-	const Style *style() const {return _style;}
+	const SubFile *typ() const {return _typ;}
 	void polys(QFile *file, const RectC &rect, int bits, QList<Poly> *polygons,
 	  QList<Poly> *lines);
 	void points(QFile *file, const RectC &rect, int bits, QList<Point> *points);
 	void elevations(QFile *file, const RectC &rect, int bits,
 	  QList<Elevation> *elevations);
-
-	void loadStyle(qreal ratio);
 	void clear();
 
 	bool hasDEM() const {return _hasDEM;}
@@ -121,7 +117,6 @@ protected:
 	QString _name;
 	RectC _bounds;
 	SubFile *_typ;
-	Style *_style;
 	TileTree _tileTree;
 	QList<Zoom> _zooms;
 	Range _zoomLevels;

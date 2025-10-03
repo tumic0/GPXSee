@@ -1,5 +1,4 @@
 #include <QtGlobal>
-#include <QPainter>
 #include "common/rectc.h"
 #include "emptymap.h"
 

@@ -17,8 +17,6 @@
 #define PROJECTIONS_FILE "projections.csv"
 #define GCS_FILE         "gcs.csv"
 #define PCS_FILE         "pcs.csv"
-#define TYP_FILE         "style.typ"
-#define RENDERTHEME_FILE "style.xml"
 
 #ifdef Q_OS_ANDROID
 #define DATA_LOCATION QStandardPaths::GenericDataLocation
@@ -132,30 +130,24 @@ QString ProgramPaths::translationsDir()
 
 QString ProgramPaths::ellipsoidsFile()
 {
-	return QDir(crsDir()).filePath(ELLIPSOIDS_FILE);
+	QString dir(crsDir());
+	return dir.isEmpty() ? QString() : QDir(dir).filePath(ELLIPSOIDS_FILE);
 }
 
 QString ProgramPaths::gcsFile()
 {
-	return QDir(crsDir()).filePath(GCS_FILE);
+	QString dir(crsDir());
+	return dir.isEmpty() ? QString() : QDir(dir).filePath(GCS_FILE);
 }
 
 QString ProgramPaths::projectionsFile()
 {
-	return QDir(crsDir()).filePath(PROJECTIONS_FILE);
+	QString dir(crsDir());
+	return dir.isEmpty() ? QString() : QDir(dir).filePath(PROJECTIONS_FILE);
 }
 
 QString ProgramPaths::pcsFile()
 {
-	return QDir(crsDir()).filePath(PCS_FILE);
-}
-
-QString ProgramPaths::typFile()
-{
-	return QDir(styleDir()).filePath(TYP_FILE);
-}
-
-QString ProgramPaths::renderthemeFile()
-{
-	return QDir(styleDir()).filePath(RENDERTHEME_FILE);
+	QString dir(crsDir());
+	return dir.isEmpty() ? QString() : QDir(crsDir()).filePath(PCS_FILE);
 }

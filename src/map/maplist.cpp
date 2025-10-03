@@ -22,6 +22,7 @@
 #include "encmap.h"
 #include "encatlas.h"
 #include "corosmap.h"
+#include "pmtilesmap.h"
 #include "invalidmap.h"
 #include "maplist.h"
 
@@ -36,6 +37,7 @@ MapList::ParserMap MapList::parsers()
 	map.insert("xml", &MapSource::create);
 	map.insert("xml", &IMGMap::createGMAP);
 	map.insert("img", &IMGMap::createIMG);
+	map.insert("csm", &IMGMap::createIMG);
 	map.insert("jnx", &JNXMap::create);
 	map.insert("tif", &GeoTIFFMap::create);
 	map.insert("tiff", &GeoTIFFMap::create);
@@ -60,7 +62,9 @@ MapList::ParserMap MapList::parsers()
 	map.insert("otrk2.xml", &OruxMap::create);
 	map.insert("000", &ENCMap::create);
 	map.insert("031", &ENCAtlas::create);
-	map.insert("cra", &CorosMap::create);
+	map.insert("csa", &CorosMap::create);
+	map.insert("pmtiles", &PMTilesMap::create);
+	map.insert("t", &PMTilesMap::create);
 
 	return map;
 }
@@ -162,10 +166,10 @@ QString MapList::formats()
 	  + qApp->translate("MapList", "Electronic Navigational Charts")
 		+ " (*.000 *.031);;"
 	  + qApp->translate("MapList", "AlpineQuest maps") + " (*.aqm);;"
-	  + qApp->translate("MapList", "COROS maps") + " (*.cra);;"
+	  + qApp->translate("MapList", "COROS maps") + " (*.csa);;"
 	  + qApp->translate("MapList", "GEMF maps") + " (*.gemf);;"
 	  + qApp->translate("MapList", "Garmin IMG maps")
-		+ " (*.gmap *.gmapi *.img *.xml);;"
+		+ " (*.csm *.gmap *.gmapi *.img *.xml);;"
 	  + qApp->translate("MapList", "Garmin JNX maps") + " (*.jnx);;"
 	  + qApp->translate("MapList", "BSB nautical charts") + " (*.kap);;"
 	  + qApp->translate("MapList", "KMZ maps") + " (*.kmz);;"
@@ -173,6 +177,7 @@ QString MapList::formats()
 	  + qApp->translate("MapList", "OziExplorer maps") + " (*.map);;"
 	  + qApp->translate("MapList", "MBTiles maps") + " (*.mbtiles);;"
 	  + qApp->translate("MapList", "Orux maps") + " (*.otrk2.xml);;"
+	  + qApp->translate("MapList", "PMTiles maps") + " (*.pmtiles *.t);;"
 	  + qApp->translate("MapList", "QuickChart maps") + " (*.qct);;"
 	  + qApp->translate("MapList", "TwoNav maps") + " (*.rmap *.rtmap);;"
 	  + qApp->translate("MapList", "Osmdroid SQLite maps") + " (*.sqlite);;"

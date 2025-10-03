@@ -230,6 +230,7 @@
 			<match type="string" offset="16" value="DSKIMG"/>
 		</magic>
 		<glob pattern="*.img"/>
+		<glob pattern="*.csm"/>
 	</mime-type>
 
 	<mime-type type="application/vnd.garmin.jnx">
@@ -406,11 +407,20 @@
 		<glob pattern="*.gmi"/>
 	</mime-type>
 
-	<mime-type type="application/vnd.coros.cra">
+	<mime-type type="application/vnd.coros.csa">
 		<comment>COROS Map Atlas</comment>
 		<sub-class-of type="text/plain"/>
 		<generic-icon name="text/plain"/>
-		<glob pattern="*.cra"/>
+		<glob pattern="*.csa"/>
 	</mime-type>
 
+	<mime-type type="application/vnd.pmtiles">
+		<comment>PMTiles Map File</comment>
+		<sub-class-of type="application/octet-stream"/>
+		<generic-icon name="application/octet-stream"/>
+		<magic>
+			<match type="string" offset="0" value="PMTiles"/>
+		</magic>
+		<glob pattern="*.pmtiles"/>
+	</mime-type>
 </mime-info>

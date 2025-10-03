@@ -367,9 +367,12 @@ void GUI::createActions()
 	_showCoordinatesAction->setCheckable(true);
 	connect(_showCoordinatesAction, &QAction::triggered, _mapView,
 	  &MapView::showCursorCoordinates);
+	_mapStylesActionGroup = new QActionGroup(this);
+	connect(_mapStylesActionGroup, &QActionGroup::triggered, this,
+	  &GUI::selectMapStyle);
 	_mapLayersActionGroup = new QActionGroup(this);
 	connect(_mapLayersActionGroup, &QActionGroup::triggered, this,
-	  &GUI::selectMapLayers);
+	  &GUI::selectMapLayer);
 
 	// Position
 	_showPositionAction = new QAction(QIcon::fromTheme(SHOW_POS_NAME,
@@ -698,6 +701,9 @@ void GUI::createMenus()
 	_mapMenu->addAction(_loadMapDirAction);
 	_mapMenu->addAction(_clearMapCacheAction);
 	_mapMenu->addSeparator();
+	_mapStylesMenu = _mapMenu->addMenu(tr("Styles"));
+	_mapStylesMenu->menuAction()->setMenuRole(QAction::NoRole);
+	_mapStylesMenu->setEnabled(false);
 	_mapLayersMenu = _mapMenu->addMenu(tr("Layers"));
 	_mapLayersMenu->menuAction()->setMenuRole(QAction::NoRole);
 	_mapLayersMenu->setEnabled(false);
@@ -1792,7 +1798,14 @@ void GUI::showPathMarkerInfo(QAction *action)
 	}
 }
 
-void GUI::selectMapLayers(QAction *action)
+void GUI::selectMapStyle(QAction *action)
+{
+	_mapView->selectStyle(action->data().toInt());
+	updateMapLayers();
+	updateHillShading();
+}
+
+void GUI::selectMapLayer(QAction *action)
 {
 	_mapView->selectLayer(action->data().toInt());
 }
@@ -2179,6 +2192,7 @@ void GUI::mapChanged(QAction *action)
 	_map = action->data().value<Map*>();
 	_mapView->setMap(_map);
 	updateMapDEMDownloadAction();
+	updateMapStyles();
 	updateMapLayers();
 	updateHillShading();
 }
@@ -2329,6 +2343,27 @@ void GUI::updateMapDEMDownloadAction()
 {
 	_downloadMapDEMAction->setEnabled(!_dem->url().isEmpty()
 	  && !_dem->checkTiles(_map->llBounds()));
+}
+
+void GUI::updateMapStyles()
+{
+	_mapStylesMenu->clear();
+
+	int dflt = 0;
+	QStringList styles(_map->styles(dflt));
+
+	for (int i = 0; i < styles.size(); i++) {
+		QAction *a = new QAction(styles.at(i), _mapStylesMenu);
+		a->setActionGroup(_mapStylesActionGroup);
+		a->setMenuRole(QAction::NoRole);
+		a->setData(i);
+		a->setCheckable(true);
+		if (i == dflt)
+			a->setChecked(true);
+		_mapStylesMenu->addAction(a);
+	}
+
+	_mapStylesMenu->setEnabled(!styles.isEmpty());
 }
 
 void GUI::updateMapLayers()
@@ -3319,7 +3354,7 @@ void GUI::loadInitialMaps(const QString &selected)
 {
 	// Load the maps
 	QString mapDir(ProgramPaths::mapDir());
-	if (mapDir.isNull())
+	if (mapDir.isEmpty())
 		return;
 
 	TreeNode<Map*> maps(MapList::loadMaps(mapDir, _mapView->inputProjection()));
@@ -3338,7 +3373,7 @@ void GUI::loadInitialPOIs(const QStringList &disabled)
 {
 	// Load the POI files
 	QString poiDir(ProgramPaths::poiDir());
-	if (poiDir.isNull())
+	if (poiDir.isEmpty())
 		return;
 
 	TreeNode<QString> poiFiles(_poi->loadDir(poiDir));
