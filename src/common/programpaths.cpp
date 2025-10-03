@@ -130,20 +130,24 @@ QString ProgramPaths::translationsDir()
 
 QString ProgramPaths::ellipsoidsFile()
 {
-	return QDir(crsDir()).filePath(ELLIPSOIDS_FILE);
+	QString dir(crsDir());
+	return dir.isEmpty() ? QString() : QDir(dir).filePath(ELLIPSOIDS_FILE);
 }
 
 QString ProgramPaths::gcsFile()
 {
-	return QDir(crsDir()).filePath(GCS_FILE);
+	QString dir(crsDir());
+	return dir.isEmpty() ? QString() : QDir(dir).filePath(GCS_FILE);
 }
 
 QString ProgramPaths::projectionsFile()
 {
-	return QDir(crsDir()).filePath(PROJECTIONS_FILE);
+	QString dir(crsDir());
+	return dir.isEmpty() ? QString() : QDir(dir).filePath(PROJECTIONS_FILE);
 }
 
 QString ProgramPaths::pcsFile()
 {
-	return QDir(crsDir()).filePath(PCS_FILE);
+	QString dir(crsDir());
+	return dir.isEmpty() ? QString() : QDir(crsDir()).filePath(PCS_FILE);
 }

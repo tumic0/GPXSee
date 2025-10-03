@@ -35,9 +35,10 @@ App::App(int &argc, char **argv) : QApplication(argc, argv)
 	setApplicationVersion(APP_VERSION);
 
 	QTranslator *app = new QTranslator(this);
-	if (app->load(QLocale::system(), "gpxsee", "_",
-	  ProgramPaths::translationsDir()))
-		installTranslator(app);
+	QString trdir(ProgramPaths::translationsDir());
+	if (!trdir.isEmpty())
+		if (app->load(QLocale::system(), "gpxsee", "_", trdir))
+			installTranslator(app);
 
 	QTranslator *qt = new QTranslator(this);
 #if defined(Q_OS_WIN32) || defined(Q_OS_MAC)
@@ -169,10 +170,10 @@ void App::loadDatums()
 	QString ellipsoidsFile(ProgramPaths::ellipsoidsFile());
 	QString gcsFile(ProgramPaths::gcsFile());
 
-	if (!QFileInfo::exists(ellipsoidsFile)) {
+	if (ellipsoidsFile.isEmpty() || !QFileInfo::exists(ellipsoidsFile)) {
 		qWarning("No ellipsoids file found.");
 		ellipsoidsFile = QString();
-	} if (!QFileInfo::exists(gcsFile)) {
+	} if (gcsFile.isEmpty() || !QFileInfo::exists(gcsFile)) {
 		qWarning("No GCS file found.");
 		gcsFile = QString();
 	}
@@ -189,11 +190,11 @@ void App::loadPCSs()
 	QString projectionsFile(ProgramPaths::projectionsFile());
 	QString pcsFile(ProgramPaths::pcsFile());
 
-	if (!QFileInfo::exists(projectionsFile)) {
+	if (projectionsFile.isEmpty() || !QFileInfo::exists(projectionsFile)) {
 		qWarning("No projections file found.");
 		projectionsFile = QString();
 	}
-	if (!QFileInfo::exists(pcsFile)) {
+	if (pcsFile.isEmpty() || !QFileInfo::exists(pcsFile)) {
 		qWarning("No PCS file found.");
 		pcsFile = QString();
 	}

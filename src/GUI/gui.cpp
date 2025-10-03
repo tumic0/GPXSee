@@ -3354,7 +3354,7 @@ void GUI::loadInitialMaps(const QString &selected)
 {
 	// Load the maps
 	QString mapDir(ProgramPaths::mapDir());
-	if (mapDir.isNull())
+	if (mapDir.isEmpty())
 		return;
 
 	TreeNode<Map*> maps(MapList::loadMaps(mapDir, _mapView->inputProjection()));
@@ -3373,7 +3373,7 @@ void GUI::loadInitialPOIs(const QStringList &disabled)
 {
 	// Load the POI files
 	QString poiDir(ProgramPaths::poiDir());
-	if (poiDir.isNull())
+	if (poiDir.isEmpty())
 		return;
 
 	TreeNode<QString> poiFiles(_poi->loadDir(poiDir));
