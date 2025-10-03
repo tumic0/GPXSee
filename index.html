@@ -95,7 +95,7 @@
             <li>User-definable online maps (OpenStreetMap/Google tiles, WMTS,
                 WMS, TMS, QuadTiles).</li>
             <li>Offline maps (OziExplorer maps, TrekBuddy maps/atlases, Garmin IMG/GMAP
-                &amp; JNX maps, TwoNav RMaps, GeoTIFF images, MBTiles, BSB charts,
+                &amp; JNX maps, TwoNav RMaps, GeoTIFF images, MBTiles, PMTiles, BSB charts,
                 ENC charts, KMZ maps, AlpineQuest maps, Locus/OsmAnd/RMaps SQLite maps,
                 Mapsforge maps, QCT maps, GEMF maps, Osmdroid SQLite maps, Orux maps,
                 COROS maps, ESRI World-File georeferenced images).</li>
@@ -203,6 +203,18 @@
         <div class="latest-news">
           <h2>Releases</h2>
           <div class="news-item">
+            <p class="date">Oct 3 2025</p>
+            <h3>Version 14.0</h3>
+            <ul>
+              <li>Added support for map style selection for Mapsforge, Garmin IMG
+                  and all MVT based maps (requires QtPBFImagePlugin v5).</li>
+              <li>Added support for PMTiles maps.</li>
+              <li>Mapsforge and MVT styles now use subdirectories of the "style"
+                  directory.</li>
+              <li>COROS maps now use *.csa as the atlas file.</li>
+            </ul>
+          </div>
+          <div class="news-item">
             <p class="date">Sep 20 2025</p>
             <h3>Version 13.48</h3>
             <ul>
@@ -232,14 +244,6 @@
             <ul>
               <li>Vector maps styles tweaks.</li>
               <li>Mac builds now use Qt6 and are compiled for both x86-64 and arm64.</li>
-            </ul>
-          </div>
-          <div class="news-item">
-            <p class="date">Jun 7 2025</p>
-            <h3>Version 13.44</h3>
-            <ul>
-              <li>Added tracks/routes/areas legend option.</li>
-              <li>Various minor fixes.</li>
             </ul>
           </div>
         </div>

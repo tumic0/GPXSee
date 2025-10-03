@@ -204,16 +204,18 @@ $ gpxsee 'geo:323482,4306480;crs=EPSG:32618'
 </pre>
 
            <p>In case of vector tile images (MVT<sup><a href="#pbf">2</a></sup>),
-           set the type attribute of the <i>tile</i> tag to "vector". This will
+           set the "type" attribute of the <i>tile</i> tag to "vector". This will
            adjust the pixel ratio of the tile to the pixel ratio of the display
-           device.</p>
+           device. For the MVT style autodetection to work, you have to properly
+           define the "vectorLayers" set to include all source layers of the MVT
+           schema.</p>
 
 <pre>
 &lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;map xmlns="http://www.gpxsee.org/map/1.5"&gt;
   &lt;name>MapTiler&lt;/name&gt;
   &lt;url>https://maps.tilehosting.com/data/v3/$z/$x/$y.pbf?key=apikey&lt;/url>
-  &lt;tile type="vector" size="512"/&gt;
+  &lt;tile type="vector" size="512" vectorLayers="landscape,cities,roads"/&gt;
   &lt;zoom max="14"/&gt;
 &lt;/map&gt;
 </pre>
@@ -326,8 +328,8 @@ $ gpxsee 'geo:323482,4306480;crs=EPSG:32618'
 
           <h3 id="offline">Offline maps</h3>
           <p>OziExplorer maps, TrekBuddy maps/atlases, Garmin JNX &amp; IMG/GMAP maps,
-          TwoNav RMaps, MBTiles, KMZ maps, AlpineQuest AQM maps, Locus/OsmAnd/RMaps SQLite
-          maps, Mapsforge maps, BSB charts, ENC charts, QCT maps, GEMF maps,
+          TwoNav RMaps, MBTiles, PMTiles, KMZ maps, AlpineQuest AQM maps, Locus/OsmAnd/RMaps
+          SQLite maps, Mapsforge maps, BSB charts, ENC charts, QCT maps, GEMF maps,
           Osmdroid SQLite maps, Orux maps, COROS maps and GeoTIFF and World-File georeferenced
           images are supported by GPXSee.</p>
 
@@ -335,10 +337,11 @@ $ gpxsee 'geo:323482,4306480;crs=EPSG:32618'
           <a href="http://mobac.sourceforge.net/">Mobile Atlas Creator (MOBAC)</a>.</p>
 
           <h4 id="COROS">COROS maps</h4>
-          <p>COROS maps as provided by the watch manufacturer are simply a set (atlas) of
+          <h5>COROS V4 maps</h5>
+          <p>COROS V4 maps as provided by the watch manufacturer are simply a set (atlas) of
           GARMIN IMG maps and the directory structure does not provide any "index" file. As
           GPXSee needs a file when opening a map, you have to create such a index file after
-          unzipping the map archive. Only the file extension - which must be ".cra" - matters,
+          unzipping the map archive. Only the file extension - which must be ".csa" - matters,
           the basename is arbitrary and used as the map name in the GPXSee map menu. The
           file does not need to have any content, but must be at the same level as the "Map"
           directory.</p>
@@ -354,7 +357,7 @@ $ gpxsee 'geo:323482,4306480;crs=EPSG:32618'
 
 <pre>
 Czechoslovakia
-├── Czechoslovakia.cra
+├── Czechoslovakia.csa
 ├── Czechoslovakia.typ
 └── Map
     ├── CM
@@ -368,6 +371,12 @@ Czechoslovakia
           <p>If there is a TYP file with the same basename as the ".cra" index file, like in the
           example above, it is used for the whole atlas (individual map TYP files are ignored
           in the COROS atlases).</p>
+
+          <h5>COROS V5 maps</h5>
+          <p>COROS V5 maps are a set (atlas) of PMTiles maps. For now, only opening the individual
+          maps (tiles) is supported by GPXSee. Use the
+          <a href="https://github.com/tumic0/QtPBFImagePlugin-styles/tree/master/COROS/COROS">COROS</a>
+          style to display the maps.</p>
 
           <h4 id="IMG">IMG maps</h4>
           <p>There is support for IMG maps overlay in GPXSee since version 7.30. If the map
@@ -399,13 +408,53 @@ Czechoslovakia
 
 
           <h3 id="styles">Map styles</h3>
-          <p>MVT(PBF), Mapsforge and Garmin IMG maps can be styled with user defined styles.
-          To apply a user defined style, place it to the <code>style</code> directory in
-          one of the configuration paths. The style must be named <i>style.typ</i> (Garmin
-          IMG), <i>style.xml</i> (Mapsforge) or <i>style.json</i> (MVT) for GPXSee to use it.
-          If a Garmin IMG map contains a TYP file, it takes precedence over the user TYP
-          file.</p>
+          <p>Mapsforge, Garmin IMG and all MVT/PBF based maps (Online, MBTiles, PMTiles) can
+          be styled with user defined styles. To enable a user defined style, place it to the
+          <code>style</code> directory in one of the configuration paths. Mapsforge and MVT
+          styles are loaded from subdirectories of the <code>style</code> directory, the TYP
+          files are placed directly into the <code>style</code> directory.</p>
 
+          <p>A sample <code>style</code> directory with two Mapsforge styles (Settler, TOTM),
+          two MVT styles (Esri, IGN) and two GARMIN IMG styles (OpenFietsMap, FrikartNO)
+          will have the following structure:</p>
+
+<pre>
+style
+├── Esri
+│   ├── sprite.json
+│   ├── sprite.png
+│   ├── sprite@2x.json
+│   ├── sprite@2x.png
+│   └── style.json
+├── FrikartNO.typ
+├── IGN
+│   ├── sprite.json
+│   ├── sprite.png
+│   └── style.json
+├── OpenFietsMap.typ
+├── Settler
+│   ├── osmc
+│   │   ├── bg_black_circle.svg
+│   │   └── ...
+│   ├── patterns
+│   │   ├── access-destination.svg
+│   │   └── ...
+│   ├── Settler.xml
+│   └── symbols
+│       ├── aerialway_station.svg
+│       └── ...
+└── TOTM
+    ├── exps
+    │   ├── p_surf_gray.svg
+    │   └── ...
+    ├── patterns
+    │   ├── allotments.png
+    │   └── ...
+    ├── symbols
+    │   ├── adit-dis.svg
+    │   └── ...
+    └── TOTM.xml
+</pre>
 
           <h2 id="poi">POI files</h2>
           <p>All of the supported formats with waypoints capability - GPX, KML, TCX, NMEA,
