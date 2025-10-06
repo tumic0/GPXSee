@@ -174,23 +174,25 @@ static QList<QPolygonF> polyLines(const QPainterPath &path, const QRectF &rect)
 	bool lastIn = rect.contains(path.elementAt(0));
 
 	for (int i = 1; i < path.elementCount(); i++) {
-		if (rect.contains(path.elementAt(i))) {
+		QPainterPath::Element e(path.elementAt(i));
+
+		if (e.isLineTo() && rect.contains(e)) {
 			if (lastIn) {
 				if (line.isEmpty())
 					line.append(path.elementAt(i-1));
-				line.append(path.elementAt(i));
+				line.append(e);
 			} else {
 				QPointF p;
-				QLineF l(path.elementAt(i-1), path.elementAt(i));
+				QLineF l(path.elementAt(i-1), e);
 
 				if (intersection(l, rect, &p))
 					line.append(p);
-				line.append(path.elementAt(i));
+				line.append(e);
 			}
 
 			lastIn = true;
-		} else {
-			QLineF l(path.elementAt(i-1), path.elementAt(i));
+		} else if (e.isLineTo()) {
+			QLineF l(path.elementAt(i-1), e);
 
 			if (lastIn) {
 				QPointF p;
@@ -211,6 +213,14 @@ static QList<QPolygonF> polyLines(const QPainterPath &path, const QRectF &rect)
 			}
 
 			lastIn = false;
+		} else {
+			if (lastIn)
+				line.append(path.elementAt(i-1));
+
+			lines.append(line);
+			line.clear();
+
+			lastIn = rect.contains(e);
 		}
 	}
 
