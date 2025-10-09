@@ -124,7 +124,8 @@ HEADERS += src/common/config.h \
     src/data/vtkparser.h \
     src/map/ENC/data.h \
     src/map/IMG/light.h \
-    src/map/corosmap.h \
+    src/map/coros4map.h \
+    src/map/coros5map.h \
     src/map/downloader.h \
     src/map/demloader.h \
     src/map/ENC/attributes.h \
@@ -152,6 +153,9 @@ HEADERS += src/common/config.h \
     src/map/mvtstyle.h \
     src/map/oruxmap.h \
     src/map/osmdroidmap.h \
+    src/map/pmtile.h \
+    src/map/pmtilejob.h \
+    src/map/pmtiles.h \
     src/map/pmtilesmap.h \
     src/map/proj/polyconic.h \
     src/map/proj/webmercator.h \
@@ -358,7 +362,8 @@ SOURCES += src/main.cpp \
     src/data/txtparser.cpp \
     src/data/vkxparser.cpp \
     src/data/vtkparser.cpp \
-    src/map/corosmap.cpp \
+    src/map/coros4map.cpp \
+    src/map/coros5map.cpp \
     src/map/downloader.cpp \
     src/map/demloader.cpp \
     src/map/ENC/atlasdata.cpp \
@@ -378,6 +383,7 @@ SOURCES += src/main.cpp \
     src/map/mvtstyle.cpp \
     src/map/oruxmap.cpp \
     src/map/osmdroidmap.cpp \
+    src/map/pmtiles.cpp \
     src/map/pmtilesmap.cpp \
     src/map/proj/polyconic.cpp \
     src/map/proj/webmercator.cpp \

@@ -1,5 +1,4 @@
 #include <QPainter>
-#include <QDataStream>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QPixmapCache>
@@ -9,133 +8,7 @@
 #define MAX_TILE_SIZE   4096
 #define LEAF_CACHE_SIZE 16
 
-struct Header {
-	quint64 magic;
-	quint64 rootOffset;
-	quint64 rootLength;
-	quint64 metadataOffset;
-	quint64 metadataLength;
-	quint64 leafOffset;
-	quint64 leafLength;
-	quint64 tileOffset;
-	quint64 tileLength;
-	quint64 addressedTiles;
-	quint64 tileEntries;
-	quint64 tileContents;
-	qint32 minLon;
-	qint32 minLat;
-	qint32 maxLon;
-	qint32 maxLat;
-	quint8 c;
-	quint8 ic;
-	quint8 tc;
-	quint8 tt;
-	quint8 minZ;
-	quint8 maxZ;
-};
-
-template<typename T>
-static bool varint(char **bp, const char *be, T &val)
-{
-	unsigned int shift = 0;
-	val = 0;
-
-	while ((*bp < be) && (shift < sizeof(T) * 8)) {
-		val |= static_cast<T>((quint8)**bp & 0x7F) << shift;
-		shift += 7;
-		if (!((quint8)*(*bp)++ & 0x80))
-			return true;
-	}
-
-	return false;
-}
-
-static quint64 id(unsigned z, const QPoint &p)
-{
-	unsigned x = p.x();
-	unsigned y = p.y();
-	quint64 acc = ((1 << (z * 2)) - 1) / 3;
-
-	for (int a = z - 1; a >= 0; a--) {
-		quint64 s = 1 << a;
-		quint64 rx = s & x;
-		quint64 ry = s & y;
-
-		acc += ((3 * rx) ^ ry) << a;
-		if (ry == 0) {
-			if (rx != 0) {
-				x = s - 1 - x;
-				y = s - 1 - y;
-			}
-			std::swap(x, y);
-		}
-	}
-
-	return acc;
-}
-
-int PMTilesMap::defaultStyle(const QStringList &vectorLayers)
-{
-	for (int i = 0; i < _styles.size(); i++)
-		if (_styles.at(i).matches(vectorLayers))
-			return i;
-
-	qWarning("%s: no matching MVT style found", qUtf8Printable(path()));
-
-	return 0;
-}
-
-QByteArray PMTilesMap::readData(quint64 offset, quint64 size, quint8 compression)
-{
-	QByteArray ba;
-
-	if (!_file.seek(offset))
-		return QByteArray();
-
-	ba.resize(size);
-	if (_file.read(ba.data(), ba.size()) != ba.size())
-		return QByteArray();
-
-	return (compression == 2) ? Util::gunzip(ba) : ba;
-}
-
-QVector<PMTilesMap::Directory> PMTilesMap::readDir(quint64 offset, quint64 size,
-  quint8 compression)
-{
-	QByteArray uba(readData(offset, size, compression));
-	if (uba.isNull())
-		return QVector<Directory>();
-
-	char *bp = uba.data();
-	const char *be = uba.constData() + uba.size();
-	quint64 n;
-	if (!varint(&bp, be, n))
-		return QVector<Directory>();
-
-	QVector<Directory> dirs;
-	dirs.resize(n);
-	for (int i = 0; i < dirs.size(); i++) {
-		quint64 tileId;
-		if (!varint(&bp, be, tileId))
-			return QVector<Directory>();
-		dirs[i].tileId = i ? tileId + dirs[i-1].tileId : tileId;
-	}
-	for (int i = 0; i < dirs.size(); i++)
-		if (!varint(&bp, be, dirs[i].runLength))
-			return QVector<Directory>();
-	for (int i = 0; i < dirs.size(); i++)
-		if (!varint(&bp, be, dirs[i].length))
-			return QVector<Directory>();
-	for (int i = 0; i < dirs.size(); i++) {
-		quint64 offset;
-		if (!varint(&bp, be, offset))
-			return QVector<Directory>();
-		dirs[i].offset = offset
-		  ? offset - 1 : dirs[i-1].offset + dirs[i-1].length;
-	}
-
-	return dirs;
-}
+using namespace PMTiles;
 
 PMTilesMap::PMTilesMap(const QString &fileName, QObject *parent)
   : Map(fileName, parent), _file(fileName), _style(0), _mapRatio(1.0),
@@ -150,31 +23,9 @@ PMTilesMap::PMTilesMap(const QString &fileName, QObject *parent)
 
 	// header
 	Header hdr;
-	QDataStream stream(&_file);
-	stream.setByteOrder(QDataStream::LittleEndian);
-	stream >> hdr.magic >> hdr.rootOffset >> hdr.rootLength
-	  >> hdr.metadataOffset >> hdr.metadataLength >> hdr.leafOffset
-	  >> hdr.leafLength >> hdr.tileOffset >> hdr.tileLength
-	  >> hdr.addressedTiles >> hdr.tileEntries >> hdr.tileContents
-	  >> hdr.c >> hdr.ic >> hdr.tc >> hdr.tt >> hdr.minZ >> hdr.maxZ
-	  >> hdr.minLon >> hdr.minLat >> hdr.maxLon >> hdr.maxLat;
-
-	if (stream.status() || (hdr.magic & 0xFFFFFFFFFFFFFF) != 0x73656c69544d50) {
-		_errorString = "Not a PMTiles file";
-		return;
-	}
-	if ((hdr.magic >> 56) != 3) {
-		_errorString = QString("%1: unsupported PMTiles version")
-		  .arg(hdr.magic >> 56);
-		return;
-	}
-	if (hdr.ic < 1 || hdr.ic > 2) {
-		_errorString = QString("%1: unsupported internal compression")
-		  .arg(hdr.ic);
-		return;
-	}
-	if (hdr.tc < 1 || hdr.tc > 2) {
-		_errorString = QString("%1: unsupported tile compression").arg(hdr.ic);
+	QString err;
+	if (!readHeader(_file, hdr, err)) {
+		_errorString = err;
 		return;
 	}
 
@@ -202,7 +53,8 @@ PMTilesMap::PMTilesMap(const QString &fileName, QObject *parent)
 	// metadata
 	QStringList vectorLayers;
 	if (hdr.metadataLength) {
-		QByteArray uba(readData(hdr.metadataOffset, hdr.metadataLength, hdr.ic));
+		QByteArray uba(readData(_file, hdr.metadataOffset, hdr.metadataLength,
+		  hdr.ic));
 		if (uba.isNull())
 			qWarning("%s: error reading metadata", qUtf8Printable(fileName));
 		else {
@@ -222,7 +74,7 @@ PMTilesMap::PMTilesMap(const QString &fileName, QObject *parent)
 	}
 
 	// root directory
-	_root = readDir(hdr.rootOffset, hdr.rootLength, hdr.ic);
+	_root = readDir(_file, hdr.rootOffset, hdr.rootLength, hdr.ic);
 	if (_root.isEmpty()) {
 		_errorString = "Error reading root directory";
 		return;
@@ -361,33 +213,6 @@ qreal PMTilesMap::tileSize() const
 	return (_tileSize / coordinatesRatio());
 }
 
-const PMTilesMap::Directory *PMTilesMap::findDir(const QVector<Directory> &list,
-  quint64 tileId)
-{
-	qint64 m = 0;
-	qint64 n = list.size() - 1;
-
-	while (m <= n) {
-		quint64 k = (n + m) >> 1;
-		qint64 cmp = (qint64)tileId - (qint64)list.at(k).tileId;
-		if (cmp > 0)
-			m = k + 1;
-		else if (cmp < 0)
-			n = k - 1;
-		else
-			return &list.at(k);
-	}
-
-	if (n >= 0) {
-		if (!list.at(n).runLength)
-			return &list.at(n);
-		if (tileId - list.at(n).tileId < (quint64)list.at(n).runLength)
-			return &list.at(n);
-	}
-
-	return 0;
-}
-
 QByteArray PMTilesMap::tileData(quint64 id)
 {
 	const Directory *d = findDir(_root, id);
@@ -396,15 +221,16 @@ QByteArray PMTilesMap::tileData(quint64 id)
 	if (!d->runLength) {
 		QVector<Directory> *leaf = _cache.object(d->offset);
 		if (!leaf) {
-			leaf = new QVector<Directory>(readDir(_leafOffset + d->offset,
+			leaf = new QVector<Directory>(readDir(_file, _leafOffset + d->offset,
 			  d->length, _ic));
 			_cache.insert(d->offset, leaf);
 		}
 		const Directory *l = findDir(*leaf, id);
 		return (l)
-		  ? readData(_tileOffset + l->offset, l->length, 1) : QByteArray();
+		  ? readData(_file, _tileOffset + l->offset, l->length, 1)
+		  : QByteArray();
 	} else
-		return readData(_tileOffset + d->offset, d->length, 1);
+		return readData(_file, _tileOffset + d->offset, d->length, 1);
 }
 
 bool PMTilesMap::isRunning(const QString &key) const
@@ -419,21 +245,21 @@ bool PMTilesMap::isRunning(const QString &key) const
 	return false;
 }
 
-void PMTilesMap::runJob(PMTilesMapJob *job)
+void PMTilesMap::runJob(PMTileJob *job)
 {
 	_jobs.append(job);
 
-	connect(job, &PMTilesMapJob::finished, this, &PMTilesMap::jobFinished);
+	connect(job, &PMTileJob::finished, this, &PMTilesMap::jobFinished);
 	job->run();
 }
 
-void PMTilesMap::removeJob(PMTilesMapJob *job)
+void PMTilesMap::removeJob(PMTileJob *job)
 {
 	_jobs.removeOne(job);
 	job->deleteLater();
 }
 
-void PMTilesMap::jobFinished(PMTilesMapJob *job)
+void PMTilesMap::jobFinished(PMTileJob *job)
 {
 	const QList<PMTile> &tiles = job->tiles();
 
@@ -513,7 +339,7 @@ void PMTilesMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 				drawTile(painter, pm, tp);
 			}
 		} else
-			runJob(new PMTilesMapJob(tiles));
+			runJob(new PMTileJob(tiles));
 	}
 }
 
@@ -535,6 +361,17 @@ Coordinates PMTilesMap::xy2ll(const QPointF &p)
 	qreal scale = OSM::zoom2scale(_zooms.at(_zoom).z, _tileSize);
 	return OSM::m2ll(QPointF(p.x() * scale, -p.y() * scale)
 	  * coordinatesRatio());
+}
+
+int PMTilesMap::defaultStyle(const QStringList &vectorLayers)
+{
+	for (int i = 0; i < _styles.size(); i++)
+		if (_styles.at(i).matches(vectorLayers))
+			return i;
+
+	qWarning("%s: no matching MVT style found", qUtf8Printable(path()));
+
+	return 0;
 }
 
 QStringList PMTilesMap::styles(int &defaultStyle) const
