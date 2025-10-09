@@ -361,11 +361,14 @@ void Coros5Map::draw(QPainter *painter, const QRectF &rect, Flags flags)
 				Coordinates tl(OSM::tile2ll(t, zoom.base));
 				Coordinates br(OSM::tile2ll(QPoint(t.x() + 1, t.y() + 1),
 				  zoom.base));
+				RectC r(Coordinates(tl.lon(), -tl.lat()),
+				  Coordinates(br.lon(), -br.lat()));
+				Coordinates c(r.center());
 
-				min[0] = tl.lon();
-				min[1] = -br.lat();
-				max[0] = br.lon();
-				max[1] = -tl.lat();
+				min[0] = c.lon();
+				min[1] = c.lat();
+				max[0] = c.lon();
+				max[1] = c.lat();
 				_maps.Search(min, max, cb, &map);
 
 				if (map)
