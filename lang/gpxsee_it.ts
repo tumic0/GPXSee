@@ -30,12 +30,12 @@
     <message>
         <location filename="../src/GUI/cadencegraph.cpp" line="28"/>
         <source>Avg</source>
-        <translation type="unfinished"></translation>
+        <translation>Media</translation>
     </message>
     <message>
         <location filename="../src/GUI/cadencegraph.cpp" line="30"/>
         <source>Max</source>
-        <translation type="unfinished"></translation>
+        <translation>Max</translation>
     </message>
     <message>
         <location filename="../src/GUI/cadencegraph.cpp" line="33"/>
@@ -185,17 +185,17 @@
     <message>
         <location filename="../src/data/data.cpp" line="253"/>
         <source>70mai GPS log files</source>
-        <translation type="unfinished"></translation>
+        <translation>File log GPS 70mai</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="254"/>
         <source>VKX files</source>
-        <translation type="unfinished"></translation>
+        <translation>File VKX</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="255"/>
         <source>VTK files</source>
-        <translation type="unfinished"></translation>
+        <translation>File VTK</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="256"/>
@@ -205,7 +205,7 @@
     <message>
         <location filename="../src/data/data.cpp" line="257"/>
         <source>GPSDump files</source>
-        <translation type="unfinished"></translation>
+        <translation>File GPSDump</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="258"/>
@@ -238,25 +238,25 @@
         <location filename="../src/GUI/elevationgraph.cpp" line="59"/>
         <source>Up</source>
         <extracomment>Use an Unicode arrow (U+2197) when there is no abbreviation or extremly short term for &quot;Up&quot; in your language</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Su</translation>
     </message>
     <message>
         <location filename="../src/GUI/elevationgraph.cpp" line="63"/>
         <source>Down</source>
         <extracomment>Use an Unicode arrow (U+2198) when there is no abbreviation or extremly short term for &quot;Down&quot; in your language</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Giù</translation>
     </message>
     <message>
         <location filename="../src/GUI/elevationgraph.cpp" line="66"/>
         <source>Max</source>
         <extracomment>Use an abbreviation or a extremly short term</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Max</translation>
     </message>
     <message>
         <location filename="../src/GUI/elevationgraph.cpp" line="69"/>
         <source>Min</source>
         <extracomment>Use an abbreviation or a extremly short term</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Min</translation>
     </message>
     <message>
         <location filename="../src/GUI/elevationgraph.cpp" line="72"/>
@@ -651,7 +651,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="529"/>
         <source>Show tabs</source>
-        <translation type="unfinished"></translation>
+        <translation>Mostra schede</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="535"/>
@@ -951,12 +951,12 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="970"/>
         <source>Zoom in</source>
-        <translation>Zoom in</translation>
+        <translation>Ingrandisci</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="972"/>
         <source>Zoom out</source>
-        <translation>Zoom out</translation>
+        <translation>Riduci</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="974"/>
@@ -1682,7 +1682,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="329"/>
         <source>Map</source>
-        <translation>Mappe</translation>
+        <translation>Mappa</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="336"/>
@@ -1725,7 +1725,7 @@
         <location filename="../src/GUI/optionsdialog.cpp" line="360"/>
         <location filename="../src/GUI/optionsdialog.cpp" line="378"/>
         <source>Smoothing</source>
-        <translation>Smoothing</translation>
+        <translation>Lisciamento</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="354"/>
@@ -2663,7 +2663,7 @@
     <message>
         <location filename="../src/GUI/trackitem.cpp" line="40"/>
         <source>Links</source>
-        <translation>Links</translation>
+        <translation>Collegamenti</translation>
     </message>
     <message>
         <location filename="../src/GUI/trackitem.cpp" line="46"/>
@@ -2706,7 +2706,7 @@
     <message>
         <location filename="../src/GUI/waypointitem.cpp" line="50"/>
         <source>Symbol</source>
-        <translation type="unfinished"></translation>
+        <translation>Simbolo</translation>
     </message>
     <message>
         <location filename="../src/GUI/waypointitem.cpp" line="55"/>

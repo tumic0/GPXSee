@@ -72,17 +72,17 @@
     <message>
         <location filename="../src/map/corosmap.cpp" line="377"/>
         <source>All</source>
-        <translation type="unfinished">Tümü</translation>
+        <translation>Tümü</translation>
     </message>
     <message>
         <location filename="../src/map/corosmap.cpp" line="377"/>
         <source>Landscape</source>
-        <translation type="unfinished">Yatay</translation>
+        <translation>Manzara</translation>
     </message>
     <message>
         <location filename="../src/map/corosmap.cpp" line="377"/>
         <source>Topo</source>
-        <translation type="unfinished"></translation>
+        <translation>Topo</translation>
     </message>
 </context>
 <context>
@@ -581,7 +581,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="444"/>
         <source>Legend</source>
-        <translation type="unfinished"></translation>
+        <translation>Lejant</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="452"/>
@@ -657,13 +657,13 @@
         <location filename="../src/GUI/gui.cpp" line="535"/>
         <location filename="../src/GUI/gui.cpp" line="967"/>
         <source>Next graph tab</source>
-        <translation type="unfinished"></translation>
+        <translation>Sonraki grafik sekmesi</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="540"/>
         <location filename="../src/GUI/gui.cpp" line="969"/>
         <source>Previous graph tab</source>
-        <translation type="unfinished"></translation>
+        <translation>Önceki grafik sekmesi</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="548"/>
@@ -760,7 +760,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="704"/>
         <source>Styles</source>
-        <translation type="unfinished"></translation>
+        <translation>Tarzlar</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="707"/>
@@ -1372,7 +1372,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="169"/>
         <source>COROS maps</source>
-        <translation type="unfinished"></translation>
+        <translation>COROS haritaları</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="175"/>
@@ -1397,7 +1397,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="180"/>
         <source>PMTiles maps</source>
-        <translation type="unfinished"></translation>
+        <translation>PMTiles haritaları</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="181"/>
