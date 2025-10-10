@@ -51,6 +51,7 @@ private:
 		MapTile(const QString &path);
 
 		bool isValid() const {return bounds.isValid() && zooms.isValid();}
+		QStringList vectorLayers() const;
 
 		QString path;
 		RectC bounds;
