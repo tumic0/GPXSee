@@ -760,7 +760,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="704"/>
         <source>Styles</source>
-        <translation type="unfinished"></translation>
+        <translation>Stiler</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="707"/>
@@ -1399,7 +1399,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="180"/>
         <source>PMTiles maps</source>
-        <translation type="unfinished"></translation>
+        <translation>PMTiles-kart</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="181"/>
