@@ -368,12 +368,11 @@ void Coros5Map::draw(QPainter *painter, const QRectF &rect, Flags flags)
 				  zoom.base));
 				RectC r(Coordinates(tl.lon(), -tl.lat()),
 				  Coordinates(br.lon(), -br.lat()));
-				Coordinates c(r.center());
 
-				min[0] = c.lon();
-				min[1] = c.lat();
-				max[0] = c.lon();
-				max[1] = c.lat();
+				min[0] = r.left();
+				min[1] = r.bottom();
+				max[0] = r.right();
+				max[1] = r.top();
 				_maps.Search(min, max, cb, &map);
 
 				if (map)
