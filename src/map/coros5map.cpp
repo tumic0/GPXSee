@@ -110,15 +110,20 @@ Coros5Map::Coros5Map(const QString &fileName, QObject *parent)
 	const MapTile *mt = _maps.GetAt(it);
 	QFile file(mt->path);
 	file.open(QIODevice::ReadOnly);
+	QVector<Directory> root(readDir(file, mt->rootOffset, mt->rootLength,
+	  mt->ic));
+	if (root.isEmpty()) {
+		_errorString = "Invalid tile data";
+		return;
+	}
 
 	// tile size
 	QByteArray data;
-	QVector<Directory> r(readDir(file, mt->rootOffset, mt->rootLength, mt->ic));
 	if (mt->tc == 2) {
-		QByteArray gzip(tileData(mt, r.first().tileId));
+		QByteArray gzip(tileData(mt, root.first().tileId));
 		data = Util::gunzip(gzip);
 	} else
-		data = tileData(mt, r.first().tileId);
+		data = tileData(mt, root.first().tileId);
 	QBuffer buffer(&data);
 	QImageReader reader(&buffer);
 	QSize tileSize(reader.size());
@@ -130,7 +135,7 @@ Coros5Map::Coros5Map(const QString &fileName, QObject *parent)
 
 	// tile style
 	if (mt->tt == 1) {
-		QStringList vectorLayers;
+		_styles = MVTStyle::fromJSON(reader.text("Description").toUtf8());
 
 		if (mt->metadataLength) {
 			QByteArray uba(readData(file, mt->metadataOffset, mt->metadataLength,
@@ -144,15 +149,15 @@ Coros5Map::Coros5Map(const QString &fileName, QObject *parent)
 					qWarning("%s: metadata error: %s", qUtf8Printable(mt->path),
 					  qUtf8Printable(error.errorString()));
 				else {
+					QStringList vectorLayers;
 					QJsonObject json(doc.object());
 					QJsonArray vl(json["vector_layers"].toArray());
 					for (int i = 0; i < vl.size(); i++)
 						vectorLayers.append(vl.at(i).toObject()["id"].toString());
+
+					_style = defaultStyle(vectorLayers);
 				}
 			}
-
-			_styles = MVTStyle::fromJSON(reader.text("Description").toUtf8());
-			_style = defaultStyle(vectorLayers);
 		} else
 			qWarning("%s: missing metadate", qUtf8Printable(mt->path));
 
