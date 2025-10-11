@@ -137,7 +137,7 @@ quint64 PMTiles::id(unsigned zoom, const QPoint &tile)
 	quint64 acc = ((1 << (zoom * 2)) - 1) / 3;
 
 	for (int a = zoom - 1; a >= 0; a--) {
-		quint64 s = 1 << a;
+		quint64 s = 1ULL << a;
 		quint64 rx = s & x;
 		quint64 ry = s & y;
 
