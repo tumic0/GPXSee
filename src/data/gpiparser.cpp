@@ -399,11 +399,10 @@ static quint32 readImageInfo(DataStream &stream, Waypoint &waypoint,
 		QFile imgFile(Util::tempDir().path() + "/" + QString("%0.%1").arg(
 		  QCryptographicHash::hash(id, QCryptographicHash::Sha1).toHex(),
 		  QString(ir.format())));
-		imgFile.open(QIODevice::WriteOnly);
-		imgFile.write(ba);
-		imgFile.close();
-
-		waypoint.addImage(imgFile.fileName());
+		if (imgFile.open(QIODevice::WriteOnly)) {
+			if (imgFile.write(ba) == ba.size())
+				waypoint.addImage(imgFile.fileName());
+		}
 	}
 
 	if (size + 5 != rh.size)
