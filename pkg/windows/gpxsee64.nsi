@@ -207,15 +207,17 @@ Section "GPXSee" SEC_APP
   !insertmacro FILE_ASSOCIATION_ADD "031" "IHO S-57 Electronic Navigation Catalogue" 28
   !insertmacro FILE_ASSOCIATION_ADD "vtk" "Velocitek VTK File" 29
   !insertmacro FILE_ASSOCIATION_ADD "vkx" "Vakaros VKX File" 30
-  !insertmacro FILE_ASSOCIATION_ADD "csa" "COROS Map Atlas" 31
+  !insertmacro FILE_ASSOCIATION_ADD "csa" "COROS IMG Atlas" 31
   !insertmacro FILE_ASSOCIATION_ADD "pmtiles" "PMTiles Map File" 32
-  !insertmacro FILE_ASSOCIATION_ADD "kml" "Keyhole Markup Language" 33
-  !insertmacro FILE_ASSOCIATION_ADD "kmz" "KML geographic compressed data" 33
-  !insertmacro FILE_ASSOCIATION_ADD "fit" "Flexible and Interoperable Data Transfer" 34
-  !insertmacro FILE_ASSOCIATION_ADD "igc" "Flight Recorder Data Format" 35
-  !insertmacro FILE_ASSOCIATION_ADD "nmea" "NMEA 0183 Data" 36
-  !insertmacro FILE_ASSOCIATION_ADD "plt" "OziExplorer Track File" 37
-  !insertmacro FILE_ASSOCIATION_ADD "rte" "OziExplorer Route File" 38
+  !insertmacro FILE_ASSOCIATION_ADD "t" "PMTiles Map File" 32
+  !insertmacro FILE_ASSOCIATION_ADD "pma" "COROS PMTiles Atlas" 33
+  !insertmacro FILE_ASSOCIATION_ADD "kml" "Keyhole Markup Language" 34
+  !insertmacro FILE_ASSOCIATION_ADD "kmz" "KML geographic compressed data" 34
+  !insertmacro FILE_ASSOCIATION_ADD "fit" "Flexible and Interoperable Data Transfer" 35
+  !insertmacro FILE_ASSOCIATION_ADD "igc" "Flight Recorder Data Format" 36
+  !insertmacro FILE_ASSOCIATION_ADD "nmea" "NMEA 0183 Data" 37
+  !insertmacro FILE_ASSOCIATION_ADD "plt" "OziExplorer Track File" 38
+  !insertmacro FILE_ASSOCIATION_ADD "rte" "OziExplorer Route File" 39
 
   !insertmacro URI_ASSOCIATION_ADD "geo"
 
@@ -276,6 +278,8 @@ Section "GPXSee" SEC_APP
   WriteRegStr HKCR ".vkx\OpenWithList" "GPXSee.exe" ""
   WriteRegStr HKCR ".csa\OpenWithList" "GPXSee.exe" ""
   WriteRegStr HKCR ".pmtiles\OpenWithList" "GPXSee.exe" ""
+  WriteRegStr HKCR ".t\OpenWithList" "GPXSee.exe" ""
+  WriteRegStr HKCR ".pma\OpenWithList" "GPXSee.exe" ""
 
   System::Call 'shell32.dll::SHChangeNotify(i, i, i, i) v (0x08000000, 0, 0, 0)'
 
@@ -455,6 +459,8 @@ Section "Uninstall"
   !insertmacro FILE_ASSOCIATION_REMOVE "vkx"
   !insertmacro FILE_ASSOCIATION_REMOVE "csa"
   !insertmacro FILE_ASSOCIATION_REMOVE "pmtiles"
+  !insertmacro FILE_ASSOCIATION_REMOVE "t"
+  !insertmacro FILE_ASSOCIATION_REMOVE "pma"
 
   !insertmacro URI_ASSOCIATION_REMOVE "geo"
 
@@ -514,6 +520,8 @@ Section "Uninstall"
   DeleteRegValue HKCR ".vkx\OpenWithList" "GPXSee.exe"
   DeleteRegValue HKCR ".csa\OpenWithList" "GPXSee.exe"
   DeleteRegValue HKCR ".pmtiles\OpenWithList" "GPXSee.exe"
+  DeleteRegValue HKCR ".t\OpenWithList" "GPXSee.exe"
+  DeleteRegValue HKCR ".pma\OpenWithList" "GPXSee.exe"
   DeleteRegKey HKCR "Applications\GPXSee.exe"   
   
   System::Call 'shell32.dll::SHChangeNotify(i, i, i, i) v (0x08000000, 0, 0, 0)'
