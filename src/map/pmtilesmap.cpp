@@ -19,15 +19,10 @@ PMTilesMap::PMTilesMap(const QString &fileName, QObject *parent)
 		return;
 	}
 
-	_cache.setMaxCost(LEAF_CACHE_SIZE);
-
 	// header
 	Header hdr;
-	QString err;
-	if (!readHeader(_file, hdr, err)) {
-		_errorString = err;
+	if (!readHeader(_file, hdr, _errorString))
 		return;
-	}
 
 	_bounds = RectC(Coordinates(hdr.minLon / 10000000.0, hdr.maxLat / 10000000.0),
 	  Coordinates(hdr.maxLon / 10000000.0, hdr.minLat / 10000000.0));
@@ -48,7 +43,6 @@ PMTilesMap::PMTilesMap(const QString &fileName, QObject *parent)
 	_leafOffset = hdr.leafOffset;
 	_tc = hdr.tc;
 	_ic = hdr.ic;
-	_mvt = (hdr.tt == 1);
 
 	// metadata
 	QStringList vectorLayers;
@@ -98,12 +92,15 @@ PMTilesMap::PMTilesMap(const QString &fileName, QObject *parent)
 	_tileSize = tileSize.width();
 
 	// tile style
-	if (_mvt) {
+	if (hdr.tt == 1) {
 		_styles = MVTStyle::fromJSON(reader.text("Description").toUtf8());
 		_style = defaultStyle(vectorLayers);
+		_mvt = true;
 	}
 
 	_file.close();
+
+	_cache.setMaxCost(LEAF_CACHE_SIZE);
 
 	_valid = true;
 }
