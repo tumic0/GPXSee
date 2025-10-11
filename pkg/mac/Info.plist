@@ -1916,7 +1916,7 @@
 			<key>UTTypeDescription</key>
 			<string>COROS PMTiles Atlas</string>
 			<key>UTTypeIconFile</key>
-			<string>icons/pmaa.icns</string>
+			<string>icons/pma.icns</string>
 			<key>UTTypeConformsTo</key>
 			<array>
 				<string>public.data</string>
