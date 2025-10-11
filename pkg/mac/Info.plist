@@ -802,7 +802,7 @@
 		<dict>
 			<key>CFBundleTypeExtensions</key>
 			<array>
-				<string>pmaa</string>
+				<string>pma</string>
 			</array>
 			<key>CFBundleTypeMIMETypes</key>
 			<array>
