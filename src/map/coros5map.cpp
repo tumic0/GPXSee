@@ -485,7 +485,7 @@ QStringList Coros5Map::styles(int &defaultStyle) const
 	return list;
 }
 
-Map* Coros5Map::create(const QString &path, const Projection &proj, bool *isDir)
+Map *Coros5Map::create(const QString &path, const Projection &proj, bool *isDir)
 {
 	Q_UNUSED(proj);
 
