@@ -408,10 +408,17 @@
 	</mime-type>
 
 	<mime-type type="application/vnd.coros.csa">
-		<comment>COROS Map Atlas</comment>
+		<comment>COROS IMG Atlas</comment>
 		<sub-class-of type="text/plain"/>
 		<generic-icon name="text/plain"/>
 		<glob pattern="*.csa"/>
+	</mime-type>
+
+	<mime-type type="application/vnd.coros.pma">
+		<comment>COROS PMTiles Atlas</comment>
+		<sub-class-of type="text/plain"/>
+		<generic-icon name="text/plain"/>
+		<glob pattern="*.pma"/>
 	</mime-type>
 
 	<mime-type type="application/vnd.pmtiles">
@@ -422,5 +429,6 @@
 			<match type="string" offset="0" value="PMTiles"/>
 		</magic>
 		<glob pattern="*.pmtiles"/>
+		<glob pattern="*.t"/>
 	</mime-type>
 </mime-info>
