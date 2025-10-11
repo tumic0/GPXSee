@@ -795,7 +795,23 @@
 			<key>CFBundleTypeIconFile</key>
 			<string>icons/csa.icns</string>
 			<key>CFBundleTypeName</key>
-			<string>COROS Map Atlas</string>
+			<string>COROS IMG Atlas</string>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>pmaa</string>
+			</array>
+			<key>CFBundleTypeMIMETypes</key>
+			<array>
+				<string>application/vnd.coros.pma</string>
+			</array>
+			<key>CFBundleTypeIconFile</key>
+			<string>icons/pma.icns</string>
+			<key>CFBundleTypeName</key>
+			<string>COROS PMTiles Atlas</string>
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>
 		</dict>
@@ -1875,7 +1891,7 @@
 			<key>UTTypeReferenceURL</key>
 			<string>https://www.gpxsee.org/doc.html#COROS</string>
 			<key>UTTypeDescription</key>
-			<string>COROS Map Atlas</string>
+			<string>COROS IMG Atlas</string>
 			<key>UTTypeIconFile</key>
 			<string>icons/csa.icns</string>
 			<key>UTTypeConformsTo</key>
@@ -1890,6 +1906,29 @@
 				</array>
 				<key>public.mime-type</key>
 				<string>application/vnd.coros.csa</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeIdentifier</key>
+			<string>com.coros.pma</string>
+			<key>UTTypeReferenceURL</key>
+			<string>https://www.gpxsee.org/doc.html#COROS</string>
+			<key>UTTypeDescription</key>
+			<string>COROS PMTiles Atlas</string>
+			<key>UTTypeIconFile</key>
+			<string>icons/pmaa.icns</string>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>pma</string>
+				</array>
+				<key>public.mime-type</key>
+				<string>application/vnd.coros.pma</string>
 			</dict>
 		</dict>
 		<dict>
