@@ -2,6 +2,7 @@
 #define PMTILES_H
 
 #include <QByteArray>
+#include "common/coordinates.h"
 
 class QFile;
 class QPoint;
@@ -48,6 +49,8 @@ namespace PMTiles
 	QByteArray readData(QFile &file, quint64 offset, quint64 size,
 	  quint8 compression);
 	quint64 id(unsigned zoom, const QPoint &tile);
+	inline Coordinates pos(qint32 lon, qint32 lat)
+	  {return Coordinates(lon / 10000000.0, lat / 10000000.0);}
 }
 
 #endif // PMTILES_H

@@ -25,8 +25,7 @@ Coros5Map::MapTile::MapTile(const QString &path) : path(path)
 		return;
 	}
 
-	bounds = RectC(Coordinates(hdr.minLon / 10000000.0, hdr.maxLat / 10000000.0),
-	  Coordinates(hdr.maxLon / 10000000.0, hdr.minLat / 10000000.0));
+	bounds = RectC(pos(hdr.minLon, hdr.maxLat), pos(hdr.maxLon, hdr.minLat));
 	if (!bounds.isValid()) {
 		qWarning("%s: invalid map bounds", qUtf8Printable(path));
 		return;

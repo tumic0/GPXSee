@@ -24,8 +24,7 @@ PMTilesMap::PMTilesMap(const QString &fileName, QObject *parent)
 	if (!readHeader(_file, hdr, _errorString))
 		return;
 
-	_bounds = RectC(Coordinates(hdr.minLon / 10000000.0, hdr.maxLat / 10000000.0),
-	  Coordinates(hdr.maxLon / 10000000.0, hdr.minLat / 10000000.0));
+	_bounds = RectC(pos(hdr.minLon, hdr.maxLat), pos(hdr.maxLon, hdr.minLat));
 	if (!_bounds.isValid()) {
 		_errorString = "Invalid map bounds";
 		return;
