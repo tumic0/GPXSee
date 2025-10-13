@@ -20,20 +20,17 @@ public:
 	const QPixmap &pixmap() const {return _pixmap;}
 
 	void load() {
-		QByteArray data;
+		QByteArray data((_tc == 2) ? Util::gunzip(_data) : _data);
+		QBuffer buffer(&data);
 
 		if (_scaledSize) {
 			QByteArray format(QByteArray::number(_zoom)
 			  + ';' + QByteArray::number(_overzoom)
 			  + ';' + QByteArray::number(_style));
-			data = (_tc == 2) ? Util::gunzip(_data) : _data;
-			QBuffer buffer(&data);
 			QImageReader reader(&buffer, format);
 			reader.setScaledSize(QSize(_scaledSize, _scaledSize));
 			_pixmap = QPixmap::fromImageReader(&reader);
 		} else {
-			data = (_tc == 2) ? Util::gunzip(_data) : _data;
-			QBuffer buffer(&data);
 			QImageReader reader(&buffer);
 			_pixmap = QPixmap::fromImageReader(&reader);
 		}
