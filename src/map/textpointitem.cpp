@@ -6,11 +6,8 @@
 #include <QStaticText>
 #include "textpointitem.h"
 
-
 #define FLAGS (Qt::AlignCenter | Qt::TextWordWrap | Qt::TextDontClip)
-#define MAX_TEXT_WIDTH 10
 #define MIN_BOX_WIDTH 2
-
 
 static void expand(QRectF &rect, int width)
 {
@@ -19,13 +16,14 @@ static void expand(QRectF &rect, int width)
 
 TextPointItem::TextPointItem(const QPoint &point, const QString *text,
   const QFont *font, const QImage *img, const QColor *color,
-  const QColor *haloColor, const QColor *bgColor, int padding, double rotate)
+  const QColor *haloColor, const QColor *bgColor, int padding, double rotate,
+  Anchor textAnchor, int maxWidth)
   : TextItem(font ? text : 0), _font(font), _img(img), _color(color),
-  _haloColor(haloColor), _bgColor(bgColor), _rotate(rotate)
+  _haloColor(haloColor), _bgColor(bgColor), _rotate(rotate), _anchor(textAnchor)
 {
 	if (_text) {
 		QFontMetrics fm(*_font);
-		int limit = _font->pixelSize() * MAX_TEXT_WIDTH;
+		int limit = _font->pixelSize() * maxWidth;
 		_textRect = fm.boundingRect(QRect(0, 0, limit, 0), FLAGS, *_text);
 		_textRect.adjust(-1, 0, 2, 0);
 
@@ -34,6 +32,32 @@ TextPointItem::TextPointItem(const QPoint &point, const QString *text,
 	}
 
 	setPos(point, padding);
+}
+
+void TextPointItem::moveTextRect(const QPoint &pos, const QRectF &iconRect,
+  int padding)
+{
+	switch (_anchor) {
+		case Center:
+			_textRect.moveCenter(pos);
+			break;
+		case Left:
+			_textRect.moveTopLeft(pos - QPointF(-iconRect.width() / 2
+			  - padding, _textRect.height() / 2));
+			break;
+		case Right:
+			_textRect.moveTopRight(pos - QPointF(iconRect.width() / 2
+			  + padding, _textRect.height() / 2));
+			break;
+		case Bottom:
+			_textRect.moveBottomLeft(pos - QPointF(_textRect.width() / 2,
+			  iconRect.height() / 2));
+			break;
+		case Top:
+			_textRect.moveTopLeft(pos - QPointF(_textRect.width() / 2,
+			  -iconRect.height() / 2));
+			break;
+	}
 }
 
 void TextPointItem::setPos(const QPoint &point, int padding)
@@ -45,14 +69,14 @@ void TextPointItem::setPos(const QPoint &point, int padding)
 		QSizeF s(_img->size() / _img->devicePixelRatioF());
 		iconRect = QRectF(QPointF(point.x() - s.width() / 2,
 		  point.y() - s.height()/2), s);
-		_textRect.moveTopLeft(QPointF(point.x() + s.width()/2 + padding,
-		  point.y() - _textRect.height()/2));
+		moveTextRect(point, iconRect, padding);
 	} else
 		_textRect.moveCenter(point);
 
 	_rect = _textRect | iconRect;
 	shape.addRect(_rect);
 	_shape = shape;
+	_pos = point;
 }
 
 void TextPointItem::paint(QPainter *painter) const
@@ -60,12 +84,11 @@ void TextPointItem::paint(QPainter *painter) const
 	if (_img && !_img->isNull()) {
 		QSizeF s(_img->size() / _img->devicePixelRatioF());
 		if (std::isnan(_rotate))
-			painter->drawImage(QPointF(_rect.left(), _rect.center().y()
-			  - s.height()/2), *_img);
+			painter->drawImage(QPointF(_pos.x() - s.width()/2,
+			  _pos.y() - s.height()/2), *_img);
 		else {
 			painter->save();
-			painter->translate(QPointF(_rect.left() + s.width()/2,
-			  _rect.center().y()));
+			painter->translate(QPointF(_pos.x() /*+ s.width()/2*/, _pos.y()));
 			painter->rotate(_rotate);
 			painter->drawImage(QPointF(-s.width()/2, -s.height()/2), *_img);
 			painter->restore();

@@ -1,85 +1,9 @@
 #include <QtEndian>
 #include <QTimeZone>
+#include "common/protobuf.h"
 #include "vtkparser.h"
 
-#define TYPE(tag) (tag & 0x07)
-#define FIELD(tag) (tag >> 3)
-
-#define VARINT 0
-#define I64    1
-#define LEN    2
-#define I32    5
-
-struct CTX
-{
-	CTX(const QByteArray &ba)
-	  : bp(ba.constData()), be(bp + ba.size()), tag(0) {}
-
-	const char *bp;
-	const char *be;
-	quint32 tag;
-};
-
-static inline qint32 zigzag32decode(quint32 value)
-{
-	return static_cast<qint32>((value >> 1u) ^ static_cast<quint32>(
-	  -static_cast<qint32>(value & 1u)));
-}
-
-template<typename T>
-static bool varint(CTX &ctx, T &val)
-{
-	unsigned int shift = 0;
-	val = 0;
-
-	while ((ctx.bp < ctx.be) && (shift < sizeof(T) * 8)) {
-		val |= static_cast<T>((quint8)*ctx.bp & 0x7F) << shift;
-		shift += 7;
-		if (!((quint8)*ctx.bp++ & 0x80))
-			return true;
-	}
-
-	return false;
-}
-
-static bool length(CTX &ctx, quint32 &val)
-{
-	if (TYPE(ctx.tag) != LEN)
-		return false;
-
-	if (!varint(ctx, val))
-		return false;
-
-	return true;
-}
-
-static bool skip(CTX &ctx)
-{
-	quint32 len = 0;
-
-	switch (TYPE(ctx.tag)) {
-		case VARINT:
-			return varint(ctx, len);
-		case I64:
-			len = 8;
-			break;
-		case LEN:
-			if (!varint(ctx, len))
-				return false;
-			break;
-		case I32:
-			len = 4;
-			break;
-		default:
-			return false;
-	}
-
-	if (ctx.bp + len > ctx.be)
-		return false;
-	ctx.bp += len;
-
-	return true;
-}
+using namespace Protobuf;
 
 static bool trackpoint(CTX &ctx, Trackpoint &t)
 {
@@ -97,35 +21,35 @@ static bool trackpoint(CTX &ctx, Trackpoint &t)
 		if (!varint(ctx, ctx.tag))
 			return false;
 
-		switch (FIELD(ctx.tag)) {
+		switch (field(ctx.tag)) {
 			case 1:
-				if (TYPE(ctx.tag) != VARINT)
+				if (type(ctx.tag) != VARINT)
 					return false;
 				if (!varint(ctx, seconds))
 					return false;
 				break;
 			case 2:
-				if (TYPE(ctx.tag) != VARINT)
+				if (type(ctx.tag) != VARINT)
 					return false;
 				if (!varint(ctx, centiSeconds))
 					return false;
 				break;
 			case 3:
-				if (TYPE(ctx.tag) != VARINT)
+				if (type(ctx.tag) != VARINT)
 					return false;
 				if (!varint(ctx, val))
 					return false;
 				lat = zigzag32decode(val);
 				break;
 			case 4:
-				if (TYPE(ctx.tag) != VARINT)
+				if (type(ctx.tag) != VARINT)
 					return false;
 				if (!varint(ctx, val))
 					return false;
 				lon = zigzag32decode(val);
 				break;
 			case 5:
-				if (TYPE(ctx.tag) != VARINT)
+				if (type(ctx.tag) != VARINT)
 					return false;
 				if (!varint(ctx, speed))
 					return false;
@@ -151,7 +75,7 @@ static bool record(CTX &ctx, Trackpoint &t)
 		if (!varint(ctx, ctx.tag))
 			return false;
 
-		switch (FIELD(ctx.tag)) {
+		switch (field(ctx.tag)) {
 			case 1:
 				if (!trackpoint(ctx, t))
 					return false;

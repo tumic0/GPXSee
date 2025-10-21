@@ -172,12 +172,13 @@ private:
 	public:
 		PointItem(const QPoint &point, const QList<const QByteArray *> &lbl,
 		  const QFont *font, const QImage *img, const QColor *color,
-		  const QColor *haloColor) : TextPointItem(point, label(lbl),
-		  font, img, color, haloColor, 0) {}
+		  const QColor *haloColor, TextPointItem::Anchor textAnchor)
+		  : TextPointItem(point, label(lbl), font, img, color, haloColor, 0, 0,
+		  NAN, textAnchor) {}
 		PointItem(const QPoint &point, const QByteArray *label,
 		  const QFont *font, const QColor *color, const QColor *bgColor)
 		  : TextPointItem(point, label ? new QString(*label) : 0, font, 0,
-		  color, 0, bgColor) {}
+		  color, 0, bgColor, 0, NAN, TextPointItem::Center) {}
 		~PointItem() {delete _text;}
 
 	private:

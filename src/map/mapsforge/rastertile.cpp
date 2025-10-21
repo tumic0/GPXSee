@@ -123,9 +123,11 @@ void RasterTile::processLabels(const QList<MapData::Point> &points,
 		const QFont *font = l.ti ? &l.ti->font() : 0;
 		const QColor *color = l.ti ? &l.ti->fillColor() : 0;
 		const QColor *hColor = l.ti ? haloColor(l.ti) : 0;
+		TextPointItem::Anchor textAnchor = l.ti
+		  ? l.ti->textAnchor() : TextPointItem::Right;
 
 		PointItem *item = new PointItem(ll2xy(l.point->coordinates).toPoint(),
-		  l.lbl, font, img, color, hColor);
+		  l.lbl, font, img, color, hColor, textAnchor);
 		if (item->isValid() && !item->collides(textItems))
 			textItems.append(item);
 		else

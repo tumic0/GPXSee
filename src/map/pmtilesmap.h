@@ -2,12 +2,9 @@
 #define PMTILESMAP_H
 
 #include <QFile>
-#include "common/rectc.h"
 #include "pmtiles.h"
-#include "pmtilejob.h"
-#include "mvtstyle.h"
+#include "mvtjob.h"
 #include "map.h"
-
 
 class PMTilesMap : public Map
 {
@@ -46,7 +43,7 @@ public:
 	static Map *create(const QString &path, const Projection &proj, bool *isDir);
 
 private slots:
-	void jobFinished(PMTileJob *job);
+	void jobFinished(MVTJob *job);
 
 private:
 	struct Zoom {
@@ -64,12 +61,14 @@ private:
 	qreal imageRatio() const;
 	QByteArray tileData(quint64 id);
 	void drawTile(QPainter *painter, QPixmap &pixmap, QPointF &tp);
-	bool isRunning(const QString &key) const;
-	void runJob(PMTileJob *job);
-	void removeJob(PMTileJob *job);
+
+	QString key(int zoom, const QPoint &xy) const;
+	bool isRunning(int zoom, const QPoint &xy) const;
+	void runJob(MVTJob *job);
+	void removeJob(MVTJob *job);
 	void cancelJobs(bool wait);
 
-	int defaultStyle(const QStringList &vectorLayers);
+	const MVT::Style *defaultStyle() const;
 
 	QFile _file;
 	QString _name;
@@ -79,15 +78,14 @@ private:
 	quint64 _tileOffset, _leafOffset;
 	quint8 _tc, _ic;
 	QVector<Zoom> _zooms, _zoomsBase;
-	QList<MVTStyle> _styles;
+	const MVT::Style *_style;
 	int _zoom;
 	int _tileSize;
-	int _style;
 	qreal _mapRatio, _tileRatio;
 	bool _mvt;
-	int _scaledSize;
+	QStringList _layers;
 
-	QList<PMTileJob*> _jobs;
+	QList<MVTJob*> _jobs;
 
 	bool _valid;
 	QString _errorString;

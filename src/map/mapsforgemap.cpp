@@ -37,9 +37,12 @@ void MapsforgeMap::load(const Projection &in, const Projection &out,
 
 	_data.load();
 
-	if (style < 0 || style >= styles().size())
-		style = 0;
-	_style = new Style(styles().at(style), _data, _tileRatio, layer);
+	if (style >= 0 && style < styles().size())
+		_style = new Style(styles().at(style), _data, _tileRatio, layer);
+	else if (styles().size())
+		_style = new Style(styles().first(), _data, _tileRatio, layer);
+	else
+		_style = new Style();
 
 	updateTransform();
 
@@ -274,9 +277,6 @@ MapsforgeMap::StyleList::StyleList()
 				append(files.at(j).absoluteFilePath());
 		}
 	}
-
-	if (isEmpty())
-		append(":/style/GPXSee.xml");
 }
 
 MapsforgeMap::StyleList &MapsforgeMap::styles()

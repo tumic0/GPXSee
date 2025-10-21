@@ -3,7 +3,6 @@
 #include "textpathitem.h"
 
 #define CHAR_RATIO     0.55
-#define MAX_ANGLE      30
 #define PADDING        2
 
 static void swap(const QLineF &line, QPointF *p1, QPointF *p2)
@@ -245,7 +244,7 @@ static qreal diff(qreal a1, qreal a2)
 
 template<class T>
 static QPainterPath textPath(const T &path, qreal textWidth, qreal charWidth,
-  const QRectF &tileRect)
+  const QRectF &tileRect, qreal maxAngle)
 {
 	if (path.isEmpty())
 		return QPainterPath();
@@ -267,7 +266,7 @@ static QPainterPath textPath(const T &path, qreal textWidth, qreal charWidth,
 					return subpath(pl, last, j - 1, length - textWidth);
 				last = j;
 				length = 0;
-			} else if (j > 1 && diff(angle, a) > MAX_ANGLE) {
+			} else if (j > 1 && diff(angle, a) > maxAngle) {
 				if (length > textWidth)
 					return subpath(pl, last, j - 1, length - textWidth);
 				last = j - 1;
@@ -286,7 +285,7 @@ static QPainterPath textPath(const T &path, qreal textWidth, qreal charWidth,
 }
 
 template<class T>
-void TextPathItem::init(const T &line, const QRect &tileRect)
+void TextPathItem::init(const T &line, const QRect &tileRect, qreal maxAngle)
 {
 	qreal cw, mw, textWidth;
 	bool label = _text && _font;
@@ -308,7 +307,8 @@ void TextPathItem::init(const T &line, const QRect &tileRect)
 		textWidth = _img->width() / _img->devicePixelRatioF();
 	}
 
-	_path = textPath(line, textWidth, cw, tileRect.adjusted(mw, mw, -mw, -mw));
+	_path = textPath(line, textWidth, cw, tileRect.adjusted(mw, mw, -mw, -mw),
+					 maxAngle);
 	if (_path.isEmpty())
 		return;
 
@@ -326,20 +326,20 @@ void TextPathItem::init(const T &line, const QRect &tileRect)
 
 TextPathItem::TextPathItem(const QPolygonF &line, const QString *label,
   const QRect &tileRect, const QFont *font, const QColor *color,
-  const QColor *haloColor, const QImage *img, bool rotate)
+  const QColor *haloColor, const QImage *img, bool rotate, qreal maxAngle)
   : TextItem(label), _font(font), _color(color), _haloColor(haloColor),
   _img(img), _rotate(rotate), _reverse(false)
 {
-	init(line, tileRect);
+	init(line, tileRect, maxAngle);
 }
 
 TextPathItem::TextPathItem(const QPainterPath &line, const QString *label,
   const QRect &tileRect, const QFont *font, const QColor *color,
-  const QColor *haloColor, const QImage *img, bool rotate)
+  const QColor *haloColor, const QImage *img, bool rotate, qreal maxAngle)
   : TextItem(label), _font(font), _color(color), _haloColor(haloColor),
 	_img(img), _rotate(rotate), _reverse(false)
 {
-	init(line, tileRect);
+	init(line, tileRect, maxAngle);
 }
 
 void TextPathItem::paint(QPainter *painter) const

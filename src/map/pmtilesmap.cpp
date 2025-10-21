@@ -2,17 +2,21 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QPixmapCache>
+#include <QImageReader>
 #include "osm.h"
+#include "MVT/style.h"
 #include "pmtilesmap.h"
 
+#define MVT_TILE_SIZE   512
 #define MAX_TILE_SIZE   4096
 #define LEAF_CACHE_SIZE 16
 
 using namespace PMTiles;
+using namespace MVT;
 
 PMTilesMap::PMTilesMap(const QString &fileName, QObject *parent)
   : Map(fileName, parent), _file(fileName), _style(0), _mapRatio(1.0),
-  _tileRatio(1.0), _mvt(false), _scaledSize(0), _valid(false)
+  _tileRatio(1.0), _mvt(false), _valid(false)
 {
 	if (!_file.open(QIODevice::ReadOnly)) {
 		_errorString = _file.errorString();
@@ -44,7 +48,6 @@ PMTilesMap::PMTilesMap(const QString &fileName, QObject *parent)
 	_ic = hdr.ic;
 
 	// metadata
-	QStringList vectorLayers;
 	if (hdr.metadataLength) {
 		QByteArray uba(readData(_file, hdr.metadataOffset, hdr.metadataLength,
 		  hdr.ic));
@@ -61,7 +64,7 @@ PMTilesMap::PMTilesMap(const QString &fileName, QObject *parent)
 				_name = json["name"].toString();
 				QJsonArray vl(json["vector_layers"].toArray());
 				for (int i = 0; i < vl.size(); i++)
-					vectorLayers.append(vl.at(i).toObject()["id"].toString());
+					_layers.append(vl.at(i).toObject()["id"].toString());
 			}
 		}
 	}
@@ -73,28 +76,23 @@ PMTilesMap::PMTilesMap(const QString &fileName, QObject *parent)
 		return;
 	}
 
-	// tile size
-	QByteArray data;
-	if (_tc == 2) {
-		QByteArray gzip(tileData(_root.first().tileId));
-		data = Util::gunzip(gzip);
-	} else
-		data = tileData(_root.first().tileId);
-	QBuffer buffer(&data);
-	QImageReader reader(&buffer);
-
-	QSize tileSize(reader.size());
-	if (!tileSize.isValid() || tileSize.width() != tileSize.height()) {
-		_errorString = "Unsupported/invalid tile images";
-		return;
-	}
-	_tileSize = tileSize.width();
-
-	// tile style
+	// tile info
 	if (hdr.tt == 1) {
-		_styles = MVTStyle::fromJSON(reader.text("Description").toUtf8());
-		_style = defaultStyle(vectorLayers);
+		_tileSize = MVT_TILE_SIZE;
 		_mvt = true;
+	} else {
+		QByteArray data((_tc == 2)
+		  ? Util::gunzip(tileData(_root.first().tileId))
+		  : tileData(_root.first().tileId));
+		QBuffer buffer(&data);
+		QImageReader reader(&buffer);
+
+		QSize tileSize(reader.size());
+		if (!tileSize.isValid() || tileSize.width() != tileSize.height()) {
+			_errorString = "Unsupported/invalid tile images";
+			return;
+		}
+		_tileSize = tileSize.width();
 	}
 
 	_file.close();
@@ -115,10 +113,9 @@ void PMTilesMap::load(const Projection &in, const Projection &out,
 	_zooms = _zoomsBase;
 
 	if (_mvt) {
-		_scaledSize = _tileSize * deviceRatio;
 		_tileRatio = deviceRatio;
-		if (style >= 0 && style < _styles.size())
-			_style = style;
+		_style = (style >= 0 && style < Style::styles().size())
+		  ? Style::styles().at(style) : defaultStyle();
 
 		for (int i = _zooms.last().base + 1; i <= OSM::ZOOMS.max(); i++) {
 			Zoom z(i, _zooms.last().base);
@@ -229,40 +226,48 @@ QByteArray PMTilesMap::tileData(quint64 id)
 		return readData(_file, _tileOffset + d->offset, d->length, 1);
 }
 
-bool PMTilesMap::isRunning(const QString &key) const
+QString PMTilesMap::key(int zoom, const QPoint &xy) const
+{
+	return path() + "-" + QString::number(zoom) + "_"
+	  + QString::number(xy.x()) + "_" + QString::number(xy.y());
+}
+
+bool PMTilesMap::isRunning(int zoom, const QPoint &xy) const
 {
 	for (int i = 0; i < _jobs.size(); i++) {
-		const QList<PMTile> &tiles = _jobs.at(i)->tiles();
-		for (int j = 0; j < tiles.size(); j++)
-			if (tiles.at(j).key() == key)
+		const QList<RasterTile> &tiles = _jobs.at(i)->tiles();
+		for (int j = 0; j < tiles.size(); j++) {
+			const RasterTile &mt = tiles.at(j);
+			if (mt.zoom() == zoom && mt.xy() == xy)
 				return true;
+		}
 	}
 
 	return false;
 }
 
-void PMTilesMap::runJob(PMTileJob *job)
+void PMTilesMap::runJob(MVTJob *job)
 {
 	_jobs.append(job);
 
-	connect(job, &PMTileJob::finished, this, &PMTilesMap::jobFinished);
+	connect(job, &MVTJob::finished, this, &PMTilesMap::jobFinished);
 	job->run();
 }
 
-void PMTilesMap::removeJob(PMTileJob *job)
+void PMTilesMap::removeJob(MVTJob *job)
 {
 	_jobs.removeOne(job);
 	job->deleteLater();
 }
 
-void PMTilesMap::jobFinished(PMTileJob *job)
+void PMTilesMap::jobFinished(MVTJob *job)
 {
-	const QList<PMTile> &tiles = job->tiles();
+	const QList<RasterTile> &tiles = job->tiles();
 
 	for (int i = 0; i < tiles.size(); i++) {
-		const PMTile &mt = tiles.at(i);
+		const RasterTile &mt = tiles.at(i);
 		if (!mt.pixmap().isNull())
-			QPixmapCache::insert(mt.key(), mt.pixmap());
+			QPixmapCache::insert(key(mt.zoom(), mt.xy()), mt.pixmap());
 	}
 
 	removeJob(job);
@@ -297,45 +302,44 @@ void PMTilesMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 	int width = ceil(s.width() / (tileSize() * f));
 	int height = ceil(s.height() / (tileSize() * f));
 
-	QList<PMTile> tiles;
+	QList<RasterTile> tiles;
 
 	for (int i = 0; i < width; i++) {
 		for (int j = 0; j < height; j++) {
-			QPixmap pm;
 			QPoint t(tile.x() + i, tile.y() + j);
-			QString key = path() + "-" + QString::number(zoom.z) + "_"
-			  + QString::number(t.x()) + "_" + QString::number(t.y());
 
-			if (isRunning(key))
+			if (isRunning(zoom.z, t))
 				continue;
 
-			if (QPixmapCache::find(key, &pm)) {
+			QPixmap pm;
+			if (QPixmapCache::find(key(zoom.z, t), &pm)) {
 				QPointF tp(tilePos(tl, t, tile, overzoom));
 				drawTile(painter, pm, tp);
 			} else
-				tiles.append(PMTile(zoom.z, overzoom, _scaledSize, _style, t,
-				  tileData(id(zoom.base, t)), _tc, key));
+				tiles.append(RasterTile(tileData(id(zoom.base, t)), _mvt,
+				  _tc == 2, _style, zoom.z, QRect(t, QSize(_tileSize, _tileSize)),
+				  _tileRatio, overzoom));
 		}
 	}
 
 	if (!tiles.isEmpty()) {
 		if (flags & Map::Block || !_mvt) {
-			QFuture<void> future = QtConcurrent::map(tiles, &PMTile::load);
+			QFuture<void> future = QtConcurrent::map(tiles, &RasterTile::render);
 			future.waitForFinished();
 
 			for (int i = 0; i < tiles.size(); i++) {
-				const PMTile &mt = tiles.at(i);
+				const RasterTile &mt = tiles.at(i);
 				QPixmap pm(mt.pixmap());
 				if (pm.isNull())
 					continue;
 
-				QPixmapCache::insert(mt.key(), pm);
+				QPixmapCache::insert(key(mt.zoom(), mt.xy()), pm);
 
 				QPointF tp(tilePos(tl, mt.xy(), tile, overzoom));
 				drawTile(painter, pm, tp);
 			}
 		} else
-			runJob(new PMTileJob(tiles));
+			runJob(new MVTJob(tiles));
 	}
 }
 
@@ -359,11 +363,11 @@ Coordinates PMTilesMap::xy2ll(const QPointF &p)
 	  * coordinatesRatio());
 }
 
-int PMTilesMap::defaultStyle(const QStringList &vectorLayers)
+const Style *PMTilesMap::defaultStyle() const
 {
-	for (int i = 0; i < _styles.size(); i++)
-		if (_styles.at(i).matches(vectorLayers))
-			return i;
+	for (int i = 0; i < Style::styles().size(); i++)
+		if (Style::styles().at(i)->matches(_layers))
+			return Style::styles().at(i);
 
 	qWarning("%s: no matching MVT style found", qUtf8Printable(path()));
 
@@ -373,12 +377,17 @@ int PMTilesMap::defaultStyle(const QStringList &vectorLayers)
 QStringList PMTilesMap::styles(int &defaultStyle) const
 {
 	QStringList list;
-	list.reserve(_styles.size());
 
-	for (int i = 0; i < _styles.size(); i++)
-		list.append(_styles.at(i).name());
+	if (_mvt) {
+		list.reserve(Style::styles().size());
+		for (int i = 0; i < Style::styles().size(); i++)
+			list.append(Style::styles().at(i)->name());
 
-	defaultStyle = _style;
+		defaultStyle = Style::styles().indexOf(_style);
+		if (defaultStyle < 0)
+			defaultStyle = 0;
+	} else
+		defaultStyle = -1;
 
 	return list;
 }

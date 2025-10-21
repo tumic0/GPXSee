@@ -49,7 +49,7 @@ Unicode true
 ; The name of the installer
 Name "GPXSee"
 ; Program version
-!define VERSION "14.2"
+!define VERSION "15.0"
 
 ; The file to write
 OutFile "GPXSee-${VERSION}_x64.exe"
@@ -138,6 +138,7 @@ Section "GPXSee" SEC_APP
   ; Put the files there
   File "gpxsee.exe"
   File /r "maps"
+  File /r "style"
   File /r "CRS"
   File /r "symbols"
 

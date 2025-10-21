@@ -336,19 +336,4 @@
 		<file alias="dumping-ground-line.png">icons/map/marine/dumping-ground-line.png</file>
 		<file alias="radio-call-garmin.png">icons/map/marine/radio-call-garmin.png</file>
 	</qresource>
-
-	<!-- Patterns (Mapsforge) -->
-	<qresource prefix="/patterns">
-		<file alias="cemetery.svg">icons/map/patterns/cemetery.svg</file>
-		<file alias="military-area.svg">icons/map/patterns/military-area.svg</file>
-		<file alias="nature-reserve.svg">icons/map/patterns/nature-reserve.svg</file>
-		<file alias="orchard.svg">icons/map/patterns/orchard.svg</file>
-		<file alias="vineyard.svg">icons/map/patterns/vineyard.svg</file>
-		<file alias="wetland.svg">icons/map/patterns/wetland.svg</file>
-	</qresource>
-
-	<!-- Mapsforge style -->
-	<qresource prefix="/style">
-		<file alias="GPXSee.xml">data/style/GPXSee.xml</file>
-	</qresource>
 </RCC>

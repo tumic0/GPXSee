@@ -1,13 +1,16 @@
 #include <QPixmapCache>
 #include <QPainter>
+#include <QImageReader>
 #include "osm.h"
 #include "coros5map.h"
 
+#define MVT_TILE_SIZE   512
 #define MAX_TILE_SIZE   4096
 #define ROOT_CACHE_SIZE 16
 #define ANY_ID          0xFFFFFFFF
 
 using namespace PMTiles;
+using namespace MVT;
 
 Coros5Map::MapTile::MapTile(const QString &path) : path(path)
 {
@@ -116,7 +119,7 @@ void Coros5Map::loadDir(const QString &path, Range &zooms)
 
 Coros5Map::Coros5Map(const QString &fileName, QObject *parent)
   : Map(fileName, parent), _style(0), _mapRatio(1.0), _tileRatio(1.0),
-  _mvt(false), _scaledSize(0), _valid(false)
+  _mvt(false), _valid(false)
 {
 	QFileInfo fi(fileName);
 	QDir dir(fi.absolutePath());
@@ -145,32 +148,26 @@ Coros5Map::Coros5Map(const QString &fileName, QObject *parent)
 	}
 	_zoom = _zoomsBase.size() - 1;
 
-	// sample tile
+	// tile info
 	MapTree::Iterator it;
 	_maps.GetFirst(it);
 	const MapTile *mt = _maps.GetAt(it);
 
-	// tile size
-	QByteArray data;
-	if (mt->tc == 2) {
-		QByteArray gzip(tileData(mt, ANY_ID));
-		data = Util::gunzip(gzip);
-	} else
-		data = tileData(mt, ANY_ID);
-	QBuffer buffer(&data);
-	QImageReader reader(&buffer);
-	QSize tileSize(reader.size());
-	if (!tileSize.isValid() || tileSize.width() != tileSize.height()) {
-		_errorString = "Unsupported tile images";
-		return;
-	}
-	_tileSize = tileSize.width();
-
-	// tile style
 	if (mt->tt == 1) {
-		_styles = MVTStyle::fromJSON(reader.text("Description").toUtf8());
-		_style = defaultStyle(mt->vectorLayers());
+		_layers = mt->vectorLayers();
+		_tileSize = MVT_TILE_SIZE;
 		_mvt = true;
+	} else {
+		QByteArray data((mt->tc == 2)
+		  ? Util::gunzip(tileData(mt, ANY_ID)) : tileData(mt, ANY_ID));
+		QBuffer buffer(&data);
+		QImageReader reader(&buffer);
+		QSize tileSize(reader.size());
+		if (!tileSize.isValid() || tileSize.width() != tileSize.height()) {
+			_errorString = "Unsupported tile images";
+			return;
+		}
+		_tileSize = tileSize.width();
 	}
 
 	_cache.setMaxCost(ROOT_CACHE_SIZE);
@@ -196,10 +193,9 @@ void Coros5Map::load(const Projection &in, const Projection &out,
 	_zooms = _zoomsBase;
 
 	if (_mvt) {
-		_scaledSize = _tileSize * deviceRatio;
 		_tileRatio = deviceRatio;
-		if (style >= 0 && style < _styles.size())
-			_style = style;
+		_style = (style >= 0 && style < Style::styles().size())
+		  ? Style::styles().at(style) : defaultStyle();
 
 		for (int i = _zooms.last().base + 1; i <= OSM::ZOOMS.max(); i++) {
 			Zoom z(i, _zooms.last().base);
@@ -280,40 +276,48 @@ qreal Coros5Map::tileSize() const
 	return (_tileSize / coordinatesRatio());
 }
 
-bool Coros5Map::isRunning(const QString &key) const
+QString Coros5Map::key(int zoom, const QPoint &xy) const
+{
+	return path() + "-" + QString::number(zoom) + "_"
+	  + QString::number(xy.x()) + "_" + QString::number(xy.y());
+}
+
+bool Coros5Map::isRunning(int zoom, const QPoint &xy) const
 {
 	for (int i = 0; i < _jobs.size(); i++) {
-		const QList<PMTile> &tiles = _jobs.at(i)->tiles();
-		for (int j = 0; j < tiles.size(); j++)
-			if (tiles.at(j).key() == key)
+		const QList<RasterTile> &tiles = _jobs.at(i)->tiles();
+		for (int j = 0; j < tiles.size(); j++) {
+			const RasterTile &mt = tiles.at(j);
+			if (mt.zoom() == zoom && mt.xy() == xy)
 				return true;
+		}
 	}
 
 	return false;
 }
 
-void Coros5Map::runJob(PMTileJob *job)
+void Coros5Map::runJob(MVTJob *job)
 {
 	_jobs.append(job);
 
-	connect(job, &PMTileJob::finished, this, &Coros5Map::jobFinished);
+	connect(job, &MVTJob::finished, this, &Coros5Map::jobFinished);
 	job->run();
 }
 
-void Coros5Map::removeJob(PMTileJob *job)
+void Coros5Map::removeJob(MVTJob *job)
 {
 	_jobs.removeOne(job);
 	job->deleteLater();
 }
 
-void Coros5Map::jobFinished(PMTileJob *job)
+void Coros5Map::jobFinished(MVTJob *job)
 {
-	const QList<PMTile> &tiles = job->tiles();
+	const QList<RasterTile> &tiles = job->tiles();
 
 	for (int i = 0; i < tiles.size(); i++) {
-		const PMTile &mt = tiles.at(i);
+		const RasterTile &mt = tiles.at(i);
 		if (!mt.pixmap().isNull())
-			QPixmapCache::insert(mt.key(), mt.pixmap());
+			QPixmapCache::insert(key(mt.zoom(), mt.xy()), mt.pixmap());
 	}
 
 	removeJob(job);
@@ -355,19 +359,16 @@ void Coros5Map::draw(QPainter *painter, const QRectF &rect, Flags flags)
 	int width = ceil(s.width() / (tileSize() * f));
 	int height = ceil(s.height() / (tileSize() * f));
 	double min[2], max[2];
-	QList<PMTile> tiles;
+	QList<RasterTile> tiles;
 
 	for (int i = 0; i < width; i++) {
 		for (int j = 0; j < height; j++) {
-			QPixmap pm;
 			QPoint t(tile.x() + i, tile.y() + j);
-			QString key = path() + "-" + QString::number(zoom.z) + "_"
-			  + QString::number(t.x()) + "_" + QString::number(t.y());
-
-			if (isRunning(key))
+			if (isRunning(zoom.z, t))
 				continue;
 
-			if (QPixmapCache::find(key, &pm)) {
+			QPixmap pm;
+			if (QPixmapCache::find(key(zoom.z, t), &pm)) {
 				QPointF tp(tilePos(tl, t, tile, overzoom));
 				drawTile(painter, pm, tp);
 			} else {
@@ -385,30 +386,32 @@ void Coros5Map::draw(QPainter *painter, const QRectF &rect, Flags flags)
 				_maps.Search(min, max, cb, &map);
 
 				if (map)
-					tiles.append(PMTile(zoom.z, overzoom, _scaledSize, _style,
-					  t, tileData(map, id(zoom.base, t)), map->tc, key));
+					tiles.append(RasterTile(tileData(map, id(zoom.base, t)),
+					  _mvt, map->tc == 2, _style, zoom.z,
+					  QRect(t, QSize(_tileSize, _tileSize)), _tileRatio,
+					  overzoom));
 			}
 		}
 	}
 
 	if (!tiles.isEmpty()) {
 		if (flags & Map::Block) {
-			QFuture<void> future = QtConcurrent::map(tiles, &PMTile::load);
+			QFuture<void> future = QtConcurrent::map(tiles, &RasterTile::render);
 			future.waitForFinished();
 
 			for (int i = 0; i < tiles.size(); i++) {
-				const PMTile &mt = tiles.at(i);
+				const RasterTile &mt = tiles.at(i);
 				QPixmap pm(mt.pixmap());
 				if (pm.isNull())
 					continue;
 
-				QPixmapCache::insert(mt.key(), pm);
+				QPixmapCache::insert(key(mt.zoom(), mt.xy()), pm);
 
 				QPointF tp(tilePos(tl, mt.xy(), tile, overzoom));
 				drawTile(painter, pm, tp);
 			}
 		} else
-			runJob(new PMTileJob(tiles));
+			runJob(new MVTJob(tiles));
 	}
 }
 
@@ -460,11 +463,11 @@ Coordinates Coros5Map::xy2ll(const QPointF &p)
 	  * coordinatesRatio());
 }
 
-int Coros5Map::defaultStyle(const QStringList &vectorLayers)
+const Style *Coros5Map::defaultStyle() const
 {
-	for (int i = 0; i < _styles.size(); i++)
-		if (_styles.at(i).matches(vectorLayers))
-			return i;
+	for (int i = 0; i < Style::styles().size(); i++)
+		if (Style::styles().at(i)->matches(_layers))
+			return Style::styles().at(i);
 
 	qWarning("%s: no matching MVT style found", qUtf8Printable(path()));
 
@@ -474,12 +477,17 @@ int Coros5Map::defaultStyle(const QStringList &vectorLayers)
 QStringList Coros5Map::styles(int &defaultStyle) const
 {
 	QStringList list;
-	list.reserve(_styles.size());
 
-	for (int i = 0; i < _styles.size(); i++)
-		list.append(_styles.at(i).name());
+	if (_mvt) {
+		list.reserve(Style::styles().size());
+		for (int i = 0; i < Style::styles().size(); i++)
+			list.append(Style::styles().at(i)->name());
 
-	defaultStyle = _style;
+		defaultStyle = Style::styles().indexOf(_style);
+		if (defaultStyle < 0)
+			defaultStyle = 0;
+	} else
+		defaultStyle = -1;
 
 	return list;
 }
