@@ -30,10 +30,10 @@ after_build:
     md installer
     copy release\GPXSee.exe installer
     windeployqt --release installer\GPXSee.exe
-    curl -L -o installer\imageformats\pbf5.dll https://ci.appveyor.com/api/projects/tumic0/QtPBFImagePlugin/artifacts/release/pbf5.dll
     copy pkg\windows\gpxsee64.nsi installer
     xcopy data\CRS installer\CRS /i
     xcopy data\maps installer\maps /i
+    xcopy data\style installer\style /i
     xcopy lang\*.qm installer\translations\ /sy
     xcopy icons\symbols installer\symbols /i
     copy licence.txt installer
