@@ -33,7 +33,7 @@ after_build:
     copy pkg\windows\gpxsee64.nsi installer
     xcopy data\CRS installer\CRS /i
     xcopy data\maps installer\maps /i
-    xcopy data\style installer\style /i
+    xcopy data\style installer\style /s /i
     xcopy lang\*.qm installer\translations\ /sy
     xcopy icons\symbols installer\symbols /i
     copy licence.txt installer
