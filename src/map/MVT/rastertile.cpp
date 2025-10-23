@@ -24,7 +24,7 @@ void RasterTile::render()
 
 		_pixmap.convertFromImage(img);
 	} else
-		_pixmap.loadFromData(_data);
+		_pixmap.loadFromData(_gzip ? Util::gunzip(_data) : _data);
 }
 
 void RasterTile::renderMVT(QImage *img)
