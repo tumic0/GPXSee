@@ -117,7 +117,6 @@ HEADERS += src/common/config.h \
     src/GUI/pngexportdialog.h \
     src/GUI/timezoneinfo.h \
     src/GUI/passwordedit.h \
-    src/map/MVT/tileset.h \
     src/map/proj/polyconic.h \
     src/map/proj/webmercator.h \
     src/map/proj/transversemercator.h \
@@ -369,7 +368,6 @@ SOURCES += src/main.cpp \
     src/GUI/pngexportdialog.cpp \
     src/GUI/projectioncombobox.cpp \
     src/GUI/passwordedit.cpp \
-    src/map/MVT/tileset.cpp \
     src/map/coros4map.cpp \
     src/map/coros5map.cpp \
     src/map/downloader.cpp \
