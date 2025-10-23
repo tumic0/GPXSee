@@ -15,21 +15,22 @@ RasterTile::RasterTile(const QByteArray &data, bool mvt, bool gzip,
 
 void RasterTile::render()
 {
+	QByteArray rawData(_gzip ? Util::gunzip(_data) : _data);
+
 	if (_mvt) {
 		QImage img(_size, _size, QImage::Format_ARGB32_Premultiplied);
 		img.fill(Qt::transparent);
 
 		if (_style)
-			renderMVT(&img);
+			renderMVT(rawData, &img);
 
 		_pixmap.convertFromImage(img);
 	} else
-		_pixmap.loadFromData(_gzip ? Util::gunzip(_data) : _data);
+		_pixmap.loadFromData(rawData);
 }
 
-void RasterTile::renderMVT(QImage *img)
+void RasterTile::renderMVT(const QByteArray &rawData, QImage *img)
 {
-	QByteArray rawData(_gzip ? Util::gunzip(_data) : _data);
 	Data data(rawData);
 	Tile pbf(data);
 	Text text(_zoom, _scaledSize, _ratio, _style);

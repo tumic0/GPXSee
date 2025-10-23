@@ -30,7 +30,7 @@ private:
 	QPixmap _pixmap;
 	int _size, _scaledSize;
 
-	void renderMVT(QImage *img);
+	void renderMVT(const QByteArray &rawData, QImage *img);
 	void drawBackground(QPainter &painter, const Style::Layer &styleLayer);
 	void drawFeature(QPainter &painter, const Style::Layer &layer,
 	  Tile::Feature &feature);
