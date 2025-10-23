@@ -68,21 +68,21 @@
     </message>
 </context>
 <context>
-    <name>CorosMap</name>
+    <name>Coros4Map</name>
     <message>
-        <location filename="../src/map/corosmap.cpp" line="377"/>
+        <location filename="../src/map/coros4map.cpp" line="397"/>
         <source>All</source>
-        <translation>Mind</translation>
+        <translation type="unfinished">Mind</translation>
     </message>
     <message>
-        <location filename="../src/map/corosmap.cpp" line="377"/>
+        <location filename="../src/map/coros4map.cpp" line="397"/>
         <source>Landscape</source>
-        <translation>Fekvő</translation>
+        <translation type="unfinished">Fekvő</translation>
     </message>
     <message>
-        <location filename="../src/map/corosmap.cpp" line="377"/>
+        <location filename="../src/map/coros4map.cpp" line="397"/>
         <source>Topo</source>
-        <translation>Topo</translation>
+        <translation type="unfinished">Topo</translation>
     </message>
 </context>
 <context>
@@ -1299,17 +1299,17 @@
 <context>
     <name>IMGMap</name>
     <message>
-        <location filename="../src/map/imgmap.cpp" line="309"/>
+        <location filename="../src/map/imgmap.cpp" line="352"/>
         <source>All</source>
         <translation>Mind</translation>
     </message>
     <message>
-        <location filename="../src/map/imgmap.cpp" line="309"/>
+        <location filename="../src/map/imgmap.cpp" line="352"/>
         <source>Vector only</source>
         <translation>Csak vektor</translation>
     </message>
     <message>
-        <location filename="../src/map/imgmap.cpp" line="309"/>
+        <location filename="../src/map/imgmap.cpp" line="352"/>
         <source>Raster only</source>
         <translation>Csak raszter</translation>
     </message>
@@ -1330,117 +1330,117 @@
 <context>
     <name>MapList</name>
     <message>
-        <location filename="../src/map/maplist.cpp" line="164"/>
+        <location filename="../src/map/maplist.cpp" line="166"/>
         <source>Supported files</source>
         <translation>Támogatott fájltípusok</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="168"/>
+        <location filename="../src/map/maplist.cpp" line="170"/>
         <source>AlpineQuest maps</source>
         <translation>AlpineQuest térképek</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="171"/>
+        <location filename="../src/map/maplist.cpp" line="173"/>
         <source>Garmin IMG maps</source>
         <translation>Garmin IMG térképek</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="173"/>
+        <location filename="../src/map/maplist.cpp" line="175"/>
         <source>Garmin JNX maps</source>
         <translation>Garmin JNX térképek</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="174"/>
+        <location filename="../src/map/maplist.cpp" line="176"/>
         <source>BSB nautical charts</source>
         <translation>BSB tengeri térképek</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="170"/>
+        <location filename="../src/map/maplist.cpp" line="172"/>
         <source>GEMF maps</source>
         <translation>GEMF térképek</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="166"/>
+        <location filename="../src/map/maplist.cpp" line="168"/>
         <source>Electronic Navigational Charts</source>
         <translation>Elektronikus navigációs térképek</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="169"/>
+        <location filename="../src/map/maplist.cpp" line="171"/>
         <source>COROS maps</source>
         <translation>COROS térképek</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="175"/>
+        <location filename="../src/map/maplist.cpp" line="177"/>
         <source>KMZ maps</source>
         <translation>KMZ térképek</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="176"/>
+        <location filename="../src/map/maplist.cpp" line="178"/>
         <source>Mapsforge maps</source>
         <translation>Mapsforge térképek</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="177"/>
+        <location filename="../src/map/maplist.cpp" line="179"/>
         <source>OziExplorer maps</source>
         <translation>OziExplorer térképek</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="178"/>
+        <location filename="../src/map/maplist.cpp" line="180"/>
         <source>MBTiles maps</source>
         <translation>MBTiles térképek</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="179"/>
+        <location filename="../src/map/maplist.cpp" line="181"/>
         <source>Orux maps</source>
         <translation>Orux térképek</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="180"/>
+        <location filename="../src/map/maplist.cpp" line="182"/>
         <source>PMTiles maps</source>
         <translation>PMTiles térképek</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="181"/>
+        <location filename="../src/map/maplist.cpp" line="183"/>
         <source>QuickChart maps</source>
         <translation>QuickChart térképek</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="183"/>
+        <location filename="../src/map/maplist.cpp" line="185"/>
         <source>Osmdroid SQLite maps</source>
         <translation>Osmdroid SQLite térképek</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="186"/>
+        <location filename="../src/map/maplist.cpp" line="188"/>
         <source>TrekBuddy maps/atlases</source>
         <translation>TrekBuddy térképek</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="188"/>
+        <location filename="../src/map/maplist.cpp" line="190"/>
         <source>GeoTIFF images</source>
         <translation>GeoTIFF képek</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="192"/>
+        <location filename="../src/map/maplist.cpp" line="194"/>
         <source>All files</source>
         <translation>Minden fájl</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="182"/>
+        <location filename="../src/map/maplist.cpp" line="184"/>
         <source>TwoNav maps</source>
         <translation>TwoNav térképek</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="184"/>
+        <location filename="../src/map/maplist.cpp" line="186"/>
         <source>Locus/OsmAnd/RMaps SQLite maps</source>
         <translation>Locus/OsmAnd/RMaps SQLite térképek</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="189"/>
+        <location filename="../src/map/maplist.cpp" line="191"/>
         <source>World-file georeferenced images</source>
         <translation>Georeferált világ-fájlképek</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="191"/>
+        <location filename="../src/map/maplist.cpp" line="193"/>
         <source>Online map sources</source>
         <translation>Online térképforrások</translation>
     </message>

@@ -68,19 +68,19 @@
     </message>
 </context>
 <context>
-    <name>CorosMap</name>
+    <name>Coros4Map</name>
     <message>
-        <location filename="../src/map/corosmap.cpp" line="377"/>
+        <location filename="../src/map/coros4map.cpp" line="397"/>
         <source>All</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/map/corosmap.cpp" line="377"/>
+        <location filename="../src/map/coros4map.cpp" line="397"/>
         <source>Landscape</source>
         <translation type="unfinished">Paesaggio</translation>
     </message>
     <message>
-        <location filename="../src/map/corosmap.cpp" line="377"/>
+        <location filename="../src/map/coros4map.cpp" line="397"/>
         <source>Topo</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1144,12 +1144,12 @@
     <message>
         <location filename="../src/GUI/gearratiograph.cpp" line="30"/>
         <source>Min</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Min</translation>
     </message>
     <message>
         <location filename="../src/GUI/gearratiograph.cpp" line="32"/>
         <source>Max</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Max</translation>
     </message>
     <message>
         <location filename="../src/GUI/gearratiograph.cpp" line="35"/>
@@ -1261,12 +1261,12 @@
     <message>
         <location filename="../src/GUI/heartrategraph.cpp" line="28"/>
         <source>Avg</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Media</translation>
     </message>
     <message>
         <location filename="../src/GUI/heartrategraph.cpp" line="30"/>
         <source>Max</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Max</translation>
     </message>
     <message>
         <location filename="../src/GUI/heartrategraph.cpp" line="33"/>
@@ -1301,17 +1301,17 @@
 <context>
     <name>IMGMap</name>
     <message>
-        <location filename="../src/map/imgmap.cpp" line="309"/>
+        <location filename="../src/map/imgmap.cpp" line="352"/>
         <source>All</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/map/imgmap.cpp" line="309"/>
+        <location filename="../src/map/imgmap.cpp" line="352"/>
         <source>Vector only</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/map/imgmap.cpp" line="309"/>
+        <location filename="../src/map/imgmap.cpp" line="352"/>
         <source>Raster only</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1332,117 +1332,117 @@
 <context>
     <name>MapList</name>
     <message>
-        <location filename="../src/map/maplist.cpp" line="164"/>
+        <location filename="../src/map/maplist.cpp" line="166"/>
         <source>Supported files</source>
         <translation>File supportati</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="168"/>
+        <location filename="../src/map/maplist.cpp" line="170"/>
         <source>AlpineQuest maps</source>
         <translation>Mappe AlpineQuest</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="171"/>
+        <location filename="../src/map/maplist.cpp" line="173"/>
         <source>Garmin IMG maps</source>
         <translation>Mappe Garmin IMG</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="173"/>
+        <location filename="../src/map/maplist.cpp" line="175"/>
         <source>Garmin JNX maps</source>
         <translation>Mappe Garmin JNX</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="174"/>
+        <location filename="../src/map/maplist.cpp" line="176"/>
         <source>BSB nautical charts</source>
         <translation>Carte nautiche BSB</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="170"/>
+        <location filename="../src/map/maplist.cpp" line="172"/>
         <source>GEMF maps</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="166"/>
+        <location filename="../src/map/maplist.cpp" line="168"/>
         <source>Electronic Navigational Charts</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="169"/>
+        <location filename="../src/map/maplist.cpp" line="171"/>
         <source>COROS maps</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="175"/>
+        <location filename="../src/map/maplist.cpp" line="177"/>
         <source>KMZ maps</source>
         <translation>Mappe KMZ</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="176"/>
+        <location filename="../src/map/maplist.cpp" line="178"/>
         <source>Mapsforge maps</source>
         <translation>Mappe Mapsforge</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="177"/>
+        <location filename="../src/map/maplist.cpp" line="179"/>
         <source>OziExplorer maps</source>
         <translation>Mappe OziExplorer</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="178"/>
+        <location filename="../src/map/maplist.cpp" line="180"/>
         <source>MBTiles maps</source>
         <translation>Mappe MBTiles</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="179"/>
+        <location filename="../src/map/maplist.cpp" line="181"/>
         <source>Orux maps</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="180"/>
+        <location filename="../src/map/maplist.cpp" line="182"/>
         <source>PMTiles maps</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="181"/>
+        <location filename="../src/map/maplist.cpp" line="183"/>
         <source>QuickChart maps</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="183"/>
+        <location filename="../src/map/maplist.cpp" line="185"/>
         <source>Osmdroid SQLite maps</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="186"/>
+        <location filename="../src/map/maplist.cpp" line="188"/>
         <source>TrekBuddy maps/atlases</source>
         <translation>Mappe/Atlanti TrekBuddy</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="188"/>
+        <location filename="../src/map/maplist.cpp" line="190"/>
         <source>GeoTIFF images</source>
         <translation>Immagini GeoTIFF</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="192"/>
+        <location filename="../src/map/maplist.cpp" line="194"/>
         <source>All files</source>
         <translation>Tutti i file</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="182"/>
+        <location filename="../src/map/maplist.cpp" line="184"/>
         <source>TwoNav maps</source>
         <translation>Mappe TwoNav</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="184"/>
+        <location filename="../src/map/maplist.cpp" line="186"/>
         <source>Locus/OsmAnd/RMaps SQLite maps</source>
         <translation>Mappe Locus/OsmAnd/RMaps o SQLite</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="189"/>
+        <location filename="../src/map/maplist.cpp" line="191"/>
         <source>World-file georeferenced images</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="191"/>
+        <location filename="../src/map/maplist.cpp" line="193"/>
         <source>Online map sources</source>
         <translation>Mappe online</translation>
     </message>
@@ -2335,12 +2335,12 @@
     <message>
         <location filename="../src/GUI/powergraph.cpp" line="28"/>
         <source>Avg</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Media</translation>
     </message>
     <message>
         <location filename="../src/GUI/powergraph.cpp" line="30"/>
         <source>Max</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Max</translation>
     </message>
     <message>
         <location filename="../src/GUI/powergraph.cpp" line="33"/>
@@ -2460,12 +2460,12 @@
     <message>
         <location filename="../src/GUI/speedgraph.cpp" line="34"/>
         <source>Avg</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Media</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraph.cpp" line="36"/>
         <source>Max</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Max</translation>
     </message>
     <message>
         <location filename="../src/GUI/speedgraph.cpp" line="39"/>
@@ -2557,17 +2557,17 @@
     <message>
         <location filename="../src/GUI/temperaturegraph.cpp" line="28"/>
         <source>Avg</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Media</translation>
     </message>
     <message>
         <location filename="../src/GUI/temperaturegraph.cpp" line="30"/>
         <source>Min</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Min</translation>
     </message>
     <message>
         <location filename="../src/GUI/temperaturegraph.cpp" line="32"/>
         <source>Max</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Max</translation>
     </message>
     <message>
         <location filename="../src/GUI/temperaturegraph.cpp" line="35"/>
