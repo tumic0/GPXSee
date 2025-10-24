@@ -72,17 +72,17 @@
     <message>
         <location filename="../src/map/coros4map.cpp" line="397"/>
         <source>All</source>
-        <translation type="unfinished">Все</translation>
+        <translation>Усі</translation>
     </message>
     <message>
         <location filename="../src/map/coros4map.cpp" line="397"/>
         <source>Landscape</source>
-        <translation type="unfinished"></translation>
+        <translation>Пейзаж</translation>
     </message>
     <message>
         <location filename="../src/map/coros4map.cpp" line="397"/>
         <source>Topo</source>
-        <translation type="unfinished">Топо</translation>
+        <translation>Топо</translation>
     </message>
 </context>
 <context>
