@@ -81,3 +81,5 @@ different, GPL compatible, licenses:
   [Transverse Mercator](src/map/proj/transversemercator.cpp) projections - NIMA
   Source Code Disclaimer
 * [Projection parameters CSV files](data/CRS) - BSD/EPSG/Public domain
+* [OSM Liberty](data/style/OpenMapTiles) and [Protomaps](data/style/Protomaps)
+  MVT styles - BSD
