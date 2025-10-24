@@ -559,7 +559,7 @@ macx {
     icons.files = $$files(icons/formats/*.icns)
     lproj.path = Contents/Resources
     lproj.files = $$files(pkg/mac/lproj/*)
-    QMAKE_BUNDLE_DATA += locale maps symbols icons crs lproj
+    QMAKE_BUNDLE_DATA += locale maps style symbols icons crs lproj
 }
 
 win32 {
@@ -638,7 +638,7 @@ unix:!macx:!android {
     appdata.files = pkg/linux/gpxsee.appdata.xml
     appdata.path = $$PREFIX/share/metainfo
     target.path = $$PREFIX/bin
-    INSTALLS += target maps crs symbols locale icon desktop mime appdata
+    INSTALLS += target maps style crs symbols locale icon desktop mime appdata
 }
 
 android {
@@ -689,5 +689,5 @@ android {
     symbols.path = /assets/symbols
     translations.files = $$files(lang/*.qm)
     translations.path = /assets/translations
-    INSTALLS += maps crs symbols translations
+    INSTALLS += maps style crs symbols translations
 }
