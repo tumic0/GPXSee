@@ -92,8 +92,13 @@ QString ProgramPaths::styleDir(bool writable)
 		return QDir(QStandardPaths::writableLocation(DATA_LOCATION))
 		  .filePath(STYLE_DIR);
 	else
+#ifdef Q_OS_ANDROID
+		return assetsPath(QStandardPaths::locate(DATA_LOCATION, STYLE_DIR,
+		  QStandardPaths::LocateDirectory), STYLE_DIR);
+#else // Q_OS_ANDROID
 		return QStandardPaths::locate(DATA_LOCATION, STYLE_DIR,
 		  QStandardPaths::LocateDirectory);
+#endif // Q_OS_ANDROID
 }
 
 QString ProgramPaths::symbolsDir(bool writable)
