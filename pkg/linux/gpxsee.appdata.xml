@@ -117,6 +117,7 @@
 		<mimetype>application/vnd.velocitek.vtk</mimetype>
 		<mimetype>application/vnd.vakaros.vkx</mimetype>
 		<mimetype>application/vnd.coros.csa</mimetype>
+		<mimetype>application/vnd.coros.pma</mimetype>
 		<mimetype>application/vnd.pmtiles</mimetype>
 		<mimetype>x-scheme-handler/geo</mimetype>
 	</mimetypes>

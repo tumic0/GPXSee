@@ -7,8 +7,10 @@
 #include "osm.h"
 #include "onlinemap.h"
 
-
+#define MVT_TILE_SIZE 512
 #define MAX_TILE_SIZE 4096
+
+using namespace MVT;
 
 OnlineMap::OnlineMap(const QString &fileName, const QString &name,
   const QString &url, const Range &zooms, const RectC &bounds, qreal tileRatio,
@@ -16,8 +18,8 @@ OnlineMap::OnlineMap(const QString &fileName, const QString &name,
   bool quadTiles, const QStringList &layers, QObject *parent)
     : Map(fileName, parent), _name(name), _zooms(zooms), _bounds(bounds),
 	_zoom(_zooms.max()), _tileSize(tileSize), _baseZoom(0), _mapRatio(1.0),
-	_tileRatio(tileRatio), _mvt(mvt), _scaledSize(0),
-	_invertY(invertY), _style(0)
+	_tileRatio(tileRatio), _mvt(mvt), _invertY(invertY), _style(0),
+	_layers(layers)
 {
 	_tileLoader = new TileLoader(QDir(ProgramPaths::tilesDir()).filePath(_name),
 	  this);
@@ -26,21 +28,13 @@ OnlineMap::OnlineMap(const QString &fileName, const QString &name,
 	connect(_tileLoader, &TileLoader::finished, this, &OnlineMap::tilesLoaded);
 
 	_baseZoom = _zooms.max();
-
-	if (_mvt) {
-		QByteArray ba(1, 0x1a);
-		QBuffer buffer(&ba);
-		QImageReader reader(&buffer);
-		_styles = MVTStyle::fromJSON(reader.text("Description").toUtf8());
-		_style = defaultStyle(layers);
-	}
 }
 
-int OnlineMap::defaultStyle(const QStringList &vectorLayers)
+const Style *OnlineMap::defaultStyle() const
 {
-	for (int i = 0; i < _styles.size(); i++)
-		if (_styles.at(i).matches(vectorLayers))
-			return i;
+	for (int i = 0; i < Style::styles().size(); i++)
+		if (Style::styles().at(i)->matches(_layers))
+			return Style::styles().at(i);
 
 	qWarning("%s: no matching MVT style found", qUtf8Printable(path()));
 
@@ -108,10 +102,9 @@ void OnlineMap::load(const Projection &in, const Projection &out,
 	_zooms.setMax(_baseZoom);
 
 	if (_mvt) {
-		_scaledSize = _tileSize * deviceRatio;
 		_tileRatio = deviceRatio;
-		if (style >= 0 && style < _styles.size())
-			_style = style;
+		_style = (style >= 0 && style < Style::styles().size())
+		  ? Style::styles().at(style) : defaultStyle();
 
 		for (int i = _baseZoom + 1; i <= OSM::ZOOMS.max(); i++) {
 			if (_tileSize * _tileRatio * (1U<<(i - _baseZoom)) > MAX_TILE_SIZE)
@@ -155,40 +148,48 @@ QPointF OnlineMap::tilePos(const QPointF &tl, const QPoint &tc,
 	  tl.y() + ((tc.y() - tile.y()) << overzoom) * tileSize());
 }
 
-bool OnlineMap::isRunning(const QString &key) const
+QString OnlineMap::key(int zoom, const QPoint &xy) const
+{
+	return path() + "-" + QString::number(zoom) + "_"
+	  + QString::number(xy.x()) + "_" + QString::number(xy.y());
+}
+
+bool OnlineMap::isRunning(int zoom, const QPoint &xy) const
 {
 	for (int i = 0; i < _jobs.size(); i++) {
-		const QList<OnlineMapTile> &tiles = _jobs.at(i)->tiles();
-		for (int j = 0; j < tiles.size(); j++)
-			if (tiles.at(j).key() == key)
+		const QList<RasterTile> &tiles = _jobs.at(i)->tiles();
+		for (int j = 0; j < tiles.size(); j++) {
+			const RasterTile &mt = tiles.at(j);
+			if (mt.zoom() == zoom && mt.xy() == xy)
 				return true;
+		}
 	}
 
 	return false;
 }
 
-void OnlineMap::runJob(OnlineMapJob *job)
+void OnlineMap::runJob(MVTJob *job)
 {
 	_jobs.append(job);
 
-	connect(job, &OnlineMapJob::finished, this, &OnlineMap::jobFinished);
+	connect(job, &MVTJob::finished, this, &OnlineMap::jobFinished);
 	job->run();
 }
 
-void OnlineMap::removeJob(OnlineMapJob *job)
+void OnlineMap::removeJob(MVTJob *job)
 {
 	_jobs.removeOne(job);
 	job->deleteLater();
 }
 
-void OnlineMap::jobFinished(OnlineMapJob *job)
+void OnlineMap::jobFinished(MVTJob *job)
 {
-	const QList<OnlineMapTile> &tiles = job->tiles();
+	const QList<RasterTile> &tiles = job->tiles();
 
 	for (int i = 0; i < tiles.size(); i++) {
-		const OnlineMapTile &mt = tiles.at(i);
+		const RasterTile &mt = tiles.at(i);
 		if (!mt.pixmap().isNull())
-			QPixmapCache::insert(mt.key(), mt.pixmap());
+			QPixmapCache::insert(key(mt.zoom(), mt.xy()), mt.pixmap());
 	}
 
 	removeJob(job);
@@ -231,47 +232,51 @@ void OnlineMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 	else
 		_tileLoader->loadTilesAsync(fetchTiles);
 
-	QList<OnlineMapTile> renderTiles;
+	QList<RasterTile> renderTiles;
 	for (int i = 0; i < fetchTiles.count(); i++) {
 		const TileLoader::Tile &t = fetchTiles.at(i);
 		if (t.file().isNull())
 			continue;
 
-		QString key(overzoom
-		  ? t.file() + ":" + QString::number(overzoom) : t.file());
-		if (isRunning(key))
+		if (isRunning(_zoom, t.xy()))
 			continue;
 
 		QPixmap pm;
-		if (QPixmapCache::find(key, &pm)) {
+		if (QPixmapCache::find(key(_zoom, t.xy()), &pm)) {
 			QPoint tc(tileCoordinates(t.xy().x(), t.xy().y(), baseZoom));
 			QPointF tp(tilePos(tl, tc, tile, overzoom));
 			drawTile(painter, pm, tp);
-		} else
-			renderTiles.append(OnlineMapTile(t.xy(), t.file(), _zoom, overzoom,
-			  _scaledSize, _style, key));
+		} else {
+			QFile file(t.file());
+			if (file.open(QIODevice::ReadOnly))
+				renderTiles.append(RasterTile(file.readAll(), _mvt, false,
+				  _style, _zoom, t.xy(), _tileSize, _tileRatio, overzoom));
+			else
+				qWarning("%s: %s", qUtf8Printable(t.file()),
+				  qUtf8Printable(file.errorString()));
+		}
 	}
 
 	if (!renderTiles.isEmpty()) {
 		if (flags & Map::Block || !_mvt) {
 			QFuture<void> future = QtConcurrent::map(renderTiles,
-			  &OnlineMapTile::load);
+			  &RasterTile::render);
 			future.waitForFinished();
 
 			for (int i = 0; i < renderTiles.size(); i++) {
-				const OnlineMapTile &mt = renderTiles.at(i);
+				const RasterTile &mt = renderTiles.at(i);
 				QPixmap pm(mt.pixmap());
 				if (pm.isNull())
 					continue;
 
-				QPixmapCache::insert(mt.key(), pm);
+				QPixmapCache::insert(key(mt.zoom(), mt.xy()), pm);
 
 				QPoint tc(tileCoordinates(mt.xy().x(), mt.xy().y(), baseZoom));
 				QPointF tp(tilePos(tl, tc, tile, overzoom));
 				drawTile(painter, pm, tp);
 			}
 		} else
-			runJob(new OnlineMapJob(renderTiles));
+			runJob(new MVTJob(renderTiles));
 	}
 }
 
@@ -304,12 +309,17 @@ void OnlineMap::clearCache()
 QStringList OnlineMap::styles(int &defaultStyle) const
 {
 	QStringList list;
-	list.reserve(_styles.size());
 
-	for (int i = 0; i < _styles.size(); i++)
-		list.append(_styles.at(i).name());
+	if (_mvt) {
+		list.reserve(Style::styles().size());
+		for (int i = 0; i < Style::styles().size(); i++)
+			list.append(Style::styles().at(i)->name());
 
-	defaultStyle = _style;
+		defaultStyle = Style::styles().indexOf(_style);
+		if (defaultStyle < 0)
+			defaultStyle = 0;
+	} else
+		defaultStyle = -1;
 
 	return list;
 }

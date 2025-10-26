@@ -8,7 +8,7 @@
 #include "rectd.h"
 #include "pcs.h"
 #include "imgjob.h"
-#include "corosmap.h"
+#include "coros4map.h"
 
 using namespace IMG;
 
@@ -16,7 +16,7 @@ using namespace IMG;
 #define TILE_SIZE  384
 #define DELTA      1e-3
 
-void CorosMap::loadDir(const QString &path, MapTree &tree)
+void Coros4Map::loadDir(const QString &path, MapTree &tree)
 {
 	QDir md(path);
 	md.setFilter(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot);
@@ -50,7 +50,7 @@ void CorosMap::loadDir(const QString &path, MapTree &tree)
 	}
 }
 
-CorosMap::CorosMap(const QString &fileName, QObject *parent)
+Coros4Map::Coros4Map(const QString &fileName, QObject *parent)
   : Map(fileName, parent), _projection(PCS::pcs(3857)), _tileRatio(1.0),
   _layer(All), _style(0), _valid(false)
 {
@@ -80,7 +80,7 @@ CorosMap::CorosMap(const QString &fileName, QObject *parent)
 	_valid = true;
 }
 
-CorosMap::~CorosMap()
+Coros4Map::~Coros4Map()
 {
 	MapTree::Iterator it;
 	for (_osm.GetFirst(it); !_osm.IsNull(it); _osm.GetNext(it))
@@ -91,7 +91,7 @@ CorosMap::~CorosMap()
 	delete _style;
 }
 
-void CorosMap::load(const Projection &in, const Projection &out,
+void Coros4Map::load(const Projection &in, const Projection &out,
   qreal devicelRatio, bool hidpi, int style, int layer)
 {
 	Q_UNUSED(in);
@@ -131,7 +131,7 @@ void CorosMap::load(const Projection &in, const Projection &out,
 	QPixmapCache::clear();
 }
 
-void CorosMap::unload()
+void Coros4Map::unload()
 {
 	cancelJobs(true);
 
@@ -145,7 +145,7 @@ void CorosMap::unload()
 	_style = 0;
 }
 
-int CorosMap::zoomFit(const QSize &size, const RectC &rect)
+int Coros4Map::zoomFit(const QSize &size, const RectC &rect)
 {
 	const Range &zooms = _zooms;
 
@@ -169,7 +169,7 @@ int CorosMap::zoomFit(const QSize &size, const RectC &rect)
 	return _zoom;
 }
 
-int CorosMap::zoomIn()
+int Coros4Map::zoomIn()
 {
 	cancelJobs(false);
 
@@ -178,7 +178,7 @@ int CorosMap::zoomIn()
 	return _zoom;
 }
 
-int CorosMap::zoomOut()
+int Coros4Map::zoomOut()
 {
 	cancelJobs(false);
 
@@ -187,13 +187,13 @@ int CorosMap::zoomOut()
 	return _zoom;
 }
 
-void CorosMap::setZoom(int zoom)
+void Coros4Map::setZoom(int zoom)
 {
 	_zoom = zoom;
 	updateTransform();
 }
 
-Transform CorosMap::transform(int zoom) const
+Transform Coros4Map::transform(int zoom) const
 {
 	double scale = _projection.isGeographic()
 	  ? 360.0 / (1<<zoom) : (2.0 * M_PI * WGS84_RADIUS) / (1<<zoom);
@@ -202,7 +202,7 @@ Transform CorosMap::transform(int zoom) const
 	  PointD(scale, scale));
 }
 
-void CorosMap::updateTransform()
+void Coros4Map::updateTransform()
 {
 	_transform = transform(_zoom);
 
@@ -214,7 +214,7 @@ void CorosMap::updateTransform()
 		_bounds.adjust(0.5, 0, -0.5, 0);
 }
 
-bool CorosMap::isRunning(const QString &key) const
+bool Coros4Map::isRunning(const QString &key) const
 {
 	for (int i = 0; i < _jobs.size(); i++) {
 		const QList<RasterTile> &tiles = _jobs.at(i)->tiles();
@@ -226,21 +226,21 @@ bool CorosMap::isRunning(const QString &key) const
 	return false;
 }
 
-void CorosMap::runJob(IMGJob *job)
+void Coros4Map::runJob(IMGJob *job)
 {
 	_jobs.append(job);
 
-	connect(job, &IMGJob::finished, this, &CorosMap::jobFinished);
+	connect(job, &IMGJob::finished, this, &Coros4Map::jobFinished);
 	job->run();
 }
 
-void CorosMap::removeJob(IMGJob *job)
+void Coros4Map::removeJob(IMGJob *job)
 {
 	_jobs.removeOne(job);
 	job->deleteLater();
 }
 
-void CorosMap::jobFinished(IMGJob *job)
+void Coros4Map::jobFinished(IMGJob *job)
 {
 	const QList<RasterTile> &tiles = job->tiles();
 
@@ -255,7 +255,7 @@ void CorosMap::jobFinished(IMGJob *job)
 	emit tilesLoaded();
 }
 
-void CorosMap::cancelJobs(bool wait)
+void Coros4Map::cancelJobs(bool wait)
 {
 	for (int i = 0; i < _jobs.size(); i++)
 		_jobs.at(i)->cancel(wait);
@@ -268,7 +268,7 @@ static bool cb(MapData *data, void *context)
 	return true;
 }
 
-void CorosMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
+void Coros4Map::draw(QPainter *painter, const QRectF &rect, Flags flags)
 {
 	double min[2], max[2];
 	QPoint tl(qFloor(rect.left() / TILE_SIZE)
@@ -342,7 +342,7 @@ static bool ecb(MapData *data, void *context)
 	return true;
 }
 
-double CorosMap::elevation(const Coordinates &c)
+double Coros4Map::elevation(const Coordinates &c)
 {
 	double min[2], max[2];
 	QList<MapData*> maps;
@@ -372,7 +372,7 @@ double CorosMap::elevation(const Coordinates &c)
 	return Map::elevation(c);
 }
 
-QStringList CorosMap::styles(int &defaultStyle) const
+QStringList Coros4Map::styles(int &defaultStyle) const
 {
 	QStringList list;
 	list.reserve(styles().size() + (_typ.isEmpty() ? 0 : 1));
@@ -388,7 +388,7 @@ QStringList CorosMap::styles(int &defaultStyle) const
 	return list;
 }
 
-QStringList CorosMap::layers(const QString &lang, int &defaultLayer) const
+QStringList Coros4Map::layers(const QString &lang, int &defaultLayer) const
 {
 	Q_UNUSED(lang);
 
@@ -397,17 +397,17 @@ QStringList CorosMap::layers(const QString &lang, int &defaultLayer) const
 	return QStringList() << tr("All") << tr("Landscape") << tr("Topo");
 }
 
-Map* CorosMap::create(const QString &path, const Projection &proj, bool *isDir)
+Map* Coros4Map::create(const QString &path, const Projection &proj, bool *isDir)
 {
 	Q_UNUSED(proj);
 
 	if (isDir)
 		*isDir = true;
 
-	return new CorosMap(path);
+	return new Coros4Map(path);
 }
 
-CorosMap::StyleList::StyleList()
+Coros4Map::StyleList::StyleList()
 {
 	QString path(ProgramPaths::styleDir());
 	if (path.isEmpty())
@@ -420,7 +420,7 @@ CorosMap::StyleList::StyleList()
 		append(styles.at(i).absoluteFilePath());
 }
 
-CorosMap::StyleList &CorosMap::styles()
+Coros4Map::StyleList &Coros4Map::styles()
 {
 	static StyleList list;
 	return list;

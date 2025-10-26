@@ -1,5 +1,5 @@
-#ifndef COROSMAP_H
-#define COROSMAP_H
+#ifndef COROS4MAP_H
+#define COROS4MAP_H
 
 #include "map.h"
 #include "projection.h"
@@ -9,13 +9,13 @@
 class IMGJob;
 namespace IMG {class Style;}
 
-class CorosMap : public Map
+class Coros4Map : public Map
 {
 	Q_OBJECT
 
 public:
-	CorosMap(const QString &fileName, QObject *parent = 0);
-	~CorosMap();
+	Coros4Map(const QString &fileName, QObject *parent = 0);
+	~Coros4Map();
 
 	QRectF bounds() {return _bounds;}
 	RectC llBounds() {return _dataBounds;}
@@ -99,4 +99,4 @@ private:
 	QString _errorString;
 };
 
-#endif // COROSMAP_H
+#endif // COROS4MAP_H

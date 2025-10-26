@@ -3,7 +3,7 @@ unix:!macx:!android {
 } else {
     TARGET = GPXSee
 }
-VERSION = 14.0
+VERSION = 15.0
 
 QT += core \
     gui \
@@ -23,11 +23,10 @@ greaterThan(QT_MAJOR_VERSION, 5) {
 CONFIG += object_parallel_to_source
 INCLUDEPATH += ./src
 HEADERS += src/common/config.h \
-    src/GUI/legendentryitem.h \
-    src/GUI/legenditem.h \
     src/common/garmin.h \
     src/common/coordinates.h \
     src/common/hash.h \
+    src/common/protobuf.h \
     src/common/range.h \
     src/common/rectc.h \
     src/common/textcodec.h \
@@ -42,6 +41,8 @@ HEADERS += src/common/config.h \
     src/common/polygon.h \
     src/common/color.h \
     src/common/csv.h \
+    src/GUI/legendentryitem.h \
+    src/GUI/legenditem.h \
     src/GUI/crosshairitem.h \
     src/GUI/motioninfoitem.h \
     src/GUI/pluginparameters.h \
@@ -116,43 +117,6 @@ HEADERS += src/common/config.h \
     src/GUI/pngexportdialog.h \
     src/GUI/timezoneinfo.h \
     src/GUI/passwordedit.h \
-    src/data/gpsdumpparser.h \
-    src/data/style.h \
-    src/data/twonavparser.h \
-    src/data/txtparser.h \
-    src/data/vkxparser.h \
-    src/data/vtkparser.h \
-    src/map/ENC/data.h \
-    src/map/IMG/light.h \
-    src/map/corosmap.h \
-    src/map/downloader.h \
-    src/map/demloader.h \
-    src/map/ENC/attributes.h \
-    src/map/ENC/mapdata.h \
-    src/map/ENC/atlasdata.h \
-    src/map/ENC/objects.h \
-    src/map/ENC/rastertile.h \
-    src/map/ENC/style.h \
-    src/map/IMG/demfile.h \
-    src/map/IMG/demtile.h \
-    src/map/IMG/demtree.h \
-    src/map/IMG/jls.h \
-    src/map/IMG/section.h \
-    src/map/IMG/zoom.h \
-    src/map/conversion.h \
-    src/map/encatlas.h \
-    src/map/encjob.h \
-    src/map/encmap.h \
-    src/map/ENC/iso8211.h \
-    src/map/filter.h \
-    src/map/gemfmap.h \
-    src/map/gmifile.h \
-    src/map/imgjob.h \
-    src/map/metatype.h \
-    src/map/mvtstyle.h \
-    src/map/oruxmap.h \
-    src/map/osmdroidmap.h \
-    src/map/pmtilesmap.h \
     src/map/proj/polyconic.h \
     src/map/proj/webmercator.h \
     src/map/proj/transversemercator.h \
@@ -164,7 +128,21 @@ HEADERS += src/common/config.h \
     src/map/proj/krovak.h \
     src/map/proj/polarstereographic.h \
     src/map/proj/obliquestereographic.h \
-    src/map/bitmapline.h \
+    src/map/ENC/data.h \
+    src/map/ENC/attributes.h \
+    src/map/ENC/mapdata.h \
+    src/map/ENC/atlasdata.h \
+    src/map/ENC/objects.h \
+    src/map/ENC/rastertile.h \
+    src/map/ENC/style.h \
+    src/map/ENC/iso8211.h \
+    src/map/IMG/demfile.h \
+    src/map/IMG/demtile.h \
+    src/map/IMG/demtree.h \
+    src/map/IMG/jls.h \
+    src/map/IMG/section.h \
+    src/map/IMG/zoom.h \
+    src/map/IMG/light.h \
     src/map/IMG/bitstream.h \
     src/map/IMG/deltastream.h \
     src/map/IMG/gmapdata.h \
@@ -187,10 +165,38 @@ HEADERS += src/common/config.h \
     src/map/IMG/style.h \
     src/map/IMG/netfile.h \
     src/map/IMG/label.h \
+    src/map/MVT/color.h \
+    src/map/MVT/data.h \
+    src/map/MVT/font.h \
+    src/map/MVT/function.h \
+    src/map/MVT/tile.h \
+    src/map/MVT/sprites.h \
+    src/map/MVT/style.h \
+    src/map/MVT/rastertile.h \
+    src/map/MVT/text.h \
     src/map/mapsforge/style.h \
     src/map/mapsforge/mapdata.h \
     src/map/mapsforge/rastertile.h \
     src/map/mapsforge/subfile.h \
+    src/map/conversion.h \
+    src/map/encatlas.h \
+    src/map/encjob.h \
+    src/map/encmap.h \
+    src/map/filter.h \
+    src/map/gemfmap.h \
+    src/map/gmifile.h \
+    src/map/imgjob.h \
+    src/map/metatype.h \
+    src/map/oruxmap.h \
+    src/map/osmdroidmap.h \
+    src/map/mvtjob.h \
+    src/map/pmtiles.h \
+    src/map/pmtilesmap.h \
+    src/map/bitmapline.h \
+    src/map/coros4map.h \
+    src/map/coros5map.h \
+    src/map/downloader.h \
+    src/map/demloader.h \
     src/map/qctmap.h \
     src/map/textpathitem.h \
     src/map/textpointitem.h \
@@ -248,6 +254,12 @@ HEADERS += src/common/config.h \
     src/map/worldfilemap.h \
     src/map/imgmap.h \
     src/map/hillshading.h \
+    src/data/gpsdumpparser.h \
+    src/data/style.h \
+    src/data/twonavparser.h \
+    src/data/txtparser.h \
+    src/data/vkxparser.h \
+    src/data/vtkparser.h \
     src/data/itnparser.h \
     src/data/link.h \
     src/data/onmoveparsers.h \
@@ -282,9 +294,8 @@ HEADERS += src/common/config.h \
     src/data/geojsonparser.h
 
 SOURCES += src/main.cpp \
-    src/GUI/legendentryitem.cpp \
-    src/GUI/legenditem.cpp \
     src/common/coordinates.cpp \
+    src/common/protobuf.cpp \
     src/common/rectc.cpp \
     src/common/range.cpp \
     src/common/textcodec.cpp \
@@ -293,6 +304,8 @@ SOURCES += src/main.cpp \
     src/common/programpaths.cpp \
     src/common/tifffile.cpp \
     src/common/csv.cpp \
+    src/GUI/legendentryitem.cpp \
+    src/GUI/legenditem.cpp \
     src/GUI/crosshairitem.cpp \
     src/GUI/motioninfoitem.cpp \
     src/GUI/pluginparameters.cpp \
@@ -355,10 +368,8 @@ SOURCES += src/main.cpp \
     src/GUI/pngexportdialog.cpp \
     src/GUI/projectioncombobox.cpp \
     src/GUI/passwordedit.cpp \
-    src/data/txtparser.cpp \
-    src/data/vkxparser.cpp \
-    src/data/vtkparser.cpp \
-    src/map/corosmap.cpp \
+    src/map/coros4map.cpp \
+    src/map/coros5map.cpp \
     src/map/downloader.cpp \
     src/map/demloader.cpp \
     src/map/ENC/atlasdata.cpp \
@@ -375,9 +386,9 @@ SOURCES += src/main.cpp \
     src/map/filter.cpp \
     src/map/gemfmap.cpp \
     src/map/gmifile.cpp \
-    src/map/mvtstyle.cpp \
     src/map/oruxmap.cpp \
     src/map/osmdroidmap.cpp \
+    src/map/pmtiles.cpp \
     src/map/pmtilesmap.cpp \
     src/map/proj/polyconic.cpp \
     src/map/proj/webmercator.cpp \
@@ -412,6 +423,15 @@ SOURCES += src/main.cpp \
     src/map/mapsforge/mapdata.cpp \
     src/map/mapsforge/rastertile.cpp \
     src/map/mapsforge/subfile.cpp \
+    src/map/MVT/color.cpp \
+    src/map/MVT/data.cpp \
+    src/map/MVT/font.cpp \
+    src/map/MVT/function.cpp \
+    src/map/MVT/tile.cpp \
+    src/map/MVT/sprites.cpp \
+    src/map/MVT/style.cpp \
+    src/map/MVT/text.cpp \
+    src/map/MVT/rastertile.cpp \
     src/map/imgmap.cpp \
     src/map/prjfile.cpp \
     src/map/qctmap.cpp \
@@ -464,6 +484,9 @@ SOURCES += src/main.cpp \
     src/map/mapsforgemap.cpp \
     src/map/worldfilemap.cpp \
     src/map/hillshading.cpp \
+    src/data/txtparser.cpp \
+    src/data/vkxparser.cpp \
+    src/data/vtkparser.cpp \
     src/data/gpsdumpparser.cpp \
     src/data/twonavparser.cpp \
     src/data/address.cpp \
@@ -528,13 +551,15 @@ macx {
     crs.files = data/CRS
     maps.path = Contents/Resources
     maps.files = data/maps
+    style.path = Contents/Resources
+    style.files = data/style
     symbols.path = Contents/Resources/symbols
     symbols.files = $$files(icons/symbols/*.png)
     icons.path = Contents/Resources/icons
     icons.files = $$files(icons/formats/*.icns)
     lproj.path = Contents/Resources
     lproj.files = $$files(pkg/mac/lproj/*)
-    QMAKE_BUNDLE_DATA += locale maps symbols icons crs lproj
+    QMAKE_BUNDLE_DATA += locale maps style symbols icons crs lproj
 }
 
 win32 {
@@ -583,7 +608,8 @@ win32 {
         icons/formats/vtk.ico \
         icons/formats/vkx.ico \
         icons/formats/csa.ico \
-        icons/formats/pmts.ico
+        icons/formats/pmts.ico \
+        icons/formats/pma.ico
     DEFINES += _USE_MATH_DEFINES \
         NOGDI
 }
@@ -595,6 +621,8 @@ unix:!macx:!android {
     isEmpty(PREFIX):PREFIX = /usr/local
     maps.files = $$files(data/maps/*)
     maps.path = $$PREFIX/share/gpxsee/maps
+    style.files = $$files(data/style/*)
+    style.path = $$PREFIX/share/gpxsee/style
     crs.files = $$files(data/CRS/*)
     crs.path = $$PREFIX/share/gpxsee/CRS
     symbols.files = $$files(icons/symbols/*.png)
@@ -610,7 +638,7 @@ unix:!macx:!android {
     appdata.files = pkg/linux/gpxsee.appdata.xml
     appdata.path = $$PREFIX/share/metainfo
     target.path = $$PREFIX/bin
-    INSTALLS += target maps crs symbols locale icon desktop mime appdata
+    INSTALLS += target maps style crs symbols locale icon desktop mime appdata
 }
 
 android {
@@ -653,11 +681,13 @@ android {
 
     maps.files = $$files(data/maps/*)
     maps.path = /assets/maps
+    style.files = $$files(data/style/*)
+    style.path = /assets/style
     crs.files = $$files(data/CRS/*)
     crs.path = /assets/CRS
     symbols.files = $$files(icons/symbols/*.png)
     symbols.path = /assets/symbols
     translations.files = $$files(lang/*.qm)
     translations.path = /assets/translations
-    INSTALLS += maps crs symbols translations
+    INSTALLS += maps style crs symbols translations
 }

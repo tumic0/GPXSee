@@ -68,21 +68,21 @@
     </message>
 </context>
 <context>
-    <name>CorosMap</name>
+    <name>Coros4Map</name>
     <message>
-        <location filename="../src/map/corosmap.cpp" line="377"/>
+        <location filename="../src/map/coros4map.cpp" line="397"/>
         <source>All</source>
-        <translation type="unfinished">Tümü</translation>
+        <translation>Tümü</translation>
     </message>
     <message>
-        <location filename="../src/map/corosmap.cpp" line="377"/>
+        <location filename="../src/map/coros4map.cpp" line="397"/>
         <source>Landscape</source>
-        <translation type="unfinished">Yatay</translation>
+        <translation>Arazi</translation>
     </message>
     <message>
-        <location filename="../src/map/corosmap.cpp" line="377"/>
+        <location filename="../src/map/coros4map.cpp" line="397"/>
         <source>Topo</source>
-        <translation type="unfinished"></translation>
+        <translation>Topo</translation>
     </message>
 </context>
 <context>
@@ -581,7 +581,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="444"/>
         <source>Legend</source>
-        <translation type="unfinished"></translation>
+        <translation>Lejant</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="452"/>
@@ -657,13 +657,13 @@
         <location filename="../src/GUI/gui.cpp" line="535"/>
         <location filename="../src/GUI/gui.cpp" line="967"/>
         <source>Next graph tab</source>
-        <translation type="unfinished"></translation>
+        <translation>Sonraki grafik sekmesi</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="540"/>
         <location filename="../src/GUI/gui.cpp" line="969"/>
         <source>Previous graph tab</source>
-        <translation type="unfinished"></translation>
+        <translation>Önceki grafik sekmesi</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="548"/>
@@ -760,7 +760,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="704"/>
         <source>Styles</source>
-        <translation type="unfinished"></translation>
+        <translation>Tarzlar</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="707"/>
@@ -1299,17 +1299,17 @@
 <context>
     <name>IMGMap</name>
     <message>
-        <location filename="../src/map/imgmap.cpp" line="309"/>
+        <location filename="../src/map/imgmap.cpp" line="352"/>
         <source>All</source>
         <translation>Tümü</translation>
     </message>
     <message>
-        <location filename="../src/map/imgmap.cpp" line="309"/>
+        <location filename="../src/map/imgmap.cpp" line="352"/>
         <source>Vector only</source>
         <translation>Yalnızca vektör</translation>
     </message>
     <message>
-        <location filename="../src/map/imgmap.cpp" line="309"/>
+        <location filename="../src/map/imgmap.cpp" line="352"/>
         <source>Raster only</source>
         <translation>Yalnızca raster</translation>
     </message>
@@ -1330,117 +1330,117 @@
 <context>
     <name>MapList</name>
     <message>
-        <location filename="../src/map/maplist.cpp" line="164"/>
+        <location filename="../src/map/maplist.cpp" line="166"/>
         <source>Supported files</source>
         <translation>Desteklenen dosyalar</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="178"/>
+        <location filename="../src/map/maplist.cpp" line="180"/>
         <source>MBTiles maps</source>
         <translation>MBTiles haritaları</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="173"/>
+        <location filename="../src/map/maplist.cpp" line="175"/>
         <source>Garmin JNX maps</source>
         <translation>Garmin JNX haritaları</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="168"/>
+        <location filename="../src/map/maplist.cpp" line="170"/>
         <source>AlpineQuest maps</source>
         <translation>AlpineQuest haritaları</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="171"/>
+        <location filename="../src/map/maplist.cpp" line="173"/>
         <source>Garmin IMG maps</source>
         <translation>Garmin IMG haritaları</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="174"/>
+        <location filename="../src/map/maplist.cpp" line="176"/>
         <source>BSB nautical charts</source>
         <translation>BSB denizcilik haritaları</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="170"/>
+        <location filename="../src/map/maplist.cpp" line="172"/>
         <source>GEMF maps</source>
         <translation>GEMF haritaları</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="166"/>
+        <location filename="../src/map/maplist.cpp" line="168"/>
         <source>Electronic Navigational Charts</source>
         <translation>Elektronik Seyir Haritaları</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="169"/>
+        <location filename="../src/map/maplist.cpp" line="171"/>
         <source>COROS maps</source>
-        <translation type="unfinished"></translation>
+        <translation>COROS haritaları</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="175"/>
+        <location filename="../src/map/maplist.cpp" line="177"/>
         <source>KMZ maps</source>
         <translation>KMZ haritaları</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="176"/>
+        <location filename="../src/map/maplist.cpp" line="178"/>
         <source>Mapsforge maps</source>
         <translation>Mapsforge haritaları</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="177"/>
+        <location filename="../src/map/maplist.cpp" line="179"/>
         <source>OziExplorer maps</source>
         <translation>OziExplorer haritaları</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="179"/>
+        <location filename="../src/map/maplist.cpp" line="181"/>
         <source>Orux maps</source>
         <translation>Orux haritaları</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="180"/>
+        <location filename="../src/map/maplist.cpp" line="182"/>
         <source>PMTiles maps</source>
-        <translation type="unfinished"></translation>
+        <translation>PMTiles haritaları</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="181"/>
+        <location filename="../src/map/maplist.cpp" line="183"/>
         <source>QuickChart maps</source>
         <translation>QuickChart haritaları</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="183"/>
+        <location filename="../src/map/maplist.cpp" line="185"/>
         <source>Osmdroid SQLite maps</source>
         <translation>Osmdroid SQLite haritaları</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="186"/>
+        <location filename="../src/map/maplist.cpp" line="188"/>
         <source>TrekBuddy maps/atlases</source>
         <translation>TrekBuddy haritaları/atlasları</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="188"/>
+        <location filename="../src/map/maplist.cpp" line="190"/>
         <source>GeoTIFF images</source>
         <translation>GeoTIFF görüntüleri</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="192"/>
+        <location filename="../src/map/maplist.cpp" line="194"/>
         <source>All files</source>
         <translation>Tüm dosyalar</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="182"/>
+        <location filename="../src/map/maplist.cpp" line="184"/>
         <source>TwoNav maps</source>
         <translation>TwoNav haritaları</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="184"/>
+        <location filename="../src/map/maplist.cpp" line="186"/>
         <source>Locus/OsmAnd/RMaps SQLite maps</source>
         <translation>Locus/OsmAnd/RMaps SQLite haritaları</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="189"/>
+        <location filename="../src/map/maplist.cpp" line="191"/>
         <source>World-file georeferenced images</source>
         <translation>World-file coğrafi referanslı görüntüleri</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="191"/>
+        <location filename="../src/map/maplist.cpp" line="193"/>
         <source>Online map sources</source>
         <translation>Çevrim içi harita kaynakları</translation>
     </message>

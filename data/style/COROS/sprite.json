@@ -1,0 +1,149 @@
+{
+  "airport-11": {
+    "height": 11,
+    "pixelRatio": 1,
+    "width": 11,
+    "x": 0,
+    "y": 0
+  },
+  "bar-11": {
+    "height": 11,
+    "pixelRatio": 1,
+    "width": 11,
+    "x": 11,
+    "y": 0
+  },
+  "bus-11": {
+    "height": 11,
+    "pixelRatio": 1,
+    "width": 11,
+    "x": 0,
+    "y": 11
+  },
+  "cafe-11": {
+    "height": 11,
+    "pixelRatio": 1,
+    "width": 11,
+    "x": 11,
+    "y": 11
+  },
+  "car-repair-11": {
+    "height": 11,
+    "pixelRatio": 1,
+    "width": 11,
+    "x": 22,
+    "y": 0
+  },
+  "cemetery-11": {
+    "height": 11,
+    "pixelRatio": 1,
+    "width": 11,
+    "x": 33,
+    "y": 0
+  },
+  "fast-food-11": {
+    "height": 11,
+    "pixelRatio": 1,
+    "width": 11,
+    "x": 22,
+    "y": 11
+  },
+  "fuel-11": {
+    "height": 11,
+    "pixelRatio": 1,
+    "width": 11,
+    "x": 33,
+    "y": 11
+  },
+  "grocery-11": {
+    "height": 11,
+    "pixelRatio": 1,
+    "width": 11,
+    "x": 0,
+    "y": 22
+  },
+  "hospital-11": {
+    "height": 11,
+    "pixelRatio": 1,
+    "width": 11,
+    "x": 11,
+    "y": 22
+  },
+  "nature-reserve": {
+    "height": 4,
+    "pixelRatio": 1,
+    "width": 4,
+    "x": 77,
+    "y": 0
+  },
+  "park-11": {
+    "height": 11,
+    "pixelRatio": 1,
+    "width": 11,
+    "x": 22,
+    "y": 22
+  },
+  "parking-11": {
+    "height": 11,
+    "pixelRatio": 1,
+    "width": 11,
+    "x": 33,
+    "y": 22
+  },
+  "rail-11": {
+    "height": 11,
+    "pixelRatio": 1,
+    "width": 11,
+    "x": 0,
+    "y": 33
+  },
+  "shop-11": {
+    "height": 11,
+    "pixelRatio": 1,
+    "width": 11,
+    "x": 11,
+    "y": 33
+  },
+  "stadium-11": {
+    "height": 11,
+    "pixelRatio": 1,
+    "width": 11,
+    "x": 22,
+    "y": 33
+  },
+  "toilet-11": {
+    "height": 11,
+    "pixelRatio": 1,
+    "width": 11,
+    "x": 33,
+    "y": 33
+  },
+  "triangle-11": {
+    "height": 11,
+    "pixelRatio": 1,
+    "width": 11,
+    "x": 44,
+    "y": 0
+  },
+  "viewpoint-11": {
+    "height": 11,
+    "pixelRatio": 1,
+    "width": 11,
+    "x": 55,
+    "y": 0
+  },
+  "water-11": {
+    "height": 11,
+    "pixelRatio": 1,
+    "width": 11,
+    "x": 66,
+    "y": 0
+  },
+  "wetland": {
+    "height": 4,
+    "pixelRatio": 1,
+    "width": 4,
+    "x": 81,
+    "y": 0
+  }
+}

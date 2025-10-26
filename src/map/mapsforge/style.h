@@ -5,6 +5,7 @@
 #include <QList>
 #include <QPen>
 #include <QFont>
+#include "map/textpointitem.h"
 #include "mapdata.h"
 
 class QXmlStreamReader;
@@ -211,7 +212,8 @@ public:
 	public:
 		TextRender(const Rule &rule)
 		  : Render(rule), _priority(0), _fillColor(Qt::black),
-		  _strokeColor(Qt::black), _strokeWidth(0), _shield(false) {}
+		  _strokeColor(Qt::black), _strokeWidth(0), _shield(false),
+		  _anchor(TextPointItem::Left) {}
 
 		const QString &symbolId() const {return _symbolId;}
 		const QFont &font() const {return _font;}
@@ -221,6 +223,7 @@ public:
 		unsigned key() const {return _key;}
 		int priority() const {return _priority;}
 		bool shield() const {return _shield;}
+		TextPointItem::Anchor textAnchor() const {return _anchor;}
 
 		bool operator<(const TextRender &other) const
 		  {return _priority > other._priority;}
@@ -235,6 +238,7 @@ public:
 		QFont _font;
 		bool _shield;
 		unsigned _key;
+		TextPointItem::Anchor _anchor;
 	};
 
 	class Symbol : public Render
@@ -260,6 +264,7 @@ public:
 		QImage _img;
 	};
 
+	Style() {}
 	Style(const QString &path, const MapData &data, qreal ratio, int layer);
 
 	QList<const PathRender *> paths(int zoom, bool closed,

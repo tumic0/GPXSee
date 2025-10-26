@@ -505,6 +505,21 @@ void Style::text(QXmlStreamReader &reader, const MapData &data,
 		if (attr.value("text-orientation").toString() == "auto_down")
 			ri._shield = true;
 	}
+	if (!line && attr.hasAttribute("position")) {
+		QString position(attr.value("position").toString());
+		if (position == "center")
+			ri._anchor = TextPointItem::Center;
+		else if (position == "below")
+			ri._anchor = TextPointItem::Top;
+		else if (position == "above")
+			ri._anchor = TextPointItem::Bottom;
+		else if (position == "left" || position == "below_left"
+		  || position == "above_left")
+			ri._anchor = TextPointItem::Right;
+		else if (position == "right" || position == "below_right"
+		  || position == "above_right")
+			ri._anchor = TextPointItem::Left;
+	}
 
 	ri._font.setFamily(fontFamily);
 	ri._font.setPixelSize(fontSize);
