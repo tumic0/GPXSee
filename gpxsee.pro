@@ -557,9 +557,7 @@ macx {
     symbols.files = $$files(icons/symbols/*.png)
     icons.path = Contents/Resources/icons
     icons.files = $$files(icons/formats/*.icns)
-    lproj.path = Contents/Resources
-    lproj.files = $$files(pkg/mac/lproj/*)
-    QMAKE_BUNDLE_DATA += locale maps style symbols icons crs lproj
+    QMAKE_BUNDLE_DATA += locale maps style symbols icons crs
 }
 
 win32 {
