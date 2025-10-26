@@ -557,9 +557,7 @@ macx {
     symbols.files = $$files(icons/symbols/*.png)
     icons.path = Contents/Resources/icons
     icons.files = $$files(icons/formats/*.icns)
-    lproj.path = Contents/Resources
-    lproj.files = $$files(pkg/mac/lproj/*)
-    QMAKE_BUNDLE_DATA += locale maps style symbols icons crs lproj
+    QMAKE_BUNDLE_DATA += locale maps style symbols icons crs
 }
 
 win32 {
@@ -619,18 +617,18 @@ unix:!macx:!android {
     RESOURCES += theme-grayscale.qrc
 
     isEmpty(PREFIX):PREFIX = /usr/local
-    maps.files = $$files(data/maps/*)
-    maps.path = $$PREFIX/share/gpxsee/maps
-    style.files = $$files(data/style/*)
-    style.path = $$PREFIX/share/gpxsee/style
-    crs.files = $$files(data/CRS/*)
-    crs.path = $$PREFIX/share/gpxsee/CRS
+    maps.files = data/maps
+    maps.path = $$PREFIX/share/gpxsee
+    style.files = data/style
+    style.path = $$PREFIX/share/gpxsee
+    crs.files = data/CRS
+    crs.path = $$PREFIX/share/gpxsee
     symbols.files = $$files(icons/symbols/*.png)
     symbols.path = $$PREFIX/share/gpxsee/symbols
     locale.files = $$files(lang/*.qm)
     locale.path = $$PREFIX/share/gpxsee/translations
-    icon.files = $$files(icons/app/hicolor/*)
-    icon.path = $$PREFIX/share/icons/hicolor
+    icon.files = icons/app/hicolor
+    icon.path = $$PREFIX/share/icons
     desktop.files = pkg/linux/gpxsee.desktop
     desktop.path = $$PREFIX/share/applications
     mime.files = pkg/linux/gpxsee.xml
@@ -679,12 +677,12 @@ android {
         pkg/android/build.gradle \
         pkg/android/res/values/libs.xml
 
-    maps.files = $$files(data/maps/*)
-    maps.path = /assets/maps
-    style.files = $$files(data/style/*)
-    style.path = /assets/style
-    crs.files = $$files(data/CRS/*)
-    crs.path = /assets/CRS
+    maps.files = data/maps
+    maps.path = /assets
+    style.files = data/style
+    style.path = /assets
+    crs.files = data/CRS
+    crs.path = /assets
     symbols.files = $$files(icons/symbols/*.png)
     symbols.path = /assets/symbols
     translations.files = $$files(lang/*.qm)
