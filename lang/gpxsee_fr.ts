@@ -77,7 +77,7 @@
     <message>
         <location filename="../src/map/coros4map.cpp" line="397"/>
         <source>Landscape</source>
-        <translation type="unfinished">Paysage</translation>
+        <translation>Paysage</translation>
     </message>
     <message>
         <location filename="../src/map/coros4map.cpp" line="397"/>
