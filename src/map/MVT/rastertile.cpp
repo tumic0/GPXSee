@@ -5,11 +5,11 @@
 using namespace MVT;
 
 RasterTile::RasterTile(const QByteArray &data, bool mvt, bool gzip,
-  const Style *style, int zoom, const QRect &rect, qreal ratio, int overzoom)
-  : _data(data), _mvt(mvt), _gzip(gzip), _style(style), _zoom(zoom),
-  _rect(rect), _ratio(ratio)
+  const Style *style, int zoom, const QPoint &xy, int size, qreal ratio,
+  int overzoom) : _data(data), _mvt(mvt), _gzip(gzip), _style(style),
+  _zoom(zoom), _xy(xy), _ratio(ratio)
 {
-	_size = qMin(rect.width()<<overzoom, 4096);
+	_size = qMin(size<<overzoom, 4096);
 }
 
 void RasterTile::render()

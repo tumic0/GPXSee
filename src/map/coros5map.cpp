@@ -387,9 +387,8 @@ void Coros5Map::draw(QPainter *painter, const QRectF &rect, Flags flags)
 
 				if (map)
 					tiles.append(RasterTile(tileData(map, id(zoom.base, t)),
-					  _mvt, map->tc == 2, _style, zoom.z,
-					  QRect(t, QSize(_tileSize, _tileSize)), _tileRatio,
-					  overzoom));
+					  _mvt, map->tc == 2, _style, zoom.z, t, _tileSize,
+					  _tileRatio, overzoom));
 			}
 		}
 	}

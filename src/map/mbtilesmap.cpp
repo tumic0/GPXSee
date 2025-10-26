@@ -457,8 +457,7 @@ void MBTilesMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 				drawTile(painter, pm, tp);
 			} else
 				tiles.append(RasterTile(tileData(zoom.base, t), _mvt, true,
-				  _style, zoom.z, QRect(t, QSize(_tileSize, _tileSize)),
-				  _tileRatio, overzoom));
+				  _style, zoom.z, t, _tileSize, _tileRatio, overzoom));
 		}
 	}
 

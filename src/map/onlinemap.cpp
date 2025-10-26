@@ -250,8 +250,7 @@ void OnlineMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 			QFile file(t.file());
 			if (file.open(QIODevice::ReadOnly))
 				renderTiles.append(RasterTile(file.readAll(), _mvt, false,
-				  _style, _zoom, QRect(t.xy(), QSize(_tileSize, _tileSize)),
-				  _tileRatio, overzoom));
+				  _style, _zoom, t.xy(), _tileSize, _tileRatio, overzoom));
 			else
 				qWarning("%s: %s", qUtf8Printable(t.file()),
 				  qUtf8Printable(file.errorString()));

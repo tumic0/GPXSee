@@ -12,10 +12,10 @@ class RasterTile
 {
 public:
 	RasterTile(const QByteArray &data, bool mvt, bool gzip, const Style *style,
-	  int zoom, const QRect &rect, qreal ratio, int overzoom);
+	  int zoom, const QPoint &xy, int size, qreal ratio, int overzoom);
 
 	int zoom() const {return _zoom;}
-	QPoint xy() const {return _rect.topLeft();}
+	QPoint xy() const {return _xy;}
 	const QPixmap &pixmap() const {return _pixmap;}
 
 	void render();
@@ -25,10 +25,10 @@ private:
 	bool _mvt, _gzip;
 	const Style *_style;
 	int _zoom;
-	QRect _rect;
+	QPoint _xy;
 	qreal _ratio;
-	QPixmap _pixmap;
 	int _size;
+	QPixmap _pixmap;
 
 	void renderMVT(const QByteArray &rawData, QImage *img);
 	void drawBackground(QPainter &painter, const Style::Layer &styleLayer);

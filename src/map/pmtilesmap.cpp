@@ -317,8 +317,7 @@ void PMTilesMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 				drawTile(painter, pm, tp);
 			} else
 				tiles.append(RasterTile(tileData(id(zoom.base, t)), _mvt,
-				  _tc == 2, _style, zoom.z, QRect(t, QSize(_tileSize, _tileSize)),
-				  _tileRatio, overzoom));
+				  _tc == 2, _style, zoom.z, t, _tileSize, _tileRatio, overzoom));
 		}
 	}
 
