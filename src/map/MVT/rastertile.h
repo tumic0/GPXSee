@@ -28,7 +28,7 @@ private:
 	QRect _rect;
 	qreal _ratio;
 	QPixmap _pixmap;
-	int _size, _scaledSize;
+	int _size;
 
 	void renderMVT(const QByteArray &rawData, QImage *img);
 	void drawBackground(QPainter &painter, const Style::Layer &styleLayer);

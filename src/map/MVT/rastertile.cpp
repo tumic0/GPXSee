@@ -10,7 +10,6 @@ RasterTile::RasterTile(const QByteArray &data, bool mvt, bool gzip,
   _rect(rect), _ratio(ratio)
 {
 	_size = qMin(rect.width()<<overzoom, 4096);
-	_scaledSize = _size / _ratio;
 }
 
 void RasterTile::render()
@@ -18,7 +17,8 @@ void RasterTile::render()
 	QByteArray rawData(_gzip ? Util::gunzip(_data) : _data);
 
 	if (_mvt) {
-		QImage img(_size, _size, QImage::Format_ARGB32_Premultiplied);
+		QImage img(_size * _ratio, _size * _ratio,
+		  QImage::Format_ARGB32_Premultiplied);
 		img.fill(Qt::transparent);
 
 		if (_style)
@@ -33,7 +33,7 @@ void RasterTile::renderMVT(const QByteArray &rawData, QImage *img)
 {
 	Data data(rawData);
 	Tile pbf(data);
-	Text text(_zoom, _scaledSize, _ratio, _style);
+	Text text(_zoom, _size, _ratio, _style);
 	QPainter painter(img);
 
 	painter.scale(_ratio, _ratio);
@@ -70,7 +70,7 @@ void RasterTile::renderMVT(const QByteArray &rawData, QImage *img)
 void RasterTile::drawBackground(QPainter &painter,
   const Style::Layer &styleLayer)
 {
-	QRectF rect(QPointF(0, 0), QSizeF(_scaledSize, _scaledSize));
+	QRectF rect(QPointF(0, 0), QSizeF(_size, _size));
 	QPainterPath path;
 	path.addRect(rect);
 
@@ -82,7 +82,7 @@ void RasterTile::drawFeature(QPainter &painter, const Style::Layer &layer,
   Tile::Feature &feature)
 {
 	if (layer.match(_zoom, feature))
-		painter.drawPath(feature.path(_scaledSize));
+		painter.drawPath(feature.path(_size));
 }
 
 void RasterTile::drawLayer(QPainter &painter, const Style::Layer &styleLayer,
