@@ -72,17 +72,17 @@
     <message>
         <location filename="../src/map/coros4map.cpp" line="397"/>
         <source>All</source>
-        <translation type="unfinished">所有图层</translation>
+        <translation>所有图层</translation>
     </message>
     <message>
         <location filename="../src/map/coros4map.cpp" line="397"/>
         <source>Landscape</source>
-        <translation type="unfinished"></translation>
+        <translation>地貌图</translation>
     </message>
     <message>
         <location filename="../src/map/coros4map.cpp" line="397"/>
         <source>Topo</source>
-        <translation type="unfinished">等高线图</translation>
+        <translation>等高线图</translation>
     </message>
 </context>
 <context>
