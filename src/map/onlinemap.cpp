@@ -7,7 +7,6 @@
 #include "osm.h"
 #include "onlinemap.h"
 
-#define MVT_TILE_SIZE 512
 #define MAX_TILE_SIZE 4096
 
 using namespace MVT;
