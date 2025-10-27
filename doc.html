@@ -203,11 +203,11 @@ $ gpxsee 'geo:323482,4306480;crs=EPSG:32618'
 &lt;/map&gt;
 </pre>
 
-           <p>In case of vector tile images (MVT<sup><a href="#pbf">2</a></sup>),
-           set the "type" attribute of the <i>tile</i> tag to "vector". This will
-           adjust the pixel ratio of the tile to the pixel ratio of the display
-           device. For the MVT style autodetection to work, you have to properly
-           define the "vectorLayers" set to include all source layers of the MVT
+           <p>In case of vector tile images (MVT), set the "type" attribute of
+           the <i>tile</i> tag to "vector". This will adjust the pixel ratio
+           of the tile to the pixel ratio of the display device. For the MVT
+           style autodetection to work, you have to properly define
+           the "vectorLayers" set to include all source layers of the MVT
            schema.</p>
 
 <pre>
@@ -388,7 +388,7 @@ Czechoslovakia
 
           <h4 id="JNXKML">JNX &amp; KMZ maps</h4>
           <p>JNX &amp; KMZ maps do not contain any info about the projection of their
-          tile images, so it has to be provided externaly<sup><a href="#garmin">3</a></sup>.
+          tile images, so it has to be provided externaly<sup><a href="#garmin">2</a></sup>.
           Generally, only two projections are used for JNX/KMZ maps - EPSG:4326 and
           EPSG:3857. If you see <a href="img/wrong_proj.png">background color stripes</a>
           in your JNX/KMZ map, you have to switch to the propper input projection
@@ -408,11 +408,12 @@ Czechoslovakia
 
 
           <h3 id="styles">Map styles</h3>
-          <p>Mapsforge, Garmin IMG and all MVT/PBF based maps (Online, MBTiles, PMTiles) can
-          be styled with user defined styles. To enable a user defined style, place it to the
-          <code>style</code> directory in one of the configuration paths. Mapsforge and MVT
-          styles are loaded from subdirectories of the <code>style</code> directory, the TYP
-          files are placed directly into the <code>style</code> directory.</p>
+          <p>Mapsforge, Garmin IMG and all MVT/PBF based maps (Online, MBTiles, PMTiles,
+          COROS V5) can be styled with user defined styles. To enable a user defined style,
+          place it to the <code>style</code> directory in one of the configuration paths.
+          Mapsforge and MVT styles are loaded from subdirectories of the <code>style</code>
+          directory, the TYP files are placed directly into the <code>style</code>
+          directory.</p>
 
           <p>A sample <code>style</code> directory with two Mapsforge styles (Settler, TOTM),
           two MVT styles (Esri, IGN) and two GARMIN IMG styles (OpenFietsMap, FrikartNO)
@@ -625,9 +626,7 @@ sudo spctl --add --type execute --label 'GPXSee' --requirement \
           <div id="footnote">
           <p id="androidGlobalConfig"><i>[1] The Android global configuration is part of the APK
           and is not accessible on an unrooted phone.</i></p>
-          <p id="pbf"><i>[2] To display PBF(MVT) tiles, <a href="https://github.com/tumic0/QtPBFImagePlugin">
-          QtPBFImagePlugin</a> is required (included in the Windows and OS&nbsp;X builds).</i></p>
-          <p id="garmin"><i>[3] Some tools like Garmin software &quot;solve&quot; this by
+          <p id="garmin"><i>[2] Some tools like Garmin software &quot;solve&quot; this by
           rescaling the images, but this introduces a small, but still visible distortion
           to the map.</i></p>
           </div>
