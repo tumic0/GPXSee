@@ -457,7 +457,8 @@ void MBTilesMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 				drawTile(painter, pm, tp);
 			} else
 				tiles.append(RasterTile(tileData(zoom.base, t), _mvt, true,
-				  _style, zoom.z, t, _tileSize, _tileRatio, overzoom));
+				  _style, zoom.z, t, _tileSize, _tileRatio, overzoom,
+				  flags & Map::HillShading));
 		}
 	}
 
@@ -500,6 +501,11 @@ Coordinates MBTilesMap::xy2ll(const QPointF &p)
 	qreal scale = OSM::zoom2scale(_zooms.at(_zoom).z, _tileSize);
 	return OSM::m2ll(QPointF(p.x() * scale, -p.y() * scale)
 	  * coordinatesRatio());
+}
+
+bool MBTilesMap::hillShading() const
+{
+	return _style && _style->hasHillShading();
 }
 
 QStringList MBTilesMap::styles(int &defaultStyle) const

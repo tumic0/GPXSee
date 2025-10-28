@@ -206,6 +206,8 @@ static bool tile(const QByteArray &ba, QVector<Data::Layer> &layers)
 
 Data::Data(const QByteArray &ba)
 {
-	if (!tile(ba, _layers))
+	if (!tile(ba, _layers)) {
 		_layers.clear();
+		qWarning("invalid MVT data");
+	}
 }

@@ -1,4 +1,8 @@
 #include "common/util.h"
+#include "map/dem.h"
+#include "map/hillshading.h"
+#include "map/filter.h"
+#include "map/osm.h"
 #include "data.h"
 #include "rastertile.h"
 
@@ -6,8 +10,8 @@ using namespace MVT;
 
 RasterTile::RasterTile(const QByteArray &data, bool mvt, bool gzip,
   const Style *style, int zoom, const QPoint &xy, int size, qreal ratio,
-  int overzoom) : _data(data), _mvt(mvt), _gzip(gzip), _style(style),
-  _zoom(zoom), _xy(xy), _ratio(ratio)
+  int overzoom, bool hillShading) : _data(data), _mvt(mvt), _gzip(gzip),
+  _style(style), _zoom(zoom), _xy(xy), _ratio(ratio), _hillShading(hillShading)
 {
 	_size = qMin(size<<overzoom, 4096);
 }
@@ -29,10 +33,17 @@ void RasterTile::render()
 		_pixmap.loadFromData(rawData);
 }
 
+static Tile::Layer *tileLayer(const Tile &tile, const Style::Layer &sl)
+{
+	QHash<QByteArray, Tile::Layer*>::const_iterator it =
+	  tile.layers().find(sl.sourceLayer());
+	return (it == tile.layers().constEnd()) ? 0 : *it;
+}
+
 void RasterTile::renderMVT(const QByteArray &rawData, QImage *img)
 {
 	Data data(rawData);
-	Tile pbf(data);
+	Tile tile(data);
 	Text text(_zoom, _size, _ratio, _style);
 	QPainter painter(img);
 
@@ -43,18 +54,22 @@ void RasterTile::renderMVT(const QByteArray &rawData, QImage *img)
 		if (!sl.isVisible())
 			continue;
 
-		if (sl.isBackground())
-			drawBackground(painter, sl);
-		else {
-			QHash<QByteArray, Tile::Layer*>::const_iterator it =
-			  pbf.layers().find(sl.sourceLayer());
-			if (it == pbf.layers().constEnd())
-				continue;
-
-			if (sl.isPath())
-				drawLayer(painter, sl, **it);
-			else if (sl.isSymbol())
-				text.addLayer(&sl, *it);
+		switch (sl.type()) {
+			case Style::Layer::Background:
+				drawBackground(painter, sl);
+				break;
+			case Style::Layer::Hillshade:
+				drawHillshading(painter, sl);
+				break;
+			case Style::Layer::Line:
+			case Style::Layer::Fill:
+				drawLayer(painter, sl, tileLayer(tile, sl));
+				break;
+			case Style::Layer::Symbol:
+				text.addLayer(sl, tileLayer(tile, sl));
+				break;
+			default:
+				break;
 		}
 	}
 
@@ -86,11 +101,51 @@ void RasterTile::drawFeature(QPainter &painter, const Style::Layer &layer,
 }
 
 void RasterTile::drawLayer(QPainter &painter, const Style::Layer &styleLayer,
-  Tile::Layer &pbfLayer)
+  Tile::Layer *pbfLayer)
 {
-	painter.save();
-	styleLayer.setPathPainter(_zoom, _style->sprites(_ratio), painter);
-	for (int i = 0; i < pbfLayer.features().size(); i++)
-		drawFeature(painter, styleLayer, pbfLayer.features()[i]);
-	painter.restore();
+	if (pbfLayer) {
+		painter.save();
+		styleLayer.setPathPainter(_zoom, _style->sprites(_ratio), painter);
+		for (int i = 0; i < pbfLayer->features().size(); i++)
+			drawFeature(painter, styleLayer, pbfLayer->features()[i]);
+		painter.restore();
+	}
+}
+
+void RasterTile::drawHillshading(QPainter &painter,
+  const Style::Layer &styleLayer)
+{
+	if (_hillShading && styleLayer.match(_zoom)) {
+		if (HillShading::blur()) {
+			MatrixD dem(Filter::blur(elevation(HillShading::blur() + 1),
+			  HillShading::blur()));
+			QImage img(HillShading::render(dem, HillShading::blur() + 1));
+			painter.drawImage(0, 0, img);
+		} else
+			painter.drawImage(0, 0, HillShading::render(elevation(1), 1));
+	}
+}
+
+MatrixD RasterTile::elevation(int extend) const
+{
+	qreal scale = OSM::zoom2scale(_zoom, _size);
+	QPointF tlm(OSM::tile2mercator(_xy, _zoom));
+	QPointF tl(QPointF(tlm.x() / scale, tlm.y() / scale) / _ratio);
+
+	int left = (int)tl.x() - extend;
+	int right = (int)tl.x() + _size + extend;
+	int top = (int)tl.y() - extend;
+	int bottom = (int)tl.y() + _size + extend;
+
+	MatrixC ll(_size + 2 * extend, _size + 2 * extend);
+	for (int y = top, i = 0; y < bottom; y++)
+		for (int x = left; x < right; x++, i++)
+			ll.at(i) = xy2ll(QPointF(x, y), scale);
+
+	return DEM::elevation(ll);
+}
+
+Coordinates RasterTile::xy2ll(const QPointF &p, qreal scale) const
+{
+	return OSM::m2ll(QPointF(p.x() * scale, -p.y() * scale) * _ratio);
 }

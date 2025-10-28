@@ -388,7 +388,7 @@ void Coros5Map::draw(QPainter *painter, const QRectF &rect, Flags flags)
 				if (map)
 					tiles.append(RasterTile(tileData(map, id(zoom.base, t)),
 					  _mvt, map->tc == 2, _style, zoom.z, t, _tileSize,
-					  _tileRatio, overzoom));
+					  _tileRatio, overzoom, flags & Map::HillShading));
 			}
 		}
 	}
@@ -460,6 +460,11 @@ Coordinates Coros5Map::xy2ll(const QPointF &p)
 	qreal scale = OSM::zoom2scale(_zooms.at(_zoom).z, _tileSize);
 	return OSM::m2ll(QPointF(p.x() * scale, -p.y() * scale)
 	  * coordinatesRatio());
+}
+
+bool Coros5Map::hillShading() const
+{
+	return _style && _style->hasHillShading();
 }
 
 const Style *Coros5Map::defaultStyle() const

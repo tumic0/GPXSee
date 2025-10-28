@@ -249,7 +249,8 @@ void OnlineMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 			QFile file(t.file());
 			if (file.open(QIODevice::ReadOnly))
 				renderTiles.append(RasterTile(file.readAll(), _mvt, false,
-				  _style, _zoom, t.xy(), _tileSize, _tileRatio, overzoom));
+				  _style, _zoom, t.xy(), _tileSize, _tileRatio, overzoom,
+				  flags & Map::HillShading));
 			else
 				qWarning("%s: %s", qUtf8Printable(t.file()),
 				  qUtf8Printable(file.errorString()));
@@ -303,6 +304,11 @@ void OnlineMap::clearCache()
 {
 	_tileLoader->clearCache();
 	QPixmapCache::clear();
+}
+
+bool OnlineMap::hillShading() const
+{
+	return _style && _style->hasHillShading();
 }
 
 QStringList OnlineMap::styles(int &defaultStyle) const

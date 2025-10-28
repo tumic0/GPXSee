@@ -36,15 +36,23 @@ public:
 
 	class Layer {
 	public:
+		enum Type {
+			Unknown,
+			Fill,
+			Line,
+			Background,
+			Symbol,
+			Hillshade
+		};
+
 		Layer() : _type(Unknown), _minZoom(0), _maxZoom(24) {}
 		Layer(const QJsonObject &json);
 
 		const QByteArray &sourceLayer() const {return _sourceLayer;}
-		bool isPath() const {return (_type == Line || _type == Fill);}
-		bool isBackground() const {return (_type == Background);}
-		bool isSymbol() const {return (_type == Symbol);}
+		Type type() const {return _type;}
 		bool isVisible() const {return (_layout.visible());}
 
+		bool match(int zoom) const;
 		bool match(int zoom, const Tile::Feature &feature) const;
 		void setPathPainter(int zoom, const Sprites &sprites,
 		  QPainter &painter) const;
@@ -56,14 +64,6 @@ public:
 		  Tile::Feature &feature, QString &label, QImage &img) const;
 
 	private:
-		enum Type {
-			Unknown,
-			Fill,
-			Line,
-			Background,
-			Symbol
-		};
-
 		class Filter {
 		public:
 			Filter() : _type(None) {}
@@ -185,6 +185,7 @@ public:
 	const Sprites &sprites(qreal scale) const;
 
 	bool matches(const QStringList &layers) const;
+	bool hasHillShading() const;
 
 	static QList<const Style*> &styles();
 

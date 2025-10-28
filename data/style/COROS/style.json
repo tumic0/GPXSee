@@ -108,6 +108,12 @@
       }
     },
     {
+      "id": "hillshading",
+      "type": "hillshade",
+      "minzoom": 9,
+      "maxzoom": 15
+    },
+    {
       "id": "waterway",
       "type": "line",
       "source-layer": "P",

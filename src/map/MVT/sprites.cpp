@@ -57,7 +57,8 @@ Sprites::Sprites(const QString &jsonFile, const QString &imageFile)
 {
 	QFile file(jsonFile);
 	if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-		qCritical() << jsonFile << ": error opening file";
+		qWarning("%s: %s", qUtf8Printable(jsonFile),
+		  qUtf8Printable(file.errorString()));
 		return;
 	}
 	QByteArray ba(file.readAll());
@@ -65,7 +66,8 @@ Sprites::Sprites(const QString &jsonFile, const QString &imageFile)
 	QJsonParseError error;
 	QJsonDocument doc(QJsonDocument::fromJson(ba, &error));
 	if (doc.isNull()) {
-		qCritical() << jsonFile << ":" << error.errorString();
+		qWarning("%s[%d]: %s", qUtf8Printable(jsonFile), error.offset,
+		  qUtf8Printable(error.errorString()));
 		return;
 	}
 
@@ -78,14 +80,15 @@ Sprites::Sprites(const QString &jsonFile, const QString &imageFile)
 			if (s.rect().isValid())
 				_sprites.insert(it.key(), s);
 			else
-				qWarning() << it.key() << ": invalid sprite definition";
+				qWarning("%s: invalid sprite definition",
+				  qUtf8Printable(it.key()));
 		} else
-			qWarning() << it.key() << ": invalid sprite definition";
+			qWarning("%s: invalid sprite definition", qUtf8Printable(it.key()));
 	}
 
 	_img = QImage(imageFile);
 	if (_img.isNull())
-		qWarning() << imageFile << ": error loading image";
+		qWarning("%s: error loading sprite image", qUtf8Printable(imageFile));
 }
 
 QImage Sprites::sprite(const Sprite &sprite, const QColor &color,

@@ -35,6 +35,7 @@ public:
 	void unload();
 
 	QStringList styles(int &defaultStyle) const;
+	bool hillShading() const;
 
 	bool isValid() const {return _valid;}
 	QString errorString() const {return _errorString;}

@@ -6,9 +6,10 @@
 
 using namespace MVT;
 
-void Text::addLayer(const Style::Layer *style, Tile::Layer *data)
+void Text::addLayer(const Style::Layer &style, Tile::Layer *data)
 {
-	_layers.append(Layer(style, data));
+	if (data)
+		_layers.append(Layer(&style, data));
 }
 
 void Text::render(QPainter *painter) const

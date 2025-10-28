@@ -23,7 +23,7 @@ public:
 	  : _zoom(zoom), _ratio(ratio), _style(style),
 	  _sceneRect(QRect(QPoint(0, 0), QSize(size, size))) {}
 
-	void addLayer(const Style::Layer *style, Tile::Layer *data);
+	void addLayer(const Style::Layer &style, Tile::Layer *data);
 	void render(QPainter *painter) const;
 
 private:

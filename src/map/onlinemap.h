@@ -42,6 +42,7 @@ public:
 	void clearCache();
 
 	QStringList styles(int &defaultStyle) const;
+	bool hillShading() const;
 
 private slots:
 	void jobFinished(MVTJob *job);

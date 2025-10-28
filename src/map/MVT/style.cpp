@@ -502,6 +502,8 @@ Style::Layer::Layer(const QJsonObject &json)
 		_type = Background;
 	else if (type == "symbol")
 		_type = Symbol;
+	else if (type == "hillshade")
+		_type = Hillshade;
 
 	// source-layer
 	_sourceLayer = json["source-layer"].toString().toUtf8();
@@ -523,6 +525,11 @@ Style::Layer::Layer(const QJsonObject &json)
 	// paint
 	if (json.contains("paint") && json["paint"].isObject())
 		_paint = Paint(json["paint"].toObject());
+}
+
+bool Style::Layer::match(int zoom) const
+{
+	return (zoom >= 0 && (zoom < _minZoom || zoom >= _maxZoom)) ? false : true;
 }
 
 bool Style::Layer::match(int zoom, const Tile::Feature &feature) const
@@ -584,7 +591,7 @@ static Sprites loadSprites(const QDir &styleDir, const QString &json,
 		if (QFileInfo::exists(spritesImg))
 			return Sprites(spritesJSON, spritesImg);
 		else
-			qWarning() << spritesImg << ": no such file";
+			qWarning("%s: %s", qUtf8Printable(spritesImg), "no such file");
 	}
 
 	return Sprites();
@@ -596,7 +603,8 @@ Style::Style(const QString &fileName) : _valid(false)
 	if (!file.exists())
 		return;
 	if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-		qCritical() << fileName << ":" << file.errorString();
+		qWarning("%s: %s", qUtf8Printable(fileName),
+		  qUtf8Printable(file.errorString()));
 		return;
 	}
 	QByteArray ba(file.readAll());
@@ -604,7 +612,8 @@ Style::Style(const QString &fileName) : _valid(false)
 	QJsonParseError error;
 	QJsonDocument doc(QJsonDocument::fromJson(ba, &error));
 	if (doc.isNull()) {
-		qCritical() << fileName << ":" << error.errorString();
+		qWarning("%s[%d]: %s", qUtf8Printable(fileName), error.offset,
+		  qUtf8Printable(error.errorString()));
 		return;
 	}
 	QJsonObject json(doc.object());
@@ -650,6 +659,15 @@ bool Style::matches(const QStringList &layers) const
 			return false;
 
 	return true;
+}
+
+bool Style::hasHillShading() const
+{
+	for (int i = 0; i < _layers.size(); i++)
+		if (_layers.at(i).type() == Layer::Hillshade)
+			return true;
+
+	return false;
 }
 
 QList<const Style*> Style::loadStyles(const QString &path)
