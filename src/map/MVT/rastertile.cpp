@@ -23,6 +23,7 @@ void RasterTile::render()
 	if (_mvt) {
 		QImage img(_size * _ratio, _size * _ratio,
 		  QImage::Format_ARGB32_Premultiplied);
+		img.setDevicePixelRatio(_ratio);
 		img.fill(Qt::transparent);
 
 		if (_style)
@@ -47,7 +48,8 @@ void RasterTile::renderMVT(const QByteArray &rawData, QImage *img)
 	Text text(_zoom, _size, _ratio, _style);
 	QPainter painter(img);
 
-	painter.scale(_ratio, _ratio);
+	painter.setRenderHint(QPainter::Antialiasing);
+	painter.setRenderHint(QPainter::SmoothPixmapTransform);
 
 	for (int i = 0; i < _style->layers().size(); i++) {
 		const Style::Layer &sl = _style->layers().at(i);
@@ -128,16 +130,17 @@ void RasterTile::drawHillshading(QPainter &painter,
 
 MatrixD RasterTile::elevation(int extend) const
 {
-	qreal scale = OSM::zoom2scale(_zoom, _size);
+	qreal scale = OSM::zoom2scale(_zoom, _size * _ratio);
 	QPointF tlm(OSM::tile2mercator(_xy, _zoom));
 	QPointF tl(QPointF(tlm.x() / scale, tlm.y() / scale) / _ratio);
 
 	int left = (int)tl.x() - extend;
-	int right = (int)tl.x() + _size + extend;
+	int right = (int)(tl.x() + _size * _ratio) + extend;
 	int top = (int)tl.y() - extend;
-	int bottom = (int)tl.y() + _size + extend;
+	int bottom = (int)(tl.y() + _size * _ratio) + extend;
 
-	MatrixC ll(_size + 2 * extend, _size + 2 * extend);
+	MatrixC ll((int)(_size * _ratio) + 2 * extend,
+	  (int)(_size * _ratio) + 2 * extend);
 	for (int y = top, i = 0; y < bottom; y++)
 		for (int x = left; x < right; x++, i++)
 			ll.at(i) = xy2ll(QPointF(x, y), scale);
