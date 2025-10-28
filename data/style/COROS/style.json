@@ -110,7 +110,7 @@
     {
       "id": "hillshading",
       "type": "hillshade",
-      "minzoom": 9,
+      "minzoom": 8,
       "maxzoom": 15
     },
     {
