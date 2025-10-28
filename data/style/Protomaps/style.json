@@ -4,10 +4,10 @@
     "sources": {
         "protomaps": {
             "type": "vector",
-            "attribution": "<a href=\"https://github.com/protomaps/basemaps\">Protomaps</a> © <a href=\"https://openstreetmap.org\">OpenStreetMap</a>",
-            "url": "pmtiles://https://demo-bucket.protomaps.com/v4.pmtiles"
+            "attribution": "<a href=\"https://github.com/protomaps/basemaps\">Protomaps</a> © <a href=\"https://openstreetmap.org\">OpenStreetMap</a>"
         }
     },
+    "sprite": "file:sprite",
     "layers": [
         {
             "id": "background",
@@ -31,7 +31,7 @@
             }
         },
         {
-            "id": "landcover",
+            "id": "landcover_grassland",
             "type": "fill",
             "source": "protomaps",
             "source-layer": "landcover",
@@ -58,7 +58,7 @@
             }
         },
         {
-            "id": "landcover",
+            "id": "landcover_barren",
             "type": "fill",
             "source": "protomaps",
             "source-layer": "landcover",
@@ -85,7 +85,7 @@
             }
         },
         {
-            "id": "landcover",
+            "id": "landcover_urban_area",
             "type": "fill",
             "source": "protomaps",
             "source-layer": "landcover",
@@ -112,7 +112,7 @@
             }
         },
         {
-            "id": "landcover",
+            "id": "landcover_farmland",
             "type": "fill",
             "source": "protomaps",
             "source-layer": "landcover",
@@ -139,7 +139,7 @@
             }
         },
         {
-            "id": "landcover",
+            "id": "landcover_glacier",
             "type": "fill",
             "source": "protomaps",
             "source-layer": "landcover",
@@ -166,7 +166,7 @@
             }
         },
         {
-            "id": "landcover",
+            "id": "landcover_scrub",
             "type": "fill",
             "source": "protomaps",
             "source-layer": "landcover",
@@ -193,7 +193,7 @@
             }
         },
         {
-            "id": "landcover",
+            "id": "landcover_other",
             "type": "fill",
             "source": "protomaps",
             "source-layer": "landcover",
@@ -257,7 +257,7 @@
             }
         },
         {
-            "id": "landuse_park",
+            "id": "landuse_forest",
             "type": "fill",
             "source": "protomaps",
             "source-layer": "landuse",
@@ -285,7 +285,7 @@
             }
         },
         {
-            "id": "landuse_park",
+            "id": "landuse_grass",
             "type": "fill",
             "source": "protomaps",
             "source-layer": "landuse",
@@ -314,7 +314,7 @@
             }
         },
         {
-            "id": "landuse_park",
+            "id": "landuse_glacier",
             "type": "fill",
             "source": "protomaps",
             "source-layer": "landuse",
@@ -341,7 +341,7 @@
             }
         },
         {
-            "id": "landuse_park",
+            "id": "landuse_sand",
             "type": "fill",
             "source": "protomaps",
             "source-layer": "landuse",
@@ -368,7 +368,7 @@
             }
         },
         {
-            "id": "landuse_park",
+            "id": "landuse_military",
             "type": "fill",
             "source": "protomaps",
             "source-layer": "landuse",
@@ -4315,7 +4315,5 @@
                 "text-halo-width": 1
             }
         }
-    ],
-    "sprite": "https://protomaps.github.io/basemaps-assets/sprites/v4/light",
-    "glyphs": "https://protomaps.github.io/basemaps-assets/fonts/{fontstack}/{range}.pbf"
+    ]
 }
