@@ -60,7 +60,12 @@ static QList<QPair<QString, QFont::Style> > styleList = styles();
 
 static const QStringList &fonts()
 {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 	static QStringList l(QFontDatabase().families());
+#else
+	static QStringList l(QFontDatabase::families());
+#endif
+
 	return l;
 }
 
