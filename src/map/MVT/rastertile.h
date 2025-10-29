@@ -41,7 +41,6 @@ private:
 	  Tile::Layer *pbfLayer);
 	void drawHillshading(QPainter &painter, const Style::Layer &styleLayer);
 	MatrixD elevation(int extend) const;
-	Coordinates xy2ll(const QPointF &p, qreal scale) const;
 };
 
 }

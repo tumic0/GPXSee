@@ -143,12 +143,7 @@ MatrixD RasterTile::elevation(int extend) const
 	  (int)(_size * _ratio) + 2 * extend);
 	for (int y = top, i = 0; y < bottom; y++)
 		for (int x = left; x < right; x++, i++)
-			ll.at(i) = xy2ll(QPointF(x, y), scale);
+			ll.at(i) = OSM::m2ll(QPointF(x * scale, -y * scale) * _ratio);
 
 	return DEM::elevation(ll);
-}
-
-Coordinates RasterTile::xy2ll(const QPointF &p, qreal scale) const
-{
-	return OSM::m2ll(QPointF(p.x() * scale, -p.y() * scale) * _ratio);
 }
