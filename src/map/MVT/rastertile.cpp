@@ -118,19 +118,28 @@ void RasterTile::drawHillshading(QPainter &painter,
   const Style::Layer &styleLayer)
 {
 	if (_hillShading && styleLayer.match(_zoom)) {
+		MatrixD ele(elevation(HillShading::blur() + 1));
+		if (ele.isNull())
+			return;
+
 		if (HillShading::blur()) {
-			MatrixD dem(Filter::blur(elevation(HillShading::blur() + 1),
-			  HillShading::blur()));
+			MatrixD dem(Filter::blur(ele, HillShading::blur()));
 			QImage img(HillShading::render(dem, HillShading::blur() + 1));
 			painter.drawImage(0, 0, img);
 		} else
-			painter.drawImage(0, 0, HillShading::render(elevation(1), 1));
+			painter.drawImage(0, 0, HillShading::render(ele, 1));
 	}
+}
+
+static inline Coordinates xy2ll(int x, int y, qreal factor)
+{
+	return OSM::m2ll(QPointF(x * factor, -y * factor));
 }
 
 MatrixD RasterTile::elevation(int extend) const
 {
 	qreal scale = OSM::zoom2scale(_zoom, _size * _ratio);
+	qreal factor = scale * _ratio;
 	QPointF tlm(OSM::tile2mercator(_xy, _zoom));
 	QPointF tl(QPointF(tlm.x() / scale, tlm.y() / scale) / _ratio);
 
@@ -139,11 +148,15 @@ MatrixD RasterTile::elevation(int extend) const
 	int top = (int)tl.y() - extend;
 	int bottom = (int)(tl.y() + _size * _ratio) + extend;
 
+	RectC rect(xy2ll(left, top, factor), xy2ll(right, bottom, factor));
+	if (!DEM::elevation(rect))
+		return MatrixD();
+
 	MatrixC ll((int)(_size * _ratio) + 2 * extend,
 	  (int)(_size * _ratio) + 2 * extend);
 	for (int y = top, i = 0; y < bottom; y++)
 		for (int x = left; x < right; x++, i++)
-			ll.at(i) = OSM::m2ll(QPointF(x * scale, -y * scale) * _ratio);
+			ll.at(i) = xy2ll(x, y, factor);
 
 	return DEM::elevation(ll);
 }

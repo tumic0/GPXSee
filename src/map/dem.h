@@ -38,6 +38,7 @@ public:
 
 	static double elevation(const Coordinates &c);
 	static MatrixD elevation(const MatrixC &m);
+	static bool elevation(const RectC &rect);
 
 	static QList<Area> tiles();
 
