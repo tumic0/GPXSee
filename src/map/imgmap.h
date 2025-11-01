@@ -43,7 +43,7 @@ public:
 
 	QStringList styles(int &defaultStyle) const;
 	QStringList layers(const QString &lang, int &defaultLayer) const;
-	bool hillShading() const {return true;}
+	bool hillShading() const;
 
 	bool isValid() const {return _valid;}
 	QString errorString() const {return _errorString;}

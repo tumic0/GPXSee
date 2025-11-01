@@ -41,6 +41,7 @@ void Coros4Map::loadDir(const QString &path, MapTree &tree)
 
 				_dataBounds |= data->bounds();
 				_zooms |= data->zooms();
+				_hasDEM |= data->hasDEM();
 			} else {
 				qWarning("%s: %s", qUtf8Printable(data->fileName()),
 				  qUtf8Printable(data->errorString()));
@@ -52,7 +53,7 @@ void Coros4Map::loadDir(const QString &path, MapTree &tree)
 
 Coros4Map::Coros4Map(const QString &fileName, QObject *parent)
   : Map(fileName, parent), _projection(PCS::pcs(3857)), _tileRatio(1.0),
-  _layer(All), _style(0), _valid(false)
+  _layer(All), _style(0), _hasDEM(false), _valid(false)
 {
 	QFileInfo fi(fileName);
 	QDir dir(fi.absolutePath());
@@ -310,8 +311,7 @@ void Coros4Map::draw(QPainter *painter, const QRectF &rect, Flags flags)
 				if (!data.isEmpty())
 					tiles.append(RasterTile(_projection, _transform, data,
 					  _style, _zoom, QRect(ttl, QSize(TILE_SIZE, TILE_SIZE)),
-					  _tileRatio, key, flags & Map::HillShading && _zoom >= 17
-					  && _zoom <= 24, false, true));
+					  _tileRatio, key, flags & Map::HillShading, false, true));
 			}
 		}
 	}
