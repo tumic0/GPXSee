@@ -17,6 +17,8 @@ namespace OSM
 	QPoint mercator2tile(const QPointF &m, int zoom);
 	QPointF tile2mercator(const QPoint &p, int zoom);
 	qreal zoom2scale(int zoom, int tileSize);
+	inline qreal zoom2scale(int zoom, int tileSize)
+	  {return (360.0/(qreal)((1<<zoom) * tileSize));}
 	int scale2zoom(qreal scale, int tileSize);
 	qreal resolution(const QPointF &p, int zoom, int tileSize);
 

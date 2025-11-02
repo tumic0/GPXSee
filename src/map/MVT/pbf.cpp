@@ -1,5 +1,5 @@
 #include "common/protobuf.h"
-#include "data.h"
+#include "pbf.h"
 
 using namespace Protobuf;
 using namespace MVT;
@@ -76,7 +76,7 @@ static bool value(CTX &ctx, QVariant &val)
 	return (ctx.bp == ee);
 }
 
-static bool feature(CTX &ctx, Data::Feature &f)
+static bool feature(CTX &ctx, PBF::Feature &f)
 {
 	quint32 len;
 	quint32 e;
@@ -108,9 +108,9 @@ static bool feature(CTX &ctx, Data::Feature &f)
 					return false;
 				if (!varint(ctx, e))
 					return false;
-				if (e > Data::GeomType::POLYGON)
+				if (e > PBF::GeomType::POLYGON)
 					return false;
-				f.type = static_cast<Data::GeomType>(e);
+				f.type = static_cast<PBF::GeomType>(e);
 				break;
 			case 4:
 				if (!packed(ctx, f.geometry))
@@ -125,7 +125,7 @@ static bool feature(CTX &ctx, Data::Feature &f)
 	return (ctx.bp == ee);
 }
 
-static bool layer(CTX &ctx, Data::Layer &l)
+static bool layer(CTX &ctx, PBF::Layer &l)
 {
 	quint32 len;
 
@@ -146,7 +146,7 @@ static bool layer(CTX &ctx, Data::Layer &l)
 					return false;
 				break;
 			case 2:
-				l.features.append(Data::Feature());
+				l.features.append(PBF::Feature());
 				if (!feature(ctx, l.features.last()))
 					return false;
 				break;
@@ -181,7 +181,7 @@ static bool layer(CTX &ctx, Data::Layer &l)
 	return (ctx.bp == ee);
 }
 
-static bool tile(const QByteArray &ba, QVector<Data::Layer> &layers)
+static bool tile(const QByteArray &ba, QVector<PBF::Layer> &layers)
 {
 	CTX ctx(ba);
 
@@ -191,7 +191,7 @@ static bool tile(const QByteArray &ba, QVector<Data::Layer> &layers)
 
 		switch (field(ctx.tag)) {
 			case 3:
-				layers.append(Data::Layer());
+				layers.append(PBF::Layer());
 				if (!layer(ctx, layers.last()))
 					return false;
 				break;
@@ -204,10 +204,16 @@ static bool tile(const QByteArray &ba, QVector<Data::Layer> &layers)
 	return (ctx.bp == ctx.be);
 }
 
-Data::Data(const QByteArray &ba)
+bool PBF::load(const QByteArray &ba)
 {
 	if (!tile(ba, _layers)) {
 		_layers.clear();
-		qWarning("invalid MVT data");
-	}
+		return false;
+	} else
+		return true;
+}
+
+void PBF::clear()
+{
+	_layers.clear();
 }

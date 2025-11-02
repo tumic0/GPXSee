@@ -114,6 +114,15 @@
       "maxzoom": 15
     },
     {
+      "id": "contour-lines",
+      "type": "line",
+      "source-layer": "Q",
+      "paint": {
+        "line-color": "#afafaf",
+        "line-width": 1
+      }
+    },
+    {
       "id": "waterway",
       "type": "line",
       "source-layer": "P",

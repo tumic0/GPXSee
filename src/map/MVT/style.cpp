@@ -10,21 +10,21 @@
 #include "common/programpaths.h"
 #include "text.h"
 #include "font.h"
-#include "tile.h"
+#include "vectortile.h"
 #include "style.h"
 
 using namespace MVT;
 
-static Data::GeomType geometryType(const QString &str)
+static PBF::GeomType geometryType(const QString &str)
 {
 	if (str == "Point")
-		return Data::GeomType::POINT;
+		return PBF::GeomType::POINT;
 	else if (str == "LineString")
-		return Data::GeomType::LINESTRING;
+		return PBF::GeomType::LINESTRING;
 	else if (str == "Polygon")
-		return Data::GeomType::POLYGON;
+		return PBF::GeomType::POLYGON;
 	else
-		return Data::GeomType::UNKNOWN;
+		return PBF::GeomType::UNKNOWN;
 }
 
 static QVariant variant(const QJsonValue &val)
@@ -136,7 +136,7 @@ Style::Layer::Filter::Filter(const QJsonArray &json)
 		INVALID_FILTER(json);
 }
 
-bool Style::Layer::Filter::match(const Tile::Feature &feature) const
+bool Style::Layer::Filter::match(const VectorTile::Feature &feature) const
 {
 	const QVariant *v;
 
@@ -221,7 +221,7 @@ bool Style::Layer::Filter::match(const Tile::Feature &feature) const
 	}
 }
 
-QString Style::Layer::Template::value(int zoom, const Tile::Feature &feature) const
+QString Style::Layer::Template::value(int zoom, const VectorTile::Feature &feature) const
 {
 	static QRegularExpression rx("\\{[^\\}]*\\}");
 	QString text(_field.value(zoom));
@@ -532,7 +532,7 @@ bool Style::Layer::match(int zoom) const
 	return (zoom >= 0 && (zoom < _minZoom || zoom >= _maxZoom)) ? false : true;
 }
 
-bool Style::Layer::match(int zoom, const Tile::Feature &feature) const
+bool Style::Layer::match(int zoom, const VectorTile::Feature &feature) const
 {
 	if (zoom >= 0 && (zoom < _minZoom || zoom >= _maxZoom))
 		return false;
@@ -571,7 +571,7 @@ void Style::Layer::setTextProperties(int zoom, qreal &maxWidth,
 }
 
 void Style::Layer::symbol(int zoom, const Sprites &sprites,
-  Tile::Feature &feature, QString &label, QImage &img) const
+  VectorTile::Feature &feature, QString &label, QImage &img) const
 {
 	QString icon(_layout.icon(zoom, feature));
 	QColor color(_paint.iconColor(zoom));

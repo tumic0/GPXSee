@@ -37,7 +37,7 @@ const Style *OnlineMap::defaultStyle() const
 
 	qWarning("%s: no matching MVT style found", qUtf8Printable(path()));
 
-	return 0;
+	return Style::styles().isEmpty() ? 0 : Style::styles().first();
 }
 
 QRectF OnlineMap::bounds()
@@ -248,7 +248,7 @@ void OnlineMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 		} else {
 			QFile file(t.file());
 			if (file.open(QIODevice::ReadOnly))
-				renderTiles.append(RasterTile(file.readAll(), _mvt, false,
+				renderTiles.append(RasterTile(Source(file.readAll(), false, _mvt),
 				  _style, _zoom, t.xy(), _tileSize, _tileRatio, overzoom,
 				  flags & Map::HillShading));
 			else
@@ -321,8 +321,6 @@ QStringList OnlineMap::styles(int &defaultStyle) const
 			list.append(Style::styles().at(i)->name());
 
 		defaultStyle = Style::styles().indexOf(_style);
-		if (defaultStyle < 0)
-			defaultStyle = 0;
 	} else
 		defaultStyle = -1;
 

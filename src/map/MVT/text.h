@@ -7,7 +7,7 @@
 #include <QPen>
 #include "map/textpointitem.h"
 #include "map/textpathitem.h"
-#include "tile.h"
+#include "vectortile.h"
 #include "style.h"
 
 class QImage;
@@ -23,16 +23,16 @@ public:
 	  : _zoom(zoom), _ratio(ratio), _style(style),
 	  _sceneRect(QRect(QPoint(0, 0), QSize(size, size))) {}
 
-	void addLayer(const Style::Layer &style, Tile::Layer *data);
+	void addLayer(const Style::Layer &style, VectorTile::Layer *data);
 	void render(QPainter *painter) const;
 
 private:
 	struct Layer {
-		Layer(const Style::Layer *style, Tile::Layer *data)
+		Layer(const Style::Layer *style, VectorTile::Layer *data)
 		  : style(style), data(data) {}
 
 		const Style::Layer *style;
-		Tile::Layer *data;
+		VectorTile::Layer *data;
 	};
 
 	struct Properties {
@@ -87,7 +87,7 @@ private:
 
 	void addSymbols(CTX &ctx, const Layer &layer) const;
 	void addSymbol(CTX &ctx, const Properties &prop, const Style::Layer &layer,
-	  Tile::Feature &feature) const;
+	  VectorTile::Feature &feature) const;
 	TextItem *symbol(const Properties &prop, const QString &label,
 	  const QImage &icon, const QPainterPath &path) const;
 

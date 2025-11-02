@@ -316,9 +316,9 @@ void PMTilesMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 				QPointF tp(tilePos(tl, t, tile, overzoom));
 				drawTile(painter, pm, tp);
 			} else
-				tiles.append(RasterTile(tileData(id(zoom.base, t)), _mvt,
-				  _tc == 2, _style, zoom.z, t, _tileSize, _tileRatio, overzoom,
-				  flags & Map::HillShading));
+				tiles.append(RasterTile(Source(tileData(id(zoom.base, t)),
+				  _tc == 2, _mvt), _style, zoom.z, t, _tileSize, _tileRatio,
+				  overzoom, flags & Map::HillShading));
 		}
 	}
 
@@ -371,7 +371,7 @@ const Style *PMTilesMap::defaultStyle() const
 
 	qWarning("%s: no matching MVT style found", qUtf8Printable(path()));
 
-	return 0;
+	return Style::styles().isEmpty() ? 0 : Style::styles().first();
 }
 
 bool PMTilesMap::hillShading() const
@@ -389,8 +389,6 @@ QStringList PMTilesMap::styles(int &defaultStyle) const
 			list.append(Style::styles().at(i)->name());
 
 		defaultStyle = Style::styles().indexOf(_style);
-		if (defaultStyle < 0)
-			defaultStyle = 0;
 	} else
 		defaultStyle = -1;
 

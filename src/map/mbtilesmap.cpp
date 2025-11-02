@@ -40,7 +40,7 @@ const Style *MBTilesMap::defaultStyle() const
 
 	qWarning("%s: no matching MVT style found", qUtf8Printable(path()));
 
-	return 0;
+	return Style::styles().isEmpty() ? 0 : Style::styles().first();
 }
 
 bool MBTilesMap::getMinZoom(int &zoom)
@@ -456,8 +456,8 @@ void MBTilesMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 				QPointF tp(tilePos(tl, t, tile, overzoom));
 				drawTile(painter, pm, tp);
 			} else
-				tiles.append(RasterTile(tileData(zoom.base, t), _mvt, true,
-				  _style, zoom.z, t, _tileSize, _tileRatio, overzoom,
+				tiles.append(RasterTile(Source(tileData(zoom.base, t), true,
+				  _mvt), _style, zoom.z, t, _tileSize, _tileRatio, overzoom,
 				  flags & Map::HillShading));
 		}
 	}
@@ -518,8 +518,6 @@ QStringList MBTilesMap::styles(int &defaultStyle) const
 			list.append(Style::styles().at(i)->name());
 
 		defaultStyle = Style::styles().indexOf(_style);
-		if (defaultStyle < 0)
-			defaultStyle = 0;
 	} else
 		defaultStyle = -1;
 

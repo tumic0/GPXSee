@@ -1,4 +1,4 @@
-#include "tile.h"
+#include "vectortile.h"
 
 #define MOVE_TO    1
 #define LINE_TO    2
@@ -17,7 +17,7 @@ static inline QPoint parameters(quint32 v1, quint32 v2)
 	return QPoint(zigzag32decode(v1), zigzag32decode(v2));
 }
 
-const QVariant *Tile::Feature::value(const QByteArray &key) const
+const QVariant *VectorTile::Feature::value(const QByteArray &key) const
 {
 	const KeyHash &keys(_layer->keys());
 	KeyHash::const_iterator it(keys.find(key));
@@ -32,7 +32,7 @@ const QVariant *Tile::Feature::value(const QByteArray &key) const
 	return 0;
 }
 
-const QPainterPath &Tile::Feature::path(int tileSize)
+const QPainterPath &VectorTile::Feature::path(int tileSize)
 {
 	if (_path.elementCount())
 		return _path;
@@ -70,7 +70,7 @@ const QPainterPath &Tile::Feature::path(int tileSize)
 	return _path;
 }
 
-Tile::Layer::Layer(const Data::Layer *layer) : _data(layer)
+VectorTile::Layer::Layer(const PBF::Layer *layer) : _data(layer)
 {
 	_keys.reserve(layer->keys.size());
 	for (int i = 0; i < layer->keys.size(); i++)
@@ -82,15 +82,15 @@ Tile::Layer::Layer(const Data::Layer *layer) : _data(layer)
 	std::sort(_features.begin(), _features.end());
 }
 
-Tile::Tile(const Data &data)
+VectorTile::VectorTile(const PBF &data)
 {
 	for (int i = 0; i <  data.layers().size(); i++) {
-		const Data::Layer &layer = data.layers().at(i);
+		const PBF::Layer &layer = data.layers().at(i);
 		_layers.insert(layer.name, new Layer(&layer));
 	}
 }
 
-Tile::~Tile()
+VectorTile::~VectorTile()
 {
 	qDeleteAll(_layers);
 }

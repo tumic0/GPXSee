@@ -6,7 +6,7 @@
 
 using namespace MVT;
 
-void Text::addLayer(const Style::Layer &style, Tile::Layer *data)
+void Text::addLayer(const Style::Layer &style, VectorTile::Layer *data)
 {
 	if (data)
 		_layers.append(Layer(&style, data));
@@ -43,7 +43,7 @@ void Text::addSymbols(CTX &ctx, const Layer &layer) const
 }
 
 void Text::addSymbol(CTX &ctx, const Properties &prop, const Style::Layer &layer,
-  Tile::Feature &feature) const
+  VectorTile::Feature &feature) const
 {
 	if (!layer.match(_zoom, feature))
 		return;

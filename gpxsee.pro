@@ -117,6 +117,9 @@ HEADERS += src/common/config.h \
     src/GUI/pngexportdialog.h \
     src/GUI/timezoneinfo.h \
     src/GUI/passwordedit.h \
+    src/map/MVT/pbf.h \
+    src/map/MVT/source.h \
+    src/map/MVT/vectortile.h \
     src/map/proj/polyconic.h \
     src/map/proj/webmercator.h \
     src/map/proj/transversemercator.h \
@@ -166,10 +169,8 @@ HEADERS += src/common/config.h \
     src/map/IMG/netfile.h \
     src/map/IMG/label.h \
     src/map/MVT/color.h \
-    src/map/MVT/data.h \
     src/map/MVT/font.h \
     src/map/MVT/function.h \
-    src/map/MVT/tile.h \
     src/map/MVT/sprites.h \
     src/map/MVT/style.h \
     src/map/MVT/rastertile.h \
@@ -368,6 +369,8 @@ SOURCES += src/main.cpp \
     src/GUI/pngexportdialog.cpp \
     src/GUI/projectioncombobox.cpp \
     src/GUI/passwordedit.cpp \
+    src/map/MVT/pbf.cpp \
+    src/map/MVT/vectortile.cpp \
     src/map/coros4map.cpp \
     src/map/coros5map.cpp \
     src/map/downloader.cpp \
@@ -424,10 +427,8 @@ SOURCES += src/main.cpp \
     src/map/mapsforge/rastertile.cpp \
     src/map/mapsforge/subfile.cpp \
     src/map/MVT/color.cpp \
-    src/map/MVT/data.cpp \
     src/map/MVT/font.cpp \
     src/map/MVT/function.cpp \
-    src/map/MVT/tile.cpp \
     src/map/MVT/sprites.cpp \
     src/map/MVT/style.cpp \
     src/map/MVT/text.cpp \

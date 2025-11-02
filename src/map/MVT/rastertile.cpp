@@ -3,50 +3,70 @@
 #include "map/hillshading.h"
 #include "map/filter.h"
 #include "map/osm.h"
-#include "data.h"
+#include "pbf.h"
 #include "rastertile.h"
 
 using namespace MVT;
 
-RasterTile::RasterTile(const QByteArray &data, bool mvt, bool gzip,
-  const Style *style, int zoom, const QPoint &xy, int size, qreal ratio,
-  int overzoom, bool hillShading) : _data(data), _mvt(mvt), _gzip(gzip),
-  _style(style), _zoom(zoom), _xy(xy), _ratio(ratio), _hillShading(hillShading)
+RasterTile::RasterTile(const Source &data, const Style *style, int zoom,
+  const QPoint &xy, int size, qreal ratio, int overzoom, bool hillShading)
+  : _style(style), _zoom(zoom), _xy(xy), _ratio(ratio),
+  _hillShading(hillShading)
+{
+	_data.append(data);
+	_size = qMin(size<<overzoom, 4096);
+}
+
+RasterTile::RasterTile(const QList<Source> &data, const Style *style, int zoom,
+  const QPoint &xy, int size, qreal ratio, int overzoom, bool hillShading)
+  : _data(data), _style(style), _zoom(zoom), _xy(xy), _ratio(ratio),
+  _hillShading(hillShading)
 {
 	_size = qMin(size<<overzoom, 4096);
 }
 
 void RasterTile::render()
 {
-	QByteArray rawData(_gzip ? Util::gunzip(_data) : _data);
+	int size = (int)(_size * _ratio);
+	QImage img(size, size, QImage::Format_ARGB32_Premultiplied);
+	PBF pbf;
 
-	if (_mvt) {
-		QImage img(_size * _ratio, _size * _ratio,
-		  QImage::Format_ARGB32_Premultiplied);
-		img.setDevicePixelRatio(_ratio);
-		img.fill(Qt::transparent);
+	img.setDevicePixelRatio(_ratio);
+	img.fill(Qt::transparent);
 
-		if (_style)
-			renderMVT(rawData, &img);
+	QPainter painter(&img);
 
-		_pixmap.convertFromImage(img);
-	} else
-		_pixmap.loadFromData(rawData);
+	for (int i = 0; i < _data.size(); i++) {
+		Source &s = _data[i];
+
+		if (s.mvt())
+			pbf.load(s.data());
+		else {
+			if (_style && pbf.layers().size())
+				renderMVT(painter, pbf);
+			painter.drawImage(QRectF(0, 0, size, size),
+			  QImage::fromData(s.data()));
+			pbf.clear();
+		}
+	}
+
+	if (_style && pbf.layers().size())
+		renderMVT(painter, pbf);
+
+	_pixmap.convertFromImage(img);
 }
 
-static Tile::Layer *tileLayer(const Tile &tile, const Style::Layer &sl)
+static VectorTile::Layer *tileLayer(const VectorTile &tile,
+  const Style::Layer &sl)
 {
-	QHash<QByteArray, Tile::Layer*>::const_iterator it =
+	QHash<QByteArray, VectorTile::Layer*>::const_iterator it =
 	  tile.layers().find(sl.sourceLayer());
 	return (it == tile.layers().constEnd()) ? 0 : *it;
 }
 
-void RasterTile::renderMVT(const QByteArray &rawData, QImage *img)
+void RasterTile::renderMVT(QPainter &painter, const VectorTile &tile)
 {
-	Data data(rawData);
-	Tile tile(data);
 	Text text(_zoom, _size, _ratio, _style);
-	QPainter painter(img);
 
 	painter.setRenderHint(QPainter::Antialiasing);
 	painter.setRenderHint(QPainter::SmoothPixmapTransform);
@@ -96,14 +116,14 @@ void RasterTile::drawBackground(QPainter &painter,
 }
 
 void RasterTile::drawFeature(QPainter &painter, const Style::Layer &layer,
-  Tile::Feature &feature)
+  VectorTile::Feature &feature)
 {
 	if (layer.match(_zoom, feature))
 		painter.drawPath(feature.path(_size));
 }
 
 void RasterTile::drawLayer(QPainter &painter, const Style::Layer &styleLayer,
-  Tile::Layer *pbfLayer)
+  VectorTile::Layer *pbfLayer)
 {
 	if (pbfLayer) {
 		painter.save();

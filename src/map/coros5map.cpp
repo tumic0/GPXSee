@@ -6,8 +6,7 @@
 
 #define MVT_TILE_SIZE   512
 #define MAX_TILE_SIZE   4096
-#define ROOT_CACHE_SIZE 16
-#define ANY_ID          0xFFFFFFFF
+#define ROOT_CACHE_SIZE 32
 
 using namespace PMTiles;
 using namespace MVT;
@@ -88,7 +87,7 @@ QStringList Coros5Map::MapTile::vectorLayers() const
 	return layers;
 }
 
-void Coros5Map::loadDir(const QString &path, Range &zooms)
+void Coros5Map::loadDir(const QString &path, MapTree &tree, Range &zooms)
 {
 	QDir md(path);
 	md.setFilter(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot);
@@ -99,7 +98,7 @@ void Coros5Map::loadDir(const QString &path, Range &zooms)
 		const QFileInfo &fi = ml.at(i);
 
 		if (fi.isDir())
-			loadDir(fi.absoluteFilePath(), zooms);
+			loadDir(fi.absoluteFilePath(), tree, zooms);
 		else {
 			MapTile *map = new MapTile(fi.absoluteFilePath());
 			if (map->isValid()) {
@@ -108,7 +107,7 @@ void Coros5Map::loadDir(const QString &path, Range &zooms)
 				max[0] = map->bounds.right();
 				max[1] = map->bounds.top();
 
-				_maps.Insert(min, max, map);
+				tree.Insert(min, max, map);
 				_bounds |= map->bounds;
 				zooms |= map->zooms;
 			} else
@@ -119,7 +118,7 @@ void Coros5Map::loadDir(const QString &path, Range &zooms)
 
 Coros5Map::Coros5Map(const QString &fileName, QObject *parent)
   : Map(fileName, parent), _style(0), _mapRatio(1.0), _tileRatio(1.0),
-  _mvt(false), _valid(false)
+  _layer(All), _valid(false)
 {
 	QFileInfo fi(fileName);
 	QDir dir(fi.absolutePath());
@@ -133,8 +132,10 @@ Coros5Map::Coros5Map(const QString &fileName, QObject *parent)
 
 	// tiles tree
 	QDir vsmDir(mapDir.filePath("VSM"));
-	loadDir(vsmDir.absolutePath(), zooms);
-	if (!_maps.Count()) {
+	QDir vtmDir(mapDir.filePath("VCM"));
+	loadDir(vsmDir.absolutePath(), _vsm, zooms);
+	loadDir(vtmDir.absolutePath(), _vcm, zooms);
+	if (!(_vsm.Count() + _vcm.Count())) {
 		_errorString = "No usable MBTiles map found";
 		return;
 	}
@@ -148,28 +149,6 @@ Coros5Map::Coros5Map(const QString &fileName, QObject *parent)
 	}
 	_zoom = _zoomsBase.size() - 1;
 
-	// tile info
-	MapTree::Iterator it;
-	_maps.GetFirst(it);
-	const MapTile *mt = _maps.GetAt(it);
-
-	if (mt->tt == 1) {
-		_layers = mt->vectorLayers();
-		_tileSize = MVT_TILE_SIZE;
-		_mvt = true;
-	} else {
-		QByteArray data((mt->tc == 2)
-		  ? Util::gunzip(tileData(mt, ANY_ID)) : tileData(mt, ANY_ID));
-		QBuffer buffer(&data);
-		QImageReader reader(&buffer);
-		QSize tileSize(reader.size());
-		if (!tileSize.isValid() || tileSize.width() != tileSize.height()) {
-			_errorString = "Unsupported tile images";
-			return;
-		}
-		_tileSize = tileSize.width();
-	}
-
 	_cache.setMaxCost(ROOT_CACHE_SIZE);
 
 	_valid = true;
@@ -178,8 +157,10 @@ Coros5Map::Coros5Map(const QString &fileName, QObject *parent)
 Coros5Map::~Coros5Map()
 {
 	MapTree::Iterator it;
-	for (_maps.GetFirst(it); !_maps.IsNull(it); _maps.GetNext(it))
-		delete _maps.GetAt(it);
+	for (_vsm.GetFirst(it); !_vsm.IsNull(it); _vsm.GetNext(it))
+		delete _vsm.GetAt(it);
+	for (_vcm.GetFirst(it); !_vcm.IsNull(it); _vcm.GetNext(it))
+		delete _vcm.GetAt(it);
 }
 
 void Coros5Map::load(const Projection &in, const Projection &out,
@@ -189,23 +170,31 @@ void Coros5Map::load(const Projection &in, const Projection &out,
 	Q_UNUSED(out);
 	Q_UNUSED(layer);
 
+	switch (layer) {
+		case 1:
+			_layer = Landscape;
+			break;
+		case 2:
+			_layer = Topo;
+			break;
+		default:
+			_layer = All;
+	}
+
 	_mapRatio = hidpi ? deviceRatio : 1.0;
 	_zooms = _zoomsBase;
+	_tileRatio = deviceRatio;
+	_style = (style >= 0 && style < Style::styles().size())
+	  ? Style::styles().at(style) : defaultStyle();
 
-	if (_mvt) {
-		_tileRatio = deviceRatio;
-		_style = (style >= 0 && style < Style::styles().size())
-		  ? Style::styles().at(style) : defaultStyle();
-
-		for (int i = _zooms.last().base + 1; i <= OSM::ZOOMS.max(); i++) {
-			Zoom z(i, _zooms.last().base);
-			if (_tileSize * _tileRatio * (1U<<(z.z - z.base)) > MAX_TILE_SIZE)
-				break;
-			_zooms.append(Zoom(i, _zooms.last().base));
-		}
-
-		QPixmapCache::clear();
+	for (int i = _zooms.last().base + 1; i <= OSM::ZOOMS.max(); i++) {
+		Zoom z(i, _zooms.last().base);
+		if (MVT_TILE_SIZE * _tileRatio * (1U<<(z.z - z.base)) > MAX_TILE_SIZE)
+			break;
+		_zooms.append(Zoom(i, _zooms.last().base));
 	}
+
+	QPixmapCache::clear();
 }
 
 void Coros5Map::unload()
@@ -227,7 +216,7 @@ int Coros5Map::zoomFit(const QSize &size, const RectC &rect)
 		QRectF tbr(OSM::ll2m(rect.topLeft()), OSM::ll2m(rect.bottomRight()));
 		QPointF sc(tbr.width() / size.width(), tbr.height() / size.height());
 		int zoom = OSM::scale2zoom(qMax(sc.x(), -sc.y()) / coordinatesRatio(),
-		  _tileSize);
+		  MVT_TILE_SIZE);
 
 		_zoom = 0;
 		for (int i = 1; i < _zooms.size(); i++) {
@@ -273,7 +262,7 @@ qreal Coros5Map::imageRatio() const
 
 qreal Coros5Map::tileSize() const
 {
-	return (_tileSize / coordinatesRatio());
+	return (MVT_TILE_SIZE / coordinatesRatio());
 }
 
 QString Coros5Map::key(int zoom, const QPoint &xy) const
@@ -349,7 +338,7 @@ void Coros5Map::draw(QPainter *painter, const QRectF &rect, Flags flags)
 {
 	const Zoom &zoom = _zooms.at(_zoom);
 	unsigned overzoom = zoom.z - zoom.base;
-	qreal scale = OSM::zoom2scale(zoom.base, _tileSize << overzoom);
+	qreal scale = OSM::zoom2scale(zoom.base, MVT_TILE_SIZE << overzoom);
 	QPoint tile = OSM::mercator2tile(QPointF(rect.topLeft().x() * scale,
 	  -rect.topLeft().y() * scale) * coordinatesRatio(), zoom.base);
 	QPointF tlm(OSM::tile2mercator(tile, zoom.base));
@@ -372,23 +361,34 @@ void Coros5Map::draw(QPainter *painter, const QRectF &rect, Flags flags)
 				QPointF tp(tilePos(tl, t, tile, overzoom));
 				drawTile(painter, pm, tp);
 			} else {
-				MapTile *map = 0;
 				Coordinates tl(OSM::tile2ll(t, zoom.base));
 				Coordinates br(OSM::tile2ll(QPoint(t.x() + 1, t.y() + 1),
 				  zoom.base));
 				RectC r(Coordinates(tl.lon(), -tl.lat()),
 				  Coordinates(br.lon(), -br.lat()));
+				MapTile *vsmMap = 0, *vcmMap = 0;
+				QList<Source> data;
 
 				min[0] = r.left();
 				min[1] = r.bottom();
 				max[0] = r.right();
 				max[1] = r.top();
-				_maps.Search(min, max, cb, &map);
 
-				if (map)
-					tiles.append(RasterTile(tileData(map, id(zoom.base, t)),
-					  _mvt, map->tc == 2, _style, zoom.z, t, _tileSize,
-					  _tileRatio, overzoom, flags & Map::HillShading));
+				if (_layer & Landscape)
+					_vsm.Search(min, max, cb, &vsmMap);
+				if (_layer & Topo)
+					_vcm.Search(min, max, cb, &vcmMap);
+
+				quint64 tid = id(zoom.base, t);
+				if (vsmMap)
+					data.append(tileData(vsmMap, tid));
+				if (vcmMap)
+					data.append(tileData(vcmMap, tid));
+
+				if (!data.isEmpty())
+					tiles.append(RasterTile(data, _style, zoom.z, t,
+					  MVT_TILE_SIZE, _tileRatio, overzoom,
+					  flags & Map::HillShading));
 			}
 		}
 	}
@@ -414,7 +414,7 @@ void Coros5Map::draw(QPainter *painter, const QRectF &rect, Flags flags)
 	}
 }
 
-QByteArray Coros5Map::tileData(const MapTile *map, quint64 id)
+Source Coros5Map::tileData(const MapTile *map, quint64 id)
 {
 	CacheEntry *ce = _cache.object(map);
 	if (!ce) {
@@ -422,24 +422,20 @@ QByteArray Coros5Map::tileData(const MapTile *map, quint64 id)
 		_cache.insert(map, ce);
 	}
 
-	if (id == ANY_ID) {
-		if (ce->root.isEmpty())
-			return QByteArray();
-		id = ce->root.first().tileId;
-	}
-
 	const Directory *d = findDir(ce->root, id);
 	if (!d)
-		return QByteArray();
+		return Source();
 	if (!d->runLength) {
 		QVector<Directory> leaf(readDir(ce->file, map->leafOffset + d->offset,
 		  d->length, map->ic));
 		const Directory *l = findDir(leaf, id);
 		return (l)
-		  ? readData(ce->file, map->tileOffset + l->offset, l->length, 1)
-		  : QByteArray();
+		  ? Source(readData(ce->file, map->tileOffset + l->offset, l->length, 1),
+			map->tc == 2, map->tt == 1)
+		  : Source();
 	} else
-		return readData(ce->file, map->tileOffset + d->offset, d->length, 1);
+		return Source(readData(ce->file, map->tileOffset + d->offset, d->length,
+		  1), map->tc == 2, map->tt == 1);
 }
 
 void Coros5Map::drawTile(QPainter *painter, QPixmap &pixmap, QPointF &tp)
@@ -450,14 +446,14 @@ void Coros5Map::drawTile(QPainter *painter, QPixmap &pixmap, QPointF &tp)
 
 QPointF Coros5Map::ll2xy(const Coordinates &c)
 {
-	qreal scale = OSM::zoom2scale(_zooms.at(_zoom).z, _tileSize);
+	qreal scale = OSM::zoom2scale(_zooms.at(_zoom).z, MVT_TILE_SIZE);
 	QPointF m = OSM::ll2m(c);
 	return QPointF(m.x() / scale, m.y() / -scale) / coordinatesRatio();
 }
 
 Coordinates Coros5Map::xy2ll(const QPointF &p)
 {
-	qreal scale = OSM::zoom2scale(_zooms.at(_zoom).z, _tileSize);
+	qreal scale = OSM::zoom2scale(_zooms.at(_zoom).z, MVT_TILE_SIZE);
 	return OSM::m2ll(QPointF(p.x() * scale, -p.y() * scale)
 	  * coordinatesRatio());
 }
@@ -469,31 +465,38 @@ bool Coros5Map::hillShading() const
 
 const Style *Coros5Map::defaultStyle() const
 {
+	static const QStringList layers(
+	  {"Q", "F", "N", "I", "K", "J", "P", "H", "A", "L", "B"});
+
 	for (int i = 0; i < Style::styles().size(); i++)
-		if (Style::styles().at(i)->matches(_layers))
+		if (Style::styles().at(i)->matches(layers))
 			return Style::styles().at(i);
 
 	qWarning("%s: no matching MVT style found", qUtf8Printable(path()));
 
-	return 0;
+	return Style::styles().isEmpty() ? 0 : Style::styles().first();
 }
 
 QStringList Coros5Map::styles(int &defaultStyle) const
 {
 	QStringList list;
 
-	if (_mvt) {
-		list.reserve(Style::styles().size());
-		for (int i = 0; i < Style::styles().size(); i++)
-			list.append(Style::styles().at(i)->name());
+	list.reserve(Style::styles().size());
+	for (int i = 0; i < Style::styles().size(); i++)
+		list.append(Style::styles().at(i)->name());
 
-		defaultStyle = Style::styles().indexOf(_style);
-		if (defaultStyle < 0)
-			defaultStyle = 0;
-	} else
-		defaultStyle = -1;
+	defaultStyle = Style::styles().indexOf(_style);
 
 	return list;
+}
+
+QStringList Coros5Map::layers(const QString &lang, int &defaultLayer) const
+{
+	Q_UNUSED(lang);
+
+	defaultLayer = 0;
+
+	return QStringList() << tr("All") << tr("Landscape") << tr("Topo");
 }
 
 Map *Coros5Map::create(const QString &path, const Projection &proj, bool *isDir)

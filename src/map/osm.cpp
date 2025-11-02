@@ -32,11 +32,6 @@ QPointF OSM::tile2mercator(const QPoint &p, int zoom)
 	return QPointF(index2mercator(p.x(), zoom), index2mercator(p.y(), zoom));
 }
 
-qreal OSM::zoom2scale(int zoom, int tileSize)
-{
-	return (360.0/(qreal)((1<<zoom) * tileSize));
-}
-
 int OSM::scale2zoom(qreal scale, int tileSize)
 {
 	return (int)(log2(360.0/(scale * (qreal)tileSize)) + EPSILON);
