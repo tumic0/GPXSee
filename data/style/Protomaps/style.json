@@ -4,7 +4,6 @@
     "sources": {
         "protomaps": {
             "type": "vector",
-            "attribution": "<a href=\"https://github.com/protomaps/basemaps\">Protomaps</a> © <a href=\"https://openstreetmap.org\">OpenStreetMap</a>"
         }
     },
     "sprite": "file:sprite",
