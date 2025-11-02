@@ -86,6 +86,24 @@
     </message>
 </context>
 <context>
+    <name>Coros5Map</name>
+    <message>
+        <location filename="../src/map/coros5map.cpp" line="499"/>
+        <source>All</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/map/coros5map.cpp" line="499"/>
+        <source>Landscape</source>
+        <translation type="unfinished">Paesaggio</translation>
+    </message>
+    <message>
+        <location filename="../src/map/coros5map.cpp" line="499"/>
+        <source>Topo</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Data</name>
     <message>
         <location filename="../src/data/data.cpp" line="234"/>
