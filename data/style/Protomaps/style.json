@@ -3,7 +3,7 @@
     "name": "Protomaps",
     "sources": {
         "protomaps": {
-            "type": "vector",
+            "type": "vector"
         }
     },
     "sprite": "file:sprite",

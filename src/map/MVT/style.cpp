@@ -581,18 +581,15 @@ void Style::Layer::symbol(int zoom, const Sprites &sprites,
 	img = sprites.icon(icon, color, size);
 }
 
-static Sprites loadSprites(const QDir &styleDir, const QString &json,
-  const QString &img)
+static Sprites loadSprites(const QString &json, const QString &img)
 {
-	QString spritesJSON(styleDir.filePath(json));
-
-	if (QFileInfo::exists(spritesJSON)) {
-		QString spritesImg(styleDir.filePath(img));
-		if (QFileInfo::exists(spritesImg))
-			return Sprites(spritesJSON, spritesImg);
+	if (QFileInfo::exists(json)) {
+		if (QFileInfo::exists(img))
+			return Sprites(json, img);
 		else
-			qWarning("%s: %s", qUtf8Printable(spritesImg), "no such file");
-	}
+			qWarning("%s: no such file", qUtf8Printable(img));
+	} else
+		qWarning("%s: no such file", qUtf8Printable(json));
 
 	return Sprites();
 }
@@ -627,9 +624,18 @@ Style::Style(const QString &fileName) : _valid(false)
 				_layers.append(Layer(layers[i].toObject()));
 	}
 
-	QDir styleDir(QFileInfo(fileName).absoluteDir());
-	_sprites = loadSprites(styleDir, "sprite.json", "sprite.png");
-	_sprites2x = loadSprites(styleDir, "sprite@2x.json", "sprite@2x.png");
+	QString sprite(json["sprite"].toString());
+	if (!sprite.isEmpty()) {
+		QUrl url(sprite);
+		if (url.isLocalFile()) {
+			QDir styleDir(QFileInfo(fileName).absoluteDir());
+			QString path(styleDir.filePath(url.toLocalFile()));
+
+			_sprites = loadSprites(path + ".json", path + ".png");
+			_sprites2x = loadSprites(path + "@2x.json", path + "@2x.png");
+		} else
+			qWarning("%s: not a local file", qUtf8Printable(sprite));
+	}
 
 	_valid = true;
 }
