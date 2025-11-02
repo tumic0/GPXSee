@@ -44,7 +44,7 @@ void RasterTile::render()
 		else {
 			if (_style && pbf.layers().size())
 				renderMVT(painter, pbf);
-			painter.drawImage(QRectF(0, 0, size, size),
+			painter.drawImage(QRect(0, 0, size, size),
 			  QImage::fromData(s.data()));
 			pbf.clear();
 		}
