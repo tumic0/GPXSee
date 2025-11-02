@@ -1,5 +1,5 @@
-#ifndef MVT_TILE_H
-#define MVT_TILE_H
+#ifndef MVT_VECTORTILE_H
+#define MVT_VECTORTILE_H
 
 #include <QVariant>
 #include <QVector>
@@ -63,4 +63,4 @@ private:
 
 }
 
-#endif // MVT_TILE_H
+#endif // MVT_VECTORTILE_H
