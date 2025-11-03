@@ -309,7 +309,7 @@ void Coros4Map::draw(QPainter *painter, const QRectF &rect, Flags flags)
 					_cm.Search(min, max, cb, &data);
 
 				if (!data.isEmpty())
-					tiles.append(RasterTile(_projection, _transform, data,
+					tiles.append(RasterTile(&_projection, _transform, data,
 					  _style, _zoom, QRect(ttl, QSize(TILE_SIZE, TILE_SIZE)),
 					  _tileRatio, key, flags & Map::HillShading, false, true));
 			}

@@ -23,7 +23,7 @@ namespace Mapsforge {
 class RasterTile
 {
 public:
-	RasterTile(const Projection &proj, const Transform &transform,
+	RasterTile(const Projection *proj, const Transform &transform,
 	  const Style *style, MapData *data, int zoom, const QRect &rect,
 	  qreal ratio, bool hillShading)
 		: _proj(proj), _transform(transform), _style(style), _data(data),
@@ -219,9 +219,9 @@ private:
 	void hillShadingInstructions(
 	  QVector<RasterTile::RenderInstruction> &instructions) const;
 	QPointF ll2xy(const Coordinates &c) const
-	  {return _transform.proj2img(_proj.ll2xy(c));}
+	  {return _transform.proj2img(_proj->ll2xy(c));}
 	Coordinates xy2ll(const QPointF &p) const
-	  {return _proj.xy2ll(_transform.img2proj(p));}
+	  {return _proj->xy2ll(_transform.img2proj(p));}
 	void processLabels(const QList<MapData::Point> &points,
 	  QList<TextItem*> &textItems) const;
 	void processLineLabels(const QVector<PainterPath> &paths,
@@ -234,7 +234,7 @@ private:
 
 	MatrixD elevation(int extend) const;
 
-	Projection _proj;
+	const Projection *_proj;
 	Transform _transform;
 	const Style *_style;
 	MapData *_data;

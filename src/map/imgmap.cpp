@@ -284,7 +284,7 @@ void IMGMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 				if (QPixmapCache::find(key, &pm))
 					painter->drawPixmap(ttl, pm);
 				else {
-					tiles.append(RasterTile(_projection, _transform,
+					tiles.append(RasterTile(&_projection, _transform,
 					  _data.at(n), _styles.at(n), _zoom,
 					  QRect(ttl, QSize(TILE_SIZE, TILE_SIZE)), _tileRatio, key,
 					  flags & Map::HillShading, _layer & Raster,

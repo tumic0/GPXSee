@@ -415,7 +415,7 @@ void RasterTile::fetchData(QList<MapData::Path> &paths,
 	  _transform.img2proj(pathRect.bottomRight()));
 	RectD searchRectD(_transform.img2proj(searchRect.topLeft()),
 	  _transform.img2proj(searchRect.bottomRight()));
-	RectC pathRectC(pathRectD.toRectC(_proj, 20));
+	RectC pathRectC(pathRectD.toRectC(*_proj, 20));
 	QRectF pointRect(QPointF(ttl.x() - TEXT_EXTENT, ttl.y() - TEXT_EXTENT),
 	  QPointF(ttl.x() + _rect.width() + TEXT_EXTENT, ttl.y() + _rect.height()
 	  + TEXT_EXTENT));
@@ -429,9 +429,9 @@ void RasterTile::fetchData(QList<MapData::Path> &paths,
 		qWarning("%s: %s", qUtf8Printable(file.fileName()),
 		  qUtf8Printable(file.errorString()));
 	else {
-		_data->paths(file, searchRectD.toRectC(_proj, 20), pathRectC, _zoom,
+		_data->paths(file, searchRectD.toRectC(*_proj, 20), pathRectC, _zoom,
 		  &paths);
-		_data->points(file, pointRectD.toRectC(_proj, 20), _zoom, &points);
+		_data->points(file, pointRectD.toRectC(*_proj, 20), _zoom, &points);
 	}
 }
 

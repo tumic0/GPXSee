@@ -16,7 +16,7 @@ namespace IMG {
 class RasterTile
 {
 public:
-	RasterTile(const Projection &proj, const Transform &transform,
+	RasterTile(const Projection *proj, const Transform &transform,
 	  MapData *data, const Style *style, int zoom, const QRect &rect,
 	  qreal ratio, const QString &key, bool hillShading, bool rasters,
 	  bool vectors)
@@ -26,7 +26,7 @@ public:
 	{
 		_data.append(data);
 	}
-	RasterTile(const Projection &proj, const Transform &transform,
+	RasterTile(const Projection *proj, const Transform &transform,
 	  const QList<MapData*> &data, const Style *style, int zoom,
 	  const QRect &rect, qreal ratio, const QString &key, bool hillShading,
 	  bool rasters, bool vectors)
@@ -70,9 +70,9 @@ private:
 	void fetchData(QList<MapData::Poly> &polygons, QList<MapData::Poly> &lines,
 	  QList<MapData::Point> &points, MatrixD &dem);
 	QPointF ll2xy(const Coordinates &c) const
-	  {return _transform.proj2img(_proj.ll2xy(c));}
+	  {return _transform.proj2img(_proj->ll2xy(c));}
 	Coordinates xy2ll(const QPointF &p) const
-	  {return _proj.xy2ll(_transform.img2proj(p));}
+	  {return _proj->xy2ll(_transform.img2proj(p));}
 	void ll2xy(QList<MapData::Poly> &polys) const;
 	void ll2xy(QList<MapData::Point> &points) const;
 
@@ -102,7 +102,7 @@ private:
 
 	bool hasDEM() const;
 
-	Projection _proj;
+	const Projection *_proj;
 	Transform _transform;
 	QList<MapData*> _data;
 	const Style *_style;

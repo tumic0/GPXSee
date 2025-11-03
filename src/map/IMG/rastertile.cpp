@@ -595,7 +595,7 @@ void RasterTile::fetchData(QList<MapData::Poly> &polygons,
 	  + _rect.height()));
 	RectD polyRectD(_transform.img2proj(polyRect.topLeft()),
 	  _transform.img2proj(polyRect.bottomRight()));
-	RectC polyRectC(polyRectD.toRectC(_proj, 20));
+	RectC polyRectC(polyRectD.toRectC(*_proj, 20));
 	RectC pointRectC;
 	if (_vectors) {
 		QRectF pointRect(QPointF(ttl.x() - TEXT_EXTENT, ttl.y() - TEXT_EXTENT),
@@ -603,7 +603,7 @@ void RasterTile::fetchData(QList<MapData::Poly> &polygons,
 		  + TEXT_EXTENT));
 		RectD pointRectD(_transform.img2proj(pointRect.topLeft()),
 		  _transform.img2proj(pointRect.bottomRight()));
-		pointRectC = pointRectD.toRectC(_proj, 20);
+		pointRectC = pointRectD.toRectC(*_proj, 20);
 	}
 
 	RectC demRectC;
