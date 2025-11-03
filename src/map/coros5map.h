@@ -20,7 +20,7 @@ public:
 	qreal resolution(const QRectF &rect);
 
 	int zoom() const {return _zoom;}
-	void setZoom(int zoom) {_zoom = zoom;}
+	void setZoom(int zoom);
 	int zoomFit(const QSize &, const RectC &);
 	int zoomIn();
 	int zoomOut();
@@ -93,8 +93,6 @@ private:
 	QPointF tilePos(const QPointF &tl, const QPoint &tc, const QPoint &tile,
 	  unsigned overzoom) const;
 	qreal tileSize() const;
-	qreal coordinatesRatio() const;
-	qreal imageRatio() const;
 	void drawTile(QPainter *painter, QPixmap &pixmap, QPointF &tp);
 	MVT::Source tileData(const MapTile *map, quint64 id);
 
@@ -117,6 +115,9 @@ private:
 	int _zoom;
 	qreal _mapRatio, _tileRatio;
 	Layer _layer;
+
+	qreal _factor;
+	qreal _coordinatesRatio;
 
 	QList<MVTJob*> _jobs;
 

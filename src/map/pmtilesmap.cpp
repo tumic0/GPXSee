@@ -13,6 +13,7 @@
 
 using namespace PMTiles;
 using namespace MVT;
+using namespace OSM;
 
 PMTilesMap::PMTilesMap(const QString &fileName, QObject *parent)
   : Map(fileName, parent), _file(fileName), _style(0), _mapRatio(1.0),
@@ -117,7 +118,7 @@ void PMTilesMap::load(const Projection &in, const Projection &out,
 		_style = (style >= 0 && style < Style::styles().size())
 		  ? Style::styles().at(style) : defaultStyle();
 
-		for (int i = _zooms.last().base + 1; i <= OSM::ZOOMS.max(); i++) {
+		for (int i = _zooms.last().base + 1; i <= ZOOMS.max(); i++) {
 			Zoom z(i, _zooms.last().base);
 			if (_tileSize * _tileRatio * (1U<<(z.z - z.base)) > MAX_TILE_SIZE)
 				break;
@@ -126,6 +127,9 @@ void PMTilesMap::load(const Projection &in, const Projection &out,
 
 		QPixmapCache::clear();
 	}
+
+	_coordinatesRatio = _mapRatio > 1.0 ? _mapRatio / _tileRatio : 1.0;
+	_factor = zoom2scale(_zooms.at(_zoom).z, _tileSize) * _coordinatesRatio;
 
 	if (!_file.open(QIODevice::ReadOnly))
 		qWarning("%s: %s", qUtf8Printable(_file.fileName()),
@@ -149,14 +153,19 @@ QRectF PMTilesMap::bounds()
 	return QRectF(ll2xy(_bounds.topLeft()), ll2xy(_bounds.bottomRight()));
 }
 
+qreal PMTilesMap::resolution(const QRectF &rect)
+{
+	return OSM::resolution(rect.center(), _zooms.at(_zoom).z, tileSize());
+}
+
 int PMTilesMap::zoomFit(const QSize &size, const RectC &rect)
 {
 	if (!rect.isValid())
 		_zoom = _zooms.size() - 1;
 	else {
-		QRectF tbr(OSM::ll2m(rect.topLeft()), OSM::ll2m(rect.bottomRight()));
+		QRectF tbr(ll2m(rect.topLeft()), ll2m(rect.bottomRight()));
 		QPointF sc(tbr.width() / size.width(), tbr.height() / size.height());
-		int zoom = OSM::scale2zoom(qMax(sc.x(), -sc.y()) / coordinatesRatio(),
+		int zoom = scale2zoom(qMax(sc.x(), -sc.y()) / _coordinatesRatio,
 		  _tileSize);
 
 		_zoom = 0;
@@ -167,12 +176,15 @@ int PMTilesMap::zoomFit(const QSize &size, const RectC &rect)
 		}
 	}
 
+	_factor = zoom2scale(_zooms.at(_zoom).z, _tileSize) * _coordinatesRatio;
+
 	return _zoom;
 }
 
-qreal PMTilesMap::resolution(const QRectF &rect)
+void PMTilesMap::setZoom(int zoom)
 {
-	return OSM::resolution(rect.center(), _zooms.at(_zoom).z, tileSize());
+	_zoom = zoom;
+	_factor = zoom2scale(_zooms.at(_zoom).z, _tileSize) * _coordinatesRatio;
 }
 
 int PMTilesMap::zoomIn()
@@ -180,6 +192,8 @@ int PMTilesMap::zoomIn()
 	cancelJobs(false);
 
 	_zoom = qMin(_zoom + 1, _zooms.size() - 1);
+	_factor = zoom2scale(_zooms.at(_zoom).z, _tileSize) * _coordinatesRatio;
+
 	return _zoom;
 }
 
@@ -188,22 +202,14 @@ int PMTilesMap::zoomOut()
 	cancelJobs(false);
 
 	_zoom = qMax(_zoom - 1, 0);
+	_factor = zoom2scale(_zooms.at(_zoom).z, _tileSize) * _coordinatesRatio;
+
 	return _zoom;
-}
-
-qreal PMTilesMap::coordinatesRatio() const
-{
-	return _mapRatio > 1.0 ? _mapRatio / _tileRatio : 1.0;
-}
-
-qreal PMTilesMap::imageRatio() const
-{
-	return _mapRatio > 1.0 ? _mapRatio : _tileRatio;
 }
 
 qreal PMTilesMap::tileSize() const
 {
-	return (_tileSize / coordinatesRatio());
+	return (_tileSize / _coordinatesRatio);
 }
 
 QByteArray PMTilesMap::tileData(quint64 id)
@@ -292,11 +298,9 @@ void PMTilesMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 {
 	const Zoom &zoom = _zooms.at(_zoom);
 	unsigned overzoom = zoom.z - zoom.base;
-	qreal scale = OSM::zoom2scale(zoom.base, _tileSize << overzoom);
-	QPoint tile = OSM::mercator2tile(QPointF(rect.topLeft().x() * scale,
-	  -rect.topLeft().y() * scale) * coordinatesRatio(), zoom.base);
-	QPointF tlm(OSM::tile2mercator(tile, zoom.base));
-	QPointF tl(QPointF(tlm.x() / scale, tlm.y() / scale) / coordinatesRatio());
+	QPoint tile = mercator2tile(QPointF(rect.topLeft().x(),
+	  -rect.topLeft().y()) * _factor, zoom.base);
+	QPointF tl(tile2mercator(tile, zoom.base) / _factor);
 	QSizeF s(rect.right() - tl.x(), rect.bottom() - tl.y());
 	unsigned f = 1U<<overzoom;
 	int width = ceil(s.width() / (tileSize() * f));
@@ -345,22 +349,19 @@ void PMTilesMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 
 void PMTilesMap::drawTile(QPainter *painter, QPixmap &pixmap, QPointF &tp)
 {
-	pixmap.setDevicePixelRatio(imageRatio());
+	pixmap.setDevicePixelRatio(_mapRatio > 1.0 ? _mapRatio : _tileRatio);
 	painter->drawPixmap(tp, pixmap);
 }
 
 QPointF PMTilesMap::ll2xy(const Coordinates &c)
 {
-	qreal scale = OSM::zoom2scale(_zooms.at(_zoom).z, _tileSize);
-	QPointF m = OSM::ll2m(c);
-	return QPointF(m.x() / scale, m.y() / -scale) / coordinatesRatio();
+	QPointF m = ll2m(c);
+	return QPointF(m.x(), -m.y()) / _factor;
 }
 
 Coordinates PMTilesMap::xy2ll(const QPointF &p)
 {
-	qreal scale = OSM::zoom2scale(_zooms.at(_zoom).z, _tileSize);
-	return OSM::m2ll(QPointF(p.x() * scale, -p.y() * scale)
-	  * coordinatesRatio());
+	return m2ll(QPointF(p.x(), -p.y()) * _factor);
 }
 
 const Style *PMTilesMap::defaultStyle() const

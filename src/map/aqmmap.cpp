@@ -8,8 +8,9 @@
 #include "tile.h"
 #include "aqmmap.h"
 
-
 #define MAGIC "FLATPACK1"
+
+using namespace OSM;
 
 static bool parseHeader(const QByteArray &data, QString &name)
 {
@@ -177,14 +178,14 @@ bool AQMMap::readHeader()
 				int minY = qMin((1<<zoom) - 1, qMax(0, bounds.top()));
 				int maxX = qMin((1<<zoom) - 1, qMax(0, bounds.right())) + 1;
 				int maxY = qMin((1<<zoom) - 1, qMax(0, bounds.bottom())) + 1;
-				Coordinates tl(OSM::tile2ll(QPoint(minX, minY), zoom));
+				Coordinates tl(tile2ll(QPoint(minX, minY), zoom));
 				tl.rlat() = -tl.lat();
-				Coordinates br(OSM::tile2ll(QPoint(maxX, maxY), zoom));
+				Coordinates br(tile2ll(QPoint(maxX, maxY), zoom));
 				br.rlat() = -br.lat();
 				// Workaround of broken zoom levels 0 and 1 due to numerical
 				// instability
-				tl.rlat() = qMin(tl.lat(), OSM::BOUNDS.top());
-				br.rlat() = qMax(br.lat(), OSM::BOUNDS.bottom());
+				tl.rlat() = qMin(tl.lat(), BOUNDS.top());
+				br.rlat() = qMax(br.lat(), BOUNDS.bottom());
 				_bounds = RectC(tl, br);
 			}
 			_zooms.append(Zoom(zoom, tileSize));
@@ -252,14 +253,17 @@ AQMMap::AQMMap(const QString &fileName, QObject *parent)
 }
 
 void AQMMap::load(const Projection &in, const Projection &out,
-				  qreal deviceRatio, bool hidpi, int style, int layer)
+  qreal deviceRatio, bool hidpi, int style, int layer)
 {
 	Q_UNUSED(in);
 	Q_UNUSED(out);
 	Q_UNUSED(style);
 	Q_UNUSED(layer);
+	const Zoom &z = _zooms.at(_zoom);
 
 	_mapRatio = hidpi ? deviceRatio : 1.0;
+	_factor = zoom2scale(z.zoom, z.tileSize) * _mapRatio;
+
 	if (!_file.open(QIODevice::ReadOnly))
 		qWarning("%s: %s", qUtf8Printable(_file.fileName()),
 		  qUtf8Printable(_file.errorString()));
@@ -273,6 +277,12 @@ void AQMMap::unload()
 QRectF AQMMap::bounds()
 {
 	return QRectF(ll2xy(_bounds.topLeft()), ll2xy(_bounds.bottomRight()));
+}
+
+qreal AQMMap::resolution(const QRectF &rect)
+{
+	const Zoom &z = _zooms.at(_zoom);
+	return OSM::resolution(rect.center(), z.zoom, tileSize());
 }
 
 int AQMMap::zoomFit(const QSize &size, const RectC &rect)
@@ -292,40 +302,46 @@ int AQMMap::zoomFit(const QSize &size, const RectC &rect)
 		}
 	}
 
+	const Zoom &z = _zooms.at(_zoom);
+	_factor = zoom2scale(z.zoom, z.tileSize) * _mapRatio;
+
 	return _zoom;
 }
 
-qreal AQMMap::resolution(const QRectF &rect)
+void AQMMap::setZoom(int zoom)
 {
+	_zoom = zoom;
 	const Zoom &z = _zooms.at(_zoom);
-	return OSM::resolution(rect.center(), z.zoom, tileSize());
+	_factor = zoom2scale(z.zoom, z.tileSize) * _mapRatio;
 }
 
 int AQMMap::zoomIn()
 {
 	_zoom = qMin(_zoom + 1, _zooms.size() - 1);
+	const Zoom &z = _zooms.at(_zoom);
+	_factor = zoom2scale(z.zoom, z.tileSize) * _mapRatio;
+
 	return _zoom;
 }
 
 int AQMMap::zoomOut()
 {
 	_zoom = qMax(_zoom - 1, 0);
+	const Zoom &z = _zooms.at(_zoom);
+	_factor = zoom2scale(z.zoom, z.tileSize) * _mapRatio;
+
 	return _zoom;
 }
 
 QPointF AQMMap::ll2xy(const Coordinates &c)
 {
-	const Zoom &z = _zooms.at(_zoom);
-	qreal scale = OSM::zoom2scale(z.zoom, z.tileSize);
-	QPointF m = OSM::ll2m(c);
-	return QPointF(m.x() / scale, m.y() / -scale) / _mapRatio;
+	QPointF m = ll2m(c);
+	return QPointF(m.x(), -m.y()) / _factor;
 }
 
 Coordinates AQMMap::xy2ll(const QPointF &p)
 {
-	const Zoom &z = _zooms.at(_zoom);
-	qreal scale = OSM::zoom2scale(z.zoom, z.tileSize);
-	return OSM::m2ll(QPointF(p.x() * scale, -p.y() * scale) * _mapRatio);
+	return m2ll(QPointF(p.x(), -p.y()) * _factor);
 }
 
 qreal AQMMap::tileSize() const
@@ -349,11 +365,9 @@ void AQMMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 {
 	Q_UNUSED(flags);
 	const Zoom &z = _zooms.at(_zoom);
-	qreal scale = OSM::zoom2scale(z.zoom, z.tileSize);
-	QPoint tile = OSM::mercator2tile(QPointF(rect.topLeft().x() * scale,
-	  -rect.topLeft().y() * scale) * _mapRatio, z.zoom);
-	QPointF tlm(OSM::tile2mercator(tile, z.zoom));
-	QPointF tl(QPointF(tlm.x() / scale, tlm.y() / scale) / _mapRatio);
+	QPoint tile = mercator2tile(QPointF(rect.topLeft().x(),
+	  -rect.topLeft().y()) * _factor, z.zoom);
+	QPointF tl(tile2mercator(tile, z.zoom) / _factor);
 	QSizeF s(rect.right() - tl.x(), rect.bottom() - tl.y());
 	int width = ceil(s.width() / tileSize());
 	int height = ceil(s.height() / tileSize());

@@ -10,6 +10,7 @@
 
 using namespace PMTiles;
 using namespace MVT;
+using namespace OSM;
 
 Coros5Map::MapTile::MapTile(const QString &path) : path(path)
 {
@@ -194,6 +195,9 @@ void Coros5Map::load(const Projection &in, const Projection &out,
 		_zooms.append(Zoom(i, _zooms.last().base));
 	}
 
+	_coordinatesRatio = _mapRatio > 1.0 ? _mapRatio / _tileRatio : 1.0;
+	_factor = zoom2scale(_zooms.at(_zoom).z, MVT_TILE_SIZE) * _coordinatesRatio;
+
 	QPixmapCache::clear();
 }
 
@@ -208,6 +212,11 @@ QRectF Coros5Map::bounds()
 	return QRectF(ll2xy(_bounds.topLeft()), ll2xy(_bounds.bottomRight()));
 }
 
+qreal Coros5Map::resolution(const QRectF &rect)
+{
+	return OSM::resolution(rect.center(), _zooms.at(_zoom).z, tileSize());
+}
+
 int Coros5Map::zoomFit(const QSize &size, const RectC &rect)
 {
 	if (!rect.isValid())
@@ -215,7 +224,7 @@ int Coros5Map::zoomFit(const QSize &size, const RectC &rect)
 	else {
 		QRectF tbr(OSM::ll2m(rect.topLeft()), OSM::ll2m(rect.bottomRight()));
 		QPointF sc(tbr.width() / size.width(), tbr.height() / size.height());
-		int zoom = OSM::scale2zoom(qMax(sc.x(), -sc.y()) / coordinatesRatio(),
+		int zoom = OSM::scale2zoom(qMax(sc.x(), -sc.y()) / _coordinatesRatio,
 		  MVT_TILE_SIZE);
 
 		_zoom = 0;
@@ -226,12 +235,15 @@ int Coros5Map::zoomFit(const QSize &size, const RectC &rect)
 		}
 	}
 
+	_factor = zoom2scale(_zooms.at(_zoom).z, MVT_TILE_SIZE) * _coordinatesRatio;
+
 	return _zoom;
 }
 
-qreal Coros5Map::resolution(const QRectF &rect)
+void Coros5Map::setZoom(int zoom)
 {
-	return OSM::resolution(rect.center(), _zooms.at(_zoom).z, tileSize());
+	_zoom = zoom;
+	_factor = zoom2scale(_zooms.at(_zoom).z, MVT_TILE_SIZE) * _coordinatesRatio;
 }
 
 int Coros5Map::zoomIn()
@@ -239,6 +251,8 @@ int Coros5Map::zoomIn()
 	cancelJobs(false);
 
 	_zoom = qMin(_zoom + 1, _zooms.size() - 1);
+	_factor = zoom2scale(_zooms.at(_zoom).z, MVT_TILE_SIZE) * _coordinatesRatio;
+
 	return _zoom;
 }
 
@@ -247,22 +261,14 @@ int Coros5Map::zoomOut()
 	cancelJobs(false);
 
 	_zoom = qMax(_zoom - 1, 0);
+	_factor = zoom2scale(_zooms.at(_zoom).z, MVT_TILE_SIZE) * _coordinatesRatio;
+
 	return _zoom;
-}
-
-qreal Coros5Map::coordinatesRatio() const
-{
-	return _mapRatio > 1.0 ? _mapRatio / _tileRatio : 1.0;
-}
-
-qreal Coros5Map::imageRatio() const
-{
-	return _mapRatio > 1.0 ? _mapRatio : _tileRatio;
 }
 
 qreal Coros5Map::tileSize() const
 {
-	return (MVT_TILE_SIZE / coordinatesRatio());
+	return (MVT_TILE_SIZE / _coordinatesRatio);
 }
 
 QString Coros5Map::key(int zoom, const QPoint &xy) const
@@ -338,15 +344,14 @@ void Coros5Map::draw(QPainter *painter, const QRectF &rect, Flags flags)
 {
 	const Zoom &zoom = _zooms.at(_zoom);
 	unsigned overzoom = zoom.z - zoom.base;
-	qreal scale = OSM::zoom2scale(zoom.base, MVT_TILE_SIZE << overzoom);
-	QPoint tile = OSM::mercator2tile(QPointF(rect.topLeft().x() * scale,
-	  -rect.topLeft().y() * scale) * coordinatesRatio(), zoom.base);
-	QPointF tlm(OSM::tile2mercator(tile, zoom.base));
-	QPointF tl(QPointF(tlm.x() / scale, tlm.y() / scale) / coordinatesRatio());
+	QPoint tile = mercator2tile(QPointF(rect.topLeft().x(),
+	  -rect.topLeft().y()) * _factor, zoom.base);
+	QPointF tl(tile2mercator(tile, zoom.base) / _factor);
 	QSizeF s(rect.right() - tl.x(), rect.bottom() - tl.y());
 	unsigned f = 1U<<overzoom;
 	int width = ceil(s.width() / (tileSize() * f));
 	int height = ceil(s.height() / (tileSize() * f));
+
 	double min[2], max[2];
 	QList<RasterTile> tiles;
 
@@ -440,22 +445,19 @@ Source Coros5Map::tileData(const MapTile *map, quint64 id)
 
 void Coros5Map::drawTile(QPainter *painter, QPixmap &pixmap, QPointF &tp)
 {
-	pixmap.setDevicePixelRatio(imageRatio());
+	pixmap.setDevicePixelRatio(_mapRatio > 1.0 ? _mapRatio : _tileRatio);
 	painter->drawPixmap(tp, pixmap);
 }
 
 QPointF Coros5Map::ll2xy(const Coordinates &c)
 {
-	qreal scale = OSM::zoom2scale(_zooms.at(_zoom).z, MVT_TILE_SIZE);
-	QPointF m = OSM::ll2m(c);
-	return QPointF(m.x() / scale, m.y() / -scale) / coordinatesRatio();
+	QPointF m = ll2m(c);
+	return QPointF(m.x(), -m.y()) / _factor;
 }
 
 Coordinates Coros5Map::xy2ll(const QPointF &p)
 {
-	qreal scale = OSM::zoom2scale(_zooms.at(_zoom).z, MVT_TILE_SIZE);
-	return OSM::m2ll(QPointF(p.x() * scale, -p.y() * scale)
-	  * coordinatesRatio());
+	return m2ll(QPointF(p.x(), -p.y()) * _factor);
 }
 
 bool Coros5Map::hillShading() const
