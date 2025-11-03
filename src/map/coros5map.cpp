@@ -43,49 +43,9 @@ Coros5Map::MapTile::MapTile(const QString &path) : path(path)
 	rootLength = hdr.rootLength;
 	tileOffset = hdr.tileOffset;
 	leafOffset = hdr.leafOffset;
-	metadataOffset = hdr.metadataOffset;
-	metadataLength = hdr.metadataLength;
 	tc = hdr.tc;
 	ic = hdr.ic;
 	tt = hdr.tt;
-}
-
-QStringList Coros5Map::MapTile::vectorLayers() const
-{
-	QStringList layers;
-
-	if (!metadataLength) {
-		qWarning("%s: missing metadata", qUtf8Printable(path));
-		return layers;
-	}
-
-	QFile file(path);
-	if (!file.open(QIODevice::ReadOnly)) {
-		qWarning("%s: %s", qUtf8Printable(path),
-		  qUtf8Printable(file.errorString()));
-		return layers;
-	}
-
-	QByteArray uba(readData(file, metadataOffset, metadataLength, ic));
-	if (uba.isNull()) {
-		qWarning("%s: error reading metadata", qUtf8Printable(path));
-		return layers;
-	}
-
-	QJsonParseError error;
-	QJsonDocument doc(QJsonDocument::fromJson(uba, &error));
-	if (doc.isNull()) {
-		qWarning("%s: metadata error: %s", qUtf8Printable(path),
-		  qUtf8Printable(error.errorString()));
-		return layers;
-	}
-
-	QJsonObject json(doc.object());
-	QJsonArray vl(json["vector_layers"].toArray());
-	for (int i = 0; i < vl.size(); i++)
-		layers.append(vl.at(i).toObject()["id"].toString());
-
-	return layers;
 }
 
 void Coros5Map::loadDir(const QString &path, MapTree &tree, Range &zooms)

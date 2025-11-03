@@ -57,14 +57,12 @@ private:
 		MapTile(const QString &path);
 
 		bool isValid() const {return bounds.isValid() && zooms.isValid();}
-		QStringList vectorLayers() const;
 
 		QString path;
 		RectC bounds;
 		Range zooms;
 		quint64 rootOffset, rootLength;
 		quint64 tileOffset, leafOffset;
-		quint64 metadataOffset, metadataLength;
 		quint8 tc, ic, tt;
 	};
 
