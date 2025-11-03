@@ -2,7 +2,6 @@
 #include <QPainter>
 #include <QCache>
 #include "common/util.h"
-#include "map/dem.h"
 #include "map/textpathitem.h"
 #include "map/textpointitem.h"
 #include "map/bitmapline.h"
@@ -596,7 +595,7 @@ void RasterTile::fetchData(QList<MapData::Poly> &polygons,
 	  + _rect.height()));
 	RectD polyRectD(_transform.img2proj(polyRect.topLeft()),
 	  _transform.img2proj(polyRect.bottomRight()));
-	RectC polyRectC(polyRectD.toRectC(_proj, 20));
+	RectC polyRectC(polyRectD.toRectC(*_proj, 20));
 	RectC pointRectC;
 	if (_vectors) {
 		QRectF pointRect(QPointF(ttl.x() - TEXT_EXTENT, ttl.y() - TEXT_EXTENT),
@@ -604,13 +603,13 @@ void RasterTile::fetchData(QList<MapData::Poly> &polygons,
 		  + TEXT_EXTENT));
 		RectD pointRectD(_transform.img2proj(pointRect.topLeft()),
 		  _transform.img2proj(pointRect.bottomRight()));
-		pointRectC = pointRectD.toRectC(_proj, 20);
+		pointRectC = pointRectD.toRectC(*_proj, 20);
 	}
 
 	RectC demRectC;
 	MatrixC demLL;
 	QList<MapData::Elevation> tiles;
-	if (_hillShading) {
+	if (_hillShading && _zoom >= 17 && _zoom <= 24 && hasDEM()) {
 		int extend = HillShading::blur() + 1;
 		int left = _rect.left() - extend;
 		int right = _rect.right() + extend;
@@ -622,17 +621,15 @@ void RasterTile::fetchData(QList<MapData::Poly> &polygons,
 			for (int x = left; x <= right; x++, i++)
 				demLL.at(i) = xy2ll(QPointF(x, y));
 
-		if (hasDEM()) {
-			RectC rect;
-			for (int i = 0; i < demLL.size(); i++)
-				rect = rect.united(demLL.at(i));
-			/* Extra margin for always including the next DEM tile on the map
-			   tile edges (the DEM tile resolution is usally 0.5-15% of the map
-			   tile) */
-			double factor = 6 - (_zoom - 24) * 1.7;
-			demRectC = rect.adjusted(0, 0, rect.width() / factor, -rect.height()
-			  / factor);
-		}
+		RectC rect;
+		for (int i = 0; i < demLL.size(); i++)
+			rect = rect.united(demLL.at(i));
+		/* Extra margin for always including the next DEM tile on the map
+		   tile edges (the DEM tile resolution is usally 0.5-15% of the map
+		   tile) */
+		double factor = 6 - (_zoom - 24) * 1.7;
+		demRectC = rect.adjusted(0, 0, rect.width() / factor, -rect.height()
+		  / factor);
 	}
 
 	for (int i = 0; i < _data.size(); i++) {
@@ -663,13 +660,15 @@ void RasterTile::fetchData(QList<MapData::Poly> &polygons,
 	ll2xy(lines);
 	ll2xy(points);
 
-	if (_hillShading)
-		dem = demRectC.isNull()
-		  ? DEM::elevation(demLL) : DEMTree(tiles).elevation(demLL);
+	if (!demLL.isNull())
+		dem = DEMTree(tiles).elevation(demLL);
 }
 
 void RasterTile::drawHillShading(QPainter *painter, const MatrixD &dem) const
 {
+	if (dem.isNull())
+		return;
+
 	if (HillShading::blur()) {
 		MatrixD filtered(Filter::blur(dem, HillShading::blur()));
 		painter->drawImage(_rect.x(), _rect.y(), HillShading::render(
@@ -709,8 +708,7 @@ void RasterTile::render()
 	painter.translate(-_rect.x(), -_rect.y());
 
 	drawPolygons(&painter, polygons);
-	if (_hillShading)
-		drawHillShading(&painter, dem);
+	drawHillShading(&painter, dem);
 	drawLines(&painter, lines);
 	drawTextItems(&painter, lights);
 	drawSectorLights(&painter, sectorLights);

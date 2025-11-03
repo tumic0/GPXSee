@@ -12,6 +12,7 @@
 #include "metatype.h"
 #include "sqlitemap.h"
 
+using namespace OSM;
 
 SqliteMap::SqliteMap(const QString &fileName, QObject *parent)
   : Map(fileName, parent), _mapRatio(1.0), _valid(false)
@@ -67,13 +68,13 @@ SqliteMap::SqliteMap(const QString &fileName, QObject *parent)
 		int minY = qMin((1<<z) - 1, qMax(0, query.value(1).toInt()));
 		int maxX = qMin((1<<z) - 1, qMax(0, query.value(2).toInt())) + 1;
 		int maxY = qMin((1<<z) - 1, qMax(0, query.value(3).toInt())) + 1;
-		Coordinates tl(OSM::tile2ll(QPoint(minX, minY), z));
+		Coordinates tl(tile2ll(QPoint(minX, minY), z));
 		tl.rlat() = -tl.lat();
-		Coordinates br(OSM::tile2ll(QPoint(maxX, maxY), z));
+		Coordinates br(tile2ll(QPoint(maxX, maxY), z));
 		br.rlat() = -br.lat();
 		// Workaround of broken zoom levels 0 and 1 due to numerical instability
-		tl.rlat() = qMin(tl.lat(), OSM::BOUNDS.top());
-		br.rlat() = qMax(br.lat(), OSM::BOUNDS.bottom());
+		tl.rlat() = qMin(tl.lat(), BOUNDS.top());
+		br.rlat() = qMax(br.lat(), BOUNDS.bottom());
 		_bounds = RectC(tl, br);
 	}
 
@@ -108,6 +109,8 @@ void SqliteMap::load(const Projection &in, const Projection &out,
 	Q_UNUSED(layer);
 
 	_mapRatio = hidpi ? deviceRatio : 1.0;
+	_factor = zoom2scale(_zoom, _tileSize) * _mapRatio;
+
 	_db.open();
 }
 
@@ -119,6 +122,11 @@ void SqliteMap::unload()
 QRectF SqliteMap::bounds()
 {
 	return QRectF(ll2xy(_bounds.topLeft()), ll2xy(_bounds.bottomRight()));
+}
+
+qreal SqliteMap::resolution(const QRectF &rect)
+{
+	return OSM::resolution(rect.center(), _zoom, tileSize());
 }
 
 int SqliteMap::limitZoom(int zoom) const
@@ -136,29 +144,36 @@ int SqliteMap::zoomFit(const QSize &size, const RectC &rect)
 	if (!rect.isValid())
 		_zoom = _zooms.max();
 	else {
-		QRectF tbr(OSM::ll2m(rect.topLeft()), OSM::ll2m(rect.bottomRight()));
+		QRectF tbr(ll2m(rect.topLeft()), ll2m(rect.bottomRight()));
 		QPointF sc(tbr.width() / size.width(), tbr.height() / size.height());
-		_zoom = limitZoom(OSM::scale2zoom(qMax(sc.x(), -sc.y()) / _mapRatio,
+		_zoom = limitZoom(scale2zoom(qMax(sc.x(), -sc.y()) / _mapRatio,
 		  _tileSize));
 	}
+
+	_factor = zoom2scale(_zoom, _tileSize) * _mapRatio;
 
 	return _zoom;
 }
 
-qreal SqliteMap::resolution(const QRectF &rect)
+void SqliteMap::setZoom(int zoom)
 {
-	return OSM::resolution(rect.center(), _zoom, tileSize());
+	_zoom = zoom;
+	_factor = zoom2scale(_zoom, _tileSize) * _mapRatio;
 }
 
 int SqliteMap::zoomIn()
 {
 	_zoom = qMin(_zoom + 1, _zooms.max());
+	_factor = zoom2scale(_zoom, _tileSize) * _mapRatio;
+
 	return _zoom;
 }
 
 int SqliteMap::zoomOut()
 {
 	_zoom = qMax(_zoom - 1, _zooms.min());
+	_factor = zoom2scale(_zoom, _tileSize) * _mapRatio;
+
 	return _zoom;
 }
 
@@ -185,11 +200,9 @@ QByteArray SqliteMap::tileData(int zoom, const QPoint &tile) const
 void SqliteMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 {
 	Q_UNUSED(flags);
-	qreal scale = OSM::zoom2scale(_zoom, _tileSize);
-	QPoint tile = OSM::mercator2tile(QPointF(rect.topLeft().x() * scale,
-	  -rect.topLeft().y() * scale) * _mapRatio, _zoom);
-	QPointF tlm(OSM::tile2mercator(tile, _zoom));
-	QPointF tl(QPointF(tlm.x() / scale, tlm.y() / scale) / _mapRatio);
+	QPoint tile = mercator2tile(QPointF(rect.topLeft().x(),
+	  -rect.topLeft().y()) * _factor, _zoom);
+	QPointF tl(tile2mercator(tile, _zoom) / _factor);
 	QSizeF s(rect.right() - tl.x(), rect.bottom() - tl.y());
 	int width = ceil(s.width() / tileSize());
 	int height = ceil(s.height() / tileSize());
@@ -237,15 +250,13 @@ void SqliteMap::drawTile(QPainter *painter, QPixmap &pixmap, QPointF &tp)
 
 QPointF SqliteMap::ll2xy(const Coordinates &c)
 {
-	qreal scale = OSM::zoom2scale(_zoom, _tileSize);
-	QPointF m = OSM::ll2m(c);
-	return QPointF(m.x() / scale, m.y() / -scale) / _mapRatio;
+	QPointF m = ll2m(c);
+	return QPointF(m.x(), -m.y()) / _factor;
 }
 
 Coordinates SqliteMap::xy2ll(const QPointF &p)
 {
-	qreal scale = OSM::zoom2scale(_zoom, _tileSize);
-	return OSM::m2ll(QPointF(p.x() * scale, -p.y() * scale) * _mapRatio);
+	return m2ll(QPointF(p.x(), -p.y()) * _factor);
 }
 
 Map *SqliteMap::create(const QString &path, const Projection &proj, bool *isDir)

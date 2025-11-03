@@ -1,5 +1,6 @@
 {
   "name": "COROS",
+  "sprite": "file:sprite",
   "layers": [
     {
       "id": "background",
@@ -105,6 +106,21 @@
       "source-layer": "N",
       "paint": {
         "fill-color": "#9fc4e1"
+      }
+    },
+    {
+      "id": "hillshading",
+      "type": "hillshade",
+      "minzoom": 8,
+      "maxzoom": 15
+    },
+    {
+      "id": "contour-lines",
+      "type": "line",
+      "source-layer": "Q",
+      "paint": {
+        "line-color": "#afafaf",
+        "line-width": 1
       }
     },
     {

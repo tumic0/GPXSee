@@ -72,15 +72,33 @@
     <message>
         <location filename="../src/map/coros4map.cpp" line="397"/>
         <source>All</source>
-        <translation type="unfinished">Все</translation>
+        <translation>Все</translation>
     </message>
     <message>
         <location filename="../src/map/coros4map.cpp" line="397"/>
         <source>Landscape</source>
-        <translation type="unfinished"></translation>
+        <translation>Пейзаж</translation>
     </message>
     <message>
         <location filename="../src/map/coros4map.cpp" line="397"/>
+        <source>Topo</source>
+        <translation>Топо</translation>
+    </message>
+</context>
+<context>
+    <name>Coros5Map</name>
+    <message>
+        <location filename="../src/map/coros5map.cpp" line="499"/>
+        <source>All</source>
+        <translation type="unfinished">Все</translation>
+    </message>
+    <message>
+        <location filename="../src/map/coros5map.cpp" line="499"/>
+        <source>Landscape</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/map/coros5map.cpp" line="499"/>
         <source>Topo</source>
         <translation type="unfinished">Топо</translation>
     </message>

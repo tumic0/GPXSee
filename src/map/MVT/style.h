@@ -8,7 +8,7 @@
 #include <QBrush>
 #include <QFont>
 #include "map/textpointitem.h"
-#include "tile.h"
+#include "vectortile.h"
 #include "function.h"
 #include "sprites.h"
 
@@ -36,16 +36,24 @@ public:
 
 	class Layer {
 	public:
+		enum Type {
+			Unknown,
+			Fill,
+			Line,
+			Background,
+			Symbol,
+			Hillshade
+		};
+
 		Layer() : _type(Unknown), _minZoom(0), _maxZoom(24) {}
 		Layer(const QJsonObject &json);
 
 		const QByteArray &sourceLayer() const {return _sourceLayer;}
-		bool isPath() const {return (_type == Line || _type == Fill);}
-		bool isBackground() const {return (_type == Background);}
-		bool isSymbol() const {return (_type == Symbol);}
+		Type type() const {return _type;}
 		bool isVisible() const {return (_layout.visible());}
 
-		bool match(int zoom, const Tile::Feature &feature) const;
+		bool match(int zoom) const;
+		bool match(int zoom, const VectorTile::Feature &feature) const;
 		void setPathPainter(int zoom, const Sprites &sprites,
 		  QPainter &painter) const;
 		void setTextProperties(int zoom, qreal &maxWidth, qreal &maxAngle,
@@ -53,23 +61,15 @@ public:
 		  QFont &font, SymbolPlacement &symbolPlacement,
 		  RotationAlignment &rotationAlignment) const;
 		void symbol(int zoom, const Sprites &sprites,
-		  Tile::Feature &feature, QString &label, QImage &img) const;
+		  VectorTile::Feature &feature, QString &label, QImage &img) const;
 
 	private:
-		enum Type {
-			Unknown,
-			Fill,
-			Line,
-			Background,
-			Symbol
-		};
-
 		class Filter {
 		public:
 			Filter() : _type(None) {}
 			Filter(const QJsonArray &json);
 
-			bool match(const Tile::Feature &feature) const;
+			bool match(const VectorTile::Feature &feature) const;
 		private:
 			enum Type {
 				None, Unknown,
@@ -89,7 +89,7 @@ public:
 		public:
 			Template() {}
 			Template(const FunctionS &str) : _field(str) {}
-			QString value(int zoom, const Tile::Feature &feature) const;
+			QString value(int zoom, const VectorTile::Feature &feature) const;
 
 		private:
 			FunctionS _field;
@@ -105,9 +105,9 @@ public:
 			  {return _textMaxWidth.value(zoom);}
 			qreal maxTextAngle(int zoom) const
 			  {return _textMaxAngle.value(zoom);}
-			QString text(int zoom, const Tile::Feature &feature) const
+			QString text(int zoom, const VectorTile::Feature &feature) const
 			  {return _text.value(zoom, feature).trimmed();}
-			QString icon(int zoom, const Tile::Feature &feature) const
+			QString icon(int zoom, const VectorTile::Feature &feature) const
 			  {return _icon.value(zoom, feature);}
 			qreal iconSize(int zoom) const
 			  {return _iconSize.value(zoom);}
@@ -185,6 +185,7 @@ public:
 	const Sprites &sprites(qreal scale) const;
 
 	bool matches(const QStringList &layers) const;
+	bool hasHillShading() const;
 
 	static QList<const Style*> &styles();
 

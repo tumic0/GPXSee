@@ -3,16 +3,22 @@
 
 #include <QImage>
 #include <QPainter>
+#include "map/matrix.h"
 #include "text.h"
 #include "style.h"
+#include "source.h"
 
 namespace MVT {
 
 class RasterTile
 {
 public:
-	RasterTile(const QByteArray &data, bool mvt, bool gzip, const Style *style,
-	  int zoom, const QPoint &xy, int size, qreal ratio, int overzoom);
+	RasterTile(const Source &data, const Style *style,
+	  int zoom, const QPoint &xy, int size, qreal ratio, int overzoom,
+	  bool hillShading);
+	RasterTile(const QList<Source> &data, const Style *style,
+	  int zoom, const QPoint &xy, int size, qreal ratio, int overzoom,
+	  bool hillShading);
 
 	int zoom() const {return _zoom;}
 	QPoint xy() const {return _xy;}
@@ -21,21 +27,23 @@ public:
 	void render();
 
 private:
-	QByteArray _data;
-	bool _mvt, _gzip;
+	QList<Source> _data;
 	const Style *_style;
 	int _zoom;
 	QPoint _xy;
 	qreal _ratio;
 	int _size;
+	bool _hillShading;
 	QPixmap _pixmap;
 
-	void renderMVT(const QByteArray &rawData, QImage *img);
+	void renderMVT(QPainter &painter, const VectorTile &tile);
 	void drawBackground(QPainter &painter, const Style::Layer &styleLayer);
 	void drawFeature(QPainter &painter, const Style::Layer &layer,
-	  Tile::Feature &feature);
+	  VectorTile::Feature &feature);
 	void drawLayer(QPainter &painter, const Style::Layer &styleLayer,
-	  Tile::Layer &pbfLayer);
+	  VectorTile::Layer *pbfLayer);
+	void drawHillshading(QPainter &painter, const Style::Layer &styleLayer);
+	MatrixD elevation(int extend) const;
 };
 
 }

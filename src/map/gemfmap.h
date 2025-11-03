@@ -17,7 +17,7 @@ public:
 	RectC llBounds() {return _bounds;}
 
 	int zoom() const {return _zi;}
-	void setZoom(int zoom) {_zi = zoom;}
+	void setZoom(int zoom);
 	int zoomFit(const QSize &size, const RectC &rect);
 	int zoomIn();
 	int zoomOut();
@@ -58,13 +58,14 @@ private:
 		  {return level < other.level;}
 	};
 
-	QRect rect(const Zoom &zoom) const;
 	bool readHeader(QDataStream &stream);
 	bool readRegions(QDataStream &stream);
 	bool computeBounds();
 	qreal tileSize() const;
 	QByteArray tileData(const QPoint &tile);
 	void drawTile(QPainter *painter, QPixmap &pixmap, QPointF &tp);
+
+	static QRect rect(const Zoom &zoom);
 
 	friend QDebug operator<<(QDebug dbg, const Region &region);
 	friend QDebug operator<<(QDebug dbg, const Zoom &zoom);
@@ -75,6 +76,8 @@ private:
 	qreal _mapRatio;
 	int _tileSize;
 	QList<Zoom> _zooms;
+
+	qreal _factor;
 
 	bool _valid;
 	QString _errorString;

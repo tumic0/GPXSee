@@ -41,7 +41,7 @@ public:
 
 	QStringList styles(int &defaultStyle) const;
 	QStringList layers(const QString &lang, int &defaultLayer) const;
-	bool hillShading() const {return true;}
+	bool hillShading() const {return _hasDEM;}
 
 	bool isValid() const {return _valid;}
 	QString errorString() const {return _errorString;}
@@ -92,6 +92,7 @@ private:
 	IMG::MapData::ElevationCache _demCache;
 	QMutex _lock, _demLock;
 	QString _typ;
+	bool _hasDEM;
 
 	QList<IMGJob*> _jobs;
 

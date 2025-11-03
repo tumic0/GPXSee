@@ -124,7 +124,7 @@ void RasterTile::processLabels(const QList<MapData::Point> &points,
 		const QColor *color = l.ti ? &l.ti->fillColor() : 0;
 		const QColor *hColor = l.ti ? haloColor(l.ti) : 0;
 		TextPointItem::Anchor textAnchor = l.ti
-		  ? l.ti->textAnchor() : TextPointItem::Right;
+		  ? l.ti->textAnchor() : TextPointItem::Center;
 
 		PointItem *item = new PointItem(ll2xy(l.point->coordinates).toPoint(),
 		  l.lbl, font, img, color, hColor, textAnchor);
@@ -345,7 +345,8 @@ void RasterTile::hillShadingInstructions(
 }
 
 void RasterTile::drawPaths(QPainter *painter, const QList<MapData::Path> &paths,
-  const QList<MapData::Point> &points, QVector<PainterPath> &painterPaths)
+  const QList<MapData::Point> &points, QVector<PainterPath> &painterPaths,
+  bool hillShading)
 {
 	QVector<RenderInstruction> instructions;
 	pathInstructions(paths, painterPaths, instructions);
@@ -387,33 +388,23 @@ void RasterTile::drawPaths(QPainter *painter, const QList<MapData::Path> &paths,
 			painter->setPen(ri->pen());
 			painter->setBrush(ri->brush());
 			painter->drawEllipse(ll2xy(point->coordinates), radius, radius);
-		} else {
-			if (_hillShading) {
-				if (HillShading::blur()) {
-					MatrixD dem(Filter::blur(elevation(HillShading::blur() + 1),
-					  HillShading::blur()));
-					QImage img(HillShading::render(dem, HillShading::blur() + 1));
-					painter->drawImage(_rect.x(), _rect.y(), img);
-				} else
-					painter->drawImage(_rect.x(), _rect.y(),
-					  HillShading::render(elevation(1), 1));
-			}
+		} else if (hillShading) {
+			if (HillShading::blur()) {
+				MatrixD dem(Filter::blur(elevation(HillShading::blur() + 1),
+				  HillShading::blur()));
+				QImage img(HillShading::render(dem, HillShading::blur() + 1));
+				painter->drawImage(_rect.x(), _rect.y(), img);
+			} else
+				painter->drawImage(_rect.x(), _rect.y(),
+				  HillShading::render(elevation(1), 1));
 		}
 	}
 }
 
 void RasterTile::fetchData(QList<MapData::Path> &paths,
-  QList<MapData::Point> &points) const
+  QList<MapData::Point> &points, bool &hasDEM) const
 {
 	QPoint ttl(_rect.topLeft());
-	QFile file(_data->fileName());
-
-	if (!file.open(QIODevice::ReadOnly | QIODevice::Unbuffered)) {
-		qWarning("%s: %s", qUtf8Printable(file.fileName()),
-		  qUtf8Printable(file.errorString()));
-		return;
-	}
-
 	QRectF pathRect(QPointF(ttl.x() - PATHS_EXTENT, ttl.y() - PATHS_EXTENT),
 	  QPointF(ttl.x() + _rect.width() + PATHS_EXTENT, ttl.y() + _rect.height()
 	  + PATHS_EXTENT));
@@ -424,15 +415,24 @@ void RasterTile::fetchData(QList<MapData::Path> &paths,
 	  _transform.img2proj(pathRect.bottomRight()));
 	RectD searchRectD(_transform.img2proj(searchRect.topLeft()),
 	  _transform.img2proj(searchRect.bottomRight()));
-	_data->paths(file, searchRectD.toRectC(_proj, 20),
-	  pathRectD.toRectC(_proj, 20), _zoom, &paths);
-
+	RectC pathRectC(pathRectD.toRectC(*_proj, 20));
 	QRectF pointRect(QPointF(ttl.x() - TEXT_EXTENT, ttl.y() - TEXT_EXTENT),
 	  QPointF(ttl.x() + _rect.width() + TEXT_EXTENT, ttl.y() + _rect.height()
 	  + TEXT_EXTENT));
 	RectD pointRectD(_transform.img2proj(pointRect.topLeft()),
 	  _transform.img2proj(pointRect.bottomRight()));
-	_data->points(file, pointRectD.toRectC(_proj, 20), _zoom, &points);
+
+	hasDEM = (_hillShading && DEM::elevation(pathRectC)) ? true : false;
+
+	QFile file(_data->fileName());
+	if (!file.open(QIODevice::ReadOnly | QIODevice::Unbuffered))
+		qWarning("%s: %s", qUtf8Printable(file.fileName()),
+		  qUtf8Printable(file.errorString()));
+	else {
+		_data->paths(file, searchRectD.toRectC(*_proj, 20), pathRectC, _zoom,
+		  &paths);
+		_data->points(file, pointRectD.toRectC(*_proj, 20), _zoom, &points);
+	}
 }
 
 MatrixD RasterTile::elevation(int extend) const
@@ -456,8 +456,9 @@ void RasterTile::render()
 	  QImage::Format_ARGB32_Premultiplied);
 	QList<MapData::Path> paths;
 	QList<MapData::Point> points;
+	bool hillShading;
 
-	fetchData(paths, points);
+	fetchData(paths, points, hillShading);
 
 	QList<TextItem*> textItems;
 	QVector<PainterPath> renderPaths(paths.size());
@@ -470,7 +471,7 @@ void RasterTile::render()
 	painter.setRenderHint(QPainter::SmoothPixmapTransform);
 	painter.translate(-_rect.x(), -_rect.y());
 
-	drawPaths(&painter, paths, points, renderPaths);
+	drawPaths(&painter, paths, points, renderPaths, hillShading);
 
 	processLabels(points, textItems);
 	processLineLabels(renderPaths, textItems);

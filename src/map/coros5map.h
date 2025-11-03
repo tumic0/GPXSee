@@ -20,7 +20,7 @@ public:
 	qreal resolution(const QRectF &rect);
 
 	int zoom() const {return _zoom;}
-	void setZoom(int zoom) {_zoom = zoom;}
+	void setZoom(int zoom);
 	int zoomFit(const QSize &, const RectC &);
 	int zoomIn();
 	int zoomOut();
@@ -35,6 +35,8 @@ public:
 	void unload();
 
 	QStringList styles(int &defaultStyle) const;
+	QStringList layers(const QString &lang, int &defaultLayer) const;
+	bool hillShading() const;
 
 	bool isValid() const {return _valid;}
 	QString errorString() const {return _errorString;}
@@ -45,18 +47,22 @@ private slots:
 	void jobFinished(MVTJob *job);
 
 private:
+	enum Layer {
+		Landscape = 1,
+		Topo = 2,
+		All = 3
+	};
+
 	struct MapTile {
 		MapTile(const QString &path);
 
 		bool isValid() const {return bounds.isValid() && zooms.isValid();}
-		QStringList vectorLayers() const;
 
 		QString path;
 		RectC bounds;
 		Range zooms;
 		quint64 rootOffset, rootLength;
 		quint64 tileOffset, leafOffset;
-		quint64 metadataOffset, metadataLength;
 		quint8 tc, ic, tt;
 	};
 
@@ -85,10 +91,8 @@ private:
 	QPointF tilePos(const QPointF &tl, const QPoint &tc, const QPoint &tile,
 	  unsigned overzoom) const;
 	qreal tileSize() const;
-	qreal coordinatesRatio() const;
-	qreal imageRatio() const;
 	void drawTile(QPainter *painter, QPixmap &pixmap, QPointF &tp);
-	QByteArray tileData(const MapTile *map, quint64 id);
+	MVT::Source tileData(const MapTile *map, quint64 id);
 
 	QString key(int zoom, const QPoint &xy) const;
 	bool isRunning(int zoom, const QPoint &xy) const;
@@ -96,21 +100,22 @@ private:
 	void removeJob(MVTJob *job);
 	void cancelJobs(bool wait);
 
-	void loadDir(const QString &path, Range &zooms);
+	void loadDir(const QString &path, MapTree &tree, Range &zooms);
 	const MVT::Style *defaultStyle() const;
 
 	static bool cb(MapTile *data, void *context);
 
 	RectC _bounds;
-	MapTree _maps;
+	MapTree _vsm, _vcm;
 	QVector<Zoom> _zooms, _zoomsBase;
 	QCache<const MapTile*, CacheEntry> _cache;
 	const MVT::Style *_style;
 	int _zoom;
-	int _tileSize;
 	qreal _mapRatio, _tileRatio;
-	bool _mvt;
-	QStringList _layers;
+	Layer _layer;
+
+	qreal _factor;
+	qreal _coordinatesRatio;
 
 	QList<MVTJob*> _jobs;
 

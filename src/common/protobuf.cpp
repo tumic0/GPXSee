@@ -65,27 +65,29 @@ bool Protobuf::flt(CTX &ctx, float &val)
 bool Protobuf::packed(CTX &ctx, QVector<quint32> &vals)
 {
 	quint32 v;
+	const char *end;
 
-	if (type(ctx.tag) == LEN) {
-		quint32 len;
-		if (!varint(ctx, len))
-			return false;
-		const char *ee = ctx.bp + len;
-		if (ee > ctx.be)
-			return false;
-		while (ctx.bp < ee) {
+	switch (type(ctx.tag)) {
+		case LEN:
+			if (!varint(ctx, v))
+				return false;
+			end = ctx.bp + v;
+			if (end > ctx.be)
+				return false;
+			while (ctx.bp < end) {
+				if (!varint(ctx, v))
+					return false;
+				vals.append(v);
+			}
+			return (ctx.bp == end);
+		case VARINT:
 			if (!varint(ctx, v))
 				return false;
 			vals.append(v);
-		}
-		return (ctx.bp == ee);
-	} else if (type(ctx.tag) == VARINT) {
-		if (!varint(ctx, v))
+			return true;
+		default:
 			return false;
-		vals.append(v);
-		return true;
-	} else
-		return false;
+	}
 }
 
 bool Protobuf::skip(CTX &ctx)

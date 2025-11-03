@@ -284,10 +284,10 @@ void IMGMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 				if (QPixmapCache::find(key, &pm))
 					painter->drawPixmap(ttl, pm);
 				else {
-					tiles.append(RasterTile(_projection, _transform, _data.at(n),
-					  _styles.at(n), _zoom, QRect(ttl, QSize(TILE_SIZE, TILE_SIZE)),
-					  _tileRatio, key, !n && flags & Map::HillShading
-					  && _zoom >= 17 && _zoom <= 24, _layer & Raster,
+					tiles.append(RasterTile(&_projection, _transform,
+					  _data.at(n), _styles.at(n), _zoom,
+					  QRect(ttl, QSize(TILE_SIZE, TILE_SIZE)), _tileRatio, key,
+					  flags & Map::HillShading, _layer & Raster,
 					  _layer & Vector));
 				}
 			}
@@ -389,4 +389,13 @@ IMGMap::StyleList &IMGMap::styles()
 {
 	static StyleList list;
 	return list;
+}
+
+bool IMGMap::hillShading() const
+{
+	for (int i = 0; i < _data.size(); i++)
+		if (_data.at(i)->hasDEM())
+			return true;
+
+	return false;
 }

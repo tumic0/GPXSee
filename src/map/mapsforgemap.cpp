@@ -203,7 +203,7 @@ void MapsforgeMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 			if (QPixmapCache::find(key(_zoom, ttl), &pm))
 				painter->drawPixmap(ttl, pm);
 			else {
-				tiles.append(RasterTile(_projection, _transform, _style, &_data,
+				tiles.append(RasterTile(&_projection, _transform, _style, &_data,
 				  _zoom, QRect(ttl, QSize(tileSize, tileSize)), _tileRatio,
 				  flags & Map::HillShading));
 			}

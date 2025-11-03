@@ -10,21 +10,21 @@
 #include "common/programpaths.h"
 #include "text.h"
 #include "font.h"
-#include "tile.h"
+#include "vectortile.h"
 #include "style.h"
 
 using namespace MVT;
 
-static Data::GeomType geometryType(const QString &str)
+static PBF::GeomType geometryType(const QString &str)
 {
 	if (str == "Point")
-		return Data::GeomType::POINT;
+		return PBF::GeomType::POINT;
 	else if (str == "LineString")
-		return Data::GeomType::LINESTRING;
+		return PBF::GeomType::LINESTRING;
 	else if (str == "Polygon")
-		return Data::GeomType::POLYGON;
+		return PBF::GeomType::POLYGON;
 	else
-		return Data::GeomType::UNKNOWN;
+		return PBF::GeomType::UNKNOWN;
 }
 
 static QVariant variant(const QJsonValue &val)
@@ -136,7 +136,7 @@ Style::Layer::Filter::Filter(const QJsonArray &json)
 		INVALID_FILTER(json);
 }
 
-bool Style::Layer::Filter::match(const Tile::Feature &feature) const
+bool Style::Layer::Filter::match(const VectorTile::Feature &feature) const
 {
 	const QVariant *v;
 
@@ -221,7 +221,7 @@ bool Style::Layer::Filter::match(const Tile::Feature &feature) const
 	}
 }
 
-QString Style::Layer::Template::value(int zoom, const Tile::Feature &feature) const
+QString Style::Layer::Template::value(int zoom, const VectorTile::Feature &feature) const
 {
 	static QRegularExpression rx("\\{[^\\}]*\\}");
 	QString text(_field.value(zoom));
@@ -502,6 +502,8 @@ Style::Layer::Layer(const QJsonObject &json)
 		_type = Background;
 	else if (type == "symbol")
 		_type = Symbol;
+	else if (type == "hillshade")
+		_type = Hillshade;
 
 	// source-layer
 	_sourceLayer = json["source-layer"].toString().toUtf8();
@@ -525,7 +527,12 @@ Style::Layer::Layer(const QJsonObject &json)
 		_paint = Paint(json["paint"].toObject());
 }
 
-bool Style::Layer::match(int zoom, const Tile::Feature &feature) const
+bool Style::Layer::match(int zoom) const
+{
+	return (zoom >= 0 && (zoom < _minZoom || zoom >= _maxZoom)) ? false : true;
+}
+
+bool Style::Layer::match(int zoom, const VectorTile::Feature &feature) const
 {
 	if (zoom >= 0 && (zoom < _minZoom || zoom >= _maxZoom))
 		return false;
@@ -564,7 +571,7 @@ void Style::Layer::setTextProperties(int zoom, qreal &maxWidth,
 }
 
 void Style::Layer::symbol(int zoom, const Sprites &sprites,
-  Tile::Feature &feature, QString &label, QImage &img) const
+  VectorTile::Feature &feature, QString &label, QImage &img) const
 {
 	QString icon(_layout.icon(zoom, feature));
 	QColor color(_paint.iconColor(zoom));
@@ -574,18 +581,15 @@ void Style::Layer::symbol(int zoom, const Sprites &sprites,
 	img = sprites.icon(icon, color, size);
 }
 
-static Sprites loadSprites(const QDir &styleDir, const QString &json,
-  const QString &img)
+static Sprites loadSprites(const QString &json, const QString &img)
 {
-	QString spritesJSON(styleDir.filePath(json));
-
-	if (QFileInfo::exists(spritesJSON)) {
-		QString spritesImg(styleDir.filePath(img));
-		if (QFileInfo::exists(spritesImg))
-			return Sprites(spritesJSON, spritesImg);
+	if (QFileInfo::exists(json)) {
+		if (QFileInfo::exists(img))
+			return Sprites(json, img);
 		else
-			qWarning() << spritesImg << ": no such file";
-	}
+			qWarning("%s: no such file", qUtf8Printable(img));
+	} else
+		qWarning("%s: no such file", qUtf8Printable(json));
 
 	return Sprites();
 }
@@ -596,7 +600,8 @@ Style::Style(const QString &fileName) : _valid(false)
 	if (!file.exists())
 		return;
 	if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-		qCritical() << fileName << ":" << file.errorString();
+		qWarning("%s: %s", qUtf8Printable(fileName),
+		  qUtf8Printable(file.errorString()));
 		return;
 	}
 	QByteArray ba(file.readAll());
@@ -604,7 +609,8 @@ Style::Style(const QString &fileName) : _valid(false)
 	QJsonParseError error;
 	QJsonDocument doc(QJsonDocument::fromJson(ba, &error));
 	if (doc.isNull()) {
-		qCritical() << fileName << ":" << error.errorString();
+		qWarning("%s[%d]: %s", qUtf8Printable(fileName), error.offset,
+		  qUtf8Printable(error.errorString()));
 		return;
 	}
 	QJsonObject json(doc.object());
@@ -618,9 +624,18 @@ Style::Style(const QString &fileName) : _valid(false)
 				_layers.append(Layer(layers[i].toObject()));
 	}
 
-	QDir styleDir(QFileInfo(fileName).absoluteDir());
-	_sprites = loadSprites(styleDir, "sprite.json", "sprite.png");
-	_sprites2x = loadSprites(styleDir, "sprite@2x.json", "sprite@2x.png");
+	QString sprite(json["sprite"].toString());
+	if (!sprite.isEmpty()) {
+		QUrl url(sprite);
+		if (url.isLocalFile()) {
+			QDir styleDir(QFileInfo(fileName).absoluteDir());
+			QString path(styleDir.filePath(url.toLocalFile()));
+
+			_sprites = loadSprites(path + ".json", path + ".png");
+			_sprites2x = loadSprites(path + "@2x.json", path + "@2x.png");
+		} else
+			qWarning("%s: not a local file", qUtf8Printable(sprite));
+	}
 
 	_valid = true;
 }
@@ -650,6 +665,15 @@ bool Style::matches(const QStringList &layers) const
 			return false;
 
 	return true;
+}
+
+bool Style::hasHillShading() const
+{
+	for (int i = 0; i < _layers.size(); i++)
+		if (_layers.at(i).type() == Layer::Hillshade)
+			return true;
+
+	return false;
 }
 
 QList<const Style*> Style::loadStyles(const QString &path)

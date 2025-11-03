@@ -15,7 +15,7 @@ public:
 	qreal resolution(const QRectF &rect);
 
 	int zoom() const {return _zoom;}
-	void setZoom(int zoom) {_zoom = zoom;}
+	void setZoom(int zoom);
 	int zoomFit(const QSize &size, const RectC &rect);
 	int zoomIn();
 	int zoomOut();
@@ -47,6 +47,8 @@ private:
 	int _zoom;
 	int _tileSize;
 	qreal _mapRatio;
+
+	qreal _factor;
 
 	bool _valid;
 	QString _errorString;

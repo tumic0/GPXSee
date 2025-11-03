@@ -23,7 +23,7 @@ namespace Mapsforge {
 class RasterTile
 {
 public:
-	RasterTile(const Projection &proj, const Transform &transform,
+	RasterTile(const Projection *proj, const Transform &transform,
 	  const Style *style, MapData *data, int zoom, const QRect &rect,
 	  qreal ratio, bool hillShading)
 		: _proj(proj), _transform(transform), _style(style), _data(data),
@@ -210,7 +210,7 @@ private:
 	friend HASH_T qHash(const RasterTile::PointKey &key);
 
 	void fetchData(QList<MapData::Path> &paths,
-	  QList<MapData::Point> &points) const;
+	  QList<MapData::Point> &points, bool &hasDEM) const;
 	void pathInstructions(const QList<MapData::Path> &paths,
 	  QVector<PainterPath> &painterPaths,
 	  QVector<RasterTile::RenderInstruction> &instructions) const;
@@ -219,9 +219,9 @@ private:
 	void hillShadingInstructions(
 	  QVector<RasterTile::RenderInstruction> &instructions) const;
 	QPointF ll2xy(const Coordinates &c) const
-	  {return _transform.proj2img(_proj.ll2xy(c));}
+	  {return _transform.proj2img(_proj->ll2xy(c));}
 	Coordinates xy2ll(const QPointF &p) const
-	  {return _proj.xy2ll(_transform.img2proj(p));}
+	  {return _proj->xy2ll(_transform.img2proj(p));}
 	void processLabels(const QList<MapData::Point> &points,
 	  QList<TextItem*> &textItems) const;
 	void processLineLabels(const QVector<PainterPath> &paths,
@@ -229,11 +229,12 @@ private:
 	QPainterPath painterPath(const Polygon &polygon, bool curve) const;
 	void drawTextItems(QPainter *painter, const QList<TextItem*> &textItems);
 	void drawPaths(QPainter *painter, const QList<MapData::Path> &paths,
-	  const QList<MapData::Point> &points, QVector<PainterPath> &painterPaths);
+	  const QList<MapData::Point> &points, QVector<PainterPath> &painterPaths,
+	  bool hillShading);
 
 	MatrixD elevation(int extend) const;
 
-	Projection _proj;
+	const Projection *_proj;
 	Transform _transform;
 	const Style *_style;
 	MapData *_data;

@@ -26,7 +26,7 @@ public:
 	qreal resolution(const QRectF &rect);
 
 	int zoom() const {return _zoom;}
-	void setZoom(int zoom) {_zoom = zoom;}
+	void setZoom(int zoom);
 	int zoomFit(const QSize &size, const RectC &rect);
 	int zoomIn();
 	int zoomOut();
@@ -42,6 +42,7 @@ public:
 	void clearCache();
 
 	QStringList styles(int &defaultStyle) const;
+	bool hillShading() const;
 
 private slots:
 	void jobFinished(MVTJob *job);
@@ -49,8 +50,6 @@ private slots:
 private:
 	int limitZoom(int zoom) const;
 	qreal tileSize() const;
-	qreal coordinatesRatio() const;
-	qreal imageRatio() const;
 	QPoint tileCoordinates(int x, int y, int zoom) const;
 	QPointF tilePos(const QPointF &tl, const QPoint &tc, const QPoint &tile,
 	  unsigned overzoom) const;
@@ -76,6 +75,9 @@ private:
 	bool _invertY;
 	const MVT::Style *_style;
 	QStringList _layers;
+
+	qreal _factor;
+	qreal _coordinatesRatio;
 
 	QList<MVTJob*> _jobs;
 };

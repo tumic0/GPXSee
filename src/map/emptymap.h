@@ -18,7 +18,7 @@ public:
 	qreal resolution(const QRectF &rect);
 
 	int zoom() const {return _zoom;}
-	void setZoom(int zoom) {_zoom = zoom;}
+	void setZoom(int zoom);
 	int zoomFit(const QSize &size, const RectC &rect);
 	int zoomIn();
 	int zoomOut();
@@ -30,6 +30,7 @@ public:
 
 private:
 	int _zoom;
+	qreal _scale;
 };
 
 #endif // EMPTYMAP_H

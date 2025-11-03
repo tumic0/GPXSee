@@ -1,13 +1,14 @@
-#ifndef MVT_DATA_H
-#define MVT_DATA_H
+#ifndef MVT_PBF_H
+#define MVT_PBF_H
 
 #include <QByteArray>
 #include <QVector>
 #include <QVariant>
+#include "source.h"
 
 namespace MVT {
 
-class Data
+class PBF
 {
 public:
 	enum GeomType {
@@ -39,7 +40,9 @@ public:
 		quint32 extent;
 	};
 
-	Data(const QByteArray &ba);
+	bool load(const QByteArray &ba);
+	void clear();
+
 	const QVector<Layer> &layers() const {return _layers;}
 
 private:
@@ -48,4 +51,4 @@ private:
 
 }
 
-#endif // MVT_DATA_H
+#endif // MVT_PBF_H

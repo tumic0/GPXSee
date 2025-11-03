@@ -182,6 +182,25 @@ MatrixD DEM::elevation(const MatrixC &m)
 	return ret;
 }
 
+bool DEM::elevation(const RectC &rect)
+{
+	QDir dir(_dir);
+	int left = floor(rect.left());
+	int top = floor(rect.top());
+	int right = floor(rect.right());
+	int bottom = floor(rect.bottom());
+
+	for (int i = bottom; i <= top; i++) {
+		for (int j = left; j <= right; j++) {
+			QString path(dir.absoluteFilePath(Tile(j, i).fileName()));
+			if (QFileInfo::exists(path) || QFileInfo::exists(path + ".zip"))
+				return true;
+		}
+	}
+
+	return false;
+}
+
 QList<Area> DEM::tiles()
 {
 	static const QRegularExpression re(
