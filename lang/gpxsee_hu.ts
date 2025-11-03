@@ -90,17 +90,17 @@
     <message>
         <location filename="../src/map/coros5map.cpp" line="499"/>
         <source>All</source>
-        <translation type="unfinished">Mind</translation>
+        <translation>Mind</translation>
     </message>
     <message>
         <location filename="../src/map/coros5map.cpp" line="499"/>
         <source>Landscape</source>
-        <translation type="unfinished">Fekvő</translation>
+        <translation>Fekvő</translation>
     </message>
     <message>
         <location filename="../src/map/coros5map.cpp" line="499"/>
         <source>Topo</source>
-        <translation type="unfinished">Topo</translation>
+        <translation>Topo</translation>
     </message>
 </context>
 <context>
