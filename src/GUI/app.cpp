@@ -31,6 +31,7 @@ App::App(int &argc, char **argv) : QApplication(argc, argv)
 	setApplicationName(APP_NAME);
 #else // Q_OS_WIN32 || Q_OS_MAC
 	setApplicationName(QString(APP_NAME).toLower());
+	setDesktopFileName(applicationName());
 #endif // Q_OS_WIN32 || Q_OS_MAC
 	setApplicationVersion(APP_VERSION);
 
