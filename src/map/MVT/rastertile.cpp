@@ -98,7 +98,7 @@ void RasterTile::renderMVT(QPainter &painter, const VectorTile &tile)
 
 	text.render(&painter);
 
-	//QRectF rect(QPointF(0, 0), QSizeF(_scaledSize, _scaledSize));
+	//QRectF rect(QPointF(0, 0), QSizeF(_size, _size));
 	//painter.setPen(Qt::red);
 	//painter.setBrush(Qt::NoBrush);
 	//painter.setRenderHint(QPainter::Antialiasing, false);
