@@ -15,8 +15,15 @@ public:
 	static QStringList filter();
 
 private:
-	typedef Map*(*ParserCb)(const QString &, const Projection &, bool *);
-	typedef QMultiMap<QString, ParserCb> ParserMap;
+	typedef Map*(*Cb)(const QString &, const Projection &, bool *);
+
+	struct Parser {
+		Parser(const char *name, Cb cb) : name(name), cb(cb) {}
+		const char *name;
+		Cb cb;
+	};
+
+	typedef QMultiMap<QString, Parser> ParserMap;
 
 	static Map *loadFile(const QString &path, const Projection &proj,
 	  bool *isDir = 0);

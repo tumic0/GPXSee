@@ -32,41 +32,41 @@ MapList::ParserMap MapList::parsers()
 {
 	MapList::ParserMap map;
 
-	map.insert("tar", &Atlas::createTAR);
-	map.insert("tar", &OziMap::createTAR);
-	map.insert("tba", &Atlas::createTBA);
-	map.insert("xml", &MapSource::create);
-	map.insert("xml", &IMGMap::createGMAP);
-	map.insert("img", &IMGMap::createIMG);
-	map.insert("csm", &IMGMap::createIMG);
-	map.insert("jnx", &JNXMap::create);
-	map.insert("tif", &GeoTIFFMap::create);
-	map.insert("tiff", &GeoTIFFMap::create);
-	map.insert("mbtiles", &MBTilesMap::create);
-	map.insert("rmap", &RMap::create);
-	map.insert("rtmap", &RMap::create);
-	map.insert("map", &MapsforgeMap::create);
-	map.insert("map", &OziMap::createMAP);
-	map.insert("gmi", &OziMap::createGMI);
-	map.insert("kap", &BSBMap::create);
-	map.insert("kmz", &KMZMap::create);
-	map.insert("aqm", &AQMMap::create);
-	map.insert("sqlitedb", &SqliteMap::create);
-	map.insert("wld", &WorldFileMap::create);
-	map.insert("jgw", &WorldFileMap::create);
-	map.insert("gfw", &WorldFileMap::create);
-	map.insert("pgw", &WorldFileMap::create);
-	map.insert("tfw", &WorldFileMap::create);
-	map.insert("qct", &QCTMap::create);
-	map.insert("sqlite", &OsmdroidMap::create);
-	map.insert("gemf", &GEMFMap::create);
-	map.insert("otrk2.xml", &OruxMap::create);
-	map.insert("000", &ENCMap::create);
-	map.insert("031", &ENCAtlas::create);
-	map.insert("csa", &Coros4Map::create);
-	map.insert("pma", &Coros5Map::create);
-	map.insert("pmtiles", &PMTilesMap::create);
-	map.insert("t", &PMTilesMap::create);
+	map.insert("tar", Parser("TrekBuddy TAR atlas", &Atlas::createTAR));
+	map.insert("tar", Parser("TrekBuddy TAR map", &OziMap::createTAR));
+	map.insert("tba", Parser("TrekBuddy atlas", &Atlas::createTBA));
+	map.insert("xml", Parser("Online map", &MapSource::create));
+	map.insert("xml", Parser("GARMIN GMAP map", &IMGMap::createGMAP));
+	map.insert("img", Parser("GARMIN IMG map", &IMGMap::createIMG));
+	map.insert("csm", Parser("COROS 4 map tile", &IMGMap::createIMG));
+	map.insert("jnx", Parser("GARMIN JNX map", &JNXMap::create));
+	map.insert("tif", Parser("GeoTIFF image", &GeoTIFFMap::create));
+	map.insert("tiff", Parser("GeoTIFF image", &GeoTIFFMap::create));
+	map.insert("mbtiles", Parser("MBTILES map", &MBTilesMap::create));
+	map.insert("rmap", Parser("TwoNav RMAP map", &RMap::create));
+	map.insert("rtmap", Parser("TwoNav RMAP map", &RMap::create));
+	map.insert("map", Parser("Mapsforge map", &MapsforgeMap::create));
+	map.insert("map", Parser("OziExplorer/TrekBuddy map", &OziMap::createMAP));
+	map.insert("gmi", Parser("TrekBuddy map", &OziMap::createGMI));
+	map.insert("kap", Parser("BSB nautical chart", &BSBMap::create));
+	map.insert("kmz", Parser("KML map", &KMZMap::create));
+	map.insert("aqm", Parser("AlpineQuest map", &AQMMap::create));
+	map.insert("sqlitedb", Parser("RMaps SQLite map", &SqliteMap::create));
+	map.insert("wld", Parser("World-file image", &WorldFileMap::create));
+	map.insert("jgw", Parser("World-file JPG", &WorldFileMap::create));
+	map.insert("gfw", Parser("World-file GIF", &WorldFileMap::create));
+	map.insert("pgw", Parser("World-file PNG", &WorldFileMap::create));
+	map.insert("tfw", Parser("World-file TIFF", &WorldFileMap::create));
+	map.insert("qct", Parser("QCT map", &QCTMap::create));
+	map.insert("sqlite", Parser("Osmdroid SQLite map", &OsmdroidMap::create));
+	map.insert("gemf", Parser("GEMF map", &GEMFMap::create));
+	map.insert("otrk2.xml", Parser("Orux map", &OruxMap::create));
+	map.insert("000", Parser("ENC chart", &ENCMap::create));
+	map.insert("031", Parser("ENC atlas", &ENCAtlas::create));
+	map.insert("csa", Parser("COROS 4 map", &Coros4Map::create));
+	map.insert("pma", Parser("COROS 5 map", &Coros5Map::create));
+	map.insert("pmtiles", Parser("PMTiles map", &PMTilesMap::create));
+	map.insert("t", Parser("COROS 5 map tile", &PMTilesMap::create));
 
 	return map;
 }
@@ -78,37 +78,55 @@ Map *MapList::loadFile(const QString &path, const Projection &proj, bool *isDir)
 	ParserMap::iterator it;
 	QFileInfo fi(Util::displayName(path));
 	QString suffix(fi.completeSuffix().toLower());
-	Map *map = 0;
-	QStringList errors;
+	QList<QPair<QString, QString> > errors;
 
 	if ((it = _parsers.find(suffix)) != _parsers.end()) {
 		while (it != _parsers.end() && it.key() == suffix) {
-			delete map;
-			map = it.value()(path, proj, isDir);
-			if (map->isValid())
-				return map;
-			else
-				errors.append(it.key() + ": " + map->errorString());
-			++it;
-		}
-	} else {
-		for (it = _parsers.begin(); it != _parsers.end(); it++) {
-			map = it.value()(path, proj, isDir);
+			const Parser &p = it.value();
+
+			Map *map = p.cb(path, proj, isDir);
 			if (map->isValid())
 				return map;
 			else {
-				errors.append(it.key() + ": " + map->errorString());
+				errors.append(QPair<QString, QString>(QString(p.name),
+				  map->errorString()));
 				delete map;
-				map = 0;
+			}
+			++it;
+		}
+
+		QString errorString;
+		if (errors.size() == 1)
+			errorString = errors.first().second;
+		else {
+			errorString.append("\n");
+			for (int i = 0; i < errors.size(); i++)
+				errorString.append("\n" + errors.at(i).first + ": "
+				  + errors.at(i).second);
+		}
+
+		return new InvalidMap(path, errorString);
+	} else {
+		for (it = _parsers.begin(); it != _parsers.end(); it++) {
+			const Parser &p = it.value();
+
+			Map *map = p.cb(path, proj, isDir);
+			if (map->isValid())
+				return map;
+			else {
+				errors.append(QPair<QString, QString>(QString(p.name),
+				  map->errorString()));
+				delete map;
 			}
 		}
+
+		qWarning("%s:", qUtf8Printable(path));
+		for (int i = 0; i < errors.size(); i++)
+			qWarning("  %s: %s", qUtf8Printable(errors.at(i).first),
+			  qUtf8Printable(errors.at(i).second));
+
+		return new InvalidMap(path, "Unknown file format");
 	}
-
-	qWarning("%s:", qUtf8Printable(path));
-	for (int i = 0; i < errors.size(); i++)
-		qWarning("  %s", qUtf8Printable(errors.at(i)));
-
-	return map ? map : new InvalidMap(path, "Unknown file format");
 }
 
 TreeNode<Map*> MapList::loadDir(const QString &path, const Projection &proj,
