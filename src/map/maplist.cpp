@@ -52,11 +52,11 @@ MapList::ParserMap MapList::parsers()
 	map.insert("kmz", Parser("KML map", &KMZMap::create));
 	map.insert("aqm", Parser("AlpineQuest map", &AQMMap::create));
 	map.insert("sqlitedb", Parser("RMaps SQLite map", &SqliteMap::create));
-	map.insert("wld", Parser("World-file image", &WorldFileMap::create));
-	map.insert("jgw", Parser("World-file JPG", &WorldFileMap::create));
-	map.insert("gfw", Parser("World-file GIF", &WorldFileMap::create));
-	map.insert("pgw", Parser("World-file PNG", &WorldFileMap::create));
-	map.insert("tfw", Parser("World-file TIFF", &WorldFileMap::create));
+	map.insert("wld", Parser("World-file + image", &WorldFileMap::create));
+	map.insert("jgw", Parser("World-file + JPG", &WorldFileMap::create));
+	map.insert("gfw", Parser("World-file + GIF", &WorldFileMap::create));
+	map.insert("pgw", Parser("World-file + PNG", &WorldFileMap::create));
+	map.insert("tfw", Parser("World-file + TIFF", &WorldFileMap::create));
 	map.insert("qct", Parser("QCT map", &QCTMap::create));
 	map.insert("sqlite", Parser("Osmdroid SQLite map", &OsmdroidMap::create));
 	map.insert("gemf", Parser("GEMF map", &GEMFMap::create));
@@ -78,7 +78,7 @@ Map *MapList::loadFile(const QString &path, const Projection &proj, bool *isDir)
 	ParserMap::iterator it;
 	QFileInfo fi(Util::displayName(path));
 	QString suffix(fi.completeSuffix().toLower());
-	QList<QPair<QString, QString> > errors;
+	QList<QPair<const char*, QString> > errors;
 
 	if ((it = _parsers.find(suffix)) != _parsers.end()) {
 		while (it != _parsers.end() && it.key() == suffix) {
@@ -88,7 +88,7 @@ Map *MapList::loadFile(const QString &path, const Projection &proj, bool *isDir)
 			if (map->isValid())
 				return map;
 			else {
-				errors.append(QPair<QString, QString>(QString(p.name),
+				errors.append(QPair<const char*, QString>(p.name,
 				  map->errorString()));
 				delete map;
 			}
@@ -101,7 +101,7 @@ Map *MapList::loadFile(const QString &path, const Projection &proj, bool *isDir)
 		else {
 			errorString.append("\n");
 			for (int i = 0; i < errors.size(); i++)
-				errorString.append("\n" + errors.at(i).first + ": "
+				errorString.append("\n" + QString(errors.at(i).first) + ": "
 				  + errors.at(i).second);
 		}
 
@@ -114,7 +114,7 @@ Map *MapList::loadFile(const QString &path, const Projection &proj, bool *isDir)
 			if (map->isValid())
 				return map;
 			else {
-				errors.append(QPair<QString, QString>(QString(p.name),
+				errors.append(QPair<const char*, QString>(p.name,
 				  map->errorString()));
 				delete map;
 			}
@@ -122,7 +122,7 @@ Map *MapList::loadFile(const QString &path, const Projection &proj, bool *isDir)
 
 		qWarning("%s:", qUtf8Printable(path));
 		for (int i = 0; i < errors.size(); i++)
-			qWarning("  %s: %s", qUtf8Printable(errors.at(i).first),
+			qWarning("  %s: %s", errors.at(i).first,
 			  qUtf8Printable(errors.at(i).second));
 
 		return new InvalidMap(path, "Unknown file format");

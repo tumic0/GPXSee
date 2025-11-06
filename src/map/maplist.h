@@ -19,6 +19,7 @@ private:
 
 	struct Parser {
 		Parser(const char *name, Cb cb) : name(name), cb(cb) {}
+
 		const char *name;
 		Cb cb;
 	};
