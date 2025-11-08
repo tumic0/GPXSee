@@ -34,7 +34,6 @@ void RasterTile::render()
 	img.fill(Qt::transparent);
 
 	QPainter painter(&img);
-	painter.setRenderHint(QPainter::Antialiasing);
 	painter.setRenderHint(QPainter::SmoothPixmapTransform);
 
 	for (int i = 0; i < _data.size(); i++) {
