@@ -31,10 +31,11 @@ void RasterTile::render()
 	QImage img(size, size, QImage::Format_ARGB32_Premultiplied);
 	PBF pbf;
 
-	img.setDevicePixelRatio(_ratio);
 	img.fill(Qt::transparent);
 
 	QPainter painter(&img);
+	painter.setRenderHint(QPainter::Antialiasing);
+	painter.setRenderHint(QPainter::SmoothPixmapTransform);
 
 	for (int i = 0; i < _data.size(); i++) {
 		Source &s = _data[i];
@@ -69,8 +70,8 @@ void RasterTile::renderMVT(QPainter &painter, const VectorTile &tile)
 {
 	Text text(_zoom, _size, _ratio, _style);
 
-	painter.setRenderHint(QPainter::Antialiasing);
-	painter.setRenderHint(QPainter::SmoothPixmapTransform);
+	painter.save();
+	painter.scale(_ratio, _ratio);
 
 	for (int i = 0; i < _style->layers().size(); i++) {
 		const Style::Layer &sl = _style->layers().at(i);
@@ -103,6 +104,8 @@ void RasterTile::renderMVT(QPainter &painter, const VectorTile &tile)
 	//painter.setBrush(Qt::NoBrush);
 	//painter.setRenderHint(QPainter::Antialiasing, false);
 	//painter.drawRect(rect);
+
+	painter.restore();
 }
 
 void RasterTile::drawBackground(QPainter &painter,
@@ -127,11 +130,9 @@ void RasterTile::drawLayer(QPainter &painter, const Style::Layer &styleLayer,
   VectorTile::Layer *pbfLayer)
 {
 	if (pbfLayer) {
-		painter.save();
 		styleLayer.setPathPainter(_zoom, _style->sprites(_ratio), painter);
 		for (int i = 0; i < pbfLayer->features().size(); i++)
 			drawFeature(painter, styleLayer, pbfLayer->features()[i]);
-		painter.restore();
 	}
 }
 
