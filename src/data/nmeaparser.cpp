@@ -488,7 +488,7 @@ bool NMEAParser::parse(QFile *file, QList<TrackData> &tracks,
 	Q_UNUSED(routes);
 	Q_UNUSED(polygons);
 	qint64 len;
-	char line[80 + 2/*CRLF*/ + 1/*'\0'*/ + 1/*extra byte for limit check*/];
+	char line[1024];
 	SegmentData segment;
 	CTX ctx;
 
