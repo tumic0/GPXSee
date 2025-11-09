@@ -139,6 +139,8 @@ void RasterTile::drawHillshading(QPainter &painter,
   const Style::Layer &styleLayer)
 {
 	if (_hillShading && styleLayer.match(_zoom)) {
+		painter.setOpacity(1.0);
+
 		MatrixD ele(elevation(HillShading::blur() + 1));
 		if (ele.isNull())
 			return;
