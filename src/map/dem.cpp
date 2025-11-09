@@ -48,7 +48,7 @@ static double interpolate(double dx, double dy, double p0, double p1, double p2,
 
 static double value(int col, int row, int samples, const QByteArray &data)
 {
-	int pos = ((samples - 1 - row) * samples + col) * 2;
+	int pos = ((samples - 1 - row) * samples + col) * sizeof(qint16);
 	qint16 val = qFromBigEndian(*((const qint16*)(data.constData() + pos)));
 
 	return (val == -32768) ? NAN : val;
@@ -57,7 +57,7 @@ static double value(int col, int row, int samples, const QByteArray &data)
 
 DEM::Entry::Entry(const QByteArray &data) : _data(data)
 {
-	_samples = isqrt(_data.size() / 2);
+	_samples = isqrt(_data.size() / sizeof(qint16));
 }
 
 QString DEM::Tile::latStr() const
