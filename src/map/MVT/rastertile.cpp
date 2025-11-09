@@ -96,6 +96,7 @@ void RasterTile::renderMVT(QPainter &painter, const VectorTile &tile)
 		}
 	}
 
+	painter.setOpacity(1.0);
 	text.render(&painter);
 
 	//QRectF rect(QPointF(0, 0), QSizeF(_size, _size));
