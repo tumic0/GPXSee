@@ -1,4 +1,4 @@
-version: 15.2.{build}
+version: 15.3.{build}
 
 configuration:
   - Release

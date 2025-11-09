@@ -3,7 +3,7 @@ unix:!macx:!android {
 } else {
     TARGET = GPXSee
 }
-VERSION = 15.2
+VERSION = 15.3
 
 QT += core \
     gui \
