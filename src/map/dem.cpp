@@ -184,6 +184,9 @@ MatrixD DEM::elevation(const MatrixC &m)
 
 bool DEM::elevation(const RectC &rect)
 {
+	if (_dir.isEmpty())
+		return false;
+
 	QDir dir(_dir);
 	int left = floor(rect.left());
 	int top = floor(rect.top());
