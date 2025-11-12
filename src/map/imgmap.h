@@ -36,7 +36,7 @@ public:
 	void draw(QPainter *painter, const QRectF &rect, Flags flags);
 
 	void load(const Projection &in, const Projection &out, qreal devicelRatio,
-	  bool hidpi, int style, int layer);
+	  bool hidpi, bool hillShading, int style, int layer);
 	void unload();
 
 	double elevation(const Coordinates &c);
@@ -94,6 +94,7 @@ private:
 	RectC _dataBounds;
 	qreal _tileRatio;
 	Layer _layer;
+	bool _hillShading;
 
 	QList<IMGJob*> _jobs;
 

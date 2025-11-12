@@ -15,7 +15,7 @@ using namespace Mapsforge;
 
 MapsforgeMap::MapsforgeMap(const QString &fileName, QObject *parent)
   : Map(fileName, parent), _data(fileName), _style(0), _zoom(0),
-  _projection(PCS::pcs(3857)), _tileRatio(1.0)
+  _projection(PCS::pcs(3857)), _tileRatio(1.0), _hillShading(false)
 {
 	if (_data.isValid())
 		_zoom = _data.zooms().min();
@@ -27,7 +27,7 @@ MapsforgeMap::~MapsforgeMap()
 }
 
 void MapsforgeMap::load(const Projection &in, const Projection &out,
-  qreal deviceRatio, bool hidpi, int style, int layer)
+  qreal deviceRatio, bool hidpi, bool hillShading, int style, int layer)
 {
 	Q_UNUSED(in);
 	Q_UNUSED(hidpi);
@@ -43,6 +43,8 @@ void MapsforgeMap::load(const Projection &in, const Projection &out,
 		_style = new Style(styles().first(), _data, _tileRatio, layer);
 	else
 		_style = new Style();
+
+	_hillShading = MapsforgeMap::hillShading() & hillShading;
 
 	updateTransform();
 
@@ -205,7 +207,7 @@ void MapsforgeMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 			else {
 				tiles.append(RasterTile(&_projection, _transform, _style, &_data,
 				  _zoom, QRect(ttl, QSize(tileSize, tileSize)), _tileRatio,
-				  flags & Map::HillShading));
+				  _hillShading));
 			}
 		}
 	}

@@ -183,10 +183,11 @@ ENCMap::~ENCMap()
 }
 
 void ENCMap::load(const Projection &in, const Projection &out,
-  qreal deviceRatio, bool hidpi, int style, int layer)
+  qreal deviceRatio, bool hidpi, bool hillShading, int style, int layer)
 {
 	Q_UNUSED(in);
 	Q_UNUSED(hidpi);
+	Q_UNUSED(hillShading);
 	Q_UNUSED(style);
 	Q_UNUSED(layer);
 

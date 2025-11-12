@@ -359,10 +359,11 @@ Coordinates RMap::xy2ll(const QPointF &p)
 }
 
 void RMap::load(const Projection &in, const Projection &out, qreal deviceRatio,
-  bool hidpi, int style, int layer)
+  bool hidpi, bool hillShading, int style, int layer)
 {
 	Q_UNUSED(in);
 	Q_UNUSED(out);
+	Q_UNUSED(hillShading);
 	Q_UNUSED(style);
 	Q_UNUSED(layer);
 

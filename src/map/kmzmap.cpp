@@ -427,9 +427,10 @@ void KMZMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 }
 
 void KMZMap::load(const Projection &in, const Projection &out,
-  qreal deviceRatio, bool hidpi, int style, int layer)
+  qreal deviceRatio, bool hidpi, bool hillShading, int style, int layer)
 {
 	Q_UNUSED(out);
+	Q_UNUSED(hillShading);
 	Q_UNUSED(layer);
 	Q_UNUSED(style);
 

@@ -79,7 +79,7 @@ void Coros5Map::loadDir(const QString &path, MapTree &tree, Range &zooms)
 
 Coros5Map::Coros5Map(const QString &fileName, QObject *parent)
   : Map(fileName, parent), _style(0), _mapRatio(1.0), _tileRatio(1.0),
-  _layer(All), _valid(false)
+  _layer(All), _hillShading(false), _valid(false)
 {
 	QFileInfo fi(fileName);
 	QDir dir(fi.absolutePath());
@@ -125,7 +125,7 @@ Coros5Map::~Coros5Map()
 }
 
 void Coros5Map::load(const Projection &in, const Projection &out,
-  qreal deviceRatio, bool hidpi, int style, int layer)
+  qreal deviceRatio, bool hidpi, bool hillShading, int style, int layer)
 {
 	Q_UNUSED(in);
 	Q_UNUSED(out);
@@ -147,6 +147,7 @@ void Coros5Map::load(const Projection &in, const Projection &out,
 	_tileRatio = deviceRatio;
 	_style = (style >= 0 && style < Style::styles().size())
 	  ? Style::styles().at(style) : defaultStyle();
+	_hillShading = Coros5Map::hillShading() & hillShading;
 
 	for (int i = _zooms.last().base + 1; i <= OSM::ZOOMS.max(); i++) {
 		Zoom z(i, _zooms.last().base);
@@ -352,8 +353,7 @@ void Coros5Map::draw(QPainter *painter, const QRectF &rect, Flags flags)
 
 				if (!data.isEmpty())
 					tiles.append(RasterTile(data, _style, zoom.z, t,
-					  MVT_TILE_SIZE, _tileRatio, overzoom,
-					  flags & Map::HillShading));
+					  MVT_TILE_SIZE, _tileRatio, overzoom, _hillShading));
 			}
 		}
 	}

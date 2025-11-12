@@ -21,8 +21,7 @@ public:
 	enum Flag {
 		NoFlags = 0,
 		Block = 1,
-		OpenGL = 2,
-		HillShading = 4,
+		OpenGL = 2
 	};
 	Q_DECLARE_FLAGS(Flags, Flag)
 
@@ -37,8 +36,8 @@ public:
 	virtual bool isReady() const {return true;}
 	virtual QString errorString() const {return QString();}
 
-	virtual void load(const Projection &, const Projection &, qreal, bool, int,
-	  int) {}
+	virtual void load(const Projection &, const Projection &, qreal, bool, bool,
+	  int, int) {}
 	virtual void unload() {}
 
 	/* llBounds() is mandatory for maps that do not provide bounds() until

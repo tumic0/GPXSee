@@ -62,7 +62,7 @@ public:
 	int zoomOut();
 
 	void load(const Projection &in, const Projection &out, qreal deviceRatio,
-	  bool hidpi, int style, int layer);
+	  bool hidpi, bool hillShading, int style, int layer);
 	void unload();
 
 	QPointF ll2xy(const Coordinates &c)
@@ -104,11 +104,11 @@ private:
 	Mapsforge::MapData _data;
 	Mapsforge::Style *_style;
 	int _zoom;
-
 	Projection _projection;
 	Transform _transform;
 	QRectF _bounds;
 	qreal _tileRatio;
+	bool _hillShading;
 
 	QList<MapsforgeMapJob*> _jobs;
 };

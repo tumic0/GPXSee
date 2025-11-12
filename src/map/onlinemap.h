@@ -37,7 +37,7 @@ public:
 	void draw(QPainter *painter, const QRectF &rect, Flags flags);
 
 	void load(const Projection &in, const Projection &out, qreal deviceRatio,
-	  bool hidpi, int style, int layer);
+	  bool hidpi, bool hillShading, int style, int layer);
 	void unload();
 	void clearCache();
 
@@ -71,8 +71,7 @@ private:
 	int _tileSize;
 	int _baseZoom;
 	qreal _mapRatio, _tileRatio;
-	bool _mvt;
-	bool _invertY;
+	bool _mvt, _hillShading, _invertY;
 	const MVT::Style *_style;
 	QStringList _layers;
 

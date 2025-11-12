@@ -17,7 +17,7 @@ using namespace OSM;
 
 PMTilesMap::PMTilesMap(const QString &fileName, QObject *parent)
   : Map(fileName, parent), _file(fileName), _style(0), _mapRatio(1.0),
-  _tileRatio(1.0), _mvt(false), _valid(false)
+  _tileRatio(1.0), _hillShading(false), _mvt(false), _valid(false)
 {
 	if (!_file.open(QIODevice::ReadOnly)) {
 		_errorString = _file.errorString();
@@ -104,7 +104,7 @@ PMTilesMap::PMTilesMap(const QString &fileName, QObject *parent)
 }
 
 void PMTilesMap::load(const Projection &in, const Projection &out,
-  qreal deviceRatio, bool hidpi, int style, int layer)
+  qreal deviceRatio, bool hidpi, bool hillShading, int style, int layer)
 {
 	Q_UNUSED(in);
 	Q_UNUSED(out);
@@ -130,6 +130,8 @@ void PMTilesMap::load(const Projection &in, const Projection &out,
 
 	_coordinatesRatio = _mapRatio > 1.0 ? _mapRatio / _tileRatio : 1.0;
 	_factor = zoom2scale(_zooms.at(_zoom).z, _tileSize) * _coordinatesRatio;
+
+	_hillShading = PMTilesMap::hillShading() & hillShading;
 
 	if (!_file.open(QIODevice::ReadOnly))
 		qWarning("%s: %s", qUtf8Printable(_file.fileName()),
@@ -322,7 +324,7 @@ void PMTilesMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 			} else
 				tiles.append(RasterTile(Source(tileData(id(zoom.base, t)),
 				  _tc == 2, _mvt), _style, zoom.z, t, _tileSize, _tileRatio,
-				  overzoom, flags & Map::HillShading));
+				  overzoom, _hillShading));
 		}
 	}
 

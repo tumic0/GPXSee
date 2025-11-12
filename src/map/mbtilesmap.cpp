@@ -212,7 +212,7 @@ void MBTilesMap::getName()
 
 MBTilesMap::MBTilesMap(const QString &fileName, QObject *parent)
   : Map(fileName, parent), _style(0), _mapRatio(1.0), _tileRatio(1.0),
-  _mvt(false), _valid(false)
+  _hillShading(false), _mvt(false), _valid(false)
 {
 	if (!Util::isSQLiteDB(fileName, _errorString))
 		return;
@@ -256,7 +256,7 @@ MBTilesMap::MBTilesMap(const QString &fileName, QObject *parent)
 }
 
 void MBTilesMap::load(const Projection &in, const Projection &out,
-  qreal deviceRatio, bool hidpi, int style, int layer)
+  qreal deviceRatio, bool hidpi, bool hillShading, int style, int layer)
 {
 	Q_UNUSED(in);
 	Q_UNUSED(out);
@@ -282,6 +282,8 @@ void MBTilesMap::load(const Projection &in, const Projection &out,
 
 	_coordinatesRatio = _mapRatio > 1.0 ? _mapRatio / _tileRatio : 1.0;
 	_factor = zoom2scale(_zooms.at(_zoom).z, _tileSize) * _coordinatesRatio;
+
+	_hillShading = MBTilesMap::hillShading() & hillShading;
 
 	_db.open();
 }
@@ -462,7 +464,7 @@ void MBTilesMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 			} else
 				tiles.append(RasterTile(Source(tileData(zoom.base, t), true,
 				  _mvt), _style, zoom.z, t, _tileSize, _tileRatio, overzoom,
-				  flags & Map::HillShading));
+				  _hillShading));
 		}
 	}
 

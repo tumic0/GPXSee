@@ -18,8 +18,8 @@ OnlineMap::OnlineMap(const QString &fileName, const QString &name,
   bool quadTiles, const QStringList &layers, QObject *parent)
     : Map(fileName, parent), _name(name), _zooms(zooms), _bounds(bounds),
 	_zoom(_zooms.max()), _tileSize(tileSize), _baseZoom(0), _mapRatio(1.0),
-	_tileRatio(tileRatio), _mvt(mvt), _invertY(invertY), _style(0),
-	_layers(layers)
+	_tileRatio(tileRatio), _mvt(mvt), _hillShading(false), _invertY(invertY),
+	_style(0), _layers(layers)
 {
 	_tileLoader = new TileLoader(QDir(ProgramPaths::tilesDir()).filePath(_name),
 	  this);
@@ -104,7 +104,7 @@ int OnlineMap::zoomOut()
 }
 
 void OnlineMap::load(const Projection &in, const Projection &out,
-  qreal deviceRatio, bool hidpi, int style, int layer)
+  qreal deviceRatio, bool hidpi, bool hillShading, int style, int layer)
 {
 	Q_UNUSED(in);
 	Q_UNUSED(out);
@@ -126,6 +126,8 @@ void OnlineMap::load(const Projection &in, const Projection &out,
 
 		QPixmapCache::clear();
 	}
+
+	_hillShading = OnlineMap::hillShading() & hillShading;
 
 	_coordinatesRatio = _mapRatio > 1.0 ? _mapRatio / _tileRatio : 1.0;
 	_factor = zoom2scale(_zoom, _tileSize) * _coordinatesRatio;
@@ -253,7 +255,7 @@ void OnlineMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 			if (file.open(QIODevice::ReadOnly))
 				renderTiles.append(RasterTile(Source(file.readAll(), false, _mvt),
 				  _style, _zoom, t.xy(), _tileSize, _tileRatio, overzoom,
-				  flags & Map::HillShading));
+				  _hillShading));
 			else
 				qWarning("%s: %s", qUtf8Printable(t.file()),
 				  qUtf8Printable(file.errorString()));

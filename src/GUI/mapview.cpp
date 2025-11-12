@@ -68,7 +68,7 @@ MapView::MapView(Map *map, POI *poi, QWidget *parent) : QGraphicsView(parent)
 	_layer = -1;
 	_map = map;
 	_map->load(_inputProjection, _outputProjection, _deviceRatio, _hidpi,
-	  _style, _layer);
+	  _hillShading, _style, _layer);
 	connect(_map, &Map::tilesLoaded, this, &MapView::reloadMap);
 
 	_poi = poi;
@@ -450,7 +450,7 @@ void MapView::setMap(Map *map)
 
 	_map = map;
 	_map->load(_inputProjection, _outputProjection, _deviceRatio, _hidpi,
-	  _style, _layer);
+	  _hillShading, _style, _layer);
 	connect(_map, &Map::tilesLoaded, this, &MapView::reloadMap);
 
 	digitalZoom(0);
@@ -1172,8 +1172,6 @@ void MapView::drawBackground(QPainter *painter, const QRectF &rect)
 			flags = Map::Block;
 		else if (_opengl)
 			flags = Map::OpenGL;
-		if (_hillShading)
-			flags |= Map::HillShading;
 
 		_map->draw(painter, ir, flags);
 	}
@@ -1314,7 +1312,7 @@ void MapView::drawHillShading(bool draw)
 
 	_map->unload();
 	_map->load(_inputProjection, _outputProjection, _deviceRatio, _hidpi,
-	  _style, _layer);
+	  _hillShading, _style, _layer);
 
 	reloadMap();
 }
@@ -1326,7 +1324,7 @@ void MapView::selectStyle(int style)
 
 	_map->unload();
 	_map->load(_inputProjection, _outputProjection, _deviceRatio, _hidpi,
-	  _style, _layer);
+	  _hillShading, _style, _layer);
 
 	reloadMap();
 }
@@ -1337,7 +1335,7 @@ void MapView::selectLayer(int layer)
 
 	_map->unload();
 	_map->load(_inputProjection, _outputProjection, _deviceRatio, _hidpi,
-	  _style, _layer);
+	  _hillShading, _style, _layer);
 
 	reloadMap();
 }
@@ -1512,7 +1510,7 @@ void MapView::setHidpi(bool hidpi)
 
 	_map->unload();
 	_map->load(_inputProjection, _outputProjection, _deviceRatio, _hidpi,
-	  _style, _layer);
+	  _hillShading, _style, _layer);
 	rescale();
 
 	QPointF nc = QRectF(_map->ll2xy(cr.topLeft()),

@@ -58,7 +58,7 @@ QList<MapData*> IMGMap::overlays(const QString &fileName)
 
 IMGMap::IMGMap(const QString &fileName, bool GMAP, QObject *parent)
   : Map(fileName, parent), _projection(PCS::pcs(3857)), _tileRatio(1.0),
-  _layer(All), _valid(false)
+  _layer(All), _hillShading(false), _valid(false)
 {
 	if (GMAP)
 		_data.append(new GMAPData(fileName, _polyCache, _pointCache, _demCache,
@@ -95,7 +95,7 @@ IMG::Style *IMGMap::createStyle(IMG::MapData *data, const QString *typFile)
 }
 
 void IMGMap::load(const Projection &in, const Projection &out,
-  qreal devicelRatio, bool hidpi, int style, int layer)
+  qreal devicelRatio, bool hidpi, bool hillShading, int style, int layer)
 {
 	Q_UNUSED(in);
 	Q_UNUSED(hidpi);
@@ -125,6 +125,8 @@ void IMGMap::load(const Projection &in, const Projection &out,
 	_styles.reserve(_data.size());
 	for (int i = 0; i < _data.size(); i++)
 		_styles.append(createStyle(_data.at(i), i ? 0 : typ));
+
+	_hillShading = IMGMap::hillShading() & hillShading;
 
 	updateTransform();
 
@@ -287,8 +289,7 @@ void IMGMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 					tiles.append(RasterTile(&_projection, _transform,
 					  _data.at(n), _styles.at(n), _zoom,
 					  QRect(ttl, QSize(TILE_SIZE, TILE_SIZE)), _tileRatio, key,
-					  flags & Map::HillShading, _layer & Raster,
-					  _layer & Vector));
+					  _hillShading, _layer & Raster, _layer & Vector));
 				}
 			}
 		}

@@ -34,7 +34,7 @@ public:
 	void draw(QPainter *painter, const QRectF &rect, Flags flags);
 
 	void load(const Projection &in, const Projection &out, qreal devicelRatio,
-	  bool hidpi, int style, int layer);
+	  bool hidpi, bool hillShading, int style, int layer);
 	void unload();
 
 	double elevation(const Coordinates &c);
@@ -92,7 +92,7 @@ private:
 	IMG::MapData::ElevationCache _demCache;
 	QMutex _lock, _demLock;
 	QString _typ;
-	bool _hasDEM;
+	bool _hasDEM, _hillShading;
 
 	QList<IMGJob*> _jobs;
 

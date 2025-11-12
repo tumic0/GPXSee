@@ -53,7 +53,7 @@ void Coros4Map::loadDir(const QString &path, MapTree &tree)
 
 Coros4Map::Coros4Map(const QString &fileName, QObject *parent)
   : Map(fileName, parent), _projection(PCS::pcs(3857)), _tileRatio(1.0),
-  _layer(All), _style(0), _hasDEM(false), _valid(false)
+  _layer(All), _style(0), _hasDEM(false), _hillShading(false), _valid(false)
 {
 	QFileInfo fi(fileName);
 	QDir dir(fi.absolutePath());
@@ -93,7 +93,7 @@ Coros4Map::~Coros4Map()
 }
 
 void Coros4Map::load(const Projection &in, const Projection &out,
-  qreal devicelRatio, bool hidpi, int style, int layer)
+  qreal devicelRatio, bool hidpi, bool hillShading, int style, int layer)
 {
 	Q_UNUSED(in);
 	Q_UNUSED(hidpi);
@@ -126,6 +126,8 @@ void Coros4Map::load(const Projection &in, const Projection &out,
 		_style = new Style(_tileRatio, &typ);
 	} else
 		_style = new Style(_tileRatio);
+
+	_hillShading = Coros4Map::hillShading() & hillShading;
 
 	updateTransform();
 
@@ -311,7 +313,7 @@ void Coros4Map::draw(QPainter *painter, const QRectF &rect, Flags flags)
 				if (!data.isEmpty())
 					tiles.append(RasterTile(&_projection, _transform, data,
 					  _style, _zoom, QRect(ttl, QSize(TILE_SIZE, TILE_SIZE)),
-					  _tileRatio, key, flags & Map::HillShading, false, true));
+					  _tileRatio, key, _hillShading, false, true));
 			}
 		}
 	}
