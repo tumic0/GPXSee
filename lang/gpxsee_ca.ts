@@ -95,7 +95,7 @@
     <message>
         <location filename="../src/map/coros5map.cpp" line="499"/>
         <source>Landscape</source>
-        <translation>Horitzontal</translation>
+        <translation>Apaïsat</translation>
     </message>
     <message>
         <location filename="../src/map/coros5map.cpp" line="499"/>
