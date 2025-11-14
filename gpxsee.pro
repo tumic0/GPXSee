@@ -7,7 +7,6 @@ VERSION = 15.4
 
 QT += core \
     gui \
-    gui-private \
     network \
     sql \
     concurrent \
@@ -18,6 +17,11 @@ QT += core \
     serialport
 greaterThan(QT_MAJOR_VERSION, 5) {
     QT += openglwidgets
+}
+versionAtLeast(QT_VERSION, 6.6) {
+    QT += core-private
+} else {
+    QT += gui-private
 }
 
 CONFIG += object_parallel_to_source
