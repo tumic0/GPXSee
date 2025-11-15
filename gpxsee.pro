@@ -122,9 +122,6 @@ HEADERS += src/common/config.h \
     src/GUI/pngexportdialog.h \
     src/GUI/timezoneinfo.h \
     src/GUI/passwordedit.h \
-    src/map/MVT/pbf.h \
-    src/map/MVT/source.h \
-    src/map/MVT/vectortile.h \
     src/map/proj/polyconic.h \
     src/map/proj/webmercator.h \
     src/map/proj/transversemercator.h \
@@ -180,6 +177,9 @@ HEADERS += src/common/config.h \
     src/map/MVT/style.h \
     src/map/MVT/rastertile.h \
     src/map/MVT/text.h \
+    src/map/MVT/pbf.h \
+    src/map/MVT/source.h \
+    src/map/MVT/vectortile.h \
     src/map/mapsforge/style.h \
     src/map/mapsforge/mapdata.h \
     src/map/mapsforge/rastertile.h \
@@ -374,30 +374,6 @@ SOURCES += src/main.cpp \
     src/GUI/pngexportdialog.cpp \
     src/GUI/projectioncombobox.cpp \
     src/GUI/passwordedit.cpp \
-    src/map/MVT/pbf.cpp \
-    src/map/MVT/vectortile.cpp \
-    src/map/coros4map.cpp \
-    src/map/coros5map.cpp \
-    src/map/downloader.cpp \
-    src/map/demloader.cpp \
-    src/map/ENC/atlasdata.cpp \
-    src/map/ENC/mapdata.cpp \
-    src/map/ENC/rastertile.cpp \
-    src/map/ENC/style.cpp \
-    src/map/IMG/demfile.cpp \
-    src/map/IMG/demtree.cpp \
-    src/map/IMG/jls.cpp \
-    src/map/conversion.cpp \
-    src/map/encatlas.cpp \
-    src/map/encmap.cpp \
-    src/map/ENC/iso8211.cpp \
-    src/map/filter.cpp \
-    src/map/gemfmap.cpp \
-    src/map/gmifile.cpp \
-    src/map/oruxmap.cpp \
-    src/map/osmdroidmap.cpp \
-    src/map/pmtiles.cpp \
-    src/map/pmtilesmap.cpp \
     src/map/proj/polyconic.cpp \
     src/map/proj/webmercator.cpp \
     src/map/proj/transversemercator.cpp \
@@ -408,7 +384,14 @@ SOURCES += src/main.cpp \
     src/map/proj/krovak.cpp \
     src/map/proj/polarstereographic.cpp \
     src/map/proj/obliquestereographic.cpp \
-    src/map/bitmapline.cpp \
+    src/map/ENC/iso8211.cpp \
+    src/map/ENC/atlasdata.cpp \
+    src/map/ENC/mapdata.cpp \
+    src/map/ENC/rastertile.cpp \
+    src/map/ENC/style.cpp \
+    src/map/IMG/demfile.cpp \
+    src/map/IMG/demtree.cpp \
+    src/map/IMG/jls.cpp \
     src/map/IMG/bitstream.cpp \
     src/map/IMG/deltastream.cpp \
     src/map/IMG/gmapdata.cpp \
@@ -427,10 +410,8 @@ SOURCES += src/main.cpp \
     src/map/IMG/vectortile.cpp \
     src/map/IMG/style.cpp \
     src/map/IMG/netfile.cpp \
-    src/map/mapsforge/style.cpp \
-    src/map/mapsforge/mapdata.cpp \
-    src/map/mapsforge/rastertile.cpp \
-    src/map/mapsforge/subfile.cpp \
+    src/map/MVT/pbf.cpp \
+    src/map/MVT/vectortile.cpp \
     src/map/MVT/color.cpp \
     src/map/MVT/font.cpp \
     src/map/MVT/function.cpp \
@@ -438,6 +419,25 @@ SOURCES += src/main.cpp \
     src/map/MVT/style.cpp \
     src/map/MVT/text.cpp \
     src/map/MVT/rastertile.cpp \
+    src/map/mapsforge/style.cpp \
+    src/map/mapsforge/mapdata.cpp \
+    src/map/mapsforge/rastertile.cpp \
+    src/map/mapsforge/subfile.cpp \
+    src/map/bitmapline.cpp \
+    src/map/coros4map.cpp \
+    src/map/coros5map.cpp \
+    src/map/downloader.cpp \
+    src/map/demloader.cpp \
+    src/map/conversion.cpp \
+    src/map/encatlas.cpp \
+    src/map/encmap.cpp \
+    src/map/filter.cpp \
+    src/map/gemfmap.cpp \
+    src/map/gmifile.cpp \
+    src/map/oruxmap.cpp \
+    src/map/osmdroidmap.cpp \
+    src/map/pmtiles.cpp \
+    src/map/pmtilesmap.cpp \
     src/map/imgmap.cpp \
     src/map/prjfile.cpp \
     src/map/qctmap.cpp \
