@@ -44,7 +44,7 @@ int DEMLoader::numTiles(const RectC &rect, int limit) const
 
 		if (!(QFileInfo::exists(zn) || QFileInfo::exists(fn)))
 			cnt++;
-		if (cnt > limit)
+		if (limit && cnt > limit)
 			return -1;
 	}
 
@@ -75,7 +75,7 @@ bool DEMLoader::loadTiles(const RectC &rect, int limit)
 			dl.append(Download(url, isZip(url) ? zn : fn));
 		}
 
-		if (dl.size() > limit) {
+		if (limit && dl.size() > limit) {
 			qWarning("DEM download limit (%d) exceeded.", limit);
 			return false;
 		}

@@ -18,8 +18,8 @@ public:
 	void setUrl(const QString &url) {_url = url;}
 	void setAuthorization(const Authorization &authorization);
 
-	int numTiles(const RectC &rect, int limit) const;
-	bool loadTiles(const RectC &rect, int limit);
+	int numTiles(const RectC &rect, int limit = 0) const;
+	bool loadTiles(const RectC &rect, int limit = 0);
 	bool checkTiles(const RectC &rect) const;
 
 	const QString &url() const {return _url;}
