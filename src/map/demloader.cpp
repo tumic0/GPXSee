@@ -51,7 +51,7 @@ int DEMLoader::numTiles(const RectC &rect, int limit) const
 	return cnt;
 }
 
-bool DEMLoader::loadTiles(const RectC &rect)
+bool DEMLoader::loadTiles(const RectC &rect, int limit)
 {
 	QList<DEM::Tile> tl(tiles(rect));
 	QList<Download> dl;
@@ -75,8 +75,8 @@ bool DEMLoader::loadTiles(const RectC &rect)
 			dl.append(Download(url, isZip(url) ? zn : fn));
 		}
 
-		if (dl.size() > DEM_DOWNLOAD_LIMIT) {
-			qWarning("DEM download limit (%d) exceeded.", DEM_DOWNLOAD_LIMIT);
+		if (dl.size() > limit) {
+			qWarning("DEM download limit (%d) exceeded.", limit);
 			return false;
 		}
 	}

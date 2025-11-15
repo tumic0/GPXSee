@@ -61,9 +61,10 @@
 #include "navigationwidget.h"
 #endif // Q_OS_ANDROID
 
-
-#define MAX_RECENT_FILES  10
-#define TOOLBAR_ICON_SIZE 22
+#define TOOLBAR_ICON_SIZE    22
+#define MAX_RECENT_FILES     10
+#define DEM_DOWNLOAD_WARNING 4
+#define DEM_DOWNLOAD_LIMIT   1024
 
 GUI::GUI(const QString &lang)
 {
@@ -2066,7 +2067,7 @@ void GUI::downloadDEM(const RectC &rect)
 	else if (cnt < DEM_DOWNLOAD_WARNING || QMessageBox::question(this, APP_NAME,
 	  tr("Download %n DEM tiles?", "", cnt)) == QMessageBox::Yes) {
 		_demRects.append(rect);
-		if (!_dem->loadTiles(rect) && _demRects.size() == 1)
+		if (!_dem->loadTiles(rect, DEM_DOWNLOAD_LIMIT) && _demRects.size() == 1)
 			demLoaded();
 	}
 }
