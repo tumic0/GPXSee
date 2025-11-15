@@ -33,7 +33,7 @@ void MotionInfoItem::paint(QPainter *painter,
 	Q_UNUSED(option);
 	Q_UNUSED(widget);
 
-	if (std::isnan(_bearing) && std::isnan(_speed) && std::isnan(_verticalSpeed))
+	if (isNull())
 		return;
 
 	if (_drawBackground) {
@@ -130,6 +130,11 @@ QString MotionInfoItem::text() const
 
 void MotionInfoItem::updateBoundingRect()
 {
+	if (isNull()) {
+		_boundingRect = QRectF();
+		return;
+	}
+
 	QFontMetrics fm(_font);
 
 	QRectF br(fm.tightBoundingRect(text()));
@@ -157,4 +162,10 @@ void MotionInfoItem::drawBackground(bool draw)
 {
 	_drawBackground = draw;
 	update();
+}
+
+bool MotionInfoItem::isNull() const
+{
+	return (std::isnan(_bearing) && std::isnan(_speed)
+	  && std::isnan(_verticalSpeed));
 }

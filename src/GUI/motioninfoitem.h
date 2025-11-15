@@ -26,6 +26,7 @@ private:
 	QString speed(const QLocale &l) const;
 	QString verticalSpeed(const QLocale &l) const;
 	QString text() const;
+	bool isNull() const;
 
 	qreal _bearing, _speed, _verticalSpeed;
 	Units _units;

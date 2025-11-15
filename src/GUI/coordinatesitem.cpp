@@ -89,6 +89,11 @@ QString CoordinatesItem::text() const
 
 void CoordinatesItem::updateBoundingRect()
 {
+	if (!_c.isValid()) {
+		_boundingRect = QRectF();
+		return;
+	}
+
 	QFontMetrics fm(_font);
 
 	QRectF br(fm.tightBoundingRect(text()));
