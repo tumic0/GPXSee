@@ -32,7 +32,7 @@ DEMLoader::DEMLoader(const QString &dir, QObject *parent)
 	connect(_downloader, &Downloader::finished, this, &DEMLoader::finished);
 }
 
-int DEMLoader::numTiles(const RectC &rect) const
+int DEMLoader::numTiles(const RectC &rect, int limit) const
 {
 	QList<DEM::Tile> tl(tiles(rect));
 	int cnt = 0;
@@ -44,6 +44,8 @@ int DEMLoader::numTiles(const RectC &rect) const
 
 		if (!(QFileInfo::exists(zn) || QFileInfo::exists(fn)))
 			cnt++;
+		if (cnt > limit)
+			return -1;
 	}
 
 	return cnt;

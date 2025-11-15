@@ -2057,9 +2057,9 @@ void GUI::downloadMapDEM()
 
 void GUI::downloadDEM(const RectC &rect)
 {
-	int cnt = _dem->numTiles(rect);
+	int cnt = _dem->numTiles(rect, DEM_DOWNLOAD_LIMIT);
 
-	if (cnt > DEM_DOWNLOAD_LIMIT)
+	if (cnt < 0)
 		QMessageBox::information(this, APP_NAME,
 		  tr("DEM tiles download limit exceeded. If you really need data for "
 		  "such a huge area, download the files manually."));

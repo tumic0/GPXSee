@@ -21,7 +21,7 @@ public:
 	void setUrl(const QString &url) {_url = url;}
 	void setAuthorization(const Authorization &authorization);
 
-	int numTiles(const RectC &rect) const;
+	int numTiles(const RectC &rect, int limit) const;
 	bool loadTiles(const RectC &rect);
 	bool checkTiles(const RectC &rect) const;
 
