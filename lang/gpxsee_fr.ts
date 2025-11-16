@@ -72,7 +72,7 @@
     <message>
         <location filename="../src/map/coros4map.cpp" line="397"/>
         <source>All</source>
-        <translation type="unfinished">Toutes</translation>
+        <translation>Toutes</translation>
     </message>
     <message>
         <location filename="../src/map/coros4map.cpp" line="397"/>
@@ -82,7 +82,7 @@
     <message>
         <location filename="../src/map/coros4map.cpp" line="397"/>
         <source>Topo</source>
-        <translation type="unfinished">Topo</translation>
+        <translation>Topo</translation>
     </message>
 </context>
 <context>
@@ -90,17 +90,17 @@
     <message>
         <location filename="../src/map/coros5map.cpp" line="499"/>
         <source>All</source>
-        <translation type="unfinished">Toutes</translation>
+        <translation>Toutes</translation>
     </message>
     <message>
         <location filename="../src/map/coros5map.cpp" line="499"/>
         <source>Landscape</source>
-        <translation type="unfinished">Paysage</translation>
+        <translation>Paysage</translation>
     </message>
     <message>
         <location filename="../src/map/coros5map.cpp" line="499"/>
         <source>Topo</source>
-        <translation type="unfinished">Topo</translation>
+        <translation>Topo</translation>
     </message>
 </context>
 <context>
@@ -1417,7 +1417,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="182"/>
         <source>PMTiles maps</source>
-        <translation type="unfinished">Cartes PMTiles</translation>
+        <translation>Cartes PMTiles</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="183"/>
