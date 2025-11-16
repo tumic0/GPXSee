@@ -72,12 +72,12 @@
     <message>
         <location filename="../src/map/coros4map.cpp" line="397"/>
         <source>All</source>
-        <translation type="unfinished">Alle</translation>
+        <translation>Alle</translation>
     </message>
     <message>
         <location filename="../src/map/coros4map.cpp" line="397"/>
         <source>Landscape</source>
-        <translation type="unfinished">Liggende</translation>
+        <translation>Liggende</translation>
     </message>
     <message>
         <location filename="../src/map/coros4map.cpp" line="397"/>
@@ -90,12 +90,12 @@
     <message>
         <location filename="../src/map/coros5map.cpp" line="499"/>
         <source>All</source>
-        <translation type="unfinished">Alle</translation>
+        <translation>Alle</translation>
     </message>
     <message>
         <location filename="../src/map/coros5map.cpp" line="499"/>
         <source>Landscape</source>
-        <translation type="unfinished">Liggende</translation>
+        <translation>Liggende</translation>
     </message>
     <message>
         <location filename="../src/map/coros5map.cpp" line="499"/>
