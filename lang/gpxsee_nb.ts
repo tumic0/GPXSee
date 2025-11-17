@@ -77,7 +77,7 @@
     <message>
         <location filename="../src/map/coros4map.cpp" line="397"/>
         <source>Landscape</source>
-        <translation>Liggende</translation>
+        <translation>Landskap</translation>
     </message>
     <message>
         <location filename="../src/map/coros4map.cpp" line="397"/>
@@ -95,7 +95,7 @@
     <message>
         <location filename="../src/map/coros5map.cpp" line="499"/>
         <source>Landscape</source>
-        <translation>Liggende</translation>
+        <translation>Landskap</translation>
     </message>
     <message>
         <location filename="../src/map/coros5map.cpp" line="499"/>
