@@ -13,9 +13,9 @@ using namespace MVT;
 using namespace OSM;
 
 OnlineMap::OnlineMap(const QString &fileName, const QString &name,
-  const QString &url, const Range &zooms, const RectC &bounds, qreal tileRatio,
-  const QList<HTTPHeader> &headers, int tileSize, bool mvt, bool invertY,
-  bool quadTiles, const QStringList &layers, QObject *parent)
+  const QStringList &url, const Range &zooms, const RectC &bounds,
+  qreal tileRatio, const QList<HTTPHeader> &headers, int tileSize, bool mvt,
+  bool invertY, bool quadTiles, const QStringList &layers, QObject *parent)
     : Map(fileName, parent), _name(name), _zooms(zooms), _bounds(bounds),
 	_zoom(_zooms.max()), _tileSize(tileSize), _baseZoom(0), _mapRatio(1.0),
 	_tileRatio(tileRatio), _mvt(mvt), _hillShading(false), _invertY(invertY),
@@ -239,7 +239,7 @@ void OnlineMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 	QList<RasterTile> renderTiles;
 	for (int i = 0; i < fetchTiles.count(); i++) {
 		const TileLoader::Tile &t = fetchTiles.at(i);
-		if (t.file().isNull())
+		if (!t.isComplete())
 			continue;
 
 		if (isRunning(_zoom, t.xy()))
@@ -251,14 +251,19 @@ void OnlineMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 			QPointF tp(tilePos(tl, tc, tile, overzoom));
 			drawTile(painter, pm, tp);
 		} else {
-			QFile file(t.file());
-			if (file.open(QIODevice::ReadOnly))
-				renderTiles.append(RasterTile(Source(file.readAll(), false, _mvt),
-				  _style, _zoom, t.xy(), _tileSize, _tileRatio, overzoom,
-				  _hillShading));
-			else
-				qWarning("%s: %s", qUtf8Printable(t.file()),
-				  qUtf8Printable(file.errorString()));
+			QList<Source> sources;
+			for (int j = 0; j < t.files().size(); j++) {
+				const QString &path = t.files().at(j);
+				QFile file(path);
+				if (file.open(QIODevice::ReadOnly))
+					sources.append(Source(file.readAll(), false, _mvt));
+				else
+					qWarning("%s: %s", qUtf8Printable(path),
+					  qUtf8Printable(file.errorString()));
+			}
+
+			renderTiles.append(RasterTile(sources, _style, _zoom, t.xy(),
+			  _tileSize, _tileRatio, overzoom, _hillShading));
 		}
 	}
 

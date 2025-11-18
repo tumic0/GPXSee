@@ -174,7 +174,7 @@ void MapSource::map(QXmlStreamReader &reader, Config &config)
 		else if (reader.name() == QLatin1String("url")) {
 			config.rest = (reader.attributes().value("type")
 			  == QLatin1String("REST")) ? true : false;
-			config.url = reader.readElementText();
+			config.url.append(reader.readElementText());
 		} else if (reader.name() == QLatin1String("zoom")) {
 			config.zooms = zooms(reader);
 			reader.skipCurrentElement();
@@ -251,6 +251,9 @@ Map *MapSource::create(const QString &path, const Projection &proj, bool *isDir)
 	if (config.url.isEmpty())
 		return new InvalidMap(path, "Missing URL definition");
 	if (config.type == WMTS || config.type == WMS) {
+		if (config.url.size() > 1)
+			return new InvalidMap(path,
+			  "Multiple URLs not allowed for WMS/WMTS maps");
 		if (config.layer.isEmpty())
 			return new InvalidMap(path, "Missing layer definition");
 		if (config.format.isEmpty())
@@ -267,12 +270,12 @@ Map *MapSource::create(const QString &path, const Projection &proj, bool *isDir)
 
 	switch (config.type) {
 		case WMTS:
-			return new WMTSMap(path, config.name, WMTS::Setup(config.url,
+			return new WMTSMap(path, config.name, WMTS::Setup(config.url.first(),
 			  config.layer, config.set, config.style, config.format, config.rest,
 			  config.coordinateSystem, config.dimensions, config.headers),
 			  config.tileRatio);
 		case WMS:
-			return new WMSMap(path, config.name, WMS::Setup(config.url,
+			return new WMSMap(path, config.name, WMS::Setup(config.url.first(),
 			  config.layer, config.style, config.format, config.crs,
 			  config.coordinateSystem, config.dimensions, config.headers),
 			  config.tileSize);

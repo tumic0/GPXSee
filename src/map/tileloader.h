@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QString>
+#include <QDir>
 #include "downloader.h"
 #include "rectd.h"
 
@@ -31,24 +32,37 @@ public:
 		const QVariant &zoom() const {return _zoom;}
 		const QPoint &xy() const {return _xy;}
 		const RectD &bbox() const {return _bbox;}
-		const QString &file() const {return _file;}
+		const QStringList &files() const {return _files;}
+
+		bool isComplete() const
+		{
+			for (int i = 0; i < _files.size(); i++)
+				if (_files.at(i).isNull())
+					return false;
+			return true;
+		}
 
 	private:
 		friend class TileLoader;
 
-		void setFile(const QString &file) {_file = file;}
+		void addFile(const QString &file) {_files.append(file);}
+		void setFile(int layer, const QString &file) {_files[layer] = file;}
 
 		QPoint _xy;
 		QVariant _zoom;
 		RectD _bbox;
-		QString _file;
+		QStringList _files;
 	};
 
 
 	TileLoader(const QString &dir, QObject *parent = 0);
 
-	void setUrl(const QString &url, UrlType type) {_url = url; _urlType = type;}
-	void setHeaders(const QList<HTTPHeader> &headers) {_headers = headers;}
+	void setUrl(const QString &url, UrlType type)
+	  {_url.append(url); _urlType = type;}
+	void setUrl(const QStringList &url, UrlType type)
+	  {_url = url; _urlType = type;}
+	void setHeaders(const QList<HTTPHeader> &headers)
+	  {_headers = headers;}
 
 	void loadTilesAsync(QVector<Tile> &list);
 	void loadTilesSync(QVector<Tile> &list);
@@ -58,13 +72,13 @@ signals:
 	void finished();
 
 private:
-	QUrl tileUrl(const Tile &tile) const;
-	QString tileFile(const Tile &tile) const;
+	QUrl tileUrl(const Tile &tile, int layer) const;
+	QString tileFile(const Tile &tile, int layer) const;
 
 	Downloader *_downloader;
-	QString _url;
+	QStringList _url;
 	UrlType _urlType;
-	QString _dir;
+	QDir _dir;
 	QList<HTTPHeader> _headers;
 };
 

@@ -29,7 +29,7 @@ private:
 	struct Config {
 		Type type;
 		QString name;
-		QString url;
+		QStringList url;
 		Range zooms;
 		RectC bounds;
 		QString layer;

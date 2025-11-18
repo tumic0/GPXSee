@@ -210,15 +210,15 @@ void WMTSMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 	QList<FileTile> renderTiles;
 	for (int i = 0; i < fetchTiles.count(); i++) {
 		const TileLoader::Tile &t = fetchTiles.at(i);
-		if (t.file().isNull())
+		if (t.files().first().isNull())
 			continue;
 
 		QPixmap pm;
-		if (QPixmapCache::find(t.file(), &pm)) {
+		if (QPixmapCache::find(t.files().first(), &pm)) {
 			QPointF tp(t.xy().x() * ts.width(), t.xy().y() * ts.height());
 			drawTile(painter, pm, tp);
 		} else
-			renderTiles.append(FileTile(t.xy(), t.file()));
+			renderTiles.append(FileTile(t.xy(), t.files().first()));
 	}
 
 	QFuture<void> future = QtConcurrent::map(renderTiles, &FileTile::load);

@@ -1,4 +1,3 @@
-#include <QDir>
 #include <QFileInfo>
 #include <QEventLoop>
 #include "tileloader.h"
@@ -55,14 +54,13 @@ static QString quadKey(const QPoint &xy, int zoom)
 TileLoader::TileLoader(const QString &dir, QObject *parent)
   : QObject(parent), _urlType(XYZ), _dir(dir)
 {
-	if (!QDir().mkpath(_dir))
-		qWarning("%s: %s", qUtf8Printable(_dir),
+	if (!_dir.mkpath("."))
+		qWarning("%s: %s", qUtf8Printable(_dir.absolutePath()),
 		  "Error creating tiles directory");
 
 	_downloader = new Downloader(this);
 	connect(_downloader, &Downloader::finished, this, &TileLoader::finished);
 }
-
 
 void TileLoader::loadTilesAsync(QVector<Tile> &list)
 {
@@ -70,16 +68,21 @@ void TileLoader::loadTilesAsync(QVector<Tile> &list)
 
 	for (int i = 0; i < list.size(); i++) {
 		Tile &t = list[i];
-		QString file(tileFile(t));
 
-		if (QFileInfo::exists(file))
-			t.setFile(file);
-		else {
-			QUrl url(tileUrl(t));
-			if (url.isLocalFile())
-				t.setFile(url.toLocalFile());
-			else
-				dl.append(Download(url, file));
+		for (int j = 0; j < _url.size(); j++) {
+			QString file(tileFile(t, j));
+
+			if (QFileInfo::exists(file))
+				t.addFile(file);
+			else {
+				QUrl url(tileUrl(t, j));
+				if (url.isLocalFile())
+					t.addFile(url.toLocalFile());
+				else {
+					t.addFile(QString());
+					dl.append(Download(url, file));
+				}
+			}
 		}
 	}
 
@@ -94,17 +97,27 @@ void TileLoader::loadTilesSync(QVector<Tile> &list)
 
 	for (int i = 0; i < list.size(); i++) {
 		Tile &t = list[i];
-		QString file(tileFile(t));
 
-		if (QFileInfo::exists(file))
-			t.setFile(file);
-		else {
-			QUrl url(tileUrl(t));
-			if (url.isLocalFile())
-				t.setFile(url.toLocalFile());
+		for (int j = 0; j < _url.size(); j++) {
+			QString file(tileFile(t, j));
+
+			if (QFileInfo::exists(file))
+				t.addFile(file);
 			else {
-				dl.append(Download(url, file));
+				QUrl url(tileUrl(t, j));
+				if (url.isLocalFile())
+					t.addFile(url.toLocalFile());
+				else {
+					t.addFile(QString());
+					dl.append(Download(url, file));
+				}
+			}
+		}
+
+		for (int j = 0; j < _url.size(); j++) {
+			if (t.files().at(j).isNull()) {
 				tl.append(&t);
+				break;
 			}
 		}
 	}
@@ -116,28 +129,31 @@ void TileLoader::loadTilesSync(QVector<Tile> &list)
 			wait.exec();
 
 		for (int i = 0; i < tl.size(); i++) {
-			Tile *t = tl[i];
-			QString file(tileFile(*t));
-			if (QFileInfo::exists(file))
-				t->setFile(file);
+			for (int j = 0; j < _url.size(); j++) {
+				Tile *t = tl[i];
+				if (t->files().at(j).isNull()) {
+					QString file(tileFile(*t, j));
+					if (QFileInfo::exists(file))
+						t->setFile(j, file);
+				}
+			}
 		}
 	}
 }
 
 void TileLoader::clearCache()
 {
-	QDir dir = QDir(_dir);
-	QStringList list = dir.entryList();
+	QStringList list = _dir.entryList();
 
 	for (int i = 0; i < list.count(); i++)
-		dir.remove(list.at(i));
+		_dir.remove(list.at(i));
 
 	_downloader->clearErrors();
 }
 
-QUrl TileLoader::tileUrl(const Tile &tile) const
+QUrl TileLoader::tileUrl(const Tile &tile, int layer) const
 {
-	QString url(_url);
+	QString url(_url.at(layer));
 
 	switch (_urlType) {
 		case BoundingBox:
@@ -159,12 +175,13 @@ QUrl TileLoader::tileUrl(const Tile &tile) const
 	return QUrl(url);
 }
 
-QString TileLoader::tileFile(const Tile &tile) const
+QString TileLoader::tileFile(const Tile &tile, int layer) const
 {
 	QString zoom(IS_INT(tile.zoom())
 	  ? tile.zoom().toString() : fsSafeStr(tile.zoom().toString()));
+	QString ls(layer ? "#" + QString::number(layer) : QString());
 
-	return _dir + QLatin1Char('/') + zoom + QLatin1Char('-')
+	return _dir.absoluteFilePath(zoom + QLatin1Char('-')
 	  + QString::number(tile.xy().x()) + QLatin1Char('-')
-	  + QString::number(tile.xy().y());
+	  + QString::number(tile.xy().y()) + ls);
 }
