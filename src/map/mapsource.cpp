@@ -144,7 +144,7 @@ void MapSource::tile(QXmlStreamReader &reader, Config &config)
 			reader.raiseError("Invalid tile type");
 			return;
 		} else
-			config.layers = layers;
+			config.vectorLayers = layers;
 	}
 }
 
@@ -174,7 +174,7 @@ void MapSource::map(QXmlStreamReader &reader, Config &config)
 		else if (reader.name() == QLatin1String("url")) {
 			config.rest = (reader.attributes().value("type")
 			  == QLatin1String("REST")) ? true : false;
-			config.url.append(reader.readElementText());
+			config.urls.append(reader.readElementText());
 		} else if (reader.name() == QLatin1String("zoom")) {
 			config.zooms = zooms(reader);
 			reader.skipCurrentElement();
@@ -248,10 +248,10 @@ Map *MapSource::create(const QString &path, const Projection &proj, bool *isDir)
 
 	if (config.name.isEmpty())
 		return new InvalidMap(path, "Missing name definition");
-	if (config.url.isEmpty())
+	if (config.urls.isEmpty())
 		return new InvalidMap(path, "Missing URL definition");
 	if (config.type == WMTS || config.type == WMS) {
-		if (config.url.size() > 1)
+		if (config.urls.size() > 1)
 			return new InvalidMap(path,
 			  "Multiple URLs not allowed for WMS/WMTS maps");
 		if (config.layer.isEmpty())
@@ -270,27 +270,27 @@ Map *MapSource::create(const QString &path, const Projection &proj, bool *isDir)
 
 	switch (config.type) {
 		case WMTS:
-			return new WMTSMap(path, config.name, WMTS::Setup(config.url.first(),
+			return new WMTSMap(path, config.name, WMTS::Setup(config.urls.first(),
 			  config.layer, config.set, config.style, config.format, config.rest,
 			  config.coordinateSystem, config.dimensions, config.headers),
 			  config.tileRatio);
 		case WMS:
-			return new WMSMap(path, config.name, WMS::Setup(config.url.first(),
+			return new WMSMap(path, config.name, WMS::Setup(config.urls.first(),
 			  config.layer, config.style, config.format, config.crs,
 			  config.coordinateSystem, config.dimensions, config.headers),
 			  config.tileSize);
 		case TMS:
-			return new OnlineMap(path, config.name, config.url, config.zooms,
+			return new OnlineMap(path, config.name, config.urls, config.zooms,
 			  config.bounds, config.tileRatio, config.headers,
-			  config.tileSize, config.mvt, true, false, config.layers);
+			  config.tileSize, config.mvt, true, false, config.vectorLayers);
 		case OSM:
-			return new OnlineMap(path, config.name, config.url, config.zooms,
+			return new OnlineMap(path, config.name, config.urls, config.zooms,
 			 config.bounds, config.tileRatio, config.headers,
-			 config.tileSize, config.mvt, false, false, config.layers);
+			 config.tileSize, config.mvt, false, false, config.vectorLayers);
 		case QuadTiles:
-			return new OnlineMap(path, config.name, config.url, config.zooms,
+			return new OnlineMap(path, config.name, config.urls, config.zooms,
 			 config.bounds, config.tileRatio, config.headers,
-			 config.tileSize, config.mvt, false, true, config.layers);
+			 config.tileSize, config.mvt, false, true, config.vectorLayers);
 		default:
 			return new InvalidMap(path, "Invalid map type");
 	}

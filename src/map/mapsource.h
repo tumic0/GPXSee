@@ -29,7 +29,7 @@ private:
 	struct Config {
 		Type type;
 		QString name;
-		QStringList url;
+		QStringList urls;
 		Range zooms;
 		RectC bounds;
 		QString layer;
@@ -44,7 +44,7 @@ private:
 		qreal tileRatio;
 		int tileSize;
 		bool mvt;
-		QStringList layers;
+		QStringList vectorLayers;
 
 		Config();
 	};
