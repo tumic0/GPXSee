@@ -461,7 +461,7 @@ void MBTilesMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 				QPointF tp(tilePos(tl, t, tile, overzoom));
 				drawTile(painter, pm, tp);
 			} else
-				tiles.append(RasterTile(Source(tileData(zoom.base, t), true,
+				tiles.append(RasterTile(Source(tileData(zoom.base, t), _mvt,
 				  _mvt), _style, zoom.z, t, _tileSize, _tileRatio, overzoom,
 				  _hillShading));
 		}
