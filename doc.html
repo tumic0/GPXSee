@@ -164,7 +164,7 @@ $ gpxsee 'geo:323482,4306480;crs=EPSG:32618'
           <h3 id="online">Online maps</h3>
 
           <p>Online maps are represented by map source definition XML files. For the formal
-          map source file syntax see the <a href="map/1.6/map.xsd">map source
+          map source file syntax see the <a href="map/1.7/map.xsd">map source
           XSD file</a>. The paragraphs below are a "human-readable" summary of the XSD
           syntax/semantics divided by map type.</p>
 
@@ -217,6 +217,18 @@ $ gpxsee 'geo:323482,4306480;crs=EPSG:32618'
   &lt;url>https://maps.tilehosting.com/data/v3/$z/$x/$y.pbf?key=apikey&lt;/url>
   &lt;tile type="vector" size="512" vectorLayers="landscape,cities,roads"/&gt;
   &lt;zoom max="14"/&gt;
+&lt;/map&gt;
+</pre>
+
+          <p>Since version 15.4 multiple URLs can be given. The resulting map is then
+          composed of overlayed images, one layer for every URL present.</p>
+
+<pre>
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;map xmlns="http://www.gpxsee.org/map/1.7"&gt;
+  &lt;name&gt;Open Sea Map&lt;/name&gt;
+  &lt;url&gt;https://t2.openseamap.org/tile/$z/$x/$y.png&lt;/url&gt;
+  &lt;url&gt;https://tiles.openseamap.org/seamark/$z/$x/$y.png&lt;/url&gt;
 &lt;/map&gt;
 </pre>
 
