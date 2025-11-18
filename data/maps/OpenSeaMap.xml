@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map xmlns="http://www.gpxsee.org/map/1.7">
+	<name>Open Sea Map</name>
+	<url>https://t2.openseamap.org/tile/$z/$x/$y.png</url>
+	<url>https://tiles.openseamap.org/seamark/$z/$x/$y.png</url>
+	<copyright>© OpenStreetMap contributors</copyright>
+</map>
