@@ -1,17 +1,9 @@
 #include <QFileInfo>
 #include <QEventLoop>
+#include "common/util.h"
 #include "tileloader.h"
 
 #define SUBSTITUTE_CHAR '$'
-
-static bool inline IS_INT(const QVariant &v)
-{
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-	return (static_cast<QMetaType::Type>(v.type()) == QMetaType::Int);
-#else // QT 6
-	return (static_cast<QMetaType::Type>((v.typeId()) == QMetaType::Int));
-#endif // QT 6
-}
 
 static QString fsSafeStr(const QString &str)
 {
@@ -177,7 +169,7 @@ QUrl TileLoader::tileUrl(const Tile &tile, int layer) const
 
 QString TileLoader::tileFile(const Tile &tile, int layer) const
 {
-	QString zoom(IS_INT(tile.zoom())
+	QString zoom(METATYPE(tile.zoom()) == QMetaType::Int
 	  ? tile.zoom().toString() : fsSafeStr(tile.zoom().toString()));
 	QString ls(layer ? "#" + QString::number(layer) : QString());
 

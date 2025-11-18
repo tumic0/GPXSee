@@ -9,6 +9,12 @@ class QTemporaryDir;
 #define ARRAY_SIZE(array) \
   (sizeof(array) / sizeof(array[0]))
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+#define METATYPE(f) static_cast<QMetaType::Type>(f.type())
+#else // QT 6
+#define METATYPE(f) static_cast<QMetaType::Type>(f.metaType().id())
+#endif // QT 6
+
 namespace Util
 {
 	int log2i(unsigned val);

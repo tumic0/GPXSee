@@ -7,9 +7,9 @@
 #include <QImageReader>
 #include <QBuffer>
 #include <QtConcurrent>
+#include "common/util.h"
 #include "osm.h"
 #include "tile.h"
-#include "metatype.h"
 #include "sqlitemap.h"
 
 using namespace OSM;

@@ -7,9 +7,9 @@
 #include <QFileInfo>
 #include <QDir>
 #include <QXmlStreamReader>
+#include "common/util.h"
 #include "pcs.h"
 #include "utm.h"
-#include "metatype.h"
 #include "oruxmap.h"
 
 

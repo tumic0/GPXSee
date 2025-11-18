@@ -7,7 +7,6 @@
 #include <QImageReader>
 #include "common/util.h"
 #include "osm.h"
-#include "metatype.h"
 #include "mbtilesmap.h"
 
 #define MVT_TILE_SIZE 512
