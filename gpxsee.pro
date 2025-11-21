@@ -567,8 +567,6 @@ macx {
 
 win32 {
     CONFIG += no_batch
-    INCLUDEPATH += $$ZLIB/include
-    LIBS += $$ZLIB/lib/zlibstatic.lib
     RESOURCES += theme-color.qrc
 
     QMAKE_TARGET_DESCRIPTION = GPXSee

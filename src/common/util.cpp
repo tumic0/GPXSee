@@ -9,7 +9,11 @@
 #include <QJniEnvironment>
 #include <QJniObject>
 #endif // Q_OS_ANDROID
+#ifdef Q_OS_WIN32
+#include <QtZlib/zlib.h>
+#else // Q_OS_WIN32
 #include <zlib.h>
+#endif // Q_OS_WIN32
 #include "util.h"
 
 #define SQLITE_DB_MAGIC "SQLite format 3"

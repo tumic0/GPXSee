@@ -10,19 +10,16 @@ environment:
   NSISDIR: C:\Program Files (x86)\NSIS
   JOMDIR: C:\Qt\Tools\QtCreator\bin\jom
   QTDIR: C:\Qt\6.9\msvc2022_64
-  ZLIBDIR: C:\tools\vcpkg\installed\x64-windows-static-md-release
 
 install:
 - cmd: |-
     set PATH=%QTDIR%\bin;%NSISDIR%;%JOMDIR%;%PATH%
     call "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvars64.bat
-    vcpkg install zlib:x64-windows-static-md-release
-    copy /y %ZLIBDIR%\lib\zlib.lib %ZLIBDIR%\lib\zlibstatic.lib
 
 build_script:
 - cmd: |-
     lrelease gpxsee.pro
-    qmake ZLIB=%ZLIBDIR% gpxsee.pro
+    qmake gpxsee.pro
     jom release
 
 after_build:
