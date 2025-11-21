@@ -31,20 +31,13 @@ GPS log file formats.
 ## Build
 ### Prerequisites
 * Qt5 >= 5.15 or Qt6 >= 6.2 (Android builds require Qt6)
-* Zlib
+* Zlib (the Qt-provided one is used where the platform does not provide its own)
 
 ### Steps
-#### Linux, OS X and Android
 ```shell
 lrelease gpxsee.pro
 qmake gpxsee.pro
-make
-```
-#### Windows
-```shell
-lrelease gpxsee.pro
-qmake ZLIB=path/to/zlib gpxsee.pro
-nmake
+make # nmake on Windows
 ```
 
 ## Download
