@@ -47,6 +47,12 @@ jobs:
         uses: joncloud/makensis-action@v5.0
         with:
           script-file: installer\gpxsee64.nsi
+      - name: Code Signing
+        run: |
+          New-Item -ItemType directory -Path certificate
+          Set-Content -Path certificate\certificate.txt -Value '${{secrets.CERTIFICATE}}'
+          certutil -decode certificate\certificate.txt certificate\certificate.pfx
+          signtool sign /f certificate\certificate.pfx /fd SHA256 /p '${{secrets.CERTIFICATE_PWD}}' installer\GPXSee-*.exe
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
