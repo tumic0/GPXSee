@@ -107,17 +107,10 @@ Var StartMenuFolder
 !insertmacro MUI_LANGUAGE "English"
 
 Function .onInit
-!ifdef QT6
   ${IfNot} ${AtLeastWin10}
     MessageBox MB_OK "GPXSee can only be installed on Windows 10 or later."
     Abort
   ${EndIf}
-!else
-  ${IfNot} ${AtLeastWin7}
-    MessageBox MB_OK "GPXSee can only be installed on Windows 7 or later."
-    Abort
-  ${EndIf}
-!endif
 
   ${If} ${RunningX64}
     SetRegView 64
@@ -290,7 +283,6 @@ Section "Qt framework" SEC_QT
 
   SectionIn RO
 
-!ifdef QT6
   File "Qt6Concurrent.dll"
   File "Qt6Core.dll"
   File "Qt6Gui.dll"
@@ -304,19 +296,6 @@ Section "Qt framework" SEC_QT
   File "Qt6Positioning.dll"
   File "Qt6SerialPort.dll"
   File /r "tls"
-!else
-  File "Qt5Core.dll"
-  File "Qt5Gui.dll"
-  File "Qt5Widgets.dll"
-  File "Qt5PrintSupport.dll"
-  File "Qt5Network.dll"
-  File "Qt5Sql.dll"
-  File "Qt5Svg.dll"
-  File "Qt5Concurrent.dll"
-  File "Qt5Positioning.dll"
-  File "Qt5SerialPort.dll" 
-  File /r "printsupport"
-!endif
   File /r "platforms"
   File /r "iconengines"
   File /r "imageformats"
@@ -336,39 +315,6 @@ Section "MSVC runtime" SEC_MSVC
   SetOutPath $INSTDIR
 
 SectionEnd
-
-!ifdef ICU
-Section "ICU" SEC_ICU
-
-  SectionIn RO
-
-  File "icudt*.dll"
-  File "icuin*.dll"
-  File "icuuc*.dll"
-
-SectionEnd
-!endif
-
-!ifdef OPENSSL
-Section "OpenSSL" SEC_OPENSSL
-
-  SectionIn RO
-
-  File "libcrypto-*-x64.dll"
-  File "libssl-*-x64.dll"
-
-SectionEnd
-!endif
-
-!ifdef ANGLE
-Section "ANGLE" SEC_ANGLE
-
-  File "libGLESv2.dll"
-  File "libEGL.dll"
-  File "D3DCompiler_47.dll"
-
-SectionEnd
-!endif
 
 SectionGroup "Localization" SEC_LOCALIZATION
   !insertmacro LOCALIZATION "Catalan" "ca"
@@ -534,27 +480,10 @@ SectionEnd
 ; Descriptions
 
 ; Language strings
-!ifdef QT6
 LangString DESC_QT ${LANG_ENGLISH} \
-  "Qt6 cross-platform application framework."
-!else
-LangString DESC_QT ${LANG_ENGLISH} \
-  "Qt5 cross-platform application framework."
-!endif
+  "Qt cross-platform application framework."
 LangString DESC_MSVC ${LANG_ENGLISH} \
   "Microsoft Visual C++ runtime. If already installed, will be skipped."
-!ifdef ICU
-LangString DESC_ICU ${LANG_ENGLISH} \
-  "ICU library. Required for character set/encoding conversions."
-!endif
-!ifdef OPENSSL
-LangString DESC_OPENSSL ${LANG_ENGLISH} \
-  "OpenSSL library. Qt SSL/TLS backend for HTTPS."
-!endif
-!ifdef ANGLE
-LangString DESC_ANGLE ${LANG_ENGLISH} \
-  "ANGLE (OpenGL via Direct3D). Enables OpenGL on systems without native OpenGL drivers."
-!endif
 LangString DESC_APP ${LANG_ENGLISH} \
   "GPXSee application"
 LangString DESC_LOCALIZATION ${LANG_ENGLISH} \
@@ -563,15 +492,6 @@ LangString DESC_LOCALIZATION ${LANG_ENGLISH} \
 ; Assign language strings to sections
 !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
   !insertmacro MUI_DESCRIPTION_TEXT ${SEC_QT} $(DESC_QT)
-!ifdef ICU
-  !insertmacro MUI_DESCRIPTION_TEXT ${SEC_ICU} $(DESC_ICU)
-!endif
-!ifdef OPENSSL
-  !insertmacro MUI_DESCRIPTION_TEXT ${SEC_OPENSSL} $(DESC_OPENSSL)
-!endif
-!ifdef ANGLE
-  !insertmacro MUI_DESCRIPTION_TEXT ${SEC_ANGLE} $(DESC_ANGLE)
-!endif
   !insertmacro MUI_DESCRIPTION_TEXT ${SEC_MSVC} $(DESC_MSVC) 
   !insertmacro MUI_DESCRIPTION_TEXT ${SEC_APP} $(DESC_APP)
   !insertmacro MUI_DESCRIPTION_TEXT ${SEC_LOCALIZATION} $(DESC_LOCALIZATION)

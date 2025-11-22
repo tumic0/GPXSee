@@ -47,7 +47,6 @@ jobs:
         uses: joncloud/makensis-action@v5.0
         with:
           script-file: installer\gpxsee64.nsi
-          arguments: "/DQT6"
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
