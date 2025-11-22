@@ -44,15 +44,22 @@
 
 ;--------------------------------
 
+
 Unicode true
 
 ; The name of the installer
 Name "GPXSee"
 ; Program version
 !define VERSION "15.5"
+; CPU architecture
+!ifdef ARM64
+!define ARCH "arm64"
+!else
+!define ARCH "x64"
+!endif
 
 ; The file to write
-OutFile "GPXSee-${VERSION}_x64.exe"
+OutFile "GPXSee-${VERSION}_${ARCH}.exe"
 ; Compression method
 SetCompressor /SOLID lzma
 
@@ -71,7 +78,7 @@ VIAddVersionKey "ProductVersion" ${VERSION}
 VIAddVersionKey "FileVersion" "${VERSION}.0.0"
 VIAddVersionKey "ProductName" "GPXSee"
 VIAddVersionKey "LegalCopyright" "Copyright (c) 2015-2025 Martin Tůma"
-VIAddVersionKey "FileDescription" "GPXSee installer (x64)"
+VIAddVersionKey "FileDescription" "GPXSee installer (${ARCH})"
 
 ; Registry key to check for directory (so if you install again, it will
 ; overwrite the old one automatically)
@@ -112,20 +119,22 @@ Function .onInit
     Abort
   ${EndIf}
 
+!ifdef ARM64
+  ${If} ${IsNativeARM64}
+!else
   ${If} ${RunningX64}
+!endif
     SetRegView 64
   ${Else}
-    MessageBox MB_OK "The 64b version of GPXSee can not be run on 32b systems."
+    MessageBox MB_OK "The ${ARCH} version of GPXSee can not be run on this system."
     Abort
   ${EndIf}
+!endif
 FunctionEnd
 
 ; The stuff to install
 Section "GPXSee" SEC_APP
-
   SectionIn RO
-
-  ; Set output path to the installation directory
   SetOutPath $INSTDIR
 
   ; Put the files there
@@ -151,7 +160,7 @@ Section "GPXSee" SEC_APP
   WriteRegStr HKLM SOFTWARE\GPXSee "Install_Dir" "$INSTDIR"
 
   ; Write the uninstall keys for Windows
-  WriteRegStr HKLM "${REGENTRY}" "DisplayName" "GPXSee (x64)"
+  WriteRegStr HKLM "${REGENTRY}" "DisplayName" "GPXSee (${ARCH})"
   WriteRegStr HKLM "${REGENTRY}" "Publisher" "Martin Tůma"
   WriteRegStr HKLM "${REGENTRY}" "DisplayVersion" "${VERSION}"
   WriteRegStr HKLM "${REGENTRY}" "UninstallString" '"$INSTDIR\uninstall.exe"'
@@ -276,12 +285,11 @@ Section "GPXSee" SEC_APP
   WriteRegStr HKCR ".pma\OpenWithList" "GPXSee.exe" ""
 
   System::Call 'shell32.dll::SHChangeNotify(i, i, i, i) v (0x08000000, 0, 0, 0)'
-
 SectionEnd
 
 Section "Qt framework" SEC_QT
-
   SectionIn RO
+  SetOutPath $INSTDIR
 
   File "Qt6Concurrent.dll"
   File "Qt6Core.dll"
@@ -302,18 +310,14 @@ Section "Qt framework" SEC_QT
   File /r "styles"
   File /r "sqldrivers"
   File /r "position"
-
 SectionEnd
 
 Section "MSVC runtime" SEC_MSVC
-
   SectionIn RO
-
   SetOutPath $TEMP
-  File "vc_redist.x64.exe"
-  ExecWait '"$TEMP\vc_redist.x64.exe" /install /quiet /norestart'
-  SetOutPath $INSTDIR
 
+  File "vc_redist.${ARCH}.exe"
+  ExecWait '"$TEMP\vc_redist.${ARCH}.exe" /install /quiet /norestart'
 SectionEnd
 
 SectionGroup "Localization" SEC_LOCALIZATION
@@ -344,7 +348,6 @@ SectionGroupEnd
 ; Uninstaller
 
 Section "Uninstall"
-
   ; Remove registry keys
   SetRegView 64
   DeleteRegKey HKLM "${REGENTRY}"
@@ -472,7 +475,6 @@ Section "Uninstall"
   DeleteRegKey HKCR "Applications\GPXSee.exe"   
   
   System::Call 'shell32.dll::SHChangeNotify(i, i, i, i) v (0x08000000, 0, 0, 0)'
-
 SectionEnd
 
 ;-------------------------------
@@ -491,8 +493,8 @@ LangString DESC_LOCALIZATION ${LANG_ENGLISH} \
 
 ; Assign language strings to sections
 !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
+  !insertmacro MUI_DESCRIPTION_TEXT ${SEC_MSVC} $(DESC_MSVC)
   !insertmacro MUI_DESCRIPTION_TEXT ${SEC_QT} $(DESC_QT)
-  !insertmacro MUI_DESCRIPTION_TEXT ${SEC_MSVC} $(DESC_MSVC) 
   !insertmacro MUI_DESCRIPTION_TEXT ${SEC_APP} $(DESC_APP)
   !insertmacro MUI_DESCRIPTION_TEXT ${SEC_LOCALIZATION} $(DESC_LOCALIZATION)
 !insertmacro MUI_FUNCTION_DESCRIPTION_END
