@@ -33,6 +33,8 @@
 ; Translations
 !macro LOCALIZATION LANG CODE
   Section "${LANG}"
+    SetOutPath $INSTDIR
+
     IfFileExists "$INSTDIR\translations" +2 0
       CreateDirectory "$INSTDIR\translations" 
     File /oname=translations\gpxsee_${CODE}.qm translations\gpxsee_${CODE}.qm
@@ -129,7 +131,6 @@ Function .onInit
     MessageBox MB_OK "The ${ARCH} version of GPXSee can not be run on this system."
     Abort
   ${EndIf}
-!endif
 FunctionEnd
 
 ; The stuff to install
