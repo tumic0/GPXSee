@@ -41,3 +41,4 @@ jobs:
         with:
           path: GPXSee.dmg
           name: GPXSee.dmg
+          compression-level: 0
