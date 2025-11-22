@@ -30,7 +30,7 @@ jobs:
       - name: Configure build
         run: qmake gpxsee.pro
       - name: Build project
-        run: jom release
+        run: jom -j 4 release
       - name: Create installer
         run: |
           md installer
