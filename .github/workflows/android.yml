@@ -49,3 +49,4 @@ jobs:
         with:
           name: GPXSee-arm64_v8a.apk
           path: android-build/build/outputs/apk/debug/android-build-debug.apk
+          compression-level: 0
