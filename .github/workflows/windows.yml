@@ -12,10 +12,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Add msbuild to PATH
-        uses: microsoft/setup-msbuild@v2
-        with:
-          msbuild-architecture: x64
       - name: Install Qt
         uses: jurplel/install-qt-action@v4
         with:
@@ -25,6 +21,10 @@ jobs:
         run: choco install jom
       - name: Install NSIS
         run: choco install nsis
+      - name: Set up Visual Studio shell
+        uses: egor-tensin/vs-shell@v2
+        with:
+          arch: x64
       - name: Create localization
         run: lrelease gpxsee.pro
       - name: Configure build
