@@ -31,7 +31,7 @@ jobs:
         run: qmake gpxsee.pro
       - name: Build project
         run: jom -j 4 release
-      - name: Create installer
+      - name: Deploy binaries and data
         run: |
           md installer
           copy release\GPXSee.exe installer
@@ -43,7 +43,11 @@ jobs:
           xcopy lang\*.qm installer\translations\ /sy
           xcopy icons\symbols installer\symbols /i
           copy licence.txt installer
-          makensis.exe /DQT6 installer\gpxsee64.nsi
+      - name: Create installer
+        uses: joncloud/makensis-action@v5.0
+        with:
+          script-file: installer\gpxsee64.nsi
+          arguments: "/DQT6"
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
