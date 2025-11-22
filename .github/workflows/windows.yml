@@ -1,0 +1,52 @@
+name: Windows
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    name: GPXSee
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Add msbuild to PATH
+        uses: microsoft/setup-msbuild@v2
+        with:
+        msbuild-architecture: x64
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: '6.10.0'
+          modules: qtpositioning qtserialport qtimageformats
+      - name: Install jom
+        run: choco install jom
+      - name: Install NSIS
+        run: choco install nsis
+      - name: Create localization
+        run: lrelease gpxsee.pro
+      - name: Configure build
+        run: qmake gpxsee.pro
+      - name: Build project
+        run: jom release
+      - name: Create installer
+        run: |
+          md installer
+          copy release\GPXSee.exe installer
+          windeployqt --release installer\GPXSee.exe
+          copy pkg\windows\gpxsee64.nsi installer
+          xcopy data\CRS installer\CRS /i
+          xcopy data\maps installer\maps /i
+          xcopy data\style installer\style /s /i
+          xcopy lang\*.qm installer\translations\ /sy
+          xcopy icons\symbols installer\symbols /i
+          copy licence.txt installer
+          makensis.exe /DQT6 installer\gpxsee64.nsi
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          path: installer/GPXSee-*.exe
+          name: GPXSee.exe
+          compression-level: 0
