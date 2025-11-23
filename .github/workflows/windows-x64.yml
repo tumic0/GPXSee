@@ -35,7 +35,7 @@ jobs:
         run: |
           md installer
           copy release\GPXSee.exe installer
-          windeployqt --release installer\GPXSee.exe
+          windeployqt --exclude-plugins qsqlibase,qsqlmimer,qsqloci,qsqlodbc,qsqlpsql --release installer\GPXSee.exe
           copy pkg\windows\gpxsee64.nsi installer
           xcopy data\CRS installer\CRS /i
           xcopy data\maps installer\maps /i

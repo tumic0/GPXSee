@@ -53,6 +53,7 @@ Unicode true
 Name "GPXSee"
 ; Program version
 !define VERSION "15.5"
+
 ; CPU architecture
 !ifdef ARM64
 !define ARCH "arm64"
