@@ -569,6 +569,7 @@ win32 {
     CONFIG += no_batch
     RESOURCES += theme-color.qrc
 
+    QMAKE_CXXFLAGS += /MP
     QMAKE_TARGET_DESCRIPTION = GPXSee
     QMAKE_TARGET_COPYRIGHT = Copyright (c) 2015-2025 Martin Tuma
     RC_ICONS = icons/app/gpxsee.ico \
