@@ -72,17 +72,17 @@
     <message>
         <location filename="../src/map/coros4map.cpp" line="397"/>
         <source>All</source>
-        <translation type="unfinished">Alle</translation>
+        <translation>Alle</translation>
     </message>
     <message>
         <location filename="../src/map/coros4map.cpp" line="397"/>
         <source>Landscape</source>
-        <translation type="unfinished">Liggende</translation>
+        <translation>Liggende</translation>
     </message>
     <message>
         <location filename="../src/map/coros4map.cpp" line="397"/>
         <source>Topo</source>
-        <translation type="unfinished"></translation>
+        <translation>Topo</translation>
     </message>
 </context>
 <context>
@@ -90,17 +90,17 @@
     <message>
         <location filename="../src/map/coros5map.cpp" line="499"/>
         <source>All</source>
-        <translation type="unfinished">Alle</translation>
+        <translation>Alle</translation>
     </message>
     <message>
         <location filename="../src/map/coros5map.cpp" line="499"/>
         <source>Landscape</source>
-        <translation type="unfinished">Liggende</translation>
+        <translation>Liggende</translation>
     </message>
     <message>
         <location filename="../src/map/coros5map.cpp" line="499"/>
         <source>Topo</source>
-        <translation type="unfinished"></translation>
+        <translation>Topo</translation>
     </message>
 </context>
 <context>
@@ -599,7 +599,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="444"/>
         <source>Legend</source>
-        <translation type="unfinished"></translation>
+        <translation>Kortforklaring</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="452"/>
@@ -675,13 +675,13 @@
         <location filename="../src/GUI/gui.cpp" line="535"/>
         <location filename="../src/GUI/gui.cpp" line="967"/>
         <source>Next graph tab</source>
-        <translation type="unfinished"></translation>
+        <translation>Næste graf-fane</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="540"/>
         <location filename="../src/GUI/gui.cpp" line="969"/>
         <source>Previous graph tab</source>
-        <translation type="unfinished"></translation>
+        <translation>Forrige graf-fane</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="548"/>
@@ -778,7 +778,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="704"/>
         <source>Styles</source>
-        <translation type="unfinished"></translation>
+        <translation>Stilarter</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="707"/>
@@ -1392,7 +1392,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="171"/>
         <source>COROS maps</source>
-        <translation type="unfinished"></translation>
+        <translation>COROS-kort</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="177"/>
@@ -1417,7 +1417,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="182"/>
         <source>PMTiles maps</source>
-        <translation type="unfinished"></translation>
+        <translation>PMTiles-kort</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="183"/>
