@@ -384,9 +384,9 @@ SOURCES += src/main.cpp \
     src/map/proj/obliquestereographic.cpp \
     src/map/ENC/iso8211.cpp \
     src/map/ENC/atlasdata.cpp \
-    src/map/ENC/enc_mapdata.cpp \
-    src/map/ENC/enc_rastertile.cpp \
-    src/map/ENC/enc_style.cpp \
+    src/map/ENC/mapdata_enc.cpp \
+    src/map/ENC/rastertile_enc.cpp \
+    src/map/ENC/style_enc.cpp \
     src/map/IMG/demfile.cpp \
     src/map/IMG/demtree.cpp \
     src/map/IMG/jls.cpp \
@@ -398,29 +398,29 @@ SOURCES += src/main.cpp \
     src/map/IMG/huffmantable.cpp \
     src/map/IMG/huffmantext.cpp \
     src/map/IMG/nodfile.cpp \
-    src/map/IMG/img_mapdata.cpp \
-    src/map/IMG/img_rastertile.cpp \
+    src/map/IMG/mapdata_img.cpp \
+    src/map/IMG/rastertile_img.cpp \
     src/map/IMG/imgdata.cpp \
-    src/map/IMG/img_subfile.cpp \
+    src/map/IMG/subfile_img.cpp \
     src/map/IMG/trefile.cpp \
     src/map/IMG/rgnfile.cpp \
     src/map/IMG/lblfile.cpp \
-    src/map/IMG/img_vectortile.cpp \
-    src/map/IMG/img_style.cpp \
+    src/map/IMG/vectortile_img.cpp \
+    src/map/IMG/style_img.cpp \
     src/map/IMG/netfile.cpp \
     src/map/MVT/pbf.cpp \
-    src/map/MVT/mvt_vectortile.cpp \
+    src/map/MVT/vectortile_mvt.cpp \
     src/map/MVT/color.cpp \
     src/map/MVT/font.cpp \
     src/map/MVT/function.cpp \
     src/map/MVT/sprites.cpp \
-    src/map/MVT/mvt_style.cpp \
+    src/map/MVT/style_mvt.cpp \
     src/map/MVT/text.cpp \
-    src/map/MVT/mvt_rastertile.cpp \
-    src/map/mapsforge/mapsforge_style.cpp \
-    src/map/mapsforge/mapsforge_mapdata.cpp \
-    src/map/mapsforge/mapsforge_rastertile.cpp \
-    src/map/mapsforge/mapsforge_subfile.cpp \
+    src/map/MVT/rastertile_mvt.cpp \
+    src/map/mapsforge/style_mapsforge.cpp \
+    src/map/mapsforge/mapdata_mapsforge.cpp \
+    src/map/mapsforge/rastertile_mapsforge.cpp \
+    src/map/mapsforge/subfile_mapsforge.cpp \
     src/map/bitmapline.cpp \
     src/map/coros4map.cpp \
     src/map/coros5map.cpp \
