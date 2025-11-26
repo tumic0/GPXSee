@@ -21,11 +21,11 @@
 #include "dem.h"
 
 
-static unsigned int isqrt(unsigned int x)
+static unsigned int isqrt(size_t x)
 {
-	unsigned int l = 0;
-	unsigned int m;
-	unsigned int r = x + 1;
+	size_t l = 0;
+	size_t m;
+	size_t r = x + 1;
 
 	while (l != r - 1) {
 		m = (l + r) / 2;
@@ -36,7 +36,7 @@ static unsigned int isqrt(unsigned int x)
 			r = m;
 	}
 
-	return l;
+	return (unsigned int)l;
 }
 
 static double interpolate(double dx, double dy, double p0, double p1, double p2,
