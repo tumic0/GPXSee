@@ -27,7 +27,7 @@ jobs:
         run: qmake gpxsee.pro
       - name: Build project
         run: nmake release
-      - name: Deploy binaries and data
+      - name: Create installer
         run: |
           md installer
           copy release\GPXSee.exe installer
@@ -39,10 +39,7 @@ jobs:
           xcopy lang\*.qm installer\translations\ /sy
           xcopy icons\symbols installer\symbols /i
           copy licence.txt installer
-      - name: Create installer
-        uses: joncloud/makensis-action@v5.0
-        with:
-          script-file: installer\gpxsee64.nsi
+          makensis installer\gpxsee64.nsi
       - name: Code Signing
         run: |
           New-Item -ItemType directory -Path certificate
