@@ -25,6 +25,7 @@ jobs:
           call "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
           qmake gpxsee.pro
           nmake release
+        shell: cmd
       - name: Create installer
         run: |
           md installer
