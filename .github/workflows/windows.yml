@@ -1,4 +1,4 @@
-name: Windows (x64)
+name: Windows
 
 on:
   push:
@@ -8,7 +8,14 @@ on:
 jobs:
   build:
     name: GPXSee
-    runs-on: windows-2022
+    strategy:
+    matrix:
+      include:
+        - arch: x64
+          os: windows-2022
+        - arch: arm64
+          os: windows-11-arm
+    runs-on: ${{matrix.os}}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -20,7 +27,7 @@ jobs:
       - name: Set up Visual Studio shell
         uses: egor-tensin/vs-shell@v2
         with:
-          arch: x64
+          arch: ${{matrix.arch}}
       - name: Create localization
         run: lrelease gpxsee.pro
       - name: Configure build
@@ -39,7 +46,7 @@ jobs:
           xcopy lang\*.qm installer\translations\ /sy
           xcopy icons\symbols installer\symbols /i
           copy licence.txt installer
-          makensis installer\gpxsee64.nsi
+          makensis /D${{matrix.arch}} installer\gpxsee64.nsi
       - name: Code Signing
         run: |
           md certificate
@@ -50,5 +57,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           path: installer/GPXSee-*.exe
-          name: GPXSee_x64.exe
+          name: GPXSee_${{matrix.arch}}.exe
           compression-level: 0
