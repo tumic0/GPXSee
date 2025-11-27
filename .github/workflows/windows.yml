@@ -9,12 +9,12 @@ jobs:
   build:
     name: GPXSee
     strategy:
-    matrix:
-      include:
-        - arch: x64
-          os: windows-2022
-        - arch: arm64
-          os: windows-11-arm
+      matrix:
+        include:
+          - arch: x64
+            os: windows-2022
+          - arch: arm64
+            os: windows-11-arm
     runs-on: ${{matrix.os}}
     steps:
       - name: Checkout
