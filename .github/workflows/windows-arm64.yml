@@ -43,8 +43,8 @@ jobs:
           makensis /DARM64 installer\gpxsee64.nsi
       - name: Code Signing
         run: |
-          New-Item -ItemType directory -Path certificate
-          Set-Content -Path certificate\certificate.txt -Value '${{secrets.CERTIFICATE}}'
+          md certificate
+          echo "${{secrets.CERTIFICATE}}" > certificate\certificate.txt
           certutil -decode certificate\certificate.txt certificate\certificate.pfx
           signtool sign /f certificate\certificate.pfx /fd SHA256 /p '${{secrets.CERTIFICATE_PWD}}' installer\GPXSee-*.exe
       - name: Upload artifacts
