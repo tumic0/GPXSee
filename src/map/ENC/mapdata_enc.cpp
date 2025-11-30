@@ -2,7 +2,7 @@
 #include "GUI/units.h"
 #include "objects.h"
 #include "attributes.h"
-#include "mapdata.h"
+#include "mapdata_enc.h"
 
 using namespace ENC;
 

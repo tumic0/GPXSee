@@ -2,7 +2,7 @@
 #define MVTJOB_H
 
 #include <QtConcurrent>
-#include "MVT/rastertile.h"
+#include "MVT/rastertile_mvt.h"
 
 class MVTJob : public QObject
 {

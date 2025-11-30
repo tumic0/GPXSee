@@ -1,4 +1,4 @@
-#include "vectortile.h"
+#include "vectortile_img.h"
 
 using namespace IMG;
 

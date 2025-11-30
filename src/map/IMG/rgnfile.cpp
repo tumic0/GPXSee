@@ -3,7 +3,7 @@
 #include "common/hash.h"
 #include "deltastream.h"
 #include "huffmanstream.h"
-#include "style.h"
+#include "style_img.h"
 #include "lblfile.h"
 #include "netfile.h"
 #include "nodfile.h"

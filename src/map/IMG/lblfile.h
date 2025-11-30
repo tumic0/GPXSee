@@ -4,7 +4,7 @@
 #include <QPixmap>
 #include "common/textcodec.h"
 #include "section.h"
-#include "subfile.h"
+#include "subfile_img.h"
 #include "label.h"
 
 namespace IMG {

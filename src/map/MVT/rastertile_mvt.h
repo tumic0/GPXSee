@@ -5,7 +5,7 @@
 #include <QPainter>
 #include "map/matrix.h"
 #include "text.h"
-#include "style.h"
+#include "style_mvt.h"
 #include "source.h"
 
 namespace MVT {

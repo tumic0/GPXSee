@@ -2,7 +2,7 @@
 #define IMGJOB_H
 
 #include <QtConcurrent>
-#include "IMG/rastertile.h"
+#include "IMG/rastertile_img.h"
 
 class IMGJob : public QObject
 {

@@ -4,7 +4,7 @@
 #include <QCache>
 #include <QMutex>
 #include "common/rtree.h"
-#include "mapdata.h"
+#include "mapdata_enc.h"
 
 namespace ENC {
 

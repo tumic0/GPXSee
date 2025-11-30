@@ -6,7 +6,7 @@
 #include <QPainter>
 #include <QtMath>
 #include "common/programpaths.h"
-#include "style.h"
+#include "style_mapsforge.h"
 
 using namespace Mapsforge;
 

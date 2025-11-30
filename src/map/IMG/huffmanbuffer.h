@@ -2,7 +2,7 @@
 #define IMG_HUFFMANBUFFER_H
 
 #include <QByteArray>
-#include "subfile.h"
+#include "subfile_img.h"
 
 namespace IMG {
 

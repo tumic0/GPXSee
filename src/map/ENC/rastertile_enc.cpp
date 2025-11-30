@@ -6,8 +6,8 @@
 #include "map/rectd.h"
 #include "objects.h"
 #include "attributes.h"
-#include "style.h"
-#include "rastertile.h"
+#include "style_enc.h"
+#include "rastertile_enc.h"
 
 using namespace ENC;
 

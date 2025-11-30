@@ -4,12 +4,12 @@
 #include <climits>
 #include <QtConcurrent>
 #include "common/range.h"
+#include "ENC/iso8211.h"
+#include "ENC/mapdata_enc.h"
+#include "ENC/style_enc.h"
 #include "map.h"
 #include "projection.h"
 #include "transform.h"
-#include "ENC/iso8211.h"
-#include "ENC/mapdata.h"
-#include "ENC/style.h"
 
 class ENCJob;
 

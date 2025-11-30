@@ -8,10 +8,10 @@
 #include "map/rectd.h"
 #include "map/hillshading.h"
 #include "map/filter.h"
-#include "style.h"
+#include "style_img.h"
 #include "lblfile.h"
 #include "demtree.h"
-#include "rastertile.h"
+#include "rastertile_img.h"
 
 using namespace IMG;
 

@@ -3,8 +3,8 @@
 #include <QJsonObject>
 #include <QPixmapCache>
 #include <QImageReader>
+#include "MVT/style_mvt.h"
 #include "osm.h"
-#include "MVT/style.h"
 #include "pmtilesmap.h"
 
 #define MVT_TILE_SIZE   512

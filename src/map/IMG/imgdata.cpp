@@ -1,7 +1,7 @@
 #include <QMap>
 #include <QtEndian>
 #include <QFile>
-#include "vectortile.h"
+#include "vectortile_img.h"
 #include "imgdata.h"
 
 using namespace IMG;

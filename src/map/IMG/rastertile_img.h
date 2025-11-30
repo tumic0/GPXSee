@@ -2,11 +2,11 @@
 #define IMG_RASTERTILE_H
 
 #include <QPixmap>
-#include "mapdata.h"
 #include "map/projection.h"
 #include "map/transform.h"
 #include "map/matrix.h"
-#include "style.h"
+#include "mapdata_img.h"
+#include "style_img.h"
 
 class QPainter;
 class TextItem;

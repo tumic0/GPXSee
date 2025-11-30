@@ -2,7 +2,7 @@
 #define IMG_RGNFILE_H
 
 #include "section.h"
-#include "subfile.h"
+#include "subfile_img.h"
 #include "subdiv.h"
 
 namespace IMG {

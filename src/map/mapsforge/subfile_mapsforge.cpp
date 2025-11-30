@@ -1,5 +1,5 @@
 #include <cstring>
-#include "subfile.h"
+#include "subfile_mapsforge.h"
 
 using namespace Mapsforge;
 

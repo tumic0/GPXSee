@@ -1,7 +1,7 @@
 #ifndef IMG_GMAP_H
 #define IMG_GMAP_H
 
-#include "mapdata.h"
+#include "mapdata_img.h"
 
 class QXmlStreamReader;
 class QDir;

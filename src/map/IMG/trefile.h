@@ -7,7 +7,7 @@
 #include "common/rectc.h"
 #include "common/rtree.h"
 #include "section.h"
-#include "subfile.h"
+#include "subfile_img.h"
 
 namespace IMG {
 

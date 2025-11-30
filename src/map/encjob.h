@@ -2,7 +2,7 @@
 #define ENCJOB_H
 
 #include <QtConcurrent>
-#include "ENC/rastertile.h"
+#include "ENC/rastertile_enc.h"
 
 class ENCJob : public QObject
 {

@@ -2,8 +2,8 @@
 #include <QPixmapCache>
 #include "common/range.h"
 #include "common/wgs84.h"
-#include "ENC/mapdata.h"
-#include "ENC/style.h"
+#include "ENC/mapdata_enc.h"
+#include "ENC/style_enc.h"
 #include "rectd.h"
 #include "pcs.h"
 #include "encjob.h"

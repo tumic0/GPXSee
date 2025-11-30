@@ -1,6 +1,6 @@
 #include <QXmlStreamReader>
 #include <QDir>
-#include "vectortile.h"
+#include "vectortile_img.h"
 #include "gmapdata.h"
 
 using namespace IMG;

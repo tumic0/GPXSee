@@ -8,7 +8,7 @@
 #include <QBrush>
 #include <QFont>
 #include "map/textpointitem.h"
-#include "vectortile.h"
+#include "vectortile_mvt.h"
 #include "function.h"
 #include "sprites.h"
 

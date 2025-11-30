@@ -6,7 +6,7 @@
 #include <QFont>
 #include <QDebug>
 #include "light.h"
-#include "subfile.h"
+#include "subfile_img.h"
 
 #define TYPE(t) ((t)<<8)
 

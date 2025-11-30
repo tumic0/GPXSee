@@ -3,7 +3,7 @@
 
 #include "common/rtree.h"
 #include "map/matrix.h"
-#include "mapdata.h"
+#include "mapdata_img.h"
 
 namespace IMG {
 

@@ -4,8 +4,8 @@
 #include <QDataStream>
 #include <QColor>
 #include "map/osm.h"
-#include "subfile.h"
-#include "mapdata.h"
+#include "subfile_mapsforge.h"
+#include "mapdata_mapsforge.h"
 
 using namespace Mapsforge;
 

@@ -7,8 +7,8 @@
 #include "map/textpointitem.h"
 #include "map/textpathitem.h"
 #include "map/matrix.h"
-#include "style.h"
-#include "mapdata.h"
+#include "style_mapsforge.h"
+#include "mapdata_mapsforge.h"
 
 
 #define HILLSHADING_RENDER(ptr) \

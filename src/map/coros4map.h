@@ -1,10 +1,10 @@
 #ifndef COROS4MAP_H
 #define COROS4MAP_H
 
+#include "IMG/mapdata_img.h"
 #include "map.h"
 #include "projection.h"
 #include "transform.h"
-#include "IMG/mapdata.h"
 
 class IMGJob;
 namespace IMG {class Style;}

@@ -3,7 +3,7 @@
 
 #include <QVector>
 #include "map/matrix.h"
-#include "subfile.h"
+#include "subfile_img.h"
 
 namespace IMG {
 

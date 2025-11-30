@@ -2,7 +2,7 @@
 #define IMG_DEMFILE_H
 
 #include "common/rtree.h"
-#include "subfile.h"
+#include "subfile_img.h"
 #include "demtile.h"
 
 namespace IMG {

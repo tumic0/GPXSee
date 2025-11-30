@@ -6,7 +6,7 @@
 #include "map/projection.h"
 #include "map/transform.h"
 #include "data.h"
-#include "style.h"
+#include "style_enc.h"
 #include "atlasdata.h"
 
 class TextItem;

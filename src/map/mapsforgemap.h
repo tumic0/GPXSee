@@ -2,8 +2,8 @@
 #define MAPSFORGEMAP_H
 
 #include <QtConcurrent>
-#include "mapsforge/mapdata.h"
-#include "mapsforge/rastertile.h"
+#include "mapsforge/mapdata_mapsforge.h"
+#include "mapsforge/rastertile_mapsforge.h"
 #include "projection.h"
 #include "transform.h"
 #include "map.h"

@@ -2,7 +2,7 @@
 #define IMG_NODFILE_H
 
 #include "section.h"
-#include "subfile.h"
+#include "subfile_img.h"
 
 namespace IMG {
 

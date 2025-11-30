@@ -2,7 +2,7 @@
 #define IMG_NETFILE_H
 
 #include "section.h"
-#include "subfile.h"
+#include "subfile_img.h"
 #include "nodfile.h"
 
 namespace IMG {

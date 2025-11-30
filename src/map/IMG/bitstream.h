@@ -1,7 +1,7 @@
 #ifndef IMG_BITSTREAM_H
 #define IMG_BITSTREAM_H
 
-#include "subfile.h"
+#include "subfile_img.h"
 
 namespace IMG {
 

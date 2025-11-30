@@ -1,7 +1,7 @@
 #ifndef IMG_IMGDATA_H
 #define IMG_IMGDATA_H
 
-#include "mapdata.h"
+#include "mapdata_img.h"
 
 class QFile;
 

@@ -1,4 +1,4 @@
-#include "subfile.h"
+#include "subfile_img.h"
 #include "huffmanstream.h"
 #include "huffmantext.h"
 

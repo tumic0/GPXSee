@@ -10,8 +10,8 @@
 #include "common/programpaths.h"
 #include "text.h"
 #include "font.h"
-#include "vectortile.h"
-#include "style.h"
+#include "vectortile_mvt.h"
+#include "style_mvt.h"
 
 using namespace MVT;
 

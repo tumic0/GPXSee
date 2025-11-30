@@ -1,4 +1,4 @@
-#include "vectortile.h"
+#include "vectortile_mvt.h"
 
 #define MOVE_TO    1
 #define LINE_TO    2

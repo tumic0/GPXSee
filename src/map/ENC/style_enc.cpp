@@ -1,7 +1,7 @@
 #include <QPainter>
 #include "common/util.h"
 #include "objects.h"
-#include "style.h"
+#include "style_enc.h"
 
 using namespace ENC;
 using namespace Util;

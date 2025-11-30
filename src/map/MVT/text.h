@@ -7,8 +7,8 @@
 #include <QPen>
 #include "map/textpointitem.h"
 #include "map/textpathitem.h"
-#include "vectortile.h"
-#include "style.h"
+#include "vectortile_mvt.h"
+#include "style_mvt.h"
 
 class QImage;
 class QPainterPath;

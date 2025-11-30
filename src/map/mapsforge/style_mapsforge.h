@@ -6,7 +6,7 @@
 #include <QPen>
 #include <QFont>
 #include "map/textpointitem.h"
-#include "mapdata.h"
+#include "mapdata_mapsforge.h"
 
 class QXmlStreamReader;
 

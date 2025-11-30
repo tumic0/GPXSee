@@ -2,7 +2,7 @@
 #include <QImageReader>
 #include <QPainter>
 #include "common/util.h"
-#include "style.h"
+#include "style_img.h"
 
 using namespace IMG;
 using namespace Util;

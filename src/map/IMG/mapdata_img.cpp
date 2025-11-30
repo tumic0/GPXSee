@@ -1,8 +1,8 @@
 #include <QFileInfo>
 #include "common/programpaths.h"
-#include "vectortile.h"
-#include "style.h"
-#include "mapdata.h"
+#include "vectortile_img.h"
+#include "style_img.h"
+#include "mapdata_img.h"
 
 using namespace IMG;
 

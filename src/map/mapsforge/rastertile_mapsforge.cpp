@@ -6,7 +6,7 @@
 #include "map/hillshading.h"
 #include "map/filter.h"
 #include "map/bitmapline.h"
-#include "rastertile.h"
+#include "rastertile_mapsforge.h"
 
 using namespace Mapsforge;
 

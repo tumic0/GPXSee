@@ -134,11 +134,11 @@ HEADERS += src/common/config.h \
     src/map/proj/obliquestereographic.h \
     src/map/ENC/data.h \
     src/map/ENC/attributes.h \
-    src/map/ENC/mapdata.h \
+    src/map/ENC/mapdata_enc.h \
     src/map/ENC/atlasdata.h \
     src/map/ENC/objects.h \
-    src/map/ENC/rastertile.h \
-    src/map/ENC/style.h \
+    src/map/ENC/rastertile_enc.h \
+    src/map/ENC/style_enc.h \
     src/map/ENC/iso8211.h \
     src/map/IMG/demfile.h \
     src/map/IMG/demtile.h \
@@ -155,34 +155,34 @@ HEADERS += src/common/config.h \
     src/map/IMG/huffmantable.h \
     src/map/IMG/huffmantext.h \
     src/map/IMG/nodfile.h \
-    src/map/IMG/mapdata.h \
+    src/map/IMG/mapdata_img.h \
     src/map/IMG/raster.h \
-    src/map/IMG/rastertile.h \
+    src/map/IMG/rastertile_img.h \
     src/map/IMG/shield.h \
     src/map/IMG/imgdata.h \
-    src/map/IMG/subfile.h \
+    src/map/IMG/subfile_img.h \
     src/map/IMG/trefile.h \
     src/map/IMG/rgnfile.h \
     src/map/IMG/lblfile.h \
-    src/map/IMG/vectortile.h \
+    src/map/IMG/vectortile_img.h \
     src/map/IMG/subdiv.h \
-    src/map/IMG/style.h \
+    src/map/IMG/style_img.h \
     src/map/IMG/netfile.h \
     src/map/IMG/label.h \
     src/map/MVT/color.h \
     src/map/MVT/font.h \
     src/map/MVT/function.h \
     src/map/MVT/sprites.h \
-    src/map/MVT/style.h \
-    src/map/MVT/rastertile.h \
+    src/map/MVT/style_mvt.h \
+    src/map/MVT/rastertile_mvt.h \
     src/map/MVT/text.h \
     src/map/MVT/pbf.h \
     src/map/MVT/source.h \
-    src/map/MVT/vectortile.h \
-    src/map/mapsforge/style.h \
-    src/map/mapsforge/mapdata.h \
-    src/map/mapsforge/rastertile.h \
-    src/map/mapsforge/subfile.h \
+    src/map/MVT/vectortile_mvt.h \
+    src/map/mapsforge/style_mapsforge.h \
+    src/map/mapsforge/mapdata_mapsforge.h \
+    src/map/mapsforge/rastertile_mapsforge.h \
+    src/map/mapsforge/subfile_mapsforge.h \
     src/map/conversion.h \
     src/map/encatlas.h \
     src/map/encjob.h \

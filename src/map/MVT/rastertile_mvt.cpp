@@ -4,7 +4,7 @@
 #include "map/filter.h"
 #include "map/osm.h"
 #include "pbf.h"
-#include "rastertile.h"
+#include "rastertile_mvt.h"
 
 using namespace MVT;
 
