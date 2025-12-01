@@ -311,11 +311,13 @@ void TextPathItem::init(const T &line, const QRect &tileRect, qreal maxAngle)
 					 maxAngle);
 	if (_path.isEmpty())
 		return;
-
 	if (reverse(_path)) {
 		_path = _path.toReversed();
 		_reverse = true;
 	}
+#if QT_VERSION >= QT_VERSION_CHECK(6, 10, 0)
+	_path.setCachingEnabled(true);
+#endif // QT 6.10
 
 	QPainterPathStroker s;
 	s.setWidth(mw * 2);
