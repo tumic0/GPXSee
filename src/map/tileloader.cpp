@@ -14,14 +14,12 @@ static QString fsSafeStr(const QString &str)
 	ret.replace('>', SUBSTITUTE_CHAR);
 	ret.replace(':', SUBSTITUTE_CHAR);
 	ret.replace('"', SUBSTITUTE_CHAR);
-	ret.replace('/', SUBSTITUTE_CHAR);
 	ret.replace('\\', SUBSTITUTE_CHAR);
 	ret.replace('|', SUBSTITUTE_CHAR);
 	ret.replace('?', SUBSTITUTE_CHAR);
 	ret.replace('*', SUBSTITUTE_CHAR);
-#else // Q_OS_WIN32
-	ret.replace('/', SUBSTITUTE_CHAR);
 #endif // Q_OS_WIN32
+	ret.replace('/', SUBSTITUTE_CHAR);
 
 	return ret;
 }
