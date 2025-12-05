@@ -94,6 +94,7 @@ static QMultiMap<QString, Parser*> parsers()
 	map.insert("vtk", &vtk);
 	map.insert("vkx", &vkx);
 	map.insert("mp4", &gpmf);
+	map.insert("raw", &gpmf);
 
 	return map;
 }
@@ -246,7 +247,7 @@ QString Data::formats()
 	  + qApp->translate("Data", "JPEG images") + " (*.jpg *.jpeg);;"
 	  + qApp->translate("Data", "KML files") + " (*.kml *.kmz);;"
 	  + qApp->translate("Data", "LOC files") + " (*.loc);;"
-	  + qApp->translate("Data", "MP4 files") + " (*.mp4);;"
+	  + qApp->translate("Data", "GPMF files") + " (*.mp4 *.raw);;"
 	  + qApp->translate("Data", "NMEA files") + " (*.nmea);;"
 	  + qApp->translate("Data", "ONmove files") + " (*.omd *.ghp);;"
 	  + qApp->translate("Data", "OV2 files") + " (*.ov2);;"

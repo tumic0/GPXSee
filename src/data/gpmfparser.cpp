@@ -30,6 +30,7 @@ constexpr quint32 CO64 = TAG("co64");
 constexpr quint32 GPMD = TAG("gpmd");
 
 constexpr quint32 GPS5 = TAG("GPS5");
+constexpr quint32 GPS9 = TAG("GPS9");
 constexpr quint32 GPSU = TAG("GPSU");
 constexpr quint32 SCAL = TAG("SCAL");
 
@@ -67,14 +68,16 @@ static bool ftyp(QDataStream &stream)
 	return (stream.skipRawData(size - 12) == (qint64)size - 12);
 }
 
-static bool entry(QDataStream &stream, quint32 size, SegmentData &segment)
+static bool entry(QDataStream &stream, quint32 size, SegmentData &segment,
+  bool &gps9, bool &gps5)
 {
 	quint32 key;
 	quint8 ss, type;
 	quint16 repeat;
 	QDateTime base;
 	QByteArray date(16, Qt::Initialization::Uninitialized);
-	qint32 scale[5] = {1, 1, 1, 1, 1};
+	qint32 scale[9] = {1, 1, 1, 1, 1, 1, 1, 1, 1};
+	static QDateTime dt2000 = QDateTime(QDate(2000, 1, 1), QTime(0, 0));
 
 	do {
 		stream >> key >> type >> ss >> repeat;
@@ -82,16 +85,40 @@ static bool entry(QDataStream &stream, quint32 size, SegmentData &segment)
 			return false;
 		size -= 8;
 		quint32 ps = alignup(ss * repeat, 4);
+
 		if (!type) {
-			if (!entry(stream, ps, segment))
+			if (!entry(stream, ps, segment, gps9, gps5))
 				return false;
 		} else {
-			if (key == SCAL && type == 'l' && ss == 4 && repeat == 5) {
-				stream >> scale[0] >> scale[1] >> scale[2] >> scale[3]
-				  >> scale[4];
+			if (key == SCAL && type == 'l' && ss == 4
+			  && (repeat == 5 || repeat == 9)) {
+				for (quint16 i = 0; i < repeat; i++)
+					stream >> scale[i];
 				if (stream.status())
 					return false;
-			} else if (key == GPS5 && type == 'l' && ss == 20) {
+			} else if (!gps5 && key == GPS9 && type == '?' && ss == 32) {
+				qint32 lat, lon, alt, spd2, spd3, days, secs;
+				quint16 dop, fix;
+
+				for (quint16 i = 0; i < repeat; i++) {
+					stream >> lat >> lon >> alt >> spd2 >> spd3 >> days >> secs
+					  >> dop >> fix;
+					if (stream.status())
+						return false;
+					Trackpoint t(Coordinates(lon / (double)scale[1],
+					  lat / (double)scale[0]));
+					QDateTime ts = dt2000.addDays(days)
+					  .addMSecs(qRound((secs / (double)scale[6]) * 1000));
+					t.setTimestamp(ts);
+					t.setElevation(alt / (double)scale[2]);
+					t.setSpeed(spd2 / (double)scale[3]);
+					if (t.coordinates().isValid())
+						segment.append(t);
+					else
+						return false;
+				}
+				gps9 = true;
+			} else if (!gps9 && key == GPS5 && type == 'l' && ss == 20) {
 				qint64 ms = qRound((1.0 / (double)repeat) * 1000);
 
 				qint32 lat, lon, alt, spd2, spd3;
@@ -104,9 +131,14 @@ static bool entry(QDataStream &stream, quint32 size, SegmentData &segment)
 					t.setTimestamp(base.addMSecs(ms * i));
 					t.setElevation(alt / (double)scale[2]);
 					t.setSpeed(spd2 / (double)scale[3]);
-					segment.append(t);
+					if (t.coordinates().isValid())
+						segment.append(t);
+					else
+						return false;
 				}
-			} else if (key == GPSU && type == 'U' && ss == 16 && repeat == 1) {
+				gps5 = true;
+			} else if (!gps9 && key == GPSU && type == 'U' && ss == 16
+			  && repeat == 1) {
 				if (stream.readRawData(date.data(), date.size()) != date.size())
 					return false;
 #if QT_VERSION < QT_VERSION_CHECK(6, 7, 0)
@@ -121,7 +153,7 @@ static bool entry(QDataStream &stream, quint32 size, SegmentData &segment)
 					return false;
 			}
 		}
-		size -= (ps);
+		size -= ps;
 	} while (size);
 
 	return true;
@@ -524,19 +556,39 @@ bool GPMFParser::mp4(QFile *file, QVector<quint32> &sizes,
 		}
 	} while (!stream.atEnd());
 
+	if (chunks.isEmpty()) {
+		_errorString = "No GPMF data found in MP4";
+		return false;
+	}
+
 	return true;
 }
 
 bool GPMFParser::gpmf(QFile *file, quint64 offset, quint32 size,
   SegmentData &segment)
 {
-	if (!file->seek(offset))
+	char magic[4];
+	bool gps9 = false, gps5 = false;
+
+	if (!file->seek(offset)) {
+		_errorString = "Invalid GPMF chunk offset";
 		return false;
+	}
+	if ((file->peek(magic, sizeof(magic)) != sizeof(magic))
+	  || memcmp(magic, "DEVC", sizeof(magic))) {
+		_errorString = "Not a GPMF file";
+		return false;
+	}
 
 	QDataStream stream(file);
 	stream.setByteOrder(QDataStream::BigEndian);
 
-	return entry(stream, size, segment);
+	if (!entry(stream, size, segment, gps9, gps5)) {
+		_errorString = "GPMF parse error";
+		return false;
+	}
+
+	return true;
 }
 
 bool GPMFParser::parse(QFile *file, QList<TrackData> &tracks,
@@ -547,20 +599,15 @@ bool GPMFParser::parse(QFile *file, QList<TrackData> &tracks,
 	Q_UNUSED(waypoints);
 	QVector<quint32> sizes;
 	QVector<quint64> chunks;
-
-	if (!mp4(file, sizes, chunks))
-		return false;
-	if (chunks.isEmpty()) {
-		_errorString = "No GPMF data found";
-		return false;
-	}
-
 	SegmentData segment;
-	for (int i = 0; i < chunks.size(); i++) {
-		if (!gpmf(file, chunks.at(i), sizes.at(i), segment)) {
-			_errorString = "GPMF parse error";
+
+	if (!mp4(file, sizes, chunks)) {
+		if (!gpmf(file, 0, file->size(), segment))
 			return false;
-		}
+	} else {
+		for (int i = 0; i < chunks.size(); i++)
+			if (!gpmf(file, chunks.at(i), sizes.at(i), segment))
+				return false;
 	}
 
 	if (segment.isEmpty()) {
