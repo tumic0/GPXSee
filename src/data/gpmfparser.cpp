@@ -70,8 +70,7 @@ static bool ftyp(QDataStream &stream)
 static bool entry(QDataStream &stream, quint32 size, SegmentData &segment)
 {
 	quint32 key;
-	char type;
-	quint8 ss;
+	quint8 ss, type;
 	quint16 repeat;
 	QDateTime base;
 	QByteArray date(16, Qt::Initialization::Uninitialized);
@@ -110,10 +109,15 @@ static bool entry(QDataStream &stream, quint32 size, SegmentData &segment)
 			} else if (key == GPSU && type == 'U' && ss == 16 && repeat == 1) {
 				if (stream.readRawData(date.data(), date.size()) != date.size())
 					return false;
+#if QT_VERSION < QT_VERSION_CHECK(6, 7, 0)
+				base = QDateTime::fromString(date, "yyMMddHHmmss.zzz")
+				  .addYears(100);
+#else // QT 6.7
 				base = QDateTime::fromString(date, "yyMMddHHmmss.zzz", 2000);
+#endif // QT 6.7
 				base.setTimeZone(QTimeZone::utc());
 			} else {
-				if (stream.skipRawData(ps) != ps)
+				if (stream.skipRawData(ps) != (qint64)ps)
 					return false;
 			}
 		}
