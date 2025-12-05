@@ -26,6 +26,7 @@
 #include "txtparser.h"
 #include "vtkparser.h"
 #include "vkxparser.h"
+#include "gpmfparser.h"
 #include "data.h"
 
 
@@ -55,6 +56,7 @@ static GPSDumpParser gpsdump;
 static TXTParser txt;
 static VTKParser vtk;
 static VKXParser vkx;
+static GPMFParser gpmf;
 
 static QMultiMap<QString, Parser*> parsers()
 {
@@ -91,6 +93,7 @@ static QMultiMap<QString, Parser*> parsers()
 	map.insert("txt", &txt);
 	map.insert("vtk", &vtk);
 	map.insert("vkx", &vkx);
+	map.insert("mp4", &gpmf);
 
 	return map;
 }
@@ -243,6 +246,7 @@ QString Data::formats()
 	  + qApp->translate("Data", "JPEG images") + " (*.jpg *.jpeg);;"
 	  + qApp->translate("Data", "KML files") + " (*.kml *.kmz);;"
 	  + qApp->translate("Data", "LOC files") + " (*.loc);;"
+	  + qApp->translate("Data", "MP4 files") + " (*.mp4);;"
 	  + qApp->translate("Data", "NMEA files") + " (*.nmea);;"
 	  + qApp->translate("Data", "ONmove files") + " (*.omd *.ghp);;"
 	  + qApp->translate("Data", "OV2 files") + " (*.ov2);;"
