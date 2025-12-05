@@ -119,6 +119,7 @@
 		<mimetype>application/vnd.coros.csa</mimetype>
 		<mimetype>application/vnd.coros.pma</mimetype>
 		<mimetype>application/vnd.pmtiles</mimetype>
+		<mimetype>application/mp4</mimetype>
 		<mimetype>x-scheme-handler/geo</mimetype>
 	</mimetypes>
 </component>

@@ -500,6 +500,20 @@
 		<dict>
 			<key>CFBundleTypeExtensions</key>
 			<array>
+				<string>mp4</string>
+			</array>
+			<key>CFBundleTypeMIMETypes</key>
+			<array>
+				<string>application/mp4</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>MPEG-4 Video</string>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
 				<string>xml</string>
 			</array>
 			<key>CFBundleTypeMIMETypes</key>
@@ -1584,6 +1598,28 @@
 				</array>
 				<key>public.mime-type</key>
 				<string>image/tiff</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeIdentifier</key>
+			<string>public.mp4</string>
+			<key>UTTypeReferenceURL</key>
+			<string>https://developer.apple.com/documentation/quicktime-file-format</string>
+			<key>UTTypeDescription</key>
+			<string>MPEG-4 Video</string>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.video</string>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>mp4</string>
+				</array>
+				<key>public.mime-type</key>
+				<string>application/mp4</string>
 			</dict>
 		</dict>
 		<dict>
