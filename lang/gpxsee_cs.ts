@@ -198,7 +198,7 @@
     <message>
         <location filename="../src/data/data.cpp" line="250"/>
         <source>GPMF files</source>
-        <translation type="unfinished"></translation>
+        <translation>Soubory GPMF</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="252"/>
