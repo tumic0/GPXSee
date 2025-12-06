@@ -33,36 +33,6 @@ constexpr quint32 GPS9 = TAG("GPS9");
 constexpr quint32 GPSU = TAG("GPSU");
 constexpr quint32 SCAL = TAG("SCAL");
 
-static bool hdr(QDataStream &stream, quint32 &type, quint64 &size)
-{
-	quint32 size32;
-
-	stream >> size32 >> type;
-	if (stream.status())
-		return false;
-	if (size32 == 1) {
-		stream >> size;
-		if (stream.status())
-			return false;
-	} else
-		size = size32;
-
-	return true;
-}
-
-static bool ftyp(QDataStream &stream)
-{
-	quint32 type;
-	quint64 size;
-
-	if (!hdr(stream, type, size))
-		return false;
-	if (type != FTYP)
-		return false;
-
-	return (stream.skipRawData(size - 8) == (qint64)size - 8);
-}
-
 static bool entry(QDataStream &stream, quint32 size, SegmentData &segment,
   bool &gps9, bool &gps5)
 {
@@ -155,28 +125,64 @@ static bool entry(QDataStream &stream, quint32 size, SegmentData &segment,
 	return true;
 }
 
-bool GPMFParser::stsd(QDataStream &stream, quint64 atomSize, bool &gpmd)
+static bool hdr(QDataStream &stream, quint32 &type, quint64 &size)
 {
-	if (atomSize && atomSize < 8) {
-		_errorString = "Invalid STSD atom size";
+	quint32 size32;
+
+	stream >> size32 >> type;
+	if (stream.status())
 		return false;
+	if (size32 == 1) {
+		stream >> size;
+		if (stream.status())
+			return false;
+	} else
+		size = size32;
+
+	return true;
+}
+
+static bool dec(quint64 &atomSize, quint64 size)
+{
+	if (atomSize) {
+		if (size > atomSize)
+			return false;
+		else
+			atomSize -= size;
 	}
+
+	return true;
+}
+
+static bool ftyp(QDataStream &stream)
+{
+	quint32 type;
+	quint64 size;
+
+	if (!hdr(stream, type, size))
+		return false;
+	if (type != FTYP)
+		return false;
+
+	return (stream.skipRawData(size - 8) == (qint64)size - 8);
+}
+
+static bool stsd(QDataStream &stream, quint64 atomSize, bool &gpmd)
+{
+	if (atomSize && atomSize < 8)
+		return false;
 
 	quint32 vf, num;
 	stream >> vf >> num;
-	if (stream.status()) {
-		_errorString = "Error reading STSD data";
+	if (stream.status())
 		return false;
-	}
 
 	for (quint32 i = 0; i < num; i++) {
 		quint32 ds, format;
 		stream >> ds >> format;
 		stream.skipRawData(ds - 8);
-		if (stream.status()) {
-			_errorString = "Error reading STSD table entry";
+		if (stream.status())
 			return false;
-		}
 		if (format == GPMD)
 			gpmd = true;
 	}
@@ -184,20 +190,15 @@ bool GPMFParser::stsd(QDataStream &stream, quint64 atomSize, bool &gpmd)
 	return true;
 }
 
-bool GPMFParser::stsz(QDataStream &stream, quint64 atomSize,
-  QVector<quint32> &sizes)
+static bool stsz(QDataStream &stream, quint64 atomSize, QVector<quint32> &sizes)
 {
-	if (atomSize && atomSize < 12) {
-		_errorString = "Invalid STSZ atom size";
+	if (atomSize && atomSize < 12)
 		return false;
-	}
 
 	quint32 vf, ss, num;
 	stream >> vf >> ss >> num;
-	if (stream.status()) {
-		_errorString = "Error reading STSZ data";
+	if (stream.status())
 		return false;
-	}
 
 	if (ss)
 		sizes = QVector<quint32>(num, ss);
@@ -205,88 +206,63 @@ bool GPMFParser::stsz(QDataStream &stream, quint64 atomSize,
 		sizes.resize(num);
 		for (quint32 i = 0; i < num; i++)
 			stream >> sizes[i];
-		if (stream.status()) {
-			_errorString = "Error reading STSZ table";
+		if (stream.status())
 			return false;
-		}
 	}
 
 	return true;
 }
 
-bool GPMFParser::stco(QDataStream &stream, quint64 atomSize,
-  QVector<quint64> &chunks)
+static bool stco(QDataStream &stream, quint64 atomSize, QVector<quint64> &chunks)
 {
-	if (atomSize && atomSize < 8) {
-		_errorString = "Invalid STCO atom size";
+	if (atomSize && atomSize < 8)
 		return false;
-	}
 
 	quint32 vf, num, chunk;
 	stream >> vf >> num;
-	if (stream.status()) {
-		_errorString = "Error reading STCO data";
+	if (stream.status())
 		return false;
-	}
 
 	chunks.resize(num);
 	for (quint32 i = 0; i < num; i++) {
 		stream >> chunk;
 		chunks[i] = chunk;
 	}
-	if (stream.status()) {
-		_errorString = "Error reading STCO table";
+	if (stream.status())
 		return false;
-	}
 
 	return true;
 }
 
-bool GPMFParser::co64(QDataStream &stream, quint64 atomSize,
-  QVector<quint64> &chunks)
+static bool co64(QDataStream &stream, quint64 atomSize, QVector<quint64> &chunks)
 {
-	if (atomSize && atomSize < 8) {
-		_errorString = "Invalid CO64 atom size";
+	if (atomSize && atomSize < 8)
 		return false;
-	}
 
 	quint32 vf, num;
 	stream >> vf >> num;
-	if (stream.status()) {
-		_errorString = "Error reading CO64 data";
+	if (stream.status())
 		return false;
-	}
 
 	chunks.resize(num);
 	for (quint32 i = 0; i < num; i++)
 		stream >> chunks[i];
-	if (stream.status()) {
-		_errorString = "Error reading CO64 table";
+	if (stream.status())
 		return false;
-	}
 
 	return true;
 }
 
-bool GPMFParser::stbl(QDataStream &stream, quint64 atomSize,
-  QVector<quint32> &sizes, QVector<quint64> &chunks)
+static bool stbl(QDataStream &stream, quint64 atomSize, QVector<quint32> &sizes,
+  QVector<quint64> &chunks)
 {
 	quint32 type;
 	quint64 size;
 	bool gpmd = false;
 
 	do {
-		if (!hdr(stream, type, size)) {
-			_errorString = "Error reading STBL atom header";
+		if (!(hdr(stream, type, size) && dec(atomSize, size)))
 			return false;
-		}
-		if (atomSize) {
-			if (size > atomSize) {
-				_errorString = "STBL size overflow";
-				return false;
-			} else
-				atomSize -= size;
-		}
 
 		if (type == STSD) {
 			if (!stsd(stream, size ? size - 8 : 0, gpmd))
@@ -302,10 +278,8 @@ bool GPMFParser::stbl(QDataStream &stream, quint64 atomSize,
 				return false;
 		} else {
 			if (size) {
-				if (stream.skipRawData(size - 8) != (qint64)size - 8) {
-					_errorString = "Unexpected EOF in STBL";
+				if (stream.skipRawData(size - 8) != (qint64)size - 8)
 					return false;
-				}
 			} else
 				break;
 		}
@@ -313,67 +287,46 @@ bool GPMFParser::stbl(QDataStream &stream, quint64 atomSize,
 			break;
 	} while (atomSize);
 
-	if (atomSize) {
-		_errorString = "STBL size underflow";
+	if (chunks.size() != sizes.size())
 		return false;
-	}
-	if (chunks.size() != sizes.size()) {
-		_errorString = "STSZ/STCO size mismatch";
-		return false;
-	}
 
-	return true;
+	return (!atomSize);
 }
 
-bool GPMFParser::hdlr(QDataStream &stream, quint64 atomSize, bool &mhlr)
+static bool hdlr(QDataStream &stream, quint64 atomSize, bool &mhlr)
 {
 	// HDLR atom size can not be zero
-	if (atomSize < 24) {
-		_errorString = "Invalid HDLR atom size";
+	if (atomSize < 24)
 		return false;
-	}
 
 	quint32 vf, type, subtype, manufacturer, flags, mask;
 	stream >> vf >> type >> subtype >> manufacturer >> flags >> mask;
 	if (stream.status()
-	  || stream.skipRawData(atomSize - 24) != (qint64)atomSize - 24) {
-		_errorString = "Error reading HDLR data";
+	  || stream.skipRawData(atomSize - 24) != (qint64)atomSize - 24)
 		return false;
-	}
 
 	mhlr = (type == MHLR && subtype == META);
 
 	return true;
 }
 
-bool GPMFParser::minf(QDataStream &stream, quint64 atomSize,
-  QVector<quint32> &sizes, QVector<quint64> &chunks)
+static bool minf(QDataStream &stream, quint64 atomSize, QVector<quint32> &sizes,
+  QVector<quint64> &chunks)
 {
 	quint32 type;
 	quint64 size;
 
 	do {
-		if (!hdr(stream, type, size)) {
-			_errorString = "Error reading MINF atom header";
+		if (!(hdr(stream, type, size) && dec(atomSize, size)))
 			return false;
-		}
-		if (atomSize) {
-			if (size > atomSize) {
-				_errorString = "MINF size overflow";
-				return false;
-			} else
-				atomSize -= size;
-		}
 
 		if (type == STBL) {
 			if (!stbl(stream, size ? size - 8 : 0, sizes, chunks))
 				return false;
 		} else {
 			if (size) {
-				if (stream.skipRawData(size - 8) != (qint64)size - 8) {
-					_errorString = "Unexpected EOF in MINF";
+				if (stream.skipRawData(size - 8) != (qint64)size - 8)
 					return false;
-				}
 			} else
 				break;
 		}
@@ -381,32 +334,19 @@ bool GPMFParser::minf(QDataStream &stream, quint64 atomSize,
 			break;
 	} while (atomSize);
 
-	if (atomSize) {
-		_errorString = "MINF size underflow";
-		return false;
-	} else
-		return true;
+	return (!atomSize);
 }
 
-bool GPMFParser::mdia(QDataStream &stream, quint64 atomSize,
-  QVector<quint32> &sizes, QVector<quint64> &chunks)
+static bool mdia(QDataStream &stream, quint64 atomSize, QVector<quint32> &sizes,
+  QVector<quint64> &chunks)
 {
 	quint32 type;
 	quint64 size;
 	bool mhlr = false;
 
 	do {
-		if (!hdr(stream, type, size)) {
-			_errorString = "Error reading MDIA atom header";
+		if (!(hdr(stream, type, size) && dec(atomSize, size)))
 			return false;
-		}
-		if (atomSize) {
-			if (size > atomSize) {
-				_errorString = "MDIA size overflow";
-				return false;
-			} else
-				atomSize -= size;
-		}
 
 		if (type == HDLR) {
 			if (!hdlr(stream, size ? size - 8 : 0, mhlr))
@@ -416,10 +356,8 @@ bool GPMFParser::mdia(QDataStream &stream, quint64 atomSize,
 				return false;
 		} else {
 			if (size) {
-				if (stream.skipRawData(size - 8) != (qint64)size - 8) {
-					_errorString = "Unexpected EOF in MDIA";
+				if (stream.skipRawData(size - 8) != (qint64)size - 8)
 					return false;
-				}
 			} else
 				break;
 		}
@@ -427,41 +365,26 @@ bool GPMFParser::mdia(QDataStream &stream, quint64 atomSize,
 			break;
 	} while (atomSize);
 
-	if (atomSize) {
-		_errorString = "MDIA size underflow";
-		return false;
-	} else
-		return true;
+	return (!atomSize);
 }
 
-bool GPMFParser::trak(QDataStream &stream, quint64 atomSize,
-  QVector<quint32> &sizes, QVector<quint64> &chunks)
+static bool trak(QDataStream &stream, quint64 atomSize, QVector<quint32> &sizes,
+  QVector<quint64> &chunks)
 {
 	quint32 type;
 	quint64 size;
 
 	do {
-		if (!hdr(stream, type, size)) {
-			_errorString = "Error reading TRAK atom header";
+		if (!(hdr(stream, type, size) && dec(atomSize, size)))
 			return false;
-		}
-		if (atomSize) {
-			if (size > atomSize) {
-				_errorString = "TRAK size overflow";
-				return false;
-			} else
-				atomSize -= size;
-		}
 
 		if (type == MDIA) {
 			if (!mdia(stream, size ? size - 8 : 0, sizes, chunks))
 				return false;
 		} else {
 			if (size) {
-				if (stream.skipRawData(size - 8) != (qint64)size - 8) {
-					_errorString = "Unexpected EOF in TRAK";
+				if (stream.skipRawData(size - 8) != (qint64)size - 8)
 					return false;
-				}
 			} else
 				break;
 		}
@@ -469,41 +392,26 @@ bool GPMFParser::trak(QDataStream &stream, quint64 atomSize,
 			break;
 	} while (atomSize);
 
-	if (atomSize) {
-		_errorString = "TRAK size underflow";
-		return false;
-	} else
-		return true;
+	return (!atomSize);
 }
 
-bool GPMFParser::moov(QDataStream &stream, quint64 atomSize,
-  QVector<quint32> &sizes, QVector<quint64> &chunks)
+static bool moov(QDataStream &stream, quint64 atomSize, QVector<quint32> &sizes,
+  QVector<quint64> &chunks)
 {
 	quint32 type;
 	quint64 size;
 
 	do {
-		if (!hdr(stream, type, size)) {
-			_errorString = "Error reading MOOV atom header";
+		if (!(hdr(stream, type, size) && dec(atomSize, size)))
 			return false;
-		}
-		if (atomSize) {
-			if (size > atomSize) {
-				_errorString = "MOOV size overflow";
-				return false;
-			} else
-				atomSize -= size;
-		}
 
 		if (type == TRAK) {
 			if (!trak(stream, size ? size - 8 : 0, sizes, chunks))
 				return false;
 		} else {
 			if (size) {
-				if (stream.skipRawData(size - 8) != (qint64)size - 8) {
-					_errorString = "Unexpected EOF in MOOV";
+				if (stream.skipRawData(size - 8) != (qint64)size - 8)
 					return false;
-				}
 			} else
 				break;
 		}
@@ -511,15 +419,10 @@ bool GPMFParser::moov(QDataStream &stream, quint64 atomSize,
 			break;
 	} while (atomSize);
 
-	if (atomSize) {
-		_errorString = "MOOV size underflow";
-		return false;
-	} else
-		return true;
+	return (!atomSize);
 }
 
-bool GPMFParser::mp4(QFile *file, QVector<quint32> &sizes,
-  QVector<quint64> &chunks)
+static bool mp4(QFile *file, QVector<quint32> &sizes, QVector<quint64> &chunks)
 {
 	QDataStream stream(file);
 	quint32 type;
@@ -527,26 +430,20 @@ bool GPMFParser::mp4(QFile *file, QVector<quint32> &sizes,
 
 	stream.setByteOrder(QDataStream::BigEndian);
 
-	if (!ftyp(stream)) {
-		_errorString = "Not a MP4 file";
+	if (!ftyp(stream))
 		return false;
-	}
 
 	do {
-		if (!hdr(stream, type, size)) {
-			_errorString = "Error reading root atom header";
+		if (!hdr(stream, type, size))
 			return false;
-		}
 
 		if (type == MOOV) {
 			if (!moov(stream, size ? size - 8 : 0, sizes, chunks))
 				return false;
 		} else {
 			if (size) {
-				if (stream.skipRawData(size - 8) != (qint64)size - 8) {
-					_errorString = "Unexpected EOF in root";
+				if (stream.skipRawData(size - 8) != (qint64)size - 8)
 					return false;
-				}
 			} else
 				break;
 		}
