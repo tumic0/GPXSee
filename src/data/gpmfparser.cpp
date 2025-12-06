@@ -15,7 +15,6 @@ static constexpr quint32 TAG(const char name[4])
 
 constexpr quint32 FTYP = TAG("ftyp");
 constexpr quint32 MOOV = TAG("moov");
-constexpr quint32 MP41 = TAG("mp41");
 constexpr quint32 TRAK = TAG("trak");
 constexpr quint32 MDIA = TAG("mdia");
 constexpr quint32 HDLR = TAG("hdlr");
@@ -53,19 +52,15 @@ static bool hdr(QDataStream &stream, quint32 &type, quint64 &size)
 
 static bool ftyp(QDataStream &stream)
 {
-	quint32 type, brand;
+	quint32 type;
 	quint64 size;
 
 	if (!hdr(stream, type, size))
 		return false;
-	stream >> brand;
-	if (stream.status())
+	if (type != FTYP)
 		return false;
 
-	if (type != FTYP || brand != MP41)
-		return false;
-
-	return (stream.skipRawData(size - 12) == (qint64)size - 12);
+	return (stream.skipRawData(size - 8) == (qint64)size - 8);
 }
 
 static bool entry(QDataStream &stream, quint32 size, SegmentData &segment,
@@ -557,11 +552,6 @@ bool GPMFParser::mp4(QFile *file, QVector<quint32> &sizes,
 		}
 	} while (!stream.atEnd());
 
-	if (chunks.isEmpty()) {
-		_errorString = "No GPMF data found in MP4";
-		return false;
-	}
-
 	return true;
 }
 
@@ -606,6 +596,10 @@ bool GPMFParser::parse(QFile *file, QList<TrackData> &tracks,
 		if (!gpmf(file, 0, file->size(), segment))
 			return false;
 	} else {
+		if (chunks.isEmpty()) {
+			_errorString = "No GPMF data found in MP4";
+			return false;
+		}
 		for (int i = 0; i < chunks.size(); i++)
 			if (!gpmf(file, chunks.at(i), sizes.at(i), segment))
 				return false;
