@@ -77,7 +77,8 @@ static bool entry(QDataStream &stream, quint32 size, SegmentData &segment,
 	QDateTime base;
 	QByteArray date(16, Qt::Initialization::Uninitialized);
 	qint32 scale[9] = {1, 1, 1, 1, 1, 1, 1, 1, 1};
-	static QDateTime dt2000 = QDateTime(QDate(2000, 1, 1), QTime(0, 0));
+	static const QDateTime dt2000 = QDateTime(QDate(2000, 1, 1), QTime(0, 0),
+	  QTimeZone::utc());
 
 	do {
 		stream >> key >> type >> ss >> repeat;
