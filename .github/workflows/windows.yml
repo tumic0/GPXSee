@@ -52,7 +52,7 @@ jobs:
           md certificate
           echo "${{secrets.CERTIFICATE}}" > certificate\certificate.txt
           certutil -decode certificate\certificate.txt certificate\certificate.pfx
-          signtool sign /f certificate\certificate.pfx /fd SHA256 /p '${{secrets.CERTIFICATE_PWD}}' installer\GPXSee-*.exe
+          signtool sign /f certificate\certificate.pfx /fd SHA256 /p '${{secrets.CERTIFICATE_PWD}}' /tr "http://timestamp.acs.microsoft.com" installer\GPXSee-*.exe
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
