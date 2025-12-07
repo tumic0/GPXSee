@@ -13,7 +13,7 @@ int main(int argc, char *argv[])
 #else // QT6
 	qRegisterMetaType<TimeZoneInfo>("TimeZoneInfo");
 	QGuiApplication::setHighDpiScaleFactorRoundingPolicy(
-	  Qt::HighDpiScaleFactorRoundingPolicy::Round);
+	  Qt::HighDpiScaleFactorRoundingPolicy::RoundPreferFloor);
 #endif // QT6
 
 	QSurfaceFormat fmt;
