@@ -48,11 +48,15 @@ jobs:
           copy licence.txt installer
           makensis /D${{matrix.arch}} installer\gpxsee64.nsi
       - name: Code Signing
+        env:
+          CERTIFICATE ${{secrets.CERTIFICATE}}
+          CERTIFICATE_PWD ${{secrets.CERTIFICATE_PWD}}
+        if: env.CERTIFICATE
         run: |
           md certificate
-          echo "${{secrets.CERTIFICATE}}" > certificate\certificate.txt
+          echo "$env:CERTIFICATE" > certificate\certificate.txt
           certutil -decode certificate\certificate.txt certificate\certificate.pfx
-          signtool sign /f certificate\certificate.pfx /fd SHA256 /p '${{secrets.CERTIFICATE_PWD}}' /tr "http://timestamp.acs.microsoft.com" /td SHA256 installer\GPXSee-*.exe
+          signtool sign /f certificate\certificate.pfx /fd SHA256 /p "$env:CERTIFICATE_PWD" /tr "http://timestamp.acs.microsoft.com" /td SHA256 installer\GPXSee-*.exe
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:

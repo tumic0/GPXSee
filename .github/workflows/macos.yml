@@ -25,17 +25,23 @@ jobs:
         run: make -j3
       - name: Install codesigning certificate
         env:
-          MACOS_CERTIFICATE: ${{ secrets.CODESIGN_CERT }}
-          MACOS_CERTIFICATE_PWD: ${{ secrets.CODESIGN_PWD }}
+          CERTIFICATE: ${{secrets.CODESIGN_CERT}}
+          CERTIFICATE_PWD: ${{secrets.CODESIGN_PWD}}
+        if: env.CERTIFICATE
         run: |
-          echo $MACOS_CERTIFICATE | base64 --decode > certificate.p12
+          echo $CERTIFICATE | base64 --decode > certificate.p12
           security create-keychain -p password keychain
           security default-keychain -s keychain
           security unlock-keychain -p password keychain
-          security import certificate.p12 -k keychain -P $MACOS_CERTIFICATE_PWD -T /usr/bin/codesign
+          security import certificate.p12 -k keychain -P $CERTIFICATE_PWD -T /usr/bin/codesign
           security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k password keychain
       - name: Create DMG
-        run: macdeployqt GPXSee.app -dmg -appstore-compliant -codesign=GPXSee
+        run: |
+          if [ security find-certificate -c GPXSee keychain ]; then
+            macdeployqt GPXSee.app -dmg -appstore-compliant -codesign=GPXSee
+          else
+            macdeployqt GPXSee.app -dmg -appstore-compliant
+          fi
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
