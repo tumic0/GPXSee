@@ -37,7 +37,7 @@ jobs:
           security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k password keychain
       - name: Create DMG
         run: |
-          if [ security find-certificate -c GPXSee keychain ]; then
+          if security find-certificate -c GPXSee keychain; then
             macdeployqt GPXSee.app -dmg -appstore-compliant -codesign=GPXSee
           else
             macdeployqt GPXSee.app -dmg -appstore-compliant
