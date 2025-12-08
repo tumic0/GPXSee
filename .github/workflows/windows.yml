@@ -49,8 +49,8 @@ jobs:
           makensis /D${{matrix.arch}} installer\gpxsee64.nsi
       - name: Code Signing
         env:
-          CERTIFICATE ${{secrets.CERTIFICATE}}
-          CERTIFICATE_PWD ${{secrets.CERTIFICATE_PWD}}
+          CERTIFICATE: ${{secrets.CERTIFICATE}}
+          CERTIFICATE_PWD: ${{secrets.CERTIFICATE_PWD}}
         if: env.CERTIFICATE
         run: |
           md certificate
