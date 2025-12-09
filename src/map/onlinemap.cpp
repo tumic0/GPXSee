@@ -13,13 +13,14 @@ using namespace MVT;
 using namespace OSM;
 
 OnlineMap::OnlineMap(const QString &fileName, const QString &name,
-  const QStringList &url, const Range &zooms, const RectC &bounds,
-  qreal tileRatio, const QList<HTTPHeader> &headers, int tileSize, bool mvt,
-  bool invertY, bool quadTiles, const QStringList &layers, QObject *parent)
+  const QStringList &url, const QList<TileType> &tileType, int tileSize,
+  qreal tileRatio, const Range &zooms, const RectC &bounds,
+  const QList<HTTPHeader> &headers, bool invertY, bool quadTiles,
+  QStringList vectorLayers, QObject *parent)
     : Map(fileName, parent), _name(name), _zooms(zooms), _bounds(bounds),
-	_zoom(_zooms.max()), _tileSize(tileSize), _baseZoom(0), _mapRatio(1.0),
-	_tileRatio(tileRatio), _mvt(mvt), _hillShading(false), _invertY(invertY),
-	_style(0), _layers(layers)
+	_tileSize(tileSize), _zoom(_zooms.max()), _mapRatio(1.0),
+	_tileRatio(tileRatio), _tileType(tileType), _layers(0), _hillShading(false),
+	_invertY(invertY), _style(0), _vectorLayers(vectorLayers)
 {
 	_tileLoader = new TileLoader(QDir(ProgramPaths::tilesDir()).filePath(_name),
 	  this);
@@ -33,7 +34,7 @@ OnlineMap::OnlineMap(const QString &fileName, const QString &name,
 const Style *OnlineMap::defaultStyle() const
 {
 	for (int i = 0; i < Style::styles().size(); i++)
-		if (Style::styles().at(i)->matches(_layers))
+		if (Style::styles().at(i)->matches(_vectorLayers))
 			return Style::styles().at(i);
 
 	qWarning("%s: no matching MVT style found", qUtf8Printable(path()));
@@ -113,8 +114,9 @@ void OnlineMap::load(const Projection &in, const Projection &out,
 	_mapRatio = hidpi ? deviceRatio : 1.0;
 	_zooms.setMax(_baseZoom);
 
-	if (_mvt) {
-		_tileRatio = deviceRatio;
+	if (_tileType.contains(MVT)) {
+		if (!_tileType.contains(Raster))
+			_tileRatio = deviceRatio;
 		_style = (style >= 0 && style < Style::styles().size())
 		  ? Style::styles().at(style) : defaultStyle();
 
@@ -123,14 +125,15 @@ void OnlineMap::load(const Projection &in, const Projection &out,
 				break;
 			_zooms.setMax(i);
 		}
-
-		QPixmapCache::clear();
 	}
 
+	_layers = (layer > 0) ? 1 : _tileType.size();
 	_hillShading = OnlineMap::hillShading() & hillShading;
 
 	_coordinatesRatio = _mapRatio > 1.0 ? _mapRatio / _tileRatio : 1.0;
 	_factor = zoom2scale(_zoom, _tileSize) * _coordinatesRatio;
+
+	QPixmapCache::clear();
 }
 
 void OnlineMap::unload()
@@ -252,14 +255,17 @@ void OnlineMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 			drawTile(painter, pm, tp);
 		} else {
 			QList<Source> sources;
-			for (int j = 0; j < t.files().size(); j++) {
+			for (int j = 0; j < qMin(t.files().size(), _layers); j++) {
 				const QString &path = t.files().at(j);
-				QFile file(path);
-				if (file.open(QIODevice::ReadOnly))
-					sources.append(Source(file.readAll(), false, _mvt));
-				else
-					qWarning("%s: %s", qUtf8Printable(path),
-					  qUtf8Printable(file.errorString()));
+				if (path != NULLFILE) {
+					QFile file(path);
+					if (file.open(QIODevice::ReadOnly))
+						sources.append(Source(file.readAll(), false,
+						  _tileType.at(j) == MVT));
+					else
+						qWarning("%s: %s", qUtf8Printable(path),
+						  qUtf8Printable(file.errorString()));
+				}
 			}
 
 			renderTiles.append(RasterTile(sources, _style, _zoom, t.xy(),
@@ -268,7 +274,7 @@ void OnlineMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 	}
 
 	if (!renderTiles.isEmpty()) {
-		if (flags & Map::Block || !_mvt) {
+		if (flags & Map::Block || !_tileType.contains(MVT)) {
 			QFuture<void> future = QtConcurrent::map(renderTiles,
 			  &RasterTile::render);
 			future.waitForFinished();
@@ -322,7 +328,7 @@ QStringList OnlineMap::styles(int &defaultStyle) const
 {
 	QStringList list;
 
-	if (_mvt) {
+	if (_tileType.contains(MVT)) {
 		list.reserve(Style::styles().size());
 		for (int i = 0; i < Style::styles().size(); i++)
 			list.append(Style::styles().at(i)->name());
@@ -332,4 +338,16 @@ QStringList OnlineMap::styles(int &defaultStyle) const
 		defaultStyle = -1;
 
 	return list;
+}
+
+QStringList OnlineMap::layers(const QString &lang, int &defaultLayer) const
+{
+	Q_UNUSED(lang);
+
+	defaultLayer = 0;
+
+	if (_tileType.size() > 1)
+		return QStringList() << tr("All") << tr("Basemap only");
+	else
+		return QStringList();
 }

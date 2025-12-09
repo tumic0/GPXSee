@@ -14,11 +14,16 @@ class OnlineMap : public Map
 	Q_OBJECT
 
 public:
+	enum TileType {
+		MVT,
+		Raster
+	};
+
 	OnlineMap(const QString &fileName, const QString &name,
-	  const QStringList &url, const Range &zooms, const RectC &bounds,
-	  qreal tileRatio, const QList<HTTPHeader> &headers, int tileSize,
-	  bool mvt, bool invertY, bool quadTiles, const QStringList &layers,
-	  QObject *parent = 0);
+	  const QStringList &url, const QList<TileType> &tileType, int tileSize,
+	  qreal tileRatio, const Range &zooms, const RectC &bounds,
+	  const QList<HTTPHeader> &headers, bool invertY, bool quadTiles,
+	  QStringList vectorLayers, QObject *parent = 0);
 
 	QString name() const {return _name;}
 
@@ -43,6 +48,7 @@ public:
 	void clearCache();
 
 	QStringList styles(int &defaultStyle) const;
+	QStringList layers(const QString &lang, int &defaultLayer) const;
 	bool hillShading() const;
 
 private slots:
@@ -68,13 +74,14 @@ private:
 	QString _name;
 	Range _zooms;
 	RectC _bounds;
-	int _zoom;
 	int _tileSize;
-	int _baseZoom;
+	int _zoom, _baseZoom;
 	qreal _mapRatio, _tileRatio;
-	bool _mvt, _hillShading, _invertY;
+	QList<TileType> _tileType;
+	int _layers;
+	bool _hillShading, _invertY;
 	const MVT::Style *_style;
-	QStringList _layers;
+	QStringList _vectorLayers;
 
 	qreal _factor;
 	qreal _coordinatesRatio;

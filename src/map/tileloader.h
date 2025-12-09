@@ -7,6 +7,12 @@
 #include "downloader.h"
 #include "rectd.h"
 
+#ifdef Q_OS_WIN32
+#define NULLFILE "nul"
+#else // Q_OS_WIN32
+#define NULLFILE "/dev/null"
+#endif // Q_OS_WIN32
+
 class TileLoader : public QObject
 {
 	Q_OBJECT

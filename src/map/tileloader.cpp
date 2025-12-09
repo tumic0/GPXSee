@@ -69,8 +69,12 @@ void TileLoader::loadTilesAsync(QVector<Tile> &list)
 				if (url.isLocalFile())
 					t.addFile(url.toLocalFile());
 				else {
-					t.addFile(QString());
-					dl.append(Download(url, file));
+					if (_downloader->hasError(url))
+						t.addFile(NULLFILE);
+					else {
+						t.addFile(QString());
+						dl.append(Download(url, file));
+					}
 				}
 			}
 		}
@@ -98,8 +102,12 @@ void TileLoader::loadTilesSync(QVector<Tile> &list)
 				if (url.isLocalFile())
 					t.addFile(url.toLocalFile());
 				else {
-					t.addFile(QString());
-					dl.append(Download(url, file));
+					if (_downloader->hasError(url))
+						t.addFile(NULLFILE);
+					else {
+						t.addFile(QString());
+						dl.append(Download(url, file));
+					}
 				}
 			}
 		}

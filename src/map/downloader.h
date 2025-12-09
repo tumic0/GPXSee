@@ -46,6 +46,7 @@ public:
 	Downloader(QObject *parent = 0) : QObject(parent) {}
 
 	bool get(const QList<Download> &list, const QList<HTTPHeader> &headers);
+	bool hasError(const QUrl &url) const {return _errorDownloads.contains(url);}
 	void clearErrors() {_errorDownloads.clear();}
 
 	static void setNetworkManager(QNetworkAccessManager *manager)
