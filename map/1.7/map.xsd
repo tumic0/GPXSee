@@ -48,7 +48,7 @@
 						</xs:simpleContent>
 					</xs:complexType>
 				</xs:element>
-				<xs:element name="tile" minOccurs="0" maxOccurs="1">
+				<xs:element name="tile" minOccurs="0" maxOccurs="unbounded">
 					<xs:complexType>
 						<xs:attribute name="size" type="xs:nonNegativeInteger"/>
 						<xs:attribute name="pixelRatio" type="xs:decimal"/>
