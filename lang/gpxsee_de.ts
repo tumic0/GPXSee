@@ -1503,12 +1503,12 @@
     <message>
         <location filename="../src/map/onlinemap.cpp" line="350"/>
         <source>All</source>
-        <translation type="unfinished">Alle</translation>
+        <translation>Alle</translation>
     </message>
     <message>
         <location filename="../src/map/onlinemap.cpp" line="350"/>
         <source>Basemap only</source>
-        <translation type="unfinished"></translation>
+        <translation>Nur Basiskarte</translation>
     </message>
 </context>
 <context>
