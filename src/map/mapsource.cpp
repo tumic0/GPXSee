@@ -271,8 +271,7 @@ Map *MapSource::create(const QString &path, const Projection &proj, bool *isDir)
 
 	int tileSize, rasterTileSize = 0, mvtTileSize = 0;
 	qreal tileRatio = 0;
-	QList<OnlineMap::TileType> tileTypes(config.tiles.size(),
-	  Qt::Initialization::Uninitialized);
+	QList<OnlineMap::TileType> tileTypes(config.tiles.size());
 	QStringList vectorLayers;
 
 	for (int i = 0; i < config.tiles.size(); i++) {
