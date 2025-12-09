@@ -271,13 +271,15 @@ Map *MapSource::create(const QString &path, const Projection &proj, bool *isDir)
 
 	int tileSize, rasterTileSize = 0, mvtTileSize = 0;
 	qreal tileRatio = 0;
-	QList<OnlineMap::TileType> tileTypes(config.tiles.size());
+	QList<OnlineMap::TileType> tileTypes;
 	QStringList vectorLayers;
+
+	tileTypes.reserve(config.tiles.size());
 
 	for (int i = 0; i < config.tiles.size(); i++) {
 		const Tile &t = config.tiles.at(i);
 
-		tileTypes[i] = t.mvt ? OnlineMap::MVT : OnlineMap::Raster;
+		tileTypes.append(t.mvt ? OnlineMap::MVT : OnlineMap::Raster);
 		vectorLayers += t.vectorLayers;
 
 		if (t.mvt) {
