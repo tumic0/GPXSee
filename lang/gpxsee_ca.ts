@@ -168,7 +168,7 @@
     <message>
         <location filename="../src/data/data.cpp" line="250"/>
         <source>GPMF files</source>
-        <translation type="unfinished"></translation>
+        <translation>Fitxers GPMF</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="251"/>
@@ -1503,12 +1503,12 @@
     <message>
         <location filename="../src/map/onlinemap.cpp" line="350"/>
         <source>All</source>
-        <translation type="unfinished">Tot</translation>
+        <translation>Tot</translation>
     </message>
     <message>
         <location filename="../src/map/onlinemap.cpp" line="350"/>
         <source>Basemap only</source>
-        <translation type="unfinished"></translation>
+        <translation>Només mapa base</translation>
     </message>
 </context>
 <context>

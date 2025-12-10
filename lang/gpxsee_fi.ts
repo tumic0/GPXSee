@@ -198,7 +198,7 @@
     <message>
         <location filename="../src/data/data.cpp" line="250"/>
         <source>GPMF files</source>
-        <translation type="unfinished"></translation>
+        <translation>GPMF-tiedostot</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="252"/>
@@ -1503,7 +1503,7 @@
     <message>
         <location filename="../src/map/onlinemap.cpp" line="350"/>
         <source>All</source>
-        <translation type="unfinished">Kaikki</translation>
+        <translation>Kaikki</translation>
     </message>
     <message>
         <location filename="../src/map/onlinemap.cpp" line="350"/>

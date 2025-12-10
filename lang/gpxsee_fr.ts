@@ -1508,7 +1508,7 @@
     <message>
         <location filename="../src/map/onlinemap.cpp" line="350"/>
         <source>Basemap only</source>
-        <translation type="unfinished"></translation>
+        <translation>Carte de base seulement</translation>
     </message>
 </context>
 <context>
