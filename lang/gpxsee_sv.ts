@@ -1508,12 +1508,12 @@
     <message>
         <location filename="../src/map/onlinemap.cpp" line="350"/>
         <source>All</source>
-        <translation type="unfinished">Alla</translation>
+        <translation>Alla</translation>
     </message>
     <message>
         <location filename="../src/map/onlinemap.cpp" line="350"/>
         <source>Basemap only</source>
-        <translation type="unfinished"></translation>
+        <translation>Endast baskarta</translation>
     </message>
 </context>
 <context>

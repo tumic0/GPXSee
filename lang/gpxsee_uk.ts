@@ -1510,12 +1510,12 @@
     <message>
         <location filename="../src/map/onlinemap.cpp" line="350"/>
         <source>All</source>
-        <translation type="unfinished"></translation>
+        <translation>Усі</translation>
     </message>
     <message>
         <location filename="../src/map/onlinemap.cpp" line="350"/>
         <source>Basemap only</source>
-        <translation type="unfinished"></translation>
+        <translation>Тільки базова карта</translation>
     </message>
 </context>
 <context>
