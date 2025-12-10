@@ -34,6 +34,7 @@ bool TXTParser::parse(QFile *file, QList<TrackData> &tracks,
 		if (entry.size() == 1) {
 			if (entry.at(0) == "$V02") {
 				tracks.append(TrackData(SegmentData()));
+				tracks.last().setFile(file->fileName());
 				sg = &tracks.last().last();
 			} else {
 				_errorString = "Invalid track start marker";
