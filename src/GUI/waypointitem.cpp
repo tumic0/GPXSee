@@ -1,7 +1,7 @@
 #include <QApplication>
 #include <QPainter>
 #include <QGraphicsSceneMouseEvent>
-#include <QLabel>
+#include <QFileInfo>
 #include "font.h"
 #include "popup.h"
 #include "waypointitem.h"
@@ -67,6 +67,12 @@ ToolTip WaypointItem::info(bool extended) const
 		}
 		tt.insert(qApp->translate("WaypointItem", "Links"), links);
 	}
+#ifndef Q_OS_ANDROID
+	if (!_waypoint.file().isEmpty())
+		tt.insert(qApp->translate("WaypointItem", "File"),
+		  QString("<a href=\"file:%1\">%2</a>").arg(_waypoint.file(),
+		  QFileInfo(_waypoint.file()).fileName()));
+#endif // Q_OS_ANDROID
 
 	tt.setImages(_waypoint.images());
 

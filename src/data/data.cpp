@@ -26,7 +26,7 @@
 #include "txtparser.h"
 #include "vtkparser.h"
 #include "vkxparser.h"
-#include "gpmfparser.h"
+#include "mp4parser.h"
 #include "data.h"
 
 
@@ -56,7 +56,7 @@ static GPSDumpParser gpsdump;
 static TXTParser txt;
 static VTKParser vtk;
 static VKXParser vkx;
-static GPMFParser gpmf;
+static MP4Parser mp4;
 
 static QMultiMap<QString, Parser*> parsers()
 {
@@ -93,8 +93,8 @@ static QMultiMap<QString, Parser*> parsers()
 	map.insert("txt", &txt);
 	map.insert("vtk", &vtk);
 	map.insert("vkx", &vkx);
-	map.insert("mp4", &gpmf);
-	map.insert("raw", &gpmf);
+	map.insert("mp4", &mp4);
+	map.insert("raw", &mp4);
 
 	return map;
 }
@@ -247,11 +247,12 @@ QString Data::formats()
 	  + qApp->translate("Data", "JPEG images") + " (*.jpg *.jpeg);;"
 	  + qApp->translate("Data", "KML files") + " (*.kml *.kmz);;"
 	  + qApp->translate("Data", "LOC files") + " (*.loc);;"
-	  + qApp->translate("Data", "GPMF files") + " (*.mp4 *.raw);;"
+	  + qApp->translate("Data", "MP4 videos") + " (*.mp4 *.mov);;"
 	  + qApp->translate("Data", "NMEA files") + " (*.nmea);;"
 	  + qApp->translate("Data", "ONmove files") + " (*.omd *.ghp);;"
 	  + qApp->translate("Data", "OV2 files") + " (*.ov2);;"
 	  + qApp->translate("Data", "OziExplorer files") + " (*.plt *.rte *.wpt);;"
+	  + qApp->translate("Data", "GPMF files") + " (*.raw);;"
 	  + qApp->translate("Data", "SLF files") + " (*.slf);;"
 	  + qApp->translate("Data", "SML files") + " (*.sml);;"
 	  + qApp->translate("Data", "TCX files") + " (*.tcx);;"

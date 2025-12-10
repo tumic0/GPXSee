@@ -19,6 +19,7 @@ public:
 private:
 	qreal _time;
 	qreal _movingTime;
+	bool _video;
 };
 
 #endif // TRACKITEM_H

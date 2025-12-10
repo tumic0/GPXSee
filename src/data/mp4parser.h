@@ -1,9 +1,9 @@
-#ifndef GPMFPARSER_H
-#define GPMFPARSER_H
+#ifndef MP4PARSER_H
+#define MP4PARSER_H
 
 #include "parser.h"
 
-class GPMFParser : public Parser
+class MP4Parser : public Parser
 {
 public:
 	bool parse(QFile *file, QList<TrackData> &tracks, QList<RouteData> &routes,
@@ -12,9 +12,11 @@ public:
 	int errorLine() const {return 0;}
 
 private:
+	bool mp4(QFile *file, QVector<quint32> &sizes, QVector<quint64> &chunks,
+	  Waypoint &wpt);
 	bool gpmf(QFile *file, quint64 offset, quint32 size, SegmentData &segment);
 
 	QString _errorString;
 };
 
-#endif // GPMFPARSER_H
+#endif // MP4PARSER_H

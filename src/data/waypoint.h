@@ -34,6 +34,7 @@ public:
 	const QDateTime &timestamp() const {return _timestamp;}
 	qreal elevation() const {return _elevation;}
 	const PointStyle &style() const {return _style;}
+	const QString &file() const {return _file;}
 
 	QPair<qreal, qreal> elevations(Map *map) const;
 
@@ -51,6 +52,7 @@ public:
 	void addImage(const QString &path) {_images.append(path);}
 	void addLink(const Link &link) {_links.append(link);}
 	void setStyle(const PointStyle &style) {_style = style;}
+	void setFile(const QString &path) {_file = path;}
 
 	bool hasElevation() const {return !std::isnan(_elevation);}
 
@@ -73,6 +75,7 @@ private:
 	QString _address;
 	QString _phone;
 	QString _symbol;
+	QString _file;
 	QVector<QString> _images;
 	QVector<Link> _links;
 	QDateTime _timestamp;

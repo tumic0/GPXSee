@@ -42,7 +42,7 @@ ToolTip TrackItem::info(bool extended) const
 #ifdef Q_OS_ANDROID
 	Q_UNUSED(extended);
 #else // Q_OS_ANDROID
-	if (extended && !_file.isEmpty())
+	if ((extended || _video) && !_file.isEmpty())
 		tt.insert(tr("File"), QString("<a href=\"file:%1\">%2</a>")
 		  .arg(_file, QFileInfo(_file).fileName()));
 #endif // Q_OS_ANDROID
@@ -61,4 +61,5 @@ TrackItem::TrackItem(const Track &track, Map *map, QGraphicsItem *parent)
 	_time = track.time();
 	_movingTime = track.movingTime();
 	_file = track.file();
+	_video = track.isVideo();
 }

@@ -37,6 +37,7 @@ public:
 	const QVector<Link> &links() const {return _data.links();}
 	const LineStyle &style() const {return _data.style();}
 	const QString &file() const {return _data.file();}
+	bool isVideo() const {return _data.isVideo();}
 
 	bool isValid() const;
 
