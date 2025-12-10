@@ -168,7 +168,7 @@
     <message>
         <location filename="../src/data/data.cpp" line="250"/>
         <source>MP4 videos</source>
-        <translation type="unfinished"></translation>
+        <translation>Videa MP4</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="251"/>
@@ -2769,7 +2769,7 @@
     <message>
         <location filename="../src/GUI/waypointitem.cpp" line="72"/>
         <source>File</source>
-        <translation type="unfinished">Soubor</translation>
+        <translation>Soubor</translation>
     </message>
 </context>
 </TS>
