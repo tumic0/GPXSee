@@ -166,6 +166,11 @@
         <translation>LOC-tiedostot</translation>
     </message>
     <message>
+        <location filename="../src/data/data.cpp" line="250"/>
+        <source>MP4 videos</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../src/data/data.cpp" line="251"/>
         <source>NMEA files</source>
         <translation>NMEA-tiedostot</translation>
@@ -181,22 +186,22 @@
         <translation>OziExplorer-tiedostot</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="256"/>
+        <location filename="../src/data/data.cpp" line="257"/>
         <source>SML files</source>
         <translation>SML-tiedostot</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="257"/>
+        <location filename="../src/data/data.cpp" line="258"/>
         <source>TCX files</source>
         <translation>TCX-tiedostot</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="255"/>
+        <location filename="../src/data/data.cpp" line="256"/>
         <source>SLF files</source>
         <translation>SLF-tiedostot</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="250"/>
+        <location filename="../src/data/data.cpp" line="255"/>
         <source>GPMF files</source>
         <translation type="unfinished"></translation>
     </message>
@@ -206,32 +211,32 @@
         <translation>ONmove-tiedostot</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="258"/>
+        <location filename="../src/data/data.cpp" line="259"/>
         <source>70mai GPS log files</source>
         <translation>70mai GPS -lokitiedostot</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="259"/>
+        <location filename="../src/data/data.cpp" line="260"/>
         <source>VKX files</source>
         <translation>VKX-tiedostot</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="260"/>
+        <location filename="../src/data/data.cpp" line="261"/>
         <source>VTK files</source>
         <translation>VTK-tiedostot</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="261"/>
+        <location filename="../src/data/data.cpp" line="262"/>
         <source>TwoNav files</source>
         <translation>TwoNav-tiedostot</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="262"/>
+        <location filename="../src/data/data.cpp" line="263"/>
         <source>GPSDump files</source>
         <translation>GPSDump-tiedostot</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="263"/>
+        <location filename="../src/data/data.cpp" line="264"/>
         <source>All files</source>
         <translation>Kaikki tiedostot</translation>
     </message>
@@ -2758,6 +2763,11 @@
         <location filename="../src/GUI/waypointitem.cpp" line="68"/>
         <source>Links</source>
         <translation>Linkit</translation>
+    </message>
+    <message>
+        <location filename="../src/GUI/waypointitem.cpp" line="72"/>
+        <source>File</source>
+        <translation type="unfinished">Tiedosto</translation>
     </message>
 </context>
 </TS>

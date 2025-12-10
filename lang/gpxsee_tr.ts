@@ -167,6 +167,11 @@
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="250"/>
+        <source>MP4 videos</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/data/data.cpp" line="255"/>
         <source>GPMF files</source>
         <translation>GPMF dosyaları</translation>
     </message>
@@ -191,47 +196,47 @@
         <translation>OziExplorer dosyaları</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="255"/>
+        <location filename="../src/data/data.cpp" line="256"/>
         <source>SLF files</source>
         <translation>SLF dosyaları</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="256"/>
+        <location filename="../src/data/data.cpp" line="257"/>
         <source>SML files</source>
         <translation>SML dosyaları</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="257"/>
+        <location filename="../src/data/data.cpp" line="258"/>
         <source>TCX files</source>
         <translation>TCX dosyaları</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="258"/>
+        <location filename="../src/data/data.cpp" line="259"/>
         <source>70mai GPS log files</source>
         <translation>70mai GPS kayıt dosyaları</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="259"/>
+        <location filename="../src/data/data.cpp" line="260"/>
         <source>VKX files</source>
         <translation>VKX dosyaları</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="260"/>
+        <location filename="../src/data/data.cpp" line="261"/>
         <source>VTK files</source>
         <translation>VTK dosyaları</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="261"/>
+        <location filename="../src/data/data.cpp" line="262"/>
         <source>TwoNav files</source>
         <translation>TwoNav dosyaları</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="262"/>
+        <location filename="../src/data/data.cpp" line="263"/>
         <source>GPSDump files</source>
         <translation>GPSDump dosyaları</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="263"/>
+        <location filename="../src/data/data.cpp" line="264"/>
         <source>All files</source>
         <translation>Tüm dosyalar</translation>
     </message>
@@ -2756,6 +2761,11 @@
         <location filename="../src/GUI/waypointitem.cpp" line="68"/>
         <source>Links</source>
         <translation>Bağlantılar</translation>
+    </message>
+    <message>
+        <location filename="../src/GUI/waypointitem.cpp" line="72"/>
+        <source>File</source>
+        <translation type="unfinished">Dosya</translation>
     </message>
 </context>
 </TS>
