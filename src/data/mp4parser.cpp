@@ -499,7 +499,6 @@ static bool udta(QDataStream &stream, quint64 atomSize, Waypoint &wpt)
 			if (!xyz(stream, size ? size - hdrSize : 0, wpt))
 				return false;
 		} else {
-			qDebug() << QByteArray((char*)&type, sizeof(type));
 			if (size) {
 				if (stream.skipRawData(size - hdrSize)
 				  != (qint64)(size - hdrSize))
