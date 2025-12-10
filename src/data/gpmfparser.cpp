@@ -505,8 +505,10 @@ bool GPMFParser::parse(QFile *file, QList<TrackData> &tracks,
 	if (segment.isEmpty()) {
 		_errorString = "No GPS data found in GPMF";
 		return false;
-	} else
-		tracks.append(segment);
+	}
+
+	tracks.append(segment);
+	tracks.last().setFile(file->fileName());
 
 	return true;
 }
