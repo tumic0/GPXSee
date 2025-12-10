@@ -173,7 +173,7 @@
     <message>
         <location filename="../src/data/data.cpp" line="255"/>
         <source>GPMF files</source>
-        <translation type="unfinished"></translation>
+        <translation>GPMF-dosieroj</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="251"/>
@@ -1508,7 +1508,7 @@
     <message>
         <location filename="../src/map/onlinemap.cpp" line="350"/>
         <source>All</source>
-        <translation type="unfinished">Ĉiuj</translation>
+        <translation>Ĉiuj</translation>
     </message>
     <message>
         <location filename="../src/map/onlinemap.cpp" line="350"/>

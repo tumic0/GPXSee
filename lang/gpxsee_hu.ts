@@ -1506,12 +1506,12 @@
     <message>
         <location filename="../src/map/onlinemap.cpp" line="350"/>
         <source>All</source>
-        <translation type="unfinished">Mind</translation>
+        <translation>Mind</translation>
     </message>
     <message>
         <location filename="../src/map/onlinemap.cpp" line="350"/>
         <source>Basemap only</source>
-        <translation type="unfinished"></translation>
+        <translation>Csak alaptérkép</translation>
     </message>
 </context>
 <context>
