@@ -149,7 +149,7 @@ Track::Track(const TrackData &data) : _pause(0)
 					  sd.at(j).timestamp()) / 1000.0;
 				else {
 					qWarning("%s: %s: time skew detected",
-					  qUtf8Printable(_data.name()),
+					  qUtf8Printable(_data.file()),
 					  qUtf8Printable(sd.at(j).timestamp().toString(Qt::ISODate)));
 					dt = 0;
 				}
@@ -157,7 +157,7 @@ Track::Track(const TrackData &data) : _pause(0)
 				dt = NAN;
 				if (hasTime) {
 					qWarning("%s: missing timestamp(s), time graphs disabled",
-					  qUtf8Printable(_data.name()));
+					  qUtf8Printable(_data.file()));
 					hasTime = false;
 					for (int i = 0; i < seg.time.size(); i++)
 						seg.time[i] = NAN;
