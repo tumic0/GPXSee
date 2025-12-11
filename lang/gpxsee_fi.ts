@@ -82,7 +82,7 @@
     <message>
         <location filename="../src/map/coros4map.cpp" line="399"/>
         <source>Topo</source>
-        <translation type="unfinished"></translation>
+        <translation>Topo</translation>
     </message>
 </context>
 <context>
@@ -100,7 +100,7 @@
     <message>
         <location filename="../src/map/coros5map.cpp" line="461"/>
         <source>Topo</source>
-        <translation type="unfinished"></translation>
+        <translation>Topo</translation>
     </message>
 </context>
 <context>
@@ -168,7 +168,7 @@
     <message>
         <location filename="../src/data/data.cpp" line="250"/>
         <source>MP4 videos</source>
-        <translation type="unfinished"></translation>
+        <translation>MP4-videot</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="251"/>
@@ -2004,7 +2004,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="667"/>
         <source>Hillshading</source>
-        <translation type="unfinished"></translation>
+        <translation>Rinnevarjoste</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="685"/>
@@ -2767,7 +2767,7 @@
     <message>
         <location filename="../src/GUI/waypointitem.cpp" line="72"/>
         <source>File</source>
-        <translation type="unfinished">Tiedosto</translation>
+        <translation>Tiedosto</translation>
     </message>
 </context>
 </TS>
