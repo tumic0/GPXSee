@@ -1508,7 +1508,7 @@
     <message>
         <location filename="../src/map/onlinemap.cpp" line="350"/>
         <source>All</source>
-        <translation type="unfinished">Toutes</translation>
+        <translation>Toutes</translation>
     </message>
     <message>
         <location filename="../src/map/onlinemap.cpp" line="350"/>
@@ -2767,7 +2767,7 @@
     <message>
         <location filename="../src/GUI/waypointitem.cpp" line="72"/>
         <source>File</source>
-        <translation type="unfinished">Fichier</translation>
+        <translation>Fichier</translation>
     </message>
 </context>
 </TS>
