@@ -168,12 +168,12 @@
     <message>
         <location filename="../src/data/data.cpp" line="250"/>
         <source>MP4 videos</source>
-        <translation type="unfinished"></translation>
+        <translation>MP4 视频</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="255"/>
         <source>GPMF files</source>
-        <translation type="unfinished"></translation>
+        <translation>GPMF 文件</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="251"/>
@@ -1506,12 +1506,12 @@
     <message>
         <location filename="../src/map/onlinemap.cpp" line="350"/>
         <source>All</source>
-        <translation type="unfinished">所有图层</translation>
+        <translation>所有图层</translation>
     </message>
     <message>
         <location filename="../src/map/onlinemap.cpp" line="350"/>
         <source>Basemap only</source>
-        <translation type="unfinished"></translation>
+        <translation>仅底图</translation>
     </message>
 </context>
 <context>
@@ -2765,7 +2765,7 @@
     <message>
         <location filename="../src/GUI/waypointitem.cpp" line="72"/>
         <source>File</source>
-        <translation type="unfinished">文件</translation>
+        <translation>文件</translation>
     </message>
 </context>
 </TS>
