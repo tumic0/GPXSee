@@ -168,7 +168,7 @@
     <message>
         <location filename="../src/data/data.cpp" line="250"/>
         <source>MP4 videos</source>
-        <translation type="unfinished"></translation>
+        <translation>MP4 videók</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="255"/>
@@ -2765,7 +2765,7 @@
     <message>
         <location filename="../src/GUI/waypointitem.cpp" line="72"/>
         <source>File</source>
-        <translation type="unfinished">Műveletgombok</translation>
+        <translation>Fájl</translation>
     </message>
 </context>
 </TS>
