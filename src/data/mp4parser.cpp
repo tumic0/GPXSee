@@ -18,6 +18,7 @@ static constexpr quint32 TAG(const char name[4])
 
 constexpr quint32 FTYP = TAG("ftyp");
 constexpr quint32 MOOV = TAG("moov");
+constexpr quint32 MVHD = TAG("mvhd");
 constexpr quint32 TRAK = TAG("trak");
 constexpr quint32 MDIA = TAG("mdia");
 constexpr quint32 HDLR = TAG("hdlr");
@@ -481,7 +482,9 @@ static bool xyz(QDataStream &stream, quint64 atomSize, Waypoint &wpt)
 		return false;
 
 	if (!iso6709(ba, wpt))
-		qWarning("%s: invalid ISO6709 location", qUtf8Printable(ba));
+		qWarning("%s: %s: invalid ISO6709 location",
+		  qUtf8Printable(qobject_cast<QFile*>(stream.device())->fileName()),
+		  qUtf8Printable(ba));
 
 	return true;
 }
@@ -513,6 +516,24 @@ static bool udta(QDataStream &stream, quint64 atomSize, Waypoint &wpt)
 	return (!atomSize);
 }
 
+static bool mvhd(QDataStream &stream, quint64 atomSize, Waypoint &wpt)
+{
+	static const QDateTime dt1904 = QDateTime(QDate(1904, 1, 1), QTime(0, 0),
+	  QTimeZone::utc());
+
+	if (atomSize && atomSize < 8)
+		return false;
+
+	quint32 vf, time;
+	stream >> vf >> time;
+	if (stream.status())
+		return false;
+
+	wpt.setTimestamp(dt1904.addSecs(time));
+
+	return (stream.skipRawData(atomSize - 8) == (qint64)(atomSize - 8));
+}
+
 static bool moov(QDataStream &stream, quint64 atomSize, QVector<quint32> &sizes,
   QVector<quint64> &chunks, Waypoint &wpt)
 {
@@ -525,6 +546,9 @@ static bool moov(QDataStream &stream, quint64 atomSize, QVector<quint32> &sizes,
 
 		if (type == TRAK) {
 			if (!trak(stream, size ? size - hdrSize : 0, sizes, chunks))
+				return false;
+		} else if (type == MVHD) {
+			if (!mvhd(stream, size ? size - hdrSize : 0, wpt))
 				return false;
 		} else if (type == UDTA) {
 			if (!udta(stream, size ? size - hdrSize : 0, wpt))
