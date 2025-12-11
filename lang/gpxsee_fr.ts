@@ -168,7 +168,7 @@
     <message>
         <location filename="../src/data/data.cpp" line="250"/>
         <source>MP4 videos</source>
-        <translation type="unfinished"></translation>
+        <translation>Vidéos MP4</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="251"/>
