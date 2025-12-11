@@ -900,7 +900,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="820"/>
         <source>File</source>
-        <translation>Műveletgombok</translation>
+        <translation>Fájl</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="829"/>
@@ -1352,7 +1352,7 @@
     <message>
         <location filename="../src/GUI/mapitem.cpp" line="82"/>
         <source>File</source>
-        <translation>Műveletgombok</translation>
+        <translation>Fájl</translation>
     </message>
 </context>
 <context>
@@ -2441,7 +2441,7 @@
     <message>
         <location filename="../src/GUI/routeitem.cpp" line="38"/>
         <source>File</source>
-        <translation>Műveletgombok</translation>
+        <translation>Fájl</translation>
     </message>
 </context>
 <context>
@@ -2707,7 +2707,7 @@
     <message>
         <location filename="../src/GUI/trackitem.cpp" line="46"/>
         <source>File</source>
-        <translation>Műveletgombok</translation>
+        <translation>Fájl</translation>
     </message>
 </context>
 <context>
