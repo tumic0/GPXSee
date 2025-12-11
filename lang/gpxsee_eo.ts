@@ -82,7 +82,7 @@
     <message>
         <location filename="../src/map/coros4map.cpp" line="399"/>
         <source>Topo</source>
-        <translation type="unfinished"></translation>
+        <translation>Topo</translation>
     </message>
 </context>
 <context>
@@ -100,7 +100,7 @@
     <message>
         <location filename="../src/map/coros5map.cpp" line="461"/>
         <source>Topo</source>
-        <translation type="unfinished"></translation>
+        <translation>Topo</translation>
     </message>
 </context>
 <context>
@@ -1331,7 +1331,7 @@
     <message>
         <location filename="../src/map/imgmap.cpp" line="353"/>
         <source>All</source>
-        <translation type="unfinished">Ĉiuj</translation>
+        <translation>Ĉiuj</translation>
     </message>
     <message>
         <location filename="../src/map/imgmap.cpp" line="353"/>
@@ -1397,7 +1397,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="189"/>
         <source>COROS maps</source>
-        <translation type="unfinished"></translation>
+        <translation>COROS-mapoj</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="195"/>
@@ -1427,7 +1427,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="200"/>
         <source>PMTiles maps</source>
-        <translation type="unfinished"></translation>
+        <translation>PMTiles-mapoj</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="201"/>
@@ -2767,7 +2767,7 @@
     <message>
         <location filename="../src/GUI/waypointitem.cpp" line="72"/>
         <source>File</source>
-        <translation type="unfinished">Dosiero</translation>
+        <translation>Dosiero</translation>
     </message>
 </context>
 </TS>
