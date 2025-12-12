@@ -6,7 +6,7 @@ GPS log file formats.
 * Opens GPX, TCX, FIT, KML, NMEA, IGC, CUP, SIGMA SLF, Suunto SML, LOC, GeoJSON,
   OziExplorer (PLT, RTE, WPT), Garmin GPI&CSV, TomTom OV2&ITN, ONmove OMD/GHP,
   TwoNav (TRK, RTE, WPT), GPSDump WPT, Velocitek VTK, Vakaros VKX, 70mai GPS
-  logs, GoPro videos and geotagged JPEG files.
+  logs, GoPro videos and geotagged JPEG/MP4 files.
 * Opens geo URIs (RFC 5870).
 * User-definable online maps (OpenStreetMap/Google tiles, WMTS, WMS, TMS,
   QuadTiles).
