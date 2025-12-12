@@ -1623,9 +1623,11 @@
 					<string>mov</string>
 				</array>
 				<key>public.mime-type</key>
-				<string>application/mp4</string>
-				<string>video/mp4</string>
-				<string>video/quicktime</string>
+				<array>
+					<string>application/mp4</string>
+					<string>video/mp4</string>
+					<string>video/quicktime</string>
+				</array>
 			</dict>
 		</dict>
 		<dict>
