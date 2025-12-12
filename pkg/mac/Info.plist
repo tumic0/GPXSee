@@ -501,10 +501,13 @@
 			<key>CFBundleTypeExtensions</key>
 			<array>
 				<string>mp4</string>
+				<string>mov</string>
 			</array>
 			<key>CFBundleTypeMIMETypes</key>
 			<array>
 				<string>application/mp4</string>
+				<string>video/mp4</string>
+				<string>video/quicktime</string>
 			</array>
 			<key>CFBundleTypeName</key>
 			<string>MPEG-4 Video</string>
@@ -1617,9 +1620,12 @@
 				<key>public.filename-extension</key>
 				<array>
 					<string>mp4</string>
+					<string>mov</string>
 				</array>
 				<key>public.mime-type</key>
 				<string>application/mp4</string>
+				<string>video/mp4</string>
+				<string>video/quicktime</string>
 			</dict>
 		</dict>
 		<dict>

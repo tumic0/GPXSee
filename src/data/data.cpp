@@ -94,6 +94,7 @@ static QMultiMap<QString, Parser*> parsers()
 	map.insert("vtk", &vtk);
 	map.insert("vkx", &vkx);
 	map.insert("mp4", &mp4);
+	map.insert("mov", &mp4);
 	map.insert("raw", &mp4);
 
 	return map;
