@@ -34,6 +34,7 @@ constexpr quint32 STCO = TAG("stco");
 constexpr quint32 CO64 = TAG("co64");
 constexpr quint32 GPMD = TAG("gpmd");
 constexpr quint32 RTMD = TAG("rtmd");
+constexpr quint32 CAMM = TAG("camm");
 constexpr quint32 UDTA = TAG("udta");
 constexpr quint32 XYZ = TAG("\xa9xyz");
 
@@ -334,17 +335,23 @@ static bool ftyp(QDataStream &stream)
 
 bool MP4Parser::stsd(QDataStream &stream, quint64 atomSize, Format &format)
 {
-	if (atomSize && atomSize < 8)
+	if (atomSize < 8)
 		return false;
 
 	quint32 vf, num;
 	stream >> vf >> num;
 	if (stream.status())
 		return false;
+	atomSize -= 8;
 
 	for (quint32 i = 0; i < num; i++) {
 		quint32 ds, fmt;
+
+		if (atomSize < 8)
+			return false;
 		stream >> ds >> fmt;
+		if (atomSize < ds)
+			return false;
 		stream.skipRawData(ds - 8);
 		if (stream.status())
 			return false;
@@ -355,45 +362,61 @@ bool MP4Parser::stsd(QDataStream &stream, quint64 atomSize, Format &format)
 			case RTMD:
 				format = RTMDFormat;
 				break;
+			case CAMM:
+				format = CAMMFormat;
+				break;
 			default:
 				format = UnknownFormat;
 		}
+
+		atomSize -= ds;
 	}
 
-	return true;
+	return (atomSize)
+	  ? (stream.skipRawData(atomSize) == (qint64)atomSize) : true;
 }
 
 static bool stsz(QDataStream &stream, quint64 atomSize, QVector<quint32> &sizes)
 {
-	if (atomSize && atomSize < 12)
+	if (atomSize < 12)
 		return false;
 
 	quint32 vf, ss, num;
 	stream >> vf >> ss >> num;
 	if (stream.status())
 		return false;
+	atomSize -= 12;
 
 	if (ss)
 		sizes = QVector<quint32>(num, ss);
 	else {
+		if (atomSize < num * 4)
+			return false;
+
 		sizes.resize(num);
 		for (quint32 i = 0; i < num; i++)
 			stream >> sizes[i];
 		if (stream.status())
 			return false;
+		atomSize -= num * 4;
 	}
 
-	return true;
+	return (atomSize)
+	  ? (stream.skipRawData(atomSize) == (qint64)atomSize) : true;
 }
 
 bool MP4Parser::stsc(QDataStream &stream, quint64 atomSize, QVector<Table> &tables)
 {
-	if (atomSize && atomSize < 12)
+	if (atomSize < 12)
 		return false;
 
 	quint32 vf, num;
 	stream >> vf >> num;
 	if (stream.status())
+		return false;
+	atomSize -= 8;
+
+	if (atomSize < num * 12)
 		return false;
 
 	tables.resize(num);
@@ -401,18 +424,24 @@ bool MP4Parser::stsc(QDataStream &stream, quint64 atomSize, QVector<Table> &tabl
 		stream >> tables[i].first >> tables[i].samples >> tables[i].id;
 	if (stream.status())
 		return false;
+	atomSize -= num * 12;
 
-	return true;
+	return (atomSize)
+	  ? (stream.skipRawData(atomSize) == (qint64)atomSize) : true;
 }
 
 static bool stco(QDataStream &stream, quint64 atomSize, QVector<quint64> &chunks)
 {
-	if (atomSize && atomSize < 8)
+	if (atomSize < 8)
 		return false;
 
 	quint32 vf, num, chunk;
 	stream >> vf >> num;
 	if (stream.status())
+		return false;
+	atomSize -= 8;
+
+	if (atomSize < num * 4)
 		return false;
 
 	chunks.resize(num);
@@ -422,18 +451,24 @@ static bool stco(QDataStream &stream, quint64 atomSize, QVector<quint64> &chunks
 	}
 	if (stream.status())
 		return false;
+	atomSize -= num * 4;
 
-	return true;
+	return (atomSize)
+	  ? (stream.skipRawData(atomSize) == (qint64)atomSize) : true;
 }
 
 static bool co64(QDataStream &stream, quint64 atomSize, QVector<quint64> &chunks)
 {
-	if (atomSize && atomSize < 8)
+	if (atomSize < 8)
 		return false;
 
 	quint32 vf, num;
 	stream >> vf >> num;
 	if (stream.status())
+		return false;
+	atomSize -= 8;
+
+	if (atomSize < num * 8)
 		return false;
 
 	chunks.resize(num);
@@ -441,8 +476,10 @@ static bool co64(QDataStream &stream, quint64 atomSize, QVector<quint64> &chunks
 		stream >> chunks[i];
 	if (stream.status())
 		return false;
+	atomSize -= num * 8;
 
-	return true;
+	return (atomSize)
+	  ? (stream.skipRawData(atomSize) == (qint64)atomSize) : true;
 }
 
 bool MP4Parser::stbl(QDataStream &stream, quint64 atomSize, Metadata &meta)
@@ -486,7 +523,6 @@ bool MP4Parser::stbl(QDataStream &stream, quint64 atomSize, Metadata &meta)
 
 static bool hdlr(QDataStream &stream, quint64 atomSize, bool &meta)
 {
-	// HDLR atom size can not be zero
 	if (atomSize < 24)
 		return false;
 
@@ -496,7 +532,7 @@ static bool hdlr(QDataStream &stream, quint64 atomSize, bool &meta)
 	  || stream.skipRawData(atomSize - 24) != (qint64)atomSize - 24)
 		return false;
 
-	meta = (subtype == META);
+	meta = (subtype == META || subtype == CAMM);
 
 	return true;
 }
@@ -844,6 +880,63 @@ bool MP4Parser::rtmf(QFile *file, quint64 offset, quint32 size,
 	return true;
 }
 
+bool MP4Parser::camm(QFile *file, quint64 offset, quint32 size,
+  SegmentData &segment)
+{
+	if (!file->seek(offset)) {
+		_errorString = "Invalid CAMM sample offset";
+		return false;
+	}
+
+	QDataStream stream(file);
+	stream.setByteOrder(QDataStream::LittleEndian);
+
+	quint16 reserved, type;
+	stream >> reserved >> type;
+	if (stream.status() || size < 4) {
+		_errorString = "Invalid CAMM data";
+		return false;
+	}
+	size -= 4;
+
+	unsigned len = 0;
+	double time = NAN, lon = NAN, lat = NAN, ele = NAN;
+	float elef;
+	int fix;
+	static const QDateTime epoch(QDate(1980, 1, 6), QTime(0, 0),
+	  QTimeZone::utc());
+
+	switch (type) {
+		case 5:
+			stream >> lat >> lon >> ele;
+			len = 24;
+			break;
+		case 6:
+			stream >> time >> fix >> lat >> lon >> elef;
+			ele = elef;
+			len = 56;
+			break;
+		default:
+			return true;
+	}
+
+	if (stream.status() || size < len) {
+		_errorString = "CAMM parse error";
+		return false;
+	}
+
+	Trackpoint t(Coordinates(lon, lat));
+	t.setElevation(ele);
+	if (!std::isnan(time)) {
+		qint64 msec = (qint64)(time * 1000);
+		t.setTimestamp(epoch.addMSecs(msec));
+	}
+	if (t.coordinates().isValid())
+		segment.append(t);
+
+	return true;
+}
+
 bool MP4Parser::metadata(QFile *file, const Metadata &meta, SegmentData &segment)
 {
 	if (!meta.format)
@@ -877,6 +970,10 @@ bool MP4Parser::metadata(QFile *file, const Metadata &meta, SegmentData &segment
 					break;
 				case RTMDFormat:
 					if (!rtmf(file, offset, size, segment))
+						return false;
+					break;
+				case CAMMFormat:
+					if (!camm(file, offset, size, segment))
 						return false;
 					break;
 				default:
