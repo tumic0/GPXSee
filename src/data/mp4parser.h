@@ -12,9 +12,40 @@ public:
 	int errorLine() const {return 0;}
 
 private:
-	bool mp4(QFile *file, QVector<quint32> &sizes, QVector<quint64> &chunks,
-	  Waypoint &wpt);
+	enum Format {
+		UnknownFormat, GPMDFormat, RTMDFormat
+	};
+
+	struct Table {
+		quint32 first;
+		quint32 samples;
+		quint32 id;
+	};
+
+	struct Metadata {
+		Metadata() : format(UnknownFormat) {}
+
+		Format format;
+		QVector<Table> tables;
+		QVector<quint32> sizes;
+		QVector<quint64> chunks;
+	};
+
+	bool mp4(QFile *file, Metadata &meta, Waypoint &wpt);
+	bool metadata(QFile *file, const Metadata &meta, SegmentData &segment);
 	bool gpmf(QFile *file, quint64 offset, quint32 size, SegmentData &segment);
+	bool rtmf(QFile *file, quint64 offset, quint32 size, SegmentData &segment);
+
+	static bool atoms(QDataStream &stream, Metadata &meta, Waypoint &wpt);
+	static bool moov(QDataStream &stream, quint64 atomSize, Metadata &meta,
+	  Waypoint &wpt);
+	static bool trak(QDataStream &stream, quint64 atomSize, Metadata &meta);
+	static bool mdia(QDataStream &stream, quint64 atomSize, Metadata &meta);
+	static bool minf(QDataStream &stream, quint64 atomSize, Metadata &meta);
+	static bool stsd(QDataStream &stream, quint64 atomSize, Format &format);
+	static bool stbl(QDataStream &stream, quint64 atomSize, Metadata &meta);
+	static bool stsc(QDataStream &stream, quint64 atomSize,
+	  QVector<Table> &tables);
 
 	QString _errorString;
 };

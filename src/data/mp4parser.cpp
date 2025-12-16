@@ -27,10 +27,12 @@ constexpr quint32 MHLR = TAG("mhlr");
 constexpr quint32 META = TAG("meta");
 constexpr quint32 STBL = TAG("stbl");
 constexpr quint32 STSD = TAG("stsd");
+constexpr quint32 STSC = TAG("stsc");
 constexpr quint32 STSZ = TAG("stsz");
 constexpr quint32 STCO = TAG("stco");
 constexpr quint32 CO64 = TAG("co64");
 constexpr quint32 GPMD = TAG("gpmd");
+constexpr quint32 RTMD = TAG("rtmd");
 constexpr quint32 UDTA = TAG("udta");
 constexpr quint32 XYZ = TAG("\xa9xyz");
 
@@ -39,7 +41,7 @@ constexpr quint32 GPS9 = TAG("GPS9");
 constexpr quint32 GPSU = TAG("GPSU");
 constexpr quint32 SCAL = TAG("SCAL");
 
-static bool entry(QDataStream &stream, quint32 size, SegmentData &segment,
+static bool gpmfEntry(QDataStream &stream, quint32 size, SegmentData &segment,
   bool &gps9, bool &gps5)
 {
 	quint32 key;
@@ -59,7 +61,7 @@ static bool entry(QDataStream &stream, quint32 size, SegmentData &segment,
 		quint32 ps = alignup(ss * repeat, 4);
 
 		if (!type) {
-			if (!entry(stream, ps, segment, gps9, gps5))
+			if (!gpmfEntry(stream, ps, segment, gps9, gps5))
 				return false;
 		} else {
 			if (key == SCAL && type == 'l' && ss == 4
@@ -131,6 +133,158 @@ static bool entry(QDataStream &stream, quint32 size, SegmentData &segment,
 	return true;
 }
 
+static bool coord(QDataStream &stream, quint16 len, double &val)
+{
+	if (len != 24)
+		return false;
+
+	quint32 deg, degSc, min, minSc, sec, secSc;
+	stream >> deg >> degSc >> min >> minSc >> sec >> secSc;
+	if (stream.status())
+		return false;
+
+	val = (deg / (double)degSc) + (min / (double)minSc)/60.0
+	  + (sec / (double)secSc)/3600.0;
+
+	return true;
+}
+
+static bool latRef(QDataStream &stream, quint16 len, bool &neg)
+{
+	if (len != 1)
+		return false;
+
+	quint8 ref;
+	stream >> ref;
+	if (stream.status())
+		return false;
+
+	if (ref == 'S') {
+		neg = true;
+		return true;
+	} else if (ref == 'N') {
+		neg = false;
+		return true;
+	} else
+		return false;
+}
+
+static bool lonRef(QDataStream &stream, quint16 len, bool &neg)
+{
+	if (len != 1)
+		return false;
+
+	quint8 ref;
+	stream >> ref;
+	if (stream.status())
+		return false;
+
+	if (ref == 'W') {
+		neg = true;
+		return true;
+	} else if (ref == 'E') {
+		neg = false;
+		return true;
+	} else
+		return false;
+}
+
+static bool time(QDataStream &stream, quint16 len, QTime &t)
+{
+	if (len != 24)
+		return false;
+
+	quint32 h, hSc, m, mSc, s, sSc;
+	stream >> h >> hSc >> m >> mSc >> s >> sSc;
+	if (stream.status() || hSc != 1 || mSc != 1)
+		return false;
+
+	double ds = s / (double)sSc;
+	int sec = qFloor(ds);
+	int ms = qRound((ds - sec) * 1000.0);
+
+	t = QTime(h, m, sec, ms);
+
+	return true;
+}
+
+static bool date(QDataStream &stream, quint16 len, QDate &d)
+{
+	QByteArray ba(len, Qt::Initialization::Uninitialized);
+	if (stream.readRawData(ba.data(), ba.size()) != ba.size())
+		return false;
+
+	d = QDate::fromString(ba, "yyyy:MM:dd");
+
+	return true;
+}
+
+static bool rtmfEntry(QDataStream &stream, quint32 size, SegmentData &segment)
+{
+	quint16 len, id;
+	double lon = NAN, lat = NAN;
+	bool lonr = false, latr = false;
+	QTime t;
+	QDate d;
+
+	do {
+		if (size < 4)
+			return false;
+		stream >> id >> len;
+		if (stream.status())
+			return false;
+		size -= 4;
+
+		if (id == 0x8300)
+			continue;
+		if (id == 0x060e)
+			len = 12;
+
+		switch (id) {
+			case 0x8501:
+				if (!latRef(stream, len, latr))
+					return false;
+				break;
+			case 0x8502:
+				if (!coord(stream, len, lat))
+					return false;
+				break;
+			case 0x8503:
+				if (!lonRef(stream, len, lonr))
+					return false;
+				break;
+			case 0x8504:
+				if (!coord(stream, len, lon))
+					return false;
+				break;
+			case 0x8507:
+				if (!time(stream, len, t))
+					return false;
+				break;
+			case 0x851d:
+				if (!date(stream, len, d))
+					return false;
+				break;
+			default:
+				if (size < len || stream.skipRawData(len) != len)
+					return false;
+		}
+		size -= len;
+	} while (size);
+
+	if (lonr)
+		lon = -lon;
+	if (latr)
+		lat = -lat;
+
+	Trackpoint tp(Coordinates(lon, lat));
+	tp.setTimestamp(QDateTime(d, t, QTimeZone::utc()));
+	if (tp.coordinates().isValid())
+		segment.append(tp);
+
+	return true;
+}
+
 static bool hdr(QDataStream &stream, quint32 &type, quint64 &size,
   quint32 &hdrSize)
 {
@@ -177,7 +331,7 @@ static bool ftyp(QDataStream &stream)
 	return (stream.skipRawData(size - hdrSize) == (qint64)(size - hdrSize));
 }
 
-static bool stsd(QDataStream &stream, quint64 atomSize, bool &gpmd)
+bool MP4Parser::stsd(QDataStream &stream, quint64 atomSize, Format &format)
 {
 	if (atomSize && atomSize < 8)
 		return false;
@@ -188,13 +342,21 @@ static bool stsd(QDataStream &stream, quint64 atomSize, bool &gpmd)
 		return false;
 
 	for (quint32 i = 0; i < num; i++) {
-		quint32 ds, format;
-		stream >> ds >> format;
+		quint32 ds, fmt;
+		stream >> ds >> fmt;
 		stream.skipRawData(ds - 8);
 		if (stream.status())
 			return false;
-		if (format == GPMD)
-			gpmd = true;
+		switch (fmt) {
+			case GPMD:
+				format = GPMDFormat;
+				break;
+			case RTMD:
+				format = RTMDFormat;
+				break;
+			default:
+				format = UnknownFormat;
+		}
 	}
 
 	return true;
@@ -219,6 +381,25 @@ static bool stsz(QDataStream &stream, quint64 atomSize, QVector<quint32> &sizes)
 		if (stream.status())
 			return false;
 	}
+
+	return true;
+}
+
+bool MP4Parser::stsc(QDataStream &stream, quint64 atomSize, QVector<Table> &tables)
+{
+	if (atomSize && atomSize < 12)
+		return false;
+
+	quint32 vf, num;
+	stream >> vf >> num;
+	if (stream.status())
+		return false;
+
+	tables.resize(num);
+	for (quint32 i = 0; i < num; i++)
+		stream >> tables[i].first >> tables[i].samples >> tables[i].id;
+	if (stream.status())
+		return false;
 
 	return true;
 }
@@ -263,28 +444,29 @@ static bool co64(QDataStream &stream, quint64 atomSize, QVector<quint64> &chunks
 	return true;
 }
 
-static bool stbl(QDataStream &stream, quint64 atomSize, QVector<quint32> &sizes,
-  QVector<quint64> &chunks)
+bool MP4Parser::stbl(QDataStream &stream, quint64 atomSize, Metadata &meta)
 {
 	quint32 type, hdrSize;
 	quint64 size;
-	bool gpmd = false;
 
 	do {
 		if (!(hdr(stream, type, size, hdrSize) && dec(atomSize, size)))
 			return false;
 
 		if (type == STSD) {
-			if (!stsd(stream, size ? size - hdrSize : 0, gpmd))
+			if (!stsd(stream, size ? size - hdrSize : 0, meta.format))
 				return false;
-		} else if (type == STSZ && gpmd) {
-			if (!stsz(stream, size ? size - hdrSize : 0, sizes))
+		} else if (type == STSC && meta.format) {
+			if (!stsc(stream, size ? size - hdrSize : 0, meta.tables))
 				return false;
-		} else if (type == STCO && gpmd) {
-			if (!stco(stream, size ? size - hdrSize : 0, chunks))
+		} else if (type == STSZ && meta.format) {
+			if (!stsz(stream, size ? size - hdrSize : 0, meta.sizes))
 				return false;
-		} else if (type == CO64 && gpmd) {
-			if (!co64(stream, size ? size - hdrSize : 0, chunks))
+		} else if (type == STCO && meta.format) {
+			if (!stco(stream, size ? size - hdrSize : 0, meta.chunks))
+				return false;
+		} else if (type == CO64 && meta.format) {
+			if (!co64(stream, size ? size - hdrSize : 0, meta.chunks))
 				return false;
 		} else {
 			if (size) {
@@ -298,13 +480,10 @@ static bool stbl(QDataStream &stream, quint64 atomSize, QVector<quint32> &sizes,
 			break;
 	} while (atomSize);
 
-	if (chunks.size() != sizes.size())
-		return false;
-
 	return (!atomSize);
 }
 
-static bool hdlr(QDataStream &stream, quint64 atomSize, bool &mhlr)
+static bool hdlr(QDataStream &stream, quint64 atomSize, bool &meta)
 {
 	// HDLR atom size can not be zero
 	if (atomSize < 24)
@@ -316,13 +495,12 @@ static bool hdlr(QDataStream &stream, quint64 atomSize, bool &mhlr)
 	  || stream.skipRawData(atomSize - 24) != (qint64)atomSize - 24)
 		return false;
 
-	mhlr = (type == MHLR && subtype == META);
+	meta = (subtype == META);
 
 	return true;
 }
 
-static bool minf(QDataStream &stream, quint64 atomSize, QVector<quint32> &sizes,
-  QVector<quint64> &chunks)
+bool MP4Parser::minf(QDataStream &stream, quint64 atomSize, Metadata &meta)
 {
 	quint32 type, hdrSize;
 	quint64 size;
@@ -332,7 +510,7 @@ static bool minf(QDataStream &stream, quint64 atomSize, QVector<quint32> &sizes,
 			return false;
 
 		if (type == STBL) {
-			if (!stbl(stream, size ? size - hdrSize : 0, sizes, chunks))
+			if (!stbl(stream, size ? size - hdrSize : 0, meta))
 				return false;
 		} else {
 			if (size) {
@@ -349,22 +527,21 @@ static bool minf(QDataStream &stream, quint64 atomSize, QVector<quint32> &sizes,
 	return (!atomSize);
 }
 
-static bool mdia(QDataStream &stream, quint64 atomSize, QVector<quint32> &sizes,
-  QVector<quint64> &chunks)
+bool MP4Parser::mdia(QDataStream &stream, quint64 atomSize, Metadata &meta)
 {
 	quint32 type, hdrSize;
 	quint64 size;
-	bool mhlr = false;
+	bool ismeta = false;
 
 	do {
 		if (!(hdr(stream, type, size, hdrSize) && dec(atomSize, size)))
 			return false;
 
 		if (type == HDLR) {
-			if (!hdlr(stream, size ? size - hdrSize : 0, mhlr))
+			if (!hdlr(stream, size ? size - hdrSize : 0, ismeta))
 				return false;
-		} else if (type == MINF && mhlr) {
-			if (!minf(stream, size ? size - hdrSize : 0, sizes, chunks))
+		} else if (type == MINF && ismeta) {
+			if (!minf(stream, size ? size - hdrSize : 0, meta))
 				return false;
 		} else {
 			if (size) {
@@ -381,8 +558,7 @@ static bool mdia(QDataStream &stream, quint64 atomSize, QVector<quint32> &sizes,
 	return (!atomSize);
 }
 
-static bool trak(QDataStream &stream, quint64 atomSize, QVector<quint32> &sizes,
-  QVector<quint64> &chunks)
+bool MP4Parser::trak(QDataStream &stream, quint64 atomSize, Metadata &meta)
 {
 	quint32 type, hdrSize;
 	quint64 size;
@@ -392,7 +568,7 @@ static bool trak(QDataStream &stream, quint64 atomSize, QVector<quint32> &sizes,
 			return false;
 
 		if (type == MDIA) {
-			if (!mdia(stream, size ? size - hdrSize : 0, sizes, chunks))
+			if (!mdia(stream, size ? size - hdrSize : 0, meta))
 				return false;
 		} else {
 			if (size) {
@@ -534,8 +710,8 @@ static bool mvhd(QDataStream &stream, quint64 atomSize, Waypoint &wpt)
 	return (stream.skipRawData(atomSize - 8) == (qint64)(atomSize - 8));
 }
 
-static bool moov(QDataStream &stream, quint64 atomSize, QVector<quint32> &sizes,
-  QVector<quint64> &chunks, Waypoint &wpt)
+bool MP4Parser::moov(QDataStream &stream, quint64 atomSize, Metadata &meta,
+  Waypoint &wpt)
 {
 	quint32 type, hdrSize;
 	quint64 size;
@@ -545,7 +721,7 @@ static bool moov(QDataStream &stream, quint64 atomSize, QVector<quint32> &sizes,
 			return false;
 
 		if (type == TRAK) {
-			if (!trak(stream, size ? size - hdrSize : 0, sizes, chunks))
+			if (!meta.format && !trak(stream, size ? size - hdrSize : 0, meta))
 				return false;
 		} else if (type == MVHD) {
 			if (!mvhd(stream, size ? size - hdrSize : 0, wpt))
@@ -568,8 +744,7 @@ static bool moov(QDataStream &stream, quint64 atomSize, QVector<quint32> &sizes,
 	return (!atomSize);
 }
 
-static bool atoms(QDataStream &stream, QVector<quint32> &sizes,
-  QVector<quint64> &chunks, Waypoint &wpt)
+bool MP4Parser::atoms(QDataStream &stream, Metadata &meta, Waypoint &wpt)
 {
 	quint32 type, hdrSize;
 	quint64 size;
@@ -579,7 +754,7 @@ static bool atoms(QDataStream &stream, QVector<quint32> &sizes,
 			return false;
 
 		if (type == MOOV) {
-			if (!moov(stream, size ? size - hdrSize : 0, sizes, chunks, wpt))
+			if (!moov(stream, size ? size - hdrSize : 0, meta, wpt))
 				return false;
 		} else {
 			if (size) {
@@ -594,8 +769,7 @@ static bool atoms(QDataStream &stream, QVector<quint32> &sizes,
 	return true;
 }
 
-bool MP4Parser::mp4(QFile *file, QVector<quint32> &sizes,
-  QVector<quint64> &chunks, Waypoint &wpt)
+bool MP4Parser::mp4(QFile *file, Metadata &meta, Waypoint &wpt)
 {
 	QDataStream stream(file);
 
@@ -606,7 +780,7 @@ bool MP4Parser::mp4(QFile *file, QVector<quint32> &sizes,
 		return false;
 	}
 
-	if (!atoms(stream, sizes, chunks, wpt)) {
+	if (!atoms(stream, meta, wpt)) {
 		_errorString = "MP4 file format error";
 		return false;
 	}
@@ -621,21 +795,96 @@ bool MP4Parser::gpmf(QFile *file, quint64 offset, quint32 size,
 	bool gps9 = false, gps5 = false;
 
 	if (!file->seek(offset)) {
-		_errorString = "Invalid GPMF chunk offset";
+		_errorString = "Invalid GPMF sample offset";
 		return false;
 	}
 	if ((file->peek(magic, sizeof(magic)) != sizeof(magic))
 	  || memcmp(magic, "DEVC", sizeof(magic))) {
-		_errorString = "Invalid GPMF file";
+		_errorString = "Invalid GPMF data";
 		return false;
 	}
 
 	QDataStream stream(file);
 	stream.setByteOrder(QDataStream::BigEndian);
 
-	if (!entry(stream, size, segment, gps9, gps5)) {
+	if (!gpmfEntry(stream, size, segment, gps9, gps5)) {
 		_errorString = "GPMF parse error";
 		return false;
+	}
+
+	return true;
+}
+
+bool MP4Parser::rtmf(QFile *file, quint64 offset, quint32 size,
+  SegmentData &segment)
+{
+	if (!file->seek(offset)) {
+		_errorString = "Invalid RTMF sample offset";
+		return false;
+	}
+
+	QDataStream stream(file);
+	stream.setByteOrder(QDataStream::BigEndian);
+
+	quint16 hdrLen;
+	stream >> hdrLen;
+	if (stream.status() || hdrLen > size
+	  || stream.skipRawData(hdrLen - 2) != (hdrLen - 2)) {
+		_errorString = "Invalid RTMF data";
+		return false;
+	}
+	size -= hdrLen;
+
+	if (!rtmfEntry(stream, size, segment)) {
+		_errorString = "RTMF parse error";
+		return false;
+	}
+
+	return true;
+}
+
+bool MP4Parser::metadata(QFile *file, const Metadata &meta, SegmentData &segment)
+{
+	if (!meta.format)
+		return true;
+	if (meta.tables.isEmpty()) {
+		_errorString = "Missing stsc table";
+		return false;
+	}
+
+	int cnt = 0, ti = 0;
+
+	for (int i = 0; i < meta.chunks.size(); i++) {
+		if (ti + 1 < meta.tables.size()
+		  && i >= (int)(meta.tables.at(ti + 1).first - 1))
+			ti++;
+
+		quint32 offset = meta.chunks.at(i);
+		const Table &t = meta.tables.at(ti);
+
+		for (quint32 j = 0; j < t.samples; j++) {
+			if (meta.sizes.size() <= cnt) {
+				_errorString = "Invalid number of stsz entries";
+				return false;
+			}
+			quint32 size = meta.sizes.at(cnt);
+
+			switch (meta.format) {
+				case GPMDFormat:
+					if (!gpmf(file, offset, size, segment))
+						return false;
+					break;
+				case RTMDFormat:
+					if (!rtmf(file, offset, size, segment))
+						return false;
+					break;
+				default:
+					break;
+			}
+
+			cnt++;
+			offset += size;
+		}
 	}
 
 	return true;
@@ -646,12 +895,11 @@ bool MP4Parser::parse(QFile *file, QList<TrackData> &tracks,
 {
 	Q_UNUSED(routes);
 	Q_UNUSED(polygons);
-	QVector<quint32> sizes;
-	QVector<quint64> chunks;
+	Metadata meta;
 	SegmentData segment;
 	Waypoint wpt;
 
-	if (!mp4(file, sizes, chunks, wpt)) {
+	if (!mp4(file, meta, wpt)) {
 		QString es(_errorString);
 
 		if (gpmf(file, 0, file->size(), segment)) {
@@ -664,18 +912,17 @@ bool MP4Parser::parse(QFile *file, QList<TrackData> &tracks,
 		} else
 			_errorString = es;
 	} else {
-		if (chunks.size()) {
-			for (int i = 0; i < chunks.size(); i++)
-				if (!gpmf(file, chunks.at(i), sizes.at(i), segment))
-					return false;
-			if (segment.size()) {
-				TrackData t(segment);
-				t.setFile(file->fileName());
-				t.markVideo(true);
-				tracks.append(t);
-				return true;
-			}
+		if (!metadata(file, meta, segment))
+			return false;
+
+		if (segment.size()) {
+			TrackData t(segment);
+			t.setFile(file->fileName());
+			t.markVideo(true);
+			tracks.append(t);
+			return true;
 		}
+
 		if (wpt.coordinates().isValid()) {
 			wpt.setName(Util::file2name(file->fileName()));
 			wpt.setFile(file->fileName());
