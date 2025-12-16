@@ -1,3 +1,4 @@
+#include <QtMath>
 #include <QDataStream>
 #include <QDateTime>
 #include <QTimeZone>
