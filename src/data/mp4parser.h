@@ -26,6 +26,7 @@ private:
 		Metadata() : format(UnknownFormat) {}
 
 		Format format;
+		quint32 id;
 		QVector<Table> tables;
 		QVector<quint32> sizes;
 		QVector<quint64> chunks;
@@ -43,7 +44,8 @@ private:
 	static bool trak(QDataStream &stream, quint64 atomSize, Metadata &meta);
 	static bool mdia(QDataStream &stream, quint64 atomSize, Metadata &meta);
 	static bool minf(QDataStream &stream, quint64 atomSize, Metadata &meta);
-	static bool stsd(QDataStream &stream, quint64 atomSize, Format &format);
+	static bool stsd(QDataStream &stream, quint64 atomSize, Format &format,
+	  quint32 &id);
 	static bool stbl(QDataStream &stream, quint64 atomSize, Metadata &meta);
 	static bool stsc(QDataStream &stream, quint64 atomSize,
 	  QVector<Table> &tables);

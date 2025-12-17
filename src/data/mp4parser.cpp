@@ -333,7 +333,8 @@ static bool ftyp(QDataStream &stream)
 	return (stream.skipRawData(size - hdrSize) == (qint64)(size - hdrSize));
 }
 
-bool MP4Parser::stsd(QDataStream &stream, quint64 atomSize, Format &format)
+bool MP4Parser::stsd(QDataStream &stream, quint64 atomSize, Format &format,
+  quint32 &id)
 {
 	if (atomSize < 8)
 		return false;
@@ -358,12 +359,15 @@ bool MP4Parser::stsd(QDataStream &stream, quint64 atomSize, Format &format)
 		switch (fmt) {
 			case GPMD:
 				format = GPMDFormat;
+				id = i + 1;
 				break;
 			case RTMD:
 				format = RTMDFormat;
+				id = i + 1;
 				break;
 			case CAMM:
 				format = CAMMFormat;
+				id = i + 1;
 				break;
 			default:
 				format = UnknownFormat;
@@ -492,7 +496,7 @@ bool MP4Parser::stbl(QDataStream &stream, quint64 atomSize, Metadata &meta)
 			return false;
 
 		if (type == STSD) {
-			if (!stsd(stream, size ? size - hdrSize : 0, meta.format))
+			if (!stsd(stream, size ? size - hdrSize : 0, meta.format, meta.id))
 				return false;
 		} else if (type == STSC && meta.format) {
 			if (!stsc(stream, size ? size - hdrSize : 0, meta.tables))
@@ -963,21 +967,23 @@ bool MP4Parser::metadata(QFile *file, const Metadata &meta, SegmentData &segment
 			}
 			quint32 size = meta.sizes.at(cnt);
 
-			switch (meta.format) {
-				case GPMDFormat:
-					if (!gpmf(file, offset, size, segment))
-						return false;
-					break;
-				case RTMDFormat:
-					if (!rtmf(file, offset, size, segment))
-						return false;
-					break;
-				case CAMMFormat:
-					if (!camm(file, offset, size, segment))
-						return false;
-					break;
-				default:
-					break;
+			if (meta.id == t.id) {
+				switch (meta.format) {
+					case GPMDFormat:
+						if (!gpmf(file, offset, size, segment))
+							return false;
+						break;
+					case RTMDFormat:
+						if (!rtmf(file, offset, size, segment))
+							return false;
+						break;
+					case CAMMFormat:
+						if (!camm(file, offset, size, segment))
+							return false;
+						break;
+					default:
+						break;
+				}
 			}
 
 			cnt++;
