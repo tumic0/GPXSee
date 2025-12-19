@@ -24,7 +24,6 @@ constexpr quint32 TRAK = TAG("trak");
 constexpr quint32 MDIA = TAG("mdia");
 constexpr quint32 HDLR = TAG("hdlr");
 constexpr quint32 MINF = TAG("minf");
-constexpr quint32 MHLR = TAG("mhlr");
 constexpr quint32 META = TAG("meta");
 constexpr quint32 STBL = TAG("stbl");
 constexpr quint32 STSD = TAG("stsd");
