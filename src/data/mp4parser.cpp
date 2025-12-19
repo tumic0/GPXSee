@@ -3,7 +3,7 @@
 #include <QDateTime>
 #include <QTimeZone>
 #include <QRegularExpression>
-#include <QUrl>
+#include <QBuffer>
 #include "common/util.h"
 #include "mp4parser.h"
 
@@ -37,6 +37,9 @@ constexpr quint32 RTMD = TAG("rtmd");
 constexpr quint32 CAMM = TAG("camm");
 constexpr quint32 UDTA = TAG("udta");
 constexpr quint32 XYZ = TAG("\xa9xyz");
+constexpr quint32 GPS = TAG("gps ");
+constexpr quint32 FREE = TAG("free");
+constexpr quint32 CGPS = TAG("GPS ");
 
 constexpr quint32 GPS5 = TAG("GPS5");
 constexpr quint32 GPS9 = TAG("GPS9");
@@ -733,6 +736,35 @@ static bool udta(QDataStream &stream, quint64 atomSize, Waypoint &wpt)
 	return (!atomSize);
 }
 
+bool MP4Parser::gps(QDataStream &stream, quint64 atomSize, Metadata &meta)
+{
+	if (atomSize < 8)
+		return false;
+
+	meta.format = NovatekFormat;
+	meta.id = 1;
+	meta.tables.append(Table(1, 1, 1));
+
+	quint64 hdr;
+	quint32 offset, size;
+
+	stream >> hdr;
+	if (stream.status())
+		return false;
+	atomSize -= 8;
+	while (atomSize >= 8) {
+		stream >> offset >> size;
+		if (stream.status())
+			return false;
+		atomSize -= 8;
+
+		meta.sizes.append(size);
+		meta.chunks.append(offset);
+	}
+
+	return (!atomSize);
+}
+
 static bool mvhd(QDataStream &stream, quint64 atomSize, Waypoint &wpt)
 {
 	static const QDateTime dt1904 = QDateTime(QDate(1904, 1, 1), QTime(0, 0),
@@ -769,6 +801,9 @@ bool MP4Parser::moov(QDataStream &stream, quint64 atomSize, Metadata &meta,
 				return false;
 		} else if (type == UDTA) {
 			if (!udta(stream, size ? size - hdrSize : 0, wpt))
+				return false;
+		} else if (type == GPS) {
+			if (!gps(stream, size ? size - hdrSize : 0, meta))
 				return false;
 		} else {
 			if (size) {
@@ -916,7 +951,8 @@ bool MP4Parser::camm(QFile *file, quint64 offset, quint32 size,
 			len = 24;
 			break;
 		case 6:
-			stream >> time >> fix >> lat >> lon >> elef;
+			stream >> time >> fix >> lat >> lon;
+			stream.readRawData((char*)&elef, sizeof(elef));
 			ele = elef;
 			len = 56;
 			break;
@@ -937,6 +973,107 @@ bool MP4Parser::camm(QFile *file, quint64 offset, quint32 size,
 	}
 	if (t.coordinates().isValid())
 		segment.append(t);
+
+	return true;
+}
+
+static double lon2dd(float dm, quint8 ref)
+{
+	int deg = (dm / 100.0);
+	float min = dm - (float)(deg * 100);
+	return (ref == 'W')
+	  ? -((double)deg + (double)min / 60.0) : (double)deg + (double)min / 60.0;
+}
+
+static double lat2dd(float dm, quint8 ref)
+{
+	int deg = (dm / 100.0);
+	float min = dm - (float)(deg * 100);
+	return (ref == 'S')
+	  ? -((double)deg + (double)min / 60.0) : (double)deg + (double)min / 60.0;
+}
+
+static int gpsOffset(const QByteArray &ba)
+{
+	int state = 0;
+
+	for (int i = 0; i < ba.size(); i++) {
+		char c = ba.at(i);
+
+		switch (state) {
+			case 0:
+				if (c == 'A')
+					state = 1;
+				break;
+			case 1:
+				if (c == 'N' || c == 'S')
+					state = 2;
+				else
+					state = 0;
+				break;
+			case 2:
+				if (c == 'E' || c == 'W') {
+					if ((i >= 26) && (ba.size() - i >= 13))
+						return i - 26;
+				}
+				state = 0;
+				break;
+		}
+	}
+
+	return -1;
+}
+
+bool MP4Parser::novatek(QFile *file, quint64 offset, quint32 size,
+  SegmentData &segment)
+{
+	if (!file->seek(offset)) {
+		_errorString = "Invalid Novatek sample offset";
+		return false;
+	}
+
+	QDataStream stream(file);
+	stream.setByteOrder(QDataStream::BigEndian);
+
+	quint32 atomType, atomSize, magic;
+	stream >> atomSize >> atomType >> magic;
+	if (stream.status() || atomSize != size || atomType != FREE
+	  || magic != CGPS) {
+		_errorString = "Invalid Novatek data";
+		return false;
+	}
+
+	QByteArray ba(atomSize - 12, Qt::Initialization::Uninitialized);
+	if (stream.readRawData(ba.data(), ba.size()) != ba.size()) {
+		_errorString = "Unexpected Novatek EOF";
+		return false;
+	}
+	int go = gpsOffset(ba);
+	if (go < 0) {
+		_errorString = "Unknown Novatek GPS data format";
+		return false;
+	}
+
+	QBuffer buf(&ba);
+	buf.open(QIODeviceBase::ReadOnly);
+	QDataStream les(&buf);
+	quint32 h, m, s, y, M, d;
+	quint8 fix, NS, EW, u1;
+	float lat, lon, speed;
+
+	les.setByteOrder(QDataStream::LittleEndian);
+	les.skipRawData(go);
+	les >> h >> m >> s >> y >> M >> d >> fix >> NS >> EW >> u1;
+	les.readRawData((char*)&lat, sizeof(lat));
+	les.readRawData((char*)&lon, sizeof(lon));
+	les.readRawData((char*)&speed, sizeof(speed));
+
+	Trackpoint tp(Coordinates(lon2dd(lon, EW), lat2dd(lat, NS)));
+	tp.setTimestamp(QDateTime(QDate(y + 2000, M, d), QTime(h, m, s),
+	  QTimeZone::utc()));
+	tp.setSpeed(speed * 0.51444);
+	if (tp.coordinates().isValid())
+		segment.append(tp);
 
 	return true;
 }
@@ -979,6 +1116,10 @@ bool MP4Parser::metadata(QFile *file, const Metadata &meta, SegmentData &segment
 						break;
 					case CAMMFormat:
 						if (!camm(file, offset, size, segment))
+							return false;
+						break;
+					case NovatekFormat:
+						if (!novatek(file, offset, size, segment))
 							return false;
 						break;
 					default:

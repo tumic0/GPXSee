@@ -13,10 +13,14 @@ public:
 
 private:
 	enum Format {
-		UnknownFormat, GPMDFormat, RTMDFormat, CAMMFormat
+		UnknownFormat, GPMDFormat, RTMDFormat, CAMMFormat, NovatekFormat
 	};
 
 	struct Table {
+		Table() {}
+		Table(quint32 first, quint32 samples, quint32 id)
+		  : first(first), samples(samples), id(id) {}
+
 		quint32 first;
 		quint32 samples;
 		quint32 id;
@@ -37,6 +41,7 @@ private:
 	bool gpmf(QFile *file, quint64 offset, quint32 size, SegmentData &segment);
 	bool rtmf(QFile *file, quint64 offset, quint32 size, SegmentData &segment);
 	bool camm(QFile *file, quint64 offset, quint32 size, SegmentData &segment);
+	bool novatek(QFile *file, quint64 offset, quint32 size, SegmentData &segment);
 
 	static bool atoms(QDataStream &stream, Metadata &meta, Waypoint &wpt);
 	static bool moov(QDataStream &stream, quint64 atomSize, Metadata &meta,
@@ -49,6 +54,7 @@ private:
 	static bool stbl(QDataStream &stream, quint64 atomSize, Metadata &meta);
 	static bool stsc(QDataStream &stream, quint64 atomSize,
 	  QVector<Table> &tables);
+	static bool gps(QDataStream &stream, quint64 atomSize, Metadata &meta);
 
 	QString _errorString;
 };
