@@ -1055,7 +1055,7 @@ bool MP4Parser::novatek(QFile *file, quint64 offset, quint32 size,
 	}
 
 	QBuffer buf(&ba);
-	buf.open(QIODeviceBase::ReadOnly);
+	buf.open(QIODevice::ReadOnly);
 	QDataStream les(&buf);
 	quint32 h, m, s, y, M, d;
 	quint8 fix, NS, EW, u1;
