@@ -41,7 +41,8 @@ private:
 	bool gpmf(QFile *file, quint64 offset, quint32 size, SegmentData &segment);
 	bool rtmf(QFile *file, quint64 offset, quint32 size, SegmentData &segment);
 	bool camm(QFile *file, quint64 offset, quint32 size, SegmentData &segment);
-	bool novatek(QFile *file, quint64 offset, quint32 size, SegmentData &segment);
+	bool novatek(QFile *file, quint64 offset, quint32 size,
+	  SegmentData &segment);
 
 	static bool atoms(QDataStream &stream, Metadata &meta, Waypoint &wpt);
 	static bool moov(QDataStream &stream, quint64 atomSize, Metadata &meta,

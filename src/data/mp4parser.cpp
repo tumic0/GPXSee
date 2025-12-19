@@ -411,7 +411,8 @@ static bool stsz(QDataStream &stream, quint64 atomSize, QVector<quint32> &sizes)
 	  ? (stream.skipRawData(atomSize) == (qint64)atomSize) : true;
 }
 
-bool MP4Parser::stsc(QDataStream &stream, quint64 atomSize, QVector<Table> &tables)
+bool MP4Parser::stsc(QDataStream &stream, quint64 atomSize,
+  QVector<Table> &tables)
 {
 	if (atomSize < 12)
 		return false;
