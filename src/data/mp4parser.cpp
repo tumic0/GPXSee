@@ -631,11 +631,17 @@ bool MP4Parser::trak(QDataStream &stream, quint64 atomSize, Metadata &meta)
 static bool iso6709(const QByteArray &ba, Waypoint &wpt)
 {
 	static const QRegularExpression dd(
-	  "^([-+]\\d{1,2}(?:\\.\\d*)?)([-+]\\d{1,3}(?:\\.\\d*)?)([-+]\\d+(?:\\.\\d*)?)?");
+	  "^([-+]\\d{1,2}(?:\\.\\d*)?)([-+]\\d{1,3}(?:\\.\\d*)?)([-+]\\d+"
+	  "(?:\\.\\d*)?)?"
+	);
 	static const QRegularExpression dm(
-	  "^([-+])(\\d{2})(\\d{2}(?:\\.\\d*)?)([-+])(\\d{3})(\\d{2}(?:\\.\\d*)?)([-+]\\d+(?:\\.\\d*)?)?");
+	  "^([-+])(\\d{2})(\\d{2}(?:\\.\\d*)?)([-+])(\\d{3})(\\d{2}(?:\\.\\d*)?)"
+	  "([-+]\\d+(?:\\.\\d*)?)?"
+	);
 	static const QRegularExpression dms(
-	  "^([-+])(\\d{2})(\\d{2})(\\d{2}(?:\\.\\d*)?)([-+])(\\d{3})(\\d{2})(\\d{2}(?:\\.\\d*)?)([-+]\\d+(?:\\.\\d*)?)?");
+	  "^([-+])(\\d{2})(\\d{2})(\\d{2}(?:\\.\\d*)?)([-+])(\\d{3})(\\d{2})"
+	  "(\\d{2}(?:\\.\\d*)?)([-+]\\d+(?:\\.\\d*)?)?"
+	);
 	bool ok;
 	double ele;
 
