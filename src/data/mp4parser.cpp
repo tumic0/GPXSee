@@ -1001,9 +1001,12 @@ static double lat2dd(float dm, quint8 ref)
 
 static int gpsOffset(const QByteArray &ba)
 {
+	if (ba.size() < 40)
+		return -1;
+
 	int state = 0;
 
-	for (int i = 0; i < ba.size(); i++) {
+	for (int i = 24; i < ba.size(); i++) {
 		char c = ba.at(i);
 
 		switch (state) {
@@ -1019,7 +1022,7 @@ static int gpsOffset(const QByteArray &ba)
 				break;
 			case 2:
 				if (c == 'E' || c == 'W') {
-					if ((i >= 26) && (ba.size() - i >= 13))
+					if (ba.size() - i >= 13)
 						return i - 26;
 				}
 				state = 0;
