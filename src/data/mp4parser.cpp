@@ -1021,11 +1021,10 @@ static int gpsOffset(const QByteArray &ba)
 					state = 0;
 				break;
 			case 2:
-				if (c == 'E' || c == 'W') {
-					if (ba.size() - i >= 13)
-						return i - 26;
-				}
-				state = 0;
+				if (c == 'E' || c == 'W')
+					return (ba.size() - i >= 13) ? i - 26 : -1;
+				else
+					state = 0;
 				break;
 		}
 	}
