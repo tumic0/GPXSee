@@ -1058,8 +1058,9 @@ bool MP4Parser::novatek(QFile *file, quint64 offset, quint32 size,
 	}
 	int go = gpsOffset(ba);
 	if (go < 0) {
-		_errorString = "Unknown Novatek GPS data format";
-		return false;
+		qWarning("%s: Unknown Novatek GPS data format",
+		  qUtf8Printable(file->fileName()));
+		return true;
 	}
 
 	QBuffer buf(&ba);
