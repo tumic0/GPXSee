@@ -40,6 +40,7 @@
                 <data android:scheme="content" android:mimeType="text/csv"/>
                 <data android:scheme="content" android:mimeType="image/jpeg"/>
                 <data android:scheme="content" android:mimeType="image/tiff"/>
+                <data android:scheme="content" android:mimeType="video/mp4"/>
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
