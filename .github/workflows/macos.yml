@@ -43,7 +43,7 @@ jobs:
             macdeployqt GPXSee.app -dmg -appstore-compliant
           fi
       - name: Upload artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           path: GPXSee.dmg
           name: GPXSee.dmg
