@@ -168,12 +168,12 @@
     <message>
         <location filename="../src/data/data.cpp" line="250"/>
         <source>MP4 videos</source>
-        <translation type="unfinished"></translation>
+        <translation>MP4-videoer</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="255"/>
         <source>GPMF files</source>
-        <translation type="unfinished"></translation>
+        <translation>GPMF-filer</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="251"/>
@@ -1513,7 +1513,7 @@
     <message>
         <location filename="../src/map/onlinemap.cpp" line="350"/>
         <source>Basemap only</source>
-        <translation type="unfinished"></translation>
+        <translation>Kun basiskart</translation>
     </message>
 </context>
 <context>
