@@ -364,8 +364,12 @@ bool NMEAParser::readGGA(CTX &ctx, const char *line, int len,
 	Coordinates c(lon, lat);
 	if (c.isValid()) {
 		Trackpoint t(c);
-		if (!(ctx.time.isNull() || ctx.date.isNull()))
+		if (!(ctx.time.isNull() || ctx.date.isNull())) {
+			if (ctx.time < segment.last().timestamp().time()
+			  && ctx.date == segment.last().timestamp().date())
+				ctx.date = ctx.date.addDays(1);
 			t.setTimestamp(QDateTime(ctx.date, ctx.time, QTimeZone::utc()));
+		}
 		if (!std::isnan(ele))
 			t.setElevation(ele - gh);
 		segment.append(t);
