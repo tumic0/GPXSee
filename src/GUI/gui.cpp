@@ -489,8 +489,10 @@ void GUI::createActions()
 	_drawHillShadingAction = new QAction(tr("Show hillshading"), this);
 	_drawHillShadingAction->setMenuRole(QAction::NoRole);
 	_drawHillShadingAction->setCheckable(true);
+	_drawHillShadingAction->setShortcut(HILLSHADING_SHORTCUT);
 	connect(_drawHillShadingAction, &QAction::triggered, _mapView,
 	  &MapView::drawHillShading);
+	addAction(_drawHillShadingAction);
 
 	// Graph actions
 	_showGraphsAction = new QAction(QIcon::fromTheme(SHOW_GRAPHS_NAME,

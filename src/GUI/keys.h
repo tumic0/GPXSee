@@ -35,6 +35,7 @@
 #define SHOW_ROUTES_SHORTCUT    QKeySequence(Qt::CTRL | Qt::Key_R)
 #define SHOW_AREAS_SHORTCUT     QKeySequence(Qt::CTRL | Qt::Key_A)
 #define SHOW_WAYPOINTS_SHORTCUT QKeySequence(Qt::CTRL | Qt::Key_P)
+#define HILLSHADING_SHORTCUT    QKeySequence(Qt::CTRL | Qt::Key_H)
 #define FULLSCREEN_SHORTCUT     (QKeySequence(QKeySequence::FullScreen).isEmpty() \
                                   ? QKeySequence(Qt::Key_F11) \
                                   : QKeySequence(QKeySequence::FullScreen))
