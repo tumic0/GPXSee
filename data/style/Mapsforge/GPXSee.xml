@@ -119,24 +119,22 @@
     <hillshading zoom-min="9" zoom-max="15"/>
 
     <!-- Contour lines -->
-    <rule e="way" k="contour_ext" v="*">
-        <rule e="way" k="contour_ext" v="elevation_minor">
-            <rule e="way" k="*" v="*" zoom-min="14" zoom-max="15">
-                <line stroke="#bfbfbf" stroke-width="0.2" curve="cubic"/>
-            </rule>
-            <rule e="way" k="*" v="*" zoom-min="16">
-                <line stroke="#bfbfbf" stroke-width="0.1" curve="cubic"/>
-            </rule>
+    <rule e="way" k="contour_ext" v="elevation_minor" zoom-min="14">
+        <rule e="way" k="*" v="*" zoom-max="15">
+            <line stroke="#bfbfbf" stroke-width="0.2" curve="cubic"/>
         </rule>
-        <rule e="way" k="contour_ext" v="elevation_medium|elevation_major">
-            <rule e="way" k="*" v="*" zoom-min="14" zoom-max="15">
-                <line stroke="#afafaf" stroke-width="0.3" curve="cubic"/>
-            </rule>
-            <rule e="way" k="*" v="*" zoom-min="16">
-                <line stroke="#afafaf" stroke-width="0.15" curve="cubic"/>
-            </rule>
-            <pathText k="ele" font-size="9" fill="#8f8f8f"/>
+        <rule e="way" k="*" v="*" zoom-min="16">
+            <line stroke="#bfbfbf" stroke-width="0.1" curve="cubic"/>
         </rule>
+    </rule>
+    <rule e="way" k="contour_ext" v="elevation_medium|elevation_major" zoom-min="14">
+        <rule e="way" k="*" v="*" zoom-max="15">
+            <line stroke="#afafaf" stroke-width="0.3" curve="cubic"/>
+        </rule>
+        <rule e="way" k="*" v="*" zoom-min="16">
+            <line stroke="#afafaf" stroke-width="0.15" curve="cubic"/>
+        </rule>
+        <pathText k="ele" font-size="9" fill="#8f8f8f"/>
     </rule>
 
     <!-- Water -->
