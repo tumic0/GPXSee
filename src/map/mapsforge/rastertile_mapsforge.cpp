@@ -135,7 +135,7 @@ void RasterTile::processLabels(const QList<MapData::Point> &points,
 	}
 }
 
-void RasterTile::processLineLabels(const QVector<PainterPath> &paths,
+void RasterTile::processLineLabels(QVector<PainterPath> &paths,
   QList<TextItem*> &textItems) const
 {
 	QList<const Style::TextRender*> labels(_style->pathLabels(_zoom));
@@ -144,12 +144,12 @@ void RasterTile::processLineLabels(const QVector<PainterPath> &paths,
 	QSet<QByteArray> set;
 
 	for (int i = 0; i < paths.size(); i++) {
-		const PainterPath &path = paths.at(i);
+		PainterPath &path = paths[i];
 		const Style::TextRender *ti = 0;
 		const Style::Symbol *si = 0;
 		const QByteArray *lbl = 0;
 
-		if (path.pp.isEmpty() || path.path->closed)
+		if (path.path->closed)
 			continue;
 
 		for (int j = 0; j < symbols.size(); j++) {
@@ -172,8 +172,11 @@ void RasterTile::processLineLabels(const QVector<PainterPath> &paths,
 			}
 		}
 
-		if (ti || si)
+		if (ti || si) {
+			if (!path.pp.elementCount())
+				path.pp = painterPath(path.path->poly, false);
 			items.append(LineLabel(&path, lbl, si, ti));
+		}
 	}
 
 	std::sort(items.begin(), items.end());

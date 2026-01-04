@@ -224,7 +224,7 @@ private:
 	  {return _proj->xy2ll(_transform.img2proj(p));}
 	void processLabels(const QList<MapData::Point> &points,
 	  QList<TextItem*> &textItems) const;
-	void processLineLabels(const QVector<PainterPath> &paths,
+	void processLineLabels(QVector<PainterPath> &paths,
 	  QList<TextItem*> &textItems) const;
 	QPainterPath painterPath(const Polygon &polygon, bool curve) const;
 	void drawTextItems(QPainter *painter, const QList<TextItem*> &textItems);
