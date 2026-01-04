@@ -175,7 +175,7 @@ static QList<QPolygonF> polyLines(const QPainterPath &path, const QRectF &rect)
 	for (int i = 1; i < path.elementCount(); i++) {
 		QPainterPath::Element e(path.elementAt(i));
 
-		if (e.isLineTo() && rect.contains(e)) {
+		if (!e.isMoveTo() && rect.contains(e)) {
 			if (lastIn) {
 				if (line.isEmpty())
 					line.append(path.elementAt(i-1));
@@ -190,7 +190,7 @@ static QList<QPolygonF> polyLines(const QPainterPath &path, const QRectF &rect)
 			}
 
 			lastIn = true;
-		} else if (e.isLineTo()) {
+		} else if (!e.isMoveTo()) {
 			QLineF l(path.elementAt(i-1), e);
 
 			if (lastIn) {

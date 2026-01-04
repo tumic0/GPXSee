@@ -149,7 +149,7 @@ void RasterTile::processLineLabels(const QVector<PainterPath> &paths,
 		const Style::Symbol *si = 0;
 		const QByteArray *lbl = 0;
 
-		if (path.path->closed)
+		if (path.pp.isEmpty() || path.path->closed)
 			continue;
 
 		for (int j = 0; j < symbols.size(); j++) {
