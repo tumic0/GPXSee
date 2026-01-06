@@ -54,6 +54,8 @@ private:
 	bool geographicModel(QMap<quint16, Value> &kv);
 	bool projectedModel(QMap<quint16, Value> &kv);
 
+	static bool isWebMercator(const QMap<quint16, Value> &kv);
+
 	Transform _transform;
 	Projection _projection;
 

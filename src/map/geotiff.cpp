@@ -45,6 +45,7 @@
 #define ModelTypeProjected             1
 #define ModelTypeGeographic            2
 #define ModelTypeGeocentric            3
+#define ModelTypeUserDefined           32767
 
 #define CT_TransverseMercator          1
 #define CT_ObliqueMercator             3
@@ -76,6 +77,19 @@ struct GeoKeyEntry {
 	quint16 ValueOffset;
 };
 
+bool GeoTIFF::isWebMercator(const QMap<quint16, Value> &kv)
+{
+	return (kv.value(ProjectedCSTypeGeoKey).SHORT == 32767
+	  && kv.value(ProjectionGeoKey).SHORT == 32767
+	  && kv.value(ProjCoordTransGeoKey).SHORT == 7
+	  && kv.value(ProjLinearUnitsGeoKey).SHORT == 9001
+	  && kv.value(ProjNatOriginLongGeoKey).DOUBLE == 0
+	  && kv.value(ProjNatOriginLatGeoKey).DOUBLE == 0
+	  && kv.value(ProjFalseEastingGeoKey).DOUBLE == 0
+	  && kv.value(ProjFalseNorthingGeoKey).DOUBLE == 0
+	  && kv.value(ProjScaleAtNatOriginGeoKey).DOUBLE == 1.0
+	  && kv.value(GeographicTypeGeoKey).SHORT == 4326);
+}
 
 bool GeoTIFF::readEntry(TIFFFile &file, Ctx &ctx) const
 {
@@ -532,6 +546,14 @@ GeoTIFF::GeoTIFF(const QString &path)
 		case ModelTypeGeocentric:
 			_errorString = "Geocentric models are not supported";
 			return;
+		case ModelTypeUserDefined:
+			if (isWebMercator(kv))
+				_projection = Projection(PCS::pcs(3857));
+			else {
+				_errorString = "Unknown user-defined model";
+				return;
+			}
+			break;
 		default:
 			_errorString = "Unknown/missing model type";
 			return;
