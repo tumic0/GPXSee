@@ -50,7 +50,8 @@ public:
 						return true;
 					return valueMatches(tags) ^ _excl;
 				} else
-					return (keyMatches(tags) && (valueMatches(tags) ^ _excl));
+					return ((keyMatches(tags) | _excl)
+					  && (valueMatches(tags) ^ _excl));
 			}
 
 			bool isTautology() const

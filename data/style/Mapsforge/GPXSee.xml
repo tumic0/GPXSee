@@ -272,10 +272,11 @@
     </rule>
 
     <!-- Buildings -->
-    <rule e="way" closed="yes" k="building" v="-|civic|office|cathedral|church|basilica">
-        <area fill="#dbd0b6" stroke="#cdccc4" stroke-width="0.1"/>
+    <rule e="way" closed="yes" k="building" v="*">
+        <rule e="way" closed="yes" k="building" v="-|civic|office|cathedral|church|basilica">
+            <area fill="#dbd0b6" stroke="#cdccc4" stroke-width="0.1"/>
+        </rule>
     </rule>
-
     <rule e="way" closed="yes" k="building" v="civic|office">
         <area fill="#cfc4b3" stroke="#cdccc4" stroke-width="0.1"/>
         <rule e="way" k="*" v="*" zoom-min="16">
@@ -1250,10 +1251,10 @@
 
     <!-- Pistes -->
     <rule cat="cross-country" e="way" closed="no" k="piste:type" v="nordic">
-        <rule e="way" k="piste:grooming" v="~|-|backcountry" zoom-min="13" zoom-max="14">
+        <rule e="way" k="piste:grooming" v="-|backcountry" zoom-min="13" zoom-max="14">
             <line stroke="#377bf0" stroke-width="1.0" dy="-1.1"/>
         </rule>
-        <rule e="way" k="piste:grooming" v="~|-|backcountry" zoom-min="15">
+        <rule e="way" k="piste:grooming" v="-|backcountry" zoom-min="15">
             <line stroke="#377bf0" stroke-width="0.6" dy="-0.7"/>
         </rule>
     </rule>
