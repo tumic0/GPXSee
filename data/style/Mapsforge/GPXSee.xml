@@ -1194,35 +1194,35 @@
     </rule>
 
     <!-- Hiking trails -->
-    <rule cat="hiking" e="way" closed="no" k="osmc_color" v="*">
+    <rule cat="hiking" e="way" closed="no" k="*" v="*">
         <rule e="way" k="*" v="*" zoom-min="13" zoom-max="14">
-            <rule e="way" k="osmc_color" v="wmco_yellow">
+            <rule e="way" k="osmc_color" v="wmco_yellow|yellow">
                 <line stroke="#e5cb15" stroke-width="0.9" dy="1"/>
             </rule>
-            <rule e="way" k="osmc_color" v="wmco_green">
+            <rule e="way" k="osmc_color" v="wmco_green|green">
                 <line stroke="#1b8a01" stroke-width="0.9" dy="1"/>
             </rule>
-            <rule e="way" k="osmc_color" v="wmco_red">
+            <rule e="way" k="osmc_color" v="wmco_red|red">
                 <line stroke="#c90000" stroke-width="0.9" dy="1"/>
             </rule>
-            <rule e="way" k="osmc_color" v="wmco_blue">
+            <rule e="way" k="osmc_color" v="wmco_blue|blue">
                 <line stroke="#021dc1" stroke-width="0.9" dy="1"/>
             </rule>
         </rule>
         <rule e="way" k="*" v="*" zoom-min="15">
-            <rule e="way" k="osmc_color" v="wmco_yellow">
+            <rule e="way" k="osmc_color" v="wmco_yellow|yellow">
                 <line stroke="#e5cb15" stroke-width="0.5" dy="0.6"/>
                 <pathText fill="#e5cb15" font-size="10" k="ref_hike" stroke="#ffffff" stroke-width="2"/>
             </rule>
-            <rule e="way" k="osmc_color" v="wmco_green">
+            <rule e="way" k="osmc_color" v="wmco_green|green">
                 <line stroke="#1b8a01" stroke-width="0.5" dy="0.6"/>
                 <pathText fill="#1b8a01" font-size="10" k="ref_hike" stroke="#ffffff" stroke-width="2"/>
             </rule>
-            <rule e="way" k="osmc_color" v="wmco_red">
+            <rule e="way" k="osmc_color" v="wmco_red|red">
                 <line stroke="#c90000" stroke-width="0.5" dy="0.6"/>
                 <pathText fill="#c90000" font-size="10" k="ref_hike" stroke="#ffffff" stroke-width="2"/>
             </rule>
-            <rule e="way" k="osmc_color" v="wmco_blue">
+            <rule e="way" k="osmc_color" v="wmco_blue|blue">
                 <line stroke="#021dc1" stroke-width="0.5" dy="0.6"/>
                 <pathText fill="#021dc1" font-size="10" k="ref_hike" stroke="#ffffff" stroke-width="2"/>
             </rule>
