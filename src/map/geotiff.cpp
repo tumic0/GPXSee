@@ -83,6 +83,7 @@ bool GeoTIFF::isWebMercator(const QMap<quint16, Value> &kv)
 	  && kv.value(ProjectionGeoKey).SHORT == 32767
 	  && kv.value(ProjCoordTransGeoKey).SHORT == 7
 	  && kv.value(ProjLinearUnitsGeoKey).SHORT == 9001
+	  && kv.value(GeogAngularUnitsGeoKey).SHORT == 9102
 	  && kv.value(ProjNatOriginLongGeoKey).DOUBLE == 0
 	  && kv.value(ProjNatOriginLatGeoKey).DOUBLE == 0
 	  && kv.value(ProjFalseEastingGeoKey).DOUBLE == 0
