@@ -412,7 +412,7 @@ void PRJFile::datum(CTX &ctx, Datum *dtm, int *epsg)
 	optDatum(ctx, &dx, &dy, &dz, &rx, &ry, &rz, &ds, epsg);
 	compare(ctx, RBRK);
 
-	*dtm = Datum(el, dx, dy, dz, rx, ry, rz, ds);
+	*dtm = Datum(el, dx, dy, dz, -rx, -ry, -rz, ds);
 }
 
 void PRJFile::unit(CTX &ctx, double *val, int *epsg)
