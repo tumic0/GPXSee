@@ -39,21 +39,18 @@ private:
 		  values(0) {}
 	};
 
-	bool readEntry(TIFFFile &file, Ctx &ctx) const;
-	bool readIFD(TIFFFile &file, quint32 offset, Ctx &ctx) const;
-	bool readScale(TIFFFile &file, quint32 offset, PointD &scale) const;
-	bool readTiepoints(TIFFFile &file, quint32 offset, quint32 count,
-	  QList<ReferencePoint> &points) const;
-	bool readMatrix(TIFFFile &file, quint32 offset, double matrix[16]) const;
-	bool readKeys(TIFFFile &file, Ctx &ctx, QMap<quint16, Value> &kv) const;
-	bool readGeoValue(TIFFFile &file, quint32 offset, quint16 index,
-	  double &val) const;
+	GCS geographicCS(const QMap<quint16, Value> &kv,
+	  const QVector<double> &toWGS84);
+	Conversion::Method coordinateTransformation(const QMap<quint16, Value> &kv);
+	bool geographicModel(const QMap<quint16, Value> &kv,
+	  const QVector<double> &toWGS84);
+	bool projectedModel(const QMap<quint16, Value> &kv,
+	  const QVector<double> &toWGS84);
 
-	GCS geographicCS(QMap<quint16, Value> &kv);
-	Conversion::Method coordinateTransformation(QMap<quint16, Value> &kv);
-	bool geographicModel(QMap<quint16, Value> &kv);
-	bool projectedModel(QMap<quint16, Value> &kv);
-
+	static bool readEntry(TIFFFile &file, Ctx &ctx);
+	static bool readIFD(TIFFFile &file, quint32 offset, Ctx &ctx);
+	static bool readKeys(TIFFFile &file, Ctx &ctx, QMap<quint16, Value> &kv,
+	  QVector<double> &toWGS84);
 	static bool isWebMercator(const QMap<quint16, Value> &kv);
 
 	Transform _transform;
