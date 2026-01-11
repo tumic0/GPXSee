@@ -91,8 +91,8 @@ Transform::Transform(const ReferencePoint &p, const PointD &scale)
 		return;
 	}
 
-	_img2proj = QTransform(scale.x(), 0, 0, -scale.y(), p.pp().x() - p.xy().x()
-	  / scale.x(), p.pp().y() + p.xy().x() / scale.y());
+	_img2proj = QTransform(scale.x(), 0, 0, -scale.y(), p.pp().x() + p.xy().x()
+	  / scale.x(), p.pp().y() - p.xy().y() / scale.y());
 	_proj2img = _img2proj.inverted();
 }
 
