@@ -52,7 +52,7 @@ Unicode true
 ; The name of the installer
 Name "GPXSee"
 ; Program version
-!define VERSION "15.8"
+!define VERSION "15.9"
 
 ; CPU architecture
 !ifdef ARM64
