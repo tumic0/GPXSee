@@ -17,6 +17,8 @@
 #define GeogPrimeMeridianGeoKey        2051
 #define GeogAngularUnitsGeoKey         2054
 #define GeogEllipsoidGeoKey            2056
+#define GeogSemiMajorAxisGeoKey        2057
+#define GeogInvFlatteningGeoKey        2059
 #define GeogAzimuthUnitsGeoKey         2060
 #define GeogTOWGS84GeoKey              2062
 #define ProjectedCSTypeGeoKey          3072
@@ -295,6 +297,8 @@ bool GeoTIFF::readKeys(TIFFFile &file, Ctx &ctx, QMap<quint16, Value> &kv,
 			case ProjFalseOriginEastingGeoKey:
 			case ProjFalseOriginNorthingGeoKey:
 			case ProjStraightVertPoleLongGeoKey:
+			case GeogSemiMajorAxisGeoKey:
+			case GeogInvFlatteningGeoKey:
 				if (!readGeoValue(file, ctx.values, entry.ValueOffset,
 				  value.DOUBLE))
 					return false;
@@ -377,6 +381,40 @@ GCS GeoTIFF::geographicCS(const QMap<quint16, Value> &kv,
 			datum = Datum(e, toWGS84.at(0), toWGS84.at(1), toWGS84.at(2),
 			  -toWGS84.at(3), -toWGS84.at(4), -toWGS84.at(5), toWGS84.at(6));
 		else if (ec == 7019 || ec == 7030)
+			datum = Datum::WGS84();
+		else {
+			_errorString = "Invalid/missing TOWGS84 parameters";
+			return gcs;
+		}
+
+		PrimeMeridian pm(pmc);
+		if (pm.isNull()) {
+			_errorString = QString("%1: unknown prime meridian").arg(pmc);
+			return gcs;
+		}
+		AngularUnits au(auc);
+		if (au.isNull()) {
+			_errorString = QString("%1: unknown angular units").arg(auc);
+			return gcs;
+		}
+
+		gcs = GCS(datum, pm, au);
+	} else if (kv.contains(GeogSemiMajorAxisGeoKey)
+	  && kv.contains(GeogInvFlatteningGeoKey)) {
+		Ellipsoid e(kv.value(GeogSemiMajorAxisGeoKey).DOUBLE,
+		  kv.value(GeogInvFlatteningGeoKey).DOUBLE);
+		int pmc = IS_SET(kv, GeogPrimeMeridianGeoKey)
+		  ? kv.value(GeogPrimeMeridianGeoKey).SHORT : 8901;
+		int auc = IS_SET(kv, GeogAngularUnitsGeoKey)
+		  ? kv.value(GeogAngularUnitsGeoKey).SHORT : 9102;
+
+		Datum datum;
+		if (toWGS84.size() == 3)
+			datum = Datum(e, toWGS84.at(0), toWGS84.at(1), toWGS84.at(2));
+		else if (toWGS84.size() == 7)
+			datum = Datum(e, toWGS84.at(0), toWGS84.at(1), toWGS84.at(2),
+			  -toWGS84.at(3), -toWGS84.at(4), -toWGS84.at(5), toWGS84.at(6));
+		else if (e == Ellipsoid::WGS84())
 			datum = Datum::WGS84();
 		else {
 			_errorString = "Invalid/missing TOWGS84 parameters";
