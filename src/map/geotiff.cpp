@@ -80,7 +80,7 @@ struct GeoKeyEntry {
 	quint16 ValueOffset;
 };
 
-static bool readGeoValue(TIFFFile &file, quint32 offset, quint16 index,
+static bool readGeoValue(TIFFFile &file, qint64 offset, quint16 index,
   double &val)
 {
 	qint64 pos = file.pos();
@@ -90,13 +90,10 @@ static bool readGeoValue(TIFFFile &file, quint32 offset, quint16 index,
 	if (!file.readValue(val))
 		return false;
 
-	if (!file.seek(pos))
-		return false;
-
-	return true;
+	return file.seek(pos);
 }
 
-static bool readGeoArray(TIFFFile &file, quint32 offset, quint16 index,
+static bool readGeoArray(TIFFFile &file, qint64 offset, quint16 index,
   QVector<double> &val)
 {
 	qint64 pos = file.pos();
@@ -107,13 +104,10 @@ static bool readGeoArray(TIFFFile &file, quint32 offset, quint16 index,
 		if (!file.readValue(val[i]))
 			return false;
 
-	if (!file.seek(pos))
-		return false;
-
-	return true;
+	return file.seek(pos);
 }
 
-static bool readScale(TIFFFile &file, quint32 offset, PointD &scale)
+static bool readScale(TIFFFile &file, qint64 offset, PointD &scale)
 {
 	if (!file.seek(offset))
 		return false;
@@ -126,7 +120,7 @@ static bool readScale(TIFFFile &file, quint32 offset, PointD &scale)
 	return true;
 }
 
-static bool readTiepoints(TIFFFile &file, quint32 offset, quint32 count,
+static bool readTiepoints(TIFFFile &file, qint64 offset, quint32 count,
   QList<ReferencePoint> &points)
 {
 	double z, pz;
@@ -156,7 +150,7 @@ static bool readTiepoints(TIFFFile &file, quint32 offset, quint32 count,
 	return true;
 }
 
-static bool readMatrix(TIFFFile &file, quint32 offset, double matrix[16])
+static bool readMatrix(TIFFFile &file, qint64 offset, double matrix[16])
 {
 	if (!file.seek(offset))
 		return false;
@@ -172,16 +166,26 @@ bool GeoTIFF::readEntry(TIFFFile &file, Ctx &ctx)
 {
 	quint16 tag;
 	quint16 type;
-	quint32 count, offset;
+	qint64 count, offset;
 
 	if (!file.readValue(tag))
 		return false;
 	if (!file.readValue(type))
 		return false;
-	if (!file.readValue(count))
-		return false;
-	if (!file.readValue(offset))
-		return false;
+	if (file.isBig()) {
+		if (!file.readValue(count))
+			return false;
+		if (!file.readValue(offset))
+			return false;
+	} else {
+		quint32 count32, offset32;
+		if (!file.readValue(count32))
+			return false;
+		count = count32;
+		if (!file.readValue(offset32))
+			return false;
+		offset = offset32;
+	}
 
 	switch (tag) {
 		case ModelPixelScaleTag:
@@ -215,16 +219,23 @@ bool GeoTIFF::readEntry(TIFFFile &file, Ctx &ctx)
 	return true;
 }
 
-bool GeoTIFF::readIFD(TIFFFile &file, quint32 offset, Ctx &ctx)
+bool GeoTIFF::readIFD(TIFFFile &file, qint64 offset, Ctx &ctx)
 {
-	quint16 count;
+	qint64 count;
 
 	if (!file.seek(offset))
 		return false;
-	if (!file.readValue(count))
-		return false;
+	if (file.isBig()) {
+		if (!file.readValue(count))
+			return false;
+	} else {
+		quint16 count16;
+		if (!file.readValue(count16))
+			return false;
+		count = count16;
+	}
 
-	for (quint16 i = 0; i < count; i++)
+	for (qint64 i = 0; i < count; i++)
 		if (!readEntry(file, ctx))
 			return false;
 
@@ -299,6 +310,8 @@ bool GeoTIFF::readKeys(TIFFFile &file, Ctx &ctx, QMap<quint16, Value> &kv,
 			case ProjStraightVertPoleLongGeoKey:
 			case GeogSemiMajorAxisGeoKey:
 			case GeogInvFlatteningGeoKey:
+				if (entry.TIFFTagLocation == 0 || entry.Count != 1)
+					return false;
 				if (!readGeoValue(file, ctx.values, entry.ValueOffset,
 				  value.DOUBLE))
 					return false;
@@ -591,6 +604,21 @@ bool GeoTIFF::geographicModel(const QMap<quint16, Value> &kv,
 	return true;
 }
 
+static bool nextIFD(TIFFFile &file, qint64 &offset)
+{
+	if (file.isBig()) {
+		if (!file.readValue(offset))
+			return false;
+	} else {
+		quint32 offset32;
+		if (!file.readValue(offset32))
+			return false;
+		offset = offset32;
+	}
+
+	return true;
+}
+
 GeoTIFF::GeoTIFF(const QString &path)
 {
 	QList<ReferencePoint> points;
@@ -612,9 +640,13 @@ GeoTIFF::GeoTIFF(const QString &path)
 		return;
 	}
 
-	for (quint32 ifd = tiff.ifd(); ifd; ) {
-		if (!readIFD(tiff, ifd, ctx) || !tiff.readValue(ifd)) {
+	for (qint64 ifd = tiff.ifd(); ifd; ) {
+		if (!readIFD(tiff, ifd, ctx)) {
 			_errorString = "Invalid IFD";
+			return;
+		}
+		if (!nextIFD(tiff, ifd)) {
+			_errorString = "Error reading next IFD offset";
 			return;
 		}
 	}

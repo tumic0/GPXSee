@@ -28,12 +28,12 @@ private:
 	};
 
 	struct Ctx {
-		quint32 scale;
-		quint32 tiepoints;
-		quint32 tiepointCount;
-		quint32 matrix;
-		quint32 keys;
-		quint32 values;
+		qint64 scale;
+		qint64 tiepoints;
+		qint64 tiepointCount;
+		qint64 matrix;
+		qint64 keys;
+		qint64 values;
 
 		Ctx() : scale(0), tiepoints(0), tiepointCount(0), matrix(0), keys(0),
 		  values(0) {}
@@ -48,7 +48,7 @@ private:
 	  const QVector<double> &toWGS84);
 
 	static bool readEntry(TIFFFile &file, Ctx &ctx);
-	static bool readIFD(TIFFFile &file, quint32 offset, Ctx &ctx);
+	static bool readIFD(TIFFFile &file, qint64 offset, Ctx &ctx);
 	static bool readKeys(TIFFFile &file, Ctx &ctx, QMap<quint16, Value> &kv,
 	  QVector<double> &toWGS84);
 	static bool isWebMercator(const QMap<quint16, Value> &kv);

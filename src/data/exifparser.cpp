@@ -26,7 +26,7 @@ QString EXIFParser::text(TIFFFile &file, const IFDEntry &e) const
 	if (e.type != TIFF_ASCII || !e.count)
 		return QString();
 
-	if (e.count <= sizeof(e.offset))
+	if (e.count <= (qint64)sizeof(e.offset))
 		return QString(QByteArray((const char *)&e.offset, sizeof(e.offset)));
 
 	if (!file.seek(e.offset))
@@ -137,10 +137,20 @@ bool EXIFParser::readEntry(TIFFFile &file, const QSet<quint16> &tags,
 		return false;
 	if (!file.readValue(entry.type))
 		return false;
-	if (!file.readValue(entry.count))
-		return false;
-	if (!file.readValue(entry.offset))
-		return false;
+	if (file.isBig()) {
+		if (!file.readValue(entry.count))
+			return false;
+		if (!file.readValue(entry.offset))
+			return false;
+	} else {
+		quint32 count, offset;
+		if (!file.readValue(count))
+			return false;
+		entry.count = count;
+		if (!file.readValue(offset))
+			return false;
+		entry.offset = offset;
+	}
 
 	if (tags.contains(tag))
 		entries.insert(tag, entry);
@@ -148,19 +158,41 @@ bool EXIFParser::readEntry(TIFFFile &file, const QSet<quint16> &tags,
 	return true;
 }
 
-bool EXIFParser::readIFD(TIFFFile &file, quint32 offset,
+bool EXIFParser::readIFD(TIFFFile &file, qint64 offset,
   const QSet<quint16> &tags, QMap<quint16, IFDEntry> &entries) const
 {
-	quint16 count;
+	qint64 count;
 
 	if (!file.seek(offset))
 		return false;
-	if (!file.readValue(count))
-		return false;
+	if (file.isBig()) {
+		if (!file.readValue(count))
+			return false;
+	} else {
+		quint16 count16;
+		if (!file.readValue(count16))
+			return false;
+		count = count16;
+	}
 
-	for (quint16 i = 0; i < count; i++)
+	for (qint64 i = 0; i < count; i++)
 		if (!readEntry(file, tags, entries))
 			return false;
+
+	return true;
+}
+
+static bool nextIFD(TIFFFile &file, qint64 &offset)
+{
+	if (file.isBig()) {
+		if (!file.readValue(offset))
+			return false;
+	} else {
+		quint32 offset32;
+		if (!file.readValue(offset32))
+			return false;
+		offset = offset32;
+	}
 
 	return true;
 }
@@ -176,9 +208,13 @@ bool EXIFParser::parseTIFF(QFile *file, QVector<Waypoint> &waypoints)
 	QSet<quint16> IFD0Tags;
 	IFD0Tags << GPSIFDTag << ImageDescription;
 	QMap<quint16, IFDEntry> IFD0;
-	for (quint32 ifd = tiff.ifd(); ifd; ) {
-		if (!readIFD(tiff, ifd, IFD0Tags, IFD0) || !tiff.readValue(ifd)) {
+	for (qint64 ifd = tiff.ifd(); ifd; ) {
+		if (!readIFD(tiff, ifd, IFD0Tags, IFD0)) {
 			_errorString = "Invalid IFD0";
+			return false;
+		}
+		if (!nextIFD(tiff, ifd)) {
+			_errorString = "Error reading next IFD0";
 			return false;
 		}
 	}
@@ -192,9 +228,13 @@ bool EXIFParser::parseTIFF(QFile *file, QVector<Waypoint> &waypoints)
 	  << GPSLongitudeRef << GPSAltitude << GPSAltitudeRef << GPSDateStamp
 	  << GPSTimeStamp;
 	QMap<quint16, IFDEntry> GPSIFD;
-	for (quint32 ifd = IFD0.value(GPSIFDTag).offset; ifd; ) {
-		if (!readIFD(tiff, ifd, GPSIFDTags, GPSIFD) || !tiff.readValue(ifd)) {
+	for (qint64 ifd = IFD0.value(GPSIFDTag).offset; ifd; ) {
+		if (!readIFD(tiff, ifd, GPSIFDTags, GPSIFD)) {
 			_errorString = "Invalid GPS IFD";
+			return false;
+		}
+		if (!nextIFD(tiff, ifd)) {
+			_errorString = "Error reading next GPS IFD";
 			return false;
 		}
 	}

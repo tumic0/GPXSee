@@ -19,12 +19,12 @@ private:
 		IFDEntry() : type(0), count(0), offset(0) {}
 
 		quint16 type;
-		quint32 count;
-		quint32 offset;
+		qint64 count;
+		qint64 offset;
 	};
 
 	bool parseTIFF(QFile *file, QVector<Waypoint> &waypoints);
-	bool readIFD(TIFFFile &file, quint32 offset, const QSet<quint16> &tags,
+	bool readIFD(TIFFFile &file, qint64 offset, const QSet<quint16> &tags,
 	  QMap<quint16, IFDEntry> &entries) const;
 	bool readEntry(TIFFFile &file, const QSet<quint16> &tags,
 	  QMap<quint16, IFDEntry> &entries) const;
