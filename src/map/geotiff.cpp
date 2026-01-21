@@ -65,7 +65,6 @@
 #define IS_SET(map, key) \
 	((map).contains(key) && (map).value(key).SHORT != 32767)
 
-
 struct GeoKeyHeader {
 	quint16 KeyDirectoryVersion;
 	quint16 KeyRevision;
@@ -79,6 +78,8 @@ struct GeoKeyEntry {
 	quint16 Count;
 	quint16 ValueOffset;
 };
+
+static const Ellipsoid GRS80(6378137.0, 1.0 / 298.257222101);
 
 static bool readGeoValue(TIFFFile &file, qint64 offset, quint16 index,
   double &val)
@@ -427,7 +428,7 @@ GCS GeoTIFF::geographicCS(const QMap<quint16, Value> &kv,
 		else if (toWGS84.size() == 7)
 			datum = Datum(e, toWGS84.at(0), toWGS84.at(1), toWGS84.at(2),
 			  -toWGS84.at(3), -toWGS84.at(4), -toWGS84.at(5), toWGS84.at(6));
-		else if (e == Ellipsoid::WGS84() || e == Ellipsoid::GRS80())
+		else if (e == Ellipsoid::WGS84() || e == GRS80)
 			datum = Datum::WGS84();
 		else {
 			_errorString = "Invalid/missing TOWGS84 parameters";
