@@ -7,6 +7,19 @@
 #include "wldfile.h"
 #include "worldfilemap.h"
 
+bool WorldFileMap::parsePRJFile(const QString &file)
+{
+	PRJFile prj(file);
+	if (!prj.projection().isValid()) {
+		_errorString = file + ": " + prj.errorString();
+		return false;
+	}
+
+	_projection = prj.projection();
+	_hasPRJ = true;
+
+	return true;
+}
 
 WorldFileMap::WorldFileMap(const QString &fileName, const Projection &proj,
   QObject *parent) : Map(fileName, parent), _img(0), _mapRatio(1.0),
@@ -16,7 +29,6 @@ WorldFileMap::WorldFileMap(const QString &fileName, const Projection &proj,
 	QDir dir(fi.absoluteDir());
 	QString basename(fi.completeBaseName());
 
-
 	// Get the transformation from the WLD file
 	WLDFile wld(fileName);
 	if (wld.transform().isValid())
@@ -25,20 +37,6 @@ WorldFileMap::WorldFileMap(const QString &fileName, const Projection &proj,
 		_errorString = wld.errorString();
 		return;
 	}
-
-	// Get the projection from the corresponding PRJ file (if any)
-	QString prjFile(basename + ".prj");
-	if (dir.exists(prjFile)) {
-		PRJFile prj(dir.filePath(prjFile));
-		if (prj.projection().isValid()) {
-			_projection = prj.projection();
-			_hasPRJ = true;
-		} else {
-			_errorString = prjFile + ": " + prj.errorString();
-			return;
-		}
-	} else
-		_projection = proj;
 
 	// Find the corresponding image file
 	QList<QByteArray> formats(QImageReader::supportedImageFormats());
@@ -63,6 +61,26 @@ WorldFileMap::WorldFileMap(const QString &fileName, const Projection &proj,
 		return;
 	}
 	_size = ir.size();
+
+	// Get the projection from the corresponding PRJ file (if any)
+	QString prjFile(basename + ".prj");
+	if (dir.exists(prjFile)) {
+		if (!parsePRJFile(dir.filePath(prjFile)))
+			return;
+	} else {
+		// USGS specific naming
+		prjFile = QFileInfo(_imgFile).fileName() + ".prj";
+		if (dir.exists(prjFile)) {
+			if (!parsePRJFile(dir.filePath(prjFile)))
+				return;
+		} else
+			_projection = proj;
+	}
+
+	if (!llBounds().isValid()) {
+		_errorString = "invalid map bounds (wrong projection?)";
+		return;
+	}
 
 	_valid = true;
 }

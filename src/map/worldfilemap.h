@@ -32,6 +32,8 @@ public:
 	static Map *create(const QString &path, const Projection &proj, bool *isDir);
 
 private:
+	bool parsePRJFile(const QString &file);
+
 	Projection _projection;
 	Transform _transform;
 	Image *_img;
