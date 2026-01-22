@@ -41,7 +41,8 @@ public:
 	}
 
 	static GCS gcs(int id);
-	static GCS gcs(int geodeticDatum, int primeMeridian, int angularUnits);
+	static GCS gcs(int geodeticDatum, const PrimeMeridian &primeMeridian,
+	  const AngularUnits &angularUnits);
 	static GCS gcs(const QString &name);
 	static const GCS &WGS84();
 

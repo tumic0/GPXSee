@@ -40,7 +40,7 @@ static double deg2sDMS(double val)
 	return (val < 0) ? -str.toDouble() : str.toDouble();
 }
 
-AngularUnits::AngularUnits(int code) : _code(code)
+AngularUnits::AngularUnits(int code)
 {
 	switch (code) {
 		case 9101:
@@ -49,7 +49,6 @@ AngularUnits::AngularUnits(int code) : _code(code)
 		case 9102:
 		case 9107:
 		case 9108:
-		case 9110:
 		case 9122:
 			_f = 1.0;
 			break;
@@ -68,6 +67,9 @@ AngularUnits::AngularUnits(int code) : _code(code)
 		case 9109:
 			_f = 180.0 / (M_PI * 1000000.0);
 			break;
+		case 9110:
+			_f = -1.0;
+			break;
 		default:
 			_f = NAN;
 	}
@@ -75,12 +77,12 @@ AngularUnits::AngularUnits(int code) : _code(code)
 
 double AngularUnits::toDegrees(double val) const
 {
-	return (_code == 9110) ? sDMS2deg(val) : val * _f;
+	return (_f < 0) ? sDMS2deg(val) : val * _f;
 }
 
 double AngularUnits::fromDegrees(double val) const
 {
-	return (_code == 9110) ? deg2sDMS(val) : val / _f;
+	return (_f < 0) ? deg2sDMS(val) : val / _f;
 }
 
 #ifndef QT_NO_DEBUG

@@ -628,11 +628,18 @@ void PRJFile::geographicCS(CTX &ctx, GCS *gcs)
 	optGeographicCS(ctx, &gcsEpsg);
 	compare(ctx, RBRK);
 
-	*gcs = (gcsEpsg > 0)
-	  ? GCS::gcs(gcsEpsg)
-	  : (datumEpsg > 0 && pmEpsg > 0 && auEpsg > 0)
-		 ? GCS::gcs(datumEpsg, pmEpsg, auEpsg)
-		 : GCS(dat, pm, au);
+	if (gcsEpsg > 0)
+		*gcs = GCS::gcs(gcsEpsg);
+	else if (datumEpsg > 0 && pmEpsg > 0 && auEpsg > 0)
+		*gcs = GCS::gcs(datumEpsg, pmEpsg, auEpsg);
+	else if (datumEpsg > 0 && pmEpsg > 0)
+		*gcs = GCS::gcs(datumEpsg, pmEpsg, au);
+	else if (datumEpsg > 0 && auEpsg > 0)
+		*gcs = GCS::gcs(datumEpsg, pm, auEpsg);
+	else if (datumEpsg > 0)
+		*gcs = GCS::gcs(datumEpsg, pm, au);
+	else
+		*gcs = GCS(dat, pm, au);
 }
 
 void PRJFile::horizontalCS(CTX &ctx)

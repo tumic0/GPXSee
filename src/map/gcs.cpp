@@ -73,7 +73,8 @@ GCS GCS::gcs(int id)
 	return (it == _gcss.end() || id != it->id()) ? GCS() : it->gcs();
 }
 
-GCS GCS::gcs(int geodeticDatum, int primeMeridian, int angularUnits)
+GCS GCS::gcs(int geodeticDatum, const PrimeMeridian &primeMeridian,
+  const AngularUnits &angularUnits)
 {
 	for (int i = 0; i < _gcss.size(); i++) {
 		const Entry &e = _gcss.at(i);
