@@ -12,9 +12,16 @@ const Ellipsoid &Ellipsoid::WGS84()
 	return e;
 }
 
+const Ellipsoid &Ellipsoid::GRS80()
+{
+	static Ellipsoid e(6378137.0, 1.0 / 298.257222101);
+	return e;
+}
+
 QMap<int, Ellipsoid> Ellipsoid::defaults()
 {
 	QMap<int, Ellipsoid> map;
+	map.insert(7019, GRS80());
 	map.insert(7030, WGS84());
 	return map;
 }

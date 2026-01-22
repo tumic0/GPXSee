@@ -1,7 +1,6 @@
 #include "common/wgs84.h"
 #include "datum.h"
 
-
 #define as2rad(x) ((x) * (M_PI/648000.0))
 #define rad2as(x) ((x) * (648000.0/M_PI))
 #define ds2scale(x) (1.0 + (x) * 1e-6)
@@ -71,9 +70,9 @@ Datum::Datum(const Ellipsoid &ellipsoid, double dx, double dy, double dz,
   : _ellipsoid(ellipsoid), _dx(dx), _dy(dy), _dz(dz), _rx(as2rad(rx)),
   _ry(as2rad(ry)), _rz(as2rad(rz)), _scale(ds2scale(ds))
 {
-	if (_ellipsoid.radius() == WGS84_RADIUS && _ellipsoid.flattening()
-	  == WGS84_FLATTENING && _dx == 0.0 && _dy == 0.0 && _dz == 0.0
-	  && _rx == 0.0 && _ry == 0.0 && _rz == 0.0 && ds == 0.0)
+	if ((ellipsoid == Ellipsoid::WGS84() || ellipsoid == Ellipsoid::GRS80())
+	  && _dx == 0.0 && _dy == 0.0 && _dz == 0.0 && _rx == 0.0 && _ry == 0.0
+	  && _rz == 0.0 && ds == 0.0)
 		_transformation = None;
 	else
 		_transformation = Helmert;
@@ -83,8 +82,8 @@ Datum::Datum(const Ellipsoid &ellipsoid, double dx, double dy, double dz)
   : _ellipsoid(ellipsoid), _dx(dx), _dy(dy), _dz(dz), _rx(0.0), _ry(0.0),
   _rz(0.0), _scale(1.0)
 {
-	if (_ellipsoid.radius() == WGS84_RADIUS && _ellipsoid.flattening()
-	  == WGS84_FLATTENING && _dx == 0.0 && _dy == 0.0 && _dz == 0.0)
+	if ((ellipsoid == Ellipsoid::WGS84() || ellipsoid == Ellipsoid::GRS80())
+	  && _dx == 0.0 && _dy == 0.0 && _dz == 0.0)
 		_transformation = None;
 	else
 		_transformation = Molodensky;
