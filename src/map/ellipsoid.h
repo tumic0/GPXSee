@@ -25,7 +25,6 @@ public:
 	  {return !(std::isnan(_radius) || std::isnan(_flattening));}
 
 	static const Ellipsoid &WGS84();
-	static const Ellipsoid &GRS80();
 	static const Ellipsoid &ellipsoid(int id);
 	static bool loadList(const QString &path);
 
