@@ -52,6 +52,7 @@ public:
 
 	const LinearUnits &units() const {return _units;}
 	const CoordinateSystem &coordinateSystem() const {return _cs;}
+	const GCS &gcs() const {return _gcs;}
 
 private:
 	GCS _gcs;

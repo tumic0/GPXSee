@@ -783,8 +783,12 @@ PRJFile::PRJFile(const QString &fileName)
 	CS(ctx);
 
 	if (ctx.token == EOI) {
-		if (!_projection.isValid())
-			_errorString = "unknown/incomplete projection";
+		if (!_projection.isValid()) {
+			if (!_projection.gcs().isValid())
+				_errorString = "unknow/incomplete GCS";
+			else
+				_errorString = "unknown/incomplete projection";
+		}
 	} else {
 		error(ctx);
 		_projection = Projection();
