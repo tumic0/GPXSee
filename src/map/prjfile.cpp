@@ -412,7 +412,12 @@ void PRJFile::datum(CTX &ctx, Datum *dtm, int *epsg)
 	optDatum(ctx, &dx, &dy, &dz, &rx, &ry, &rz, &ds, epsg);
 	compare(ctx, RBRK);
 
-	*dtm = Datum(el, dx, dy, dz, -rx, -ry, -rz, ds);
+	if (!std::isnan(dx) && !std::isnan(dy) && !std::isnan(dz)
+	  && !std::isnan(rx) && !std::isnan(ry) && !std::isnan(rz)
+	  && !std::isnan(ds))
+		*dtm = Datum(el, dx, dy, dz, -rx, -ry, -rz, ds);
+	else if (el == Ellipsoid::WGS84() || el == Ellipsoid::GRS80())
+		*dtm = Datum::WGS84();
 }
 
 void PRJFile::unit(CTX &ctx, double *val, int *epsg)

@@ -13,6 +13,12 @@ public:
 	  : _radius(NAN), _flattening(NAN), _es(NAN), _e2s(NAN), _b(NAN) {}
 	Ellipsoid(double radius, double flattening);
 
+	bool operator==(const Ellipsoid &other) const
+	{
+		return (fabs(_radius - other._radius) < 1e-3
+		  && fabs(_flattening - other._flattening) < 1e-12);
+	}
+
 	double radius() const {return _radius;}
 	double flattening() const {return _flattening;}
 	double es() const {return _es;}
@@ -37,9 +43,6 @@ private:
 	static QMap<int, Ellipsoid> defaults();
 	static QMap<int, Ellipsoid> _ellipsoids;
 };
-
-inline bool operator==(const Ellipsoid &e1, const Ellipsoid &e2)
-  {return (e1.radius() == e2.radius() && e1.flattening() == e2.flattening());}
 
 #ifndef QT_NO_DEBUG
 QDebug operator<<(QDebug dbg, const Ellipsoid &ellipsoid);
