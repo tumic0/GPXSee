@@ -4,6 +4,7 @@
 #include <cmath>
 #include <QDebug>
 #include <common/kv.h>
+#include "common/coordinates.h"
 #include "coordinatesystem.h"
 #include "linearunits.h"
 
@@ -46,6 +47,13 @@ public:
 			  && std::isnan(_standardParallel1)
 			  && std::isnan(_standardParallel2);
 		}
+		bool isValid() const
+		{
+			return ((std::isnan(_latitudeOrigin) || isLat(_latitudeOrigin))
+			  && (std::isnan(_longitudeOrigin) || isLon(_longitudeOrigin))
+			  && (std::isnan(_standardParallel1) || isLat(_standardParallel1))
+			  && (std::isnan(_standardParallel2) || isLat(_standardParallel2)));
+		}
 
 	private:
 		double _latitudeOrigin;
@@ -87,7 +95,7 @@ public:
 		/* We do not check the CoordinateSystem here as it is not always defined
 		   and except of WMTS/WMS it is not needed. The projection setup is
 		   always valid as we do not have any checks for it. */
-		return (_units.isValid() && _method.isValid());
+		return (_units.isValid() && _method.isValid() && _setup.isValid());
 	}
 
 	static bool loadList(const QString &path);

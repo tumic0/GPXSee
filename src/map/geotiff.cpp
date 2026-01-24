@@ -586,6 +586,10 @@ bool GeoTIFF::projectedModel(const QMap<quint16, Value> &kv,
 
 		Conversion::Setup setup(lat0, lon0, scale, fe, fn, sp1, sp2);
 		_projection = Projection(PCS(gcs, Conversion(method, setup, lu)));
+		if (!_projection.isValid()) {
+			_errorString = "Invalid/incomplete projection parameters";
+			return false;
+		}
 	}
 
 	return true;

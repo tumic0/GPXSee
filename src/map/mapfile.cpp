@@ -232,6 +232,10 @@ bool MapFile::createProjection(const QString &datum, const QString &name,
 	}
 
 	_projection = Projection(pcs);
+	if (!_projection.isValid()) {
+		_errorString = "Invalid/incomplete projection parameters";
+		return false;
+	}
 
 	return true;
 }
