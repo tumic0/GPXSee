@@ -14,6 +14,9 @@ Conversion::Setup UTM::setup(int zone)
 
 int UTM::zone(const Coordinates &c)
 {
+	if (!c.isValid())
+		return 0;
+
 	int zone = int((c.lon() + 180)/6) + 1;
 
 	if (c.lat() >= 56.0 && c.lat() < 64.0 && c.lon() >= 3.0 && c.lon() < 12.0)

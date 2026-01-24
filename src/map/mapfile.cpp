@@ -95,10 +95,8 @@ int MapFile::parse(QIODevice &device, QList<CalibrationPoint> &points,
 					if (res) {
 						if (list.at(16).trimmed() == "S")
 							zone = -zone;
-					} else {
-						if (c.isValid())
-							zone = UTM::zone(c);
-					}
+					} else
+						zone = UTM::zone(c);
 				}
 			} else if (key == "IWH") {
 				if (list.count() < 4)
