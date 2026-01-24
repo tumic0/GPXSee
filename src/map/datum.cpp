@@ -71,8 +71,8 @@ Datum::Datum(const Ellipsoid &ellipsoid, double dx, double dy, double dz,
   _ry(as2rad(ry)), _rz(as2rad(rz)), _scale(ds2scale(ds))
 {
 	if ((ellipsoid == Ellipsoid::WGS84() || ellipsoid == Ellipsoid::GRS80())
-	  && _dx == 0.0 && _dy == 0.0 && _dz == 0.0 && _rx == 0.0 && _ry == 0.0
-	  && _rz == 0.0 && ds == 0.0)
+	  && dx == 0.0 && dy == 0.0 && dz == 0.0 && rx == 0.0 && ry == 0.0
+	  && rz == 0.0 && ds == 0.0)
 		_transformation = None;
 	else
 		_transformation = Helmert;
@@ -83,7 +83,7 @@ Datum::Datum(const Ellipsoid &ellipsoid, double dx, double dy, double dz)
   _rz(0.0), _scale(1.0)
 {
 	if ((ellipsoid == Ellipsoid::WGS84() || ellipsoid == Ellipsoid::GRS80())
-	  && _dx == 0.0 && _dy == 0.0 && _dz == 0.0)
+	  && dx == 0.0 && dy == 0.0 && dz == 0.0)
 		_transformation = None;
 	else
 		_transformation = Molodensky;
