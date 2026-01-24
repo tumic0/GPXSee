@@ -4,8 +4,10 @@
 
 Conversion::Setup UTM::setup(int zone)
 {
-	return Conversion::Setup(0, (qAbs(zone) - 1)*6 - 180 + 3, 0.9996, 500000,
-	  zone < 0 ? 10000000 : 0, 0, 0);
+	return ((zone >= -60) && (zone <= 60))
+	  ? Conversion::Setup(0, (qAbs(zone) - 1)*6 - 180 + 3, 0.9996, 500000,
+		  zone < 0 ? 10000000 : 0, 0, 0)
+	  : Conversion::Setup();
 }
 
 int UTM::zone(const Coordinates &c)

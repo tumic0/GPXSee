@@ -82,6 +82,8 @@ static Coordinates parseUTM(const QString &zone, const QString &easting,
 		return Coordinates();
 
 	Projection proj(PCS(GCS::WGS84(), Conversion(9807, UTM::setup(z), 9001)));
+	if (!proj.isValid())
+		return Coordinates();
 
 	return proj.xy2ll(PointD(x, y));
 }
