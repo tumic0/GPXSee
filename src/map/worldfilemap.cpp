@@ -11,7 +11,7 @@ bool WorldFileMap::parsePRJFile(const QString &file)
 {
 	PRJFile prj(file);
 	if (!prj.projection().isValid()) {
-		_errorString = file + ": " + prj.errorString();
+		_errorString = QFileInfo(file).fileName() + ": " + prj.errorString();
 		return false;
 	}
 
