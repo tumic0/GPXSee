@@ -25,18 +25,26 @@ QString EXIFParser::text(TIFFFile &file, const IFDEntry &e) const
 {
 	if (e.type != TIFF_ASCII || !e.count)
 		return QString();
+	int threshold = file.isBig() ? 8 : 4;
 
-	if (e.count <= (qint64)sizeof(e.offset))
-		return QString(QByteArray((const char *)&e.offset, sizeof(e.offset)));
+	if (e.count <= threshold) {
+		if (file.isBE()) {
+			QByteArray ba(e.count, Qt::Initialization::Uninitialized);
+			for (int i = 0; i < e.count; i++)
+				*(ba.data() + i) = *((char*)&e.offset + threshold - 1 - i);
+			return ba;
+		} else
+			return QByteArray((char*)&e.offset, e.count);
+	} else {
+		if (!file.seek(e.offset))
+			return QString();
 
-	if (!file.seek(e.offset))
-		return QString();
+		QByteArray str(file.read(e.count));
+		if (str.size() < (int)e.count)
+			return QString();
 
-	QByteArray str(file.read(e.count));
-	if (str.size() < (int)e.count)
-		return QString();
-
-	return QString(str);
+		return str;
+	}
 }
 
 QTime EXIFParser::time(TIFFFile &file, const IFDEntry &ts) const
@@ -64,17 +72,23 @@ QTime EXIFParser::time(TIFFFile &file, const IFDEntry &ts) const
 double EXIFParser::altitude(TIFFFile &file, const IFDEntry &alt,
   const IFDEntry &altRef) const
 {
+	quint32 num, den;
+
 	if (!(alt.type == TIFF_RATIONAL && alt.count == 1))
 		return NAN;
 
-	if (!file.seek(alt.offset))
-		return NAN;
+	if (file.isBig()) {
+		num = ((quint64)alt.offset) >> 32;
+		den = ((quint64)alt.offset) && 0xFFFFFFFF;
+	} else {
+		if (!file.seek(alt.offset))
+			return NAN;
 
-	quint32 num, den;
-	if (!file.readValue(num))
-		return NAN;
-	if (!file.readValue(den))
-		return NAN;
+		if (!file.readValue(num))
+			return NAN;
+		if (!file.readValue(den))
+			return NAN;
+	}
 
 	return (altRef.type == TIFF_BYTE && altRef.count == 1 && altRef.offset)
 	  ? -(num/(double)den) : num/(double)den;
@@ -116,8 +130,13 @@ Coordinates EXIFParser::coordinates(TIFFFile &file, const IFDEntry &lon,
 	if (!c.isValid())
 		return Coordinates();
 
-	char ew = file.isBE() ? lonRef.offset >> 24 : lonRef.offset;
-	char ns = file.isBE() ? latRef.offset >> 24 : latRef.offset;
+	int threshold = file.isBig() ? 8 : 4;
+	char ew = file.isBE()
+	  ? lonRef.offset >> ((threshold - 1) * 8)
+	  : lonRef.offset;
+	char ns = file.isBE()
+	  ? latRef.offset >> ((threshold - 1) * 8)
+	  : latRef.offset;
 
 	if (ew == 'W')
 		c.rlon() = -c.lon();
