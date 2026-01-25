@@ -23,29 +23,31 @@
 
 QString EXIFParser::text(TIFFFile &file, const IFDEntry &e) const
 {
-	int threshold = file.isBigTIFF() ? 8 : 4;
-
 	if (e.type != TIFF_ASCII || !e.count)
 		return QString();
 
+	int threshold = file.isBigTIFF() ? 8 : 4;
+	QByteArray ba(e.count, Qt::Initialization::Uninitialized);
+
 	if (e.count <= threshold) {
 		if (file.isBigEndian()) {
-			QByteArray ba(e.count, Qt::Initialization::Uninitialized);
 			for (int i = 0; i < e.count; i++)
 				*(ba.data() + i) = *((char*)&e.offset + threshold - 1 - i);
 			return ba;
 		} else
-			return QByteArray((char*)&e.offset, e.count);
+			memcpy(ba.data(), (char*)&e.offset, ba.size());
 	} else {
 		if (!file.seek(e.offset))
 			return QString();
 
-		QByteArray ba(e.count, Qt::Initialization::Uninitialized);
 		if (file.read(ba.data(), ba.size()) < ba.size())
 			return QString();
-
-		return ba;
 	}
+
+	while (ba.size() && ba.back() == '\0')
+		ba.resize(ba.size() - 1);
+
+	return ba;
 }
 
 QTime EXIFParser::time(TIFFFile &file, const IFDEntry &ts) const
@@ -270,12 +272,15 @@ bool EXIFParser::parseTIFF(QFile *file, QVector<Waypoint> &waypoints)
 	Waypoint wp(c);
 	wp.setName(Util::file2name(file->fileName()));
 	wp.addImage(file->fileName());
-	wp.setElevation(altitude(tiff, GPSIFD.value(GPSAltitude),
-	  GPSIFD.value(GPSAltitudeRef)));
-	wp.setTimestamp(QDateTime(QDate::fromString(text(tiff,
-	  GPSIFD.value(GPSDateStamp)), "yyyy:MM:dd"), time(tiff,
-	  GPSIFD.value(GPSTimeStamp)), QTimeZone::utc()));
-	wp.setDescription(text(tiff, IFD0.value(ImageDescription)).trimmed());
+	if (GPSIFD.contains(GPSAltitude))
+		wp.setElevation(altitude(tiff, GPSIFD.value(GPSAltitude),
+		  GPSIFD.value(GPSAltitudeRef)));
+	if (GPSIFD.contains(GPSDateStamp) && GPSIFD.contains(GPSTimeStamp))
+		wp.setTimestamp(QDateTime(QDate::fromString(text(tiff,
+		  GPSIFD.value(GPSDateStamp)), "yyyy:MM:dd"), time(tiff,
+		  GPSIFD.value(GPSTimeStamp)), QTimeZone::utc()));
+	if (IFD0.contains(ImageDescription))
+		wp.setDescription(text(tiff, IFD0.value(ImageDescription)).trimmed());
 
 	waypoints.append(wp);
 
