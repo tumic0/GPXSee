@@ -171,7 +171,7 @@ bool GeoTIFF::readEntry(TIFFFile &file, Ctx &ctx)
 		return false;
 	if (!file.readValue(type))
 		return false;
-	if (file.isBig()) {
+	if (file.isBigTIFF()) {
 		if (!file.readValue(count))
 			return false;
 		if (!file.readValue(offset))
@@ -224,7 +224,7 @@ bool GeoTIFF::readIFD(TIFFFile &file, qint64 offset, Ctx &ctx)
 
 	if (!file.seek(offset))
 		return false;
-	if (file.isBig()) {
+	if (file.isBigTIFF()) {
 		if (!file.readValue(count))
 			return false;
 	} else {
@@ -609,7 +609,7 @@ bool GeoTIFF::geographicModel(const QMap<quint16, Value> &kv,
 
 static bool nextIFD(TIFFFile &file, qint64 &offset)
 {
-	if (file.isBig()) {
+	if (file.isBigTIFF()) {
 		if (!file.readValue(offset))
 			return false;
 	} else {

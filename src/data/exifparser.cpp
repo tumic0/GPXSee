@@ -23,12 +23,13 @@
 
 QString EXIFParser::text(TIFFFile &file, const IFDEntry &e) const
 {
+	int threshold = file.isBigTIFF() ? 8 : 4;
+
 	if (e.type != TIFF_ASCII || !e.count)
 		return QString();
-	int threshold = file.isBig() ? 8 : 4;
 
 	if (e.count <= threshold) {
-		if (file.isBE()) {
+		if (file.isBigEndian()) {
 			QByteArray ba(e.count, Qt::Initialization::Uninitialized);
 			for (int i = 0; i < e.count; i++)
 				*(ba.data() + i) = *((char*)&e.offset + threshold - 1 - i);
@@ -39,11 +40,11 @@ QString EXIFParser::text(TIFFFile &file, const IFDEntry &e) const
 		if (!file.seek(e.offset))
 			return QString();
 
-		QByteArray str(file.read(e.count));
-		if (str.size() < (int)e.count)
+		QByteArray ba(e.count, Qt::Initialization::Uninitialized);
+		if (file.read(ba.data(), ba.size()) < ba.size())
 			return QString();
 
-		return str;
+		return ba;
 	}
 }
 
@@ -77,7 +78,7 @@ double EXIFParser::altitude(TIFFFile &file, const IFDEntry &alt,
 	if (!(alt.type == TIFF_RATIONAL && alt.count == 1))
 		return NAN;
 
-	if (file.isBig()) {
+	if (file.isBigTIFF()) {
 		num = ((quint64)alt.offset) >> 32;
 		den = ((quint64)alt.offset) && 0xFFFFFFFF;
 	} else {
@@ -130,11 +131,11 @@ Coordinates EXIFParser::coordinates(TIFFFile &file, const IFDEntry &lon,
 	if (!c.isValid())
 		return Coordinates();
 
-	int threshold = file.isBig() ? 8 : 4;
-	char ew = file.isBE()
+	int threshold = file.isBigTIFF() ? 8 : 4;
+	char ew = file.isBigEndian()
 	  ? lonRef.offset >> ((threshold - 1) * 8)
 	  : lonRef.offset;
-	char ns = file.isBE()
+	char ns = file.isBigEndian()
 	  ? latRef.offset >> ((threshold - 1) * 8)
 	  : latRef.offset;
 
@@ -156,7 +157,7 @@ bool EXIFParser::readEntry(TIFFFile &file, const QSet<quint16> &tags,
 		return false;
 	if (!file.readValue(entry.type))
 		return false;
-	if (file.isBig()) {
+	if (file.isBigTIFF()) {
 		if (!file.readValue(entry.count))
 			return false;
 		if (!file.readValue(entry.offset))
@@ -184,7 +185,7 @@ bool EXIFParser::readIFD(TIFFFile &file, qint64 offset,
 
 	if (!file.seek(offset))
 		return false;
-	if (file.isBig()) {
+	if (file.isBigTIFF()) {
 		if (!file.readValue(count))
 			return false;
 	} else {
@@ -203,7 +204,7 @@ bool EXIFParser::readIFD(TIFFFile &file, qint64 offset,
 
 static bool nextIFD(TIFFFile &file, qint64 &offset)
 {
-	if (file.isBig()) {
+	if (file.isBigTIFF()) {
 		if (!file.readValue(offset))
 			return false;
 	} else {
