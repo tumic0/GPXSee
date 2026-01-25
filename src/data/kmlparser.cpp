@@ -14,20 +14,11 @@
 #include <QFileInfo>
 #include <QTemporaryDir>
 #include <QCryptographicHash>
-#include <QtEndian>
 #include <QUrl>
 #include <QRegularExpression>
 #include <private/qzipreader_p.h>
 #include "common/util.h"
 #include "kmlparser.h"
-
-static bool isZIP(QFile *file)
-{
-	quint32 magic;
-
-	return (file->read((char *)&magic, sizeof(magic)) == (qint64)sizeof(magic)
-	  && qFromLittleEndian(magic) == 0x04034b50);
-}
 
 qreal KMLParser::number()
 {
@@ -934,8 +925,8 @@ bool KMLParser::parse(QFile *file, QList<TrackData> &tracks,
 
 	_reader.clear();
 
-	if (isZIP(file)) {
-		QZipReader zip(fi.absoluteFilePath(), QIODevice::ReadOnly);
+	if (Util::isZIP(file)) {
+		QZipReader zip(file);
 		QTemporaryDir tempDir;
 		if (!tempDir.isValid() || !zip.extractAll(tempDir.path()))
 			_reader.raiseError("Error extracting ZIP file");
@@ -964,7 +955,6 @@ bool KMLParser::parse(QFile *file, QList<TrackData> &tracks,
 			}
 		}
 	} else {
-		file->reset();
 		_reader.setDevice(file);
 
 		if (_reader.readNextStartElement()) {

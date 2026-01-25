@@ -277,7 +277,17 @@ KMZMap::KMZMap(const QString &fileName, QObject *parent)
   : Map(fileName, parent), _zoom(0), _mapIndex(-1), _zip(0), _mapRatio(1.0),
   _valid(false)
 {
-	QZipReader zip(fileName, QIODevice::ReadOnly);
+	QFile file(fileName);
+	if (!file.open(QIODevice::ReadOnly)) {
+		_errorString = file.errorString();
+		return;
+	}
+	if (!Util::isZIP(&file)) {
+		_errorString = "Not a ZIP file";
+		return;
+	}
+
+	QZipReader zip(&file);
 	QByteArray xml(zip.fileData("doc.kml"));
 	QXmlStreamReader reader(xml);
 	QList<Overlay> overlays;
