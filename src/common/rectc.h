@@ -13,16 +13,25 @@ public:
 	RectC(const Coordinates &center, double radius);
 
 	bool isNull() const
-	  {return _tl.isNull() && _br.isNull();}
-	bool isValid() const
-	  {return (_tl.isValid() && _br.isValid()
-	  && _tl.lat() != _br.lat() && _tl.lon() != _br.lon());}
+	{
+		return _tl.isNull() && _br.isNull();
+	}
+	bool isValid(bool checkEmpty = true) const
+	{
+		if (!(_tl.isValid() && _br.isValid()))
+			return false;
+		return checkEmpty
+			? (_tl.lat() != _br.lat() && _tl.lon() != _br.lon())
+			: true;
+	}
 
 	Coordinates topLeft() const {return _tl;}
 	Coordinates bottomRight() const {return _br;}
 	Coordinates center() const
-	  {return Coordinates((_tl.lon() + _br.lon()) / 2.0,
-	    (_tl.lat() + _br.lat()) / 2.0);}
+	{
+		return Coordinates((_tl.lon() + _br.lon()) / 2.0,
+		  (_tl.lat() + _br.lat()) / 2.0);
+	}
 
 	double width() const
 	{
@@ -51,11 +60,15 @@ public:
 	RectC adjusted(double lon1, double lat1, double lon2, double lat2) const;
 
 	bool intersects(const RectC &r) const
-	  {return (right() >= r.left() && bottom() <= r.top() && left() <= r.right()
-		&& top() >= r.bottom());}
+	{
+		return (right() >= r.left() && bottom() <= r.top()
+		  && left() <= r.right() && top() >= r.bottom());
+	}
 	bool contains(const Coordinates &c) const
-	  {return (c.lon() >= left() && c.lon() <= right() && c.lat() <= top()
-		&& c.lat() >= bottom());}
+	{
+		return (c.lon() >= left() && c.lon() <= right() && c.lat() <= top()
+		  && c.lat() >= bottom());
+	}
 
 private:
 	Coordinates _tl, _br;

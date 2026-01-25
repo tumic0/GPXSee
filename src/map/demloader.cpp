@@ -8,7 +8,7 @@ static QList<DEM::Tile> tiles(const RectC &rect)
 {
 	QList<DEM::Tile> list;
 
-	if (!rect.isValid())
+	if (!rect.isValid(false))
 		return list;
 
 	for (int i = qFloor(rect.top()); i >= qFloor(rect.bottom()); i--)
