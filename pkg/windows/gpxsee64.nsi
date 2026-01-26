@@ -215,9 +215,9 @@ Section "GPXSee" SEC_APP
   !insertmacro FILE_ASSOCIATION_ADD "csa" "COROS IMG Atlas" 31
   !insertmacro FILE_ASSOCIATION_ADD "pmtiles" "PMTiles Map File" 32
   !insertmacro FILE_ASSOCIATION_ADD "t" "PMTiles Map File" 32
-  !insertmacro FILE_ASSOCIATION_ADD "pma" "COROS PMTiles Atlas" 33
-  !insertmacro FILE_ASSOCIATION_ADD "kml" "Keyhole Markup Language" 34
-  !insertmacro FILE_ASSOCIATION_ADD "kmz" "KML geographic compressed data" 34
+  !insertmacro FILE_ASSOCIATION_ADD "kml" "Keyhole Markup Language" 33
+  !insertmacro FILE_ASSOCIATION_ADD "kmz" "KML geographic compressed data" 33
+  !insertmacro FILE_ASSOCIATION_ADD "pma" "COROS PMTiles Atlas" 34
   !insertmacro FILE_ASSOCIATION_ADD "fit" "Flexible and Interoperable Data Transfer" 35
   !insertmacro FILE_ASSOCIATION_ADD "igc" "Flight Recorder Data Format" 36
   !insertmacro FILE_ASSOCIATION_ADD "nmea" "NMEA 0183 Data" 37
