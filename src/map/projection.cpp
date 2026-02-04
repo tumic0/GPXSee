@@ -141,9 +141,14 @@ Projection::Projection(const PCS &pcs)
 				  setup.falseNorthing());
 			break;
 		case 9829:
-			_ct = new PolarStereographic(ellipsoid, setup.latitudeOrigin(),
-			  setup.longitudeOrigin(), setup.falseEasting(),
-			  setup.falseNorthing());
+			_ct = (!isLat(setup.latitudeOrigin())
+			  || !isLon(setup.longitudeOrigin())
+			  || std::isnan(setup.falseEasting())
+			  || std::isnan(setup.falseNorthing()))
+				? 0
+				: new PolarStereographic(ellipsoid, setup.latitudeOrigin(),
+				  setup.longitudeOrigin(), setup.falseEasting(),
+				  setup.falseNorthing());
 			break;
 		default:
 			_ct = 0;
