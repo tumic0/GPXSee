@@ -82,7 +82,7 @@ double EXIFParser::altitude(TIFFFile &file, const IFDEntry &alt,
 
 	if (file.isBigTIFF()) {
 		num = ((quint64)alt.offset) >> 32;
-		den = ((quint64)alt.offset) && 0xFFFFFFFF;
+		den = ((quint64)alt.offset) & 0xFFFFFFFF;
 	} else {
 		if (!file.seek(alt.offset))
 			return NAN;
