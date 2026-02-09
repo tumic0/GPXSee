@@ -1,9 +1,12 @@
 #include <QtMath>
+#include <QtEndian>
 #include <QDataStream>
 #include <QDateTime>
 #include <QTimeZone>
 #include <QRegularExpression>
 #include <QBuffer>
+#include <QJsonDocument>
+#include <QJsonObject>
 #include "common/util.h"
 #include "mp4parser.h"
 
@@ -826,6 +829,38 @@ bool MP4Parser::moov(QDataStream &stream, quint64 atomSize, Metadata &meta,
 	return (!atomSize);
 }
 
+bool MP4Parser::udtaG(QDataStream &stream, quint64 atomSize, Metadata &meta)
+{
+	if (atomSize > 24) {
+		quint32 v1, v2, offset, size;
+		qint64 totalOffset = stream.device()->pos();
+		QByteArray magic(16, Qt::Initialization::Uninitialized);
+
+		stream.readRawData((char*)&v1, 4);
+		stream.readRawData((char*)&v2, 4);
+		stream.readRawData(magic.data(), magic.size());
+
+		offset = qFromLittleEndian(v1);
+		size = qFromLittleEndian(v2);
+		totalOffset += offset;
+
+		if (magic == "__V35AX_QVDATA__" && offset < atomSize) {
+			meta.format = LigoJSONFormat;
+			meta.id = 1;
+			meta.tables.append(Table(1, 1, 1));
+			meta.chunks.resize((atomSize - offset) / size);
+			meta.sizes.resize(meta.chunks.size());
+			for (int i = 0; i < meta.chunks.size(); i++) {
+				meta.chunks[i] = totalOffset + (i * size);
+				meta.sizes[i] = size;
+			}
+		}
+
+		return (stream.skipRawData(atomSize - 24) == (qint64)(atomSize - 24));
+	} else
+		return (stream.skipRawData(atomSize) == (qint64)(atomSize));
+}
+
 bool MP4Parser::atoms(QDataStream &stream, Metadata &meta, Waypoint &wpt)
 {
 	quint32 type, hdrSize;
@@ -834,9 +869,11 @@ bool MP4Parser::atoms(QDataStream &stream, Metadata &meta, Waypoint &wpt)
 	do {
 		if (!hdr(stream, type, size, hdrSize))
 			return false;
-
 		if (type == MOOV) {
 			if (!moov(stream, size ? size - hdrSize : 0, meta, wpt))
+				return false;
+		} else if (type == UDTA) {
+			if (!udtaG(stream, size ? size - hdrSize : 0, meta))
 				return false;
 		} else {
 			if (size) {
@@ -1087,6 +1124,60 @@ bool MP4Parser::novatek(QFile *file, quint64 offset, quint32 size,
 	return true;
 }
 
+bool MP4Parser::ligoJSON(QFile *file, quint64 offset, quint32 size,
+  SegmentData &segment)
+{
+	if (!file->seek(offset)) {
+		_errorString = "Invalid LIGOJson sample offset";
+		return false;
+	}
+
+	QByteArray prefix(12, Qt::Initialization::Uninitialized);
+	if (file->read(prefix.data(), prefix.size()) != prefix.size()
+	  || prefix != "LIGOGPSINFO ") {
+		_errorString = "Invalid LIGOJson data";
+		return false;
+	}
+
+	QByteArray json(size - prefix.size(), Qt::Initialization::Uninitialized);
+	if (file->read(json.data(), json.size()) != json.size()) {
+		_errorString = "Unexpected LIGOJson EOF";
+		return false;
+	}
+	json.resize(json.lastIndexOf('}') + 1);
+
+	QJsonParseError err;
+	QJsonDocument doc(QJsonDocument::fromJson(json, &err));
+	if (err.error) {
+		_errorString = err.errorString();
+		return false;
+	}
+
+	if (doc.object().value("status").toString() != "A")
+		return true;
+
+	double lon = doc.object().value("Longitude").toString().toDouble();
+	double lat = doc.object().value("Latitude").toString().toDouble();
+	if (doc.object().value("EW").toString() == "W")
+		lon = -lon;
+	if (doc.object().value("NS").toString() == "S")
+		lat = -lat;
+	unsigned y = doc.object().value("Year").toString().toUInt();
+	unsigned m = doc.object().value("Month").toString().toUInt();
+	unsigned d = doc.object().value("Day").toString().toUInt();
+	unsigned h = doc.object().value("Hour").toString().toUInt();
+	unsigned min = doc.object().value("Minute").toString().toUInt();
+	unsigned s = doc.object().value("Second").toString().toUInt();
+
+	Trackpoint tp(Coordinates(lon, lat));
+	tp.setTimestamp(QDateTime(QDate(y, m, d), QTime(h, min, s)));
+	tp.setSpeed(doc.object().value("Speed").toString().toDouble() * 0.514444);
+	if (tp.coordinates().isValid())
+		segment.append(tp);
+
+	return true;
+}
+
 bool MP4Parser::metadata(QFile *file, const Metadata &meta, SegmentData &segment)
 {
 	if (!meta.format)
@@ -1129,6 +1220,10 @@ bool MP4Parser::metadata(QFile *file, const Metadata &meta, SegmentData &segment
 						break;
 					case NovatekFormat:
 						if (!novatek(file, offset, size, segment))
+							return false;
+						break;
+					case LigoJSONFormat:
+						if (!ligoJSON(file, offset, size, segment))
 							return false;
 						break;
 					default:

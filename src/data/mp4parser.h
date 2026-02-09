@@ -13,7 +13,12 @@ public:
 
 private:
 	enum Format {
-		UnknownFormat, GPMDFormat, RTMDFormat, CAMMFormat, NovatekFormat
+		UnknownFormat,
+		GPMDFormat,
+		RTMDFormat,
+		CAMMFormat,
+		NovatekFormat,
+		LigoJSONFormat
 	};
 
 	struct Table {
@@ -43,10 +48,12 @@ private:
 	bool camm(QFile *file, quint64 offset, quint32 size, SegmentData &segment);
 	bool novatek(QFile *file, quint64 offset, quint32 size,
 	  SegmentData &segment);
+	bool ligoJSON(QFile *file, quint64 offset, quint32 size, SegmentData &segment);
 
 	static bool atoms(QDataStream &stream, Metadata &meta, Waypoint &wpt);
 	static bool moov(QDataStream &stream, quint64 atomSize, Metadata &meta,
 	  Waypoint &wpt);
+	static bool udtaG(QDataStream &stream, quint64 atomSize, Metadata &meta);
 	static bool trak(QDataStream &stream, quint64 atomSize, Metadata &meta);
 	static bool mdia(QDataStream &stream, quint64 atomSize, Metadata &meta);
 	static bool minf(QDataStream &stream, quint64 atomSize, Metadata &meta);
