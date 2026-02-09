@@ -1128,20 +1128,20 @@ bool MP4Parser::ligoJSON(QFile *file, quint64 offset, quint32 size,
   SegmentData &segment)
 {
 	if (!file->seek(offset)) {
-		_errorString = "Invalid LIGOJson sample offset";
+		_errorString = "Invalid LigoJSON sample offset";
 		return false;
 	}
 
 	QByteArray prefix(12, Qt::Initialization::Uninitialized);
 	if (file->read(prefix.data(), prefix.size()) != prefix.size()
 	  || prefix != "LIGOGPSINFO ") {
-		_errorString = "Invalid LIGOJson data";
+		_errorString = "Invalid LigoJSON data";
 		return false;
 	}
 
 	QByteArray json(size - prefix.size(), Qt::Initialization::Uninitialized);
 	if (file->read(json.data(), json.size()) != json.size()) {
-		_errorString = "Unexpected LIGOJson EOF";
+		_errorString = "Unexpected LigoJSON EOF";
 		return false;
 	}
 	json.resize(json.lastIndexOf('}') + 1);
