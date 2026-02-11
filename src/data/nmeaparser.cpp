@@ -114,8 +114,7 @@ bool NMEAParser::readDate(const char *data, int len, QDate &date)
 		goto error;
 
 	if (len - 4 == 2)
-		date = QDate(y + 2000 < QDate::currentDate().year()
-		  ? 2000 + y : 1900 + y, m, d);
+		date = QDate(y + 1900 < 1980 ? 2000 + y : 1900 + y, m, d);
 	else
 		date = QDate(y, m, d);
 	if (!date.isValid())
