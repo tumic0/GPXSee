@@ -18,7 +18,8 @@ private:
 		RTMDFormat,
 		CAMMFormat,
 		NovatekFormat,
-		LigoJSONFormat
+		LigoJSONFormat,
+		PittasoftFormat
 	};
 
 	struct Table {
@@ -48,12 +49,17 @@ private:
 	bool camm(QFile *file, quint64 offset, quint32 size, SegmentData &segment);
 	bool novatek(QFile *file, quint64 offset, quint32 size,
 	  SegmentData &segment);
-	bool ligoJSON(QFile *file, quint64 offset, quint32 size, SegmentData &segment);
+	bool ligoJSON(QFile *file, quint64 offset, quint32 size,
+	  SegmentData &segment);
+	bool pittasoft(QFile *file, quint64 offset, quint32 size,
+	  SegmentData &segment);
 
 	static bool atoms(QDataStream &stream, Metadata &meta, Waypoint &wpt);
 	static bool moov(QDataStream &stream, quint64 atomSize, Metadata &meta,
 	  Waypoint &wpt);
-	static bool udtaG(QDataStream &stream, quint64 atomSize, Metadata &meta);
+	static bool udta(QDataStream &stream, quint64 atomSize, Metadata &meta);
+	static bool free(QDataStream &stream, quint64 atomSize, Metadata &meta);
+	static bool free2(QDataStream &stream, quint64 atomSize, Metadata &meta);
 	static bool trak(QDataStream &stream, quint64 atomSize, Metadata &meta);
 	static bool mdia(QDataStream &stream, quint64 atomSize, Metadata &meta);
 	static bool minf(QDataStream &stream, quint64 atomSize, Metadata &meta);
@@ -63,6 +69,7 @@ private:
 	static bool stsc(QDataStream &stream, quint64 atomSize,
 	  QVector<Table> &tables);
 	static bool gps(QDataStream &stream, quint64 atomSize, Metadata &meta);
+	static bool gpsf(QDataStream &stream, quint64 atomSize, Metadata &meta);
 
 	QString _errorString;
 };

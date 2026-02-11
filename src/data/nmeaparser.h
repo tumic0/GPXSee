@@ -4,7 +4,6 @@
 #include <QDate>
 #include "parser.h"
 
-
 class NMEAParser : public Parser
 {
 public:
@@ -16,6 +15,8 @@ public:
 	int errorLine() const {return _errorLine;}
 
 private:
+	friend class MP4Parser;
+
 	struct CTX {
 		CTX() : GGA(false) {}
 

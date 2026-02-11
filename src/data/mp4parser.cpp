@@ -8,6 +8,7 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include "common/util.h"
+#include "nmeaparser.h"
 #include "mp4parser.h"
 
 #define alignup(n, k) (((n) + (k) - 1) / (k) * (k))
@@ -718,7 +719,7 @@ static bool xyz(QDataStream &stream, quint64 atomSize, Waypoint &wpt)
 	return true;
 }
 
-static bool udta(QDataStream &stream, quint64 atomSize, Waypoint &wpt)
+static bool udtam(QDataStream &stream, quint64 atomSize, Waypoint &wpt)
 {
 	quint32 type, hdrSize;
 	quint64 size;
@@ -802,14 +803,14 @@ bool MP4Parser::moov(QDataStream &stream, quint64 atomSize, Metadata &meta,
 		if (!(hdr(stream, type, size, hdrSize) && dec(atomSize, size)))
 			return false;
 
-		if (type == TRAK) {
-			if (!meta.format && !trak(stream, size ? size - hdrSize : 0, meta))
+		if (!meta.format && type == TRAK) {
+			if (!trak(stream, size ? size - hdrSize : 0, meta))
 				return false;
 		} else if (type == MVHD) {
 			if (!mvhd(stream, size ? size - hdrSize : 0, wpt))
 				return false;
 		} else if (type == UDTA) {
-			if (!udta(stream, size ? size - hdrSize : 0, wpt))
+			if (!udtam(stream, size ? size - hdrSize : 0, wpt))
 				return false;
 		} else if (type == GPS) {
 			if (!gps(stream, size ? size - hdrSize : 0, meta))
@@ -829,36 +830,88 @@ bool MP4Parser::moov(QDataStream &stream, quint64 atomSize, Metadata &meta,
 	return (!atomSize);
 }
 
-bool MP4Parser::udtaG(QDataStream &stream, quint64 atomSize, Metadata &meta)
+bool MP4Parser::udta(QDataStream &stream, quint64 atomSize, Metadata &meta)
 {
-	if (atomSize > 24) {
-		quint32 v1, v2, offset, size;
-		qint64 totalOffset = stream.device()->pos();
-		QByteArray magic(16, Qt::Initialization::Uninitialized);
-
-		stream.readRawData((char*)&v1, 4);
-		stream.readRawData((char*)&v2, 4);
-		stream.readRawData(magic.data(), magic.size());
-
-		offset = qFromLittleEndian(v1);
-		size = qFromLittleEndian(v2);
-		totalOffset += offset;
-
-		if (magic == "__V35AX_QVDATA__" && offset < atomSize) {
-			meta.format = LigoJSONFormat;
-			meta.id = 1;
-			meta.tables.append(Table(1, 1, 1));
-			meta.chunks.resize((atomSize - offset) / size);
-			meta.sizes.resize(meta.chunks.size());
-			for (int i = 0; i < meta.chunks.size(); i++) {
-				meta.chunks[i] = totalOffset + (i * size);
-				meta.sizes[i] = size;
-			}
-		}
-
-		return (stream.skipRawData(atomSize - 24) == (qint64)(atomSize - 24));
-	} else
+	if (atomSize < 24)
 		return (stream.skipRawData(atomSize) == (qint64)(atomSize));
+
+	quint32 v1, v2, offset, size;
+	qint64 totalOffset = stream.device()->pos();
+	QByteArray magic(16, Qt::Initialization::Uninitialized);
+
+	stream.readRawData((char*)&v1, 4);
+	stream.readRawData((char*)&v2, 4);
+	stream.readRawData(magic.data(), magic.size());
+
+	offset = qFromLittleEndian(v1);
+	size = qFromLittleEndian(v2);
+	totalOffset += offset;
+
+	if (magic == "__V35AX_QVDATA__" && offset < atomSize) {
+		quint32 cnt = (atomSize - offset) / size;
+		quint32 prev = meta.chunks.size();
+
+		meta.format = LigoJSONFormat;
+		meta.id = 1;
+		meta.tables.append(Table(meta.tables.size() + 1, 1, 1));
+		meta.chunks.resize(prev + cnt);
+		meta.sizes.resize(prev + cnt);
+		for (quint32 i = 0; i < cnt; i++) {
+			meta.chunks[prev + i] = totalOffset + (i * size);
+			meta.sizes[prev + i] = size;
+		}
+	}
+
+	return (stream.skipRawData(atomSize - 24) == (qint64)(atomSize - 24));
+}
+
+bool MP4Parser::gpsf(QDataStream &stream, quint64 atomSize, Metadata &meta)
+{
+	qint64 offset = stream.device()->pos();
+
+	meta.format = PittasoftFormat;
+	meta.id = 1;
+	meta.tables.append(Table(meta.tables.size() + 1, 1, 1));
+	meta.chunks.append(offset);
+	meta.sizes.append((quint32)atomSize);
+
+	return (stream.skipRawData(atomSize) == (qint64)(atomSize));
+}
+
+bool MP4Parser::free2(QDataStream &stream, quint64 atomSize, Metadata &meta)
+{
+	quint32 type, hdrSize;
+	quint64 size;
+
+	do {
+		if (!(hdr(stream, type, size, hdrSize) && dec(atomSize, size)))
+			return false;
+
+		if (!meta.format && type == GPS) {
+			if (!gpsf(stream, size ? size - hdrSize : 0, meta))
+				return false;
+		} else {
+			if (size) {
+				if (stream.skipRawData(size - hdrSize)
+				  != (qint64)(size - hdrSize))
+					return false;
+			} else
+				break;
+		}
+		if (stream.atEnd())
+			break;
+	} while (atomSize);
+
+	return (!atomSize);
+}
+
+bool MP4Parser::free(QDataStream &stream, quint64 atomSize, Metadata &meta)
+{
+	qint64 pos = stream.device()->pos();
+	if (free2(stream, atomSize, meta))
+		return true;
+	else
+		return stream.device()->seek(pos + atomSize);
 }
 
 bool MP4Parser::atoms(QDataStream &stream, Metadata &meta, Waypoint &wpt)
@@ -873,7 +926,10 @@ bool MP4Parser::atoms(QDataStream &stream, Metadata &meta, Waypoint &wpt)
 			if (!moov(stream, size ? size - hdrSize : 0, meta, wpt))
 				return false;
 		} else if (type == UDTA) {
-			if (!udtaG(stream, size ? size - hdrSize : 0, meta))
+			if (!udta(stream, size ? size - hdrSize : 0, meta))
+				return false;
+		} else if (type == FREE) {
+			if (!free(stream, size ? size - hdrSize : 0, meta))
 				return false;
 		} else {
 			if (size) {
@@ -1178,6 +1234,68 @@ bool MP4Parser::ligoJSON(QFile *file, quint64 offset, quint32 size,
 	return true;
 }
 
+bool MP4Parser::pittasoft(QFile *file, quint64 offset, quint32 size,
+  SegmentData &segment)
+{
+	char line[1024];
+	NMEAParser parser;
+	NMEAParser::CTX ctx;
+
+	if (!file->seek(offset)) {
+		_errorString = "Invalid Pittasoft sample offset";
+		return false;
+	}
+
+	while (size) {
+		qint64 len = file->readLine(line, qMin(sizeof(line), size));
+
+		if (len < 0) {
+			_errorString = "NMEA I/O error";
+			return false;
+		} else if (len >= (qint64)sizeof(line) - 1) {
+			char *eol = (char*)memchr(line, 0, len);
+			if (eol) {
+				len -= (eol - line);
+				size = 0;
+			} else {
+				_errorString = "NMEA line limit exceeded";
+				return false;
+			}
+		} else
+			size -= len;
+
+		char *nmea = line;
+		for (qint64 i = 0; i < len; i++) {
+			if (*nmea == '$')
+				break;
+			else
+				nmea++;
+		}
+		len -= (nmea - line);
+
+		if (len >= 12) {
+			if (!memcmp(nmea + 3, "RMC,", 4)) {
+				if (!parser.readRMC(ctx, nmea + 7, len - 7, segment)) {
+					_errorString = parser.errorString();
+					return false;
+				}
+			} else if (!memcmp(nmea + 3, "GGA,", 4)) {
+				if (!parser.readGGA(ctx, nmea + 7, len - 7, segment)) {
+					_errorString = parser.errorString();
+					return false;
+				}
+			} else if (!memcmp(nmea + 3, "ZDA,", 4)) {
+				if (!parser.readZDA(ctx, nmea + 7, len - 7)) {
+					_errorString = parser.errorString();
+					return false;
+				}
+			}
+		}
+	}
+
+	return true;
+}
+
 bool MP4Parser::metadata(QFile *file, const Metadata &meta, SegmentData &segment)
 {
 	if (!meta.format)
@@ -1226,6 +1344,10 @@ bool MP4Parser::metadata(QFile *file, const Metadata &meta, SegmentData &segment
 						if (!ligoJSON(file, offset, size, segment))
 							return false;
 						break;
+					case PittasoftFormat:
+						if (!pittasoft(file, offset, size, segment))
+							return false;
+						break;
 					default:
 						break;
 				}
@@ -1253,8 +1375,9 @@ bool MP4Parser::parse(QFile *file, QList<TrackData> &tracks,
 
 		if (gpmf(file, 0, file->size(), segment)) {
 			if (segment.size()) {
-				tracks.append(segment);
-				tracks.last().setFile(file->fileName());
+				TrackData t(segment);
+				t.setFile(file->fileName());
+				tracks.append(t);
 				return true;
 			} else
 				_errorString = "No GPS data found in GPMF";
