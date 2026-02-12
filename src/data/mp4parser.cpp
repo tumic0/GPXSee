@@ -1163,7 +1163,10 @@ bool MP4Parser::novatek(QFile *file, quint64 offset, quint32 size,
 	tp.setTimestamp(QDateTime(QDate(y + 2000, M, d), QTime(h, m, s),
 	  QTimeZone::utc()));
 	tp.setSpeed(speed * 0.51444);
-	if (tp.coordinates().isValid())
+	if (!tp.coordinates().isValid()) {
+		_errorString = "Unknown/obfuscated Novatek GPS data format";
+		return false;
+	} else
 		segment.append(tp);
 
 	return true;
