@@ -1247,7 +1247,7 @@ bool MP4Parser::pittasoft(QFile *file, quint64 offset, quint32 size,
 	}
 
 	while (size) {
-		qint64 len = file->readLine(line, qMin(sizeof(line), size));
+		qint64 len = file->readLine(line, qMin((quint32)sizeof(line), size));
 
 		if (len < 0) {
 			_errorString = "NMEA I/O error";
