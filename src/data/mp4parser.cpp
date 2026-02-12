@@ -832,34 +832,23 @@ bool MP4Parser::moov(QDataStream &stream, quint64 atomSize, Metadata &meta,
 
 bool MP4Parser::udta(QDataStream &stream, quint64 atomSize, Metadata &meta)
 {
+	qint64 offset = stream.device()->pos();
+
 	if (atomSize < 24)
 		return (stream.skipRawData(atomSize) == (qint64)(atomSize));
 
-	quint32 v1, v2, offset, size;
-	qint64 totalOffset = stream.device()->pos();
 	QByteArray magic(16, Qt::Initialization::Uninitialized);
+	if (stream.skipRawData(8) != 8)
+		return false;
+	if (stream.readRawData(magic.data(), magic.size()) != magic.size())
+		return false;
 
-	stream.readRawData((char*)&v1, 4);
-	stream.readRawData((char*)&v2, 4);
-	stream.readRawData(magic.data(), magic.size());
-
-	offset = qFromLittleEndian(v1);
-	size = qFromLittleEndian(v2);
-	totalOffset += offset;
-
-	if (magic == "__V35AX_QVDATA__" && offset < atomSize) {
-		quint32 cnt = (atomSize - offset) / size;
-		quint32 prev = meta.chunks.size();
-
+	if (magic == "__V35AX_QVDATA__") {
 		meta.format = LigoJSONFormat;
 		meta.id = 1;
 		meta.tables.append(Table(meta.tables.size() + 1, 1, 1));
-		meta.chunks.resize(prev + cnt);
-		meta.sizes.resize(prev + cnt);
-		for (quint32 i = 0; i < cnt; i++) {
-			meta.chunks[prev + i] = totalOffset + (i * size);
-			meta.sizes[prev + i] = size;
-		}
+		meta.chunks.append(offset);
+		meta.sizes.append((quint32)atomSize);
 	}
 
 	return (stream.skipRawData(atomSize - 24) == (qint64)(atomSize - 24));
@@ -1184,52 +1173,61 @@ bool MP4Parser::ligoJSON(QFile *file, quint64 offset, quint32 size,
   SegmentData &segment)
 {
 	if (!file->seek(offset)) {
-		_errorString = "Invalid LigoJSON sample offset";
+		_errorString = "Invalid LigoJSON offset";
 		return false;
 	}
 
-	QByteArray prefix(12, Qt::Initialization::Uninitialized);
-	if (file->read(prefix.data(), prefix.size()) != prefix.size()
-	  || prefix != "LIGOGPSINFO ") {
-		_errorString = "Invalid LigoJSON data";
+	quint32 gpsOffset, sampleSize;
+	QDataStream stream(file);
+	stream.setByteOrder(QDataStream::LittleEndian);
+	stream >> gpsOffset >> sampleSize;
+	if (gpsOffset > size || stream.skipRawData(gpsOffset - 8) != gpsOffset - 8) {
+		_errorString = "Invalid LigoJSON GPS offset";
 		return false;
 	}
+	quint32 samples = (size - gpsOffset) / sampleSize;
+	QByteArray sample(sampleSize, Qt::Initialization::Uninitialized);
 
-	QByteArray json(size - prefix.size(), Qt::Initialization::Uninitialized);
-	if (file->read(json.data(), json.size()) != json.size()) {
-		_errorString = "Unexpected LigoJSON EOF";
-		return false;
+	for (quint32 i = 0; i < samples; i++) {
+		if (stream.readRawData(sample.data(), sample.size()) != sample.size()) {
+			_errorString = "Unexpected LigoJSON sample EOF";
+			return false;
+		}
+		if (!sample.startsWith("LIGOGPSINFO ")) {
+			_errorString = "Invalid LigoJSON sample data";
+			return false;
+		}
+
+		QByteArray json(sample.mid(12, sample.lastIndexOf('}') - 11));
+		QJsonParseError err;
+		QJsonDocument doc(QJsonDocument::fromJson(json, &err));
+		if (err.error) {
+			_errorString = err.errorString();
+			return false;
+		}
+
+		if (doc.object().value("status").toString() != "A")
+			continue;
+
+		double lon = doc.object().value("Longitude").toString().toDouble();
+		double lat = doc.object().value("Latitude").toString().toDouble();
+		if (doc.object().value("EW").toString() == "W")
+			lon = -lon;
+		if (doc.object().value("NS").toString() == "S")
+			lat = -lat;
+		unsigned y = doc.object().value("Year").toString().toUInt();
+		unsigned m = doc.object().value("Month").toString().toUInt();
+		unsigned d = doc.object().value("Day").toString().toUInt();
+		unsigned h = doc.object().value("Hour").toString().toUInt();
+		unsigned min = doc.object().value("Minute").toString().toUInt();
+		unsigned s = doc.object().value("Second").toString().toUInt();
+
+		Trackpoint tp(Coordinates(lon, lat));
+		tp.setTimestamp(QDateTime(QDate(y, m, d), QTime(h, min, s)));
+		tp.setSpeed(doc.object().value("Speed").toString().toDouble() * 0.514444);
+		if (tp.coordinates().isValid())
+			segment.append(tp);
 	}
-	json.resize(json.lastIndexOf('}') + 1);
-
-	QJsonParseError err;
-	QJsonDocument doc(QJsonDocument::fromJson(json, &err));
-	if (err.error) {
-		_errorString = err.errorString();
-		return false;
-	}
-
-	if (doc.object().value("status").toString() != "A")
-		return true;
-
-	double lon = doc.object().value("Longitude").toString().toDouble();
-	double lat = doc.object().value("Latitude").toString().toDouble();
-	if (doc.object().value("EW").toString() == "W")
-		lon = -lon;
-	if (doc.object().value("NS").toString() == "S")
-		lat = -lat;
-	unsigned y = doc.object().value("Year").toString().toUInt();
-	unsigned m = doc.object().value("Month").toString().toUInt();
-	unsigned d = doc.object().value("Day").toString().toUInt();
-	unsigned h = doc.object().value("Hour").toString().toUInt();
-	unsigned min = doc.object().value("Minute").toString().toUInt();
-	unsigned s = doc.object().value("Second").toString().toUInt();
-
-	Trackpoint tp(Coordinates(lon, lat));
-	tp.setTimestamp(QDateTime(QDate(y, m, d), QTime(h, min, s)));
-	tp.setSpeed(doc.object().value("Speed").toString().toDouble() * 0.514444);
-	if (tp.coordinates().isValid())
-		segment.append(tp);
 
 	return true;
 }
@@ -1242,7 +1240,7 @@ bool MP4Parser::pittasoft(QFile *file, quint64 offset, quint32 size,
 	NMEAParser::CTX ctx;
 
 	if (!file->seek(offset)) {
-		_errorString = "Invalid Pittasoft sample offset";
+		_errorString = "Invalid Pittasoft offset";
 		return false;
 	}
 
