@@ -1212,24 +1212,36 @@ bool MP4Parser::ligoJSON(QFile *file, quint64 offset, quint32 size,
 		if (doc.object().value("status").toString() != "A")
 			continue;
 
-		double lon = doc.object().value("Longitude").toString().toDouble();
-		double lat = doc.object().value("Latitude").toString().toDouble();
+		bool lonOk, latOk;
+		double lon = doc.object().value("Longitude").toString().toDouble(&lonOk);
+		double lat = doc.object().value("Latitude").toString().toDouble(&latOk);
+		Coordinates c(lon, lat);
+		if (!(lonOk && latOk && c.isValid())) {
+			_errorString = "Invalid/missing LigoJSON coordinates";
+			return false;
+		}
 		if (doc.object().value("EW").toString() == "W")
-			lon = -lon;
+			c.rlon() = -c.lon();
 		if (doc.object().value("NS").toString() == "S")
-			lat = -lat;
-		unsigned y = doc.object().value("Year").toString().toUInt();
-		unsigned m = doc.object().value("Month").toString().toUInt();
-		unsigned d = doc.object().value("Day").toString().toUInt();
-		unsigned h = doc.object().value("Hour").toString().toUInt();
-		unsigned min = doc.object().value("Minute").toString().toUInt();
-		unsigned s = doc.object().value("Second").toString().toUInt();
+			c.rlat() = -c.lat();
 
-		Trackpoint tp(Coordinates(lon, lat));
-		tp.setTimestamp(QDateTime(QDate(y, m, d), QTime(h, min, s)));
-		tp.setSpeed(doc.object().value("Speed").toString().toDouble() * 0.514444);
-		if (tp.coordinates().isValid())
-			segment.append(tp);
+		bool yOk, mOk, dOk, hOk, minOk, sOk;
+		unsigned y = doc.object().value("Year").toString().toUInt(&yOk);
+		unsigned m = doc.object().value("Month").toString().toUInt(&mOk);
+		unsigned d = doc.object().value("Day").toString().toUInt(&dOk);
+		unsigned h = doc.object().value("Hour").toString().toUInt(&hOk);
+		unsigned min = doc.object().value("Minute").toString().toUInt(&minOk);
+		unsigned s = doc.object().value("Second").toString().toUInt(&sOk);
+
+		bool speedOk;
+		double speed = doc.object().value("Speed").toString().toDouble(&speedOk);
+
+		Trackpoint tp(c);
+		if (yOk && mOk && dOk && hOk && minOk && sOk)
+			tp.setTimestamp(QDateTime(QDate(y, m, d), QTime(h, min, s)));
+		if (speedOk)
+			tp.setSpeed(speed * 0.514444);
+		segment.append(tp);
 	}
 
 	return true;
