@@ -1065,23 +1065,25 @@ bool MP4Parser::camm(QFile *file, quint64 offset, quint32 size,
 	return true;
 }
 
-static double lon2dd(float dm, quint8 ref)
+template<typename T>
+static double lon2dd(T dm, quint8 ref)
 {
 	int deg = (dm / 100.0);
-	float min = dm - (float)(deg * 100);
+	T min = dm - (T)(deg * 100);
 	return (ref == 'W')
 	  ? -((double)deg + (double)min / 60.0) : (double)deg + (double)min / 60.0;
 }
 
-static double lat2dd(float dm, quint8 ref)
+template<typename T>
+static double lat2dd(T dm, quint8 ref)
 {
 	int deg = (dm / 100.0);
-	float min = dm - (float)(deg * 100);
+	T min = dm - (T)(deg * 100);
 	return (ref == 'S')
 	  ? -((double)deg + (double)min / 60.0) : (double)deg + (double)min / 60.0;
 }
 
-static int gpsOffset(const QByteArray &ba)
+static int novatekOffset(const QByteArray &ba)
 {
 	if (ba.size() < 40)
 		return -1;
@@ -1114,6 +1116,88 @@ static int gpsOffset(const QByteArray &ba)
 	return -1;
 }
 
+static int vantrueOffset(const QByteArray &ba)
+{
+	if (ba.size() < 72)
+		return -1;
+
+	int state = 0, cnt;
+
+	for (int i = 16; i < ba.size(); i++) {
+		char c = ba.at(i);
+
+		switch (state) {
+			case 0:
+				if (c == 'A') {
+					state = 1;
+					cnt = 0;
+				}
+				break;
+			case 1:
+				if (cnt == 11 && (c == 'N' || c == 'S')) {
+					state = 2;
+					cnt = 0;
+				} else if (cnt >= 11)
+					state = 0;
+				else
+					cnt++;
+				break;
+			case 2:
+				if (cnt == 15 && (c == 'E' || c == 'W'))
+					return (ba.size() - i >= 32) ? i - 40 : -1;
+				else if (cnt >= 15)
+					state = 0;
+				else
+					cnt++;
+				break;
+		}
+	}
+
+	return -1;
+}
+
+static void novatekData(QDataStream &les, double &lat, double &lon,
+  double &speed, quint32 &h, quint32 &m, quint32 &s, quint32 &y, quint32 &M,
+  quint32 &d)
+{
+	float flat, flon, fspeed;
+	quint8 fix, u1, EW, NS;
+
+	les >> h >> m >> s >> y >> M >> d >> fix >> NS >> EW >> u1;
+	les.readRawData((char*)&flat, sizeof(flat));
+	les.readRawData((char*)&flon, sizeof(flon));
+	les.readRawData((char*)&fspeed, sizeof(fspeed));
+
+	lon = lon2dd(flon, EW);
+	lat = lat2dd(flat, NS);
+	speed = fspeed * 0.51444;
+	y += 2000;
+}
+
+static void vantrueData(QDataStream &les, double &lat, double &lon,
+  double &speed, quint32 &h, quint32 &m, quint32 &s, quint32 &y, quint32 &M,
+  quint32 &d)
+{
+	quint32 u4;
+	quint8 EW, NS;
+
+	les >> h >> m >> s >> u4;
+	les.readRawData((char*)&lat, sizeof(lat));
+	les >> NS;
+	les.skipRawData(7);
+	les.readRawData((char*)&lon, sizeof(lon));
+	les >> EW;
+	les.skipRawData(7);
+	les.readRawData((char*)&speed, sizeof(speed));
+	les.skipRawData(8);
+	les >> y >> M >> d;
+
+	lon = lon2dd(lon, EW);
+	lat = lat2dd(lat, NS);
+	speed *= 0.51444;
+	y += 2000;
+}
+
 bool MP4Parser::novatek(QFile *file, quint64 offset, quint32 size,
   SegmentData &segment)
 {
@@ -1138,31 +1222,31 @@ bool MP4Parser::novatek(QFile *file, quint64 offset, quint32 size,
 		_errorString = "Unexpected Novatek EOF";
 		return false;
 	}
-	int go = gpsOffset(ba);
-	if (go < 0) {
+
+	quint32 h, m, s, y, M, d;
+	double lat, lon, speed;
+	int gpsOffset;
+	QBuffer buf(&ba);
+	buf.open(QIODevice::ReadOnly);
+	QDataStream ds(&buf);
+	ds.setByteOrder(QDataStream::LittleEndian);
+
+	if ((gpsOffset = novatekOffset(ba)) >= 0) {
+		ds.skipRawData(gpsOffset);
+		novatekData(ds, lat, lon, speed, h, m, s, y, M, d);
+	} else if ((gpsOffset = vantrueOffset(ba)) >= 0) {
+		ds.skipRawData(gpsOffset);
+		vantrueData(ds, lat, lon, speed, h, m, s, y, M, d);
+	} else {
 		qWarning("%s: Unknown Novatek GPS data format",
 		  qUtf8Printable(file->fileName()));
 		return true;
 	}
 
-	QBuffer buf(&ba);
-	buf.open(QIODevice::ReadOnly);
-	QDataStream les(&buf);
-	quint32 h, m, s, y, M, d;
-	quint8 fix, NS, EW, u1;
-	float lat, lon, speed;
-
-	les.setByteOrder(QDataStream::LittleEndian);
-	les.skipRawData(go);
-	les >> h >> m >> s >> y >> M >> d >> fix >> NS >> EW >> u1;
-	les.readRawData((char*)&lat, sizeof(lat));
-	les.readRawData((char*)&lon, sizeof(lon));
-	les.readRawData((char*)&speed, sizeof(speed));
-
-	Trackpoint tp(Coordinates(lon2dd(lon, EW), lat2dd(lat, NS)));
-	tp.setTimestamp(QDateTime(QDate(y + 2000, M, d), QTime(h, m, s),
+	Trackpoint tp(Coordinates(lon, lat));
+	tp.setTimestamp(QDateTime(QDate(y, M, d), QTime(h, m, s),
 	  QTimeZone::utc()));
-	tp.setSpeed(speed * 0.51444);
+	tp.setSpeed(speed);
 	if (!tp.coordinates().isValid()) {
 		_errorString = "Unknown/obfuscated Novatek GPS data format";
 		return false;
