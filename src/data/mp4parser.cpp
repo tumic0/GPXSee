@@ -1156,17 +1156,17 @@ static int vantrueOffset(const QByteArray &ba)
 	return -1;
 }
 
-static void novatekData(QDataStream &les, double &lat, double &lon,
+static void novatekData(QDataStream &stream, double &lat, double &lon,
   double &speed, quint32 &h, quint32 &m, quint32 &s, quint32 &y, quint32 &M,
   quint32 &d)
 {
 	float flat, flon, fspeed;
 	quint8 fix, u1, EW, NS;
 
-	les >> h >> m >> s >> y >> M >> d >> fix >> NS >> EW >> u1;
-	les.readRawData((char*)&flat, sizeof(flat));
-	les.readRawData((char*)&flon, sizeof(flon));
-	les.readRawData((char*)&fspeed, sizeof(fspeed));
+	stream >> h >> m >> s >> y >> M >> d >> fix >> NS >> EW >> u1;
+	stream.readRawData((char*)&flat, sizeof(flat));
+	stream.readRawData((char*)&flon, sizeof(flon));
+	stream.readRawData((char*)&fspeed, sizeof(fspeed));
 
 	lon = lon2dd(flon, EW);
 	lat = lat2dd(flat, NS);
@@ -1174,23 +1174,23 @@ static void novatekData(QDataStream &les, double &lat, double &lon,
 	y += 2000;
 }
 
-static void vantrueData(QDataStream &les, double &lat, double &lon,
+static void vantrueData(QDataStream &stream, double &lat, double &lon,
   double &speed, quint32 &h, quint32 &m, quint32 &s, quint32 &y, quint32 &M,
   quint32 &d)
 {
 	quint32 u4;
 	quint8 EW, NS;
 
-	les >> h >> m >> s >> u4;
-	les.readRawData((char*)&lat, sizeof(lat));
-	les >> NS;
-	les.skipRawData(7);
-	les.readRawData((char*)&lon, sizeof(lon));
-	les >> EW;
-	les.skipRawData(7);
-	les.readRawData((char*)&speed, sizeof(speed));
-	les.skipRawData(8);
-	les >> y >> M >> d;
+	stream >> h >> m >> s >> u4;
+	stream.readRawData((char*)&lat, sizeof(lat));
+	stream >> NS;
+	stream.skipRawData(7);
+	stream.readRawData((char*)&lon, sizeof(lon));
+	stream >> EW;
+	stream.skipRawData(7);
+	stream.readRawData((char*)&speed, sizeof(speed));
+	stream.skipRawData(8);
+	stream >> y >> M >> d;
 
 	lon = lon2dd(lon, EW);
 	lat = lat2dd(lat, NS);
