@@ -1085,12 +1085,9 @@ static double lat2dd(T dm, quint8 ref)
 
 static int novatekOffset(const QByteArray &ba)
 {
-	if (ba.size() < 40)
-		return -1;
-
 	int state = 0;
 
-	for (int i = 24; i < ba.size(); i++) {
+	for (int i = 24; i < ba.size() - 13; i++) {
 		char c = ba.at(i);
 
 		switch (state) {
@@ -1106,7 +1103,7 @@ static int novatekOffset(const QByteArray &ba)
 				break;
 			case 2:
 				if (c == 'E' || c == 'W')
-					return (ba.size() - i >= 13) ? i - 26 : -1;
+					return i - 26;
 				else
 					state = 0;
 				break;
@@ -1118,12 +1115,9 @@ static int novatekOffset(const QByteArray &ba)
 
 static int vantrueOffset(const QByteArray &ba)
 {
-	if (ba.size() < 72)
-		return -1;
-
 	int state = 0, cnt;
 
-	for (int i = 16; i < ba.size(); i++) {
+	for (int i = 16; i < ba.size() - 32; i++) {
 		char c = ba.at(i);
 
 		switch (state) {
@@ -1144,7 +1138,7 @@ static int vantrueOffset(const QByteArray &ba)
 				break;
 			case 2:
 				if (cnt == 15 && (c == 'E' || c == 'W'))
-					return (ba.size() - i >= 32) ? i - 40 : -1;
+					return i - 40;
 				else if (cnt >= 15)
 					state = 0;
 				else
