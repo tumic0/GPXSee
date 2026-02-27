@@ -1262,7 +1262,8 @@ bool MP4Parser::ligoJSON(QFile *file, quint64 offset, quint32 size,
 	QDataStream stream(file);
 	stream.setByteOrder(QDataStream::LittleEndian);
 	stream >> gpsOffset >> sampleSize;
-	if (gpsOffset > size || stream.skipRawData(gpsOffset - 8) != gpsOffset - 8) {
+	if (gpsOffset > size
+	  || stream.skipRawData(gpsOffset - 8) != (qint64)gpsOffset - 8) {
 		_errorString = "Invalid LigoJSON GPS offset";
 		return false;
 	}
