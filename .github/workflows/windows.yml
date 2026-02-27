@@ -58,7 +58,7 @@ jobs:
           certutil -decode certificate\certificate.txt certificate\certificate.pfx
           signtool sign /f certificate\certificate.pfx /fd SHA256 /p "$env:CERTIFICATE_PWD" /tr "http://timestamp.acs.microsoft.com" /td SHA256 installer\GPXSee-*.exe
       - name: Upload artifacts
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           path: installer/GPXSee-*.exe
           name: GPXSee_${{matrix.arch}}.exe
