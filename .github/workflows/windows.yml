@@ -62,4 +62,4 @@ jobs:
         with:
           path: installer/GPXSee-*.exe
           name: GPXSee_${{matrix.arch}}.exe
-          compression-level: 0
+          archive: false
