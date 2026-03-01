@@ -640,7 +640,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="486"/>
         <source>Show local DEM tiles</source>
-        <translation>Показать локальные DEM тайлы</translation>
+        <translation>Показать локальные ЦМР тайлы</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="489"/>
@@ -779,7 +779,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="758"/>
         <source>DEM</source>
-        <translation>DEM</translation>
+        <translation>ЦМР</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="766"/>
@@ -873,7 +873,7 @@
         <location filename="../src/GUI/gui.cpp" line="991"/>
         <location filename="../src/GUI/gui.cpp" line="1009"/>
         <source>DEM directory:</source>
-        <translation>Каталог с DEM данными:</translation>
+        <translation>Каталог с ЦМР данными:</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="993"/>
@@ -927,12 +927,12 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="2058"/>
         <source>DEM tiles download limit exceeded. If you really need data for such a huge area, download the files manually.</source>
-        <translation>Превышен лимит загрузки DEM тайлов. Если вам действительно нужны данные для такой огромной области, загрузите файлы вручную.</translation>
+        <translation>Превышен лимит загрузки ЦМР тайлов. Если вам действительно нужны данные для такой огромной области, загрузите файлы вручную.</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="2074"/>
         <source>Could not download all required DEM files.</source>
-        <translation>Не удалось загрузить все необходимые DEM файлы.</translation>
+        <translation>Не удалось загрузить все необходимые ЦМР файлы.</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="2102"/>
@@ -975,12 +975,12 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="475"/>
         <source>Download data DEM</source>
-        <translation>Скачать данные DEM</translation>
+        <translation>Скачать данные ЦМР</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="481"/>
         <source>Download map DEM</source>
-        <translation>Скачать карту DEM</translation>
+        <translation>Скачать карту ЦМР</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="773"/>
@@ -1044,15 +1044,15 @@
         <location filename="../src/GUI/gui.cpp" line="2061"/>
         <source>Download %n DEM tiles?</source>
         <translation>
-            <numerusform>Скачать %n DEM тайл?</numerusform>
-            <numerusform>Скачать %n DEM тайла?</numerusform>
-            <numerusform>Скачать %n DEM тайлов?</numerusform>
+            <numerusform>Скачать %n ЦМР тайл?</numerusform>
+            <numerusform>Скачать %n ЦМР тайла?</numerusform>
+            <numerusform>Скачать %n ЦМР тайлов?</numerusform>
         </translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="2091"/>
         <source>No local DEM tiles found.</source>
-        <translation>Не найдено локальных DEM тайлов.</translation>
+        <translation>Не найдено локальных ЦМР тайлов.</translation>
     </message>
     <message numerus="yes">
         <location filename="../src/GUI/gui.cpp" line="2106"/>
@@ -1824,7 +1824,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="436"/>
         <source>DEM data</source>
-        <translation>DEM данные</translation>
+        <translation>ЦМР данные</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="441"/>
@@ -2133,7 +2133,7 @@
         <location filename="../src/GUI/optionsdialog.cpp" line="798"/>
         <location filename="../src/GUI/optionsdialog.cpp" line="806"/>
         <source>DEM cache size:</source>
-        <translation>Размер кэша DEM:</translation>
+        <translation>Размер кэша ЦМР:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="826"/>
@@ -2178,7 +2178,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="886"/>
         <source>DEM</source>
-        <translation>DEM</translation>
+        <translation>ЦМР</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="889"/>
