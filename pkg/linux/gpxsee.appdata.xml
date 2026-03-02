@@ -16,8 +16,9 @@
 				OziExplorer (PLT, WPT, RTE), GeoJSON, SeeYou CUP,
 				Garmin GPI &amp; CSV, TomTom OV2 &amp; ITN, ONmove OMD/GHP,
 				TwoNav (TRK, RTE, WPT), GPSDump WPT, Velocitek VTK,
-				Vakaros VKX, 70mai GPS logs, GoPro videos and geotagged JPEG/MP4
-				files.</li>
+				Vakaros VKX, 70mai GPS logs, GoPro GPMF videos, Sony RTMD videos,
+				Google CAMM videos, Novatek/VIOFO/Blackvue/Vantrue dashcam videos
+				and geotagged JPEG/MP4 files.</li>
 			<li>Opens geo URIs (RFC 5870).</li>
 			<li>User-definable online maps (OpenStreetMap/Google tiles, WMTS,
 				WMS, TMS, QuadTiles).</li>
