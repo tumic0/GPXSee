@@ -1,6 +1,18 @@
 {
+  "version": 8,
   "name": "COROS",
   "sprite": "file:sprite",
+  "glyphs": "dummy:{fontstack}/{range}",
+  "sources": {
+    "mvt": {
+      "type": "vector",
+      "url": "dummy:"
+    },
+    "dem": {
+      "type": "raster-dem",
+      "url": "dummy:"
+    }
+  },
   "layers": [
     {
       "id": "background",
@@ -12,6 +24,7 @@
     {
       "id": "wood",
       "type": "fill",
+      "source": "mvt",
       "source-layer": "F",
       "filter": [
         "==",
@@ -25,6 +38,7 @@
     {
       "id": "wetland",
       "type": "fill",
+      "source": "mvt",
       "source-layer": "F",
       "filter": [
         "==",
@@ -38,6 +52,7 @@
     {
       "id": "sand",
       "type": "fill",
+      "source": "mvt",
       "source-layer": "F",
       "filter": [
         "==",
@@ -51,6 +66,7 @@
     {
       "id": "grass",
       "type": "fill",
+      "source": "mvt",
       "source-layer": "F",
       "filter": [
         "==",
@@ -64,6 +80,7 @@
     {
       "id": "glacier",
       "type": "fill",
+      "source": "mvt",
       "source-layer": "F",
       "filter": [
         "==",
@@ -77,6 +94,7 @@
     {
       "id": "rock",
       "type": "fill",
+      "source": "mvt",
       "source-layer": "F",
       "filter": [
         "==",
@@ -90,6 +108,7 @@
     {
       "id": "park",
       "type": "fill",
+      "source": "mvt",
       "source-layer": "F",
       "filter": [
         "==",
@@ -103,6 +122,7 @@
     {
       "id": "water",
       "type": "fill",
+      "source": "mvt",
       "source-layer": "N",
       "paint": {
         "fill-color": "#9fc4e1"
@@ -111,12 +131,14 @@
     {
       "id": "hillshading",
       "type": "hillshade",
+      "source": "dem",
       "minzoom": 8,
       "maxzoom": 15
     },
     {
       "id": "contour-lines",
       "type": "line",
+      "source": "mvt",
       "source-layer": "Q",
       "paint": {
         "line-color": "#afafaf",
@@ -126,6 +148,7 @@
     {
       "id": "waterway",
       "type": "line",
+      "source": "mvt",
       "source-layer": "P",
       "paint": {
         "line-color": "#9fc4e1",
@@ -135,6 +158,7 @@
     {
       "id": "nature-reserves",
       "type": "fill",
+      "source": "mvt",
       "source-layer": "I",
       "filter": [
         "==",
@@ -148,6 +172,7 @@
     {
       "id": "peers-areas",
       "type": "fill",
+      "source": "mvt",
       "source-layer": "L",
       "filter": [
         "all",
@@ -169,6 +194,7 @@
     {
       "id": "bridges",
       "type": "fill",
+      "source": "mvt",
       "source-layer": "L",
       "filter": [
         "all",
@@ -190,6 +216,7 @@
     {
       "id": "peers",
       "type": "line",
+      "source": "mvt",
       "source-layer": "L",
       "filter": [
         "all",
@@ -224,6 +251,7 @@
     {
       "id": "squares",
       "type": "fill",
+      "source": "mvt",
       "source-layer": "L",
       "filter": [
         "all",
@@ -245,6 +273,7 @@
     {
       "id": "aerialways-buildings",
       "type": "fill",
+      "source": "mvt",
       "source-layer": "L",
       "filter": [
         "all",
@@ -266,6 +295,7 @@
     {
       "id": "roads-minor-bg-tunnel",
       "type": "line",
+      "source": "mvt",
       "source-layer": "L",
       "filter": [
         "all",
@@ -309,6 +339,7 @@
     {
       "id": "roads-minor-fg-tunnel",
       "type": "line",
+      "source": "mvt",
       "source-layer": "L",
       "filter": [
         "all",
@@ -348,6 +379,7 @@
     {
       "id": "roads-major-bg-tunnel",
       "type": "line",
+      "source": "mvt",
       "source-layer": "L",
       "filter": [
         "all",
@@ -391,6 +423,7 @@
     {
       "id": "roads-major-fg-tunnel",
       "type": "line",
+      "source": "mvt",
       "source-layer": "L",
       "filter": [
         "all",
@@ -430,6 +463,7 @@
     {
       "id": "roads-trunk-bg-tunnel",
       "type": "line",
+      "source": "mvt",
       "source-layer": "L",
       "filter": [
         "all",
@@ -468,6 +502,7 @@
     {
       "id": "roads-trunk-fg-tunnel",
       "type": "line",
+      "source": "mvt",
       "source-layer": "L",
       "filter": [
         "all",
@@ -502,6 +537,7 @@
     {
       "id": "roads-motorway-bg-tunnel",
       "type": "line",
+      "source": "mvt",
       "source-layer": "L",
       "filter": [
         "all",
@@ -540,6 +576,7 @@
     {
       "id": "roads-motorway-fg-tunnel",
       "type": "line",
+      "source": "mvt",
       "source-layer": "L",
       "filter": [
         "all",
@@ -574,6 +611,7 @@
     {
       "id": "trams-tunnel",
       "type": "line",
+      "source": "mvt",
       "source-layer": "L",
       "minzoom": 15,
       "filter": [
@@ -613,6 +651,8 @@
     {
       "id": "railways-tunnel",
       "type": "line",
+      "source": "mvt",
+      "source": "mvt",
       "source-layer": "L",
       "maxzoom": 16,
       "filter": [
@@ -652,6 +692,7 @@
     {
       "id": "railways-16-tunnel",
       "type": "line",
+      "source": "mvt",
       "source-layer": "L",
       "minzoom": 16,
       "filter": [
@@ -691,6 +732,7 @@
     {
       "id": "runways-polygons",
       "type": "fill",
+      "source": "mvt",
       "source-layer": "B",
       "filter": [
         "all",
@@ -712,6 +754,7 @@
     {
       "id": "runways-3",
       "type": "line",
+      "source": "mvt",
       "source-layer": "B",
       "filter": [
         "all",
@@ -728,7 +771,7 @@
         [
           "==",
           "$type",
-          "LineString"           
+          "LineString"
         ]
       ],
       "paint": {
@@ -751,6 +794,7 @@
     {
       "id": "runways-5",
       "type": "line",
+      "source": "mvt",
       "source-layer": "B",
       "filter": [
         "all",
@@ -785,6 +829,7 @@
     {
       "id": "paths-15",
       "type": "line",
+      "source": "mvt",
       "source-layer": "L",
       "minzoom": 14,
       "filter": [
@@ -816,6 +861,7 @@
     {
       "id": "paths-13",
       "type": "line",
+      "source": "mvt",
       "source-layer": "L",
       "minzoom": 14,
       "filter": [
@@ -851,6 +897,7 @@
     {
       "id": "roads-minor-bg",
       "type": "line",
+      "source": "mvt",
       "source-layer": "L",
       "filter": [
         "all",
@@ -889,6 +936,7 @@
     {
       "id": "roads-minor-fg",
       "type": "line",
+      "source": "mvt",
       "source-layer": "L",
       "filter": [
         "all",
@@ -927,6 +975,7 @@
     {
       "id": "roads-major-bg",
       "type": "line",
+      "source": "mvt",
       "source-layer": "L",
       "filter": [
         "all",
@@ -965,6 +1014,7 @@
     {
       "id": "roads-major-fg",
       "type": "line",
+      "source": "mvt",
       "source-layer": "L",
       "filter": [
         "all",
@@ -1003,6 +1053,7 @@
     {
       "id": "roads-trunk-bg",
       "type": "line",
+      "source": "mvt",
       "source-layer": "L",
       "filter": [
         "all",
@@ -1036,6 +1087,7 @@
     {
       "id": "roads-trunk-fg",
       "type": "line",
+      "source": "mvt",
       "source-layer": "L",
       "filter": [
         "all",
@@ -1069,6 +1121,7 @@
     {
       "id": "roads-motorway-bg",
       "type": "line",
+      "source": "mvt",
       "source-layer": "L",
       "filter": [
         "all",
@@ -1102,6 +1155,7 @@
     {
       "id": "roads-motorway-fg",
       "type": "line",
+      "source": "mvt",
       "source-layer": "L",
       "filter": [
         "all",
@@ -1135,6 +1189,7 @@
     {
       "id": "trams",
       "type": "line",
+      "source": "mvt",
       "source-layer": "L",
       "minzoom": 15,
       "filter": [
@@ -1169,6 +1224,7 @@
     {
       "id": "railways",
       "type": "line",
+      "source": "mvt",
       "source-layer": "L",
       "maxzoom": 16,
       "filter": [
@@ -1203,6 +1259,7 @@
     {
       "id": "railways-16-bg",
       "type": "line",
+      "source": "mvt",
       "source-layer": "L",
       "minzoom": 16,
       "filter": [
@@ -1237,6 +1294,7 @@
     {
       "id": "railways-16-fg",
       "type": "line",
+      "source": "mvt",
       "source-layer": "L",
       "minzoom": 16,
       "filter": [
@@ -1275,6 +1333,7 @@
     {
       "id": "aerialways",
       "type": "line",
+      "source": "mvt",
       "source-layer": "L",
       "filter": [
         "all",
@@ -1309,6 +1368,7 @@
     {
       "id": "roads-minor-bg-bridge",
       "type": "line",
+      "source": "mvt",
       "source-layer": "L",
       "filter": [
         "all",
@@ -1348,6 +1408,7 @@
     {
       "id": "roads-minor-fg-bridge",
       "type": "line",
+      "source": "mvt",
       "source-layer": "L",
       "filter": [
         "all",
@@ -1387,6 +1448,7 @@
     {
       "id": "roads-major-bg-bridge",
       "type": "line",
+      "source": "mvt",
       "source-layer": "L",
       "filter": [
         "all",
@@ -1426,6 +1488,7 @@
     {
       "id": "roads-major-fg-bridge",
       "type": "line",
+      "source": "mvt",
       "source-layer": "L",
       "filter": [
         "all",
@@ -1465,6 +1528,7 @@
     {
       "id": "roads-trunk-bg-bridge",
       "type": "line",
+      "source": "mvt",
       "source-layer": "L",
       "filter": [
         "all",
@@ -1499,6 +1563,7 @@
     {
       "id": "roads-trunk-fg-bridge",
       "type": "line",
+      "source": "mvt",
       "source-layer": "L",
       "filter": [
         "all",
@@ -1533,6 +1598,7 @@
     {
       "id": "roads-motorway-bg-bridge",
       "type": "line",
+      "source": "mvt",
       "source-layer": "L",
       "filter": [
         "all",
@@ -1567,6 +1633,7 @@
     {
       "id": "roads-motorway-fg-bridge",
       "type": "line",
+      "source": "mvt",
       "source-layer": "L",
       "filter": [
         "all",
@@ -1601,6 +1668,7 @@
     {
       "id": "trams-bridge",
       "type": "line",
+      "source": "mvt",
       "source-layer": "L",
       "minzoom": 15,
       "filter": [
@@ -1636,6 +1704,7 @@
     {
       "id": "railways-bridge",
       "type": "line",
+      "source": "mvt",
       "source-layer": "L",
       "maxzoom": 16,
       "filter": [
@@ -1671,6 +1740,7 @@
     {
       "id": "railways-16-bg-bridge",
       "type": "line",
+      "source": "mvt",
       "source-layer": "L",
       "minzoom": 16,
       "filter": [
@@ -1706,6 +1776,7 @@
     {
       "id": "railways-16-fg-bridge",
       "type": "line",
+      "source": "mvt",
       "source-layer": "L",
       "minzoom": 16,
       "filter": [
@@ -1745,6 +1816,7 @@
     {
       "id": "drinking-water",
       "type": "symbol",
+      "source": "mvt",
       "source-layer": "K",
       "minzoom": 16,
       "filter": [
@@ -1770,6 +1842,7 @@
     {
       "id": "toilets",
       "type": "symbol",
+      "source": "mvt",
       "source-layer": "K",
       "minzoom": 16,
       "filter": [
@@ -1795,6 +1868,7 @@
     {
       "id": "viewpoints",
       "type": "symbol",
+      "source": "mvt",
       "source-layer": "K",
       "minzoom": 16,
       "filter": [
@@ -1820,6 +1894,7 @@
     {
       "id": "shop",
       "type": "symbol",
+      "source": "mvt",
       "source-layer": "K",
       "minzoom": 16,
       "filter": [
@@ -1845,6 +1920,7 @@
     {
       "id": "bars",
       "type": "symbol",
+      "source": "mvt",
       "source-layer": "K",
       "minzoom": 16,
       "filter": [
@@ -1870,6 +1946,7 @@
     {
       "id": "cafes",
       "type": "symbol",
+      "source": "mvt",
       "source-layer": "K",
       "minzoom": 16,
       "filter": [
@@ -1895,6 +1972,7 @@
     {
       "id": "fast_foods",
       "type": "symbol",
+      "source": "mvt",
       "source-layer": "K",
       "minzoom": 16,
       "filter": [
@@ -1920,6 +1998,7 @@
     {
       "id": "mall",
       "type": "symbol",
+      "source": "mvt",
       "source-layer": "K",
       "minzoom": 16,
       "filter": [
@@ -1945,6 +2024,7 @@
     {
       "id": "parkings",
       "type": "symbol",
+      "source": "mvt",
       "source-layer": "K",
       "minzoom": 14,
       "filter": [
@@ -1970,6 +2050,7 @@
     {
       "id": "car_repairs",
       "type": "symbol",
+      "source": "mvt",
       "source-layer": "K",
       "minzoom": 15,
       "filter": [
@@ -1995,6 +2076,7 @@
     {
       "id": "gas_stations",
       "type": "symbol",
+      "source": "mvt",
       "source-layer": "K",
       "minzoom": 14,
       "filter": [
@@ -2021,6 +2103,7 @@
       "id": "cemeteries",
       "type": "symbol",
       "minzoom": 14,
+      "source": "mvt",
       "source-layer": "K",
       "filter": [
         "==",
@@ -2046,6 +2129,7 @@
       "id": "parks",
       "type": "symbol",
       "minzoom": 14,
+      "source": "mvt",
       "source-layer": "K",
       "filter": [
         "==",
@@ -2070,6 +2154,7 @@
     {
       "id": "stadiums",
       "type": "symbol",
+      "source": "mvt",
       "source-layer": "K",
       "minzoom": 14,
       "filter": [
@@ -2095,6 +2180,7 @@
     {
       "id": "hospitals",
       "type": "symbol",
+      "source": "mvt",
       "source-layer": "K",
       "minzoom": 13,
       "filter": [
@@ -2120,6 +2206,7 @@
     {
       "id": "airports",
       "type": "symbol",
+      "source": "mvt",
       "source-layer": "A",
       "filter": [
         "==",
@@ -2144,6 +2231,7 @@
     {
       "id": "bus_stations",
       "type": "symbol",
+      "source": "mvt",
       "source-layer": "K",
       "minzoom": 15,
       "filter": [
@@ -2169,6 +2257,7 @@
     {
       "id": "railway_stations",
       "type": "symbol",
+      "source": "mvt",
       "source-layer": "K",
       "minzoom": 13,
       "filter": [
@@ -2194,6 +2283,7 @@
     {
       "id": "peaks-15-height",
       "type": "symbol",
+      "source": "mvt",
       "source-layer": "H",
       "minzoom": 15,
       "filter": [
@@ -2205,7 +2295,10 @@
         ],
         [
           "has",
-          "X",
+          "X"
+        ],
+        [
+          "has",
           "F"
         ]
       ],
@@ -2227,6 +2320,7 @@
     {
       "id": "peaks-15",
       "type": "symbol",
+      "source": "mvt",
       "source-layer": "H",
       "minzoom": 15,
       "filter": [
@@ -2263,6 +2357,7 @@
     {
       "id": "peaks",
       "type": "symbol",
+      "source": "mvt",
       "source-layer": "H",
       "maxzoom": 15,
       "filter": [
@@ -2295,6 +2390,7 @@
     {
       "id": "road_labels",
       "type": "symbol",
+      "source": "mvt",
       "source-layer": "L",
       "layout": {
         "symbol-placement": "line",
@@ -2314,6 +2410,7 @@
     {
       "id": "stream_labels",
       "type": "symbol",
+      "source": "mvt",
       "source-layer": "P",
       "filter": [
         "<=",
@@ -2338,6 +2435,7 @@
     {
       "id": "river_labels",
       "type": "symbol",
+      "source": "mvt",
       "source-layer": "P",
       "filter": [
         ">",
@@ -2362,6 +2460,7 @@
     {
       "id": "suburbs",
       "type": "symbol",
+      "source": "mvt",
       "source-layer": "J",
       "filter": [
         "==",
@@ -2385,6 +2484,7 @@
     {
       "id": "cities-7",
       "type": "symbol",
+      "source": "mvt",
       "source-layer": "J",
       "filter": [
         "==",
@@ -2407,6 +2507,7 @@
     {
       "id": "cities-6",
       "type": "symbol",
+      "source": "mvt",
       "source-layer": "J",
       "filter": [
         "==",
@@ -2429,6 +2530,7 @@
     {
       "id": "cities-5",
       "type": "symbol",
+      "source": "mvt",
       "source-layer": "J",
       "filter": [
         "==",

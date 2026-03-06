@@ -1,6 +1,18 @@
 {
+  "version": 8,
   "name": "OpenMapTiles",
   "sprite": "file:sprite",
+  "glyphs": "dummy:{fontstack}/{range}",
+  "sources": {
+    "mvt": {
+      "type": "vector",
+      "url": "dummy:"
+    },
+    "dem": {
+      "type": "raster-dem",
+      "url": "dummy:"
+    }
+  },
   "layers": [
     {
       "id": "background",
@@ -12,6 +24,7 @@
     {
       "id": "park",
       "type": "fill",
+      "source": "mvt",
       "source-layer": "park",
       "paint": {
         "fill-color": "#d8e8c8",
@@ -22,6 +35,7 @@
     {
       "id": "park_outline",
       "type": "line",
+      "source": "mvt",
       "source-layer": "park",
       "layout": {},
       "paint": {
@@ -36,6 +50,7 @@
     {
       "id": "landuse_residential",
       "type": "fill",
+      "source": "mvt",
       "source-layer": "landuse",
       "maxzoom": 8,
       "filter": [
@@ -65,6 +80,7 @@
     {
       "id": "landcover_wood",
       "type": "fill",
+      "source": "mvt",
       "source-layer": "landcover",
       "filter": [
         "all",
@@ -83,6 +99,7 @@
     {
       "id": "landcover_grass",
       "type": "fill",
+      "source": "mvt",
       "source-layer": "landcover",
       "filter": [
         "all",
@@ -101,12 +118,14 @@
     {
       "id": "hillshading",
       "type": "hillshade",
+      "source": "dem",
       "minzoom": 8,
       "maxzoom": 15
     },
     {
       "id": "landuse_cemetery",
       "type": "fill",
+      "source": "mvt",
       "source-layer": "landuse",
       "filter": [
         "==",
@@ -123,6 +142,7 @@
     {
       "id": "landuse_hospital",
       "type": "fill",
+      "source": "mvt",
       "source-layer": "landuse",
       "filter": [
         "==",
@@ -136,6 +156,7 @@
     {
       "id": "landuse_school",
       "type": "fill",
+      "source": "mvt",
       "source-layer": "landuse",
       "filter": [
         "==",
@@ -149,6 +170,7 @@
     {
       "id": "waterway_river",
       "type": "line",
+      "source": "mvt",
       "source-layer": "waterway",
       "filter": [
         "==",
@@ -178,6 +200,7 @@
     {
       "id": "waterway_other",
       "type": "line",
+      "source": "mvt",
       "source-layer": "waterway",
       "filter": [
         "all",
@@ -210,6 +233,7 @@
     {
       "id": "water",
       "type": "fill",
+      "source": "mvt",
       "source-layer": "water",
       "paint": {
         "fill-color": "rgb(158,189,255)"
@@ -218,6 +242,7 @@
     {
       "id": "aeroway_fill",
       "type": "fill",
+      "source": "mvt",
       "source-layer": "aeroway",
       "minzoom": 11,
       "filter": [
@@ -233,6 +258,7 @@
     {
       "id": "aeroway_runway",
       "type": "line",
+      "source": "mvt",
       "source-layer": "aeroway",
       "minzoom": 11,
       "filter": [
@@ -268,6 +294,7 @@
     {
       "id": "aeroway_taxiway",
       "type": "line",
+      "source": "mvt",
       "source-layer": "aeroway",
       "minzoom": 11,
       "filter": [
@@ -303,6 +330,7 @@
     {
       "id": "tunnel_motorway_link_casing",
       "type": "line",
+      "source": "mvt",
       "source-layer": "transportation",
       "filter": [
         "all",
@@ -359,6 +387,7 @@
     {
       "id": "tunnel_service_track_casing",
       "type": "line",
+      "source": "mvt",
       "source-layer": "transportation",
       "filter": [
         "all",
@@ -405,6 +434,7 @@
     {
       "id": "tunnel_link_casing",
       "type": "line",
+      "source": "mvt",
       "source-layer": "transportation",
       "filter": [
         "all",
@@ -451,6 +481,7 @@
     {
       "id": "tunnel_street_casing",
       "type": "line",
+      "source": "mvt",
       "source-layer": "transportation",
       "filter": [
         "all",
@@ -509,6 +540,7 @@
     {
       "id": "tunnel_secondary_tertiary_casing",
       "type": "line",
+      "source": "mvt",
       "source-layer": "transportation",
       "filter": [
         "all",
@@ -548,6 +580,7 @@
     {
       "id": "tunnel_trunk_primary_casing",
       "type": "line",
+      "source": "mvt",
       "source-layer": "transportation",
       "filter": [
         "all",
@@ -594,6 +627,7 @@
     {
       "id": "tunnel_motorway_casing",
       "type": "line",
+      "source": "mvt",
       "source-layer": "transportation",
       "filter": [
         "all",
@@ -644,6 +678,7 @@
     {
       "id": "tunnel_path_pedestrian",
       "type": "line",
+      "source": "mvt",
       "source-layer": "transportation",
       "filter": [
         "all",
@@ -688,6 +723,7 @@
     {
       "id": "tunnel_motorway_link",
       "type": "line",
+      "source": "mvt",
       "source-layer": "transportation",
       "filter": [
         "all",
@@ -739,6 +775,7 @@
     {
       "id": "tunnel_service_track",
       "type": "line",
+      "source": "mvt",
       "source-layer": "transportation",
       "filter": [
         "all",
@@ -781,6 +818,7 @@
     {
       "id": "tunnel_link",
       "type": "line",
+      "source": "mvt",
       "source-layer": "transportation",
       "filter": [
         "all",
@@ -826,6 +864,7 @@
     {
       "id": "tunnel_minor",
       "type": "line",
+      "source": "mvt",
       "source-layer": "transportation",
       "filter": [
         "all",
@@ -868,6 +907,7 @@
     {
       "id": "tunnel_secondary_tertiary",
       "type": "line",
+      "source": "mvt",
       "source-layer": "transportation",
       "filter": [
         "all",
@@ -910,6 +950,7 @@
     {
       "id": "tunnel_trunk_primary",
       "type": "line",
+      "source": "mvt",
       "source-layer": "transportation",
       "filter": [
         "all",
@@ -952,6 +993,7 @@
     {
       "id": "tunnel_motorway",
       "type": "line",
+      "source": "mvt",
       "source-layer": "transportation",
       "filter": [
         "all",
@@ -994,6 +1036,7 @@
     {
       "id": "tunnel_major_rail",
       "type": "line",
+      "source": "mvt",
       "source-layer": "transportation",
       "filter": [
         "all",
@@ -1032,6 +1075,7 @@
     {
       "id": "tunnel_major_rail_hatching",
       "type": "line",
+      "source": "mvt",
       "source-layer": "transportation",
       "filter": [
         "all",
@@ -1074,6 +1118,7 @@
     {
       "id": "tunnel_transit_rail",
       "type": "line",
+      "source": "mvt",
       "source-layer": "transportation",
       "filter": [
         "all",
@@ -1112,6 +1157,7 @@
     {
       "id": "tunnel_transit_rail_hatching",
       "type": "line",
+      "source": "mvt",
       "source-layer": "transportation",
       "filter": [
         "all",
@@ -1154,6 +1200,7 @@
     {
       "id": "road_area_pattern",
       "type": "fill",
+      "source": "mvt",
       "source-layer": "transportation",
       "filter": [
         "all",
@@ -1173,6 +1220,7 @@
     {
       "id": "road_motorway_link_casing",
       "type": "line",
+      "source": "mvt",
       "source-layer": "transportation",
       "minzoom": 12,
       "filter": [
@@ -1227,6 +1275,7 @@
     {
       "id": "road_service_track_casing",
       "type": "line",
+      "source": "mvt",
       "source-layer": "transportation",
       "filter": [
         "all",
@@ -1271,6 +1320,7 @@
     {
       "id": "road_link_casing",
       "type": "line",
+      "source": "mvt",
       "source-layer": "transportation",
       "minzoom": 13,
       "filter": [
@@ -1329,6 +1379,7 @@
     {
       "id": "road_minor_casing",
       "type": "line",
+      "source": "mvt",
       "source-layer": "transportation",
       "filter": [
         "all",
@@ -1398,6 +1449,7 @@
     {
       "id": "road_secondary_tertiary_casing",
       "type": "line",
+      "source": "mvt",
       "source-layer": "transportation",
       "filter": [
         "all",
@@ -1445,6 +1497,7 @@
     {
       "id": "road_trunk_primary_casing",
       "type": "line",
+      "source": "mvt",
       "source-layer": "transportation",
       "filter": [
         "all",
@@ -1495,6 +1548,7 @@
     {
       "id": "road_motorway_casing",
       "type": "line",
+      "source": "mvt",
       "source-layer": "transportation",
       "minzoom": 5,
       "filter": [
@@ -1549,6 +1603,7 @@
     {
       "id": "road_path_pedestrian",
       "type": "line",
+      "source": "mvt",
       "source-layer": "transportation",
       "minzoom": 14,
       "filter": [
@@ -1598,6 +1653,7 @@
     {
       "id": "road_motorway_link",
       "type": "line",
+      "source": "mvt",
       "source-layer": "transportation",
       "minzoom": 12,
       "filter": [
@@ -1651,6 +1707,7 @@
     {
       "id": "road_service_track",
       "type": "line",
+      "source": "mvt",
       "source-layer": "transportation",
       "filter": [
         "all",
@@ -1695,6 +1752,7 @@
     {
       "id": "road_link",
       "type": "line",
+      "source": "mvt",
       "source-layer": "transportation",
       "minzoom": 13,
       "filter": [
@@ -1752,6 +1810,7 @@
     {
       "id": "road_secondary_tertiary",
       "type": "line",
+      "source": "mvt",
       "source-layer": "transportation",
       "filter": [
         "all",
@@ -1797,6 +1856,7 @@
     {
       "id": "road_trunk_primary",
       "type": "line",
+      "source": "mvt",
       "source-layer": "transportation",
       "filter": [
         "all",
@@ -1842,6 +1902,7 @@
     {
       "id": "road_motorway",
       "type": "line",
+      "source": "mvt",
       "source-layer": "transportation",
       "minzoom": 5,
       "filter": [
@@ -1904,6 +1965,7 @@
     {
       "id": "road_major_rail",
       "type": "line",
+      "source": "mvt",
       "source-layer": "transportation",
       "filter": [
         "all",
@@ -1943,6 +2005,7 @@
     {
       "id": "road_major_rail_hatching",
       "type": "line",
+      "source": "mvt",
       "source-layer": "transportation",
       "filter": [
         "all",
@@ -1986,6 +2049,7 @@
     {
       "id": "road_transit_rail",
       "type": "line",
+      "source": "mvt",
       "source-layer": "transportation",
       "filter": [
         "all",
@@ -2025,6 +2089,7 @@
     {
       "id": "road_transit_rail_hatching",
       "type": "line",
+      "source": "mvt",
       "source-layer": "transportation",
       "filter": [
         "all",
@@ -2068,6 +2133,7 @@
     {
       "id": "road_minor-copy",
       "type": "line",
+      "source": "mvt",
       "source-layer": "transportation",
       "filter": [
         "all",
@@ -2120,6 +2186,7 @@
     {
       "id": "building",
       "type": "fill",
+      "source": "mvt",
       "source-layer": "building",
       "minzoom": 13,
       "layout": {
@@ -2145,6 +2212,7 @@
     {
       "id": "building-3d",
       "type": "fill-extrusion",
+      "source": "mvt",
       "source-layer": "building",
       "minzoom": 14,
       "layout": {
@@ -2166,6 +2234,7 @@
     {
       "id": "bridge_motorway_link_casing",
       "type": "line",
+      "source": "mvt",
       "source-layer": "transportation",
       "filter": [
         "all",
@@ -2217,6 +2286,7 @@
     {
       "id": "bridge_service_track_casing",
       "type": "line",
+      "source": "mvt",
       "source-layer": "transportation",
       "filter": [
         "all",
@@ -2259,6 +2329,7 @@
     {
       "id": "bridge_link_casing",
       "type": "line",
+      "source": "mvt",
       "source-layer": "transportation",
       "filter": [
         "all",
@@ -2305,6 +2376,7 @@
     {
       "id": "bridge_street_casing",
       "type": "line",
+      "source": "mvt",
       "source-layer": "transportation",
       "filter": [
         "all",
@@ -2363,6 +2435,7 @@
     {
       "id": "bridge_path_pedestrian_casing",
       "type": "line",
+      "source": "mvt",
       "source-layer": "transportation",
       "filter": [
         "all",
@@ -2411,6 +2484,7 @@
     {
       "id": "bridge_secondary_tertiary_casing",
       "type": "line",
+      "source": "mvt",
       "source-layer": "transportation",
       "filter": [
         "all",
@@ -2450,6 +2524,7 @@
     {
       "id": "bridge_trunk_primary_casing",
       "type": "line",
+      "source": "mvt",
       "source-layer": "transportation",
       "filter": [
         "all",
@@ -2496,6 +2571,7 @@
     {
       "id": "bridge_motorway_casing",
       "type": "line",
+      "source": "mvt",
       "source-layer": "transportation",
       "filter": [
         "all",
@@ -2541,6 +2617,7 @@
     {
       "id": "bridge_path_pedestrian",
       "type": "line",
+      "source": "mvt",
       "source-layer": "transportation",
       "filter": [
         "all",
@@ -2585,6 +2662,7 @@
     {
       "id": "bridge_motorway_link",
       "type": "line",
+      "source": "mvt",
       "source-layer": "transportation",
       "filter": [
         "all",
@@ -2635,6 +2713,7 @@
     {
       "id": "bridge_service_track",
       "type": "line",
+      "source": "mvt",
       "source-layer": "transportation",
       "filter": [
         "all",
@@ -2677,6 +2756,7 @@
     {
       "id": "bridge_link",
       "type": "line",
+      "source": "mvt",
       "source-layer": "transportation",
       "filter": [
         "all",
@@ -2722,6 +2802,7 @@
     {
       "id": "bridge_street",
       "type": "line",
+      "source": "mvt",
       "source-layer": "transportation",
       "filter": [
         "all",
@@ -2764,6 +2845,7 @@
     {
       "id": "bridge_secondary_tertiary",
       "type": "line",
+      "source": "mvt",
       "source-layer": "transportation",
       "filter": [
         "all",
@@ -2806,6 +2888,7 @@
     {
       "id": "bridge_trunk_primary",
       "type": "line",
+      "source": "mvt",
       "source-layer": "transportation",
       "filter": [
         "all",
@@ -2848,6 +2931,7 @@
     {
       "id": "bridge_motorway",
       "type": "line",
+      "source": "mvt",
       "source-layer": "transportation",
       "filter": [
         "all",
@@ -2889,6 +2973,7 @@
     {
       "id": "bridge_major_rail",
       "type": "line",
+      "source": "mvt",
       "source-layer": "transportation",
       "filter": [
         "all",
@@ -2927,6 +3012,7 @@
     {
       "id": "bridge_major_rail_hatching",
       "type": "line",
+      "source": "mvt",
       "source-layer": "transportation",
       "filter": [
         "all",
@@ -2969,6 +3055,7 @@
     {
       "id": "bridge_transit_rail",
       "type": "line",
+      "source": "mvt",
       "source-layer": "transportation",
       "filter": [
         "all",
@@ -3007,6 +3094,7 @@
     {
       "id": "bridge_transit_rail_hatching",
       "type": "line",
+      "source": "mvt",
       "source-layer": "transportation",
       "filter": [
         "all",
@@ -3049,6 +3137,7 @@
     {
       "id": "boundary_3",
       "type": "line",
+      "source": "mvt",
       "source-layer": "boundary",
       "filter": [
         "all",
@@ -3090,6 +3179,7 @@
     {
       "id": "boundary_2",
       "type": "line",
+      "source": "mvt",
       "source-layer": "boundary",
       "filter": [
         "all",
@@ -3140,6 +3230,7 @@
     {
       "id": "water_name_line",
       "type": "symbol",
+      "source": "mvt",
       "source-layer": "water_name",
       "minzoom": 0,
       "filter": [
@@ -3168,6 +3259,7 @@
     {
       "id": "water_name_point",
       "type": "symbol",
+      "source": "mvt",
       "source-layer": "water_name",
       "minzoom": 0,
       "filter": [
@@ -3192,6 +3284,7 @@
     {
       "id": "poi_z16",
       "type": "symbol",
+      "source": "mvt",
       "source-layer": "poi",
       "minzoom": 16,
       "filter": [
@@ -3232,6 +3325,7 @@
     {
       "id": "poi_z15",
       "type": "symbol",
+      "source": "mvt",
       "source-layer": "poi",
       "minzoom": 15,
       "filter": [
@@ -3277,6 +3371,7 @@
     {
       "id": "poi_z14",
       "type": "symbol",
+      "source": "mvt",
       "source-layer": "poi",
       "minzoom": 14,
       "filter": [
@@ -3322,6 +3417,7 @@
     {
       "id": "poi_transit",
       "type": "symbol",
+      "source": "mvt",
       "source-layer": "poi",
       "filter": [
         "all",
@@ -3359,6 +3455,7 @@
     {
       "id": "road_label",
       "type": "symbol",
+      "source": "mvt",
       "source-layer": "transportation_name",
       "filter": [
         "all"
@@ -3397,6 +3494,7 @@
     {
       "id": "road_shield",
       "type": "symbol",
+      "source": "mvt",
       "source-layer": "transportation_name",
       "minzoom": 7,
       "filter": [
@@ -3453,6 +3551,7 @@
     {
       "id": "airport_label_major",
       "type": "symbol",
+      "source": "mvt",
       "source-layer": "aerodrome_label",
       "minzoom": 10,
       "filter": [
@@ -3489,6 +3588,7 @@
     {
       "id": "place_other",
       "type": "symbol",
+      "source": "mvt",
       "source-layer": "place",
       "filter": [
         "all",
@@ -3533,6 +3633,7 @@
     {
       "id": "place_village",
       "type": "symbol",
+      "source": "mvt",
       "source-layer": "place",
       "filter": [
         "all",
@@ -3571,6 +3672,7 @@
     {
       "id": "place_town",
       "type": "symbol",
+      "source": "mvt",
       "source-layer": "place",
       "filter": [
         "all",
@@ -3627,6 +3729,7 @@
     {
       "id": "place_city_4",
       "type": "symbol",
+      "source": "mvt",
       "source-layer": "place",
       "minzoom": 5,
       "filter": [
@@ -3691,6 +3794,7 @@
     {
       "id": "place_city_3",
       "type": "symbol",
+      "source": "mvt",
       "source-layer": "place",
       "minzoom": 5,
       "filter": [
@@ -3755,6 +3859,7 @@
     {
       "id": "place_city_2",
       "type": "symbol",
+      "source": "mvt",
       "source-layer": "place",
       "minzoom": 5,
       "filter": [
@@ -3819,6 +3924,7 @@
     {
       "id": "place_city_1",
       "type": "symbol",
+      "source": "mvt",
       "source-layer": "place",
       "minzoom": 5,
       "filter": [
@@ -3883,6 +3989,7 @@
     {
       "id": "state",
       "type": "symbol",
+      "source": "mvt",
       "source-layer": "place",
       "maxzoom": 6,
       "filter": [
@@ -3921,6 +4028,7 @@
     {
       "id": "country_3",
       "type": "symbol",
+      "source": "mvt",
       "source-layer": "place",
       "filter": [
         "all",
@@ -3965,6 +4073,7 @@
     {
       "id": "country_2",
       "type": "symbol",
+      "source": "mvt",
       "source-layer": "place",
       "filter": [
         "all",
@@ -4009,6 +4118,7 @@
     {
       "id": "country_1",
       "type": "symbol",
+      "source": "mvt",
       "source-layer": "place",
       "filter": [
         "all",
@@ -4053,6 +4163,7 @@
     {
       "id": "continent",
       "type": "symbol",
+      "source": "mvt",
       "source-layer": "place",
       "maxzoom": 1,
       "filter": [
