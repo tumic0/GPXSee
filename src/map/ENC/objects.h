@@ -27,6 +27,7 @@
 #define CBLOHD 21
 #define CBLSUB 22
 #define CANALS 23
+#define CTNARE 27
 #define CGUSTA 29
 #define COALNE 30
 #define CONZNE 31

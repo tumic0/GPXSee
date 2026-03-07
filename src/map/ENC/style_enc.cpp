@@ -296,6 +296,8 @@ void Style::polygonStyle()
 	  QImage(":/marine/seaward-limit-of-territorial-sea.png"));
 	_polygons[SUBTYPE(ADMARE, 2)] = Polygon(
 	  QImage(":/marine/international-maritime-boundary.png"));
+	_polygons[TYPE(CTNARE)] = Polygon(
+	  QImage(":/marine/caution-area-line.png"));
 
 	_drawOrder
 	  << TYPE(LNDARE) << SUBTYPE(DEPARE, 0) << SUBTYPE(DEPARE, 1)
@@ -344,7 +346,7 @@ void Style::polygonStyle()
 	  << TYPE(CBLARE) << TYPE(PIPARE) << TYPE(PRCARE) << TYPE(I_TRNBSN)
 	  << TYPE(PILBOP) << SUBTYPE(MARCUL, 0) << SUBTYPE(MARCUL, 1)
 	  << SUBTYPE(MARCUL, 2) << SUBTYPE(MARCUL, 3) << TYPE(CONZNE)
-	  << TYPE(TESARE) << SUBTYPE(ADMARE, 2);
+	  << TYPE(TESARE) << SUBTYPE(ADMARE, 2) << TYPE(CTNARE);
 }
 
 void Style::lineStyle(qreal ratio)
@@ -659,6 +661,10 @@ void Style::pointStyle(qreal ratio)
 	_points[SUBTYPE(DMPGRD, 4)].setHaloColor(QColor());
 	_points[SUBTYPE(DMPGRD, 5)] = _points[TYPE(DMPGRD)];
 	_points[SUBTYPE(DMPGRD, 6)] = _points[TYPE(DMPGRD)];
+	_points[TYPE(CTNARE)].setTextColor(QColor(0xeb, 0x49, 0xeb));
+	_points[TYPE(CTNARE)].setHaloColor(QColor());
+	_points[TYPE(PRCARE)].setTextColor(QColor(0xeb, 0x49, 0xeb));
+	_points[TYPE(PRCARE)].setHaloColor(QColor());
 
 	_points[SUBTYPE(I_BUNSTA, 1)] = Point(svg2img(":/POI/fuel-11.svg", ratio),
 	  Small);

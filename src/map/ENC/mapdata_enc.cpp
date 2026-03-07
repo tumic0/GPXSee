@@ -89,6 +89,8 @@ static QMap<uint,uint> orderMapInit()
 	map.insert(TYPE(ACHARE), 47);
 	map.insert(TYPE(I_ACHARE), 47);
 	map.insert(TYPE(DMPGRD), 48);
+	map.insert(TYPE(CTNARE), 49);
+	map.insert(TYPE(PRCARE), 50);
 
 	map.insert(TYPE(I_DISMAR), 0xFFFFFFFE);
 	map.insert(TYPE(SOUNDG), 0xFFFFFFFF);
@@ -193,7 +195,8 @@ static bool polygonPointCb(const MapData::Poly *polygon, void *context)
 	if (baseType == TSSLPT || baseType == RCTLPT || baseType == I_TRNBSN
 	  || baseType == BRIDGE || baseType == I_BRIDGE || baseType == BUAARE
 	  || baseType == LNDARE || baseType == LNDRGN || baseType == I_BUNSTA
-	  || baseType == PILBOP || baseType == DMPGRD
+	  || baseType == PILBOP || baseType == DMPGRD || baseType == CTNARE
+	  || baseType == PRCARE
 	  || type == SUBTYPE(ACHARE, 2) || type == SUBTYPE(I_ACHARE, 2)
 	  || type == SUBTYPE(ACHARE, 3) || type == SUBTYPE(I_ACHARE, 3)
 	  || type == SUBTYPE(ACHARE, 9) || type == SUBTYPE(I_ACHARE, 9)
@@ -483,7 +486,8 @@ MapData::Point::Point(uint type, const Coordinates &c, const Attributes &attr,
 	  || _type == SUBTYPE(HRBFAC, 10)) {
 		if (_label.isEmpty())
 			_label = "Bulk Terminal";
-	}
+	} else if (type == CTNARE || type == PRCARE)
+		_label = _attr.value(INFORM);
 }
 
 MapData::Poly::Poly(uint type, const Polygon &path, const Attributes &attr,
@@ -523,7 +527,6 @@ MapData::Poly::Poly(uint type, const Polygon &path, const Attributes &attr,
 		default:
 			_type = SUBTYPE(type, _attr.value(subtype).toUInt());
 	}
-
 }
 
 MapData::Line::Line(uint type, const QVector<Coordinates> &path,

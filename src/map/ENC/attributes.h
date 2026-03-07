@@ -26,6 +26,7 @@
 #define DRVAL1 87
 #define ELEVAT 90
 #define FUNCTN 94
+#define INFORM 102
 #define JRSDTN 103
 #define LITVIS 108
 #define OBJNAM 116
