@@ -1,6 +1,7 @@
 #include <QPixmapCache>
 #include <QPainter>
 #include <QImageReader>
+#include <QDir>
 #include "osm.h"
 #include "coros5map.h"
 

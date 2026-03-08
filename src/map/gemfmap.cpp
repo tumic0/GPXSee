@@ -1,7 +1,7 @@
 #include <QDataStream>
 #include <QPainter>
 #include <QPixmapCache>
-#include <QtConcurrent>
+#include <QtConcurrentMap>
 #include "osm.h"
 #include "tile.h"
 #include "gemfmap.h"

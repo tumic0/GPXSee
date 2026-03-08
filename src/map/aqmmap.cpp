@@ -3,7 +3,7 @@
 #include <QPixmapCache>
 #include <QImageReader>
 #include <QBuffer>
-#include <QtConcurrent>
+#include <QtConcurrentMap>
 #include "osm.h"
 #include "tile.h"
 #include "aqmmap.h"

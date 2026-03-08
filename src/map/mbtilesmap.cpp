@@ -5,6 +5,10 @@
 #include <QPainter>
 #include <QPixmapCache>
 #include <QImageReader>
+#include <QBuffer>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonArray>
 #include "common/util.h"
 #include "osm.h"
 #include "mbtilesmap.h"

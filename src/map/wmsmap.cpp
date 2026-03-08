@@ -2,7 +2,7 @@
 #include <QDir>
 #include <QPainter>
 #include <QPixmapCache>
-#include <QtConcurrent>
+#include <QtConcurrentMap>
 #include "common/wgs84.h"
 #include "common/rectc.h"
 #include "common/programpaths.h"

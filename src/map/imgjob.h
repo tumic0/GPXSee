@@ -1,7 +1,8 @@
 #ifndef IMGJOB_H
 #define IMGJOB_H
 
-#include <QtConcurrent>
+#include <QtConcurrentMap>
+#include <QFutureWatcher>
 #include "IMG/rastertile_img.h"
 
 class IMGJob : public QObject

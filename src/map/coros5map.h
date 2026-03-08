@@ -1,6 +1,7 @@
 #ifndef COROS5MAP_H
 #define COROS5MAP_H
 
+#include <QFile>
 #include "common/range.h"
 #include "common/rtree.h"
 #include "pmtiles.h"

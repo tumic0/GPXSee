@@ -1,6 +1,9 @@
 #include <QFile>
 #include <QPainter>
 #include <QPixmapCache>
+#include <QFileInfo>
+#include <QDir>
+#include <QtMath>
 #include "common/wgs84.h"
 #include "common/programpaths.h"
 #include "IMG/imgdata.h"

@@ -3,6 +3,10 @@
 #include <QJsonObject>
 #include <QPixmapCache>
 #include <QImageReader>
+#include <QBuffer>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonArray>
 #include "MVT/style_mvt.h"
 #include "osm.h"
 #include "pmtilesmap.h"

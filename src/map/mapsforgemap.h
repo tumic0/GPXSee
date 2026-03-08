@@ -1,7 +1,8 @@
 #ifndef MAPSFORGEMAP_H
 #define MAPSFORGEMAP_H
 
-#include <QtConcurrent>
+#include <QtConcurrentMap>
+#include <QFutureWatcher>
 #include "mapsforge/mapdata_mapsforge.h"
 #include "mapsforge/rastertile_mapsforge.h"
 #include "projection.h"

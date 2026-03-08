@@ -2,7 +2,6 @@
 #define ENCMAP_H
 
 #include <climits>
-#include <QtConcurrent>
 #include "common/range.h"
 #include "ENC/iso8211.h"
 #include "ENC/mapdata_enc.h"

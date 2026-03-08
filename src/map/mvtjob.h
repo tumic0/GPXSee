@@ -1,7 +1,8 @@
 #ifndef MVTJOB_H
 #define MVTJOB_H
 
-#include <QtConcurrent>
+#include <QtConcurrentMap>
+#include <QFutureWatcher>
 #include "MVT/rastertile_mvt.h"
 
 class MVTJob : public QObject

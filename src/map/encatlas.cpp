@@ -1,5 +1,7 @@
 #include <QPainter>
 #include <QPixmapCache>
+#include <QFileInfo>
+#include <QDir>
 #include "common/wgs84.h"
 #include "GUI/format.h"
 #include "rectd.h"

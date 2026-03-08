@@ -6,7 +6,7 @@
 #include <QPixmapCache>
 #include <QImageReader>
 #include <QBuffer>
-#include <QtConcurrent>
+#include <QtConcurrentMap>
 #include "common/util.h"
 #include "osm.h"
 #include "tile.h"
