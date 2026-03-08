@@ -62,10 +62,10 @@ PMTilesMap::PMTilesMap(const QString &fileName, QObject *parent)
 				  qUtf8Printable(error.errorString()));
 			else {
 				QJsonObject json(doc.object());
-				_name = json["name"].toString();
+				_name = json.value("name").toString();
 				QJsonArray vl(json["vector_layers"].toArray());
 				for (int i = 0; i < vl.size(); i++)
-					_layers.append(vl.at(i).toObject()["id"].toString());
+					_layers.append(vl.at(i).toObject().value("id").toString());
 			}
 		}
 	}

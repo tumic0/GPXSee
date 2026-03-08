@@ -228,7 +228,7 @@ bool GeoJSONParser::crs(const QJsonObject &object, Projection &proj)
 		_errorString = "Invalid crs object";
 		return false;
 	}
-	QString str(crsObj["properties"].toObject()["name"].toString());
+	QString str(crsObj["properties"].toObject().value("name").toString());
 	proj = CRS::projection(str);
 
 	if (proj.isValid())

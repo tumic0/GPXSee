@@ -149,10 +149,9 @@ bool MBTilesMap::getTileSizeAndStyle()
 			QJsonDocument doc(QJsonDocument::fromJson(
 			  query.value(0).toByteArray()));
 			QJsonObject json(doc.object());
-			QJsonArray vl(json["vector_layers"].toArray());
-			QStringList vectorLayers;
+			QJsonArray vl(json.value("vector_layers").toArray());
 			for (int i = 0; i < vl.size(); i++)
-				_layers.append(vl.at(i).toObject()["id"].toString());
+				_layers.append(vl.at(i).toObject().value("id").toString());
 		} else
 			qWarning("%s: missing MVT json metadata", qUtf8Printable(path()));
 		_tileSize = MVT_TILE_SIZE;
