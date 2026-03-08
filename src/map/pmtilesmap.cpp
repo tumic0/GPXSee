@@ -217,16 +217,21 @@ qreal PMTilesMap::tileSize() const
 QByteArray PMTilesMap::tileData(quint64 id)
 {
 	const Directory *d = findDir(_root, id);
+
 	if (!d)
 		return QByteArray();
 	if (!d->runLength) {
 		QVector<Directory> *leaf = _cache.object(d->offset);
+		const Directory *l;
+
 		if (!leaf) {
 			leaf = new QVector<Directory>(readDir(_file, _leafOffset + d->offset,
 			  d->length, _ic));
+			l = findDir(*leaf, id);
 			_cache.insert(d->offset, leaf);
-		}
-		const Directory *l = findDir(*leaf, id);
+		} else
+			l = findDir(*leaf, id);
+
 		return (l)
 		  ? readData(_file, _tileOffset + l->offset, l->length, 1)
 		  : QByteArray();
