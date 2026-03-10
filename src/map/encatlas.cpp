@@ -100,10 +100,6 @@ void ENCAtlas::addMap(const QDir &dir, const QByteArray &file,
 		qWarning("%s: No such map file", qUtf8Printable(path));
 		return;
 	}
-	if (!bounds.isValid()) {
-		qWarning("%s: Invalid map bounds", qUtf8Printable(path));
-		return;
-	}
 
 	IntendedUsage iu = usage(path);
 	auto it = _data.find(iu);
