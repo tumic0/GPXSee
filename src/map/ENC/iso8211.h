@@ -45,7 +45,6 @@ public:
 		  + (static_cast<quint32>(name[2]) << 16)
 		  + (static_cast<quint32>(name[3]) << 24);
 	}
-	static QString NAME(quint32 tag);
 
 private:
 	enum FieldType {Unknown, String, Array, S8, S16, S32, U8, U16, U32};

@@ -22,6 +22,13 @@ struct DR {
 	char FieldTagSize;
 };
 
+static QString NAME(quint32 tag)
+{
+	char buffer[sizeof(quint32)];
+	qToLittleEndian<quint32>(tag, buffer);
+	return QString::fromLatin1(buffer, sizeof(buffer));
+}
+
 ISO8211::SubFieldDefinition ISO8211::fieldType(const QString &str, int cnt)
 {
 	if (str == "A" || str == "I" || str == "R")
@@ -297,11 +304,4 @@ bool ISO8211::readRecord(Record &record)
 	}
 
 	return true;
-}
-
-QString ISO8211::NAME(quint32 tag)
-{
-	char buffer[sizeof(quint32)];
-	qToLittleEndian<quint32>(tag, buffer);
-	return QString::fromLatin1(buffer, sizeof(buffer));
 }
