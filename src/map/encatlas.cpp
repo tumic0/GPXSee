@@ -51,7 +51,7 @@ ENCAtlas::IntendedUsage ENCAtlas::usage(const QString &path)
 	if (basename.size() != 8)
 		return Unknown;
 	int iu = basename.at(2).digitValue();
-	if (iu < 1 || iu > 9)
+	if (iu < Overview || iu > RiverBerthing)
 		return Unknown;
 
 	return (IntendedUsage)iu;
