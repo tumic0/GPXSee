@@ -80,7 +80,7 @@ bool ENCAtlas::processRecord(const ISO8211::Record &record, QByteArray &file,
 			bool ok1, ok2, ok3, ok4;
 			bounds = RectC(Coordinates(wlon.toDouble(&ok1), nlat.toDouble(&ok2)),
 			  Coordinates(elon.toDouble(&ok3), slat.toDouble(&ok4)));
-			if (!(ok1 && ok2 && ok3 && ok4))
+			if (!(ok1 && ok2 && ok3 && ok4 && bounds.isValid()))
 				return false;
 
 			file.replace('\\', '/');
