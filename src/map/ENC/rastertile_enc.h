@@ -60,6 +60,8 @@ private:
 		  {return lines.isEmpty() && polygons.isEmpty() && points.isEmpty();}
 	};
 
+	typedef QMultiMap<Coordinates, SectorLight> SectorLightsMap;
+
 	QPointF ll2xy(const Coordinates &c) const
 	  {return _transform.proj2img(_proj.ll2xy(c));}
 	QPainterPath painterPath(const Polygon &polygon) const;
@@ -69,15 +71,14 @@ private:
 	QPointF centroid(const QVector<Coordinates> &polygon) const;
 	void processPoints(const QList<Data::Point> &points,
 	  QList<TextItem*> &textItems, QList<TextItem*> &lightItems,
-	  QMultiMap<Coordinates, SectorLight> &sectorLights, bool overZoom) const;
+	  SectorLightsMap &sectorLights, bool overZoom) const;
 	void processLines(const QList<Data::Line> &lines,
 	  QList<TextItem*> &textItems) const;
 	void drawArrows(QPainter *painter, const QList<Data::Point> &points) const;
 	void drawPolygons(QPainter *painter, const QList<Data::Poly> &polygons) const;
 	void drawLines(QPainter *painter, const QList<Data::Line> &lines) const;
 	void drawTextItems(QPainter *painter, const QList<TextItem*> &textItems) const;
-	void drawSectorLights(QPainter *painter,
-	  const QMultiMap<Coordinates, SectorLight> &lights) const;
+	void drawSectorLights(QPainter *painter, const SectorLightsMap &lights) const;
 	bool showLabel(const QImage *img, int type) const;
 	void drawLevels(QPainter *painter, const QList<Level> &levels);
 	QList<Level> fetchLevels();

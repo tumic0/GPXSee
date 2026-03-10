@@ -226,9 +226,10 @@ static QRectF lightRect(const QPointF &pos, double range)
 }
 
 void RasterTile::drawSectorLights(QPainter *painter,
-  const QMultiMap<Coordinates, SectorLight> &lights) const
+  const SectorLightsMap &lights) const
 {
-	for (auto it = lights.cbegin(); it != lights.cend(); ++it) {
+	for (SectorLightsMap::const_iterator it = lights.cbegin();
+	  it != lights.cend(); ++it) {
 		const SectorLight &l = it.value();
 		QPointF pos(ll2xy(it.key()));
 		QRectF rect(lightRect(pos, (l.range == 0) ? 6 : l.range));
@@ -264,7 +265,7 @@ void RasterTile::drawSectorLights(QPainter *painter,
 
 void RasterTile::processPoints(const QList<Data::Point> &points,
   QList<TextItem*> &textItems, QList<TextItem*> &lightItems,
-  QMultiMap<Coordinates, SectorLight> &sectorLights, bool overZoom) const
+  SectorLightsMap &sectorLights, bool overZoom) const
 {
 	QMap<Coordinates, Style::Color> lights;
 	QSet<Coordinates> sigs;
@@ -356,7 +357,7 @@ void RasterTile::drawLevels(QPainter *painter, const QList<Level> &levels)
 {
 	for (int i = levels.size() - 1; i >= 0; i--) {
 		QList<TextItem*> textItems, lightItems;
-		QMultiMap<Coordinates, SectorLight> sectorLights;
+		SectorLightsMap sectorLights;
 		const Level &l = levels.at(i);
 
 		processPoints(l.points, textItems, lightItems, sectorLights, l.overZoom);
