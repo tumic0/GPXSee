@@ -102,7 +102,7 @@ void ENCAtlas::addMap(const QDir &dir, const QByteArray &file,
 	}
 
 	IntendedUsage iu = usage(path);
-	auto it = _data.find(iu);
+	AtlasMap::iterator it = _data.find(iu);
 	if (it == _data.end())
 		it = _data.insert(iu, new AtlasData(_cache, _cacheLock));
 
@@ -189,7 +189,8 @@ int ENCAtlas::zoomFit(const QSize &size, const RectC &rect)
 	if (rect.isValid()) {
 		RectD pr(rect, _projection, 10);
 
-		for (auto it = _data.cbegin(); it != _data.cend(); ++it) {
+		for (AtlasMap::const_iterator it = _data.cbegin(); it != _data.cend();
+		  ++it) {
 			Range z(zooms(it.key()));
 
 			_usage = it.key();
@@ -226,7 +227,7 @@ int ENCAtlas::zoomIn()
 	if (_zoom + 1 <= zooms(_usage).max())
 		_zoom++;
 	else {
-		auto it = _data.find(_usage);
+		AtlasMap::iterator it = _data.find(_usage);
 		if (++it != _data.end()) {
 			_usage = it.key();
 			_zoom = zooms(it.key()).min();
@@ -245,7 +246,7 @@ int ENCAtlas::zoomOut()
 	if (_zoom - 1 >= zooms(_usage).min())
 		_zoom--;
 	else {
-		auto it = _data.find(_usage);
+		AtlasMap::iterator it = _data.find(_usage);
 		if (it != _data.begin()) {
 			--it;
 			_usage = it.key();
@@ -342,7 +343,7 @@ QString ENCAtlas::key(int zoom, const QPoint &xy) const
 QList<Data*> ENCAtlas::levels() const
 {
 	QList<Data*> list;
-	QMap<IntendedUsage, ENC::AtlasData*>::const_iterator it = _data.find(_usage);
+	AtlasMap::const_iterator it = _data.find(_usage);
 
 	do {
 		list.append(it.value());

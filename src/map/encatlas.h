@@ -66,6 +66,8 @@ private:
 		RiverBerthing = 9
 	};
 
+	typedef QMap<IntendedUsage, ENC::AtlasData*> AtlasMap;
+
 	Transform transform(int zoom) const;
 	void updateTransform();
 	bool isRunning(int zoom, const QPoint &xy) const;
@@ -87,7 +89,7 @@ private:
 	Projection _projection;
 	Transform _transform;
 	qreal _tileRatio;
-	QMap<IntendedUsage, ENC::AtlasData*> _data;
+	AtlasMap _data;
 	ENC::Style *_style;
 	ENC::MapCache _cache;
 	QMutex _cacheLock;
