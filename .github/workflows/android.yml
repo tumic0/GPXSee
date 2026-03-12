@@ -33,7 +33,7 @@ jobs:
           version: '6.10.2'
           target: 'android'
           arch: 'android_arm64_v8a'
-          modules: qtimageformats qtpositioning qtserialport qtmultimedia qtmultimediawidgets qt5compat
+          modules: qtimageformats qtpositioning qtserialport qtmultimedia qt5compat
       - name: Install Android OpenSSL
         run:  git clone https://github.com/KDAB/android_openssl.git
       - name: Create localization

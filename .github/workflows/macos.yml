@@ -16,7 +16,7 @@ jobs:
         uses: jurplel/install-qt-action@v4
         with:
           version: '6.10.2'
-          modules: qtpositioning qtserialport qtimageformats qtmultimedia qtmultimediawidgets
+          modules: qtpositioning qtserialport qtimageformats qtmultimedia
       - name: Create localization
         run: lrelease gpxsee.pro
       - name: Configure build
