@@ -465,6 +465,11 @@ void GUI::createActions()
 	_showMarkerCoordinatesAction->setMenuRole(QAction::NoRole);
 	_showMarkerCoordinatesAction->setCheckable(true);
 	_showMarkerCoordinatesAction->setActionGroup(markerInfoGroup);
+	_showVideosAction = new QAction(tr("Show video"));
+	_showVideosAction->setMenuRole(QAction::NoRole);
+	_showVideosAction->setCheckable(true);
+	connect(_showVideosAction, &QAction::triggered, _mapView,
+	  &MapView::showVideos);
 	_useStylesAction = new QAction(tr("Use styles"), this);
 	_useStylesAction->setMenuRole(QAction::NoRole);
 	_useStylesAction->setCheckable(true);
@@ -737,6 +742,8 @@ void GUI::createMenus()
 	markerMenu->addAction(_showMarkersAction);
 	markerMenu->addAction(_showMarkerDateAction);
 	markerMenu->addAction(_showMarkerCoordinatesAction);
+	markerMenu->addSeparator();
+	markerMenu->addAction(_showVideosAction);
 	dataMenu->addSeparator();
 	dataMenu->addAction(_useStylesAction);
 	dataMenu->addSeparator();
@@ -2684,6 +2691,7 @@ void GUI::writeSettings()
 	  || _showMarkerCoordinatesAction->isChecked());
 	WRITE(markerInfo, mi);
 	WRITE(useStyles, _useStylesAction->isChecked());
+	WRITE(videos, _showVideosAction->isChecked());
 	settings.endGroup();
 
 	/* DEM */
@@ -2982,6 +2990,10 @@ void GUI::readSettings(QString &activeMap, QStringList &disabledPOIs,
 		_mapView->showMarkerInfo(mt);
 	} else
 		_hideMarkersAction->setChecked(true);
+	if (READ(videos).toBool()) {
+		_showVideosAction->setChecked(true);
+		_mapView->showVideos(true);
+	}
 	settings.endGroup();
 
 	/* DEM */

@@ -2,6 +2,7 @@
 #include <QCursor>
 #include <QPainter>
 #include <QGraphicsSceneMouseEvent>
+#include <QGraphicsVideoItem>
 #include "common/greatcircle.h"
 #include "map/map.h"
 #include "pathtickitem.h"
@@ -11,6 +12,9 @@
 #include "pathitem.h"
 
 #define GEOGRAPHICAL_MILE 1855.3248
+
+#define VIDEO_SIZE QSize(320, 180)
+#define VIDEO_OFFSET QPoint(6, -12)
 
 Units PathItem::_units = Metric;
 QTimeZone PathItem::_timeZone = QTimeZone::utc();
@@ -26,7 +30,8 @@ static inline unsigned segments(qreal distance)
 }
 
 PathItem::PathItem(const Path &path, Map *map, QGraphicsItem *parent)
-  : GraphicsItem(parent), _path(path), _map(map), _graph(0)
+  : GraphicsItem(parent), _player(0), _video(0), _path(path), _map(map),
+  _graph(0)
 {
 	Q_ASSERT(_path.isValid());
 
@@ -35,6 +40,7 @@ PathItem::PathItem(const Path &path, Map *map, QGraphicsItem *parent)
 	_color = Qt::black;
 	_penStyle = Qt::SolidLine;
 	_showMarker = true;
+	_showVideo = false;
 	_showTicks = false;
 	_markerInfoType = MarkerInfoItem::None;
 
@@ -342,6 +348,13 @@ void PathItem::setMarkerPosition(qreal pos)
 		setMarkerInfo(pos);
 	} else
 		_marker->setVisible(false);
+
+	if (_player && _graph) {
+		qreal time = (_graph->graphType() == Distance)
+		  ? _graph->timeAtDistance(pos) : pos;
+		if (!std::isnan(time))
+			_player->setPosition(time * 1000);
+	}
 }
 
 void PathItem::setMarkerInfo(qreal pos)
@@ -484,6 +497,36 @@ void PathItem::showTicks(bool show)
 	updateTicks();
 }
 
+void PathItem::showVideo(bool show)
+{
+	if (_showVideo == show)
+		return;
+
+	if (show) {
+		_video = new QGraphicsVideoItem(_marker);
+		_video->setSize(VIDEO_SIZE);
+		_video->setZValue(-1);
+		_video->setPos(VIDEO_OFFSET);
+		_player = new QMediaPlayer(this);
+		_player->setVideoOutput(_video);
+		connect(_player, &QMediaPlayer::mediaStatusChanged, this,
+		  &PathItem::mediaStatusChanged);
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+		_player->setMedia(QUrl::fromLocalFile(_file));
+#else
+		_player->setSource(QUrl::fromLocalFile(_file));
+#endif
+		_player->pause();
+	} else {
+		_video->deleteLater();
+		_video = 0;
+		_player->deleteLater();
+		_player = 0;
+	}
+
+	_showVideo = show;
+}
+
 void PathItem::addGraph(GraphItem *graph)
 {
 	_graphs.append(graph);
@@ -534,4 +577,16 @@ void PathItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 		Popup::show(event->screenPos(), info(gs->showExtendedInfo()),
 		  event->widget());
 	GraphicsItem::mousePressEvent(event);
+}
+
+void PathItem::mediaStatusChanged(QMediaPlayer::MediaStatus status)
+{
+	if (status == QMediaPlayer::LoadedMedia
+	  || status == QMediaPlayer::BufferedMedia) {
+		if (_graph) {
+			qreal time = _graph->timeAtDistance(_markerDistance);
+			if (!std::isnan(time))
+				_player->setPosition(time * 1000);
+		}
+	}
 }

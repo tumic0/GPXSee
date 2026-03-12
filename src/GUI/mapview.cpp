@@ -114,6 +114,7 @@ MapView::MapView(Map *map, POI *poi, QWidget *parent) : QGraphicsView(parent)
 	_showMarkers = false;
 	_markerInfoType = MarkerInfoItem::None;
 	_showPathTicks = false;
+	_showVideos = false;
 	_trackWidth = 3;
 	_routeWidth = 3;
 	_trackStyle = Qt::SolidLine;
@@ -188,6 +189,7 @@ PathItem *MapView::addTrack(const Track &track)
 	ti->showMarker(_showMarkers);
 	ti->showMarkerInfo(_markerInfoType);
 	ti->showTicks(_showPathTicks);
+	ti->showVideo(track.isVideo() & _showVideos);
 	_scene->addItem(ti);
 
 	if (_showTracks) {
@@ -960,10 +962,19 @@ void MapView::showMarkerInfo(MarkerInfoItem::Type type)
 void MapView::showTicks(bool show)
 {
 	_showPathTicks = show;
+
 	for (int i = 0; i < _tracks.size(); i++)
 		_tracks.at(i)->showTicks(show);
 	for (int i = 0; i < _routes.size(); i++)
 		_routes.at(i)->showTicks(show);
+}
+
+void MapView::showVideos(bool show)
+{
+	_showVideos = show;
+
+	for (int i = 0; i < _tracks.size(); i++)
+		_tracks.at(i)->showVideo(_tracks.at(i)->isVideo() & show);
 }
 
 void MapView::showMap(bool show)

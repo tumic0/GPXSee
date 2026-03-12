@@ -125,6 +125,7 @@ public:
 	static const Setting positionMarkers;
 	static const Setting markerInfo;
 	static const Setting useStyles;
+	static const Setting videos;
 
 	/* DEM */
 	static const Setting drawHillShading;

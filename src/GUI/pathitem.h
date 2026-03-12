@@ -3,6 +3,7 @@
 
 #include <QPen>
 #include <QTimeZone>
+#include <QMediaPlayer>
 #include "data/path.h"
 #include "data/link.h"
 #include "graphicsscene.h"
@@ -14,6 +15,7 @@ class Map;
 class PathTickItem;
 class GraphItem;
 class MarkerItem;
+class QGraphicsVideoItem;
 
 class PathItem : public QObject, public GraphicsItem
 {
@@ -49,6 +51,7 @@ public:
 	void showMarker(bool show);
 	void showMarkerInfo(MarkerInfoItem::Type type);
 	void showTicks(bool show);
+	void showVideo(bool show);
 
 	void setMarkerPosition(qreal pos);
 
@@ -78,8 +81,14 @@ protected:
 	QString _comment;
 	QVector<Link> _links;
 
+	QMediaPlayer *_player;
+	QGraphicsVideoItem *_video;
+
 	static Units _units;
 	static QTimeZone _timeZone;
+
+private slots:
+	void mediaStatusChanged(QMediaPlayer::MediaStatus status);
 
 private:
 	const PathSegment *segment(qreal x) const;
@@ -115,6 +124,7 @@ private:
 	Qt::PenStyle _penStyle;
 	bool _showMarker;
 	bool _showTicks;
+	bool _showVideo;
 	MarkerInfoItem::Type _markerInfoType;
 	qreal _markerDistance;
 	int _digitalZoom;

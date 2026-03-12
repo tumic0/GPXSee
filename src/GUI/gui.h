@@ -301,6 +301,7 @@ private:
 	QAction *_showMarkersAction;
 	QAction *_showMarkerDateAction;
 	QAction *_showMarkerCoordinatesAction;
+	QAction *_showVideosAction;
 	QAction *_showTicksAction;
 	QAction *_showLegendAction;
 	QAction *_useStylesAction;

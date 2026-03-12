@@ -174,6 +174,7 @@ SETTING(legend,              "legend",                 false                  );
 SETTING(positionMarkers,     "positionMarkers",        true                   );
 SETTING(markerInfo,          "markerInfo",             MarkerInfoItem::None   );
 SETTING(useStyles,           "styles",                 true                   );
+SETTING(videos,              "videos",                 true                   );
 
 /* DEM */
 SETTING(drawHillShading,     "hillshading",            true                   );

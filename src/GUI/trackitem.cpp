@@ -5,7 +5,6 @@
 #include "tooltip.h"
 #include "trackitem.h"
 
-
 ToolTip TrackItem::info(bool extended) const
 {
 	ToolTip tt;
