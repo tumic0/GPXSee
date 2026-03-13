@@ -61,9 +61,10 @@
 #include "navigationwidget.h"
 #endif // Q_OS_ANDROID
 
-#define MAX_RECENT_FILES     10
-#define DEM_DOWNLOAD_WARNING 4
-#define DEM_DOWNLOAD_LIMIT   1024
+#define MAX_RECENT_FILES      10
+#define DEM_DOWNLOAD_WARNING  4
+#define DEM_DOWNLOAD_LIMIT    1024
+#define MAC_TOOLBAR_ICON_SIZE QSize(22, 22)
 
 GUI::GUI(const QString &lang)
 {
@@ -828,6 +829,9 @@ void GUI::createToolBars()
 
 	_fileToolBar = addToolBar(tr("File"));
 	_fileToolBar->setObjectName("File");
+#ifdef Q_OS_MAC
+	_fileToolBar->setIconSize(MAC_TOOLBAR_ICON_SIZE);
+#endif // Q_OS_MAC
 	_fileToolBar->addAction(_openFileAction);
 	_fileToolBar->addAction(_reloadFileAction);
 	_fileToolBar->addAction(_closeFileAction);
@@ -837,6 +841,9 @@ void GUI::createToolBars()
 
 	_showToolBar = addToolBar(tr("Show"));
 	_showToolBar->setObjectName("Show");
+#ifdef Q_OS_MAC
+	_showToolBar->setIconSize(MAC_TOOLBAR_ICON_SIZE);
+#endif // Q_OS_MAC
 	_showToolBar->addAction(_showPOIAction);
 	_showToolBar->addAction(_showMapAction);
 	_showToolBar->addAction(_showGraphsAction);
@@ -844,6 +851,9 @@ void GUI::createToolBars()
 
 	_navigationToolBar = addToolBar(tr("Navigation"));
 	_navigationToolBar->setObjectName("Navigation");
+#ifdef Q_OS_MAC
+	_navigationToolBar->setIconSize(MAC_TOOLBAR_ICON_SIZE);
+#endif // Q_OS_MAC
 	_navigationToolBar->addAction(_firstAction);
 	_navigationToolBar->addAction(_prevAction);
 	_navigationToolBar->addAction(_nextAction);
