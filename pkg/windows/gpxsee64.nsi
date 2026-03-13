@@ -291,7 +291,7 @@ Section "GPXSee" SEC_APP
   System::Call 'shell32.dll::SHChangeNotify(i, i, i, i) v (0x08000000, 0, 0, 0)'
 SectionEnd
 
-Section "Qt framework" SEC_QT
+Section "Qt" SEC_QT
   SectionIn RO
   SetOutPath $INSTDIR
 
