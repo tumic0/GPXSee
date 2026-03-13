@@ -307,6 +307,13 @@ Section "Qt framework" SEC_QT
   File "Qt6Widgets.dll"
   File "Qt6Positioning.dll"
   File "Qt6SerialPort.dll"
+  File "Qt6Multimedia.dll"
+  File "Qt6MultimediaWidgets.dll"
+  File avcodec-*.dll
+  File avformat-*.dll
+  File avutil-*.dll
+  File swresample-*.dll
+  File swscale-*.dll
   File /r "tls"
   File /r "platforms"
   File /r "iconengines"
@@ -314,6 +321,7 @@ Section "Qt framework" SEC_QT
   File /r "styles"
   File /r "sqldrivers"
   File /r "position"
+  File /r "multimedia"
 SectionEnd
 
 Section "MSVC runtime" SEC_MSVC
