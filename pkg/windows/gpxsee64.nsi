@@ -309,11 +309,6 @@ Section "Qt framework" SEC_QT
   File "Qt6SerialPort.dll"
   File "Qt6Multimedia.dll"
   File "Qt6MultimediaWidgets.dll"
-  File avcodec-*.dll
-  File avformat-*.dll
-  File avutil-*.dll
-  File swresample-*.dll
-  File swscale-*.dll
   File /r "tls"
   File /r "platforms"
   File /r "iconengines"
@@ -322,6 +317,17 @@ Section "Qt framework" SEC_QT
   File /r "sqldrivers"
   File /r "position"
   File /r "multimedia"
+SectionEnd
+
+Section "FFmpeg" SEC_FFMPEG
+  SectionIn RO
+  SetOutPath $INSTDIR
+
+  File avcodec-*.dll
+  File avformat-*.dll
+  File avutil-*.dll
+  File swresample-*.dll
+  File swscale-*.dll
 SectionEnd
 
 Section "MSVC runtime" SEC_MSVC
@@ -498,6 +504,8 @@ SectionEnd
 ; Language strings
 LangString DESC_QT ${LANG_ENGLISH} \
   "Qt cross-platform application framework."
+LangString DESC_FFMPEG ${LANG_ENGLISH} \
+  "FFmpeg multimedia framework."
 LangString DESC_MSVC ${LANG_ENGLISH} \
   "Microsoft Visual C++ runtime. If already installed, will be skipped."
 LangString DESC_APP ${LANG_ENGLISH} \
@@ -509,6 +517,7 @@ LangString DESC_LOCALIZATION ${LANG_ENGLISH} \
 !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
   !insertmacro MUI_DESCRIPTION_TEXT ${SEC_MSVC} $(DESC_MSVC)
   !insertmacro MUI_DESCRIPTION_TEXT ${SEC_QT} $(DESC_QT)
+  !insertmacro MUI_DESCRIPTION_TEXT ${SEC_FFMPEG} $(DESC_FFMPEG)
   !insertmacro MUI_DESCRIPTION_TEXT ${SEC_APP} $(DESC_APP)
   !insertmacro MUI_DESCRIPTION_TEXT ${SEC_LOCALIZATION} $(DESC_LOCALIZATION)
 !insertmacro MUI_FUNCTION_DESCRIPTION_END
