@@ -466,7 +466,7 @@ void GUI::createActions()
 	_showMarkerCoordinatesAction->setMenuRole(QAction::NoRole);
 	_showMarkerCoordinatesAction->setCheckable(true);
 	_showMarkerCoordinatesAction->setActionGroup(markerInfoGroup);
-	_showVideosAction = new QAction(tr("Show video"));
+	_showVideosAction = new QAction(tr("Video preview"));
 	_showVideosAction->setMenuRole(QAction::NoRole);
 	_showVideosAction->setCheckable(true);
 	connect(_showVideosAction, &QAction::triggered, _mapView,
