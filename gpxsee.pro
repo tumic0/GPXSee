@@ -29,6 +29,7 @@ versionAtLeast(QT_VERSION, 6.6) {
 
 INCLUDEPATH += ./src
 HEADERS += src/common/config.h \
+    src/GUI/videoitem.h \
     src/common/garmin.h \
     src/common/coordinates.h \
     src/common/hash.h \
@@ -301,6 +302,7 @@ HEADERS += src/common/config.h \
     src/data/geojsonparser.h
 
 SOURCES += src/main.cpp \
+    src/GUI/videoitem.cpp \
     src/common/coordinates.cpp \
     src/common/protobuf.cpp \
     src/common/rectc.cpp \

@@ -3,7 +3,6 @@
 
 #include <QPen>
 #include <QTimeZone>
-#include <QMediaPlayer>
 #include "data/path.h"
 #include "data/link.h"
 #include "graphicsscene.h"
@@ -15,7 +14,7 @@ class Map;
 class PathTickItem;
 class GraphItem;
 class MarkerItem;
-class QGraphicsVideoItem;
+class VideoItem;
 
 class PathItem : public QObject, public GraphicsItem
 {
@@ -81,14 +80,11 @@ protected:
 	QString _comment;
 	QVector<Link> _links;
 
-	QMediaPlayer *_player;
-	QGraphicsVideoItem *_video;
-
 	static Units _units;
 	static QTimeZone _timeZone;
 
 private slots:
-	void mediaStatusChanged(QMediaPlayer::MediaStatus status);
+	void videoLoaded();
 
 private:
 	const PathSegment *segment(qreal x) const;
@@ -102,6 +98,7 @@ private:
 	void updatePenStyle();
 	qreal width() const;
 	Qt::PenStyle penStyle() const;
+	void enableVideo(bool enable);
 
 	qreal xInM() const;
 	unsigned tickSize() const;
@@ -113,6 +110,7 @@ private:
 	GraphItem *_graph;
 	MarkerItem *_marker;
 	MarkerInfoItem *_markerInfo;
+	VideoItem *_video;
 	QVector<PathTickItem*> _ticks;
 
 	QPen _pen;

@@ -1,14 +1,13 @@
 #include <cmath>
-#include <QCursor>
 #include <QPainter>
 #include <QGraphicsSceneMouseEvent>
-#include <QGraphicsVideoItem>
 #include "common/greatcircle.h"
 #include "map/map.h"
 #include "pathtickitem.h"
 #include "popup.h"
 #include "graphitem.h"
 #include "markeritem.h"
+#include "videoitem.h"
 #include "pathitem.h"
 
 #define GEOGRAPHICAL_MILE 1855.3248
@@ -30,8 +29,7 @@ static inline unsigned segments(qreal distance)
 }
 
 PathItem::PathItem(const Path &path, Map *map, QGraphicsItem *parent)
-  : GraphicsItem(parent), _player(0), _video(0), _path(path), _map(map),
-  _graph(0)
+  : GraphicsItem(parent), _path(path), _map(map), _graph(0), _video(0)
 {
 	Q_ASSERT(_path.isValid());
 
@@ -349,11 +347,11 @@ void PathItem::setMarkerPosition(qreal pos)
 	} else
 		_marker->setVisible(false);
 
-	if (_player && _graph) {
+	if (_video && _graph) {
 		qreal time = (_graph->graphType() == Distance)
 		  ? _graph->timeAtDistance(pos) : pos;
 		if (!std::isnan(time))
-			_player->setPosition(time * 1000);
+			_video->seek(time * 1000);
 	}
 }
 
@@ -427,6 +425,7 @@ void PathItem::showMarker(bool show)
 
 	_showMarker = show;
 	updateMarkerInfo();
+	enableVideo(show && _showVideo);
 	_marker->setVisible(show && isValid(position(_markerDistance)));
 }
 
@@ -438,6 +437,16 @@ void PathItem::showMarkerInfo(MarkerInfoItem::Type type)
 	_markerInfoType = type;
 	updateMarkerInfo();
 	_markerInfo->setVisible(type > MarkerInfoItem::None);
+}
+
+void PathItem::showVideo(bool show)
+{
+	if (_showVideo == show)
+		return;
+
+	enableVideo(show && _showMarker);
+
+	_showVideo = show;
 }
 
 qreal PathItem::xInM() const
@@ -497,36 +506,6 @@ void PathItem::showTicks(bool show)
 	updateTicks();
 }
 
-void PathItem::showVideo(bool show)
-{
-	if (_showVideo == show)
-		return;
-
-	if (show) {
-		_video = new QGraphicsVideoItem(_marker);
-		_video->setSize(VIDEO_SIZE);
-		_video->setZValue(-1);
-		_video->setPos(VIDEO_OFFSET);
-		_player = new QMediaPlayer(this);
-		_player->setVideoOutput(_video);
-		connect(_player, &QMediaPlayer::mediaStatusChanged, this,
-		  &PathItem::mediaStatusChanged);
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-		_player->setMedia(QUrl::fromLocalFile(_file));
-#else
-		_player->setSource(QUrl::fromLocalFile(_file));
-#endif
-		_player->pause();
-	} else {
-		_video->deleteLater();
-		_video = 0;
-		_player->deleteLater();
-		_player = 0;
-	}
-
-	_showVideo = show;
-}
-
 void PathItem::addGraph(GraphItem *graph)
 {
 	_graphs.append(graph);
@@ -579,14 +558,30 @@ void PathItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 	GraphicsItem::mousePressEvent(event);
 }
 
-void PathItem::mediaStatusChanged(QMediaPlayer::MediaStatus status)
+void PathItem::enableVideo(bool enable)
 {
-	if (status == QMediaPlayer::LoadedMedia
-	  || status == QMediaPlayer::BufferedMedia) {
-		if (_graph) {
-			qreal time = _graph->timeAtDistance(_markerDistance);
-			if (!std::isnan(time))
-				_player->setPosition(time * 1000);
+	if (enable) {
+		if (!_video) {
+			_video = new VideoItem(_file, _marker);
+			_video->setSize(VIDEO_SIZE);
+			_video->setZValue(-1);
+			_video->setPos(VIDEO_OFFSET);
+			connect(_video, &VideoItem::videoLoaded, this,
+			  &PathItem::videoLoaded);
 		}
+	} else {
+		if (_video) {
+			_video->deleteLater();
+			_video = 0;
+		}
+	}
+}
+
+void PathItem::videoLoaded()
+{
+	if (_graph) {
+		qreal time = _graph->timeAtDistance(_markerDistance);
+		if (!std::isnan(time))
+			_video->seek(time * 1000);
 	}
 }
