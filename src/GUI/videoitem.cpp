@@ -4,16 +4,16 @@
 VideoItem::VideoItem(const QString &file, QGraphicsItem *parent)
   : QGraphicsVideoItem(parent), _pos(0), _eos(0)
 {
-		_player = new QMediaPlayer(this);
-		_player->setVideoOutput(this);
-		connect(_player, &QMediaPlayer::mediaStatusChanged, this,
-		  &VideoItem::mediaStatusChanged);
+	_player = new QMediaPlayer(this);
+	_player->setVideoOutput(this);
+	connect(_player, &QMediaPlayer::mediaStatusChanged, this,
+	  &VideoItem::mediaStatusChanged);
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-		_player->setMedia(QUrl::fromLocalFile(file));
+	_player->setMedia(QUrl::fromLocalFile(file));
 #else
-		_player->setSource(QUrl::fromLocalFile(file));
+	_player->setSource(QUrl::fromLocalFile(file));
 #endif
-		_player->pause();
+	_player->pause();
 }
 
 void VideoItem::seek(qint64 pos)
