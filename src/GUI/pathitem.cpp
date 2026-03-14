@@ -344,15 +344,17 @@ void PathItem::setMarkerPosition(qreal pos)
 		_marker->setVisible(_showMarker);
 		_marker->setPos(pp);
 		setMarkerInfo(pos);
+
+		if (_video) {
+			qreal time = _graph
+			  ? (_graph->graphType() == Distance)
+				? _graph->timeAtDistance(pos) : pos
+			  : NAN;
+			if (!std::isnan(time))
+				_video->seek(time * 1000);
+		}
 	} else
 		_marker->setVisible(false);
-
-	if (_video && _graph) {
-		qreal time = (_graph->graphType() == Distance)
-		  ? _graph->timeAtDistance(pos) : pos;
-		if (!std::isnan(time))
-			_video->seek(time * 1000);
-	}
 }
 
 void PathItem::setMarkerInfo(qreal pos)
@@ -566,22 +568,15 @@ void PathItem::enableVideo(bool enable)
 			_video->setSize(VIDEO_SIZE);
 			_video->setZValue(-1);
 			_video->setPos(VIDEO_OFFSET);
-			connect(_video, &VideoItem::videoLoaded, this,
-			  &PathItem::videoLoaded);
+
+			qreal time = _graph ? _graph->timeAtDistance(_markerDistance) : NAN;
+			if (!std::isnan(time))
+				_video->seek(time * 1000);
 		}
 	} else {
 		if (_video) {
 			_video->deleteLater();
 			_video = 0;
 		}
-	}
-}
-
-void PathItem::videoLoaded()
-{
-	if (_graph) {
-		qreal time = _graph->timeAtDistance(_markerDistance);
-		if (!std::isnan(time))
-			_video->seek(time * 1000);
 	}
 }

@@ -83,9 +83,6 @@ protected:
 	static Units _units;
 	static QTimeZone _timeZone;
 
-private slots:
-	void videoLoaded();
-
 private:
 	const PathSegment *segment(qreal x) const;
 	QPointF position(qreal distance) const;

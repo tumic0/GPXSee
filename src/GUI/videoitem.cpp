@@ -2,7 +2,7 @@
 #include "videoitem.h"
 
 VideoItem::VideoItem(const QString &file, QGraphicsItem *parent)
-  : QGraphicsVideoItem(parent)
+  : QGraphicsVideoItem(parent), _pos(0), _eos(0)
 {
 		_player = new QMediaPlayer(this);
 		_player->setVideoOutput(this);
@@ -16,9 +16,21 @@ VideoItem::VideoItem(const QString &file, QGraphicsItem *parent)
 		_player->pause();
 }
 
+void VideoItem::seek(qint64 pos)
+{
+	_pos = pos;
+
+	QMediaPlayer::MediaStatus status = _player->mediaStatus();
+	if (status == QMediaPlayer::LoadedMedia
+	  || status == QMediaPlayer::BufferedMedia)
+		_player->setPosition(qMin(pos, _eos));
+}
+
 void VideoItem::mediaStatusChanged(QMediaPlayer::MediaStatus status)
 {
 	if (status == QMediaPlayer::LoadedMedia
-	  || status == QMediaPlayer::BufferedMedia)
-		emit videoLoaded();
+	  || status == QMediaPlayer::BufferedMedia) {
+		_eos = qMax(0ll, _player->duration() - 100);
+		_player->setPosition(qMin(_pos, _eos));
+	}
 }
