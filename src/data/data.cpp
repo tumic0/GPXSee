@@ -27,6 +27,7 @@
 #include "vtkparser.h"
 #include "vkxparser.h"
 #include "mp4parser.h"
+#include "srtparser.h"
 #include "data.h"
 
 
@@ -57,6 +58,7 @@ static TXTParser txt;
 static VTKParser vtk;
 static VKXParser vkx;
 static MP4Parser mp4;
+static SRTParser srt;
 
 static QMultiMap<QString, Parser*> parsers()
 {
@@ -96,6 +98,7 @@ static QMultiMap<QString, Parser*> parsers()
 	map.insert("mp4", &mp4);
 	map.insert("mov", &mp4);
 	map.insert("raw", &mp4);
+	map.insert("srt", &srt);
 
 	return map;
 }
@@ -256,6 +259,7 @@ QString Data::formats()
 	  + qApp->translate("Data", "GPMF files") + " (*.raw);;"
 	  + qApp->translate("Data", "SLF files") + " (*.slf);;"
 	  + qApp->translate("Data", "SML files") + " (*.sml);;"
+	  + qApp->translate("Data", "DJI SRT files") + " (*.srt);;"
 	  + qApp->translate("Data", "TCX files") + " (*.tcx);;"
 	  + qApp->translate("Data", "70mai GPS log files") + " (*.txt);;"
 	  + qApp->translate("Data", "VKX files") + " (*.vkx);;"
