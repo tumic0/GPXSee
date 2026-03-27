@@ -193,7 +193,7 @@
     <message>
         <location filename="../src/data/data.cpp" line="262"/>
         <source>DJI SRT files</source>
-        <translation type="unfinished"></translation>
+        <translation>Soubory DJI SRT</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="263"/>
