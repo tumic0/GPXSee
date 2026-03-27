@@ -106,137 +106,142 @@
 <context>
     <name>Data</name>
     <message>
-        <location filename="../src/data/data.cpp" line="239"/>
+        <location filename="../src/data/data.cpp" line="242"/>
         <source>Supported files</source>
         <translation>Obsługiwane pliki</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="240"/>
+        <location filename="../src/data/data.cpp" line="243"/>
         <source>CSV files</source>
         <translation>Pliki CSV</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="241"/>
+        <location filename="../src/data/data.cpp" line="244"/>
         <source>CUP files</source>
         <translation>Pliki CUP</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="242"/>
+        <location filename="../src/data/data.cpp" line="245"/>
         <source>FIT files</source>
         <translation>Pliki FIT</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="243"/>
+        <location filename="../src/data/data.cpp" line="246"/>
         <source>GeoJSON files</source>
         <translation>Pliki GeoJSON</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="244"/>
+        <location filename="../src/data/data.cpp" line="247"/>
         <source>GPI files</source>
         <translation>Pliki GPI</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="245"/>
+        <location filename="../src/data/data.cpp" line="248"/>
         <source>GPX files</source>
         <translation>Pliki GPX</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="246"/>
+        <location filename="../src/data/data.cpp" line="249"/>
         <source>IGC files</source>
         <translation>Pliki IGC</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="247"/>
+        <location filename="../src/data/data.cpp" line="250"/>
         <source>ITN files</source>
         <translation>Pliki ITN</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="248"/>
+        <location filename="../src/data/data.cpp" line="251"/>
         <source>JPEG images</source>
         <translation>Pliki JPEG</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="249"/>
+        <location filename="../src/data/data.cpp" line="252"/>
         <source>KML files</source>
         <translation>Pliki KML</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="250"/>
+        <location filename="../src/data/data.cpp" line="253"/>
         <source>LOC files</source>
         <translation>Pliki LOC</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="251"/>
+        <location filename="../src/data/data.cpp" line="254"/>
         <source>MP4 videos</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="252"/>
+        <location filename="../src/data/data.cpp" line="255"/>
         <source>NMEA files</source>
         <translation>Pliki NMEA</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="254"/>
+        <location filename="../src/data/data.cpp" line="257"/>
         <source>OV2 files</source>
         <translation>Pliki OV2</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="255"/>
+        <location filename="../src/data/data.cpp" line="258"/>
         <source>OziExplorer files</source>
         <translation>Pliki OziExplorer</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="258"/>
+        <location filename="../src/data/data.cpp" line="261"/>
         <source>SML files</source>
         <translation>Pliki SML</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="259"/>
-        <source>TCX files</source>
-        <translation>Pliki TCX</translation>
-    </message>
-    <message>
-        <location filename="../src/data/data.cpp" line="257"/>
-        <source>SLF files</source>
-        <translation>Pliki SLF</translation>
-    </message>
-    <message>
-        <location filename="../src/data/data.cpp" line="256"/>
-        <source>GPMF files</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/data/data.cpp" line="253"/>
-        <source>ONmove files</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/data/data.cpp" line="260"/>
-        <source>70mai GPS log files</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/data/data.cpp" line="261"/>
-        <source>VKX files</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../src/data/data.cpp" line="262"/>
-        <source>VTK files</source>
+        <source>DJI SRT files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="263"/>
-        <source>TwoNav files</source>
+        <source>TCX files</source>
+        <translation>Pliki TCX</translation>
+    </message>
+    <message>
+        <location filename="../src/data/data.cpp" line="260"/>
+        <source>SLF files</source>
+        <translation>Pliki SLF</translation>
+    </message>
+    <message>
+        <location filename="../src/data/data.cpp" line="259"/>
+        <source>GPMF files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/data/data.cpp" line="256"/>
+        <source>ONmove files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="264"/>
-        <source>GPSDump files</source>
+        <source>70mai GPS log files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="265"/>
+        <source>VKX files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/data/data.cpp" line="266"/>
+        <source>VTK files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/data/data.cpp" line="267"/>
+        <source>TwoNav files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/data/data.cpp" line="268"/>
+        <source>GPSDump files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/data/data.cpp" line="269"/>
         <source>All files</source>
         <translation>Wszystkie pliki</translation>
     </message>
