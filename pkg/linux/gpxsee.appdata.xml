@@ -122,6 +122,7 @@
 		<mimetype>application/vnd.coros.pma</mimetype>
 		<mimetype>application/vnd.pmtiles</mimetype>
 		<mimetype>application/mp4</mimetype>
+		<mimetype>application/x-subrip</mimetype>
 		<mimetype>video/mp4</mimetype>
 		<mimetype>video/quicktime</mimetype>
 		<mimetype>x-scheme-handler/geo</mimetype>

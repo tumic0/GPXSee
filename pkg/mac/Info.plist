@@ -517,6 +517,20 @@
 		<dict>
 			<key>CFBundleTypeExtensions</key>
 			<array>
+				<string>srt</string>
+			</array>
+			<key>CFBundleTypeMIMETypes</key>
+			<array>
+				<string>application/x-subrip</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>SubRip Text</string>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
 				<string>xml</string>
 			</array>
 			<key>CFBundleTypeMIMETypes</key>
@@ -1628,6 +1642,27 @@
 					<string>video/mp4</string>
 					<string>video/quicktime</string>
 				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeIdentifier</key>
+			<string>public.srt</string>
+			<key>UTTypeReferenceURL</key>
+			<string>https://en.wikipedia.org/wiki/SubRip</string>
+			<key>UTTypeDescription</key>
+			<string>SubRip Text</string>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>srt</string>
+				</array>
+				<key>public.mime-type</key>
+				<string>application/x-subrip</string>
 			</dict>
 		</dict>
 		<dict>
