@@ -18,7 +18,7 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
       - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
+        uses: android-actions/setup-android@v4
       - name: Install android platform, build-tools and ndk
         run:  ${ANDROID_HOME}/cmdline-tools/latest/bin/sdkmanager --install "platforms;android-35" "build-tools;35.0.0" "ndk;27.2.12479018"
       - name: Setup NDK path
