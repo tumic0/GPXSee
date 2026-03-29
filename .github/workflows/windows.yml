@@ -22,7 +22,7 @@ jobs:
       - name: Install Qt
         uses: jurplel/install-qt-action@v4
         with:
-          version: '6.11.0'
+          version: '6.10.2'
           modules: qtpositioning qtserialport qtimageformats qtmultimedia
       - name: Set up Visual Studio shell
         uses: egor-tensin/vs-shell@v2
