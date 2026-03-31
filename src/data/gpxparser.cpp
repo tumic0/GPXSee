@@ -16,7 +16,7 @@ qreal GPXParser::number()
 QDateTime GPXParser::time()
 {
 	QDateTime d = QDateTime::fromString(_reader.readElementText(),
-	  Qt::ISODate);
+	  Qt::ISODateWithMs);
 	if (!d.isValid())
 		_reader.raiseError(QString("Invalid %1").arg(
 		  _reader.name().toString()));
