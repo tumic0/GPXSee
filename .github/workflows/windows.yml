@@ -30,7 +30,7 @@ jobs:
         with:
           arch: ${{matrix.arch}}
       - name: Create localization
-        run: lrelease gpxsee.pro
+        run: lrelease-pro gpxsee.pro
       - name: Configure build
         run: qmake gpxsee.pro
       - name: Build project
