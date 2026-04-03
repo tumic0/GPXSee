@@ -26,6 +26,7 @@ constexpr quint32 MOOV = TAG("moov");
 constexpr quint32 MVHD = TAG("mvhd");
 constexpr quint32 TRAK = TAG("trak");
 constexpr quint32 MDIA = TAG("mdia");
+constexpr quint32 MDHD = TAG("mdhd");
 constexpr quint32 HDLR = TAG("hdlr");
 constexpr quint32 MINF = TAG("minf");
 constexpr quint32 META = TAG("meta");
@@ -34,6 +35,7 @@ constexpr quint32 STSD = TAG("stsd");
 constexpr quint32 STSC = TAG("stsc");
 constexpr quint32 STSZ = TAG("stsz");
 constexpr quint32 STCO = TAG("stco");
+constexpr quint32 STTS = TAG("stts");
 constexpr quint32 CO64 = TAG("co64");
 constexpr quint32 GPMD = TAG("gpmd");
 constexpr quint32 RTMD = TAG("rtmd");
@@ -43,6 +45,7 @@ constexpr quint32 XYZ = TAG("\xa9xyz");
 constexpr quint32 GPS = TAG("gps ");
 constexpr quint32 FREE = TAG("free");
 constexpr quint32 CGPS = TAG("GPS ");
+constexpr quint32 TEXT = TAG("text");
 
 constexpr quint32 GPS5 = TAG("GPS5");
 constexpr quint32 GPS9 = TAG("GPS9");
@@ -375,6 +378,10 @@ bool MP4Parser::stsd(QDataStream &stream, quint64 atomSize, Format &format,
 				format = CAMMFormat;
 				id = i + 1;
 				break;
+			case TEXT:
+				format = DJIFormat;
+				id = i + 1;
+				break;
 			default:
 				format = UnknownFormat;
 		}
@@ -400,7 +407,7 @@ static bool stsz(QDataStream &stream, quint64 atomSize, QVector<quint32> &sizes)
 	if (ss)
 		sizes = QVector<quint32>(num, ss);
 	else {
-		if (atomSize < num * 4)
+		if (atomSize < num * sizeof(quint32))
 			return false;
 
 		sizes.resize(num);
@@ -408,7 +415,7 @@ static bool stsz(QDataStream &stream, quint64 atomSize, QVector<quint32> &sizes)
 			stream >> sizes[i];
 		if (stream.status())
 			return false;
-		atomSize -= num * 4;
+		atomSize -= num * sizeof(quint32);
 	}
 
 	return (atomSize)
@@ -416,9 +423,9 @@ static bool stsz(QDataStream &stream, quint64 atomSize, QVector<quint32> &sizes)
 }
 
 bool MP4Parser::stsc(QDataStream &stream, quint64 atomSize,
-  QVector<Table> &tables)
+  QVector<STSCEntry> &table)
 {
-	if (atomSize < 12)
+	if (atomSize < 8)
 		return false;
 
 	quint32 vf, num;
@@ -427,15 +434,41 @@ bool MP4Parser::stsc(QDataStream &stream, quint64 atomSize,
 		return false;
 	atomSize -= 8;
 
-	if (atomSize < num * 12)
+	if (atomSize < num * 3 * sizeof(quint32))
 		return false;
 
-	tables.resize(num);
+	table.resize(num);
 	for (quint32 i = 0; i < num; i++)
-		stream >> tables[i].first >> tables[i].samples >> tables[i].id;
+		stream >> table[i].first >> table[i].samples >> table[i].id;
 	if (stream.status())
 		return false;
-	atomSize -= num * 12;
+	atomSize -= num * 3 * sizeof(quint32);
+
+	return (atomSize)
+	  ? (stream.skipRawData(atomSize) == (qint64)atomSize) : true;
+}
+
+bool MP4Parser::stts(QDataStream &stream, quint64 atomSize,
+  QVector<STTSEntry> &table)
+{
+	if (atomSize < 8)
+		return false;
+
+	quint32 vf, num;
+	stream >> vf >> num;
+	if (stream.status())
+		return false;
+	atomSize -= 8;
+
+	if (atomSize < num * 2 * sizeof(quint32))
+		return false;
+
+	table.resize(num);
+	for (quint32 i = 0; i < num; i++)
+		stream >> table[i].samples >> table[i].duration;
+	if (stream.status())
+		return false;
+	atomSize -= num * 2 * sizeof(quint32);
 
 	return (atomSize)
 	  ? (stream.skipRawData(atomSize) == (qint64)atomSize) : true;
@@ -452,7 +485,7 @@ static bool stco(QDataStream &stream, quint64 atomSize, QVector<quint64> &chunks
 		return false;
 	atomSize -= 8;
 
-	if (atomSize < num * 4)
+	if (atomSize < num * sizeof(quint32))
 		return false;
 
 	chunks.resize(num);
@@ -462,7 +495,7 @@ static bool stco(QDataStream &stream, quint64 atomSize, QVector<quint64> &chunks
 	}
 	if (stream.status())
 		return false;
-	atomSize -= num * 4;
+	atomSize -= num * sizeof(quint32);
 
 	return (atomSize)
 	  ? (stream.skipRawData(atomSize) == (qint64)atomSize) : true;
@@ -479,7 +512,7 @@ static bool co64(QDataStream &stream, quint64 atomSize, QVector<quint64> &chunks
 		return false;
 	atomSize -= 8;
 
-	if (atomSize < num * 8)
+	if (atomSize < num * sizeof(quint64))
 		return false;
 
 	chunks.resize(num);
@@ -487,7 +520,7 @@ static bool co64(QDataStream &stream, quint64 atomSize, QVector<quint64> &chunks
 		stream >> chunks[i];
 	if (stream.status())
 		return false;
-	atomSize -= num * 8;
+	atomSize -= num * sizeof(quint64);
 
 	return (atomSize)
 	  ? (stream.skipRawData(atomSize) == (qint64)atomSize) : true;
@@ -506,13 +539,16 @@ bool MP4Parser::stbl(QDataStream &stream, quint64 atomSize, Metadata &meta)
 			if (!stsd(stream, size ? size - hdrSize : 0, meta.format, meta.id))
 				return false;
 		} else if (type == STSC && meta.format) {
-			if (!stsc(stream, size ? size - hdrSize : 0, meta.tables))
+			if (!stsc(stream, size ? size - hdrSize : 0, meta.stscTable))
 				return false;
 		} else if (type == STSZ && meta.format) {
 			if (!stsz(stream, size ? size - hdrSize : 0, meta.sizes))
 				return false;
 		} else if (type == STCO && meta.format) {
 			if (!stco(stream, size ? size - hdrSize : 0, meta.chunks))
+				return false;
+		} else if (type == STTS && meta.format) {
+			if (!stts(stream, size ? size - hdrSize : 0, meta.sttsTable))
 				return false;
 		} else if (type == CO64 && meta.format) {
 			if (!co64(stream, size ? size - hdrSize : 0, meta.chunks))
@@ -534,18 +570,40 @@ bool MP4Parser::stbl(QDataStream &stream, quint64 atomSize, Metadata &meta)
 
 static bool hdlr(QDataStream &stream, quint64 atomSize, bool &meta)
 {
-	if (atomSize < 24)
+	if (atomSize < 25)
 		return false;
 
 	quint32 vf, type, subtype, manufacturer, flags, mask;
-	stream >> vf >> type >> subtype >> manufacturer >> flags >> mask;
-	if (stream.status()
-	  || stream.skipRawData(atomSize - 24) != (qint64)atomSize - 24)
+	quint8 nameLen;
+
+	stream >> vf >> type >> subtype >> manufacturer >> flags >> mask >> nameLen;
+	if (stream.status())
 		return false;
 
-	meta = (subtype == META || subtype == CAMM);
+	/* RICOH THETA X video files have a null terminated string here instead of
+	   a counted string! */
+	QByteArray name(atomSize - 25, Qt::Initialization::Uninitialized);
+	if (stream.readRawData(name.data(), name.size())
+	  != name.size())
+		return false;
+
+	meta = (subtype == META || subtype == CAMM
+	  || (subtype == TEXT && name.startsWith("DJI.Subtitle")));
 
 	return true;
+}
+
+static bool mdhd(QDataStream &stream, quint64 atomSize, quint32 &scale)
+{
+	if (atomSize < 24)
+		return false;
+
+	quint32 vf, ctime, mtime, duration;
+	quint16 lang, quality;
+
+	stream >> vf >> ctime >> mtime >> scale >> duration >> lang >> quality;
+
+	return !stream.status();
 }
 
 bool MP4Parser::minf(QDataStream &stream, quint64 atomSize, Metadata &meta)
@@ -587,6 +645,9 @@ bool MP4Parser::mdia(QDataStream &stream, quint64 atomSize, Metadata &meta)
 
 		if (type == HDLR) {
 			if (!hdlr(stream, size ? size - hdrSize : 0, ismeta))
+				return false;
+		} else if (type == MDHD) {
+			if (!mdhd(stream, size ? size - hdrSize : 0, meta.scale))
 				return false;
 		} else if (type == MINF && ismeta) {
 			if (!minf(stream, size ? size - hdrSize : 0, meta))
@@ -753,10 +814,10 @@ bool MP4Parser::gps(QDataStream &stream, quint64 atomSize, Metadata &meta)
 
 	meta.format = NovatekFormat;
 	meta.id = 1;
-	meta.tables.append(Table(1, 1, 1));
+	meta.stscTable.append(STSCEntry(1, 1, 1));
 
 	quint64 hdr;
-	quint32 offset, size;
+	quint32 offset, size, cnt = 0;
 
 	stream >> hdr;
 	if (stream.status())
@@ -770,7 +831,10 @@ bool MP4Parser::gps(QDataStream &stream, quint64 atomSize, Metadata &meta)
 
 		meta.sizes.append(size);
 		meta.chunks.append(offset);
+		cnt++;
 	}
+
+	meta.sttsTable.append(STTSEntry(cnt, 0));
 
 	return (!atomSize);
 }
@@ -846,7 +910,8 @@ bool MP4Parser::udta(QDataStream &stream, quint64 atomSize, Metadata &meta)
 	if (magic == "__V35AX_QVDATA__") {
 		meta.format = LigoJSONFormat;
 		meta.id = 1;
-		meta.tables.append(Table(meta.tables.size() + 1, 1, 1));
+		meta.stscTable.append(STSCEntry(meta.stscTable.size() + 1, 1, 1));
+		meta.sttsTable.append(STTSEntry(meta.sttsTable.size() + 1, 0));
 		meta.chunks.append(offset);
 		meta.sizes.append((quint32)atomSize);
 	}
@@ -860,7 +925,8 @@ bool MP4Parser::gpsf(QDataStream &stream, quint64 atomSize, Metadata &meta)
 
 	meta.format = PittasoftFormat;
 	meta.id = 1;
-	meta.tables.append(Table(meta.tables.size() + 1, 1, 1));
+	meta.stscTable.append(STSCEntry(meta.stscTable.size() + 1, 1, 1));
+	meta.sttsTable.append(STTSEntry(meta.sttsTable.size() + 1, 0));
 	meta.chunks.append(offset);
 	meta.sizes.append((quint32)atomSize);
 
@@ -1008,7 +1074,7 @@ bool MP4Parser::rtmf(QFile *file, quint64 offset, quint32 size,
 }
 
 bool MP4Parser::camm(QFile *file, quint64 offset, quint32 size,
-  SegmentData &segment)
+  const QDateTime &timestamp, SegmentData &segment)
 {
 	if (!file->seek(offset)) {
 		_errorString = "Invalid CAMM sample offset";
@@ -1055,7 +1121,9 @@ bool MP4Parser::camm(QFile *file, quint64 offset, quint32 size,
 
 	Trackpoint t(Coordinates(lon, lat));
 	t.setElevation(ele);
-	if (!std::isnan(time)) {
+	if (std::isnan(time))
+		t.setTimestamp(timestamp);
+	else {
 		qint64 msec = (qint64)(time * 1000);
 		t.setTimestamp(epoch.addMSecs(msec));
 	}
@@ -1388,31 +1456,78 @@ bool MP4Parser::pittasoft(QFile *file, quint64 offset, quint32 size,
 	return true;
 }
 
-bool MP4Parser::metadata(QFile *file, const Metadata &meta, SegmentData &segment)
+bool MP4Parser::dji(QFile *file, quint64 offset, quint32 size,
+  const QDateTime &timestamp, SegmentData &segment)
 {
-	if (!meta.format)
-		return true;
-	if (meta.tables.isEmpty()) {
-		_errorString = "Missing stsc table";
+	static const QRegularExpression pos(
+	  "(GPS|RTK) \\(([-+]?\\d*\\.\\d+),\\s*([-+]?\\d*\\.\\d+)");
+	static const QRegularExpression alt(",\\s*H\\s+([-+]?\\d+\\.?\\d*)m");
+
+	if (!file->seek(offset)) {
+		_errorString = "Invalid DJI offset";
 		return false;
 	}
 
-	int cnt = 0, ti = 0;
+	QByteArray ba(size, Qt::Initialization::Uninitialized);
+	if (file->read(ba.data(), ba.size()) != (qint64)size) {
+		_errorString = "Error reading DJI data";
+		return false;
+	}
+
+	QRegularExpressionMatch mPos(pos.match(ba));
+	if (mPos.hasMatch()) {
+		Trackpoint tp(Coordinates(mPos.captured(2).toDouble(),
+		  mPos.captured(3).toDouble()));
+		tp.setTimestamp(timestamp);
+		QRegularExpressionMatch mAlt(alt.match(ba));
+		if (mAlt.hasMatch())
+			tp.setElevation(mAlt.captured(1).toDouble());
+		segment.append(tp);
+		return true;
+	}
+
+	_errorString = "DJI SRT format error";
+	return false;
+}
+
+bool MP4Parser::metadata(QFile *file, const Metadata &meta,
+  const QDateTime &start, SegmentData &segment)
+{
+	if (!meta.format)
+		return true;
+	if (meta.stscTable.isEmpty()) {
+		_errorString = "Missing stsc table";
+		return false;
+	}
+	if (meta.sttsTable.isEmpty()) {
+		_errorString = "Missing stts table";
+		return false;
+	}
+
+	qint64 time = 0;
+	int cnt = 0, ti = 0, tti = 0;
+	quint32 tcnt = 0;
 
 	for (int i = 0; i < meta.chunks.size(); i++) {
-		if (ti + 1 < meta.tables.size()
-		  && i >= (int)(meta.tables.at(ti + 1).first - 1))
+		if (ti + 1 < meta.stscTable.size()
+		  && i >= (int)(meta.stscTable.at(ti + 1).first - 1))
 			ti++;
 
 		quint32 offset = meta.chunks.at(i);
-		const Table &t = meta.tables.at(ti);
+		const STSCEntry &t = meta.stscTable.at(ti);
 
 		for (quint32 j = 0; j < t.samples; j++) {
 			if (meta.sizes.size() <= cnt) {
 				_errorString = "Invalid number of stsz entries";
 				return false;
 			}
+			if (meta.sttsTable.size() <= tti) {
+				_errorString = "Invalid number of stts entries";
+				return false;
+			}
+
 			quint32 size = meta.sizes.at(cnt);
+			const STTSEntry &tt = meta.sttsTable.at(tti);
 
 			if (meta.id == t.id) {
 				switch (meta.format) {
@@ -1425,7 +1540,8 @@ bool MP4Parser::metadata(QFile *file, const Metadata &meta, SegmentData &segment
 							return false;
 						break;
 					case CAMMFormat:
-						if (!camm(file, offset, size, segment))
+						if (!camm(file, offset, size, start.addMSecs(
+						  (time * 1000) / meta.scale), segment))
 							return false;
 						break;
 					case NovatekFormat:
@@ -1440,6 +1556,11 @@ bool MP4Parser::metadata(QFile *file, const Metadata &meta, SegmentData &segment
 						if (!pittasoft(file, offset, size, segment))
 							return false;
 						break;
+					case DJIFormat:
+						if (!dji(file, offset, size, start.addMSecs(
+						  (time * 1000) / meta.scale), segment))
+							return false;
+						break;
 					default:
 						break;
 				}
@@ -1447,6 +1568,9 @@ bool MP4Parser::metadata(QFile *file, const Metadata &meta, SegmentData &segment
 
 			cnt++;
 			offset += size;
+			time += tt.duration;
+			if (++tcnt > tt.samples)
+				tti++;
 		}
 	}
 
@@ -1476,7 +1600,7 @@ bool MP4Parser::parse(QFile *file, QList<TrackData> &tracks,
 		} else
 			_errorString = es;
 	} else {
-		if (!metadata(file, meta, segment))
+		if (!metadata(file, meta, wpt.timestamp(), segment))
 			return false;
 
 		if (segment.size()) {

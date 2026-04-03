@@ -19,12 +19,13 @@ private:
 		CAMMFormat,
 		NovatekFormat,
 		LigoJSONFormat,
-		PittasoftFormat
+		PittasoftFormat,
+		DJIFormat
 	};
 
-	struct Table {
-		Table() {}
-		Table(quint32 first, quint32 samples, quint32 id)
+	struct STSCEntry {
+		STSCEntry() {}
+		STSCEntry(quint32 first, quint32 samples, quint32 id)
 		  : first(first), samples(samples), id(id) {}
 
 		quint32 first;
@@ -32,27 +33,42 @@ private:
 		quint32 id;
 	};
 
+	struct STTSEntry {
+		STTSEntry() {}
+		STTSEntry(quint32 samples, quint32 duration)
+		  : samples(samples), duration(duration) {}
+
+		quint32 samples;
+		quint32 duration;
+	};
+
 	struct Metadata {
-		Metadata() : format(UnknownFormat) {}
+		Metadata() : format(UnknownFormat), scale(0), id(0) {}
 
 		Format format;
+		quint32 scale;
 		quint32 id;
-		QVector<Table> tables;
+		QVector<STSCEntry> stscTable;
+		QVector<STTSEntry> sttsTable;
 		QVector<quint32> sizes;
 		QVector<quint64> chunks;
 	};
 
 	bool mp4(QFile *file, Metadata &meta, Waypoint &wpt);
-	bool metadata(QFile *file, const Metadata &meta, SegmentData &segment);
+	bool metadata(QFile *file, const Metadata &meta, const QDateTime &start,
+	  SegmentData &segment);
 	bool gpmf(QFile *file, quint64 offset, quint32 size, SegmentData &segment);
 	bool rtmf(QFile *file, quint64 offset, quint32 size, SegmentData &segment);
-	bool camm(QFile *file, quint64 offset, quint32 size, SegmentData &segment);
+	bool camm(QFile *file, quint64 offset, quint32 size,
+	  const QDateTime &timestamp, SegmentData &segment);
 	bool novatek(QFile *file, quint64 offset, quint32 size,
 	  SegmentData &segment);
 	bool ligoJSON(QFile *file, quint64 offset, quint32 size,
 	  SegmentData &segment);
 	bool pittasoft(QFile *file, quint64 offset, quint32 size,
 	  SegmentData &segment);
+	bool dji(QFile *file, quint64 offset, quint32 size,
+	  const QDateTime &timestamp, SegmentData &segment);
 
 	static bool atoms(QDataStream &stream, Metadata &meta, Waypoint &wpt);
 	static bool moov(QDataStream &stream, quint64 atomSize, Metadata &meta,
@@ -67,7 +83,9 @@ private:
 	  quint32 &id);
 	static bool stbl(QDataStream &stream, quint64 atomSize, Metadata &meta);
 	static bool stsc(QDataStream &stream, quint64 atomSize,
-	  QVector<Table> &tables);
+	  QVector<STSCEntry> &table);
+	static bool stts(QDataStream &stream, quint64 atomSize,
+	  QVector<STTSEntry> &table);
 	static bool gps(QDataStream &stream, quint64 atomSize, Metadata &meta);
 	static bool gpsf(QDataStream &stream, quint64 atomSize, Metadata &meta);
 
