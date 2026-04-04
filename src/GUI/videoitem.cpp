@@ -37,7 +37,9 @@ void VideoItem::mediaStatusChanged(QMediaPlayer::MediaStatus status)
 {
 	if (status == QMediaPlayer::LoadedMedia
 	  || status == QMediaPlayer::BufferedMedia) {
-		_eos = qMax(0ll, _player->duration() - 100);
+		/* Seeking to the end of the file makes the video disappear, so only
+		   allow seeking to 1/3s before the end */
+		_eos = qMax(0ll, _player->duration() - 333);
 		seek();
 	}
 }
