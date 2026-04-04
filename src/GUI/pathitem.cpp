@@ -351,7 +351,7 @@ void PathItem::setMarkerPosition(qreal pos)
 				? _graph->timeAtDistance(pos) : pos
 			  : NAN;
 			if (!std::isnan(time))
-				_video->seek(time * 1000);
+				_video->seek(time, _graph->duration());
 		}
 	} else
 		_marker->setVisible(false);
@@ -571,7 +571,7 @@ void PathItem::enableVideo(bool enable)
 
 			qreal time = _graph ? _graph->timeAtDistance(_markerDistance) : NAN;
 			if (!std::isnan(time))
-				_video->seek(time * 1000);
+				_video->seek(time, _graph->duration());
 		}
 	} else {
 		if (_video) {

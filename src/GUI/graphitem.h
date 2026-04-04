@@ -53,6 +53,7 @@ public:
 	qreal yAtX(qreal x) const;
 	qreal distanceAtTime(qreal time) const;
 	qreal timeAtDistance(qreal distance) const;
+	qreal duration() const;
 	SegmentTime date(qreal x);
 
 	void redraw();

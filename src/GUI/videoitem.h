@@ -11,14 +11,17 @@ class VideoItem : public QGraphicsVideoItem
 public:
 	VideoItem(const QString &file, QGraphicsItem *parent = 0);
 
-	void seek(qint64 pos);
+	void seek(qreal pos, qreal duration);
 
 private slots:
 	void mediaStatusChanged(QMediaPlayer::MediaStatus status);
 
 private:
+	void seek();
+
 	QMediaPlayer *_player;
-	qint64 _pos, _eos;
+	qreal _pos, _duration;
+	qint64 _eos;
 };
 
 #endif // VIDEOITEM_H

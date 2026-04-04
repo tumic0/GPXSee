@@ -16,14 +16,21 @@ VideoItem::VideoItem(const QString &file, QGraphicsItem *parent)
 	_player->pause();
 }
 
-void VideoItem::seek(qint64 pos)
+void VideoItem::seek()
+{
+	qreal f = _eos / (_duration * 1000.0);
+	_player->setPosition((qint64)(_pos * 1000.0 * f));
+}
+
+void VideoItem::seek(qreal pos, qreal duration)
 {
 	_pos = pos;
+	_duration = duration;
 
 	QMediaPlayer::MediaStatus status = _player->mediaStatus();
 	if (status == QMediaPlayer::LoadedMedia
 	  || status == QMediaPlayer::BufferedMedia)
-		_player->setPosition(qMin(pos, _eos));
+		seek();
 }
 
 void VideoItem::mediaStatusChanged(QMediaPlayer::MediaStatus status)
@@ -31,6 +38,6 @@ void VideoItem::mediaStatusChanged(QMediaPlayer::MediaStatus status)
 	if (status == QMediaPlayer::LoadedMedia
 	  || status == QMediaPlayer::BufferedMedia) {
 		_eos = qMax(0ll, _player->duration() - 100);
-		_player->setPosition(qMin(_pos, _eos));
+		seek();
 	}
 }
