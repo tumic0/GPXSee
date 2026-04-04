@@ -1616,7 +1616,8 @@ bool MP4Parser::metadata(QFile *file, const Metadata &meta,
 
 	if (timeShift)
 		for (int i = 0; i < segment.size(); i++)
-			segment[i].setTimestamp(segment.at(i).timestamp().addMSecs(timeShift));
+			segment[i].setTimestamp(segment.at(i).timestamp()
+			  .addMSecs(timeShift));
 
 	return true;
 }
@@ -1632,13 +1633,14 @@ bool MP4Parser::parse(QFile *file, QList<TrackData> &tracks,
 
 	if (!mp4(file, meta, wpt)) {
 		QString es(_errorString);
-		quint64 timeShift;
+		quint64 timeShift = 0;
 
 		if (gpmf(file, 0, file->size(), segment, timeShift)) {
 			if (segment.size()) {
-				for (int i = 0; i < segment.size(); i++)
-					segment[i].setTimestamp(segment.at(i).timestamp().addMSecs(
-					  timeShift));
+				if (timeShift)
+					for (int i = 0; i < segment.size(); i++)
+						segment[i].setTimestamp(segment.at(i).timestamp()
+						  .addMSecs(timeShift));
 
 				TrackData t(segment);
 				t.setFile(file->fileName());
