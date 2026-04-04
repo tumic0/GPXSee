@@ -57,7 +57,8 @@ private:
 	bool mp4(QFile *file, Metadata &meta, Waypoint &wpt);
 	bool metadata(QFile *file, const Metadata &meta, const QDateTime &start,
 	  SegmentData &segment);
-	bool gpmf(QFile *file, quint64 offset, quint32 size, SegmentData &segment);
+	bool gpmf(QFile *file, quint64 offset, quint32 size, SegmentData &segment,
+	  quint64 &timeShift);
 	bool rtmf(QFile *file, quint64 offset, quint32 size, SegmentData &segment);
 	bool camm(QFile *file, quint64 offset, quint32 size,
 	  const QDateTime &timestamp, SegmentData &segment);

@@ -51,9 +51,11 @@ constexpr quint32 GPS5 = TAG("GPS5");
 constexpr quint32 GPS9 = TAG("GPS9");
 constexpr quint32 GPSU = TAG("GPSU");
 constexpr quint32 SCAL = TAG("SCAL");
+constexpr quint32 GLPI = TAG("GLPI");
+constexpr quint32 SYST = TAG("SYST");
 
 static bool gpmfEntry(QDataStream &stream, quint32 size, SegmentData &segment,
-  bool &gps9, bool &gps5)
+  bool &gps9, bool &gps5, quint64 &timeShift)
 {
 	quint32 key;
 	quint8 ss, type;
@@ -68,15 +70,16 @@ static bool gpmfEntry(QDataStream &stream, quint32 size, SegmentData &segment,
 		stream >> key >> type >> ss >> repeat;
 		if (stream.status())
 			return false;
+
 		size -= 8;
 		quint32 ps = alignup(ss * repeat, 4);
 
 		if (!type) {
-			if (!gpmfEntry(stream, ps, segment, gps9, gps5))
+			if (!gpmfEntry(stream, ps, segment, gps9, gps5, timeShift))
 				return false;
 		} else {
 			if (key == SCAL && type == 'l' && ss == 4
-			  && (repeat == 5 || repeat == 9)) {
+			  && repeat <= ARRAY_SIZE(scale)) {
 				for (quint16 i = 0; i < repeat; i++)
 					stream >> scale[i];
 				if (stream.status())
@@ -90,6 +93,7 @@ static bool gpmfEntry(QDataStream &stream, quint32 size, SegmentData &segment,
 					  >> dop >> fix;
 					if (stream.status())
 						return false;
+
 					Trackpoint t(Coordinates(lon / (double)scale[1],
 					  lat / (double)scale[0]));
 					QDateTime ts = dt2000.addDays(days)
@@ -105,12 +109,13 @@ static bool gpmfEntry(QDataStream &stream, quint32 size, SegmentData &segment,
 				gps9 = true;
 			} else if (!gps9 && key == GPS5 && type == 'l' && ss == 20) {
 				qint64 ms = qRound((1.0 / (double)repeat) * 1000);
-
 				qint32 lat, lon, alt, spd2, spd3;
+
 				for (quint16 i = 0; i < repeat; i++) {
 					stream >> lat >> lon >> alt >> spd2 >> spd3;
 					if (stream.status())
 						return false;
+
 					Trackpoint t(Coordinates(lon / (double)scale[1],
 					  lat / (double)scale[0]));
 					t.setTimestamp(base.addMSecs(ms * i));
@@ -133,6 +138,40 @@ static bool gpmfEntry(QDataStream &stream, quint32 size, SegmentData &segment,
 				base = QDateTime::fromString(date, "yyMMddHHmmss.zzz", 2000);
 #endif // QT 6.7
 				base.setTimeZone(QTimeZone::utc());
+			} else if (!gps9 && !gps5 && key == SYST && type == '?' && ss == 16
+			  && repeat == 1) {
+				quint64 t1, t2;
+				stream >> t1 >> t2;
+				if (stream.status())
+					return false;
+
+				quint64 tsys = (quint64)((t1 / (double)scale[0]) * 1000);
+				quint64 tunix = (quint64)((t2 / (double)scale[1]) * 1000);
+				timeShift = tunix - tsys;
+			} else if (!gps9 && !gps5 && key == GLPI && type == '?' && ss == 28) {
+				quint32 ts;
+				qint32 lat, lon, alt, u1;
+				qint16 speed, u2, u3;
+				quint16 u4;
+
+				for (quint16 i = 0; i < repeat; i++) {
+					stream >> ts >> lat >> lon >> alt >> u1 >> speed >> u2
+					  >> u3 >> u4;
+					if (stream.status())
+						return false;
+
+					Trackpoint t(Coordinates(lon / (double)scale[2],
+					  lat / (double)scale[1]));
+					t.setTimestamp(QDateTime::fromMSecsSinceEpoch(
+					  (ts / (double)scale[0]) * 1000));
+					qDebug() << ((ts / (double)scale[0]) * 1000);
+					t.setElevation(alt / (double)scale[3]);
+					t.setSpeed(speed / (double)scale[5]);
+					if (t.coordinates().isValid())
+						segment.append(t);
+					else
+						return false;
+				}
 			} else {
 				if (stream.skipRawData(ps) != (qint64)ps)
 					return false;
@@ -1019,7 +1058,7 @@ bool MP4Parser::mp4(QFile *file, Metadata &meta, Waypoint &wpt)
 }
 
 bool MP4Parser::gpmf(QFile *file, quint64 offset, quint32 size,
-  SegmentData &segment)
+  SegmentData &segment, quint64 &timeShift)
 {
 	char magic[4];
 	bool gps9 = false, gps5 = false;
@@ -1037,7 +1076,7 @@ bool MP4Parser::gpmf(QFile *file, quint64 offset, quint32 size,
 	QDataStream stream(file);
 	stream.setByteOrder(QDataStream::BigEndian);
 
-	if (!gpmfEntry(stream, size, segment, gps9, gps5)) {
+	if (!gpmfEntry(stream, size, segment, gps9, gps5, timeShift)) {
 		_errorString = "GPMF parse error";
 		return false;
 	}
@@ -1507,6 +1546,7 @@ bool MP4Parser::metadata(QFile *file, const Metadata &meta,
 	qint64 time = 0;
 	int cnt = 0, ti = 0, tti = 0;
 	quint32 tcnt = 0;
+	quint64 timeShift = 0;
 
 	for (int i = 0; i < meta.chunks.size(); i++) {
 		if (ti + 1 < meta.stscTable.size()
@@ -1532,7 +1572,7 @@ bool MP4Parser::metadata(QFile *file, const Metadata &meta,
 			if (meta.id == t.id) {
 				switch (meta.format) {
 					case GPMDFormat:
-						if (!gpmf(file, offset, size, segment))
+						if (!gpmf(file, offset, size, segment, timeShift))
 							return false;
 						break;
 					case RTMDFormat:
@@ -1574,6 +1614,10 @@ bool MP4Parser::metadata(QFile *file, const Metadata &meta,
 		}
 	}
 
+	if (timeShift)
+		for (int i = 0; i < segment.size(); i++)
+			segment[i].setTimestamp(segment.at(i).timestamp().addMSecs(timeShift));
+
 	return true;
 }
 
@@ -1588,9 +1632,14 @@ bool MP4Parser::parse(QFile *file, QList<TrackData> &tracks,
 
 	if (!mp4(file, meta, wpt)) {
 		QString es(_errorString);
+		quint64 timeShift;
 
-		if (gpmf(file, 0, file->size(), segment)) {
+		if (gpmf(file, 0, file->size(), segment, timeShift)) {
 			if (segment.size()) {
+				for (int i = 0; i < segment.size(); i++)
+					segment[i].setTimestamp(segment.at(i).timestamp().addMSecs(
+					  timeShift));
+
 				TrackData t(segment);
 				t.setFile(file->fileName());
 				tracks.append(t);
