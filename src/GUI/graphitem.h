@@ -53,7 +53,7 @@ public:
 	qreal yAtX(qreal x) const;
 	qreal distanceAtTime(qreal time) const;
 	qreal timeAtDistance(qreal distance) const;
-	qreal duration() const;
+	qreal duration() const {return _graph.last().last().t();}
 	SegmentTime date(qreal x);
 
 	void redraw();

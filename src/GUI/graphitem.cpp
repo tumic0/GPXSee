@@ -230,12 +230,6 @@ GraphItem::SegmentTime GraphItem::date(qreal x)
 	return seg ? SegmentTime(seg->start(), seg->first().t()) : SegmentTime();
 }
 
-qreal GraphItem::duration() const
-{
-	const GraphSegment *seg = segment(_bounds.right(), _type);
-	return seg ? seg->last().t() : NAN;
-}
-
 void GraphItem::hover(bool hover)
 {
 	if (hover) {
