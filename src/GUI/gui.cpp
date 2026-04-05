@@ -2123,8 +2123,8 @@ void GUI::showDEMTiles()
 	}
 }
 
-#if QT_VERSION >= QT_VERSION_CHECK(6, 5, 0)
-#if defined(Q_OS_ANDROID) || defined(Q_OS_MAC)
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 5, 0)) \
+  && (defined(Q_OS_ANDROID) || defined(Q_OS_MAC))
 void GUI::positionGranted(const QPermission &perm)
 {
 	if (perm.status() == Qt::PermissionStatus::Granted)
@@ -2153,8 +2153,7 @@ void GUI::showPosition(bool show)
 
 	_mapView->showPosition(show);
 }
-#endif // Q_OS_ANDROID || Q_OS_MAC
-#endif // QT 6.5
+#endif // QT 6.5 && (Q_OS_ANDROID || Q_OS_MAC)
 
 void GUI::updateStatusBarInfo()
 {

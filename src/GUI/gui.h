@@ -90,9 +90,10 @@ private slots:
 	void downloadDataDEM();
 	void downloadMapDEM();
 	void showDEMTiles();
-#if defined(Q_OS_ANDROID) || defined(Q_OS_MAC)
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 5, 0)) \
+  && (defined(Q_OS_ANDROID) || defined(Q_OS_MAC))
 	void showPosition(bool show);
-#endif // Q_OS_ANDROID || Q_OS_MAC
+#endif // QT 6.5 && (Q_OS_ANDROID || Q_OS_MAC)
 
 	void mapChanged(QAction *action);
 	void graphChanged(int);
@@ -208,9 +209,10 @@ private:
 
 	void downloadDEM(const RectC &rect);
 
-#if defined(Q_OS_ANDROID) || defined(Q_OS_MAC)
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 5, 0)) \
+  && (defined(Q_OS_ANDROID) || defined(Q_OS_MAC))
 	void positionGranted(const QPermission &perm);
-#endif // Q_OS_ANDROID || Q_OS_MAC
+#endif // QT 6.5 && (Q_OS_ANDROID || Q_OS_MAC)
 
 	void loadOptions();
 	void updateOptions(const Options &options);
