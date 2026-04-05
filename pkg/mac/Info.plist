@@ -24,6 +24,8 @@
 	<string>@FULL_VERSION@</string>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
+	<key>NSLocationUsageDescription</key>
+	<string>Required for real-time GPS positioning.</string>
 
 	<key>CFBundleLocalizations</key>
 	<array>

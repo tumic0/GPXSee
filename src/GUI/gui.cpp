@@ -27,6 +27,9 @@
 #include <QStyle>
 #include <QTabBar>
 #include <QGeoPositionInfoSource>
+#if defined(Q_OS_ANDROID) || defined(Q_OS_MAC)
+#include <QPermissions>
+#endif // Q_OS_ANDROID || Q_OS_MAC
 #include "common/config.h"
 #include "common/programpaths.h"
 #include "data/data.h"
@@ -381,8 +384,13 @@ void GUI::createActions()
 	_showPositionAction->setMenuRole(QAction::NoRole);
 	_showPositionAction->setCheckable(true);
 	_showPositionAction->setEnabled(false);
+#if defined(Q_OS_ANDROID) || defined(Q_OS_MAC)
+	connect(_showPositionAction, &QAction::triggered, this,
+	  &GUI::showPosition);
+#else // Q_OS_ANDROID || Q_OS_MAC
 	connect(_showPositionAction, &QAction::triggered, _mapView,
 	  &MapView::showPosition);
+#endif // Q_OS_ANDROID || Q_OS_MAC
 	_followPositionAction = new QAction(tr("Follow position"), this);
 	_followPositionAction->setMenuRole(QAction::NoRole);
 	_followPositionAction->setCheckable(true);
@@ -2084,7 +2092,6 @@ void GUI::downloadDEM(const RectC &rect)
 	}
 }
 
-
 void GUI::demLoaded()
 {
 	for (int i = 0; i < _demRects.size(); i++) {
@@ -2114,6 +2121,37 @@ void GUI::showDEMTiles()
 		_fileActionGroup->setEnabled(true);
 	}
 }
+
+#if defined(Q_OS_ANDROID) || defined(Q_OS_MAC)
+void GUI::positionGranted(const QPermission &perm)
+{
+	if (perm.status() == Qt::PermissionStatus::Granted)
+		_mapView->showPosition(true);
+	else
+		_showPositionAction->setChecked(false);
+}
+
+void GUI::showPosition(bool show)
+{
+	if (show) {
+		QLocationPermission perm;
+		perm.setAccuracy(QLocationPermission::Precise);
+
+		switch (qApp->checkPermission(perm)) {
+			case Qt::PermissionStatus::Undetermined:
+				qApp->requestPermission(perm, this, &GUI::positionGranted);
+				return;
+			case Qt::PermissionStatus::Denied:
+				_showPositionAction->setChecked(false);
+				return;
+			case Qt::PermissionStatus::Granted:
+				break;
+		}
+	}
+
+	_mapView->showPosition(show);
+}
+#endif // Q_OS_ANDROID || Q_OS_MAC
 
 void GUI::updateStatusBarInfo()
 {
@@ -3018,7 +3056,11 @@ void GUI::readSettings(QString &activeMap, QStringList &disabledPOIs,
 	settings.beginGroup(SETTINGS_POSITION);
 	if (READ(showPosition).toBool()) {
 		_showPositionAction->setChecked(true);
+#if defined(Q_OS_ANDROID) || defined(Q_OS_MAC)
+		showPosition(true);
+#else // Q_OS_ANDROID || Q_OS_MAC
 		_mapView->showPosition(true);
+#endif // Q_OS_ANDROID || Q_OS_MAC
 	}
 	if (READ(followPosition).toBool()) {
 		_followPositionAction->setChecked(true);

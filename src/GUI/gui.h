@@ -25,6 +25,7 @@ class QLabel;
 class QSplitter;
 class QPrinter;
 class QGeoPositionInfoSource;
+class QPermission;
 class FileBrowser;
 class GraphTab;
 class MapView;
@@ -89,6 +90,9 @@ private slots:
 	void downloadDataDEM();
 	void downloadMapDEM();
 	void showDEMTiles();
+#if defined(Q_OS_ANDROID) || defined(Q_OS_MAC)
+	void showPosition(bool show);
+#endif // Q_OS_ANDROID || Q_OS_MAC
 
 	void mapChanged(QAction *action);
 	void graphChanged(int);
@@ -203,6 +207,10 @@ private:
 #endif // Q_OS_ANDROID
 
 	void downloadDEM(const RectC &rect);
+
+#if defined(Q_OS_ANDROID) || defined(Q_OS_MAC)
+	void positionGranted(const QPermission &perm);
+#endif // Q_OS_ANDROID || Q_OS_MAC
 
 	void loadOptions();
 	void updateOptions(const Options &options);
