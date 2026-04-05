@@ -3062,9 +3062,9 @@ void GUI::readSettings(QString &activeMap, QStringList &disabledPOIs,
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 5, 0)) \
   && (defined(Q_OS_ANDROID) || defined(Q_OS_MAC))
 		showPosition(true);
-#else // Q_OS_ANDROID || Q_OS_MAC
+#else // QT 6.5 && (Q_OS_ANDROID || Q_OS_MAC)
 		_mapView->showPosition(true);
-#endif // Q_OS_ANDROID || Q_OS_MAC
+#endif // QT 6.5 && (Q_OS_ANDROID || Q_OS_MAC)
 	}
 	if (READ(followPosition).toBool()) {
 		_followPositionAction->setChecked(true);
