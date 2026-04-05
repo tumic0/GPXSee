@@ -27,9 +27,9 @@
 #include <QStyle>
 #include <QTabBar>
 #include <QGeoPositionInfoSource>
-#if defined(Q_OS_ANDROID) || defined(Q_OS_MAC)
+#if QT_VERSION >= QT_VERSION_CHECK(6, 5, 0)
 #include <QPermissions>
-#endif // Q_OS_ANDROID || Q_OS_MAC
+#endif // QT 6.5
 #include "common/config.h"
 #include "common/programpaths.h"
 #include "data/data.h"
@@ -384,13 +384,14 @@ void GUI::createActions()
 	_showPositionAction->setMenuRole(QAction::NoRole);
 	_showPositionAction->setCheckable(true);
 	_showPositionAction->setEnabled(false);
-#if defined(Q_OS_ANDROID) || defined(Q_OS_MAC)
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 5, 0)) \
+  && (defined(Q_OS_ANDROID) || defined(Q_OS_MAC))
 	connect(_showPositionAction, &QAction::triggered, this,
 	  &GUI::showPosition);
-#else // Q_OS_ANDROID || Q_OS_MAC
+#else // QT 6.5 && (Q_OS_ANDROID || Q_OS_MAC)
 	connect(_showPositionAction, &QAction::triggered, _mapView,
 	  &MapView::showPosition);
-#endif // Q_OS_ANDROID || Q_OS_MAC
+#endif // QT 6.5 && (Q_OS_ANDROID || Q_OS_MAC)
 	_followPositionAction = new QAction(tr("Follow position"), this);
 	_followPositionAction->setMenuRole(QAction::NoRole);
 	_followPositionAction->setCheckable(true);
@@ -2122,6 +2123,7 @@ void GUI::showDEMTiles()
 	}
 }
 
+#if QT_VERSION >= QT_VERSION_CHECK(6, 5, 0)
 #if defined(Q_OS_ANDROID) || defined(Q_OS_MAC)
 void GUI::positionGranted(const QPermission &perm)
 {
@@ -2152,6 +2154,7 @@ void GUI::showPosition(bool show)
 	_mapView->showPosition(show);
 }
 #endif // Q_OS_ANDROID || Q_OS_MAC
+#endif // QT 6.5
 
 void GUI::updateStatusBarInfo()
 {
