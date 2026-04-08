@@ -37,7 +37,7 @@ GPS log file formats.
 
 ### Steps
 ```shell
-lrelease-pro gpxsee.pro
+lrelease gpxsee.pro
 qmake gpxsee.pro
 make # nmake on Windows
 ```
