@@ -164,7 +164,6 @@ static bool gpmfEntry(QDataStream &stream, quint32 size, SegmentData &segment,
 					  lat / (double)scale[1]));
 					t.setTimestamp(QDateTime::fromMSecsSinceEpoch(
 					  (ts / (double)scale[0]) * 1000));
-					qDebug() << ((ts / (double)scale[0]) * 1000);
 					t.setElevation(alt / (double)scale[3]);
 					t.setSpeed(speed / (double)scale[5]);
 					if (t.coordinates().isValid())
