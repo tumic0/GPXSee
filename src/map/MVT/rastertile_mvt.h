@@ -1,12 +1,13 @@
 #ifndef MVT_RASTERTILE_H
 #define MVT_RASTERTILE_H
 
-#include <QImage>
-#include <QPainter>
+#include <QPixmap>
 #include "map/matrix.h"
-#include "text.h"
 #include "style_mvt.h"
+#include "vectortile_mvt.h"
 #include "source.h"
+
+class QPainter;
 
 namespace MVT {
 

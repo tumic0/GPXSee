@@ -1,9 +1,11 @@
-#include "common/util.h"
+#include <QImage>
+#include <QPainter>
 #include "map/dem.h"
 #include "map/hillshading.h"
 #include "map/filter.h"
 #include "map/osm.h"
 #include "pbf.h"
+#include "text.h"
 #include "rastertile_mvt.h"
 
 using namespace MVT;
