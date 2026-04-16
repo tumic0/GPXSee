@@ -5,7 +5,7 @@
 
 using namespace MVT;
 
-static QList<QPair<QString, QFont::Weight> > weights()
+static const QList<QPair<QString, QFont::Weight> > weights()
 {
 	QList<QPair<QString, QFont::Weight> > list;
 
@@ -22,7 +22,7 @@ static QList<QPair<QString, QFont::Weight> > weights()
 	return list;
 }
 
-static QList<QPair<QString, QFont::Stretch> > stretches()
+static const QList<QPair<QString, QFont::Stretch> > stretches()
 {
 	QList<QPair<QString, QFont::Stretch> > list;
 
@@ -44,7 +44,7 @@ static QList<QPair<QString, QFont::Stretch> > stretches()
 	return list;
 }
 
-static QList<QPair<QString, QFont::Style> > styles()
+static const QList<QPair<QString, QFont::Style> > styles()
 {
 	QList<QPair<QString, QFont::Style> > list;
 
@@ -54,9 +54,9 @@ static QList<QPair<QString, QFont::Style> > styles()
 	return list;
 }
 
-static QList<QPair<QString, QFont::Weight> > weightList = weights();
-static QList<QPair<QString, QFont::Stretch> > stretchList = stretches();
-static QList<QPair<QString, QFont::Style> > styleList = styles();
+static const QList<QPair<QString, QFont::Weight> > weightList = weights();
+static const QList<QPair<QString, QFont::Stretch> > stretchList = stretches();
+static const QList<QPair<QString, QFont::Style> > styleList = styles();
 
 static const QStringList &fonts()
 {
