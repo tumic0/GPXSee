@@ -368,14 +368,14 @@ bool Style::Layer::Paint::antialias(Layer::Type type, int zoom) const
 }
 
 Style::Layer::Layout::Layout(const QJsonObject &json)
-  : _lineCap(Qt::FlatCap), _lineJoin(Qt::MiterJoin), _font("Open Sans")
+  : _textFont("Open Sans"), _visible(true)
 {
 	// line
 	_lineCap = FunctionS(json["line-cap"], "butt");
 	_lineJoin = FunctionS(json["line-join"], "miter");
 
 	// text
-	_text = Template(FunctionS(json["text-field"]));
+	_textField = Template(FunctionS(json["text-field"]));
 
 	_textSize = FunctionF(json["text-size"], 16);
 	_textMaxWidth = FunctionF(json["text-max-width"], 10);
@@ -385,11 +385,12 @@ Style::Layer::Layout::Layout(const QJsonObject &json)
 	_textAnchor = FunctionS(json["text-anchor"]);
 
 	if (json.contains("text-font") && json["text-font"].isArray())
-		_font = Font::fromJsonArray(json["text-font"].toArray());
+		_textFont = Font::fromJsonArray(json["text-font"].toArray());
 
 	// icon
-	_icon = Template(FunctionS(json["icon-image"]));
+	_iconImage = Template(FunctionS(json["icon-image"]));
 	_iconSize = FunctionF(json["icon-size"], 1.0);
+	_iconRotate = FunctionF(json["icon-rotate"], 0);
 
 	// symbol
 	_symbolPlacement = FunctionS(json["symbol-placement"]);
@@ -397,13 +398,11 @@ Style::Layer::Layout::Layout(const QJsonObject &json)
 	// visibility
 	if (json.contains("visibility") && json["visibility"].isString())
 		_visible = !(json["visibility"].toString() == "none");
-	else
-		_visible = true;
 }
 
 QFont Style::Layer::Layout::font(int zoom) const
 {
-	QFont font(_font);
+	QFont font(_textFont);
 	font.setPixelSize(_textSize.value(zoom));
 	font.setCapitalization(textTransform(zoom));
 
@@ -556,12 +555,13 @@ void Style::Layer::setPathPainter(int zoom, const Sprites &sprites,
 }
 
 void Style::Layer::setTextProperties(int zoom, qreal &maxWidth,
-  qreal &maxAngle, TextPointItem::Anchor &anchor, QColor &color,
-  QColor &haloColor, QFont &font, SymbolPlacement &symbolPlacement,
-  RotationAlignment &rotationAlignment) const
+  qreal &maxAngle, qreal &iconRotate, TextPointItem::Anchor &anchor,
+  QColor &color, QColor &haloColor, QFont &font,
+  SymbolPlacement &symbolPlacement, RotationAlignment &rotationAlignment) const
 {
 	maxWidth = _layout.maxTextWidth(zoom);
 	maxAngle = _layout.maxTextAngle(zoom);
+	iconRotate = _layout.iconRotateAngle(zoom);
 	anchor = _layout.textAnchor(zoom);
 	color = _paint.pen(_type, zoom).color();
 	haloColor = _paint.haloColor(zoom);

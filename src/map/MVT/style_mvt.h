@@ -57,8 +57,8 @@ public:
 		void setPathPainter(int zoom, const Sprites &sprites,
 		  QPainter &painter) const;
 		void setTextProperties(int zoom, qreal &maxWidth, qreal &maxAngle,
-		  TextPointItem::Anchor &anchor, QColor &color, QColor &haloColor,
-		  QFont &font, SymbolPlacement &symbolPlacement,
+		  qreal &iconRotate, TextPointItem::Anchor &anchor, QColor &color,
+		  QColor &haloColor, QFont &font, SymbolPlacement &symbolPlacement,
 		  RotationAlignment &rotationAlignment) const;
 		void symbol(int zoom, const Sprites &sprites,
 		  VectorTile::Feature &feature, QString &label, QImage &img) const;
@@ -98,17 +98,20 @@ public:
 		class Layout {
 		public:
 			Layout() : _iconSize(1.0), _textSize(16), _textMaxWidth(10),
-			  _textMaxAngle(45), _font("Open Sans"), _visible(true) {}
+			  _textMaxAngle(45), _iconRotate(0), _textFont("Open Sans"),
+			  _visible(true) {}
 			Layout(const QJsonObject &json);
 
 			qreal maxTextWidth(int zoom) const
 			  {return _textMaxWidth.value(zoom);}
 			qreal maxTextAngle(int zoom) const
 			  {return _textMaxAngle.value(zoom);}
+			qreal iconRotateAngle(int zoom) const
+			  {return _iconRotate.value(zoom);}
 			QString text(int zoom, const VectorTile::Feature &feature) const
-			  {return _text.value(zoom, feature).trimmed();}
+			  {return _textField.value(zoom, feature).trimmed();}
 			QString icon(int zoom, const VectorTile::Feature &feature) const
-			  {return _icon.value(zoom, feature);}
+			  {return _iconImage.value(zoom, feature);}
 			qreal iconSize(int zoom) const
 			  {return _iconSize.value(zoom);}
 			QFont font(int zoom) const;
@@ -122,19 +125,20 @@ public:
 		private:
 			QFont::Capitalization textTransform(int zoom) const;
 
-			Template _text;
-			Template _icon;
+			Template _textField;
+			Template _iconImage;
 			FunctionF _iconSize;
 			FunctionF _textSize;
 			FunctionF _textMaxWidth;
 			FunctionF _textMaxAngle;
+			FunctionF _iconRotate;
 			FunctionS _lineCap;
 			FunctionS _lineJoin;
 			FunctionS _textAnchor;
 			FunctionS _textTransform;
 			FunctionS _symbolPlacement;
 			FunctionS _textRotationAlignment;
-			QFont _font;
+			QFont _textFont;
 			bool _visible;
 		};
 

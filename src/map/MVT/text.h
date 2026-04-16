@@ -38,6 +38,7 @@ private:
 	struct Properties {
 		qreal maxWidth;
 		qreal maxAngle;
+		qreal iconRotate;
 		TextPointItem::Anchor anchor;
 		Style::SymbolPlacement placement;
 		Style::RotationAlignment alignment;
@@ -76,13 +77,17 @@ private:
 	public:
 		PathItem(const QPainterPath &line, const QString &text,
 		  const QRect &tileRect, const QFont &font, const QColor &color,
-		  const QColor &haloColor, qreal maxAngle)
+		  const QColor &haloColor, const QImage &img, qreal maxAngle)
 		  : TextPathItem(line, text.isEmpty() ? 0 : new QString(text), tileRect,
 		  text.isEmpty() ? 0 : new QFont(font), (color.isValid() && !text.isEmpty())
 		  ? new QColor(color) : 0, (haloColor.isValid() && !text.isEmpty())
-		  ? new QColor(haloColor) : 0, 0, true, maxAngle) {}
+		  ? new QColor(haloColor) : 0, img.isNull() ? 0 : new QImage(img),
+		  true, maxAngle) {}
 		~PathItem()
-		  {delete _text; delete _font; delete _color; delete _haloColor;}
+		{
+			delete _text; delete _font; delete _img; delete _color;
+			delete _haloColor;
+		}
 	};
 
 	void addSymbols(CTX &ctx, const Layer &layer) const;

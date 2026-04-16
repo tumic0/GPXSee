@@ -6,6 +6,10 @@
 
 using namespace MVT;
 
+#define ICON(icon, prop) \
+	((!(icon).isNull() && (prop).iconRotate != 0) \
+	  ? (icon).transformed(QTransform().rotate((prop).iconRotate)) : (icon))
+
 void Text::addLayer(const Style::Layer &style, VectorTile::Layer *data)
 {
 	if (data)
@@ -32,8 +36,8 @@ void Text::addSymbols(CTX &ctx, const Layer &layer) const
 	Properties prop;
 
 	layer.style->setTextProperties(_zoom, prop.maxWidth, prop.maxAngle,
-	  prop.anchor, prop.color, prop.haloColor, prop.font, prop.placement,
-	  prop.alignment);
+	  prop.iconRotate, prop.anchor, prop.color, prop.haloColor, prop.font,
+	  prop.placement, prop.alignment);
 
 	if (prop.placement != Style::Point)
 		ctx.clip = true;
@@ -85,7 +89,8 @@ TextItem *Text::symbol(const Properties &prop, const QString &label,
 		}
 		QMap<qreal, int>::const_iterator jt = map.constBegin();
 		ti = new PointItem(path.elementAt(jt.value()), label, prop.font,
-		  icon, prop.color, prop.haloColor, prop.anchor, prop.maxWidth);
+		  ICON(icon, prop), prop.color, prop.haloColor, prop.anchor,
+		  prop.maxWidth);
 		while (true) {
 			if (_sceneRect.contains(ti->boundingRect().toRect()))
 				break;
@@ -97,18 +102,20 @@ TextItem *Text::symbol(const Properties &prop, const QString &label,
 	} else {
 		switch (prop.placement) {
 			case Style::Line:
-				if (label.isEmpty())
+				if (label.isEmpty() && icon.isNull())
 					return 0;
 				ti = new PathItem(path, label, _sceneRect, prop.font, prop.color,
-				  prop.haloColor, prop.maxAngle);
+				  prop.haloColor, ICON(icon, prop), prop.maxAngle);
 				break;
 			case Style::LineCenter:
 				ti = new PointItem(path.pointAtPercent(0.5), label, prop.font,
-				  icon, prop.color, prop.haloColor, prop.anchor, prop.maxWidth);
+				  ICON(icon, prop), prop.color, prop.haloColor, prop.anchor,
+				  prop.maxWidth);
 				break;
 			default:
 				ti = new PointItem(path.elementAt(0), label, prop.font,
-				  icon, prop.color, prop.haloColor, prop.anchor, prop.maxWidth);
+				  ICON(icon, prop), prop.color, prop.haloColor, prop.anchor,
+				  prop.maxWidth);
 		}
 	}
 
