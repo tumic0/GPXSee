@@ -18,6 +18,7 @@
         android:requestLegacyExternalStorage="true"
         android:allowBackup="true"
         android:fullBackupOnly="false"
+        android:theme="@android:style/Theme.Holo.Light"
         android:icon="@drawable/icon">
         <activity
             android:name="org.gpxsee.gpxsee.Activity"
