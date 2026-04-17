@@ -208,7 +208,7 @@
     <message>
         <location filename="../src/data/data.cpp" line="262"/>
         <source>DJI SRT files</source>
-        <translation type="unfinished"></translation>
+        <translation>DJI SRT-filer</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="263"/>
@@ -218,7 +218,7 @@
     <message>
         <location filename="../src/data/data.cpp" line="264"/>
         <source>70mai GPS log files</source>
-        <translation type="unfinished"></translation>
+        <translation>70mai GPS-loggfiler</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="265"/>
