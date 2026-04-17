@@ -5,7 +5,6 @@
 #include <QMap>
 #include <QImage>
 #include <QString>
-#include <QMutex>
 
 class QJsonObject;
 

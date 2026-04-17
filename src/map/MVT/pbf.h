@@ -4,7 +4,6 @@
 #include <QByteArray>
 #include <QVector>
 #include <QVariant>
-#include "source.h"
 
 namespace MVT {
 
