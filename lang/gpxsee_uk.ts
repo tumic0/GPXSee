@@ -208,7 +208,7 @@
     <message>
         <location filename="../src/data/data.cpp" line="262"/>
         <source>DJI SRT files</source>
-        <translation type="unfinished"></translation>
+        <translation>Файли DJI SRT</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="263"/>
@@ -639,7 +639,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="469"/>
         <source>Video preview</source>
-        <translation type="unfinished"></translation>
+        <translation>Попередній перегляд відео</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="474"/>
