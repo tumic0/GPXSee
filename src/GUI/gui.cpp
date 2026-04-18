@@ -26,6 +26,7 @@
 #include <QScreen>
 #include <QStyle>
 #include <QTabBar>
+#include <QPushButton>
 #include <QGeoPositionInfoSource>
 #if QT_VERSION >= QT_VERSION_CHECK(6, 5, 0)
 #include <QPermissions>
@@ -122,9 +123,7 @@ GUI::GUI(const QString &lang)
 
 	loadInitialMaps(activeMap);
 	loadInitialPOIs(disabledPOIs);
-#ifndef Q_OS_ANDROID
 	loadRecentFiles(recentFiles);
-#endif // Q_OS_ANDROID
 
 	updateGraphTabs();
 	updateStatusBarInfo();
@@ -276,7 +275,6 @@ void GUI::createActions()
 	_statisticsAction->setActionGroup(_fileActionGroup);
 	connect(_statisticsAction, &QAction::triggered, this, &GUI::statistics);
 	addAction(_statisticsAction);
-#ifndef Q_OS_ANDROID
 	_recentFilesActionGroup = new QActionGroup(this);
 	connect(_recentFilesActionGroup, &QActionGroup::triggered, this,
 	  &GUI::recentFileSelected);
@@ -284,7 +282,6 @@ void GUI::createActions()
 	_clearRecentFilesAction->setMenuRole(QAction::NoRole);
 	connect(_clearRecentFilesAction, &QAction::triggered, this,
 	  &GUI::clearRecentFiles);
-#endif // Q_OS_ANDROID
 
 	// POI actions
 	_poisActionGroup = new QActionGroup(this);
@@ -684,9 +681,29 @@ void GUI::createPOINodeMenu(const TreeNode<POIAction*> &node, QMenu *menu,
 
 void GUI::createMenus()
 {
+#ifdef Q_OS_ANDROID
+	QMenu *menu = new QMenu(this);
+	QPushButton *button = new QPushButton(QIcon(":/hamburger.svg"), QString());
+	button->setIconSize(QSize(32, 32));
+	button->setFlat(true);
+	button->setMenu(menu);
+
+	QVBoxLayout *vlayout = new QVBoxLayout();
+	vlayout->addSpacing(5);
+	vlayout->addWidget(button);
+	vlayout->addStretch();
+	QHBoxLayout *hlayout = new QHBoxLayout(_mapView);
+	hlayout->addStretch();
+	hlayout->addLayout(vlayout);
+	hlayout->addSpacing(5);
+#endif // Q_OS_ANDROID
+
+#ifdef Q_OS_ANDROID
+	QMenu *fileMenu = menu->addMenu(tr("&File"));
+#else
 	QMenu *fileMenu = menuBar()->addMenu(tr("&File"));
+#endif
 	fileMenu->addAction(_openFileAction);
-#ifndef Q_OS_ANDROID
 	_recentFilesMenu = fileMenu->addMenu(tr("Open recent"));
 	_recentFilesMenu->setIcon(QIcon::fromTheme(OPEN_RECENT_NAME,
 	  QIcon(OPEN_RECENT_ICON)));
@@ -694,7 +711,6 @@ void GUI::createMenus()
 	_recentFilesMenu->setEnabled(false);
 	_recentFilesEnd = _recentFilesMenu->addSeparator();
 	_recentFilesMenu->addAction(_clearRecentFilesAction);
-#endif // Q_OS_ANDROID
 	fileMenu->addAction(_openDirAction);
 	fileMenu->addSeparator();
 #ifndef Q_OS_ANDROID
@@ -712,7 +728,11 @@ void GUI::createMenus()
 	fileMenu->addAction(_exitAction);
 #endif // Q_OS_MAC + Q_OS_ANDROID
 
+#ifdef Q_OS_ANDROID
+	_mapMenu = menu->addMenu(tr("&Map"));
+#else
 	_mapMenu = menuBar()->addMenu(tr("&Map"));
+#endif
 	_mapsEnd = _mapMenu->addSeparator();
 	_mapMenu->addAction(_loadMapAction);
 	_mapMenu->addAction(_loadMapDirAction);
@@ -728,7 +748,11 @@ void GUI::createMenus()
 	_mapMenu->addSeparator();
 	_mapMenu->addAction(_showMapAction);
 
+#ifdef Q_OS_ANDROID
+	QMenu *graphMenu = menu->addMenu(tr("&Graph"));
+#else
 	QMenu *graphMenu = menuBar()->addMenu(tr("&Graph"));
+#endif
 	graphMenu->addAction(_distanceGraphAction);
 	graphMenu->addAction(_timeGraphAction);
 	graphMenu->addSeparator();
@@ -740,7 +764,11 @@ void GUI::createMenus()
 	graphMenu->addSeparator();
 	graphMenu->addAction(_showGraphsAction);
 
+#ifdef Q_OS_ANDROID
+	QMenu *dataMenu = menu->addMenu(tr("&Data"));
+#else
 	QMenu *dataMenu = menuBar()->addMenu(tr("&Data"));
+#endif
 	dataMenu->addAction(_showWaypointIconsAction);
 	dataMenu->addAction(_showWaypointLabelsAction);
 	dataMenu->addAction(_showRouteWaypointsAction);
@@ -762,7 +790,11 @@ void GUI::createMenus()
 	dataMenu->addAction(_showAreasAction);
 	dataMenu->addAction(_showWaypointsAction);
 
+#ifdef Q_OS_ANDROID
+	_poiMenu = menu->addMenu(tr("&POI"));
+#else
 	_poiMenu = menuBar()->addMenu(tr("&POI"));
+#endif
 	_poisEnd = _poiMenu->addSeparator();
 	_poiMenu->addAction(_openPOIAction);
 	_poiMenu->addAction(_selectAllPOIAction);
@@ -774,7 +806,11 @@ void GUI::createMenus()
 	_poiMenu->addSeparator();
 	_poiMenu->addAction(_showPOIAction);
 
+#ifdef Q_OS_ANDROID
+	QMenu *demMenu = menu->addMenu(tr("DEM"));
+#else
 	QMenu *demMenu = menuBar()->addMenu(tr("DEM"));
+#endif
 	demMenu->addAction(_showDEMTilesAction);
 	demMenu->addSeparator();
 	demMenu->addAction(_downloadDataDEMAction);
@@ -782,14 +818,22 @@ void GUI::createMenus()
 	demMenu->addSeparator();
 	demMenu->addAction(_drawHillShadingAction);
 
+#ifdef Q_OS_ANDROID
+	QMenu *positionMenu = menu->addMenu(tr("Position"));
+#else
 	QMenu *positionMenu = menuBar()->addMenu(tr("Position"));
+#endif
 	positionMenu->addAction(_showPositionCoordinatesAction);
 	positionMenu->addAction(_showMotionInfoAction);
 	positionMenu->addAction(_followPositionAction);
 	positionMenu->addSeparator();
 	positionMenu->addAction(_showPositionAction);
 
+#ifdef Q_OS_ANDROID
+	QMenu *settingsMenu = menu->addMenu(tr("&Settings"));
+#else
 	QMenu *settingsMenu = menuBar()->addMenu(tr("&Settings"));
+#endif
 	QMenu *timeMenu = settingsMenu->addMenu(tr("Time"));
 	timeMenu->menuAction()->setMenuRole(QAction::NoRole);
 	timeMenu->addAction(_totalTimeAction);
@@ -812,7 +856,11 @@ void GUI::createMenus()
 #endif // Q_OS_ANDROID
 	settingsMenu->addAction(_openOptionsAction);
 
+#ifdef Q_OS_ANDROID
+	QMenu *helpMenu = menu->addMenu(tr("&Help"));
+#else
 	QMenu *helpMenu = menuBar()->addMenu(tr("&Help"));
+#endif
 	helpMenu->addAction(_pathsAction);
 #ifndef Q_OS_ANDROID
 	helpMenu->addAction(_keysAction);
@@ -1139,9 +1187,7 @@ bool GUI::openFile(const QString &fileName, bool tryUnknown, int &showError)
 	updateWindowTitle();
 	if (_files.count() > 1)
 		_mapView->showExtendedInfo(true);
-#ifndef Q_OS_ANDROID
 	updateRecentFiles(canonicalPath);
-#endif // Q_OS_ANDROID
 
 	return true;
 }
@@ -2197,7 +2243,6 @@ void GUI::updateWindowTitle()
 		setWindowTitle(APP_NAME);
 }
 
-#ifndef Q_OS_ANDROID
 void GUI::updateRecentFiles(const QString &fileName)
 {
 	QAction *a = 0;
@@ -2217,7 +2262,11 @@ void GUI::updateRecentFiles(const QString &fileName)
 
 	actions = _recentFilesActionGroup->actions();
 	QAction *before = actions.size() ? actions.last() : _recentFilesEnd;
+#ifdef Q_OS_ANDROID
+	a = new QAction(Util::displayName(fileName), _recentFilesActionGroup);
+#else // Q_OS_ANDROID
 	a = new QAction(fileName, _recentFilesActionGroup);
+#endif // Q_OS_ANDROID
 	a->setData(fileName);
 	_recentFilesMenu->insertAction(before, a);
 	_recentFilesMenu->setEnabled(true);
@@ -2238,7 +2287,6 @@ void GUI::recentFileSelected(QAction *action)
 	int showError = 1;
 	openFile(action->data().toString(), true, showError);
 }
-#endif // Q_OS_ANDROID
 
 void GUI::mapChanged(QAction *action)
 {
@@ -2673,7 +2721,6 @@ void GUI::writeSettings()
 	settings.endGroup();
 
 	/* File */
-#ifndef Q_OS_ANDROID
 	QList<QAction*> recentActions(_recentFilesActionGroup->actions());
 	QStringList recent;
 	for (int i = 0; i < recentActions.size(); i++)
@@ -2682,7 +2729,6 @@ void GUI::writeSettings()
 	settings.beginGroup(SETTINGS_FILE);
 	WRITE(recentDataFiles, recent);
 	settings.endGroup();
-#endif // Q_OS_ANDROID
 
 	/* Map */
 	settings.beginGroup(SETTINGS_MAP);
@@ -2907,13 +2953,9 @@ void GUI::readSettings(QString &activeMap, QStringList &disabledPOIs,
 	settings.endGroup();
 
 	/* File */
-#ifndef Q_OS_ANDROID
 	settings.beginGroup(SETTINGS_FILE);
 	recentFiles = READ(recentDataFiles);
 	settings.endGroup();
-#else // Q_OS_ANDROID
-	Q_UNUSED(recentFiles);
-#endif // Q_OS_ANDROID
 
 	/* Map */
 	settings.beginGroup(SETTINGS_MAP);
@@ -3459,13 +3501,17 @@ void GUI::loadInitialPOIs(const QStringList &disabled)
 	_unselectAllPOIAction->setEnabled(!poiActions.isEmpty());
 }
 
-#ifndef Q_OS_ANDROID
 void GUI::loadRecentFiles(const QStringList &files)
 {
 	QAction *before = _recentFilesEnd;
 
 	for (int i = 0; i < files.size(); i++) {
+#ifdef Q_OS_ANDROID
+	QAction *a = new QAction(Util::displayName(files.at(i)),
+	  _recentFilesActionGroup);
+#else // Q_OS_ANDROID
 		QAction *a = new QAction(files.at(i), _recentFilesActionGroup);
+#endif // Q_OS_ANDROID
 		a->setData(files.at(i));
 		_recentFilesMenu->insertAction(before, a);
 		before = a;
@@ -3474,7 +3520,6 @@ void GUI::loadRecentFiles(const QStringList &files)
 	if (!files.isEmpty())
 		_recentFilesMenu->setEnabled(true);
 }
-#endif // Q_OS_ANDROID
 
 QAction *GUI::mapAction(const QString &name)
 {

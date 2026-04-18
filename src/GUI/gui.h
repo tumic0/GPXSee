@@ -100,10 +100,8 @@ private slots:
 	void poiFileChecked(QAction *action);
 	void selectAllPOIs();
 	void unselectAllPOIs();
-#ifndef Q_OS_ANDROID
 	void recentFileSelected(QAction *action);
 	void clearRecentFiles();
-#endif // Q_OS_ANDROID
 
 	void nextTab();
 	void prevTab();
@@ -181,9 +179,7 @@ private:
 	void updateMapLayers();
 	void updateMapStyles();
 	void updateHillShading();
-#ifndef Q_OS_ANDROID
 	void updateRecentFiles(const QString &fileName);
-#endif // Q_OS_ANDROID
 
 	TimeType timeType() const;
 	Units units() const;
@@ -203,9 +199,7 @@ private:
 	void reloadMap();
 	void loadInitialMaps(const QString &selected);
 	void loadInitialPOIs(const QStringList &disabled);
-#ifndef Q_OS_ANDROID
 	void loadRecentFiles(const QStringList &files);
-#endif // Q_OS_ANDROID
 
 	void downloadDEM(const RectC &rect);
 
@@ -237,17 +231,13 @@ private:
 	QMenu *_mapMenu;
 	QMenu *_mapStylesMenu;
 	QMenu *_mapLayersMenu;
-#ifndef Q_OS_ANDROID
 	QMenu *_recentFilesMenu;
-#endif // Q_OS_ANDROID
 
 	QActionGroup *_fileActionGroup;
 	QActionGroup *_navigationActionGroup;
 	QActionGroup *_mapsActionGroup;
 	QActionGroup *_poisActionGroup;
-#ifndef Q_OS_ANDROID
 	QActionGroup *_recentFilesActionGroup;
-#endif // Q_OS_ANDROID
 #if !defined(Q_OS_MAC) && !defined(Q_OS_ANDROID)
 	QAction *_exitAction;
 #endif // Q_OS_MAC + Q_OS_ANDROID
@@ -323,10 +313,8 @@ private:
 	QAction *_drawHillShadingAction;
 	QAction *_mapsEnd;
 	QAction *_poisEnd;
-#ifndef Q_OS_ANDROID
 	QAction *_clearRecentFilesAction;
 	QAction *_recentFilesEnd;
-#endif // Q_OS_ANDROID
 	QActionGroup *_mapStylesActionGroup;
 	QActionGroup *_mapLayersActionGroup;
 

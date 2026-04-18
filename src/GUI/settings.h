@@ -87,9 +87,7 @@ public:
 #endif // Q_OS_ANDROID
 
 	/* File */
-#ifndef Q_OS_ANDROID
 	static const SettingList recentDataFiles;
-#endif // Q_OS_ANDROID
 
 	/* Map */
 	static const Setting activeMap;
