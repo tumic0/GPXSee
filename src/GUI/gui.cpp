@@ -33,6 +33,7 @@
 #endif // QT 6.5
 #include "common/config.h"
 #include "common/programpaths.h"
+#include "common/util.h"
 #include "data/data.h"
 #include "data/poi.h"
 #include "map/downloader.h"
@@ -59,11 +60,8 @@
 #include "pathitem.h"
 #include "mapaction.h"
 #include "poiaction.h"
-#include "gui.h"
-#ifdef Q_OS_ANDROID
-#include "common/util.h"
 #include "navigationwidget.h"
-#endif // Q_OS_ANDROID
+#include "gui.h"
 
 #define MAX_RECENT_FILES      10
 #define DEM_DOWNLOAD_WARNING  4
