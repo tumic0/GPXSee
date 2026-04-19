@@ -731,7 +731,6 @@ void GUI::createMenus()
 	QHBoxLayout *hlayout = new QHBoxLayout(_mapView);
 	hlayout->addStretch();
 	hlayout->addLayout(vlayout);
-	hlayout->addSpacing(5);
 #endif // Q_OS_ANDROID
 
 #ifdef Q_OS_ANDROID
