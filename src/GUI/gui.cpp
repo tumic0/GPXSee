@@ -224,7 +224,9 @@ void GUI::createActions()
 	_openFileAction = new QAction(QIcon::fromTheme(OPEN_FILE_NAME,
 	  QIcon(OPEN_FILE_ICON)), tr("Open..."), this);
 	_openFileAction->setMenuRole(QAction::NoRole);
+#ifndef Q_OS_ANDROID
 	_openFileAction->setShortcut(OPEN_SHORTCUT);
+#endif // Q_OS_ANDROID
 	connect(_openFileAction, &QAction::triggered, this,
 	  QOverload<>::of(&GUI::openFile));
 	addAction(_openFileAction);
@@ -242,34 +244,44 @@ void GUI::createActions()
 	_exportPDFFileAction = new QAction(QIcon::fromTheme(EXPORT_FILE_NAME,
 	  QIcon(EXPORT_FILE_ICON)), tr("Export to PDF..."), this);
 	_exportPDFFileAction->setMenuRole(QAction::NoRole);
+#ifndef Q_OS_ANDROID
 	_exportPDFFileAction->setShortcut(PDF_EXPORT_SHORTCUT);
+#endif // Q_OS_ANDROID
 	_exportPDFFileAction->setActionGroup(_fileActionGroup);
 	connect(_exportPDFFileAction, &QAction::triggered, this, &GUI::exportPDFFile);
 	addAction(_exportPDFFileAction);
 	_exportPNGFileAction = new QAction(QIcon::fromTheme(EXPORT_FILE_NAME,
 	  QIcon(EXPORT_FILE_ICON)), tr("Export to PNG..."), this);
 	_exportPNGFileAction->setMenuRole(QAction::NoRole);
+#ifndef Q_OS_ANDROID
 	_exportPNGFileAction->setShortcut(PNG_EXPORT_SHORTCUT);
+#endif // Q_OS_ANDROID
 	_exportPNGFileAction->setActionGroup(_fileActionGroup);
 	connect(_exportPNGFileAction, &QAction::triggered, this, &GUI::exportPNGFile);
 	addAction(_exportPNGFileAction);
 	_closeFileAction = new QAction(QIcon::fromTheme(CLOSE_FILE_NAME,
 	  QIcon(CLOSE_FILE_ICON)), tr("Close"), this);
 	_closeFileAction->setMenuRole(QAction::NoRole);
+#ifndef Q_OS_ANDROID
 	_closeFileAction->setShortcut(CLOSE_SHORTCUT);
+#endif // Q_OS_ANDROID
 	_closeFileAction->setActionGroup(_fileActionGroup);
 	connect(_closeFileAction, &QAction::triggered, this, &GUI::closeAll);
 	addAction(_closeFileAction);
 	_reloadFileAction = new QAction(QIcon::fromTheme(RELOAD_FILE_NAME,
 	  QIcon(RELOAD_FILE_ICON)), tr("Reload"), this);
 	_reloadFileAction->setMenuRole(QAction::NoRole);
+#ifndef Q_OS_ANDROID
 	_reloadFileAction->setShortcut(RELOAD_SHORTCUT);
+#endif // Q_OS_ANDROID
 	_reloadFileAction->setActionGroup(_fileActionGroup);
 	connect(_reloadFileAction, &QAction::triggered, this, &GUI::reloadFiles);
 	addAction(_reloadFileAction);
 	_statisticsAction = new QAction(tr("Statistics..."), this);
 	_statisticsAction->setMenuRole(QAction::NoRole);
+#ifndef Q_OS_ANDROID
 	_statisticsAction->setShortcut(STATISTICS_SHORTCUT);
+#endif // Q_OS_ANDROID
 	_statisticsAction->setActionGroup(_fileActionGroup);
 	connect(_statisticsAction, &QAction::triggered, this, &GUI::statistics);
 	addAction(_statisticsAction);
@@ -320,7 +332,9 @@ void GUI::createActions()
 	  QIcon(SHOW_POI_ICON)), tr("Show POIs"), this);
 	_showPOIAction->setMenuRole(QAction::NoRole);
 	_showPOIAction->setCheckable(true);
+#ifndef Q_OS_ANDROID
 	_showPOIAction->setShortcut(SHOW_POI_SHORTCUT);
+#endif // Q_OS_ANDROID
 	connect(_showPOIAction, &QAction::triggered, _mapView, &MapView::showPOI);
 	addAction(_showPOIAction);
 
@@ -333,7 +347,9 @@ void GUI::createActions()
 	_showMapAction->setEnabled(false);
 	_showMapAction->setMenuRole(QAction::NoRole);
 	_showMapAction->setCheckable(true);
+#ifndef Q_OS_ANDROID
 	_showMapAction->setShortcut(SHOW_MAP_SHORTCUT);
+#endif // Q_OS_ANDROID
 	connect(_showMapAction, &QAction::triggered, _mapView,
 	  &MapView::showMap);
 	addAction(_showMapAction);
@@ -353,12 +369,16 @@ void GUI::createActions()
 	  &GUI::clearMapCache);
 	QAction *nextMapAction = new QAction(tr("Next map"), this);
 	nextMapAction->setMenuRole(QAction::NoRole);
+#ifndef Q_OS_ANDROID
 	nextMapAction->setShortcut(NEXT_MAP_SHORTCUT);
+#endif // Q_OS_ANDROID
 	connect(nextMapAction, &QAction::triggered, this, &GUI::nextMap);
 	addAction(nextMapAction);
 	QAction *prevMapAction = new QAction(tr("Previous map"), this);
 	prevMapAction->setMenuRole(QAction::NoRole);
+#ifndef Q_OS_ANDROID
 	prevMapAction->setShortcut(PREV_MAP_SHORTCUT);
+#endif // Q_OS_ANDROID
 	connect(prevMapAction, &QAction::triggered, this, &GUI::prevMap);
 	addAction(prevMapAction);
 	_showCoordinatesAction = new QAction(tr("Show cursor coordinates"), this);
@@ -408,23 +428,31 @@ void GUI::createActions()
 	_showTracksAction = new QAction(tr("Show tracks"), this);
 	_showTracksAction->setMenuRole(QAction::NoRole);
 	_showTracksAction->setCheckable(true);
+#ifndef Q_OS_ANDROID
 	_showTracksAction->setShortcut(SHOW_TRACKS_SHORTCUT);
+#endif // Q_OS_ANDROID
 	connect(_showTracksAction, &QAction::triggered, this, &GUI::showTracks);
 	_showRoutesAction = new QAction(tr("Show routes"), this);
 	_showRoutesAction->setMenuRole(QAction::NoRole);
 	_showRoutesAction->setCheckable(true);
+#ifndef Q_OS_ANDROID
 	_showRoutesAction->setShortcut(SHOW_ROUTES_SHORTCUT);
+#endif // Q_OS_ANDROID
 	connect(_showRoutesAction, &QAction::triggered, this, &GUI::showRoutes);
 	_showWaypointsAction = new QAction(tr("Show waypoints"), this);
 	_showWaypointsAction->setMenuRole(QAction::NoRole);
 	_showWaypointsAction->setCheckable(true);
+#ifndef Q_OS_ANDROID
 	_showWaypointsAction->setShortcut(SHOW_WAYPOINTS_SHORTCUT);
+#endif // Q_OS_ANDROID
 	connect(_showWaypointsAction, &QAction::triggered, this,
 	  &GUI::showWaypoints);
 	_showAreasAction = new QAction(tr("Show areas"), this);
 	_showAreasAction->setMenuRole(QAction::NoRole);
 	_showAreasAction->setCheckable(true);
+#ifndef Q_OS_ANDROID
 	_showAreasAction->setShortcut(SHOW_AREAS_SHORTCUT);
+#endif // Q_OS_ANDROID
 	connect(_showAreasAction, &QAction::triggered, this, &GUI::showAreas);
 	_showWaypointIconsAction = new QAction(tr("Waypoint icons"), this);
 	_showWaypointIconsAction->setMenuRole(QAction::NoRole);
@@ -485,7 +513,9 @@ void GUI::createActions()
 	_downloadDataDEMAction = new QAction(tr("Download data DEM"), this);
 	_downloadDataDEMAction->setMenuRole(QAction::NoRole);
 	_downloadDataDEMAction->setEnabled(false);
+#ifndef Q_OS_ANDROID
 	_downloadDataDEMAction->setShortcut(DOWNLOAD_DEM_SHORTCUT);
+#endif // Q_OS_ANDROID
 	connect(_downloadDataDEMAction, &QAction::triggered, this,
 	  &GUI::downloadDataDEM);
 	_downloadMapDEMAction = new QAction(tr("Download map DEM"), this);
@@ -499,7 +529,9 @@ void GUI::createActions()
 	_drawHillShadingAction = new QAction(tr("Show hillshading"), this);
 	_drawHillShadingAction->setMenuRole(QAction::NoRole);
 	_drawHillShadingAction->setCheckable(true);
+#ifndef Q_OS_ANDROID
 	_drawHillShadingAction->setShortcut(HILLSHADING_SHORTCUT);
+#endif // Q_OS_ANDROID
 	connect(_drawHillShadingAction, &QAction::triggered, _mapView,
 	  &MapView::drawHillShading);
 	addAction(_drawHillShadingAction);
@@ -509,7 +541,9 @@ void GUI::createActions()
 	  QIcon(SHOW_GRAPHS_ICON)), tr("Show graphs"), this);
 	_showGraphsAction->setMenuRole(QAction::NoRole);
 	_showGraphsAction->setCheckable(true);
+#ifndef Q_OS_ANDROID
 	_showGraphsAction->setShortcut(SHOW_GRAPHS_SHORTCUT);
+#endif // Q_OS_ANDROID
 	connect(_showGraphsAction, &QAction::triggered, this, &GUI::showGraphs);
 	addAction(_showGraphsAction);
 	ag = new QActionGroup(this);
@@ -546,12 +580,16 @@ void GUI::createActions()
 #endif // Q_OS_ANDROID
 	QAction *nextTabAction = new QAction(tr("Next graph tab"), this);
 	nextTabAction->setMenuRole(QAction::NoRole);
+#ifndef Q_OS_ANDROID
 	nextTabAction->setShortcut(NEXT_TAB_SHORTCUT);
+#endif // Q_OS_ANDROID
 	connect(nextTabAction, &QAction::triggered, this, &GUI::nextTab);
 	addAction(nextTabAction);
 	QAction *prevTabAction = new QAction(tr("Previous graph tab"), this);
 	prevTabAction->setMenuRole(QAction::NoRole);
+#ifndef Q_OS_ANDROID
 	prevTabAction->setShortcut(PREV_TAB_SHORTCUT);
+#endif // Q_OS_ANDROID
 	connect(prevTabAction, &QAction::triggered, this, &GUI::prevTab);
 	addAction(prevTabAction);
 
