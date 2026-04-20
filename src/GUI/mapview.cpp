@@ -23,6 +23,7 @@
 #include "markerinfoitem.h"
 #include "crosshairitem.h"
 #include "motioninfoitem.h"
+#include "navigationwidget.h"
 #include "mapview.h"
 
 
@@ -33,8 +34,8 @@
 #define COORDINATES_OFFSET SCALE_OFFSET
 #define LEGEND_OFFSET SCALE_OFFSET
 
-
-MapView::MapView(Map *map, POI *poi, QWidget *parent) : QGraphicsView(parent)
+MapView::MapView(Map *map, POI *poi, QWidget *parent)
+  : QGraphicsView(parent), _map(map), _poi(poi)
 {
 	Q_ASSERT(map != 0);
 	Q_ASSERT(poi != 0);
@@ -66,13 +67,8 @@ MapView::MapView(Map *map, POI *poi, QWidget *parent) : QGraphicsView(parent)
 	_hillShading = true;
 	_style = -1;
 	_layer = -1;
-	_map = map;
 	_map->load(_inputProjection, _outputProjection, _deviceRatio, _hidpi,
 	  _hillShading, _style, _layer);
-	connect(_map, &Map::tilesLoaded, this, &MapView::reloadMap);
-
-	_poi = poi;
-	connect(_poi, &POI::pointsChanged, this, &MapView::updatePOI);
 
 	_positionSource = 0;
 	_crosshair = new CrosshairItem();
@@ -137,6 +133,13 @@ MapView::MapView(Map *map, POI *poi, QWidget *parent) : QGraphicsView(parent)
 
 	_res = _map->resolution(_map->bounds());
 	_scene->setSceneRect(_map->bounds());
+
+#ifdef Q_OS_ANDROID
+	_nav = new NavigationWidget(this);
+#endif // Q_OS_ANDROID
+
+	connect(_map, &Map::tilesLoaded, this, &MapView::reloadMap);
+	connect(_poi, &POI::pointsChanged, this, &MapView::updatePOI);
 
 	centerOn(_scene->sceneRect().center());
 }
@@ -1257,7 +1260,6 @@ void MapView::mouseMoveEvent(QMouseEvent *event)
 	QGraphicsView::mouseMoveEvent(event);
 }
 
-
 void MapView::mousePressEvent(QMouseEvent *event)
 {
 	if (event->button() == Qt::LeftButton) {
@@ -1265,13 +1267,27 @@ void MapView::mousePressEvent(QMouseEvent *event)
 			QApplication::clipboard()->setText(Format::coordinates(_map->xy2ll(
 			  mapToScene(event->pos())), _cursorCoordinates->format()));
 #ifdef Q_OS_ANDROID
-		else
-			emit clicked(event->pos());
+		else {
+			if (_nav->pressed(event->pos()))
+				return;
+		}
 #endif // Q_OS_ANDROID
 	}
 
 	QGraphicsView::mousePressEvent(event);
 }
+
+#ifdef Q_OS_ANDROID
+void MapView::mouseReleaseEvent(QMouseEvent *event)
+{
+	if (event->button() == Qt::LeftButton) {
+		if (_nav->released(event->pos()))
+			return;
+	}
+
+	QGraphicsView::mouseReleaseEvent(event);
+}
+#endif // Q_OS_ANDROID
 
 void MapView::mouseDoubleClickEvent(QMouseEvent *event)
 {

@@ -11,17 +11,18 @@ class NavigationWidget : public QWidget
 	Q_OBJECT
 
 public:
-	NavigationWidget(MapView *view);
+	NavigationWidget(QWidget *parent = 0);
 
-	void enableNext(bool enable) {_showNext = enable; update();}
-	void enablePrev(bool enable) {_showPrev = enable; update();}
+	void showNext(bool enable) {_showNext = enable; update();}
+	void showPrev(bool enable) {_showPrev = enable; update();}
+
+	bool pressed(const QPoint &pos);
+	bool released(const QPoint &pos);
 
 signals:
+	void menu(const QPoint &pos);
 	void next();
 	void prev();
-
-private slots:
-	void viewClicked(const QPoint &pos);
 
 private:
 	bool eventFilter(QObject *obj, QEvent *ev);
@@ -29,6 +30,7 @@ private:
 	void paintEvent(QPaintEvent *ev);
 	void newParent();
 
+	bool _menuHover, _prevHover, _nextHover;
 	bool _showPrev, _showNext;
 };
 #endif // Q_OS_ANDROID

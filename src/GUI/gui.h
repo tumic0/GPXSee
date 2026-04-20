@@ -132,6 +132,10 @@ private slots:
 
 	void demLoaded();
 
+#ifdef Q_OS_ANDROID
+	void menu(const QPoint &pos);
+#endif // Q_OS_ANDROID
+
 private:
 	typedef QPair<QDateTime, QDateTime> DateTimeRange;
 
@@ -346,6 +350,10 @@ private:
 	QList<QByteArray> _windowStates;
 	QList<QByteArray> _windowGeometries;
 	int _frameStyle;
+#endif // Q_OS_ANDROID
+
+#ifdef Q_OS_ANDROID
+	QMenu *_menu;
 #endif // Q_OS_ANDROID
 
 	PDFExport _pdfExport;

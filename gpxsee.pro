@@ -136,9 +136,7 @@ unix:!macx:!android {
 android {
     QT += core5compat
     LIBS += -lz
-    RESOURCES += \
-       theme-color.qrc \
-       android.qrc
+    RESOURCES += theme-color.qrc
 
     defineReplace(versionCode) {
         segments = $$split(1, ".")

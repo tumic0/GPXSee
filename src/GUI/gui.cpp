@@ -84,12 +84,13 @@ GUI::GUI(const QString &lang)
 	createStatusBar();
 	createActions();
 	createMenus();
-#ifdef Q_OS_ANDROID
-	createNavigation();
-#else // Q_OS_ANDROID
+#ifndef Q_OS_ANDROID
 	createToolBars();
 #endif // Q_OS_ANDROID
 	createBrowser();
+#ifdef Q_OS_ANDROID
+	createNavigation();
+#endif // Q_OS_ANDROID
 
 	_splitter = new QSplitter();
 	_splitter->setOrientation(Qt::Vertical);
@@ -718,23 +719,11 @@ void GUI::createPOINodeMenu(const TreeNode<POIAction*> &node, QMenu *menu,
 void GUI::createMenus()
 {
 #ifdef Q_OS_ANDROID
-	QMenu *menu = new QMenu(this);
-	QPushButton *button = new QPushButton(QIcon(":/hamburger.svg"), QString());
-	button->setIconSize(QSize(32, 32));
-	button->setFlat(true);
-	button->setMenu(menu);
-
-	QVBoxLayout *vlayout = new QVBoxLayout();
-	vlayout->addSpacing(5);
-	vlayout->addWidget(button);
-	vlayout->addStretch();
-	QHBoxLayout *hlayout = new QHBoxLayout(_mapView);
-	hlayout->addStretch();
-	hlayout->addLayout(vlayout);
+	_menu = new QMenu(this);
 #endif // Q_OS_ANDROID
 
 #ifdef Q_OS_ANDROID
-	QMenu *fileMenu = menu->addMenu(tr("&File"));
+	QMenu *fileMenu = _menu->addMenu(tr("&File"));
 #else
 	QMenu *fileMenu = menuBar()->addMenu(tr("&File"));
 #endif
@@ -764,7 +753,7 @@ void GUI::createMenus()
 #endif // Q_OS_MAC + Q_OS_ANDROID
 
 #ifdef Q_OS_ANDROID
-	_mapMenu = menu->addMenu(tr("&Map"));
+	_mapMenu = _menu->addMenu(tr("&Map"));
 #else
 	_mapMenu = menuBar()->addMenu(tr("&Map"));
 #endif
@@ -784,7 +773,7 @@ void GUI::createMenus()
 	_mapMenu->addAction(_showMapAction);
 
 #ifdef Q_OS_ANDROID
-	QMenu *graphMenu = menu->addMenu(tr("&Graph"));
+	QMenu *graphMenu = _menu->addMenu(tr("&Graph"));
 #else
 	QMenu *graphMenu = menuBar()->addMenu(tr("&Graph"));
 #endif
@@ -800,7 +789,7 @@ void GUI::createMenus()
 	graphMenu->addAction(_showGraphsAction);
 
 #ifdef Q_OS_ANDROID
-	QMenu *dataMenu = menu->addMenu(tr("&Data"));
+	QMenu *dataMenu = _menu->addMenu(tr("&Data"));
 #else
 	QMenu *dataMenu = menuBar()->addMenu(tr("&Data"));
 #endif
@@ -826,7 +815,7 @@ void GUI::createMenus()
 	dataMenu->addAction(_showWaypointsAction);
 
 #ifdef Q_OS_ANDROID
-	_poiMenu = menu->addMenu(tr("&POI"));
+	_poiMenu = _menu->addMenu(tr("&POI"));
 #else
 	_poiMenu = menuBar()->addMenu(tr("&POI"));
 #endif
@@ -842,7 +831,7 @@ void GUI::createMenus()
 	_poiMenu->addAction(_showPOIAction);
 
 #ifdef Q_OS_ANDROID
-	QMenu *demMenu = menu->addMenu(tr("DEM"));
+	QMenu *demMenu = _menu->addMenu(tr("DEM"));
 #else
 	QMenu *demMenu = menuBar()->addMenu(tr("DEM"));
 #endif
@@ -854,7 +843,7 @@ void GUI::createMenus()
 	demMenu->addAction(_drawHillShadingAction);
 
 #ifdef Q_OS_ANDROID
-	QMenu *positionMenu = menu->addMenu(tr("Position"));
+	QMenu *positionMenu = _menu->addMenu(tr("Position"));
 #else
 	QMenu *positionMenu = menuBar()->addMenu(tr("Position"));
 #endif
@@ -865,7 +854,7 @@ void GUI::createMenus()
 	positionMenu->addAction(_showPositionAction);
 
 #ifdef Q_OS_ANDROID
-	QMenu *settingsMenu = menu->addMenu(tr("&Settings"));
+	QMenu *settingsMenu = _menu->addMenu(tr("&Settings"));
 #else
 	QMenu *settingsMenu = menuBar()->addMenu(tr("&Settings"));
 #endif
@@ -892,7 +881,7 @@ void GUI::createMenus()
 	settingsMenu->addAction(_openOptionsAction);
 
 #ifdef Q_OS_ANDROID
-	QMenu *helpMenu = menu->addMenu(tr("&Help"));
+	QMenu *helpMenu = _menu->addMenu(tr("&Help"));
 #else
 	QMenu *helpMenu = menuBar()->addMenu(tr("&Help"));
 #endif
@@ -907,8 +896,9 @@ void GUI::createMenus()
 #ifdef Q_OS_ANDROID
 void GUI::createNavigation()
 {
-	_navigation = new NavigationWidget(_mapView);
+	_navigation = _mapView->navigation();
 
+	connect(_navigation, &NavigationWidget::menu, this, &GUI::menu);
 	connect(_navigation, &NavigationWidget::next, this, &GUI::next);
 	connect(_navigation, &NavigationWidget::prev, this, &GUI::prev);
 }
@@ -956,6 +946,7 @@ void GUI::createToolBars()
 void GUI::createMapView()
 {
 	_map = new EmptyMap(this);
+
 	_mapView = new MapView(_map, _poi, this);
 	_mapView->setSizePolicy(QSizePolicy(QSizePolicy::Ignored,
 	  QSizePolicy::Expanding));
@@ -2421,9 +2412,9 @@ void GUI::graphChanged(int index)
 void GUI::updateNavigationActions()
 {
 #ifdef Q_OS_ANDROID
-	_navigation->enableNext(!_browser->isLast()
+	_navigation->showNext(!_browser->isLast()
 	  && !_browser->current().isNull());
-	_navigation->enablePrev(!_browser->isFirst()
+	_navigation->showPrev(!_browser->isFirst()
 	  && !_browser->current().isNull());
 #else // Q_OS_ANDROID
 	_lastAction->setEnabled(!_browser->isLast());
@@ -2596,6 +2587,13 @@ void GUI::first()
 	closeFiles();
 	openFile(file, true, showError);
 }
+
+#ifdef Q_OS_ANDROID
+void GUI::menu(const QPoint &pos)
+{
+	_menu->popup(pos);
+}
+#endif // Q_OS_ANDROID
 
 #ifndef Q_OS_ANDROID
 void GUI::keyPressEvent(QKeyEvent *event)

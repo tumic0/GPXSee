@@ -4,21 +4,20 @@
 #include "mapview.h"
 #include "navigationwidget.h"
 
-#define MARGIN 5
+#define MARGIN 10
 #define SIZE   40
 
 #ifdef Q_OS_ANDROID
 
-NavigationWidget::NavigationWidget(MapView *view)
-  : QWidget(view), _showPrev(false), _showNext(false)
+NavigationWidget::NavigationWidget(QWidget *parent)
+  : QWidget(parent), _menuHover(false), _prevHover(false), _nextHover(false),
+  _showPrev(false), _showNext(false)
 {
 	setAttribute(Qt::WA_NoSystemBackground);
 	setAttribute(Qt::WA_TranslucentBackground);
 	setAttribute(Qt::WA_TransparentForMouseEvents);
 
 	newParent();
-
-	connect(view, &MapView::clicked, this, &NavigationWidget::viewClicked);
 }
 
 bool NavigationWidget::eventFilter(QObject *obj, QEvent *ev)
@@ -50,11 +49,32 @@ void NavigationWidget::paintEvent(QPaintEvent *ev)
 	QPainter p(this);
 
 	QColor c(Qt::black);
-	c.setAlpha(64);
-	p.setBrush(c);
+	c.setAlpha(_menuHover ? 128 : 64);
+	p.setBrush(Qt::NoBrush);
+	p.setPen(QPen(QBrush(c), 2, Qt::SolidLine, Qt::RoundCap));
+
+	p.drawLine(
+	  QPoint(rect().right() - (MARGIN + SIZE*0.875), rect().top() + MARGIN
+		+ SIZE/4),
+	  QPoint(rect().right() - (MARGIN + SIZE*0.125), rect().top() + MARGIN
+		+ SIZE/4));
+	p.drawLine(
+	  QPoint(rect().right() - (MARGIN + SIZE*0.875), rect().top() + MARGIN
+		+ SIZE/2),
+	  QPoint(rect().right() - (MARGIN + SIZE*0.125), rect().top() + MARGIN
+		+ SIZE/2));
+	p.drawLine(
+	  QPoint(rect().right() - (MARGIN + SIZE*0.875), rect().top() + MARGIN
+		+ (SIZE/4)*3),
+	  QPoint(rect().right() - (MARGIN + SIZE*0.125), rect().top() + MARGIN
+		+ (SIZE/4)*3));
+
 	p.setPen(Qt::NoPen);
 
 	if (_showPrev) {
+		c.setAlpha(_prevHover ? 128 : 64);
+		p.setBrush(c);
+
 		QPainterPath path;
 		path.addEllipse(QRect(MARGIN, rect().center().y() - SIZE/2, SIZE, SIZE));
 		path.moveTo(QPointF(MARGIN + 0.66*SIZE, rect().center().y() - SIZE/4));
@@ -64,6 +84,9 @@ void NavigationWidget::paintEvent(QPaintEvent *ev)
 		p.drawPath(path);
 	}
 	if (_showNext) {
+		c.setAlpha(_nextHover ? 128 : 64);
+		p.setBrush(c);
+
 		QPainterPath path;
 		path.addEllipse(QRect(rect().right() - (MARGIN + SIZE),
 		  rect().center().y() - SIZE/2, SIZE, SIZE));
@@ -87,16 +110,59 @@ void NavigationWidget::newParent()
 	raise();
 }
 
-void NavigationWidget::viewClicked(const QPoint &pos)
+bool NavigationWidget::pressed(const QPoint &pos)
 {
+	QRect menuRect(rect().right() - (MARGIN + SIZE), rect().top() + MARGIN,
+	  SIZE, SIZE);
 	QRect prevRect(MARGIN, rect().center().y() - SIZE/2, SIZE, SIZE);
 	QRect nextRect(rect().right() - (MARGIN + SIZE), rect().center().y()
 	  - SIZE/2, SIZE, SIZE);
 
-	if (prevRect.contains(pos))
+	if (prevRect.contains(pos)) {
+		_prevHover = true;
+		update();
+		return true;
+	} else if (nextRect.contains(pos)) {
+		_nextHover = true;
+		update();
+		return true;
+	} else if (menuRect.contains(pos)) {
+		_menuHover = true;
+		update();
+		return true;
+	}
+
+	return false;
+}
+
+bool NavigationWidget::released(const QPoint &pos)
+{
+	QRect menuRect(rect().right() - (MARGIN + SIZE), rect().top() + MARGIN,
+	  SIZE, SIZE);
+	QRect prevRect(MARGIN, rect().center().y() - SIZE/2, SIZE, SIZE);
+	QRect nextRect(rect().right() - (MARGIN + SIZE), rect().center().y()
+	  - SIZE/2, SIZE, SIZE);
+
+	if (_menuHover || _prevHover || _nextHover) {
+		_menuHover = false;
+		_prevHover = false;
+		_nextHover = false;
+
+		update();
+	}
+
+	if (prevRect.contains(pos)) {
 		emit prev();
-	else if (nextRect.contains(pos))
+		return true;
+	} else if (nextRect.contains(pos)) {
 		emit next();
+		return true;
+	} else if (menuRect.contains(pos)) {
+		emit menu(pos);
+		return true;
+	}
+
+	return false;
 }
 
 #endif // Q_OS_ANDROID
