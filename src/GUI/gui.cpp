@@ -238,6 +238,13 @@ void GUI::createActions()
 	_openDirAction->setMenuRole(QAction::NoRole);
 	connect(_openDirAction, &QAction::triggered, this,
 	  QOverload<>::of(&GUI::openDir));
+#ifdef Q_OS_ANDROID
+	_browseDirAction = new QAction(QIcon::fromTheme(OPEN_DIR_NAME,
+	  QIcon(OPEN_DIR_ICON)), tr("Browse directory..."), this);
+	_browseDirAction->setMenuRole(QAction::NoRole);
+	connect(_browseDirAction, &QAction::triggered, this,
+	  QOverload<>::of(&GUI::browseDir));
+#endif // Q_OS_ANDROID
 	_printFileAction = new QAction(QIcon::fromTheme(PRINT_FILE_NAME,
 	  QIcon(PRINT_FILE_ICON)), tr("Print..."), this);
 	_printFileAction->setMenuRole(QAction::NoRole);
@@ -742,6 +749,9 @@ void GUI::createMenus()
 	_recentFilesMenu->addAction(_clearRecentFilesAction);
 #endif // Q_OS_ANDROID
 	fileMenu->addAction(_openDirAction);
+#ifdef Q_OS_ANDROID
+	fileMenu->addAction(_browseDirAction);
+#endif // Q_OS_ANDROID
 	fileMenu->addSeparator();
 #ifndef Q_OS_ANDROID
 	fileMenu->addAction(_printFileAction);
@@ -1145,7 +1155,6 @@ void GUI::openFile()
 		_dataDir = QFileInfo(files.last()).path();
 }
 
-#ifndef Q_OS_ANDROID
 void GUI::openDir(const QString &path, int &showError)
 {
 	QDir md(path);
@@ -1162,7 +1171,6 @@ void GUI::openDir(const QString &path, int &showError)
 			openFile(fi.absoluteFilePath(), true, showError);
 	}
 }
-#endif // Q_OS_ANDROID
 
 void GUI::openDir()
 {
@@ -1170,17 +1178,25 @@ void GUI::openDir()
 	  _dataDir));
 
 	if (!dir.isEmpty()) {
-#ifdef Q_OS_ANDROID
-		int showError = 1;
-		_browser->setCurrentDir(dir);
-		openFile(_browser->current(), true, showError);
-#else // Q_OS_ANDROID
 		int showError = 2;
 		openDir(dir, showError);
 		_dataDir = dir;
-#endif // Q_OS_ANDROID
 	}
 }
+
+#ifdef Q_OS_ANDROID
+void GUI::browseDir()
+{
+	QString dir(QFileDialog::getExistingDirectory(this, tr("Open directory"),
+	  _dataDir));
+
+	if (!dir.isEmpty()) {
+		int showError = 1;
+		_browser->setCurrentDir(dir);
+		openFile(_browser->current(), true, showError);
+	}
+}
+#endif // Q_OS_ANDROID
 
 bool GUI::openFile(const QString &fileName, bool tryUnknown, int &showError)
 {

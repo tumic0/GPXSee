@@ -61,6 +61,9 @@ private slots:
 	void exportPNGFile();
 	void openFile();
 	void openDir();
+#ifdef Q_OS_ANDROID
+	void browseDir();
+#endif // Q_OS_ANDROID
 	void closeAll();
 	void reloadFiles();
 	void statistics();
@@ -166,9 +169,7 @@ private:
 	void createGraphTabs();
 	void createBrowser();
 
-#ifndef Q_OS_ANDROID
 	void openDir(const QString &path, int &showError);
-#endif // Q_OS_ANDROID
 	bool openPOIFile(const QString &fileName);
 	bool loadFile(const QString &fileName, bool tryUnknown, int &showError);
 	bool loadURL(const QUrl &url, int &showError);
@@ -262,6 +263,7 @@ private:
 	QAction *_exportPNGFileAction;
 	QAction *_openFileAction;
 	QAction *_openDirAction;
+	QAction *_browseDirAction;
 	QAction *_closeFileAction;
 	QAction *_reloadFileAction;
 	QAction *_statisticsAction;
