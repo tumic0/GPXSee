@@ -27,7 +27,6 @@ class PopupFrame : public QFrame
 {
 public:
 	PopupFrame(const ToolTip &toolTip, QWidget *parent = 0);
-	~PopupFrame();
 
 	const ToolTip &toolTip() const {return _toolTip;}
 
@@ -56,9 +55,6 @@ PopupFrame::PopupFrame(const ToolTip &toolTip, QWidget *parent)
   : QFrame(parent, Qt::ToolTip | Qt::BypassGraphicsProxyWidget
     | Qt::WindowDoesNotAcceptFocus), _toolTip(toolTip)
 {
-	delete _instance;
-	_instance = this;
-
 	setForegroundRole(QPalette::ToolTipText);
 	setBackgroundRole(QPalette::ToolTipBase);
 	setPalette(QToolTip::palette());
@@ -73,11 +69,6 @@ PopupFrame::PopupFrame(const ToolTip &toolTip, QWidget *parent)
 	setMouseTracking(true);
 
 	qApp->installEventFilter(this);
-}
-
-PopupFrame::~PopupFrame()
-{
-	_instance = 0;
 }
 
 void PopupFrame::createLayout(const ToolTip &content)
@@ -142,6 +133,7 @@ void PopupFrame::timerEvent(QTimerEvent *event)
 	if (event->timerId() == _timer.timerId()) {
 		_timer.stop();
 		deleteLater();
+		PopupFrame::_instance = 0;
 	}
 }
 
@@ -155,6 +147,7 @@ bool PopupFrame::eventFilter(QObject *o, QEvent *ev)
 			const int key = static_cast<QKeyEvent *>(ev)->key();
 			if (key == Qt::Key_Escape) {
 				deleteLater();
+				PopupFrame::_instance = 0;
 				return true;
 			}
 			break;
@@ -165,6 +158,7 @@ bool PopupFrame::eventFilter(QObject *o, QEvent *ev)
 		case QEvent::WindowDeactivate:
 		case QEvent::Close:
 			deleteLater();
+			PopupFrame::_instance = 0;
 			break;
 		case QEvent::MouseMove: {
 			QRectF r(geometry().adjusted(-5, -20, 5, 20));
@@ -229,6 +223,6 @@ void Popup::show(const QPoint &pos, const ToolTip &toolTip, QWidget *w)
 
 void Popup::clear()
 {
-	if (PopupFrame::_instance)
-		delete PopupFrame::_instance;
+	delete PopupFrame::_instance;
+	PopupFrame::_instance = 0;
 }
