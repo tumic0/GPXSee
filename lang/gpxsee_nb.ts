@@ -448,12 +448,12 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="237"/>
         <source>Open directory...</source>
-        <translation>Åpne mappe …</translation>
+        <translation>Åpne mappe…</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="243"/>
         <source>Browse directory...</source>
-        <translation type="unfinished"></translation>
+        <translation>Bla gjennom mappe...</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="249"/>
@@ -1533,7 +1533,7 @@
     <message>
         <location filename="../src/map/onlinemap.cpp" line="350"/>
         <source>All</source>
-        <translation type="unfinished">Alle</translation>
+        <translation>Alle</translation>
     </message>
     <message>
         <location filename="../src/map/onlinemap.cpp" line="350"/>
@@ -2792,7 +2792,7 @@
     <message>
         <location filename="../src/GUI/waypointitem.cpp" line="72"/>
         <source>File</source>
-        <translation type="unfinished">Fil</translation>
+        <translation>Fil</translation>
     </message>
 </context>
 </TS>
