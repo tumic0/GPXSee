@@ -14,7 +14,6 @@ NavigationWidget::NavigationWidget(QWidget *parent)
   _showPrev(false), _showNext(false)
 {
 	setAttribute(Qt::WA_NoSystemBackground);
-	setAttribute(Qt::WA_TranslucentBackground);
 	setAttribute(Qt::WA_TransparentForMouseEvents);
 
 	newParent();
