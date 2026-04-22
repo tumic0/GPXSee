@@ -386,5 +386,6 @@ void GraphItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 	if (gs)
 		Popup::show(event->screenPos(), info(gs->showExtendedInfo()),
 		  event->widget());
-	GraphicsItem::mousePressEvent(event);
+
+	event->accept();
 }

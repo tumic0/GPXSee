@@ -43,11 +43,11 @@ void GraphicsScene::helpEvent(QGraphicsSceneHelpEvent *event)
 			GraphicsItem *mi = static_cast<GraphicsItem*>(list.at(i));
 			Popup::show(event->screenPos(), mi->info(_showExtendedInfo),
 			  event->widget());
-			return;
+			break;
 		}
 	}
 
-	/* No need to process QGraphicsScene::helpEvent() */
+	event->accept();
 }
 
 void GraphicsScene::clear()

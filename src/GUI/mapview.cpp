@@ -1268,8 +1268,10 @@ void MapView::mousePressEvent(QMouseEvent *event)
 			  mapToScene(event->pos())), _cursorCoordinates->format()));
 #ifdef Q_OS_ANDROID
 		else {
-			if (_nav->pressed(event->pos()))
+			if (_nav->pressed(event->pos())) {
+				event->accept();
 				return;
+			}
 		}
 #endif // Q_OS_ANDROID
 	}
@@ -1281,8 +1283,10 @@ void MapView::mousePressEvent(QMouseEvent *event)
 void MapView::mouseReleaseEvent(QMouseEvent *event)
 {
 	if (event->button() == Qt::LeftButton) {
-		if (_nav->released(event->pos()))
+		if (_nav->released(event->pos())) {
+			event->accept();
 			return;
+		}
 	}
 
 	QGraphicsView::mouseReleaseEvent(event);

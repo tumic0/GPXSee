@@ -80,5 +80,6 @@ void PathTickItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 	if (gs)
 		Popup::show(event->screenPos(), pi->info(gs->showExtendedInfo()),
 		  event->widget());
-	QGraphicsItem::mousePressEvent(event);
+
+	event->accept();
 }

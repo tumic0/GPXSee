@@ -285,6 +285,6 @@ void WaypointItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 	if (gs)
 		Popup::show(event->screenPos(), info(gs->showExtendedInfo()),
 		  event->widget());
-	/* Do not propagate the event any further as lower stacked items (path
-	   items) would replace the popup with their own popup */
+
+	event->accept();
 }
