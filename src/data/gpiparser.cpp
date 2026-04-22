@@ -631,16 +631,18 @@ static quint32 readSymbol(DataStream &stream, QPixmap &pixmap)
 	}
 
 	if (width && height && lineSize && data.size() >= lineSize * height) {
-		if (paletteSize > 0 && paletteSize <= 256 && lineSize >= width) {
+		if (bpp == 8 && paletteSize > 0 && paletteSize <= 256
+		  && lineSize >= width) {
 			img = QImage((uchar*)data.data(), width, height, lineSize,
 			  QImage::Format_Indexed8);
 			img.setColorTable(palette);
-		} else if (!paletteSize && lineSize >= 4 * width)
+		} else if (bpp == 32 && !paletteSize && lineSize >= 4 * width)
 			img = QImage((uchar*)data.data(), width, height, lineSize,
 			  QImage::Format_RGBX8888).rgbSwapped();
 		else
-			qWarning("Invalid image format %ux%u %uB (stride: %u, palette size: %u)",
-			  width, height, imageSize, lineSize, paletteSize);
+			qWarning("Unknown/invalid image format: %ux%u %uB"
+			  " (bpp: %u, stride: %u, palette: %u)", width, height, imageSize,
+			  bpp, lineSize, paletteSize);
 	}
 	pixmap = QPixmap::fromImage(img);
 
