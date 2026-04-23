@@ -24,7 +24,11 @@ GraphItem::GraphItem(const Graph &graph, GraphType type, int width,
 void GraphItem::updateShape()
 {
 	QPainterPathStroker s;
+#ifdef Q_OS_ANDROID
+	s.setWidth(_pen.width() + 10);
+#else // Q_OS_ANDROID
 	s.setWidth(_pen.width() + 1);
+#endif // Q_OS_ANDROID
 	_shape = s.createStroke(_path);
 }
 

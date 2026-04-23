@@ -62,7 +62,11 @@ PathItem::PathItem(const Path &path, Map *map, QGraphicsItem *parent)
 void PathItem::updateShape()
 {
 	QPainterPathStroker s;
+#ifdef Q_OS_ANDROID
+	s.setWidth((_width + 10) * pow(2, -_digitalZoom));
+#else // Q_OS_ANDROID
 	s.setWidth((_width + 1) * pow(2, -_digitalZoom));
+#endif // Q_OS_ANDROID
 	_shape = s.createStroke(_painterPath);
 }
 
