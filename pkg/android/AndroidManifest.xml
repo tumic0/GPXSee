@@ -67,5 +67,5 @@
                 android:resource="@xml/qtprovider_paths"/>
         </provider>
     </application>
-    <uses-feature android:glEsVersion="0x00030002" android:required="false"/>
+    <uses-feature android:glEsVersion="0x00030001" android:required="false"/>
 </manifest>

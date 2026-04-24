@@ -18,11 +18,13 @@ int main(int argc, char *argv[])
 
 	QSurfaceFormat fmt;
 	fmt.setProfile(QSurfaceFormat::CoreProfile);
-	fmt.setVersion(3, 2);
+
 #ifdef Q_OS_ANDROID
 	fmt.setRenderableType(QSurfaceFormat::OpenGLES);
+	fmt.setVersion(3, 1);
 #else // Android
 	fmt.setRenderableType(QSurfaceFormat::OpenGL);
+	fmt.setVersion(3, 2);
 #endif // Android
 	fmt.setDepthBufferSize(24);
 	fmt.setStencilBufferSize(8);
