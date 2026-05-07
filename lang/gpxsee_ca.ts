@@ -453,7 +453,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="243"/>
         <source>Browse directory...</source>
-        <translation type="unfinished"></translation>
+        <translation>Navega pel directori...</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="249"/>
