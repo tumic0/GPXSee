@@ -1,6 +1,9 @@
 #include <QApplication>
 #include <QFile>
 #include <QFileInfo>
+#ifdef Q_OS_ANDROID
+#include <QtCore/private/qandroidextras_p.h>
+#endif // Q_OS_ANDROID
 #include "common/util.h"
 #include "map/crs.h"
 #include "gpxparser.h"
@@ -30,6 +33,7 @@
 #include "srtparser.h"
 #include "data.h"
 
+#define PERMISSION "android.permission.ACCESS_MEDIA_LOCATION"
 
 static GPXParser gpx;
 static TCXParser tcx;
@@ -104,6 +108,9 @@ static QMultiMap<QString, Parser*> parsers()
 }
 
 QMultiMap<QString, Parser*> Data::_parsers = parsers();
+#ifdef Q_OS_ANDROID
+bool Data::_permChecked = false;
+#endif // Q_OS_ANDROID
 
 void Data::processData(QList<TrackData> &trackData, QList<RouteData> &routeData)
 {
@@ -113,15 +120,37 @@ void Data::processData(QList<TrackData> &trackData, QList<RouteData> &routeData)
 		_routes.append(Route(routeData.at(i)));
 }
 
+#ifdef Q_OS_ANDROID
+static bool isMedia(const QString &suffix)
+{
+	return (suffix == "jpg" || suffix == "jpeg" || suffix == "mp4"
+	  || suffix == "mov");
+}
+#endif // Q_OS_ANDROID
+
 Data::Data(const QString &fileName, bool tryUnknown)
 {
 	QFile file(fileName);
 	QFileInfo fi(Util::displayName(fileName));
+	QString suffix(fi.suffix().toLower());
 	QList<TrackData> trackData;
 	QList<RouteData> routeData;
 
 	_valid = false;
 	_errorLine = 0;
+
+#ifdef Q_OS_ANDROID
+	if (!_permChecked && isMedia(suffix)) {
+		QFuture<QtAndroidPrivate::PermissionResult> res;
+		res = QtAndroidPrivate::checkPermission(PERMISSION);
+		if (res.result() != QtAndroidPrivate::Authorized) {
+			res = QtAndroidPrivate::requestPermission(PERMISSION);
+			if (res.result() != QtAndroidPrivate::Authorized)
+				qWarning("Error getting ACCESS_MEDIA_LOCATION permissions");
+		}
+		_permChecked = true;
+	}
+#endif // Q_OS_ANDROID
 
 	if (!file.open(QFile::ReadOnly)) {
 		_errorString = file.errorString();
@@ -129,7 +158,6 @@ Data::Data(const QString &fileName, bool tryUnknown)
 	}
 
 	QMultiMap<QString, Parser*>::iterator it;
-	QString suffix(fi.suffix().toLower());
 	if ((it = _parsers.find(suffix)) != _parsers.end()) {
 		while (it != _parsers.end() && it.key() == suffix) {
 			if (it.value()->parse(&file, trackData, routeData, _polygons,

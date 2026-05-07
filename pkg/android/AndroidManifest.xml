@@ -68,4 +68,5 @@
         </provider>
     </application>
     <uses-feature android:glEsVersion="0x00030001" android:required="false"/>
+    <uses-permission android:name="android.permission.ACCESS_MEDIA_LOCATION"/>
 </manifest>

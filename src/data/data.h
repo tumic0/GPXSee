@@ -41,6 +41,9 @@ private:
 	QVector<Waypoint> _waypoints;
 
 	static QMultiMap<QString, Parser*> _parsers;
+#ifdef Q_OS_ANDROID
+	static bool _permChecked;
+#endif // Q_OS_ANDROID
 };
 
 #endif // DATA_H
