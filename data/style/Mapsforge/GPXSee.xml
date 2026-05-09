@@ -603,12 +603,22 @@
     <!-- Powerlines -->
     <rule e="way" k="power" v="line" zoom-min="14">
         <rule e="way" k="*" v="*" zoom-max="15">
-            <line stroke="#444444" stroke-width="0.25"/>
-            <line stroke="#444444" stroke-width="1.6" stroke-dasharray="0.2,20.0" stroke-linecap="butt" scale="all"/>
+            <line stroke="#555555" stroke-width="0.25"/>
+            <line stroke="#555555" stroke-width="1.6" stroke-dasharray="0.2,20.0" stroke-linecap="butt" scale="all"/>
         </rule>
         <rule e="way" k="*" v="*" zoom-min="16">
-            <line stroke="#444444" stroke-width="0.15"/>
-            <line stroke="#444444" stroke-width="0.8" stroke-dasharray="0.1,10.0" stroke-linecap="butt" scale="all"/>
+            <line stroke="#555555" stroke-width="0.15"/>
+            <line stroke="#555555" stroke-width="0.8" stroke-dasharray="0.1,10.0" stroke-linecap="butt" scale="all"/>
+        </rule>
+    </rule>
+    <rule e="way" k="power" v="minor_line" zoom-min="15">
+        <rule e="way" k="*" v="*" zoom-max="15">
+            <line stroke="#888888" stroke-width="0.25"/>
+            <line stroke="#888888" stroke-width="1.6" stroke-dasharray="0.2,20.0" stroke-linecap="butt" scale="all"/>
+        </rule>
+        <rule e="way" k="*" v="*" zoom-min="16">
+            <line stroke="#888888" stroke-width="0.15"/>
+            <line stroke="#888888" stroke-width="0.8" stroke-dasharray="0.1,10.0" stroke-linecap="butt" scale="all"/>
         </rule>
     </rule>
 
