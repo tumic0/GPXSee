@@ -1002,6 +1002,14 @@
             </rule>
         </rule>
     </rule>
+    <rule e="any" k="leisure" v="beach_resort" zoom-min="16">
+        <rule e="any" k="name" v="*">
+            <symbol id="beach" src=":/POI/beach-11.svg" symbol-width="11"/>
+            <rule e="any" k="*" v="*" zoom-min="17">
+                <caption fill="#000000" font-size="10" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="2" symbol-id="beach"/>
+            </rule>
+        </rule>
+    </rule>
 
     <rule e="any" k="sport" v="swimming" zoom-min="16">
         <symbol id="swimming" src=":/POI/swimming-11.svg" symbol-width="11"/>
