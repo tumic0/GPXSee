@@ -872,6 +872,20 @@
             <caption fill="#000000" font-size="10" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="2" symbol-id="obs-tower"/>
         </rule>
     </rule>
+    <rule e="any" k="man_made" v="tower|mast" zoom-min="16">
+        <rule e="any" k="tower:type" v="communication" zoom-min="16">
+            <symbol id="com-tower" src=":/POI/communications-tower-11.svg" symbol-width="11"/>
+            <rule e="any" k="*" v="*" zoom-min="17">
+                <caption fill="#000000" font-size="10" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="2" symbol-id="com-tower"/>
+            </rule>
+        </rule>
+        <rule e="any" k="tower:type" v="observation" zoom-min="16">
+            <symbol id="com-tower" src=":/POI/observation-tower.svg" symbol-width="11"/>
+            <rule e="any" k="*" v="*" zoom-min="17">
+                <caption fill="#000000" font-size="10" font-style="italic" k="name" stroke="#FFFFFF" stroke-width="2" symbol-id="obs-tower"/>
+            </rule>
+        </rule>
+    </rule>
     <rule e="any" k="power" v="generator" zoom-min="16">
         <rule e="any" k="generator:source" v="wind">
             <symbol id="wind-turbine" src=":/POI/cross-11.svg" symbol-width="11" priority="5"/>
