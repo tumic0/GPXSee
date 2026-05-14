@@ -24,6 +24,7 @@ jobs:
         with:
           version: '6.11.1'
           modules: qtpositioning qtserialport qtimageformats qtmultimedia
+          aqtsource: 'git+https://github.com/miurahr/aqtinstall.git'
       - name: Set up Visual Studio shell
         uses: egor-tensin/vs-shell@v2
         with:
