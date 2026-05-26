@@ -35,6 +35,7 @@ RESOURCES += gpxsee.qrc
 TRANSLATIONS = $$files(lang/*.ts)
 
 macx {
+    QT += core5compat
     LIBS += -lz
     RESOURCES += theme-grayscale.qrc
 

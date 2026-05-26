@@ -2,11 +2,12 @@
 #define TEXTCODEC_H
 
 #include <QString>
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0) || defined(Q_OS_ANDROID)
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0) \
+  || defined(Q_OS_ANDROID) || defined(Q_OS_MAC)
 #include <QTextCodec>
-#else // QT 6 || ANDROID
+#else // QT 6 || ANDROID || MAC
 #include <QStringDecoder>
-#endif // QT 6 || ANDROID
+#endif // QT 6 || ANDROID || MAC
 
 class TextCodec
 {
@@ -17,11 +18,12 @@ public:
 	QString toString(const QByteArray &ba);
 
 private:
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0) || defined(Q_OS_ANDROID)
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0) \
+  || defined(Q_OS_ANDROID) || defined(Q_OS_MAC)
 	QTextCodec *_codec;
-#else // QT 6 || ANDROID
+#else // QT 6 || ANDROID || MAC
 	QStringDecoder _decoder;
-#endif // QT 6 || ANDROID
+#endif // QT 6 || ANDROID || MAC
 };
 
 #endif // TEXTCODEC_H

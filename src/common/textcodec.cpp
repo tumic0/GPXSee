@@ -1,17 +1,13 @@
 #include "textcodec.h"
 
 /*
-	QStringDecoder can use the ICU library for codepage transformations since
-	Qt 6.5, but we use QTextCodec from the core5compat module on Android to
-	reduce the size of the app bundle (the ICU library has ~30MB).
-
-	On all other platforms, we require a Qt6 build with ICU support for all
-	the CP* encodings to work. On Linux, most distros compile Qt6 with ICU
-	support, on Windows and OS X a special Qt6 build is required as
-	the "official" Qt6 installers have ICU support disabled (QTBUG-121353).
+	Only Linux and Windows (starting with Qt 6.8) have a working ICU support
+	in QStringDecoder. For Android and macOS QTextCodec from the core5compat
+	module must be used (like it is used in the Qt5 builds).
 */
 
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0) || defined(Q_OS_ANDROID)
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0) \
+  || defined(Q_OS_ANDROID) || defined(Q_OS_MAC)
 
 static QTextCodec *codec(int mib)
 {
@@ -88,7 +84,7 @@ QString TextCodec::toString(const QByteArray &ba)
 	return _codec ? _codec->toUnicode(ba) : QString::fromLatin1(ba);
 }
 
-#else // QT 6 || ANDROID
+#else // QT 6 || ANDROID || MAC
 
 TextCodec::TextCodec()
 {
@@ -114,4 +110,4 @@ QString TextCodec::toString(const QByteArray &ba)
 {
 	return _decoder.isValid() ? _decoder.decode(ba) : QString::fromLatin1(ba);
 }
-#endif // QT 6 || ANDROID
+#endif // QT 6 || ANDROID || MAC
