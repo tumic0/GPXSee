@@ -84,7 +84,7 @@ QString TextCodec::toString(const QByteArray &ba)
 	return _codec ? _codec->toUnicode(ba) : QString::fromLatin1(ba);
 }
 
-#else // QT 6 || ANDROID || MAC
+#else // QT 5 || ANDROID || MAC
 
 TextCodec::TextCodec()
 {
@@ -110,4 +110,4 @@ QString TextCodec::toString(const QByteArray &ba)
 {
 	return _decoder.isValid() ? _decoder.decode(ba) : QString::fromLatin1(ba);
 }
-#endif // QT 6 || ANDROID || MAC
+#endif // QT 5 || ANDROID || MAC
