@@ -588,10 +588,15 @@ sudo spctl --add --type execute --label 'GPXSee' --requirement \
           maps on new Android versions (>=11) are almost unusable when opened from the application
           menu.</p>
 
-          <h3>Missing menu on Android tablets</h3>
-          <p>The overflow menu ( ⋮ ) may be missing if only "Buttons" are active in the Android
-          navigation bar settings (Settings → Display → Navigation bar). Enable "Buttons and swipe
-          gestures" for the menu to appear.</p>
+          <h3>Missing non-UTF encoding support on macOS and Android</h3>
+          <p>The official Qt6 builds for macOS and Android as used by GPXSee are missing ICU
+          support and thus only UTF8/16/32 (and ISO-8859-1) encoded XML files (GPX, TCX, ...)
+          are supported on those platforms.</p>
+
+          <h3>Broken large files handling in Qt5</h3>
+          <p>Some distributions (e.g. Fedora and Macports) still use Qt5 for building GPXSee
+          which does not support files > 2GB in QDataStream. As a consequence parsing some
+          formats - especially MP4 - does not work on large files in such builds.</p>
 
           <h3>OpenGL</h3>
           <p>There are numerous OpenGL issues in Qt that cause some kind of broken rendering
