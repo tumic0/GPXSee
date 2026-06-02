@@ -30,9 +30,9 @@ void ColorBox::paintEvent(QPaintEvent *event)
 {
 	Q_UNUSED(event);
 
-    QStylePainter painter(this);
+	QStylePainter painter(this);
 
-    QStyleOptionComboBox option;
+	QStyleOptionComboBox option;
 	option.initFrom(this);
 
 	// Fallback for styles that do not draw the background
