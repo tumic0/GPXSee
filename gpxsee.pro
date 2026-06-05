@@ -42,7 +42,10 @@ macx {
     ICON = icons/app/gpxsee.icns
     QMAKE_INFO_PLIST = pkg/mac/Info.plist
     locale.path = Contents/Resources/translations
-    locale.files = $$files(lang/*.qm)
+    locale.files = $$files(lang/*.qm) \
+        $$files($$[QT_INSTALL_TRANSLATIONS]/qtbase_*.qm) \
+        $$files($$[QT_INSTALL_TRANSLATIONS]/qtmultimedia_*.qm) \
+        $$files($$[QT_INSTALL_TRANSLATIONS]/qt_*.qm)
     crs.path = Contents/Resources
     crs.files = data/CRS
     maps.path = Contents/Resources
