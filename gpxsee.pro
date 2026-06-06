@@ -46,6 +46,7 @@ macx {
         $$files($$[QT_INSTALL_TRANSLATIONS]/qtbase_*.qm) \
         $$files($$[QT_INSTALL_TRANSLATIONS]/qtmultimedia_*.qm) \
         $$files($$[QT_INSTALL_TRANSLATIONS]/qt_*.qm)
+    locale.files -= $$files($$[QT_INSTALL_TRANSLATIONS]/qt_help_*.qm)
     crs.path = Contents/Resources
     crs.files = data/CRS
     maps.path = Contents/Resources
