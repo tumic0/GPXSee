@@ -574,6 +574,10 @@ sudo spctl --add --type execute --label 'GPXSee' --requirement \
   'certificate leaf H"F45CCC1FF42FDF031C949BD8DC47412E8D3826D8"'
 </pre>
 
+          <p><i>Note: This only works up to macOS 14 (Sonoma), starting with macOS 15 (Sequoia)
+          Apple has crippled the spctl command and you have to unblock each application separately
+          in System settings -> Privacy &amp; Security.</i></p>
+
           <h3>Android file system</h3>
           <p>Due to the limited file system access on Android, all map formats that consist of
           multiple files (eg. OziExplorer maps or World-file georeferenced images) will not load
