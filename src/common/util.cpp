@@ -11,11 +11,11 @@
 #include <QJniEnvironment>
 #include <QJniObject>
 #endif // Q_OS_ANDROID
-#ifdef Q_OS_WIN32
+#ifdef _MSC_VER
 #include <QtZlib/zlib.h>
-#else // Q_OS_WIN32
+#else // _MSC_VER
 #include <zlib.h>
-#endif // Q_OS_WIN32
+#endif // _MSC_VER
 #include "util.h"
 
 #define SQLITE_DB_MAGIC "SQLite format 3"
