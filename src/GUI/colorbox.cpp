@@ -42,16 +42,13 @@ void ColorBox::paintEvent(QPaintEvent *event)
 		option.state |= QStyle::State_Raised;
 
 #if QT_VERSION >= QT_VERSION_CHECK(6, 1, 0)
-	static const QSet<QString> set =
-	  {"breeze", "windows", "windowsvista"};
+	static const QSet<QString> set = {"fusion", "windows11"};
 
 	if (set.contains(painter.style()->name().toLower()))
+		painter.drawPrimitive(QStyle::PE_PanelButtonBevel, option);
+	else
 #endif // QT6
 		painter.drawPrimitive(QStyle::PE_PanelButtonCommand, option);
-#if QT_VERSION >= QT_VERSION_CHECK(6, 1, 0)
-	else
-		painter.drawPrimitive(QStyle::PE_PanelButtonBevel, option);
-#endif // QT6
 }
 
 void ColorBox::mousePressEvent(QMouseEvent *event)
