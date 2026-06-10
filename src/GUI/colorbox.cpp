@@ -1,5 +1,4 @@
 #include <QStylePainter>
-#include <QStyleOptionFrame>
 #include <QStyleOptionButton>
 #include <QMouseEvent>
 #include <QColorDialog>
@@ -11,6 +10,7 @@ ColorBox::ColorBox(QWidget *parent) : QWidget(parent)
 {
 	_color = Qt::red;
 	_alpha = true;
+	_pressed = false;
 
 	setSizePolicy(QSizePolicy::QSizePolicy::Minimum, QSizePolicy::Fixed);
 	setAttribute(Qt::WA_Hover);
@@ -33,35 +33,41 @@ void ColorBox::paintEvent(QPaintEvent *event)
 
 	QStylePainter painter(this);
 
+	QStyleOptionButton option;
+	option.initFrom(this);
+	option.palette.setColor(QPalette::Button, _color);
+	if (_pressed)
+		option.state |= QStyle::State_Sunken;
+	else
+		option.state |= QStyle::State_Raised;
+
 #if QT_VERSION >= QT_VERSION_CHECK(6, 1, 0)
 	static const QSet<QString> set =
-	  {"breeze", "fusion", "windows", "windowsvista"};
+	  {"breeze", "windows", "windowsvista"};
 
-	if (set.contains(painter.style()->name().toLower())) {
+	if (set.contains(painter.style()->name().toLower()))
 #endif // QT6
-		QStyleOptionFrame option;
-		option.initFrom(this);
-		option.palette.setColor(QPalette::Base, _color);
-		option.lineWidth = 1;
-		option.midLineWidth = 0;
-		option.state |= QStyle::State_Sunken;
-		option.features = QStyleOptionFrame::None;
-
-		painter.drawPrimitive(QStyle::PE_PanelLineEdit, option);
+		painter.drawPrimitive(QStyle::PE_PanelButtonCommand, option);
 #if QT_VERSION >= QT_VERSION_CHECK(6, 1, 0)
-	} else {
-		QStyleOptionButton option;
-		option.initFrom(this);
-		option.palette.setColor(QPalette::Button, _color);
-
+	else
 		painter.drawPrimitive(QStyle::PE_PanelButtonBevel, option);
-	}
 #endif // QT6
+}
+
+void ColorBox::mousePressEvent(QMouseEvent *event)
+{
+	if (event->button() == Qt::LeftButton) {
+		_pressed = true;
+		update();
+	}
 }
 
 void ColorBox::mouseReleaseEvent(QMouseEvent *event)
 {
 	if (event->button() == Qt::LeftButton) {
+		_pressed = false;
+		update();
+
 		QColorDialog::ColorDialogOptions options = _alpha
 		  ? QColorDialog::ColorDialogOptions(QColorDialog::ShowAlphaChannel)
 		  : QColorDialog::ColorDialogOptions();

@@ -20,12 +20,14 @@ signals:
 	void colorChanged(const QColor &color);
 
 protected:
+	void mousePressEvent(QMouseEvent *event);
 	void mouseReleaseEvent(QMouseEvent *event);
 	void paintEvent(QPaintEvent *event);
 
 private:
 	QColor _color;
 	bool _alpha;
+	bool _pressed;
 };
 
 #endif // COLORBOX_H
