@@ -20,7 +20,7 @@ signals:
 	void colorChanged(const QColor &color);
 
 protected:
-	void mousePressEvent(QMouseEvent *event);
+	void mouseReleaseEvent(QMouseEvent *event);
 	void paintEvent(QPaintEvent *event);
 
 private:

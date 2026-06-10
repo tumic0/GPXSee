@@ -1,5 +1,6 @@
 #include <QStylePainter>
-#include <QStyleOptionComboBox>
+#include <QStyleOptionFrame>
+#include <QStyleOptionButton>
 #include <QMouseEvent>
 #include <QColorDialog>
 #include <QComboBox>
@@ -32,26 +33,33 @@ void ColorBox::paintEvent(QPaintEvent *event)
 
 	QStylePainter painter(this);
 
-	QStyleOptionComboBox option;
-	option.initFrom(this);
+#if QT_VERSION >= QT_VERSION_CHECK(6, 1, 0)
+	static const QSet<QString> set =
+	  {"breeze", "fusion", "windows", "windowsvista"};
 
-	// Fallback for styles that do not draw the background
-	painter.setBrush(_color);
-	painter.setPen(Qt::NoPen);
-	painter.drawRect(event->rect().adjusted(2, 2, -2, -2));
+	if (set.contains(painter.style()->name().toLower())) {
+#endif // QT6
+		QStyleOptionFrame option;
+		option.initFrom(this);
+		option.palette.setColor(QPalette::Base, _color);
+		option.lineWidth = 1;
+		option.midLineWidth = 0;
+		option.state |= QStyle::State_Sunken;
+		option.features = QStyleOptionFrame::None;
 
-	// If works, overpaints the previous rectangle
-#if defined(Q_OS_MAC) || defined(Q_OS_WIN32)
-	painter.setBrush(_color);
-	painter.drawPrimitive(QStyle::PE_Frame, option);
-#else // Q_OS_MAC || Q_OS_WIN32
-	option.palette.setBrush(QPalette::Base, _color);
-	painter.drawPrimitive(QStyle::PE_PanelLineEdit, option);
-	painter.drawPrimitive(QStyle::PE_FrameLineEdit, option);
-#endif // Q_OS_MAC || Q_OS_WIN32
+		painter.drawPrimitive(QStyle::PE_PanelLineEdit, option);
+#if QT_VERSION >= QT_VERSION_CHECK(6, 1, 0)
+	} else {
+		QStyleOptionButton option;
+		option.initFrom(this);
+		option.palette.setColor(QPalette::Button, _color);
+
+		painter.drawPrimitive(QStyle::PE_PanelButtonBevel, option);
+	}
+#endif // QT6
 }
 
-void ColorBox::mousePressEvent(QMouseEvent *event)
+void ColorBox::mouseReleaseEvent(QMouseEvent *event)
 {
 	if (event->button() == Qt::LeftButton) {
 		QColorDialog::ColorDialogOptions options = _alpha
@@ -65,7 +73,7 @@ void ColorBox::mousePressEvent(QMouseEvent *event)
 		}
 	}
 
-	QWidget::mousePressEvent(event);
+	QWidget::mouseReleaseEvent(event);
 }
 
 void ColorBox::setColor(const QColor &color)
