@@ -4,6 +4,15 @@
 #include <QComboBox>
 #include "colorbox.h"
 
+#if QT_VERSION >= QT_VERSION_CHECK(6, 1, 0)
+static bool useButtonCommand(const QStyle *style)
+{
+	static const QStringList list = {"breeze", "windowsvista"};
+	return list.contains(style->name().toLower());
+}
+#else // QT6
+#define useButtonCommand(style) true
+#endif // QT6
 
 ColorBox::ColorBox(QWidget *parent) : QAbstractButton(parent)
 {
@@ -41,14 +50,10 @@ void ColorBox::paintEvent(QPaintEvent *event)
 	else
 		option.state |= QStyle::State_Raised;
 
-#if QT_VERSION >= QT_VERSION_CHECK(6, 1, 0)
-	static const QSet<QString> set = {"fusion", "windows11"};
-
-	if (set.contains(painter.style()->name().toLower()))
-		painter.drawPrimitive(QStyle::PE_PanelButtonBevel, option);
-	else
-#endif // QT6
+	if (useButtonCommand(painter.style()))
 		painter.drawPrimitive(QStyle::PE_PanelButtonCommand, option);
+	else
+		painter.drawPrimitive(QStyle::PE_PanelButtonBevel, option);
 }
 
 void ColorBox::setColor(const QColor &color)
