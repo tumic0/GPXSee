@@ -61,6 +61,7 @@
 #include "mapaction.h"
 #include "poiaction.h"
 #include "navigationwidget.h"
+#include "macos.h"
 #include "gui.h"
 
 #define MAX_RECENT_FILES      10
@@ -105,7 +106,7 @@ GUI::GUI(const QString &lang)
 
 	setWindowIcon(QIcon(APP_ICON));
 	setWindowTitle(APP_NAME);
-	if (IS_MACOS(style()))
+	if (MacOS::match(style()))
 		setUnifiedTitleAndToolBarOnMac(true);
 	setAcceptDrops(true);
 
@@ -922,7 +923,7 @@ void GUI::createNavigation()
 #else // Q_OS_ANDROID
 void GUI::createToolBars()
 {
-	bool macos = IS_MACOS(style());
+	bool macos = MacOS::match(style());
 
 	if (macos)
 		setToolButtonStyle(Qt::ToolButtonTextUnderIcon);

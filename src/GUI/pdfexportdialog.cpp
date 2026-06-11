@@ -10,6 +10,7 @@
 #include "marginswidget.h"
 #include "fileselectwidget.h"
 #include "units.h"
+#include "macos.h"
 #include "pdfexportdialog.h"
 
 
@@ -17,6 +18,7 @@ PDFExportDialog::PDFExportDialog(PDFExport &exp, Units units, QWidget *parent)
   : QDialog(parent), _export(exp), _units(units)
 {
 	int index;
+	bool macos = MacOS::match(style());
 
 #ifdef Q_OS_ANDROID
 	setWindowFlags(Qt::Window);
@@ -69,31 +71,16 @@ PDFExportDialog::PDFExportDialog(PDFExport &exp, Units units, QWidget *parent)
 	_margins->setValue((units == Metric)
 	  ? _export.margins * MM2CM : _export.margins * MM2IN);
 
-#ifndef Q_OS_MAC
-	QGroupBox *pageSetupBox = new QGroupBox(tr("Page Setup"));
-#endif // Q_OS_MAC
 	QFormLayout *pageSetupLayout = new QFormLayout;
 	pageSetupLayout->addRow(tr("Page size:"), _paperSize);
 	pageSetupLayout->addRow(tr("Resolution:"), _resolution);
 	pageSetupLayout->addRow(tr("Orientation:"), orientationLayout);
 	pageSetupLayout->addRow(tr("Margins:"), _margins);
-#ifdef Q_OS_MAC
-	QFrame *line = new QFrame();
-	line->setFrameShape(QFrame::HLine);
-	line->setFrameShadow(QFrame::Sunken);
-	pageSetupLayout->addRow(line);
-	pageSetupLayout->addRow(tr("File:"), _fileSelect);
-	pageSetupLayout->setFieldGrowthPolicy(QFormLayout::ExpandingFieldsGrow);
-#else // Q_OS_MAC
-	pageSetupBox->setLayout(pageSetupLayout);
-#endif // Q_OS_MAC
-
-#ifndef Q_OS_MAC
-	QGroupBox *outputFileBox = new QGroupBox(tr("Output file"));
-	QVBoxLayout *outputFileLayout = new QVBoxLayout();
-	outputFileLayout->addWidget(_fileSelect);
-	outputFileBox->setLayout(outputFileLayout);
-#endif // Q_OS_MAC
+	if (macos) {
+		pageSetupLayout->addRow(MacOS::line());
+		pageSetupLayout->addRow(tr("File:"), _fileSelect);
+		pageSetupLayout->setFieldGrowthPolicy(QFormLayout::ExpandingFieldsGrow);
+	}
 
 	QDialogButtonBox *buttonBox = new QDialogButtonBox();
 	buttonBox->addButton(tr("Export"), QDialogButtonBox::AcceptRole);
@@ -104,15 +91,21 @@ PDFExportDialog::PDFExportDialog(PDFExport &exp, Units units, QWidget *parent)
 	  &PDFExportDialog::reject);
 
 	QVBoxLayout *layout = new QVBoxLayout;
-#ifdef Q_OS_MAC
-	layout->addLayout(pageSetupLayout);
-#else // Q_OS_MAC
-	layout->addWidget(pageSetupBox);
-	layout->addWidget(outputFileBox);
+	if (macos)
+		layout->addLayout(pageSetupLayout);
+	else {
+		QGroupBox *pageSetupBox = new QGroupBox(tr("Page Setup"));
+		pageSetupBox->setLayout(pageSetupLayout);
+		QGroupBox *outputFileBox = new QGroupBox(tr("Output file"));
+		QVBoxLayout *outputFileLayout = new QVBoxLayout();
+		outputFileLayout->addWidget(_fileSelect);
+		outputFileBox->setLayout(outputFileLayout);
+		layout->addWidget(pageSetupBox);
+		layout->addWidget(outputFileBox);
+	}
 #ifdef Q_OS_ANDROID
 	layout->addStretch();
 #endif // Q_OS_ANDROID
-#endif // Q_OS_MAC
 	layout->addWidget(buttonBox);
 	setLayout(layout);
 

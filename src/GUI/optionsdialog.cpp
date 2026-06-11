@@ -14,7 +14,6 @@
 #include <QSysInfo>
 #include <QButtonGroup>
 #include <QGeoPositionInfoSource>
-#include <common/util.h>
 #include "map/pcs.h"
 #include "icons.h"
 #include "infolabel.h"
@@ -26,6 +25,7 @@
 #include "dirselectwidget.h"
 #include "authenticationwidget.h"
 #include "pluginparameters.h"
+#include "macos.h"
 #include "optionsdialog.h"
 
 #ifdef Q_OS_ANDROID
@@ -36,15 +36,6 @@
 #define MENU_ICON_SIZE 32
 
 typedef QList<KV<int, QString> > ProjectionList;
-
-static QFrame *line()
-{
-	QFrame *l = new QFrame();
-	l->setFrameShape(QFrame::HLine);
-	l->setFrameShadow(QFrame::Sunken);
-
-	return l;
-}
 
 void OptionsDialog::automaticPauseDetectionSet(bool set)
 {
@@ -104,7 +95,7 @@ QWidget *OptionsDialog::createMapPage(bool macos)
 	if (macos) {
 		projectionTabLayout->addWidget(new QLabel(tr("Input:")));
 		projectionTabLayout->addLayout(inLayout);
-		projectionTabLayout->addWidget(line());
+		projectionTabLayout->addWidget(MacOS::line());
 		projectionTabLayout->addWidget(new QLabel(tr("Output:")));
 		projectionTabLayout->addLayout(outLayout);
 	} else {
@@ -174,17 +165,17 @@ QWidget *OptionsDialog::createAppearancePage(bool macos)
 		QFormLayout *pathTabLayout = new QFormLayout();
 		pathTabLayout->addRow(tr("Track width:"), _trackWidth);
 		pathTabLayout->addRow(tr("Track style:"), _trackStyle);
-		pathTabLayout->addRow(line());
+		pathTabLayout->addRow(MacOS::line());
 		pathTabLayout->addRow(tr("Route width:"), _routeWidth);
 		pathTabLayout->addRow(tr("Route style:"), _routeStyle);
-		pathTabLayout->addRow(line());
+		pathTabLayout->addRow(MacOS::line());
 		pathTabLayout->addRow(tr("Area border width:"), _areaWidth);
 		pathTabLayout->addRow(tr("Area border style:"), _areaStyle);
 		pathTabLayout->addRow(tr("Area fill opacity:"), _areaOpacity);
-		pathTabLayout->addRow(line());
+		pathTabLayout->addRow(MacOS::line());
 		pathTabLayout->addRow(tr("Base color:"), _baseColor);
 		pathTabLayout->addRow(tr("Palette shift:"), _colorOffset);
-		pathTabLayout->addRow(line());
+		pathTabLayout->addRow(MacOS::line());
 		pathTabLayout->addWidget(_pathAA);
 		pathTab->setLayout(pathTabLayout);
 	} else {
@@ -239,7 +230,7 @@ QWidget *OptionsDialog::createAppearancePage(bool macos)
 		QFormLayout *pointTabLayout = new QFormLayout();
 		pointTabLayout->addRow(tr("Waypoint color:"), _waypointColor);
 		pointTabLayout->addRow(tr("Waypoint size:"), _waypointSize);
-		pointTabLayout->addRow(line());
+		pointTabLayout->addRow(MacOS::line());
 		pointTabLayout->addRow(tr("POI color:"), _poiColor);
 		pointTabLayout->addRow(tr("POI size:"), _poiSize);
 		pointTab->setLayout(pointTabLayout);
@@ -488,7 +479,7 @@ QWidget *OptionsDialog::createDataPage(bool macos)
 		sourceTabLayout->addRow(tr("Speed:"), speedOptions);
 		sourceTabLayout->addRow(tr("Elevation:"), elevationOptions);
 		sourceTabLayout->addRow(tr("Time zone:"), zoneOptions);
-		sourceTabLayout->addRow(line());
+		sourceTabLayout->addRow(MacOS::line());
 		sourceTabLayout->addWidget(_useSegments);
 		sourceTab->setLayout(sourceTabLayout);
 	} else {
@@ -850,7 +841,7 @@ OptionsDialog::OptionsDialog(Options &options, Units units, QWidget *parent)
 	setWindowState(Qt::WindowFullScreen);
 #endif // Q_OS_ANDROID
 
-	bool macos = IS_MACOS(style());
+	bool macos = MacOS::match(style());
 
 	QStackedWidget *pages = new QStackedWidget();
 	pages->addWidget(createAppearancePage(macos));
