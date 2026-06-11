@@ -16,6 +16,16 @@ class QFile;
 #define METATYPE(f) static_cast<QMetaType::Type>((f).metaType().id())
 #endif // QT 6
 
+#if QT_VERSION >= QT_VERSION_CHECK(6, 1, 0)
+#define IS_MACOS(style) ((style)->name().toLower() == "macos")
+#else // QT6
+#ifdef Q_OS_MAC
+#define IS_MACOS(style) true
+#else // Q_OS_MAC
+#define IS_MACOS(style) false
+#endif // Q_OS_MAC
+#endif // QT6
+
 namespace Util
 {
 	int log2i(unsigned val);

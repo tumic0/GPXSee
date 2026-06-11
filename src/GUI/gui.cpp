@@ -105,7 +105,8 @@ GUI::GUI(const QString &lang)
 
 	setWindowIcon(QIcon(APP_ICON));
 	setWindowTitle(APP_NAME);
-	setUnifiedTitleAndToolBarOnMac(true);
+	if (IS_MACOS(style()))
+		setUnifiedTitleAndToolBarOnMac(true);
 	setAcceptDrops(true);
 
 	_trackCount = 0;
@@ -921,37 +922,36 @@ void GUI::createNavigation()
 #else // Q_OS_ANDROID
 void GUI::createToolBars()
 {
-#ifdef Q_OS_MAC
-	setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
-#endif // Q_OS_MAC
+	bool macos = IS_MACOS(style());
+
+	if (macos)
+		setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
 
 	_fileToolBar = addToolBar(tr("File"));
 	_fileToolBar->setObjectName("File");
-#ifdef Q_OS_MAC
-	_fileToolBar->setIconSize(MAC_TOOLBAR_ICON_SIZE);
-#endif // Q_OS_MAC
+	if (macos)
+		_fileToolBar->setIconSize(MAC_TOOLBAR_ICON_SIZE);
 	_fileToolBar->addAction(_openFileAction);
 	_fileToolBar->addAction(_reloadFileAction);
 	_fileToolBar->addAction(_closeFileAction);
-#ifndef Q_OS_MAC
-	_fileToolBar->addAction(_printFileAction);
-#endif // Q_OS_MAC
+	if (!macos)
+		_fileToolBar->addAction(_printFileAction);
 
 	_showToolBar = addToolBar(tr("Show"));
 	_showToolBar->setObjectName("Show");
-#ifdef Q_OS_MAC
-	_showToolBar->setIconSize(MAC_TOOLBAR_ICON_SIZE);
-#endif // Q_OS_MAC
-	_showToolBar->addAction(_showPOIAction);
+	if (macos)
+		_showToolBar->setIconSize(MAC_TOOLBAR_ICON_SIZE);
+	if (!macos)
+		_showToolBar->addAction(_showPOIAction);
 	_showToolBar->addAction(_showMapAction);
 	_showToolBar->addAction(_showGraphsAction);
-	_showToolBar->addAction(_showPositionAction);
+	if (!macos)
+		_showToolBar->addAction(_showPositionAction);
 
 	_navigationToolBar = addToolBar(tr("Navigation"));
 	_navigationToolBar->setObjectName("Navigation");
-#ifdef Q_OS_MAC
-	_navigationToolBar->setIconSize(MAC_TOOLBAR_ICON_SIZE);
-#endif // Q_OS_MAC
+	if (macos)
+		_navigationToolBar->setIconSize(MAC_TOOLBAR_ICON_SIZE);
 	_navigationToolBar->addAction(_firstAction);
 	_navigationToolBar->addAction(_prevAction);
 	_navigationToolBar->addAction(_nextAction);

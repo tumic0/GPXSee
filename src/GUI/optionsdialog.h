@@ -117,14 +117,14 @@ private slots:
 	void pauseDetectionSet(bool set);
 
 private:
-	QWidget *createMapPage();
-	QWidget *createAppearancePage();
-	QWidget *createDataPage();
-	QWidget *createPOIPage();
-	QWidget *createSystemPage();
-	QWidget *createExportPage();
-	QWidget *createDEMPage();
-	QWidget *createPositionPage();
+	QWidget *createMapPage(bool macos);
+	QWidget *createAppearancePage(bool macos);
+	QWidget *createDataPage(bool macos);
+	QWidget *createPOIPage(bool macos);
+	QWidget *createSystemPage(bool macos);
+	QWidget *createExportPage(bool macos);
+	QWidget *createDEMPage(bool macos);
+	QWidget *createPositionPage(bool macos);
 
 	Options &_options;
 
