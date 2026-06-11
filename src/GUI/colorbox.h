@@ -1,9 +1,9 @@
 #ifndef COLORBOX_H
 #define COLORBOX_H
 
-#include <QWidget>
+#include <QAbstractButton>
 
-class ColorBox : public QWidget
+class ColorBox : public QAbstractButton
 {
 	Q_OBJECT
 
@@ -20,14 +20,14 @@ signals:
 	void colorChanged(const QColor &color);
 
 protected:
-	void mousePressEvent(QMouseEvent *event);
-	void mouseReleaseEvent(QMouseEvent *event);
 	void paintEvent(QPaintEvent *event);
+
+private slots:
+	void showColorDialog();
 
 private:
 	QColor _color;
 	bool _alpha;
-	bool _pressed;
 };
 
 #endif // COLORBOX_H

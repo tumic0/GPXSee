@@ -6,14 +6,15 @@
 #include "colorbox.h"
 
 
-ColorBox::ColorBox(QWidget *parent) : QWidget(parent)
+ColorBox::ColorBox(QWidget *parent) : QAbstractButton(parent)
 {
 	_color = Qt::red;
 	_alpha = true;
-	_pressed = false;
 
 	setSizePolicy(QSizePolicy::QSizePolicy::Minimum, QSizePolicy::Fixed);
 	setAttribute(Qt::WA_Hover);
+
+	connect(this, &ColorBox::clicked, this, &ColorBox::showColorDialog);
 }
 
 QSize ColorBox::sizeHint() const
@@ -36,7 +37,7 @@ void ColorBox::paintEvent(QPaintEvent *event)
 	QStyleOptionButton option;
 	option.initFrom(this);
 	option.palette.setColor(QPalette::Button, _color);
-	if (_pressed)
+	if (isDown())
 		option.state |= QStyle::State_Sunken;
 	else
 		option.state |= QStyle::State_Raised;
@@ -51,36 +52,22 @@ void ColorBox::paintEvent(QPaintEvent *event)
 		painter.drawPrimitive(QStyle::PE_PanelButtonCommand, option);
 }
 
-void ColorBox::mousePressEvent(QMouseEvent *event)
-{
-	if (event->button() == Qt::LeftButton) {
-		_pressed = true;
-		update();
-	}
-}
-
-void ColorBox::mouseReleaseEvent(QMouseEvent *event)
-{
-	if (event->button() == Qt::LeftButton) {
-		_pressed = false;
-		update();
-
-		QColorDialog::ColorDialogOptions options = _alpha
-		  ? QColorDialog::ColorDialogOptions(QColorDialog::ShowAlphaChannel)
-		  : QColorDialog::ColorDialogOptions();
-		QColor color = QColorDialog::getColor(_color, this, QString(), options);
-		if (color.isValid()) {
-			_color = color;
-			update();
-			emit colorChanged(_color);
-		}
-	}
-
-	QWidget::mouseReleaseEvent(event);
-}
-
 void ColorBox::setColor(const QColor &color)
 {
 	_color = color;
 	update();
+}
+
+void ColorBox::showColorDialog()
+{
+	QColorDialog::ColorDialogOptions options = _alpha
+	  ? QColorDialog::ColorDialogOptions(QColorDialog::ShowAlphaChannel)
+	  : QColorDialog::ColorDialogOptions();
+	QColor color = QColorDialog::getColor(_color, this, QString(), options);
+
+	if (color.isValid()) {
+		_color = color;
+		update();
+		emit colorChanged(_color);
+	}
 }
