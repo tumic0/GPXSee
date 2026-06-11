@@ -1,6 +1,5 @@
 #include <QStylePainter>
 #include <QStyleOptionButton>
-#include <QMouseEvent>
 #include <QColorDialog>
 #include <QComboBox>
 #include "colorbox.h"
