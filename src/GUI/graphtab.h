@@ -18,9 +18,7 @@ class GraphTab : public GraphView
 public:
 	GraphTab(QWidget *parent = 0) : GraphView(parent)
 	{
-#if defined(Q_OS_WIN32) || defined(Q_OS_MAC)
 		setFrameShape(QFrame::NoFrame);
-#endif // Q_OS_WIN32 || Q_OS_MAC
 	}
 	virtual ~GraphTab() {}
 

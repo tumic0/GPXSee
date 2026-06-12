@@ -49,6 +49,7 @@ MapView::MapView(Map *map, POI *poi, QWidget *parent)
 	setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
 	setResizeAnchor(QGraphicsView::AnchorViewCenter);
 	setAcceptDrops(false);
+	setFrameShape(QFrame::NoFrame);
 	viewport()->setAttribute(Qt::WA_AcceptTouchEvents);
 	grabGesture(Qt::PinchGesture);
 
