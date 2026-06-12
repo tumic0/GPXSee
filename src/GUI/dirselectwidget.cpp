@@ -1,5 +1,4 @@
 #include <QPushButton>
-#include <QToolButton>
 #include <QFileDialog>
 #include <QHBoxLayout>
 #include <QFileInfo>
@@ -16,19 +15,15 @@ DirSelectWidget::DirSelectWidget(QWidget *parent) : QWidget(parent)
 	  + 12));
 #endif // Q_OS_ANDROID
 	_edit->setPlaceholderText(tr("System default"));
-#ifdef Q_OS_WIN32
-	_button = new QPushButton("...");
-	_button->setMaximumWidth(_button->sizeHint().width() / 2);
-#else // Q_OS_WIN32
-	_button = new QToolButton();
-	_button->setText("...");
-#endif // Q_OS_WIN32
-	connect(_button, &QToolButton::clicked, this, &DirSelectWidget::browse);
+
+	QPushButton *button = new QPushButton("...");
+	button->setMaximumWidth(35);
+	connect(button, &QPushButton::clicked, this, &DirSelectWidget::browse);
 
 	QHBoxLayout *layout = new QHBoxLayout();
 	layout->setContentsMargins(QMargins());
 	layout->addWidget(_edit);
-	layout->addWidget(_button);
+	layout->addWidget(button);
 	setLayout(layout);
 
 	QSizePolicy p(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);

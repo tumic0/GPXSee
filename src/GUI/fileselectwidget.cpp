@@ -1,15 +1,12 @@
+#include <QLineEdit>
 #include <QPushButton>
-#include <QToolButton>
 #include <QFileDialog>
 #include <QHBoxLayout>
 #include <QFileInfo>
 #include <QApplication>
 #include <QFontMetrics>
-#include "fileselectwidget.h"
-#ifdef Q_OS_ANDROID
 #include "common/util.h"
-#endif // Q_OS_ANDROID
-
+#include "fileselectwidget.h"
 
 FileSelectWidget::FileSelectWidget(QWidget *parent) : QWidget(parent)
 {
@@ -21,19 +18,15 @@ FileSelectWidget::FileSelectWidget(QWidget *parent) : QWidget(parent)
 	_edit->setMinimumWidth(fm.averageCharWidth() * (QDir::homePath().length()
 	  + 12));
 #endif // Q_OS_ANDROID
-#ifdef Q_OS_WIN32
-	_button = new QPushButton("...");
-	_button->setMaximumWidth(_button->sizeHint().width() / 2);
-#else // Q_OS_WIN32
-	_button = new QToolButton();
-	_button->setText("...");
-#endif // Q_OS_WIN32
-	connect(_button, &QToolButton::clicked, this, &FileSelectWidget::browse);
+
+	QPushButton *button = new QPushButton("...");
+	button->setMaximumWidth(35);
+	connect(button, &QPushButton::clicked, this, &FileSelectWidget::browse);
 
 	QHBoxLayout *layout = new QHBoxLayout();
 	layout->setContentsMargins(QMargins());
 	layout->addWidget(_edit);
-	layout->addWidget(_button);
+	layout->addWidget(button);
 	setLayout(layout);
 
 	QSizePolicy p(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);

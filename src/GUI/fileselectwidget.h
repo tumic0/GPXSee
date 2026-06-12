@@ -4,9 +4,6 @@
 #include <QWidget>
 #include <QLineEdit>
 
-class QPushButton;
-class QToolButton;
-
 class FileSelectWidget : public QWidget
 {
 	Q_OBJECT
@@ -28,11 +25,6 @@ private slots:
 
 private:
 	QLineEdit *_edit;
-#ifdef Q_OS_WIN32
-	QPushButton *_button;
-#else // Q_OS_WIN32
-	QToolButton *_button;
-#endif // Q_OS_WIN32
 #ifdef Q_OS_ANDROID
 	QString _fileName;
 #else // Q_OS_ANDROID
