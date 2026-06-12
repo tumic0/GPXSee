@@ -203,14 +203,14 @@ void GUI::createActions()
 	_navigationActionGroup->setEnabled(false);
 
 	// General actions
-#if !defined(Q_OS_MAC) && !defined(Q_OS_ANDROID)
+#if !defined(Q_OS_MACOS) && !defined(Q_OS_ANDROID)
 	_exitAction = new QAction(QIcon::fromTheme(QUIT_NAME, QIcon(QUIT_ICON)),
 	  tr("Quit"), this);
 	_exitAction->setShortcut(QUIT_SHORTCUT);
 	_exitAction->setMenuRole(QAction::QuitRole);
 	connect(_exitAction, &QAction::triggered, this, &GUI::close);
 	addAction(_exitAction);
-#endif // Q_OS_MAC + Q_OS_ANDROID
+#endif // !Q_OS_MACOS && !Q_OS_ANDROID
 
 	// Help & About
 	_pathsAction = new QAction(tr("Paths"), this);
@@ -414,13 +414,13 @@ void GUI::createActions()
 	_showPositionAction->setCheckable(true);
 	_showPositionAction->setEnabled(false);
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 5, 0)) \
-  && (defined(Q_OS_ANDROID) || defined(Q_OS_MAC))
+  && (defined(Q_OS_ANDROID) || defined(Q_OS_MACOS))
 	connect(_showPositionAction, &QAction::triggered, this,
 	  &GUI::showPosition);
-#else // QT 6.5 && (Q_OS_ANDROID || Q_OS_MAC)
+#else // QT 6.5 && (Q_OS_ANDROID || Q_OS_MACOS)
 	connect(_showPositionAction, &QAction::triggered, _mapView,
 	  &MapView::showPosition);
-#endif // QT 6.5 && (Q_OS_ANDROID || Q_OS_MAC)
+#endif // QT 6.5 && (Q_OS_ANDROID || Q_OS_MACOS)
 	_followPositionAction = new QAction(tr("Follow position"), this);
 	_followPositionAction->setMenuRole(QAction::NoRole);
 	_followPositionAction->setCheckable(true);
@@ -765,10 +765,10 @@ void GUI::createMenus()
 	fileMenu->addSeparator();
 	fileMenu->addAction(_reloadFileAction);
 	fileMenu->addAction(_closeFileAction);
-#if !defined(Q_OS_MAC) && !defined(Q_OS_ANDROID)
+#if !defined(Q_OS_MACOS) && !defined(Q_OS_ANDROID)
 	fileMenu->addSeparator();
 	fileMenu->addAction(_exitAction);
-#endif // Q_OS_MAC + Q_OS_ANDROID
+#endif // !Q_OS_MACOS && !Q_OS_ANDROID
 
 #ifdef Q_OS_ANDROID
 	_mapMenu = _menu->addMenu(tr("&Map"));
@@ -2218,7 +2218,7 @@ void GUI::showDEMTiles()
 }
 
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 5, 0)) \
-  && (defined(Q_OS_ANDROID) || defined(Q_OS_MAC))
+  && (defined(Q_OS_ANDROID) || defined(Q_OS_MACOS))
 void GUI::positionGranted(const QPermission &perm)
 {
 	if (perm.status() == Qt::PermissionStatus::Granted)
@@ -2247,7 +2247,7 @@ void GUI::showPosition(bool show)
 
 	_mapView->showPosition(show);
 }
-#endif // QT 6.5 && (Q_OS_ANDROID || Q_OS_MAC)
+#endif // QT 6.5 && (Q_OS_ANDROID || Q_OS_MACOS)
 
 void GUI::updateStatusBarInfo()
 {
@@ -3174,11 +3174,11 @@ void GUI::readSettings(QString &activeMap, QStringList &disabledPOIs,
 	if (READ(showPosition).toBool()) {
 		_showPositionAction->setChecked(true);
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 5, 0)) \
-  && (defined(Q_OS_ANDROID) || defined(Q_OS_MAC))
+  && (defined(Q_OS_ANDROID) || defined(Q_OS_MACOS))
 		showPosition(true);
-#else // QT 6.5 && (Q_OS_ANDROID || Q_OS_MAC)
+#else // QT 6.5 && (Q_OS_ANDROID || Q_OS_MACOS)
 		_mapView->showPosition(true);
-#endif // QT 6.5 && (Q_OS_ANDROID || Q_OS_MAC)
+#endif // QT 6.5 && (Q_OS_ANDROID || Q_OS_MACOS)
 	}
 	if (READ(followPosition).toBool()) {
 		_followPositionAction->setChecked(true);

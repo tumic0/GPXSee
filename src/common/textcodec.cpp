@@ -7,7 +7,7 @@
 */
 
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0) \
-  || defined(Q_OS_ANDROID) || defined(Q_OS_MAC)
+  || defined(Q_OS_ANDROID) || defined(Q_OS_MACOS)
 
 static QTextCodec *codec(int mib)
 {

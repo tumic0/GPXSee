@@ -3,7 +3,7 @@
 
 #include <QString>
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0) \
-  || defined(Q_OS_ANDROID) || defined(Q_OS_MAC)
+  || defined(Q_OS_ANDROID) || defined(Q_OS_MACOS)
 #include <QTextCodec>
 #else // QT 5 || ANDROID || MAC
 #include <QStringDecoder>
@@ -19,7 +19,7 @@ public:
 
 private:
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0) \
-  || defined(Q_OS_ANDROID) || defined(Q_OS_MAC)
+  || defined(Q_OS_ANDROID) || defined(Q_OS_MACOS)
 	QTextCodec *_codec;
 #else // QT 5 || ANDROID || MAC
 	QStringDecoder _decoder;

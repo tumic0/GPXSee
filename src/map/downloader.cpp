@@ -12,7 +12,7 @@
 #define PLATFORM_STR "Linux"
 #elif defined(Q_OS_WIN32)
 #define PLATFORM_STR "Windows"
-#elif defined(Q_OS_MAC)
+#elif defined(Q_OS_MACOS)
 #define PLATFORM_STR "OS X"
 #elif defined(Q_OS_BSD4)
 #define PLATFORM_STR "BSD"

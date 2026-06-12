@@ -94,9 +94,9 @@ private slots:
 	void downloadMapDEM();
 	void showDEMTiles();
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 5, 0)) \
-  && (defined(Q_OS_ANDROID) || defined(Q_OS_MAC))
+  && (defined(Q_OS_ANDROID) || defined(Q_OS_MACOS))
 	void showPosition(bool show);
-#endif // QT 6.5 && (Q_OS_ANDROID || Q_OS_MAC)
+#endif // QT 6.5 && (Q_OS_ANDROID || Q_OS_MACOS)
 
 	void mapChanged(QAction *action);
 	void graphChanged(int);
@@ -215,9 +215,9 @@ private:
 	void downloadDEM(const RectC &rect);
 
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 5, 0)) \
-  && (defined(Q_OS_ANDROID) || defined(Q_OS_MAC))
+  && (defined(Q_OS_ANDROID) || defined(Q_OS_MACOS))
 	void positionGranted(const QPermission &perm);
-#endif // QT 6.5 && (Q_OS_ANDROID || Q_OS_MAC)
+#endif // QT 6.5 && (Q_OS_ANDROID || Q_OS_MACOS)
 
 	void loadOptions();
 	void updateOptions(const Options &options);
@@ -253,9 +253,9 @@ private:
 #ifndef Q_OS_ANDROID
 	QActionGroup *_recentFilesActionGroup;
 #endif // Q_OS_ANDROID
-#if !defined(Q_OS_MAC) && !defined(Q_OS_ANDROID)
+#if !defined(Q_OS_MACOS) && !defined(Q_OS_ANDROID)
 	QAction *_exitAction;
-#endif // Q_OS_MAC + Q_OS_ANDROID
+#endif // !Q_OS_MACOS && !Q_OS_ANDROID
 	QAction *_pathsAction;
 	QAction *_aboutAction;
 	QAction *_printFileAction;

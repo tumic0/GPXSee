@@ -27,12 +27,12 @@
 
 App::App(int &argc, char **argv) : QApplication(argc, argv)
 {
-#if defined(Q_OS_WIN32) || defined(Q_OS_MAC)
+#if defined(Q_OS_WIN32) || defined(Q_OS_MACOS)
 	setApplicationName(APP_NAME);
-#else // Q_OS_WIN32 || Q_OS_MAC
+#else // Q_OS_WIN32 || Q_OS_MACOS
 	setApplicationName(QString(APP_NAME).toLower());
 	setDesktopFileName(applicationName());
-#endif // Q_OS_WIN32 || Q_OS_MAC
+#endif // Q_OS_WIN32 || Q_OS_MACOS
 	setApplicationVersion(APP_VERSION);
 
 	QTranslator *app = new QTranslator(this);
@@ -42,9 +42,9 @@ App::App(int &argc, char **argv) : QApplication(argc, argv)
 			installTranslator(app);
 
 	QTranslator *qt = new QTranslator(this);
-#if defined(Q_OS_WIN32) || defined(Q_OS_MAC)
+#if defined(Q_OS_WIN32) || defined(Q_OS_MACOS)
 	if (qt->load(QLocale::system(), "qt", "_", ProgramPaths::translationsDir()))
-#else // Q_OS_WIN32 || Q_OS_MAC
+#else // Q_OS_WIN32 || Q_OS_MACOS
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 	if (qt->load(QLocale::system(), "qt", "_", QLibraryInfo::location(
 	  QLibraryInfo::TranslationsPath)))
@@ -52,12 +52,12 @@ App::App(int &argc, char **argv) : QApplication(argc, argv)
 	if (qt->load(QLocale::system(), "qt", "_", QLibraryInfo::path(
 	  QLibraryInfo::TranslationsPath)))
 #endif // QT 6
-#endif // Q_OS_WIN32 || Q_OS_MAC
+#endif // Q_OS_WIN32 || Q_OS_MACOS
 		installTranslator(qt);
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_MACOS
 	setAttribute(Qt::AA_DontShowIconsInMenus);
-#endif // Q_OS_MAC
+#endif // Q_OS_MACOS
 	QNetworkProxyFactory::setUseSystemConfiguration(true);
 	/* The QNetworkAccessManager must be a child of QApplication, otherwise it
 	   triggers the following warning on exit (and may probably crash):
@@ -72,9 +72,9 @@ App::App(int &argc, char **argv) : QApplication(argc, argv)
 	loadPCSs();
 	Waypoint::loadSymbolIcons(ProgramPaths::symbolsDir());
 
-#if defined(Q_OS_WIN32) || defined(Q_OS_MAC)
+#if defined(Q_OS_WIN32) || defined(Q_OS_MACOS)
 	QIcon::setThemeName(APP_NAME);
-#endif // Q_OS_WIN32 || Q_OS_MAC
+#endif // Q_OS_WIN32 || Q_OS_MACOS
 	QIcon::setFallbackThemeName(APP_NAME);
 
 	_gui = new GUI(app->language());
