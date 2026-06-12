@@ -983,9 +983,8 @@ void GUI::createGraphTabs()
 	_graphTabWidget->setSizePolicy(QSizePolicy(QSizePolicy::Ignored,
 	  QSizePolicy::Preferred));
 	_graphTabWidget->setMinimumHeight(200);
-#ifndef Q_OS_MAC
-	_graphTabWidget->setDocumentMode(true);
-#endif // Q_OS_MAC
+	if (!MacOS::match(style()))
+		_graphTabWidget->setDocumentMode(true);
 
 	connect(_graphTabWidget, &QTabWidget::currentChanged, this,
 	  &GUI::graphChanged);
@@ -1832,9 +1831,8 @@ void GUI::showFullscreen(bool show)
 		showToolbars(false);
 		_mapView->setFrameStyle(QFrame::NoFrame);
 		_graphTabWidget->tabBar()->hide();
-#ifdef Q_OS_MAC
-		_graphTabWidget->setDocumentMode(true);
-#endif // Q_OS_MAC
+		if (MacOS::match(style()))
+			_graphTabWidget->setDocumentMode(true);
 		showFullScreen();
 	} else {
 		Q_ASSERT(!_windowGeometries.isEmpty());
@@ -1844,9 +1842,8 @@ void GUI::showFullscreen(bool show)
 		showToolbars(true);
 		_mapView->setFrameStyle(_frameStyle);
 		_graphTabWidget->tabBar()->show();
-#ifdef Q_OS_MAC
-		_graphTabWidget->setDocumentMode(false);
-#endif // Q_OS_MAC
+		if (MacOS::match(style()))
+			_graphTabWidget->setDocumentMode(false);
 		showNormal();
 	}
 }
