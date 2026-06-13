@@ -138,15 +138,15 @@ int App::run()
 void App::colorSchemeChanged(Qt::ColorScheme colorScheme)
 {
 #if defined(Q_OS_MACOS) || defined(Q_OS_ANDROID)
-	if (styleHints()->colorScheme() == Qt::ColorScheme::Dark)
+	if (colorScheme == Qt::ColorScheme::Dark)
 		QIcon::setThemeName(APP_NAME "-Dark");
 	else
 		QIcon::setThemeName(APP_NAME);
 #else
-	if (styleHints()->colorScheme() == Qt::ColorScheme::Dark)
+	if (colorScheme == Qt::ColorScheme::Dark)
 		QIcon::setFallbackThemeName(APP_NAME "-Dark");
 	else
-	QIcon::setFallbackThemeName(APP_NAME);
+		QIcon::setFallbackThemeName(APP_NAME);
 #endif
 }
 #endif // QT 6.5 && !Q_OS_WIN32
