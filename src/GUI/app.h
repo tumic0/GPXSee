@@ -17,8 +17,11 @@ public:
 protected:
 	bool event(QEvent *event);
 
-#ifdef Q_OS_ANDROID
 private slots:
+#if QT_VERSION >= QT_VERSION_CHECK(6, 5, 0) && !defined(Q_OS_WIN32)
+	void colorSchemeChanged(Qt::ColorScheme colorScheme);
+#endif // QT 6.5 && !Q_OS_WIN32
+#ifdef Q_OS_ANDROID
 	void appStateChanged(Qt::ApplicationState state);
 #endif // Q_OS_ANDROID
 
