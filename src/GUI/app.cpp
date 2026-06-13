@@ -73,9 +73,9 @@ App::App(int &argc, char **argv) : QApplication(argc, argv)
 	loadPCSs();
 	Waypoint::loadSymbolIcons(ProgramPaths::symbolsDir());
 
-#if defined(Q_OS_WIN32)
+#if defined(Q_OS_WIN32) || defined(Q_OS_ANDROID)
 	QIcon::setThemeName(APP_NAME);
-#elif defined(Q_OS_MACOS) || defined(Q_OS_ANDROID)
+#elif defined(Q_OS_MACOS)
 #if QT_VERSION >= QT_VERSION_CHECK(6, 5, 0)
 	if (styleHints()->colorScheme() == Qt::ColorScheme::Dark)
 		QIcon::setThemeName(APP_NAME "-Dark");
@@ -90,10 +90,11 @@ App::App(int &argc, char **argv) : QApplication(argc, argv)
 #endif // QT 6.5
 	QIcon::setFallbackThemeName(APP_NAME);
 #endif
-#if QT_VERSION >= QT_VERSION_CHECK(6, 5, 0) && !defined(Q_OS_WIN32)
+#if QT_VERSION >= QT_VERSION_CHECK(6, 5, 0) \
+  && !defined(Q_OS_WIN32) && !defined(Q_OS_ANDROID)
 	connect(styleHints(), &QStyleHints::colorSchemeChanged, this,
 	  &App::colorSchemeChanged);
-#endif // QT 6.5 && !Q_OS_WIN32
+#endif // QT 6.5 && !WIN32 && !ANDROID
 
 	_gui = new GUI(app->language());
 
@@ -134,7 +135,8 @@ int App::run()
 	return exec();
 }
 
-#if QT_VERSION >= QT_VERSION_CHECK(6, 5, 0) && !defined(Q_OS_WIN32)
+#if QT_VERSION >= QT_VERSION_CHECK(6, 5, 0) \
+  && !defined(Q_OS_WIN32) && !defined(Q_OS_ANDROID)
 void App::colorSchemeChanged(Qt::ColorScheme colorScheme)
 {
 #if defined(Q_OS_MACOS) || defined(Q_OS_ANDROID)
@@ -149,7 +151,7 @@ void App::colorSchemeChanged(Qt::ColorScheme colorScheme)
 		QIcon::setFallbackThemeName(APP_NAME);
 #endif
 }
-#endif // QT 6.5 && !Q_OS_WIN32
+#endif // QT 6.5 && !WIN32 && !ANDROID
 
 #ifdef Q_OS_ANDROID
 void App::appStateChanged(Qt::ApplicationState state)
