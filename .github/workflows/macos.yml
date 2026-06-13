@@ -17,6 +17,8 @@ jobs:
         with:
           version: '6.12.0'
           modules: qtpositioning qtserialport qtimageformats qtmultimedia qt5compat
+      - name: Remove the StyleKit style (QTBUG-147447 workaround)
+        run: rm -rf ${{env.QT_PLUGIN_PATH}}/styles/libqstylekitstyle*
       - name: Create localization
         run: lrelease-pro gpxsee.pro
       - name: Configure build
