@@ -627,7 +627,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="486"/>
         <source>Track waypoints</source>
-        <translation type="unfinished"></translation>
+        <translation>Spåra vägpunkter</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="491"/>
@@ -2142,7 +2142,7 @@
         <location filename="../src/GUI/optionsdialog.cpp" line="786"/>
         <location filename="../src/GUI/optionsdialog.cpp" line="794"/>
         <source>Image cache size:</source>
-        <translation>Cashe-storlek för bilder:</translation>
+        <translation>Cache-storlek för bilder:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="788"/>
