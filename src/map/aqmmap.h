@@ -63,7 +63,8 @@ private:
 
 	qreal tileSize() const;
 	QByteArray tileData(const QPoint &tile);
-	void drawTile(QPainter *painter, QPixmap &pixmap, QPointF &tp);
+	void drawTile(QPainter *painter, const QPixmap &pixmap,
+	  const QPointF &tp) const;
 
 	friend QDebug operator<<(QDebug dbg, const File &file);
 	friend QDebug operator<<(QDebug dbg, const Zoom &zoom);

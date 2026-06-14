@@ -396,22 +396,26 @@ void AQMMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 
 	for (int i = 0; i < tiles.size(); i++) {
 		const DataTile &mt = tiles.at(i);
-		QPixmap pm(mt.pixmap());
-		if (pm.isNull())
+		if (mt.pixmap().isNull())
 			continue;
 
-		QPixmapCache::insert(mt.key(), pm);
+		QPixmapCache::insert(mt.key(), mt.pixmap());
 
 		QPointF tp(tl.x() + (mt.xy().x() - tile.x()) * tileSize(),
 		  tl.y() + (mt.xy().y() - tile.y()) * tileSize());
-		drawTile(painter, pm, tp);
+		drawTile(painter, mt.pixmap(), tp);
 	}
 }
 
-void AQMMap::drawTile(QPainter *painter, QPixmap &pixmap, QPointF &tp)
+void AQMMap::drawTile(QPainter *painter, const QPixmap &pixmap,
+  const QPointF &tp) const
 {
-	pixmap.setDevicePixelRatio(_mapRatio);
-	painter->drawPixmap(tp, pixmap);
+	if (_mapRatio != pixmap.devicePixelRatio()) {
+		QPixmap pm(pixmap);
+		pm.setDevicePixelRatio(_mapRatio);
+		painter->drawPixmap(tp, pm);
+	} else
+		painter->drawPixmap(tp, pixmap);
 }
 
 Map *AQMMap::create(const QString &path, const Projection &proj, bool *isDir)

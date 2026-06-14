@@ -477,24 +477,30 @@ void MBTilesMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 
 			for (int i = 0; i < tiles.size(); i++) {
 				const RasterTile &mt = tiles.at(i);
-				QPixmap pm(mt.pixmap());
-				if (pm.isNull())
+				if (mt.pixmap().isNull())
 					continue;
 
-				QPixmapCache::insert(key(mt.zoom(), mt.xy()), pm);
+				QPixmapCache::insert(key(mt.zoom(), mt.xy()), mt.pixmap());
 
 				QPointF tp(tilePos(tl, mt.xy(), tile, overzoom));
-				drawTile(painter, pm, tp);
+				drawTile(painter, mt.pixmap(), tp);
 			}
 		} else
 			runJob(new MVTJob(tiles));
 	}
 }
 
-void MBTilesMap::drawTile(QPainter *painter, QPixmap &pixmap, QPointF &tp)
+void MBTilesMap::drawTile(QPainter *painter, const QPixmap &pixmap,
+  const QPointF &tp) const
 {
-	pixmap.setDevicePixelRatio(_mapRatio > 1.0 ? _mapRatio : _tileRatio);
-	painter->drawPixmap(tp, pixmap);
+	qreal ratio = _mapRatio > 1.0 ? _mapRatio : _tileRatio;
+
+	if (ratio != pixmap.devicePixelRatio()) {
+		QPixmap pm(pixmap);
+		pm.setDevicePixelRatio(ratio);
+		painter->drawPixmap(tp, pm);
+	} else
+		painter->drawPixmap(tp, pixmap);
 }
 
 QPointF MBTilesMap::ll2xy(const Coordinates &c)

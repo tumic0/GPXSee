@@ -63,7 +63,8 @@ private:
 	bool computeBounds();
 	qreal tileSize() const;
 	QByteArray tileData(const QPoint &tile);
-	void drawTile(QPainter *painter, QPixmap &pixmap, QPointF &tp);
+	void drawTile(QPainter *painter, const QPixmap &pixmap,
+	  const QPointF &tp) const;
 
 	static QRect rect(const Zoom &zoom);
 
