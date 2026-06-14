@@ -51,9 +51,9 @@ private:
 	void updateTransform();
 	QSizeF tileSize(const WMTS::Zoom &zoom) const;
 	qreal coordinatesRatio() const;
-	qreal imageRatio() const;
 	void init();
-	void drawTile(QPainter *painter, QPixmap &pixmap, QPointF &tp);
+	void drawTile(QPainter *painter, const QPixmap &pixmap,
+	  const QPointF &tp) const;
 
 	QString _name;
 	WMTS *_wmts;

@@ -175,11 +175,6 @@ qreal WMTSMap::coordinatesRatio() const
 	return _mapRatio > 1.0 ? _mapRatio / _tileRatio : 1.0;
 }
 
-qreal WMTSMap::imageRatio() const
-{
-	return _mapRatio > 1.0 ? _mapRatio : _tileRatio;
-}
-
 QSizeF WMTSMap::tileSize(const WMTS::Zoom &zoom) const
 {
 	return QSizeF(zoom.tile().width() / coordinatesRatio(),
@@ -228,21 +223,27 @@ void WMTSMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 
 	for (int i = 0; i < renderTiles.size(); i++) {
 		const FileTile &mt = renderTiles.at(i);
-		QPixmap pm(mt.pixmap());
-		if (pm.isNull())
+		if (mt.pixmap().isNull())
 			continue;
 
-		QPixmapCache::insert(mt.file(), pm);
+		QPixmapCache::insert(mt.file(), mt.pixmap());
 
 		QPointF tp(mt.xy().x() * ts.width(), mt.xy().y() * ts.height());
-		drawTile(painter, pm, tp);
+		drawTile(painter, mt.pixmap(), tp);
 	}
 }
 
-void WMTSMap::drawTile(QPainter *painter, QPixmap &pixmap, QPointF &tp)
+void WMTSMap::drawTile(QPainter *painter, const QPixmap &pixmap,
+  const QPointF &tp) const
 {
-	pixmap.setDevicePixelRatio(imageRatio());
-	painter->drawPixmap(tp, pixmap);
+	qreal ratio = _mapRatio > 1.0 ? _mapRatio : _tileRatio;
+
+	if (ratio != pixmap.devicePixelRatio()) {
+		QPixmap pm(pixmap);
+		pm.setDevicePixelRatio(ratio);
+		painter->drawPixmap(tp, pm);
+	} else
+		painter->drawPixmap(tp, pixmap);
 }
 
 QPointF WMTSMap::ll2xy(const Coordinates &c)

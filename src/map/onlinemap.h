@@ -60,7 +60,8 @@ private:
 	QPoint tileCoordinates(int x, int y, int zoom) const;
 	QPointF tilePos(const QPointF &tl, const QPoint &tc, const QPoint &tile,
 	  unsigned overzoom) const;
-	void drawTile(QPainter *painter, QPixmap &pixmap, QPointF &tp);
+	void drawTile(QPainter *painter, const QPixmap &pixmap,
+	  const QPointF &tp) const;
 
 	QString key(int zoom, const QPoint &xy) const;
 	bool isRunning(int zoom, const QPoint &xy) const;
