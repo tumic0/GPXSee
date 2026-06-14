@@ -411,7 +411,7 @@ void Coros5Map::drawTile(QPainter *painter, const QPixmap &pixmap,
 	if (ratio != pixmap.devicePixelRatio()) {
 		QPixmap pm(pixmap);
 		pm.setDevicePixelRatio(ratio);
-		painter->drawPixmap(tp, pixmap);
+		painter->drawPixmap(tp, pm);
 	} else
 		painter->drawPixmap(tp, pixmap);
 }
