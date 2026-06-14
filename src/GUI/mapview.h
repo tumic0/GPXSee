@@ -128,6 +128,7 @@ public slots:
 	void showAreas(bool show);
 	void showWaypoints(bool show);
 	void showRouteWaypoints(bool show);
+	void showTrackWaypoints(bool show);
 	void setMarkerPosition(qreal pos);
 	void followPosition(bool follow);
 	void showMotionInfo(bool show);
@@ -207,7 +208,8 @@ private:
 	bool _showMap, _showTracks, _showRoutes, _showAreas, _showWaypoints,
 	  _showWaypointLabels, _showPOI, _showPOILabels, _showRouteWaypoints,
 	  _showMarkers, _showPathTicks, _showPOIIcons, _showWaypointIcons,
-	  _showPosition, _showPositionCoordinates, _showMotionInfo, _showVideos;
+	  _showPosition, _showPositionCoordinates, _showMotionInfo, _showVideos,
+	  _showTrackWaypoints;
 	MarkerInfoItem::Type _markerInfoType;
 	bool _overlapPOIs, _followPosition;
 	int _trackWidth, _routeWidth, _areaWidth;

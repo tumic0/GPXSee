@@ -483,6 +483,11 @@ void GUI::createActions()
 	_showRouteWaypointsAction->setCheckable(true);
 	connect(_showRouteWaypointsAction, &QAction::triggered, _mapView,
 	  &MapView::showRouteWaypoints);
+	_showTrackWaypointsAction = new QAction(tr("Track waypoints"), this);
+	_showTrackWaypointsAction->setMenuRole(QAction::NoRole);
+	_showTrackWaypointsAction->setCheckable(true);
+	connect(_showTrackWaypointsAction, &QAction::triggered, _mapView,
+	  &MapView::showTrackWaypoints);
 	_showTicksAction = new QAction(tr("km/mi markers"), this);
 	_showTicksAction->setMenuRole(QAction::NoRole);
 	_showTicksAction->setCheckable(true);
@@ -814,6 +819,7 @@ void GUI::createMenus()
 	dataMenu->addAction(_showWaypointIconsAction);
 	dataMenu->addAction(_showWaypointLabelsAction);
 	dataMenu->addAction(_showRouteWaypointsAction);
+	dataMenu->addAction(_showTrackWaypointsAction);
 	dataMenu->addAction(_showTicksAction);
 	dataMenu->addAction(_showLegendAction);
 	QMenu *markerMenu = dataMenu->addMenu(tr("Position info"));
@@ -2851,6 +2857,7 @@ void GUI::writeSettings()
 	WRITE(waypointIcons, _showWaypointIconsAction->isChecked());
 	WRITE(waypointLabels, _showWaypointLabelsAction->isChecked());
 	WRITE(routeWaypoints, _showRouteWaypointsAction->isChecked());
+	WRITE(trackWaypoints, _showTrackWaypointsAction->isChecked());
 	WRITE(pathTicks, _showTicksAction->isChecked());
 	WRITE(legend, _showLegendAction->isChecked());
 	WRITE(positionMarkers, _showMarkersAction->isChecked()
@@ -3129,6 +3136,10 @@ void GUI::readSettings(QString &activeMap, QStringList &disabledPOIs,
 	if (READ(routeWaypoints).toBool()) {
 		_showRouteWaypointsAction->setChecked(true);
 		_mapView->showRouteWaypoints(true);
+	}
+	if (READ(trackWaypoints).toBool()) {
+		_showTrackWaypointsAction->setChecked(true);
+		_mapView->showTrackWaypoints(true);
 	}
 	if (READ(pathTicks).toBool()) {
 		_showTicksAction->setChecked(true);

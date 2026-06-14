@@ -40,6 +40,7 @@ PathItem::PathItem(const Path &path, Map *map, QGraphicsItem *parent)
 	_showMarker = true;
 	_showVideo = false;
 	_showTicks = false;
+	_showPoints = false;
 	_markerInfoType = MarkerInfoItem::None;
 
 	_pen = QPen(color(), width());
@@ -143,13 +144,26 @@ void PathItem::updatePainterPath()
 }
 
 void PathItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
-	  QWidget *widget)
+  QWidget *widget)
 {
 	Q_UNUSED(option);
 	Q_UNUSED(widget);
 
-	painter->setPen(_pen);
-	painter->drawPath(_painterPath);
+	if (_showPoints) {
+		QPen lp(_pen);
+		lp.setColor(_pen.color().lighter());
+		painter->setPen(lp);
+		painter->drawPath(_painterPath);
+
+		painter->setPen(Qt::NoPen);
+		painter->setBrush(_pen.color());
+		for (int i = 0; i < _painterPath.elementCount(); i++)
+			painter->drawEllipse(_painterPath.elementAt(i), _width / 2,
+			  _width / 2);
+	} else {
+		painter->setPen(_pen);
+		painter->drawPath(_painterPath);
+	}
 
 /*
 	painter->setPen(Qt::red);
@@ -453,6 +467,15 @@ void PathItem::showVideo(bool show)
 	enableVideo(show && _showMarker);
 
 	_showVideo = show;
+}
+
+void PathItem::showPoints(bool show)
+{
+	if (_showPoints == show)
+		return;
+
+	_showPoints = show;
+	update();
 }
 
 qreal PathItem::xInM() const

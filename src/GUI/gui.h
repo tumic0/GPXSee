@@ -313,6 +313,7 @@ private:
 	QAction *_showWaypointIconsAction;
 	QAction *_showAreasAction;
 	QAction *_showRouteWaypointsAction;
+	QAction *_showTrackWaypointsAction;
 	QAction *_hideMarkersAction;
 	QAction *_showMarkersAction;
 	QAction *_showMarkerDateAction;

@@ -50,6 +50,7 @@ public:
 	void showMarker(bool show);
 	void showMarkerInfo(MarkerInfoItem::Type type);
 	void showTicks(bool show);
+	void showPoints(bool show);
 	void showVideo(bool show);
 
 	void setMarkerPosition(qreal pos);
@@ -119,6 +120,7 @@ private:
 	Qt::PenStyle _penStyle;
 	bool _showMarker;
 	bool _showTicks;
+	bool _showPoints;
 	bool _showVideo;
 	MarkerInfoItem::Type _markerInfoType;
 	qreal _markerDistance;

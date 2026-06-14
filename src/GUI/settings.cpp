@@ -162,6 +162,7 @@ SETTING(routes,              "routes",                 true                   );
 SETTING(waypoints,           "waypoints",              true                   );
 SETTING(areas,               "areas",                  true                   );
 SETTING(routeWaypoints,      "routeWaypoints",         true                   );
+SETTING(trackWaypoints,      "trackWaypoints",         false                  );
 SETTING(waypointIcons,       "waypointIcons",          false                  );
 SETTING(waypointLabels,      "waypointLabels",         true                   );
 SETTING(pathTicks,           "pathTicks",              false                  );

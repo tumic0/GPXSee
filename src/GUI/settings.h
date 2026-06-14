@@ -116,6 +116,7 @@ public:
 	static const Setting waypoints;
 	static const Setting areas;
 	static const Setting routeWaypoints;
+	static const Setting trackWaypoints;
 	static const Setting waypointIcons;
 	static const Setting waypointLabels;
 	static const Setting pathTicks;

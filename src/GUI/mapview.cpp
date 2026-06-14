@@ -108,6 +108,7 @@ MapView::MapView(Map *map, POI *poi, QWidget *parent)
 	_showPOIIcons = false;
 	_overlapPOIs = false;
 	_showRouteWaypoints = false;
+	_showTrackWaypoints = false;
 	_showMarkers = false;
 	_markerInfoType = MarkerInfoItem::None;
 	_showPathTicks = false;
@@ -194,6 +195,7 @@ PathItem *MapView::addTrack(const Track &track)
 	ti->showMarkerInfo(_markerInfoType);
 	ti->showTicks(_showPathTicks);
 	ti->showVideo(track.isVideo() & _showVideos);
+	ti->showPoints(_showTrackWaypoints);
 	_scene->addItem(ti);
 
 	if (_showTracks) {
@@ -941,6 +943,14 @@ void MapView::showRouteWaypoints(bool show)
 
 	for (int i = 0; i < _routes.size(); i++)
 		_routes.at(i)->showWaypoints(show);
+}
+
+void MapView::showTrackWaypoints(bool show)
+{
+	_showTrackWaypoints = show;
+
+	for (int i = 0; i < _tracks.size(); i++)
+		_tracks.at(i)->showPoints(show);
 }
 
 void MapView::showMarkers(bool show)
