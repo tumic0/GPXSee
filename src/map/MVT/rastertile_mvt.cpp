@@ -57,6 +57,7 @@ void RasterTile::render()
 		renderMVT(painter, pbf);
 
 	_pixmap.convertFromImage(img);
+	_pixmap.setDevicePixelRatio(_ratio);
 }
 
 static VectorTile::Layer *tileLayer(const VectorTile &tile,
