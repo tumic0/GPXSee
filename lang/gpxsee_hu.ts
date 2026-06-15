@@ -614,7 +614,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="486"/>
         <source>Track waypoints</source>
-        <translation type="unfinished"></translation>
+        <translation>Nyomvonal köztespontok</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="491"/>
@@ -2058,7 +2058,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="700"/>
         <source>The zoom level will be changed so that the whole content (tracks/waypoints) fits to the printed area and the map resolution is as close as possible to the print resolution.</source>
-        <translation>A nagyítás mértéke megváltozik, hogy a teljes tartalom (nyomvonal / köztespontok) illeszkedjen a nyomtatott területhez, és a térkép felbontása a lehető legközelebb legyen a nyomtatási felbontáshoz.</translation>
+        <translation>A nagyítás mértéke megváltozik, hogy a teljes tartalom (nyomvonalak / köztespontok) illeszkedjen a nyomtatott területhez, és a térkép felbontása a lehető legközelebb legyen a nyomtatási felbontáshoz.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="716"/>
