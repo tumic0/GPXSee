@@ -111,137 +111,137 @@
         <translation>Subtenataj dosieroj</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="271"/>
+        <location filename="../src/data/data.cpp" line="272"/>
         <source>CSV files</source>
         <translation>CSV-dosieroj</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="272"/>
+        <location filename="../src/data/data.cpp" line="273"/>
         <source>CUP files</source>
         <translation>CUP-dosieroj</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="273"/>
+        <location filename="../src/data/data.cpp" line="274"/>
         <source>FIT files</source>
         <translation>FIT-dosieroj</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="274"/>
+        <location filename="../src/data/data.cpp" line="275"/>
         <source>GeoJSON files</source>
         <translation>GeoJSON-dosieroj</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="275"/>
+        <location filename="../src/data/data.cpp" line="277"/>
         <source>GPI files</source>
         <translation>GPI-dosieroj</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="276"/>
+        <location filename="../src/data/data.cpp" line="278"/>
         <source>GPX files</source>
         <translation>GPX-dosieroj</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="277"/>
+        <location filename="../src/data/data.cpp" line="279"/>
         <source>IGC files</source>
         <translation>IGC-dosieroj</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="278"/>
+        <location filename="../src/data/data.cpp" line="280"/>
         <source>ITN files</source>
         <translation>ITN-dosieroj</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="279"/>
+        <location filename="../src/data/data.cpp" line="281"/>
         <source>JPEG images</source>
         <translation>JPEG-bildoj</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="280"/>
+        <location filename="../src/data/data.cpp" line="282"/>
         <source>KML files</source>
         <translation>KML-dosieroj</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="281"/>
+        <location filename="../src/data/data.cpp" line="283"/>
         <source>LOC files</source>
         <translation>LOC-dosieroj</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="282"/>
+        <location filename="../src/data/data.cpp" line="284"/>
         <source>MP4 videos</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="287"/>
+        <location filename="../src/data/data.cpp" line="290"/>
         <source>GPMF files</source>
         <translation>GPMF-dosieroj</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="283"/>
+        <location filename="../src/data/data.cpp" line="285"/>
         <source>NMEA files</source>
         <translation>NMEA-dosieroj</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="284"/>
+        <location filename="../src/data/data.cpp" line="286"/>
         <source>ONmove files</source>
         <translation>ONmove-dosieroj</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="285"/>
+        <location filename="../src/data/data.cpp" line="287"/>
         <source>OV2 files</source>
         <translation>OV2-dosieroj</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="286"/>
+        <location filename="../src/data/data.cpp" line="288"/>
         <source>OziExplorer files</source>
         <translation>OziExplorer-dosieroj</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="288"/>
+        <location filename="../src/data/data.cpp" line="291"/>
         <source>SLF files</source>
         <translation>SLF-dosieroj</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="289"/>
+        <location filename="../src/data/data.cpp" line="292"/>
         <source>SML files</source>
         <translation>SML-dosieroj</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="290"/>
+        <location filename="../src/data/data.cpp" line="293"/>
         <source>DJI SRT files</source>
         <translation>DJIa SRT dosieroj</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="291"/>
+        <location filename="../src/data/data.cpp" line="294"/>
         <source>TCX files</source>
         <translation>TCX-dosieroj</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="292"/>
+        <location filename="../src/data/data.cpp" line="295"/>
         <source>70mai GPS log files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="293"/>
+        <location filename="../src/data/data.cpp" line="296"/>
         <source>VKX files</source>
         <translation>VKX dosieroj</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="294"/>
+        <location filename="../src/data/data.cpp" line="297"/>
         <source>VTK files</source>
         <translation>VTK dosieroj</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="295"/>
+        <location filename="../src/data/data.cpp" line="298"/>
         <source>TwoNav files</source>
         <translation>TwoNav-dosieroj</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="296"/>
+        <location filename="../src/data/data.cpp" line="300"/>
         <source>GPSDump files</source>
         <translation>GPSDump-dosieroj</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="297"/>
+        <location filename="../src/data/data.cpp" line="301"/>
         <source>All files</source>
         <translation>Ĉiuj dosieroj</translation>
     </message>
@@ -1400,22 +1400,22 @@
         <translation>AlpineQuest-mapoj</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="191"/>
+        <location filename="../src/map/maplist.cpp" line="193"/>
         <source>Garmin IMG maps</source>
         <translation>Garmin IMG -mapoj</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="193"/>
+        <location filename="../src/map/maplist.cpp" line="195"/>
         <source>Garmin JNX maps</source>
         <translation>Garmin JNX -mapoj</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="194"/>
+        <location filename="../src/map/maplist.cpp" line="196"/>
         <source>BSB nautical charts</source>
         <translation>BSB -maraj mapoj</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="190"/>
+        <location filename="../src/map/maplist.cpp" line="192"/>
         <source>GEMF maps</source>
         <translation>GEMF-mapoj</translation>
     </message>
@@ -1425,82 +1425,82 @@
         <translation>ENC-mapoj</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="189"/>
+        <location filename="../src/map/maplist.cpp" line="190"/>
         <source>COROS maps</source>
         <translation>COROS-mapoj</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="195"/>
+        <location filename="../src/map/maplist.cpp" line="198"/>
         <source>KMZ maps</source>
         <translation>KMZ-mapoj</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="196"/>
+        <location filename="../src/map/maplist.cpp" line="199"/>
         <source>Mapsforge maps</source>
         <translation>Mapsforge-mapoj</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="197"/>
+        <location filename="../src/map/maplist.cpp" line="200"/>
         <source>OziExplorer maps</source>
         <translation>OziExplorer-mapoj</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="198"/>
+        <location filename="../src/map/maplist.cpp" line="202"/>
         <source>MBTiles maps</source>
         <translation>MBTiles-mapoj</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="199"/>
+        <location filename="../src/map/maplist.cpp" line="204"/>
         <source>Orux maps</source>
         <translation>Orux-mapoj</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="200"/>
+        <location filename="../src/map/maplist.cpp" line="205"/>
         <source>PMTiles maps</source>
         <translation>PMTiles-mapoj</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="201"/>
+        <location filename="../src/map/maplist.cpp" line="207"/>
         <source>QuickChart maps</source>
         <translation>QuickChart-mapoj</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="203"/>
+        <location filename="../src/map/maplist.cpp" line="210"/>
         <source>Osmdroid SQLite maps</source>
         <translation>Osmdroid SQLite -mapoj</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="206"/>
+        <location filename="../src/map/maplist.cpp" line="214"/>
         <source>TrekBuddy maps/atlases</source>
         <translation>TrekBuddy-mapoj/maparoj</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="208"/>
+        <location filename="../src/map/maplist.cpp" line="216"/>
         <source>GeoTIFF images</source>
         <translation>GeoTIFF-bildoj</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="212"/>
+        <location filename="../src/map/maplist.cpp" line="222"/>
         <source>All files</source>
         <translation>Ĉiuj dosieroj</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="202"/>
+        <location filename="../src/map/maplist.cpp" line="208"/>
         <source>TwoNav maps</source>
         <translation>TwoNav-mapoj</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="204"/>
+        <location filename="../src/map/maplist.cpp" line="212"/>
         <source>Locus/OsmAnd/RMaps SQLite maps</source>
         <translation>Locus/OsmAnd/RMaps SQLite -mapoj</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="209"/>
+        <location filename="../src/map/maplist.cpp" line="218"/>
         <source>World-file georeferenced images</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="211"/>
+        <location filename="../src/map/maplist.cpp" line="220"/>
         <source>Online map sources</source>
         <translation>Fontoj de Online-mapoj</translation>
     </message>
@@ -2385,7 +2385,7 @@
         <translation>Nomo</translation>
     </message>
     <message>
-        <location filename="../src/GUI/areaitem.cpp" line="20"/>
+        <location filename="../src/GUI/areaitem.cpp" line="21"/>
         <source>Description</source>
         <translation>Priskribo</translation>
     </message>
@@ -2750,52 +2750,52 @@
         <translation>Nomo</translation>
     </message>
     <message>
-        <location filename="../src/GUI/waypointitem.cpp" line="27"/>
+        <location filename="../src/GUI/waypointitem.cpp" line="28"/>
         <source>Coordinates</source>
         <translation>Koordinatoj</translation>
     </message>
     <message>
-        <location filename="../src/GUI/waypointitem.cpp" line="34"/>
+        <location filename="../src/GUI/waypointitem.cpp" line="35"/>
         <source>Elevation</source>
         <translation>Alteco</translation>
     </message>
     <message>
-        <location filename="../src/GUI/waypointitem.cpp" line="38"/>
+        <location filename="../src/GUI/waypointitem.cpp" line="39"/>
         <source>Date</source>
         <translation>Dato</translation>
     </message>
     <message>
-        <location filename="../src/GUI/waypointitem.cpp" line="43"/>
+        <location filename="../src/GUI/waypointitem.cpp" line="44"/>
         <source>Description</source>
         <translation>Priskribo</translation>
     </message>
     <message>
-        <location filename="../src/GUI/waypointitem.cpp" line="47"/>
+        <location filename="../src/GUI/waypointitem.cpp" line="48"/>
         <source>Comment</source>
         <translation>Komento</translation>
     </message>
     <message>
-        <location filename="../src/GUI/waypointitem.cpp" line="50"/>
+        <location filename="../src/GUI/waypointitem.cpp" line="51"/>
         <source>Symbol</source>
         <translation>Simbolo</translation>
     </message>
     <message>
-        <location filename="../src/GUI/waypointitem.cpp" line="55"/>
+        <location filename="../src/GUI/waypointitem.cpp" line="57"/>
         <source>Address</source>
         <translation>Adreso</translation>
     </message>
     <message>
-        <location filename="../src/GUI/waypointitem.cpp" line="58"/>
+        <location filename="../src/GUI/waypointitem.cpp" line="60"/>
         <source>Phone</source>
         <translation>Telefono</translation>
     </message>
     <message>
-        <location filename="../src/GUI/waypointitem.cpp" line="68"/>
+        <location filename="../src/GUI/waypointitem.cpp" line="71"/>
         <source>Links</source>
         <translation>Ligiloj</translation>
     </message>
     <message>
-        <location filename="../src/GUI/waypointitem.cpp" line="72"/>
+        <location filename="../src/GUI/waypointitem.cpp" line="75"/>
         <source>File</source>
         <translation>Dosiero</translation>
     </message>

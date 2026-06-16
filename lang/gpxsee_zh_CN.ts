@@ -111,137 +111,137 @@
         <translation>支持的文件</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="271"/>
+        <location filename="../src/data/data.cpp" line="272"/>
         <source>CSV files</source>
         <translation>CSV 文件</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="272"/>
+        <location filename="../src/data/data.cpp" line="273"/>
         <source>CUP files</source>
         <translation>CUP 文件</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="273"/>
+        <location filename="../src/data/data.cpp" line="274"/>
         <source>FIT files</source>
         <translation>FIT 文件</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="274"/>
+        <location filename="../src/data/data.cpp" line="275"/>
         <source>GeoJSON files</source>
         <translation>GeoJSON 文件</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="275"/>
+        <location filename="../src/data/data.cpp" line="277"/>
         <source>GPI files</source>
         <translation>GPI 文件</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="276"/>
+        <location filename="../src/data/data.cpp" line="278"/>
         <source>GPX files</source>
         <translation>GPX 文件</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="277"/>
+        <location filename="../src/data/data.cpp" line="279"/>
         <source>IGC files</source>
         <translation>IGC 文件</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="278"/>
+        <location filename="../src/data/data.cpp" line="280"/>
         <source>ITN files</source>
         <translation>ITN 文件</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="279"/>
+        <location filename="../src/data/data.cpp" line="281"/>
         <source>JPEG images</source>
         <translation>JPEG 图片</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="280"/>
+        <location filename="../src/data/data.cpp" line="282"/>
         <source>KML files</source>
         <translation>KML 文件</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="281"/>
+        <location filename="../src/data/data.cpp" line="283"/>
         <source>LOC files</source>
         <translation>LOC 文件</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="282"/>
+        <location filename="../src/data/data.cpp" line="284"/>
         <source>MP4 videos</source>
         <translation>MP4 视频</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="287"/>
+        <location filename="../src/data/data.cpp" line="290"/>
         <source>GPMF files</source>
         <translation>GPMF 文件</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="283"/>
+        <location filename="../src/data/data.cpp" line="285"/>
         <source>NMEA files</source>
         <translation>NMEA 文件</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="284"/>
+        <location filename="../src/data/data.cpp" line="286"/>
         <source>ONmove files</source>
         <translation>ONmove 文件</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="285"/>
+        <location filename="../src/data/data.cpp" line="287"/>
         <source>OV2 files</source>
         <translation>OV2 文件</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="286"/>
+        <location filename="../src/data/data.cpp" line="288"/>
         <source>OziExplorer files</source>
         <translation>OziExplorer 文件</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="288"/>
+        <location filename="../src/data/data.cpp" line="291"/>
         <source>SLF files</source>
         <translation>SLF 文件</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="289"/>
+        <location filename="../src/data/data.cpp" line="292"/>
         <source>SML files</source>
         <translation>SML 文件</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="290"/>
+        <location filename="../src/data/data.cpp" line="293"/>
         <source>DJI SRT files</source>
         <translation>DJI SRT 文件</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="291"/>
+        <location filename="../src/data/data.cpp" line="294"/>
         <source>TCX files</source>
         <translation>TCX 文件</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="292"/>
+        <location filename="../src/data/data.cpp" line="295"/>
         <source>70mai GPS log files</source>
         <translation>70迈 GPS 记录文件</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="293"/>
+        <location filename="../src/data/data.cpp" line="296"/>
         <source>VKX files</source>
         <translation>VKX 文件</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="294"/>
+        <location filename="../src/data/data.cpp" line="297"/>
         <source>VTK files</source>
         <translation>VTK 文件</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="295"/>
+        <location filename="../src/data/data.cpp" line="298"/>
         <source>TwoNav files</source>
         <translation>TwoNav 文件</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="296"/>
+        <location filename="../src/data/data.cpp" line="300"/>
         <source>GPSDump files</source>
         <translation>GPSDump 文件</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="297"/>
+        <location filename="../src/data/data.cpp" line="301"/>
         <source>All files</source>
         <translation>所有文件</translation>
     </message>
@@ -1398,22 +1398,22 @@
         <translation>AlpineQuest 地图</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="191"/>
+        <location filename="../src/map/maplist.cpp" line="193"/>
         <source>Garmin IMG maps</source>
         <translation>佳明 IMG 地图</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="193"/>
+        <location filename="../src/map/maplist.cpp" line="195"/>
         <source>Garmin JNX maps</source>
         <translation>佳明 JNX 地图</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="194"/>
+        <location filename="../src/map/maplist.cpp" line="196"/>
         <source>BSB nautical charts</source>
         <translation>BSB 海图</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="190"/>
+        <location filename="../src/map/maplist.cpp" line="192"/>
         <source>GEMF maps</source>
         <translation>GEMF 地图</translation>
     </message>
@@ -1423,82 +1423,82 @@
         <translation>电子航海图</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="189"/>
+        <location filename="../src/map/maplist.cpp" line="190"/>
         <source>COROS maps</source>
         <translation>高驰地图</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="195"/>
+        <location filename="../src/map/maplist.cpp" line="198"/>
         <source>KMZ maps</source>
         <translation>KMZ 地图</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="196"/>
+        <location filename="../src/map/maplist.cpp" line="199"/>
         <source>Mapsforge maps</source>
         <translation>Mapsforge 地图</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="197"/>
+        <location filename="../src/map/maplist.cpp" line="200"/>
         <source>OziExplorer maps</source>
         <translation>OziExplorer 地图</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="198"/>
+        <location filename="../src/map/maplist.cpp" line="202"/>
         <source>MBTiles maps</source>
         <translation>MBTiles 地图</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="199"/>
+        <location filename="../src/map/maplist.cpp" line="204"/>
         <source>Orux maps</source>
         <translation>Orux 地图</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="200"/>
+        <location filename="../src/map/maplist.cpp" line="205"/>
         <source>PMTiles maps</source>
         <translation>PMTiles 地图</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="201"/>
+        <location filename="../src/map/maplist.cpp" line="207"/>
         <source>QuickChart maps</source>
         <translation>QuickChart 地图</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="202"/>
+        <location filename="../src/map/maplist.cpp" line="208"/>
         <source>TwoNav maps</source>
         <translation>TwoNav 地图</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="203"/>
+        <location filename="../src/map/maplist.cpp" line="210"/>
         <source>Osmdroid SQLite maps</source>
         <translation>Osmdroid SQLite 地图</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="204"/>
+        <location filename="../src/map/maplist.cpp" line="212"/>
         <source>Locus/OsmAnd/RMaps SQLite maps</source>
         <translation>Locus/OsmAnd/RMaps SQLite 地图</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="206"/>
+        <location filename="../src/map/maplist.cpp" line="214"/>
         <source>TrekBuddy maps/atlases</source>
         <translation>TrekBuddy 地图/地图集</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="208"/>
+        <location filename="../src/map/maplist.cpp" line="216"/>
         <source>GeoTIFF images</source>
         <translation>GeoTIFF 图像</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="209"/>
+        <location filename="../src/map/maplist.cpp" line="218"/>
         <source>World-file georeferenced images</source>
         <translation>World-file georeferenced 图像</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="211"/>
+        <location filename="../src/map/maplist.cpp" line="220"/>
         <source>Online map sources</source>
         <translation>在线地图源</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="212"/>
+        <location filename="../src/map/maplist.cpp" line="222"/>
         <source>All files</source>
         <translation>所有文件</translation>
     </message>
@@ -2383,7 +2383,7 @@
         <translation>名称</translation>
     </message>
     <message>
-        <location filename="../src/GUI/areaitem.cpp" line="20"/>
+        <location filename="../src/GUI/areaitem.cpp" line="21"/>
         <source>Description</source>
         <translation>描述</translation>
     </message>
@@ -2748,52 +2748,52 @@
         <translation>名称</translation>
     </message>
     <message>
-        <location filename="../src/GUI/waypointitem.cpp" line="27"/>
+        <location filename="../src/GUI/waypointitem.cpp" line="28"/>
         <source>Coordinates</source>
         <translation>坐标</translation>
     </message>
     <message>
-        <location filename="../src/GUI/waypointitem.cpp" line="34"/>
+        <location filename="../src/GUI/waypointitem.cpp" line="35"/>
         <source>Elevation</source>
         <translation>海拔</translation>
     </message>
     <message>
-        <location filename="../src/GUI/waypointitem.cpp" line="38"/>
+        <location filename="../src/GUI/waypointitem.cpp" line="39"/>
         <source>Date</source>
         <translation>日期</translation>
     </message>
     <message>
-        <location filename="../src/GUI/waypointitem.cpp" line="43"/>
+        <location filename="../src/GUI/waypointitem.cpp" line="44"/>
         <source>Description</source>
         <translation>描述</translation>
     </message>
     <message>
-        <location filename="../src/GUI/waypointitem.cpp" line="47"/>
+        <location filename="../src/GUI/waypointitem.cpp" line="48"/>
         <source>Comment</source>
         <translation>评论</translation>
     </message>
     <message>
-        <location filename="../src/GUI/waypointitem.cpp" line="50"/>
+        <location filename="../src/GUI/waypointitem.cpp" line="51"/>
         <source>Symbol</source>
         <translation>符号</translation>
     </message>
     <message>
-        <location filename="../src/GUI/waypointitem.cpp" line="55"/>
+        <location filename="../src/GUI/waypointitem.cpp" line="57"/>
         <source>Address</source>
         <translation>地址</translation>
     </message>
     <message>
-        <location filename="../src/GUI/waypointitem.cpp" line="58"/>
+        <location filename="../src/GUI/waypointitem.cpp" line="60"/>
         <source>Phone</source>
         <translation>电话</translation>
     </message>
     <message>
-        <location filename="../src/GUI/waypointitem.cpp" line="68"/>
+        <location filename="../src/GUI/waypointitem.cpp" line="71"/>
         <source>Links</source>
         <translation>链接</translation>
     </message>
     <message>
-        <location filename="../src/GUI/waypointitem.cpp" line="72"/>
+        <location filename="../src/GUI/waypointitem.cpp" line="75"/>
         <source>File</source>
         <translation>文件</translation>
     </message>

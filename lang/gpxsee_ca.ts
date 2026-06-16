@@ -111,137 +111,137 @@
         <translation>Fitxers compatibles</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="271"/>
+        <location filename="../src/data/data.cpp" line="272"/>
         <source>CSV files</source>
         <translation>Fitxers CSV</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="272"/>
+        <location filename="../src/data/data.cpp" line="273"/>
         <source>CUP files</source>
         <translation>Fitxers CUP</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="273"/>
+        <location filename="../src/data/data.cpp" line="274"/>
         <source>FIT files</source>
         <translation>Fitxers FIT</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="274"/>
+        <location filename="../src/data/data.cpp" line="275"/>
         <source>GeoJSON files</source>
         <translation>Fitxers GeoJSON</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="275"/>
+        <location filename="../src/data/data.cpp" line="277"/>
         <source>GPI files</source>
         <translation>Fitxers GPI</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="276"/>
+        <location filename="../src/data/data.cpp" line="278"/>
         <source>GPX files</source>
         <translation>Fitxers GPX</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="277"/>
+        <location filename="../src/data/data.cpp" line="279"/>
         <source>IGC files</source>
         <translation>Fitxers IGC</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="278"/>
+        <location filename="../src/data/data.cpp" line="280"/>
         <source>ITN files</source>
         <translation>Fitxers ITN</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="279"/>
+        <location filename="../src/data/data.cpp" line="281"/>
         <source>JPEG images</source>
         <translation>Imatges JPEG</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="280"/>
+        <location filename="../src/data/data.cpp" line="282"/>
         <source>KML files</source>
         <translation>Fitxers KML</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="281"/>
+        <location filename="../src/data/data.cpp" line="283"/>
         <source>LOC files</source>
         <translation>Fitxers LOC</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="282"/>
+        <location filename="../src/data/data.cpp" line="284"/>
         <source>MP4 videos</source>
         <translation>Vídeos MP4</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="287"/>
+        <location filename="../src/data/data.cpp" line="290"/>
         <source>GPMF files</source>
         <translation>Fitxers GPMF</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="283"/>
+        <location filename="../src/data/data.cpp" line="285"/>
         <source>NMEA files</source>
         <translation>Fitxers NMEA</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="284"/>
+        <location filename="../src/data/data.cpp" line="286"/>
         <source>ONmove files</source>
         <translation>Fitxer ONmove</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="285"/>
+        <location filename="../src/data/data.cpp" line="287"/>
         <source>OV2 files</source>
         <translation>Fitxers OV2</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="286"/>
+        <location filename="../src/data/data.cpp" line="288"/>
         <source>OziExplorer files</source>
         <translation>Fitxers OziExplorer</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="288"/>
+        <location filename="../src/data/data.cpp" line="291"/>
         <source>SLF files</source>
         <translation>Fitxers SLF</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="289"/>
+        <location filename="../src/data/data.cpp" line="292"/>
         <source>SML files</source>
         <translation>Fitxers SML</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="290"/>
+        <location filename="../src/data/data.cpp" line="293"/>
         <source>DJI SRT files</source>
         <translation>Arxius SRT DJI</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="291"/>
+        <location filename="../src/data/data.cpp" line="294"/>
         <source>TCX files</source>
         <translation>Fitxers TCX</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="292"/>
+        <location filename="../src/data/data.cpp" line="295"/>
         <source>70mai GPS log files</source>
         <translation>Fitxers de registre GPS de 70mai</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="293"/>
+        <location filename="../src/data/data.cpp" line="296"/>
         <source>VKX files</source>
         <translation>Arxius VKX</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="294"/>
+        <location filename="../src/data/data.cpp" line="297"/>
         <source>VTK files</source>
         <translation>Fitxers VTK</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="295"/>
+        <location filename="../src/data/data.cpp" line="298"/>
         <source>TwoNav files</source>
         <translation>Fitxers TwoNav</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="296"/>
+        <location filename="../src/data/data.cpp" line="300"/>
         <source>GPSDump files</source>
         <translation>Ffitxers d&apos;abocament de GPS</translation>
     </message>
     <message>
-        <location filename="../src/data/data.cpp" line="297"/>
+        <location filename="../src/data/data.cpp" line="301"/>
         <source>All files</source>
         <translation>Tots els fitxers</translation>
     </message>
@@ -1405,102 +1405,102 @@
         <translation>Mapes AlpineQuest</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="189"/>
+        <location filename="../src/map/maplist.cpp" line="190"/>
         <source>COROS maps</source>
         <translation>Mapes COROS</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="190"/>
+        <location filename="../src/map/maplist.cpp" line="192"/>
         <source>GEMF maps</source>
         <translation>Mapes GEMF</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="191"/>
+        <location filename="../src/map/maplist.cpp" line="193"/>
         <source>Garmin IMG maps</source>
         <translation>Mapes Garmin IMG</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="193"/>
+        <location filename="../src/map/maplist.cpp" line="195"/>
         <source>Garmin JNX maps</source>
         <translation>Mapes Garmin JNX</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="194"/>
+        <location filename="../src/map/maplist.cpp" line="196"/>
         <source>BSB nautical charts</source>
         <translation>Cartes nàutiques BSB</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="195"/>
+        <location filename="../src/map/maplist.cpp" line="198"/>
         <source>KMZ maps</source>
         <translation>Mapes KMZ</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="196"/>
+        <location filename="../src/map/maplist.cpp" line="199"/>
         <source>Mapsforge maps</source>
         <translation>Mapes Mapsforge</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="197"/>
+        <location filename="../src/map/maplist.cpp" line="200"/>
         <source>OziExplorer maps</source>
         <translation>Mapes OziExplorer</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="198"/>
+        <location filename="../src/map/maplist.cpp" line="202"/>
         <source>MBTiles maps</source>
         <translation>Mapes MBTiles</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="199"/>
+        <location filename="../src/map/maplist.cpp" line="204"/>
         <source>Orux maps</source>
         <translation>Mapes Orux</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="200"/>
+        <location filename="../src/map/maplist.cpp" line="205"/>
         <source>PMTiles maps</source>
         <translation>Mapes PMTiles</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="201"/>
+        <location filename="../src/map/maplist.cpp" line="207"/>
         <source>QuickChart maps</source>
         <translation>Mapes QuickChart</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="202"/>
+        <location filename="../src/map/maplist.cpp" line="208"/>
         <source>TwoNav maps</source>
         <translation>Mapes TwoNav</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="203"/>
+        <location filename="../src/map/maplist.cpp" line="210"/>
         <source>Osmdroid SQLite maps</source>
         <translation>Mapes Osmdroid SQL</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="204"/>
+        <location filename="../src/map/maplist.cpp" line="212"/>
         <source>Locus/OsmAnd/RMaps SQLite maps</source>
         <translation>Mapes SQLite Locus/OsmAnd/Rmaps</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="206"/>
+        <location filename="../src/map/maplist.cpp" line="214"/>
         <source>TrekBuddy maps/atlases</source>
         <translation>Mapes o atles TrekBuddy</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="208"/>
+        <location filename="../src/map/maplist.cpp" line="216"/>
         <source>GeoTIFF images</source>
         <translation>Imatges GeoTIFF</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="209"/>
+        <location filename="../src/map/maplist.cpp" line="218"/>
         <source>World-file georeferenced images</source>
         <translation>Imatges amb georeferenciació per worldfile</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="211"/>
+        <location filename="../src/map/maplist.cpp" line="220"/>
         <source>Online map sources</source>
         <translation>Mapes en línia</translation>
     </message>
     <message>
-        <location filename="../src/map/maplist.cpp" line="212"/>
+        <location filename="../src/map/maplist.cpp" line="222"/>
         <source>All files</source>
         <translation>Tots els fitxers</translation>
     </message>
@@ -2385,7 +2385,7 @@
         <translation>Nom</translation>
     </message>
     <message>
-        <location filename="../src/GUI/areaitem.cpp" line="20"/>
+        <location filename="../src/GUI/areaitem.cpp" line="21"/>
         <source>Description</source>
         <translation>Descripció</translation>
     </message>
@@ -2750,52 +2750,52 @@
         <translation>Nom</translation>
     </message>
     <message>
-        <location filename="../src/GUI/waypointitem.cpp" line="27"/>
+        <location filename="../src/GUI/waypointitem.cpp" line="28"/>
         <source>Coordinates</source>
         <translation>Coordenades</translation>
     </message>
     <message>
-        <location filename="../src/GUI/waypointitem.cpp" line="34"/>
+        <location filename="../src/GUI/waypointitem.cpp" line="35"/>
         <source>Elevation</source>
         <translation>Elevació</translation>
     </message>
     <message>
-        <location filename="../src/GUI/waypointitem.cpp" line="38"/>
+        <location filename="../src/GUI/waypointitem.cpp" line="39"/>
         <source>Date</source>
         <translation>Data</translation>
     </message>
     <message>
-        <location filename="../src/GUI/waypointitem.cpp" line="43"/>
+        <location filename="../src/GUI/waypointitem.cpp" line="44"/>
         <source>Description</source>
         <translation>Descripció</translation>
     </message>
     <message>
-        <location filename="../src/GUI/waypointitem.cpp" line="47"/>
+        <location filename="../src/GUI/waypointitem.cpp" line="48"/>
         <source>Comment</source>
         <translation>Comentari</translation>
     </message>
     <message>
-        <location filename="../src/GUI/waypointitem.cpp" line="50"/>
+        <location filename="../src/GUI/waypointitem.cpp" line="51"/>
         <source>Symbol</source>
         <translation>Símbol</translation>
     </message>
     <message>
-        <location filename="../src/GUI/waypointitem.cpp" line="55"/>
+        <location filename="../src/GUI/waypointitem.cpp" line="57"/>
         <source>Address</source>
         <translation>Adreça</translation>
     </message>
     <message>
-        <location filename="../src/GUI/waypointitem.cpp" line="58"/>
+        <location filename="../src/GUI/waypointitem.cpp" line="60"/>
         <source>Phone</source>
         <translation>Telèfon</translation>
     </message>
     <message>
-        <location filename="../src/GUI/waypointitem.cpp" line="68"/>
+        <location filename="../src/GUI/waypointitem.cpp" line="71"/>
         <source>Links</source>
         <translation>Enllaços</translation>
     </message>
     <message>
-        <location filename="../src/GUI/waypointitem.cpp" line="72"/>
+        <location filename="../src/GUI/waypointitem.cpp" line="75"/>
         <source>File</source>
         <translation>Fitxer</translation>
     </message>
