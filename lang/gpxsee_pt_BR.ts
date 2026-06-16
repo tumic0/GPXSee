@@ -88,17 +88,17 @@
 <context>
     <name>Coros5Map</name>
     <message>
-        <location filename="../src/map/coros5map.cpp" line="462"/>
+        <location filename="../src/map/coros5map.cpp" line="468"/>
         <source>All</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/map/coros5map.cpp" line="462"/>
+        <location filename="../src/map/coros5map.cpp" line="468"/>
         <source>Landscape</source>
         <translation type="unfinished">Paisagem</translation>
     </message>
     <message>
-        <location filename="../src/map/coros5map.cpp" line="462"/>
+        <location filename="../src/map/coros5map.cpp" line="468"/>
         <source>Topo</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1536,12 +1536,12 @@
 <context>
     <name>OnlineMap</name>
     <message>
-        <location filename="../src/map/onlinemap.cpp" line="350"/>
+        <location filename="../src/map/onlinemap.cpp" line="356"/>
         <source>All</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/map/onlinemap.cpp" line="350"/>
+        <location filename="../src/map/onlinemap.cpp" line="356"/>
         <source>Basemap only</source>
         <translation type="unfinished"></translation>
     </message>

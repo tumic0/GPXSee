@@ -88,17 +88,17 @@
 <context>
     <name>Coros5Map</name>
     <message>
-        <location filename="../src/map/coros5map.cpp" line="462"/>
+        <location filename="../src/map/coros5map.cpp" line="468"/>
         <source>All</source>
         <translation>所有图层</translation>
     </message>
     <message>
-        <location filename="../src/map/coros5map.cpp" line="462"/>
+        <location filename="../src/map/coros5map.cpp" line="468"/>
         <source>Landscape</source>
         <translation>地貌图</translation>
     </message>
     <message>
-        <location filename="../src/map/coros5map.cpp" line="462"/>
+        <location filename="../src/map/coros5map.cpp" line="468"/>
         <source>Topo</source>
         <translation>等高线图</translation>
     </message>
@@ -1534,12 +1534,12 @@
 <context>
     <name>OnlineMap</name>
     <message>
-        <location filename="../src/map/onlinemap.cpp" line="350"/>
+        <location filename="../src/map/onlinemap.cpp" line="356"/>
         <source>All</source>
         <translation>所有图层</translation>
     </message>
     <message>
-        <location filename="../src/map/onlinemap.cpp" line="350"/>
+        <location filename="../src/map/onlinemap.cpp" line="356"/>
         <source>Basemap only</source>
         <translation>仅底图</translation>
     </message>
