@@ -15,9 +15,10 @@ ToolTip AreaItem::info(bool extended) const
 	ToolTip tt;
 
 	if (!_area.name().isEmpty())
-		tt.insert(qApp->translate("PolygonItem", "Name"), _area.name());
+		tt.insert(QCoreApplication::translate("PolygonItem", "Name"),
+		  _area.name());
 	if (!_area.description().isEmpty())
-		tt.insert(qApp->translate("PolygonItem", "Description"),
+		tt.insert(QCoreApplication::translate("PolygonItem", "Description"),
 		  _area.description());
 
 	return tt;

@@ -51,33 +51,33 @@ QString Format::distance(qreal value, Units units)
 	if (units == Imperial) {
 		if (value < MIINM)
 			return l.toString(value * M2FT, 'f', 0) + UNIT_SPACE
-			  + qApp->translate("Format", "ft");
+			  + QCoreApplication::translate("Format", "ft");
 		else if (value < 10 * MIINM)
 			return l.toString(value * M2MI, 'f', 2) + UNIT_SPACE
-			  + qApp->translate("Format", "mi");
+			  + QCoreApplication::translate("Format", "mi");
 		else
 			return l.toString(value * M2MI, 'f', 1) + UNIT_SPACE
-			  + qApp->translate("Format", "mi");
+			  + QCoreApplication::translate("Format", "mi");
 	} else if (units == Nautical) {
 		if (value < NMIINM)
 			return l.toString(value * M2FT, 'f', 0) + UNIT_SPACE
-			  + qApp->translate("Format", "ft");
+			  + QCoreApplication::translate("Format", "ft");
 		else if (value < 10 * NMIINM)
 			return l.toString(value * M2NMI, 'f', 2) + UNIT_SPACE
-			  + qApp->translate("Format", "nmi");
+			  + QCoreApplication::translate("Format", "nmi");
 		else
 			return l.toString(value * M2NMI, 'f', 1) + UNIT_SPACE
-			  + qApp->translate("Format", "nmi");
+			  + QCoreApplication::translate("Format", "nmi");
 	} else {
 		if (value < KMINM)
 			return l.toString(value, 'f', 0) + UNIT_SPACE
-			  + qApp->translate("Format", "m");
+			  + QCoreApplication::translate("Format", "m");
 		else if (value < 10 * KMINM)
 			return l.toString(value * M2KM, 'f', 2) + UNIT_SPACE
-			  + qApp->translate("Format", "km");
+			  + QCoreApplication::translate("Format", "km");
 		else
 			return l.toString(value * M2KM, 'f', 1) + UNIT_SPACE
-			  + qApp->translate("Format", "km");
+			  + QCoreApplication::translate("Format", "km");
 	}
 }
 
@@ -87,10 +87,10 @@ QString Format::elevation(qreal value, Units units)
 
 	if (units == Metric)
 		return l.toString(qRound(value)) + UNIT_SPACE
-		  + qApp->translate("Format", "m");
+		  + QCoreApplication::translate("Format", "m");
 	else
 		return l.toString(qRound(value * M2FT)) + UNIT_SPACE
-		  + qApp->translate("Format", "ft");
+		  + QCoreApplication::translate("Format", "ft");
 }
 
 

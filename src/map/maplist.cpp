@@ -181,35 +181,45 @@ TreeNode<Map *> MapList::loadMaps(const QString &path, const Projection &proj)
 QString MapList::formats()
 {
 	return
-	  qApp->translate("MapList", "Supported files")
-		+ " (" + filter().join(" ") + ");;"
-	  + qApp->translate("MapList", "Electronic Navigational Charts")
-		+ " (*.000 *.031);;"
-	  + qApp->translate("MapList", "AlpineQuest maps") + " (*.aqm);;"
-	  + qApp->translate("MapList", "COROS maps") + " (*.csa *.pma);;"
-	  + qApp->translate("MapList", "GEMF maps") + " (*.gemf);;"
-	  + qApp->translate("MapList", "Garmin IMG maps")
-		+ " (*.csm *.gmap *.gmapi *.img *.xml);;"
-	  + qApp->translate("MapList", "Garmin JNX maps") + " (*.jnx);;"
-	  + qApp->translate("MapList", "BSB nautical charts") + " (*.kap);;"
-	  + qApp->translate("MapList", "KMZ maps") + " (*.kmz);;"
-	  + qApp->translate("MapList", "Mapsforge maps") + " (*.map);;"
-	  + qApp->translate("MapList", "OziExplorer maps") + " (*.map);;"
-	  + qApp->translate("MapList", "MBTiles maps") + " (*.mbtiles);;"
-	  + qApp->translate("MapList", "Orux maps") + " (*.otrk2.xml);;"
-	  + qApp->translate("MapList", "PMTiles maps") + " (*.pmtiles *.t);;"
-	  + qApp->translate("MapList", "QuickChart maps") + " (*.qct);;"
-	  + qApp->translate("MapList", "TwoNav maps") + " (*.rmap *.rtmap);;"
-	  + qApp->translate("MapList", "Osmdroid SQLite maps") + " (*.sqlite);;"
-	  + qApp->translate("MapList", "Locus/OsmAnd/RMaps SQLite maps")
-		+ " (*.sqlitedb);;"
-	  + qApp->translate("MapList", "TrekBuddy maps/atlases")
-		+ " (*.tar *.tba *.gmi *.map);;"
-	  + qApp->translate("MapList", "GeoTIFF images") + " (*.tif *.tiff);;"
-	  + qApp->translate("MapList", "World-file georeferenced images")
+	  QCoreApplication::translate("MapList", "Supported files")
+	    + " (" + filter().join(" ") + ");;"
+	  + QCoreApplication::translate("MapList", "Electronic Navigational Charts")
+	    + " (*.000 *.031);;"
+	  + QCoreApplication::translate("MapList", "AlpineQuest maps")
+	    + " (*.aqm);;"
+	  + QCoreApplication::translate("MapList", "COROS maps")
+	    + " (*.csa *.pma);;"
+	  + QCoreApplication::translate("MapList", "GEMF maps") + " (*.gemf);;"
+	  + QCoreApplication::translate("MapList", "Garmin IMG maps")
+	    + " (*.csm *.gmap *.gmapi *.img *.xml);;"
+	  + QCoreApplication::translate("MapList", "Garmin JNX maps") + " (*.jnx);;"
+	  + QCoreApplication::translate("MapList", "BSB nautical charts")
+	    + " (*.kap);;"
+	  + QCoreApplication::translate("MapList", "KMZ maps") + " (*.kmz);;"
+	  + QCoreApplication::translate("MapList", "Mapsforge maps") + " (*.map);;"
+	  + QCoreApplication::translate("MapList", "OziExplorer maps")
+	    + " (*.map);;"
+	  + QCoreApplication::translate("MapList", "MBTiles maps")
+	    + " (*.mbtiles);;"
+	  + QCoreApplication::translate("MapList", "Orux maps") + " (*.otrk2.xml);;"
+	  + QCoreApplication::translate("MapList", "PMTiles maps")
+	    + " (*.pmtiles *.t);;"
+	  + QCoreApplication::translate("MapList", "QuickChart maps") + " (*.qct);;"
+	  + QCoreApplication::translate("MapList", "TwoNav maps")
+	    + " (*.rmap *.rtmap);;"
+	  + QCoreApplication::translate("MapList", "Osmdroid SQLite maps")
+	    + " (*.sqlite);;"
+	  + QCoreApplication::translate("MapList", "Locus/OsmAnd/RMaps SQLite maps")
+	    + " (*.sqlitedb);;"
+	  + QCoreApplication::translate("MapList", "TrekBuddy maps/atlases")
+	    + " (*.tar *.tba *.gmi *.map);;"
+	  + QCoreApplication::translate("MapList", "GeoTIFF images")
+	    + " (*.tif *.tiff);;"
+	  + QCoreApplication::translate("MapList", "World-file georeferenced images")
 	    + " (*.wld *.jgw *.gfw *.pgw *.tfw);;"
-	  + qApp->translate("MapList", "Online map sources") + " (*.xml);;"
-	  + qApp->translate("MapList", "All files") + " (*)";
+	  + QCoreApplication::translate("MapList", "Online map sources")
+	    + " (*.xml);;"
+	  + QCoreApplication::translate("MapList", "All files") + " (*)";
 }
 
 QStringList MapList::filter()

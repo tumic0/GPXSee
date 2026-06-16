@@ -105,14 +105,14 @@ void ScaleItem::updateCache()
 	}
 
 	if (_units == Imperial)
-		_unitsStr = _scale ? qApp->translate("ScaleItem", "mi")
-		  : qApp->translate("ScaleItem", "ft");
+		_unitsStr = _scale ? QCoreApplication::translate("ScaleItem", "mi")
+		  : QCoreApplication::translate("ScaleItem", "ft");
 	else if (_units == Nautical)
-		_unitsStr = _scale ? qApp->translate("ScaleItem", "nmi")
-		  : qApp->translate("ScaleItem", "ft");
+		_unitsStr = _scale ? QCoreApplication::translate("ScaleItem", "nmi")
+		  : QCoreApplication::translate("ScaleItem", "ft");
 	else
-		_unitsStr = _scale ? qApp->translate("ScaleItem", "km")
-		  : qApp->translate("ScaleItem", "m");
+		_unitsStr = _scale ? QCoreApplication::translate("ScaleItem", "km")
+		  : QCoreApplication::translate("ScaleItem", "m");
 	_unitsBB = fm.tightBoundingRect(_unitsStr);
 
 	QRect ss = _ticks.isEmpty() ? QRect() : _ticks.first().boundingBox;

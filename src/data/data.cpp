@@ -267,34 +267,38 @@ Data::Data(const QUrl &url)
 QString Data::formats()
 {
 	return
-	  qApp->translate("Data", "Supported files") + " (" + filter().join(" ") + ");;"
-	  + qApp->translate("Data", "CSV files") + " (*.csv);;"
-	  + qApp->translate("Data", "CUP files") + " (*.cup);;"
-	  + qApp->translate("Data", "FIT files") + " (*.fit);;"
-	  + qApp->translate("Data", "GeoJSON files") + " (*.geojson *.json);;"
-	  + qApp->translate("Data", "GPI files") + " (*.gpi);;"
-	  + qApp->translate("Data", "GPX files") + " (*.gpx);;"
-	  + qApp->translate("Data", "IGC files") + " (*.igc);;"
-	  + qApp->translate("Data", "ITN files") + " (*.itn);;"
-	  + qApp->translate("Data", "JPEG images") + " (*.jpg *.jpeg);;"
-	  + qApp->translate("Data", "KML files") + " (*.kml *.kmz);;"
-	  + qApp->translate("Data", "LOC files") + " (*.loc);;"
-	  + qApp->translate("Data", "MP4 videos") + " (*.mp4 *.mov);;"
-	  + qApp->translate("Data", "NMEA files") + " (*.nmea);;"
-	  + qApp->translate("Data", "ONmove files") + " (*.omd *.ghp);;"
-	  + qApp->translate("Data", "OV2 files") + " (*.ov2);;"
-	  + qApp->translate("Data", "OziExplorer files") + " (*.plt *.rte *.wpt);;"
-	  + qApp->translate("Data", "GPMF files") + " (*.raw);;"
-	  + qApp->translate("Data", "SLF files") + " (*.slf);;"
-	  + qApp->translate("Data", "SML files") + " (*.sml);;"
-	  + qApp->translate("Data", "DJI SRT files") + " (*.srt);;"
-	  + qApp->translate("Data", "TCX files") + " (*.tcx);;"
-	  + qApp->translate("Data", "70mai GPS log files") + " (*.txt);;"
-	  + qApp->translate("Data", "VKX files") + " (*.vkx);;"
-	  + qApp->translate("Data", "VTK files") + " (*.vtk);;"
-	  + qApp->translate("Data", "TwoNav files") + " (*.rte *.trk *.wpt);;"
-	  + qApp->translate("Data", "GPSDump files") + " (*.wpt);;"
-	  + qApp->translate("Data", "All files") + " (*)";
+	  QCoreApplication::translate("Data", "Supported files")
+	    + " (" + filter().join(" ") + ");;"
+	  + QCoreApplication::translate("Data", "CSV files") + " (*.csv);;"
+	  + QCoreApplication::translate("Data", "CUP files") + " (*.cup);;"
+	  + QCoreApplication::translate("Data", "FIT files") + " (*.fit);;"
+	  + QCoreApplication::translate("Data", "GeoJSON files")
+	    + " (*.geojson *.json);;"
+	  + QCoreApplication::translate("Data", "GPI files") + " (*.gpi);;"
+	  + QCoreApplication::translate("Data", "GPX files") + " (*.gpx);;"
+	  + QCoreApplication::translate("Data", "IGC files") + " (*.igc);;"
+	  + QCoreApplication::translate("Data", "ITN files") + " (*.itn);;"
+	  + QCoreApplication::translate("Data", "JPEG images") + " (*.jpg *.jpeg);;"
+	  + QCoreApplication::translate("Data", "KML files") + " (*.kml *.kmz);;"
+	  + QCoreApplication::translate("Data", "LOC files") + " (*.loc);;"
+	  + QCoreApplication::translate("Data", "MP4 videos") + " (*.mp4 *.mov);;"
+	  + QCoreApplication::translate("Data", "NMEA files") + " (*.nmea);;"
+	  + QCoreApplication::translate("Data", "ONmove files") + " (*.omd *.ghp);;"
+	  + QCoreApplication::translate("Data", "OV2 files") + " (*.ov2);;"
+	  + QCoreApplication::translate("Data", "OziExplorer files")
+	    + " (*.plt *.rte *.wpt);;"
+	  + QCoreApplication::translate("Data", "GPMF files") + " (*.raw);;"
+	  + QCoreApplication::translate("Data", "SLF files") + " (*.slf);;"
+	  + QCoreApplication::translate("Data", "SML files") + " (*.sml);;"
+	  + QCoreApplication::translate("Data", "DJI SRT files") + " (*.srt);;"
+	  + QCoreApplication::translate("Data", "TCX files") + " (*.tcx);;"
+	  + QCoreApplication::translate("Data", "70mai GPS log files") + " (*.txt);;"
+	  + QCoreApplication::translate("Data", "VKX files") + " (*.vkx);;"
+	  + QCoreApplication::translate("Data", "VTK files") + " (*.vtk);;"
+	  + QCoreApplication::translate("Data", "TwoNav files")
+	    + " (*.rte *.trk *.wpt);;"
+	  + QCoreApplication::translate("Data", "GPSDump files") + " (*.wpt);;"
+	  + QCoreApplication::translate("Data", "All files") + " (*)";
 }
 
 QStringList Data::filter()

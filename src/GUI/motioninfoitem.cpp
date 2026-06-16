@@ -84,23 +84,23 @@ QString MotionInfoItem::speed(const QLocale &l) const
 {
 	if (_units == Nautical)
 		return l.toString(MS2KN * _speed, 'f', 1) + UNIT_SPACE
-		  + qApp->translate("MotionInfoItem", "kn");
+		  + QCoreApplication::translate("MotionInfoItem", "kn");
 	else if (_units == Imperial)
 		return l.toString(MS2MIH * _speed, 'f', 1) + UNIT_SPACE
-		  + qApp->translate("MotionInfoItem", "mi/h");
+		  + QCoreApplication::translate("MotionInfoItem", "mi/h");
 	else
 		return l.toString(MS2KMH * _speed, 'f', 1) + UNIT_SPACE
-		  + qApp->translate("MotionInfoItem", "km/h");
+		  + QCoreApplication::translate("MotionInfoItem", "km/h");
 }
 
 QString MotionInfoItem::verticalSpeed(const QLocale &l) const
 {
 	if (_units == Nautical || _units == Imperial)
 		return l.toString(MS2FTMIN * _verticalSpeed, 'f', 0) + UNIT_SPACE
-		  + qApp->translate("MotionInfoItem", "ft/min");
+		  + QCoreApplication::translate("MotionInfoItem", "ft/min");
 	else
 		return l.toString(MS2MMIN * _verticalSpeed, 'f', 0) + UNIT_SPACE
-		  + qApp->translate("MotionInfoItem", "m/min");
+		  + QCoreApplication::translate("MotionInfoItem", "m/min");
 }
 
 static QString bearing(qreal val, const QLocale &l)
