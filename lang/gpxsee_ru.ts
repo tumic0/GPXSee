@@ -615,7 +615,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="486"/>
         <source>Track waypoints</source>
-        <translation type="unfinished"></translation>
+        <translation>Путевые точки</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="491"/>
