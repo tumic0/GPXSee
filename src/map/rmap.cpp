@@ -402,6 +402,9 @@ QPixmap *RMap::tile(const QPoint &xy)
 			return 0;
 		quint32 width, height, size;
 		stream >> width >> height >> size;
+		// Each scanline of data in the image must be 32-bit aligned
+		if (width & 3)
+			return 0;
 		QSize tileSize(width, -(int)height);
 
 		quint32 bes = qToBigEndian(tileSize.width() * tileSize.height());
@@ -429,7 +432,7 @@ QPixmap *RMap::tile(const QPoint &xy)
 			return 0;
 
 		QImage img(QImage::fromData(ba, "JPG"));
-		return new QPixmap(QPixmap::fromImage(img));
+		return img.isNull() ? 0 : new QPixmap(QPixmap::fromImage(img));
 	} else
 		return 0;
 }

@@ -365,8 +365,7 @@ void OziMap::drawTiled(QPainter *painter, const QRectF &rect) const
 				TileCache::Key key(_tar, 0, xy);
 				pm = TileCache::object(key);
 				if (!pm) {
-					QByteArray ba = _tar->file(tileName);
-					QImage img(QImage::fromData(ba));
+					QImage img(QImage::fromData(_tar->file(tileName)));
 					if (!img.isNull()) {
 						pm = new QPixmap(QPixmap::fromImage(img));
 						drawTile(painter, pm, tp);

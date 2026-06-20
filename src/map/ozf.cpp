@@ -73,6 +73,9 @@ bool OZF::initOZF3()
 	if (!read(h1, sizeof(h1)))
 		return false;
 	_tileSize = *(h1 + 6);
+	// Each scanline of data in the image must be 32-bit aligned
+	if (_tileSize & 3)
+		return false;
 
 	if (!_file.seek(15 + randomNumber + 4))
 		return false;
@@ -209,8 +212,7 @@ QPixmap *OZF::tile(int zoom, const QPoint &xy)
 
 	const Zoom &z = _zooms.at(zoom);
 
-	int i = (xy.y() / tileSize().height()) * z.dim.width()
-	  + (xy.x() / tileSize().width());
+	int i = (xy.y() / _tileSize) * z.dim.width() + (xy.x() / _tileSize);
 	if (i >= z.tiles.size() - 1 || i < 0)
 		return 0;
 
@@ -218,7 +220,7 @@ QPixmap *OZF::tile(int zoom, const QPoint &xy)
 	if (!_file.seek(z.tiles.at(i)))
 		return 0;
 
-	quint32 bes = qToBigEndian(tileSize().width() * tileSize().height());
+	quint32 bes = qToBigEndian(_tileSize * _tileSize);
 	QByteArray ba;
 	ba.resize(sizeof(bes) + size);
 	memcpy(ba.data(), &bes, sizeof(bes));
@@ -226,11 +228,11 @@ QPixmap *OZF::tile(int zoom, const QPoint &xy)
 	if (!read(ba.data() + sizeof(bes), size, 16))
 		return 0;
 	QByteArray uba = qUncompress(ba);
-	if (uba.size() != tileSize().width() * tileSize().height())
+	if (uba.size() != _tileSize * _tileSize)
 		return 0;
 
-	QImage img((const uchar*)uba.constData(), tileSize().width(),
-	  tileSize().height(), QImage::Format_Indexed8);
+	QImage img((const uchar*)uba.constData(), _tileSize, _tileSize,
+	  QImage::Format_Indexed8);
 	img.setColorTable(z.palette);
 
 #if QT_VERSION < QT_VERSION_CHECK(6, 9, 0)

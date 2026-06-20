@@ -516,26 +516,20 @@ QPixmap *OruxMap::tile(const Zoom &z, const QPoint &xy) const
 		query.bindValue(":y", xy.y());
 		query.exec();
 
-		if (!query.first()) {
-			qWarning("%s: SQL %d-%d-%d: not found", qUtf8Printable(name()),
-			  z.zoom, xy.x(), xy.y());
+		if (!query.first())
 			return 0;
-		} else {
-			QImage img(QImage::fromData(query.value(0).toByteArray()));
-			return new QPixmap(QPixmap::fromImage(img));
-		}
+
+		QImage img(QImage::fromData(query.value(0).toByteArray()));
+		return img.isNull() ? 0 : new QPixmap(QPixmap::fromImage(img));
 	} else {
 		QString fileName(z.fileName + "_" + QString::number(xy.x()) + "_"
 		  + QString::number(xy.y()) + ".omc2");
 		QString path(z.set.absoluteFilePath(fileName));
-		if (!QFileInfo::exists(path)) {
-			qWarning("%s: %s: not found", qUtf8Printable(name()),
-			  qUtf8Printable(fileName));
+		if (!QFileInfo::exists(path))
 			return 0;
-		} else {
-			QImage img(path);
-			return new QPixmap(QPixmap::fromImage(img));
-		}
+
+		QImage img(path);
+		return img.isNull() ? 0: new QPixmap(QPixmap::fromImage(img));
 	}
 }
 
