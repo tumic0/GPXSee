@@ -21,7 +21,6 @@
 #include <QLocale>
 #include <QMimeData>
 #include <QUrl>
-#include <QPixmapCache>
 #include <QWindow>
 #include <QScreen>
 #include <QStyle>
@@ -42,6 +41,7 @@
 #include "map/emptymap.h"
 #include "map/crs.h"
 #include "map/hillshading.h"
+#include "map/tilecache.h"
 #include "icons.h"
 #include "keys.h"
 #include "settings.h"
@@ -3367,7 +3367,7 @@ void GUI::loadOptions()
 	Downloader::enableHTTP2(_options.enableHTTP2);
 	Downloader::setTimeout(_options.connectionTimeout);
 
-	QPixmapCache::setCacheLimit(_options.pixmapCache * 1024);
+	TileCache::setCacheLimit(_options.pixmapCache * 1024);
 	DEM::setCacheSize(_options.demCache * 1024);
 
 	HillShading::setAlpha(_options.hillshadingAlpha);
@@ -3506,7 +3506,7 @@ void GUI::updateOptions(const Options &options)
 		  : Authorization());
 
 	if (options.pixmapCache != _options.pixmapCache)
-		QPixmapCache::setCacheLimit(options.pixmapCache * 1024);
+		TileCache::setCacheLimit(options.pixmapCache * 1024);
 	if (options.demCache != _options.demCache)
 		DEM::setCacheSize(options.demCache * 1024);
 

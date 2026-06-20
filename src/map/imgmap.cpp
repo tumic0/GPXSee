@@ -1,6 +1,5 @@
 #include <QFile>
 #include <QPainter>
-#include <QPixmapCache>
 #include <QFileInfo>
 #include <QDir>
 #include <QtMath>
@@ -133,7 +132,7 @@ void IMGMap::load(const Projection &in, const Projection &out,
 
 	updateTransform();
 
-	QPixmapCache::clear();
+	TileCache::clear();
 }
 
 void IMGMap::unload()
@@ -216,13 +215,15 @@ void IMGMap::updateTransform()
 		_bounds.adjust(0.5, 0, -0.5, 0);
 }
 
-bool IMGMap::isRunning(const QString &key) const
+bool IMGMap::isRunning(const TileCache::Key &key) const
 {
 	for (int i = 0; i < _jobs.size(); i++) {
 		const QList<IMG::RasterTile> &tiles = _jobs.at(i)->tiles();
-		for (int j = 0; j < tiles.size(); j++)
-			if (tiles.at(j).key() == key)
+		for (int j = 0; j < tiles.size(); j++) {
+			const IMG::RasterTile &t = tiles.at(j);
+			if (TileCache::Key(t.data().first(), t.zoom(), t.xy()) == key)
 				return true;
+		}
 	}
 
 	return false;
@@ -249,7 +250,8 @@ void IMGMap::jobFinished(IMGJob *job)
 	for (int i = 0; i < tiles.size(); i++) {
 		const IMG::RasterTile &mt = tiles.at(i);
 		if (!mt.pixmap().isNull())
-			QPixmapCache::insert(mt.key(), mt.pixmap());
+			TileCache::insert(TileCache::Key(mt.data().first(), mt.zoom(),
+			  mt.xy()), new QPixmap(mt.pixmap()));
 	}
 
 	removeJob(job);
@@ -277,21 +279,18 @@ void IMGMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 		for (int i = 0; i < width; i++) {
 			for (int j = 0; j < height; j++) {
 				QPoint ttl(tl.x() + i * TILE_SIZE, tl.y() + j * TILE_SIZE);
-				QString key(_data.at(n)->fileName()
-				  + "-" + QString::number(_zoom)
-				  + "_" + QString::number(ttl.x())
-				  + "_" + QString::number(ttl.y()));
+				TileCache::Key key(_data.at(n), _zoom, ttl);
 
 				if (isRunning(key))
 					continue;
 
-				QPixmap pm;
-				if (QPixmapCache::find(key, &pm))
-					painter->drawPixmap(ttl, pm);
+				QPixmap *pm = TileCache::object(key);
+				if (pm)
+					painter->drawPixmap(ttl, *pm);
 				else {
 					tiles.append(RasterTile(&_projection, _transform,
 					  _data.at(n), _styles.at(n), _zoom,
-					  QRect(ttl, QSize(TILE_SIZE, TILE_SIZE)), _tileRatio, key,
+					  QRect(ttl, QSize(TILE_SIZE, TILE_SIZE)), _tileRatio,
 					  _hillShading, _layer & Raster, _layer & Vector));
 				}
 			}
@@ -307,7 +306,8 @@ void IMGMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 				const RasterTile &mt = tiles.at(i);
 				const QPixmap &pm = mt.pixmap();
 				painter->drawPixmap(mt.xy(), pm);
-				QPixmapCache::insert(mt.key(), pm);
+				TileCache::insert(TileCache::Key(mt.data().first(), mt.zoom(),
+				  mt.xy()), new QPixmap(pm));
 			}
 		} else
 			runJob(new IMGJob(tiles));

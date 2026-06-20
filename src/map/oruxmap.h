@@ -66,7 +66,9 @@ private:
 	void mapCalibration(QXmlStreamReader &reader, const QString &dir, int level);
 	void calibrationPoints(QXmlStreamReader &reader, const QSize &size,
 	  QList<CalibrationPoint> &points);
-	QPixmap tile(const Zoom &z, int x, int y) const;
+	QPixmap *tile(const Zoom &z, const QPoint &xy) const;
+	void drawTile(QPainter *painter, const QPixmap *pixmap,
+	  const QPointF &tp) const;
 
 	friend QDebug operator<<(QDebug dbg, const Zoom &zoom);
 

@@ -1,11 +1,11 @@
 #include <QPainter>
-#include <QPixmapCache>
 #include <QDir>
 #include "common/wgs84.h"
 #include "common/util.h"
 #include "common/programpaths.h"
 #include "rectd.h"
 #include "pcs.h"
+#include "tilecache.h"
 #include "mapsforgemap.h"
 
 
@@ -48,7 +48,7 @@ void MapsforgeMap::load(const Projection &in, const Projection &out,
 
 	updateTransform();
 
-	QPixmapCache::clear();
+	TileCache::clear();
 }
 
 void MapsforgeMap::unload()
@@ -170,7 +170,8 @@ void MapsforgeMap::jobFinished(MapsforgeMapJob *job)
 	for (int i = 0; i < tiles.size(); i++) {
 		const Mapsforge::RasterTile &mt = tiles.at(i);
 		if (!mt.pixmap().isNull())
-			QPixmapCache::insert(key(mt.zoom(), mt.xy()), mt.pixmap());
+			TileCache::insert(TileCache::Key(this, mt.zoom(), mt.xy()),
+			  new QPixmap(mt.pixmap()));
 	}
 
 	removeJob(job);
@@ -201,9 +202,9 @@ void MapsforgeMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 			if (isRunning(_zoom, ttl))
 				continue;
 
-			QPixmap pm;
-			if (QPixmapCache::find(key(_zoom, ttl), &pm))
-				painter->drawPixmap(ttl, pm);
+			QPixmap *pm = TileCache::object(TileCache::Key(this, _zoom, ttl));
+			if (pm)
+				painter->drawPixmap(ttl, *pm);
 			else {
 				tiles.append(RasterTile(&_projection, _transform, _style, &_data,
 				  _zoom, QRect(ttl, QSize(tileSize, tileSize)), _tileRatio,
@@ -221,7 +222,8 @@ void MapsforgeMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 				const RasterTile &mt = tiles.at(i);
 				const QPixmap &pm = mt.pixmap();
 				painter->drawPixmap(mt.xy(), pm);
-				QPixmapCache::insert(key(mt.zoom(), mt.xy()), pm);
+				TileCache::insert(TileCache::Key(this, mt.zoom(), mt.xy()),
+				  new QPixmap(pm));
 			}
 		} else
 			runJob(new MapsforgeMapJob(tiles));

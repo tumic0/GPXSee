@@ -202,20 +202,21 @@ bool OZF::open()
 	return true;
 }
 
-QPixmap OZF::tile(int zoom, int x, int y)
+QPixmap *OZF::tile(int zoom, const QPoint &xy)
 {
 	Q_ASSERT(_file.isOpen());
 	Q_ASSERT(0 <= zoom && zoom < _zooms.count());
 
 	const Zoom &z = _zooms.at(zoom);
 
-	int i = (y/tileSize().height()) * z.dim.width() + (x/tileSize().width());
+	int i = (xy.y() / tileSize().height()) * z.dim.width()
+	  + (xy.x() / tileSize().width());
 	if (i >= z.tiles.size() - 1 || i < 0)
-		return QPixmap();
+		return 0;
 
 	int size = z.tiles.at(i+1) - z.tiles.at(i);
 	if (!_file.seek(z.tiles.at(i)))
-		return QPixmap();
+		return 0;
 
 	quint32 bes = qToBigEndian(tileSize().width() * tileSize().height());
 	QByteArray ba;
@@ -223,19 +224,19 @@ QPixmap OZF::tile(int zoom, int x, int y)
 	memcpy(ba.data(), &bes, sizeof(bes));
 
 	if (!read(ba.data() + sizeof(bes), size, 16))
-		return QPixmap();
+		return 0;
 	QByteArray uba = qUncompress(ba);
 	if (uba.size() != tileSize().width() * tileSize().height())
-		return QPixmap();
+		return 0;
 
 	QImage img((const uchar*)uba.constData(), tileSize().width(),
 	  tileSize().height(), QImage::Format_Indexed8);
 	img.setColorTable(z.palette);
 
 #if QT_VERSION < QT_VERSION_CHECK(6, 9, 0)
-	return QPixmap::fromImage(img.mirrored());
+	return new QPixmap(QPixmap::fromImage(img.mirrored()));
 #else // QT 6.9
-	return QPixmap::fromImage(img.flipped());
+	return new QPixmap(QPixmap::fromImage(img.flipped()));
 #endif // QT 6.9
 }
 

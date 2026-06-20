@@ -51,7 +51,7 @@ private:
 	void updateTransform();
 	qreal tileSize() const;
 	void init();
-	void drawTile(QPainter *painter, const QPixmap &pixmap,
+	void drawTile(QPainter *painter, const QPixmap *pixmap,
 	  const QPointF &tp) const;
 
 	QString _name;

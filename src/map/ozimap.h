@@ -72,6 +72,8 @@ private:
 	bool setTileInfo(const QStringList &tiles, const QString &path = QString());
 	bool setImageInfo(const QString &path);
 
+	void drawTile(QPainter *painter, const QPixmap *pixmap,
+	  const QPointF &tp) const;
 	void drawTiled(QPainter *painter, const QRectF &rect) const;
 	void drawOZF(QPainter *painter, const QRectF &rect) const;
 	void drawImage(QPainter *painter, const QRectF &rect, Flags flags) const;

@@ -7,6 +7,7 @@
 #include <QPoint>
 #include <QPair>
 #include <QHash>
+#include <qhashfunctions.h>
 
 #define HASH_T uint
 

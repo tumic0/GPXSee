@@ -62,7 +62,9 @@ private:
 	bool readZoomLevel(quint64 offset, const QSize &imageSize);
 	QByteArray readIMP(quint64 IMPOffset);
 	bool parseIMP(const QByteArray &data);
-	QPixmap tile(int x, int y);
+	QPixmap *tile(const QPoint &xy);
+	void drawTile(QPainter *painter, const QPixmap *pixmap,
+	  const QPointF &tp) const;
 
 	QList<Zoom> _zooms;
 	Projection _projection;

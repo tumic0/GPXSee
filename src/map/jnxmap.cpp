@@ -1,12 +1,39 @@
 #include <QtEndian>
 #include <QPainter>
 #include <QFileInfo>
-#include <QPixmapCache>
 #include "rectd.h"
+#include "tilecache.h"
 #include "jnxmap.h"
 
-
 #define ic2dc(x) ((x) * 180.0 / 0x7FFFFFFF)
+
+static QPixmap *pixmap(QFile *file, quint32 offset, quint32 size)
+{
+	QByteArray ba;
+	ba.resize(size + 2);
+	ba[0] = (char)0xFF;
+	ba[1] = (char)0xD8;
+	char *data = ba.data() + 2;
+
+	if (!file->seek(offset))
+		return 0;
+	if (!file->read(data, size))
+		return 0;
+
+	QImage img(QImage::fromData(ba));
+	return img.isNull() ? 0 : new QPixmap(QPixmap::fromImage(img));
+}
+
+static void drawTile(QPainter *painter, const QPixmap *pixmap,
+  const QPointF &tp, qreal ratio)
+{
+	if (ratio != pixmap->devicePixelRatio()) {
+		QPixmap pm(*pixmap);
+		pm.setDevicePixelRatio(ratio);
+		painter->drawPixmap(tp, pm);
+	} else
+		painter->drawPixmap(tp, *pixmap);
+}
 
 template<class T> bool JNXMap::readValue(T &val)
 {
@@ -227,37 +254,20 @@ int JNXMap::zoomOut()
 	return _zoom;
 }
 
-QPixmap JNXMap::pixmap(const Tile *tile, QFile *file)
-{
-	QPixmap pm;
-
-	QString key = file->fileName() + "-" + QString::number(tile->offset);
-	if (!QPixmapCache::find(key, &pm)) {
-		QByteArray ba;
-		ba.resize(tile->size + 2);
-		ba[0] = (char)0xFF;
-		ba[1] = (char)0xD8;
-		char *data = ba.data() + 2;
-
-		if (!file->seek(tile->offset))
-			return QPixmap();
-		if (!file->read(data, tile->size))
-			return QPixmap();
-		pm = QPixmap::fromImage(QImage::fromData(ba));
-
-		if (!pm.isNull())
-			QPixmapCache::insert(key, pm);
-	}
-
-	return pm;
-}
-
 bool JNXMap::cb(Tile *tile, void *context)
 {
 	Ctx *ctx = static_cast<Ctx*>(context);
-	QPixmap pm(pixmap(tile, ctx->file));
-	pm.setDevicePixelRatio(ctx->ratio);
-	ctx->painter->drawPixmap(tile->pos / ctx->ratio, pm);
+	TileCache::Key key(ctx->map, ctx->zoom, tile->pos.toPoint());
+
+	QPixmap *pm = TileCache::object(key);
+	if (!pm) {
+		pm = pixmap(ctx->file, tile->offset, tile->size);
+		if (pm) {
+			drawTile(ctx->painter, pm, tile->pos / ctx->ratio, ctx->ratio);
+			TileCache::insert(key, pm);
+		}
+	} else
+		drawTile(ctx->painter, pm, tile->pos / ctx->ratio, ctx->ratio);
 
 	return true;
 }
@@ -266,7 +276,7 @@ void JNXMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 {
 	Q_UNUSED(flags);
 	const RTree<Tile*, qreal, 2> &tree = _zooms.at(_zoom)->tree;
-	Ctx ctx(painter, &_file, _mapRatio);
+	Ctx ctx(this, _zoom, &_file, painter, _mapRatio);
 	QRectF rr(rect.topLeft() * _mapRatio, rect.size() * _mapRatio);
 
 	qreal min[2], max[2];

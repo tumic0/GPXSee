@@ -68,12 +68,14 @@ private:
 	};
 
 	struct Ctx {
+		Map *map;
 		QPainter *painter;
 		QFile *file;
 		qreal ratio;
+		int zoom;
 
-		Ctx(QPainter *painter, QFile *file, qreal ratio)
-		  : painter(painter), file(file), ratio(ratio) {}
+		Ctx(Map *map, int zoom, QFile *file, QPainter *painter, qreal ratio)
+		  : map(map), painter(painter), file(file), ratio(ratio), zoom(zoom) {}
 	};
 
 
@@ -84,7 +86,6 @@ private:
 	void clearTiles();
 
 	static bool cb(Tile *tile, void *context);
-	static QPixmap pixmap(const Tile *tile, QFile *file);
 
 	QFile _file;
 	QList<Zoom*> _zooms;

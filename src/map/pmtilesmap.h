@@ -59,7 +59,7 @@ private:
 	  unsigned overzoom) const;
 	qreal tileSize() const;
 	QByteArray tileData(quint64 id);
-	void drawTile(QPainter *painter, const QPixmap &pixmap,
+	void drawTile(QPainter *painter, const QPixmap *pixmap,
 	  const QPointF &tp) const;
 
 	QString key(int zoom, const QPoint &xy) const;

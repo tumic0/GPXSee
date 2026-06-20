@@ -5,6 +5,7 @@
 #include "map.h"
 #include "projection.h"
 #include "transform.h"
+#include "tilecache.h"
 
 class IMGJob;
 namespace IMG {class Style;}
@@ -71,7 +72,7 @@ private:
 
 	Transform transform(int zoom) const;
 	void updateTransform();
-	bool isRunning(const QString &key) const;
+	bool isRunning(const TileCache::Key &key) const;
 	void runJob(IMGJob *job);
 	void removeJob(IMGJob *job);
 	void cancelJobs(bool wait);

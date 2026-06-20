@@ -1,7 +1,6 @@
 #include <QtMath>
 #include <QPainter>
 #include <QDir>
-#include <QPixmapCache>
 #include <QtConcurrentMap>
 #include "common/rectc.h"
 #include "common/wgs84.h"
@@ -9,6 +8,7 @@
 #include "transform.h"
 #include "tileloader.h"
 #include "tile.h"
+#include "tilecache.h"
 #include "wmts.h"
 #include "wmtsmap.h"
 
@@ -62,7 +62,7 @@ void WMTSMap::load(const Projection &in, const Projection &out,
 void WMTSMap::clearCache()
 {
 	_tileLoader->clearCache();
-	QPixmapCache::clear();
+	TileCache::clear();
 }
 
 double WMTSMap::sd2res(double scaleDenominator) const
@@ -210,8 +210,8 @@ void WMTSMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 		if (path.isNull() || path == NULLFILE)
 			continue;
 
-		QPixmap pm;
-		if (QPixmapCache::find(path, &pm)) {
+		QPixmap *pm = TileCache::object(TileCache::Key(this, _zoom, t.xy()));
+		if (pm) {
 			QPointF tp(t.xy().x() * ts.width(), t.xy().y() * ts.height());
 			drawTile(painter, pm, tp);
 		} else
@@ -226,24 +226,25 @@ void WMTSMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 		if (mt.pixmap().isNull())
 			continue;
 
-		QPixmapCache::insert(mt.file(), mt.pixmap());
+		TileCache::insert(TileCache::Key(this, _zoom, mt.xy()),
+		  new QPixmap(mt.pixmap()));
 
 		QPointF tp(mt.xy().x() * ts.width(), mt.xy().y() * ts.height());
-		drawTile(painter, mt.pixmap(), tp);
+		drawTile(painter, &mt.pixmap(), tp);
 	}
 }
 
-void WMTSMap::drawTile(QPainter *painter, const QPixmap &pixmap,
+void WMTSMap::drawTile(QPainter *painter, const QPixmap *pixmap,
   const QPointF &tp) const
 {
 	qreal ratio = _mapRatio > 1.0 ? _mapRatio : _tileRatio;
 
-	if (ratio != pixmap.devicePixelRatio()) {
-		QPixmap pm(pixmap);
+	if (ratio != pixmap->devicePixelRatio()) {
+		QPixmap pm(*pixmap);
 		pm.setDevicePixelRatio(ratio);
 		painter->drawPixmap(tp, pm);
 	} else
-		painter->drawPixmap(tp, pixmap);
+		painter->drawPixmap(tp, *pixmap);
 }
 
 QPointF WMTSMap::ll2xy(const Coordinates &c)

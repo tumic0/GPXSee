@@ -3,7 +3,6 @@
 #include <QSqlField>
 #include <QSqlError>
 #include <QPainter>
-#include <QPixmapCache>
 #include <QImageReader>
 #include <QBuffer>
 #include <QJsonDocument>
@@ -11,6 +10,7 @@
 #include <QJsonArray>
 #include "common/util.h"
 #include "osm.h"
+#include "tilecache.h"
 #include "mbtilesmap.h"
 
 #define MVT_TILE_SIZE 512
@@ -279,7 +279,7 @@ void MBTilesMap::load(const Projection &in, const Projection &out,
 			_zooms.append(Zoom(i, _zooms.last().base));
 		}
 
-		QPixmapCache::clear();
+		TileCache::clear();
 	}
 
 	_coordinatesRatio = _mapRatio > 1.0 ? _mapRatio / _tileRatio : 1.0;
@@ -417,7 +417,8 @@ void MBTilesMap::jobFinished(MVTJob *job)
 	for (int i = 0; i < tiles.size(); i++) {
 		const RasterTile &mt = tiles.at(i);
 		if (!mt.pixmap().isNull())
-			QPixmapCache::insert(key(mt.zoom(), mt.xy()), mt.pixmap());
+			TileCache::insert(TileCache::Key(this, mt.zoom(), mt.xy()),
+			  new QPixmap(mt.pixmap()));
 	}
 
 	removeJob(job);
@@ -459,8 +460,8 @@ void MBTilesMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 			if (isRunning(zoom.z, t))
 				continue;
 
-			QPixmap pm;
-			if (QPixmapCache::find(key(zoom.z, t), &pm)) {
+			QPixmap *pm = TileCache::object(TileCache::Key(this, zoom.z, t));
+			if (pm) {
 				QPointF tp(tilePos(tl, t, tile, overzoom));
 				drawTile(painter, pm, tp);
 			} else
@@ -480,27 +481,28 @@ void MBTilesMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 				if (mt.pixmap().isNull())
 					continue;
 
-				QPixmapCache::insert(key(mt.zoom(), mt.xy()), mt.pixmap());
+				TileCache::insert(TileCache::Key(this, mt.zoom(), mt.xy()),
+				  new QPixmap(mt.pixmap()));
 
 				QPointF tp(tilePos(tl, mt.xy(), tile, overzoom));
-				drawTile(painter, mt.pixmap(), tp);
+				drawTile(painter, &mt.pixmap(), tp);
 			}
 		} else
 			runJob(new MVTJob(tiles));
 	}
 }
 
-void MBTilesMap::drawTile(QPainter *painter, const QPixmap &pixmap,
+void MBTilesMap::drawTile(QPainter *painter, const QPixmap *pixmap,
   const QPointF &tp) const
 {
 	qreal ratio = _mapRatio > 1.0 ? _mapRatio : _tileRatio;
 
-	if (ratio != pixmap.devicePixelRatio()) {
-		QPixmap pm(pixmap);
+	if (ratio != pixmap->devicePixelRatio()) {
+		QPixmap pm(*pixmap);
 		pm.setDevicePixelRatio(ratio);
 		painter->drawPixmap(tp, pm);
 	} else
-		painter->drawPixmap(tp, pixmap);
+		painter->drawPixmap(tp, *pixmap);
 }
 
 QPointF MBTilesMap::ll2xy(const Coordinates &c)

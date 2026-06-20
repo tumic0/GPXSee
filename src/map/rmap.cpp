@@ -1,6 +1,5 @@
 #include <QFileInfo>
 #include <QDataStream>
-#include <QPixmapCache>
 #include <QPainter>
 #include <QRegularExpression>
 #include <QtEndian>
@@ -10,6 +9,7 @@
 #include "utm.h"
 #include "pcs.h"
 #include "rectd.h"
+#include "tilecache.h"
 #include "rmap.h"
 
 
@@ -378,28 +378,28 @@ void RMap::unload()
 	_file.close();
 }
 
-QPixmap RMap::tile(int x, int y)
+QPixmap *RMap::tile(const QPoint &xy)
 {
 	const Zoom &zoom = _zooms.at(_zoom);
 
-	qint32 index = y / _tileSize.height() * zoom.dim.width()
-	  + x / _tileSize.width();
+	qint32 index = xy.y() / _tileSize.height() * zoom.dim.width()
+	  + xy.x() / _tileSize.width();
 	if (index > zoom.tiles.size())
-		return QPixmap();
+		return 0;
 
 	quint64 offset = zoom.tiles.at(index);
 	if (!_file.seek(offset))
-		return QPixmap();
+		return 0;
 	QDataStream stream(&_file);
 	stream.setByteOrder(QDataStream::LittleEndian);
 	quint32 tag;
 	stream >> tag;
 	if (stream.status() != QDataStream::Ok)
-		return QPixmap();
+		return 0;
 
 	if (tag == 2) {
 		if (_palette.isEmpty())
-			return QPixmap();
+			return 0;
 		quint32 width, height, size;
 		stream >> width >> height >> size;
 		QSize tileSize(width, -(int)height);
@@ -410,15 +410,15 @@ QPixmap RMap::tile(int x, int y)
 		memcpy(ba.data(), &bes, sizeof(bes));
 
 		if (stream.readRawData(ba.data() + sizeof(bes), size) != (int)size)
-			return QPixmap();
+			return 0;
 		QByteArray uba = qUncompress(ba);
 		if (uba.size() < tileSize.width() * tileSize.height())
-			return QPixmap();
+			return 0;
 		QImage img((const uchar*)uba.constData(), tileSize.width(),
 		  tileSize.height(), QImage::Format_Indexed8);
 		img.setColorTable(_palette);
 
-		return QPixmap::fromImage(img);
+		return new QPixmap(QPixmap::fromImage(img));
 	} else if (tag == 7) {
 		quint32 len;
 		stream >> len;
@@ -426,12 +426,12 @@ QPixmap RMap::tile(int x, int y)
 		QByteArray ba;
 		ba.resize(len);
 		if (stream.readRawData(ba.data(), ba.size()) != ba.size())
-			return QPixmap();
+			return 0;
 
 		QImage img(QImage::fromData(ba, "JPG"));
-		return QPixmap::fromImage(img);
+		return new QPixmap(QPixmap::fromImage(img));
 	} else
-		return QPixmap();
+		return 0;
 }
 
 void RMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
@@ -445,27 +445,33 @@ void RMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 	QSizeF s(rect.right() - tl.x(), rect.bottom() - tl.y());
 	for (int i = 0; i < ceil(s.width() / ts.width()); i++) {
 		for (int j = 0; j < ceil(s.height() / ts.height()); j++) {
-			int x = round(tl.x() * _mapRatio + i * _tileSize.width());
-			int y = round(tl.y() * _mapRatio + j * _tileSize.height());
+			QPoint xy(round(tl.x() * _mapRatio + i * _tileSize.width()),
+			  round(tl.y() * _mapRatio + j * _tileSize.height()));
+			QPointF tp(tl.x() + i * ts.width(), tl.y() + j * ts.height());
+			TileCache::Key key(this, _zoom, xy);
 
-			QPixmap pixmap;
-			QString key = path() + "/" + QString::number(_zoom) + "_"
-			  + QString::number(x) + "_" + QString::number(y);
-			if (!QPixmapCache::find(key, &pixmap)) {
-				pixmap = tile(x, y);
-				if (!pixmap.isNull())
-					QPixmapCache::insert(key, pixmap);
-			}
-
-			if (pixmap.isNull())
-				qWarning("%s: error loading tile image", qUtf8Printable(key));
-			else {
-				pixmap.setDevicePixelRatio(_mapRatio);
-				QPointF tp(tl.x() + i * ts.width(), tl.y() + j * ts.height());
-				painter->drawPixmap(tp, pixmap);
-			}
+			QPixmap *pm = TileCache::object(key);
+			if (!pm) {
+				pm = tile(xy);
+				if (pm) {
+					drawTile(painter, pm, tp);
+					TileCache::insert(key, pm);
+				}
+			}  else
+				drawTile(painter, pm, tp);
 		}
 	}
+}
+
+void RMap::drawTile(QPainter *painter, const QPixmap *pixmap,
+  const QPointF &tp) const
+{
+	if (_mapRatio != pixmap->devicePixelRatio()) {
+		QPixmap pm(*pixmap);
+		pm.setDevicePixelRatio(_mapRatio);
+		painter->drawPixmap(tp, pm);
+	} else
+		painter->drawPixmap(tp, *pixmap);
 }
 
 Map *RMap::create(const QString &path, const Projection &proj, bool *isDir)

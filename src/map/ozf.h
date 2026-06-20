@@ -26,7 +26,7 @@ public:
 	QSize size(int zoom) const;
 	QPointF scale(int zoom) const;
 	QSize tileSize() const {return QSize(_tileSize, _tileSize);}
-	QPixmap tile(int zoom, int x, int y);
+	QPixmap *tile(int zoom, const QPoint &xy);
 
 	static bool isOZF(const QString &path);
 

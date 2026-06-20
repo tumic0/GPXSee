@@ -104,6 +104,8 @@ private:
 	double number(QXmlStreamReader &reader);
 
 	void draw(QPainter *painter, const QRectF &rect, int mapIndex);
+	void drawTile(QPainter *painter, const QPixmap *pixmap,
+	  const QPointF &pos, const QRectF &rect) const;
 
 	bool createTiles(const QList<Overlay> &overlays, QZipReader &zip);
 	void computeZooms();

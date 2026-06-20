@@ -70,7 +70,7 @@ private:
 	QByteArray tileData(int zoom, const QPoint &tile) const;
 	QPointF tilePos(const QPointF &tl, const QPoint &tc, const QPoint &tile,
 	  unsigned overzoom) const;
-	void drawTile(QPainter *painter, const QPixmap &pixmap,
+	void drawTile(QPainter *painter, const QPixmap *pixmap,
 	  const QPointF &tp) const;
 
 	QString key(int zoom, const QPoint &xy) const;

@@ -1,9 +1,9 @@
 #include <QDataStream>
 #include <QPainter>
-#include <QPixmapCache>
 #include <QtConcurrentMap>
 #include "osm.h"
 #include "tile.h"
+#include "tilecache.h"
 #include "gemfmap.h"
 
 using namespace OSM;
@@ -271,17 +271,14 @@ void GEMFMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 
 	for (int i = 0; i < width; i++) {
 		for (int j = 0; j < height; j++) {
-			QPixmap pm;
 			QPoint t(tile.x() + i, tile.y() + j);
-			QString key = path() + "-" + QString::number(z.level) + "_"
-			  + QString::number(t.x()) + "_" + QString::number(t.y());
-
-			if (QPixmapCache::find(key, &pm)) {
+			QPixmap *pm = TileCache::object(TileCache::Key(this, z.level, t));
+			if (pm) {
 				QPointF tp(tl.x() + (t.x() - tile.x()) * tileSize(),
 				  tl.y() + (t.y() - tile.y()) * tileSize());
 				drawTile(painter, pm, tp);
 			} else
-				tiles.append(DataTile(t, tileData(t), key));
+				tiles.append(DataTile(t, z.level, tileData(t)));
 		}
 	}
 
@@ -293,23 +290,24 @@ void GEMFMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 		if (mt.pixmap().isNull())
 			continue;
 
-		QPixmapCache::insert(mt.key(), mt.pixmap());
+		TileCache::insert(TileCache::Key(this, mt.zoom(), mt.xy()),
+		  new QPixmap(mt.pixmap()));
 
 		QPointF tp(tl.x() + (mt.xy().x() - tile.x()) * tileSize(),
 		  tl.y() + (mt.xy().y() - tile.y())* tileSize());
-		drawTile(painter, mt.pixmap(), tp);
+		drawTile(painter, &mt.pixmap(), tp);
 	}
 }
 
-void GEMFMap::drawTile(QPainter *painter, const QPixmap &pixmap,
+void GEMFMap::drawTile(QPainter *painter, const QPixmap *pixmap,
   const QPointF &tp) const
 {
-	if (_mapRatio != pixmap.devicePixelRatio()) {
-		QPixmap pm(pixmap);
+	if (_mapRatio != pixmap->devicePixelRatio()) {
+		QPixmap pm(*pixmap);
 		pm.setDevicePixelRatio(_mapRatio);
 		painter->drawPixmap(tp, pm);
 	} else
-		painter->drawPixmap(tp, pixmap);
+		painter->drawPixmap(tp, *pixmap);
 }
 
 Map *GEMFMap::create(const QString &path, const Projection &proj, bool *isDir)

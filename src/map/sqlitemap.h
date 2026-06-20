@@ -38,7 +38,7 @@ private:
 	int limitZoom(int zoom) const;
 	qreal tileSize() const;
 	QByteArray tileData(int zoom, const QPoint &tile) const;
-	void drawTile(QPainter *painter, const QPixmap &pixmap,
+	void drawTile(QPainter *painter, const QPixmap *pixmap,
 	  const QPointF &tp) const;
 
 	QSqlDatabase _db;

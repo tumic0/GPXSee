@@ -1,6 +1,5 @@
 #include <QFile>
 #include <QPainter>
-#include <QPixmapCache>
 #include <QDir>
 #include <QtMath>
 #include "common/wgs84.h"
@@ -10,6 +9,7 @@
 #include "rectd.h"
 #include "pcs.h"
 #include "imgjob.h"
+#include "tilecache.h"
 #include "coros4map.h"
 
 using namespace IMG;
@@ -133,7 +133,7 @@ void Coros4Map::load(const Projection &in, const Projection &out,
 
 	updateTransform();
 
-	QPixmapCache::clear();
+	TileCache::clear();
 }
 
 void Coros4Map::unload()
@@ -219,13 +219,15 @@ void Coros4Map::updateTransform()
 		_bounds.adjust(0.5, 0, -0.5, 0);
 }
 
-bool Coros4Map::isRunning(const QString &key) const
+bool Coros4Map::isRunning(const TileCache::Key &key) const
 {
 	for (int i = 0; i < _jobs.size(); i++) {
 		const QList<RasterTile> &tiles = _jobs.at(i)->tiles();
-		for (int j = 0; j < tiles.size(); j++)
-			if (tiles.at(j).key() == key)
+		for (int j = 0; j < tiles.size(); j++) {
+			const RasterTile &t = tiles.at(j);
+			if (TileCache::Key(this, t.zoom(), t.xy()) == key)
 				return true;
+		}
 	}
 
 	return false;
@@ -252,7 +254,8 @@ void Coros4Map::jobFinished(IMGJob *job)
 	for (int i = 0; i < tiles.size(); i++) {
 		const RasterTile &mt = tiles.at(i);
 		if (!mt.pixmap().isNull())
-			QPixmapCache::insert(mt.key(), mt.pixmap());
+			TileCache::insert(TileCache::Key(this, mt.zoom(), mt.xy()),
+			  new QPixmap(mt.pixmap()));
 	}
 
 	removeJob(job);
@@ -286,16 +289,15 @@ void Coros4Map::draw(QPainter *painter, const QRectF &rect, Flags flags)
 
 	for (int i = 0; i < width; i++) {
 		for (int j = 0; j < height; j++) {
-			QPixmap pm;
 			QPoint ttl(tl.x() + i * TILE_SIZE, tl.y() + j * TILE_SIZE);
-			QString key(path() + "-" + QString::number(_zoom)
-			  + "_" + QString::number(ttl.x()) + "_" + QString::number(ttl.y()));
+			TileCache::Key key(this, _zoom, ttl);
 
 			if (isRunning(key))
 				continue;
 
-			if (QPixmapCache::find(key, &pm))
-				painter->drawPixmap(ttl, pm);
+			QPixmap *pm = TileCache::object(key);
+			if (pm)
+				painter->drawPixmap(ttl, *pm);
 			else {
 				RectD rectD(_transform.img2proj(ttl), _transform.img2proj(
 				  QPoint(ttl.x() + TILE_SIZE, ttl.y() + TILE_SIZE)));
@@ -315,7 +317,7 @@ void Coros4Map::draw(QPainter *painter, const QRectF &rect, Flags flags)
 				if (!data.isEmpty())
 					tiles.append(RasterTile(&_projection, _transform, data,
 					  _style, _zoom, QRect(ttl, QSize(TILE_SIZE, TILE_SIZE)),
-					  _tileRatio, key, _hillShading, false, true));
+					  _tileRatio, _hillShading, false, true));
 			}
 		}
 	}
@@ -329,7 +331,8 @@ void Coros4Map::draw(QPainter *painter, const QRectF &rect, Flags flags)
 				const RasterTile &mt = tiles.at(i);
 				const QPixmap &pm = mt.pixmap();
 				painter->drawPixmap(mt.xy(), pm);
-				QPixmapCache::insert(mt.key(), pm);
+				TileCache::insert(TileCache::Key(this,mt.zoom(), mt.xy()),
+				  new QPixmap(pm));
 			}
 		} else
 			runJob(new IMGJob(tiles));

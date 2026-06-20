@@ -1,8 +1,8 @@
-#include <QPixmapCache>
 #include <QPainter>
 #include <QImageReader>
 #include <QDir>
 #include "osm.h"
+#include "tilecache.h"
 #include "coros5map.h"
 
 #define MVT_TILE_SIZE   512
@@ -160,7 +160,7 @@ void Coros5Map::load(const Projection &in, const Projection &out,
 	_coordinatesRatio = _mapRatio > 1.0 ? _mapRatio / _tileRatio : 1.0;
 	_factor = zoom2scale(_zooms.at(_zoom).z, MVT_TILE_SIZE) * _coordinatesRatio;
 
-	QPixmapCache::clear();
+	TileCache::clear();
 }
 
 void Coros5Map::unload()
@@ -274,7 +274,8 @@ void Coros5Map::jobFinished(MVTJob *job)
 	for (int i = 0; i < tiles.size(); i++) {
 		const RasterTile &mt = tiles.at(i);
 		if (!mt.pixmap().isNull())
-			QPixmapCache::insert(key(mt.zoom(), mt.xy()), mt.pixmap());
+			TileCache::insert(TileCache::Key(this, mt.zoom(), mt.xy()),
+			  new QPixmap(mt.pixmap()));
 	}
 
 	removeJob(job);
@@ -320,11 +321,12 @@ void Coros5Map::draw(QPainter *painter, const QRectF &rect, Flags flags)
 	for (int i = 0; i < width; i++) {
 		for (int j = 0; j < height; j++) {
 			QPoint t(tile.x() + i, tile.y() + j);
+
 			if (isRunning(zoom.z, t))
 				continue;
 
-			QPixmap pm;
-			if (QPixmapCache::find(key(zoom.z, t), &pm)) {
+			QPixmap *pm = TileCache::object(TileCache::Key(this, zoom.z, t));
+			if (pm) {
 				QPointF tp(tilePos(tl, t, tile, overzoom));
 				drawTile(painter, pm, tp);
 			} else {
@@ -369,10 +371,11 @@ void Coros5Map::draw(QPainter *painter, const QRectF &rect, Flags flags)
 				if (mt.pixmap().isNull())
 					continue;
 
-				QPixmapCache::insert(key(mt.zoom(), mt.xy()), mt.pixmap());
+				TileCache::insert(TileCache::Key(this, mt.zoom(), mt.xy()),
+				  new QPixmap(mt.pixmap()));
 
 				QPointF tp(tilePos(tl, mt.xy(), tile, overzoom));
-				drawTile(painter, mt.pixmap(), tp);
+				drawTile(painter, &mt.pixmap(), tp);
 			}
 		} else
 			runJob(new MVTJob(tiles));
@@ -403,17 +406,17 @@ Source Coros5Map::tileData(const MapTile *map, quint64 id)
 		  1), map->tc == 2, map->tt == 1);
 }
 
-void Coros5Map::drawTile(QPainter *painter, const QPixmap &pixmap,
+void Coros5Map::drawTile(QPainter *painter, const QPixmap *pixmap,
   const QPointF &tp) const
 {
 	qreal ratio = _mapRatio > 1.0 ? _mapRatio : _tileRatio;
 
-	if (ratio != pixmap.devicePixelRatio()) {
-		QPixmap pm(pixmap);
+	if (ratio != pixmap->devicePixelRatio()) {
+		QPixmap pm(*pixmap);
 		pm.setDevicePixelRatio(ratio);
 		painter->drawPixmap(tp, pm);
 	} else
-		painter->drawPixmap(tp, pixmap);
+		painter->drawPixmap(tp, *pixmap);
 }
 
 QPointF Coros5Map::ll2xy(const Coordinates &c)

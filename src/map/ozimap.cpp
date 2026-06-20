@@ -4,7 +4,6 @@
 #include <QDir>
 #include <QBuffer>
 #include <QImageReader>
-#include <QPixmapCache>
 #include <QRegularExpression>
 #include "common/coordinates.h"
 #include "common/rectc.h"
@@ -14,6 +13,7 @@
 #include "mapfile.h"
 #include "gmifile.h"
 #include "rectd.h"
+#include "tilecache.h"
 #include "ozimap.h"
 
 
@@ -354,30 +354,38 @@ void OziMap::drawTiled(QPainter *painter, const QRectF &rect) const
 	QSizeF s(rect.right() - tl.x(), rect.bottom() - tl.y());
 	for (int i = 0; i < ceil(s.width() / ts.width()); i++) {
 		for (int j = 0; j < ceil(s.height() / ts.height()); j++) {
-			int x = round(tl.x() * _mapRatio + i * _tile.size.width());
-			int y = round(tl.y() * _mapRatio + j * _tile.size.height());
-
-			QString tileName(_tile.path.arg(QString::number(x),
-			  QString::number(y)));
-			QPixmap pixmap;
+			QPoint xy(round(tl.x() * _mapRatio + i * _tile.size.width()),
+			  round(tl.y() * _mapRatio + j * _tile.size.height()));
+			QPointF tp(tl.x() + i * ts.width(), tl.y() + j * ts.height());
+			QString tileName(_tile.path.arg(QString::number(xy.x()),
+			  QString::number(xy.y())));
+			QPixmap *pm;
 
 			if (_tar) {
-				QString key = _tar->fileName() + "/" + tileName;
-				if (!QPixmapCache::find(key, &pixmap)) {
+				TileCache::Key key(_tar, 0, xy);
+				pm = TileCache::object(key);
+				if (!pm) {
 					QByteArray ba = _tar->file(tileName);
-					pixmap = QPixmap::fromImage(QImage::fromData(ba));
-					if (!pixmap.isNull())
-						QPixmapCache::insert(key, pixmap);
-				}
-			} else
-				pixmap = QPixmap(tileName);
-
-			if (pixmap.isNull())
-				qWarning("%s: error loading tile image", qUtf8Printable(tileName));
-			else {
-				pixmap.setDevicePixelRatio(_mapRatio);
-				QPointF tp(tl.x() + i * ts.width(), tl.y() + j * ts.height());
-				painter->drawPixmap(tp, pixmap);
+					QImage img(QImage::fromData(ba));
+					if (!img.isNull()) {
+						pm = new QPixmap(QPixmap::fromImage(img));
+						drawTile(painter, pm, tp);
+						TileCache::insert(key, pm);
+					}
+				} else
+					drawTile(painter, pm, tp);
+			} else {
+				TileCache::Key key(this, 0, xy);
+				pm = TileCache::object(key);
+				if (!pm) {
+					QImage img(tileName);
+					if (!img.isNull()) {
+						pm = new QPixmap(QPixmap::fromImage(img));
+						drawTile(painter, pm, tp);
+						TileCache::insert(key, pm);
+					}
+				} else
+					drawTile(painter, pm, tp);
 			}
 		}
 	}
@@ -393,28 +401,33 @@ void OziMap::drawOZF(QPainter *painter, const QRectF &rect) const
 	QSizeF s(rect.right() - tl.x(), rect.bottom() - tl.y());
 	for (int i = 0; i < ceil(s.width() / ts.width()); i++) {
 		for (int j = 0; j < ceil(s.height() / ts.height()); j++) {
-			int x = round(tl.x() * _mapRatio + i * _ozf->tileSize().width());
-			int y = round(tl.y() * _mapRatio + j * _ozf->tileSize().height());
+			QPoint xy(round(tl.x() * _mapRatio + i * _ozf->tileSize().width()),
+			  round(tl.y() * _mapRatio + j * _ozf->tileSize().height()));
+			QPointF tp(tl.x() + i * ts.width(), tl.y() + j * ts.height());
+			TileCache::Key key(_ozf, _zoom, xy);
 
-			QPixmap pixmap;
-			QString key(_ozf->fileName() + "/" + QString::number(_zoom) + "_"
-			  + QString::number(x) + "_" + QString::number(y));
-
-			if (!QPixmapCache::find(key, &pixmap)) {
-				pixmap = _ozf->tile(_zoom, x, y);
-				if (!pixmap.isNull())
-					QPixmapCache::insert(key, pixmap);
-			}
-
-			if (pixmap.isNull())
-				qWarning("%s: error loading tile image", qUtf8Printable(key));
-			else {
-				pixmap.setDevicePixelRatio(_mapRatio);
-				QPointF tp(tl.x() + i * ts.width(), tl.y() + j * ts.height());
-				painter->drawPixmap(tp, pixmap);
-			}
+			QPixmap *pm = TileCache::object(key);
+			if (!pm) {
+				pm = _ozf->tile(_zoom, xy);
+				if (pm) {
+					drawTile(painter, pm, tp);
+					TileCache::insert(key, pm);
+				}
+			} else
+				drawTile(painter, pm, tp);
 		}
 	}
+}
+
+void OziMap::drawTile(QPainter *painter, const QPixmap *pixmap,
+  const QPointF &tp) const
+{
+	if (_mapRatio != pixmap->devicePixelRatio()) {
+		QPixmap pm(*pixmap);
+		pm.setDevicePixelRatio(_mapRatio);
+		painter->drawPixmap(tp, pm);
+	} else
+		painter->drawPixmap(tp, *pixmap);
 }
 
 void OziMap::draw(QPainter *painter, const QRectF &rect, Flags flags)

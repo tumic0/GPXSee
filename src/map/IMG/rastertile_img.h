@@ -18,23 +18,23 @@ class RasterTile
 public:
 	RasterTile(const Projection *proj, const Transform &transform,
 	  MapData *data, const Style *style, int zoom, const QRect &rect,
-	  qreal ratio, const QString &key, bool hillShading, bool rasters,
-	  bool vectors)
+	  qreal ratio, bool hillShading, bool rasters, bool vectors)
 		: _proj(proj), _transform(transform), _style(style), _zoom(zoom),
-		_rect(rect), _ratio(ratio), _key(key), _hillShading(hillShading),
+		_rect(rect), _ratio(ratio), _hillShading(hillShading),
 		_rasters(rasters), _vectors(vectors)
 	{
 		_data.append(data);
 	}
 	RasterTile(const Projection *proj, const Transform &transform,
 	  const QList<MapData*> &data, const Style *style, int zoom,
-	  const QRect &rect, qreal ratio, const QString &key, bool hillShading,
-	  bool rasters, bool vectors)
+	  const QRect &rect, qreal ratio, bool hillShading, bool rasters,
+	  bool vectors)
 		: _proj(proj), _transform(transform), _data(data), _style(style),
-		_zoom(zoom), _rect(rect), _ratio(ratio), _key(key),
-		_hillShading(hillShading), _rasters(rasters), _vectors(vectors) {}
+		_zoom(zoom), _rect(rect), _ratio(ratio), _hillShading(hillShading),
+		_rasters(rasters), _vectors(vectors) {}
 
-	const QString &key() const {return _key;}
+	const QList<MapData*> data() const {return _data;}
+	int zoom() const {return _zoom;}
 	QPoint xy() const {return _rect.topLeft();}
 	const QPixmap &pixmap() const {return _pixmap;}
 

@@ -16,8 +16,8 @@
 #include <QBuffer>
 #include <QImageReader>
 #include <QPainter>
-#include <QPixmapCache>
 #include <private/qzipreader_p.h>
+#include "tilecache.h"
 #include "kmzmap.h"
 
 
@@ -470,30 +470,40 @@ void KMZMap::draw(QPainter *painter, const QRectF &rect, int mapIndex)
 	const QPointF offset = _bounds.at(mapIndex).xy.topLeft();
 	QRectF pr = QRectF(rect.topLeft() - offset, rect.size());
 	QRectF sr(pr.topLeft() * _mapRatio, pr.size() * _mapRatio);
-	QString key(path() + "/" + map.path());
-	QPixmap pm;
+	TileCache::Key key(this, _zoom, QPoint(mapIndex, mapIndex));
 
 	painter->save();
 	painter->translate(offset);
 	if (map.rotation())
 		painter->rotate(-map.rotation());
 
-	if (QPixmapCache::find(key, &pm)) {
-		pm.setDevicePixelRatio(_mapRatio);
-		painter->drawPixmap(pr.topLeft(), pm, sr);
-	} else {
+	QPixmap *pm = TileCache::object(key);
+	if (!pm) {
 		QByteArray ba(_zip->fileData(map.path()));
 		QImage img(QImage::fromData(ba));
-		pm = QPixmap::fromImage(img);
-		pm.setDevicePixelRatio(_mapRatio);
-		painter->drawPixmap(pr.topLeft(), pm, sr);
-		QPixmapCache::insert(key, pm);
-	}
+		if (!img.isNull()) {
+			pm = new QPixmap(QPixmap::fromImage(img));
+			drawTile(painter, pm, pr.topLeft(), sr);
+			TileCache::insert(key, pm);
+		}
+	} else
+		drawTile(painter, pm, pr.topLeft(), sr);
 
 	//painter->setPen(Qt::red);
 	//painter->drawRect(map.bounds());
 
 	painter->restore();
+}
+
+void KMZMap::drawTile(QPainter *painter, const QPixmap *pixmap,
+  const QPointF &pos, const QRectF &rect) const
+{
+	if (_mapRatio != pixmap->devicePixelRatio()) {
+		QPixmap pm(*pixmap);
+		pm.setDevicePixelRatio(_mapRatio);
+		painter->drawPixmap(pos, pm, rect);
+	} else
+		painter->drawPixmap(pos, *pixmap, rect);
 }
 
 Map *KMZMap::create(const QString &path, const Projection &proj, bool *isDir)

@@ -1,10 +1,10 @@
 #include <QPainter>
 #include <QDir>
-#include <QPixmapCache>
 #include "common/rectc.h"
 #include "common/programpaths.h"
 #include "downloader.h"
 #include "osm.h"
+#include "tilecache.h"
 #include "onlinemap.h"
 
 #define MAX_TILE_SIZE 4096
@@ -133,7 +133,7 @@ void OnlineMap::load(const Projection &in, const Projection &out,
 	_coordinatesRatio = _mapRatio > 1.0 ? _mapRatio / _tileRatio : 1.0;
 	_factor = zoom2scale(_zoom, _tileSize) * _coordinatesRatio;
 
-	QPixmapCache::clear();
+	TileCache::clear();
 }
 
 void OnlineMap::unload()
@@ -156,12 +156,6 @@ QPointF OnlineMap::tilePos(const QPointF &tl, const QPoint &tc,
 {
 	return QPointF(tl.x() + ((tc.x() - tile.x()) << overzoom) * tileSize(),
 	  tl.y() + ((tc.y() - tile.y()) << overzoom) * tileSize());
-}
-
-QString OnlineMap::key(int zoom, const QPoint &xy) const
-{
-	return path() + "-" + QString::number(zoom) + "_"
-	  + QString::number(xy.x()) + "_" + QString::number(xy.y());
 }
 
 bool OnlineMap::isRunning(int zoom, const QPoint &xy) const
@@ -199,7 +193,8 @@ void OnlineMap::jobFinished(MVTJob *job)
 	for (int i = 0; i < tiles.size(); i++) {
 		const RasterTile &mt = tiles.at(i);
 		if (!mt.pixmap().isNull())
-			QPixmapCache::insert(key(mt.zoom(), mt.xy()), mt.pixmap());
+			TileCache::insert(TileCache::Key(this, mt.zoom(), mt.xy()),
+			  new QPixmap(mt.pixmap()));
 	}
 
 	removeJob(job);
@@ -248,8 +243,8 @@ void OnlineMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 		if (isRunning(_zoom, t.xy()))
 			continue;
 
-		QPixmap pm;
-		if (QPixmapCache::find(key(_zoom, t.xy()), &pm)) {
+		QPixmap *pm = TileCache::object(TileCache::Key(this, _zoom, t.xy()));
+		if (pm) {
 			QPoint tc(tileCoordinates(t.xy().x(), t.xy().y(), baseZoom));
 			QPointF tp(tilePos(tl, tc, tile, overzoom));
 			drawTile(painter, pm, tp);
@@ -284,28 +279,29 @@ void OnlineMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 				if (mt.pixmap().isNull())
 					continue;
 
-				QPixmapCache::insert(key(mt.zoom(), mt.xy()), mt.pixmap());
+				TileCache::insert(TileCache::Key(this, mt.zoom(), mt.xy()),
+				  new QPixmap(mt.pixmap()));
 
 				QPoint tc(tileCoordinates(mt.xy().x(), mt.xy().y(), baseZoom));
 				QPointF tp(tilePos(tl, tc, tile, overzoom));
-				drawTile(painter, mt.pixmap(), tp);
+				drawTile(painter, &mt.pixmap(), tp);
 			}
 		} else
 			runJob(new MVTJob(renderTiles));
 	}
 }
 
-void OnlineMap::drawTile(QPainter *painter, const QPixmap &pixmap,
+void OnlineMap::drawTile(QPainter *painter, const QPixmap *pixmap,
  const QPointF &tp) const
 {
 	qreal ratio = _mapRatio > 1.0 ? _mapRatio : _tileRatio;
 
-	if (ratio != pixmap.devicePixelRatio()) {
-		QPixmap pm(pixmap);
+	if (ratio != pixmap->devicePixelRatio()) {
+		QPixmap pm(*pixmap);
 		pm.setDevicePixelRatio(ratio);
 		painter->drawPixmap(tp, pm);
 	} else
-		painter->drawPixmap(tp, pixmap);
+		painter->drawPixmap(tp, *pixmap);
 }
 
 QPointF OnlineMap::ll2xy(const Coordinates &c)
@@ -322,7 +318,7 @@ Coordinates OnlineMap::xy2ll(const QPointF &p)
 void OnlineMap::clearCache()
 {
 	_tileLoader->clearCache();
-	QPixmapCache::clear();
+	TileCache::clear();
 }
 
 bool OnlineMap::hillShading() const

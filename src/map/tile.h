@@ -26,19 +26,19 @@ private:
 class DataTile
 {
 public:
-	DataTile(const QPoint &xy, const QByteArray &data, const QString &key)
-	  : _xy(xy), _data(data), _key(key) {}
+	DataTile(const QPoint &xy, int zoom, const QByteArray &data)
+	  : _xy(xy), _zoom(zoom), _data(data) {}
 
 	const QPoint &xy() const {return _xy;}
-	const QString &key() const {return _key;}
+	const int &zoom() const {return _zoom;}
 	const QPixmap &pixmap() const {return _pixmap;}
 
 	void load() {_pixmap.loadFromData(_data);}
 
 private:
 	QPoint _xy;
+	int _zoom;
 	QByteArray _data;
-	QString _key;
 	QPixmap _pixmap;
 };
 

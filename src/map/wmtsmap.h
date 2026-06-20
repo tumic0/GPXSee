@@ -52,7 +52,7 @@ private:
 	QSizeF tileSize(const WMTS::Zoom &zoom) const;
 	qreal coordinatesRatio() const;
 	void init();
-	void drawTile(QPainter *painter, const QPixmap &pixmap,
+	void drawTile(QPainter *painter, const QPixmap *pixmap,
 	  const QPointF &tp) const;
 
 	QString _name;

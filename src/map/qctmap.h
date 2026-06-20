@@ -38,7 +38,9 @@ private:
 	bool readGeoRef(QDataStream &stream);
 	bool readIndex(QDataStream &stream);
 	bool readPalette(QDataStream &stream);
-	QPixmap tile(int x, int y);
+	QPixmap *tile(const QPoint &xy);
+	void drawTile(QPainter *painter, const QPixmap *pixmap,
+	  const QPointF &tp) const;
 
 	QFile _file;
 	QString _name;

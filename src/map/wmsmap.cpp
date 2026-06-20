@@ -1,13 +1,13 @@
 #include <QtMath>
 #include <QDir>
 #include <QPainter>
-#include <QPixmapCache>
 #include <QtConcurrentMap>
 #include "common/wgs84.h"
 #include "common/rectc.h"
 #include "common/programpaths.h"
 #include "tile.h"
 #include "tileloader.h"
+#include "tilecache.h"
 #include "wmsmap.h"
 
 
@@ -117,7 +117,7 @@ void WMSMap::load(const Projection &in, const Projection &out,
 void WMSMap::clearCache()
 {
 	_tileLoader->clearCache();
-	QPixmapCache::clear();
+	TileCache::clear();
 }
 
 QRectF WMSMap::bounds()
@@ -219,8 +219,8 @@ void WMSMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 		if (path.isNull() || path == NULLFILE)
 			continue;
 
-		QPixmap pm;
-		if (QPixmapCache::find(path, &pm)) {
+		QPixmap *pm = TileCache::object(TileCache::Key(this, _zoom, t.xy()));
+		if (pm) {
 			QPointF tp(t.xy().x() * tileSize(), t.xy().y() * tileSize());
 			drawTile(painter, pm, tp);
 		} else
@@ -235,20 +235,21 @@ void WMSMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 		if (mt.pixmap().isNull())
 			continue;
 
-		QPixmapCache::insert(mt.file(), mt.pixmap());
+		TileCache::insert(TileCache::Key(this, _zoom, mt.xy()),
+		  new QPixmap(mt.pixmap()));
 
 		QPointF tp(mt.xy().x() * tileSize(), mt.xy().y() * tileSize());
-		drawTile(painter, mt.pixmap(), tp);
+		drawTile(painter, &mt.pixmap(), tp);
 	}
 }
 
-void WMSMap::drawTile(QPainter *painter, const QPixmap &pixmap,
+void WMSMap::drawTile(QPainter *painter, const QPixmap *pixmap,
   const QPointF &tp) const
 {
-	if (_mapRatio != pixmap.devicePixelRatio()) {
-		QPixmap pm(pixmap);
+	if (_mapRatio != pixmap->devicePixelRatio()) {
+		QPixmap pm(*pixmap);
 		pm.setDevicePixelRatio(_mapRatio);
 		painter->drawPixmap(tp, pm);
 	} else
-		painter->drawPixmap(tp, pixmap);
+		painter->drawPixmap(tp, *pixmap);
 }
