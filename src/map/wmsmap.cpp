@@ -201,8 +201,14 @@ void WMSMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 			RectD bbox = (_wms->cs().axisOrder() == CoordinateSystem::YX)
 			  ? RectD(PointD(tbr.y(), tbr.x()), PointD(ttl.y(), ttl.x()))
 			  : RectD(ttl, tbr);
+			QPoint xy(i, j);
 
-			fetchTiles.append(TileLoader::Tile(QPoint(i, j), _zoom, bbox));
+			QPixmap *pm = TileCache::object(TileCache::Key(this, _zoom, xy));
+			if (pm) {
+				QPointF tp(xy.x() * tileSize(), xy.y() * tileSize());
+				drawTile(painter, pm, tp);
+			} else
+				fetchTiles.append(TileLoader::Tile(xy, _zoom, bbox));
 		}
 	}
 
@@ -216,30 +222,25 @@ void WMSMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 		const TileLoader::Tile &t = fetchTiles.at(i);
 		const QString &path = t.files().first();
 
-		if (path.isNull() || path == NULLFILE)
-			continue;
-
-		QPixmap *pm = TileCache::object(TileCache::Key(this, _zoom, t.xy()));
-		if (pm) {
-			QPointF tp(t.xy().x() * tileSize(), t.xy().y() * tileSize());
-			drawTile(painter, pm, tp);
-		} else
+		if (!(path.isNull() || path == NULLFILE))
 			renderTiles.append(FileTile(t.xy(), path));
 	}
 
-	QFuture<void> future = QtConcurrent::map(renderTiles, &FileTile::load);
-	future.waitForFinished();
+	if (!renderTiles.isEmpty()) {
+		QFuture<void> future = QtConcurrent::map(renderTiles, &FileTile::load);
+		future.waitForFinished();
 
-	for (int i = 0; i < renderTiles.size(); i++) {
-		const FileTile &mt = renderTiles.at(i);
-		if (mt.pixmap().isNull())
-			continue;
+		for (int i = 0; i < renderTiles.size(); i++) {
+			const FileTile &mt = renderTiles.at(i);
+			if (mt.pixmap().isNull())
+				continue;
 
-		TileCache::insert(TileCache::Key(this, _zoom, mt.xy()),
-		  new QPixmap(mt.pixmap()));
+			TileCache::insert(TileCache::Key(this, _zoom, mt.xy()),
+			  new QPixmap(mt.pixmap()));
 
-		QPointF tp(mt.xy().x() * tileSize(), mt.xy().y() * tileSize());
-		drawTile(painter, &mt.pixmap(), tp);
+			QPointF tp(mt.xy().x() * tileSize(), mt.xy().y() * tileSize());
+			drawTile(painter, &mt.pixmap(), tp);
+		}
 	}
 }
 
