@@ -225,7 +225,12 @@ void OnlineMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 	for (int i = 0; i < width; i++) {
 		for (int j = 0; j < height; j++) {
 			QPoint tc(tileCoordinates(tile.x() + i, tile.y() + j, baseZoom));
-			fetchTiles.append(TileLoader::Tile(tc, baseZoom));
+			QPixmap *pm = TileCache::object(TileCache::Key(this, _zoom, tc));
+			if (pm) {
+				QPointF tp(tilePos(tl, tc, tile, overzoom));
+				drawTile(painter, pm, tp);
+			} else
+				fetchTiles.append(TileLoader::Tile(tc, baseZoom));
 		}
 	}
 
@@ -243,29 +248,22 @@ void OnlineMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 		if (isRunning(_zoom, t.xy()))
 			continue;
 
-		QPixmap *pm = TileCache::object(TileCache::Key(this, _zoom, t.xy()));
-		if (pm) {
-			QPoint tc(tileCoordinates(t.xy().x(), t.xy().y(), baseZoom));
-			QPointF tp(tilePos(tl, tc, tile, overzoom));
-			drawTile(painter, pm, tp);
-		} else {
-			QList<Source> sources;
-			for (int j = 0; j < qMin(t.files().size(), _layers); j++) {
-				const QString &path = t.files().at(j);
-				if (path != NULLFILE) {
-					QFile file(path);
-					if (file.open(QIODevice::ReadOnly))
-						sources.append(Source(file.readAll(), false,
-						  _tileType.at(j) == MVT));
-					else
-						qWarning("%s: %s", qUtf8Printable(path),
-						  qUtf8Printable(file.errorString()));
-				}
+		QList<Source> sources;
+		for (int j = 0; j < qMin(t.files().size(), _layers); j++) {
+			const QString &path = t.files().at(j);
+			if (path != NULLFILE) {
+				QFile file(path);
+				if (file.open(QIODevice::ReadOnly))
+					sources.append(Source(file.readAll(), false,
+					  _tileType.at(j) == MVT));
+				else
+					qWarning("%s: %s", qUtf8Printable(path),
+					  qUtf8Printable(file.errorString()));
 			}
-
-			renderTiles.append(RasterTile(sources, _style, _zoom, t.xy(),
-			  _tileSize, _tileRatio, overzoom, _hillShading));
 		}
+
+		renderTiles.append(RasterTile(sources, _style, _zoom, t.xy(),
+		  _tileSize, _tileRatio, overzoom, _hillShading));
 	}
 
 	if (!renderTiles.isEmpty()) {
