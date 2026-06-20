@@ -69,7 +69,7 @@ private:
 
 inline HASH_T qHash(const DEM::Tile &tile)
 {
-	return (qHash(tile.lon()) ^ qHash(tile.lat()));
+	return qHash((static_cast<quint64>(tile.lon()) << 32) | tile.lat());
 }
 
 #ifndef QT_NO_DEBUG
