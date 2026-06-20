@@ -763,7 +763,7 @@ QWidget *OptionsDialog::createSystemPage(bool macos)
 	_enableHTTP2->setChecked(_options.enableHTTP2);
 
 	_pixmapCache = new QSpinBox();
-	_pixmapCache->setMinimum(64);
+	_pixmapCache->setMinimum(256);
 	_pixmapCache->setMaximum(4096);
 	_pixmapCache->setSuffix(UNIT_SPACE + tr("MB"));
 	_pixmapCache->setValue(_options.pixmapCache);
