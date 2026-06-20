@@ -10,7 +10,9 @@ class Map;
 class TileCache
 {
 public:
-	struct Key {
+	class Key
+	{
+	public:
 		Key(const void *object, int zoom, const QPoint &xy)
 		  : object(object), zoom(zoom), xy(xy) {}
 
@@ -20,11 +22,12 @@ public:
 			  && xy == other.xy);
 		}
 
+	private:
 		const void *object;
 		int zoom;
 		QPoint xy;
 
-		friend TileCache;
+		friend HASH_T qHash(const Key &key, HASH_T seed);
 	};
 
 	static QPixmap *object(const Key &key) {return _cache.object(key);}
