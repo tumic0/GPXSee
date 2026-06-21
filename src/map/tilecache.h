@@ -13,19 +13,22 @@ public:
 	class Key
 	{
 	public:
-		Key(const void *object, int zoom, const QPoint &xy)
-		  : object(object), zoom(zoom), xy(xy) {}
+		Key(const void *object, int zoom, const QPoint &tile)
+		  : object(object), zoom(zoom),
+			tile(static_cast<quint64>(tile.x()) << 32 | tile.y()) {}
+		Key(const void *object, int zoom, quint64 tile)
+		  : object(object), zoom(zoom), tile(tile) {}
 
 		bool operator==(const Key &other) const
 		{
 			return (object == other.object && zoom == other.zoom
-			  && xy == other.xy);
+			  && tile == other.tile);
 		}
 
 	private:
 		const void *object;
 		int zoom;
-		QPoint xy;
+		quint64 tile;
 
 		friend HASH_T qHash(const Key &key, HASH_T seed);
 	};
@@ -46,11 +49,11 @@ inline HASH_T qHash(const TileCache::Key &key, HASH_T seed)
 
 	seed = hash(seed, key.object);
 	seed = hash(seed, key.zoom);
-	seed = hash(seed, key.xy);
+	seed = hash(seed, key.tile);
 
 	return seed;
 #else // QT6
-	return qHashMulti(seed, key.object, key.zoom, key.xy);
+	return qHashMulti(seed, key.object, key.zoom, key.tile);
 #endif // QT6
 }
 

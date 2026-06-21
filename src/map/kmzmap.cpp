@@ -470,7 +470,7 @@ void KMZMap::draw(QPainter *painter, const QRectF &rect, int mapIndex)
 	const QPointF offset = _bounds.at(mapIndex).xy.topLeft();
 	QRectF pr = QRectF(rect.topLeft() - offset, rect.size());
 	QRectF sr(pr.topLeft() * _mapRatio, pr.size() * _mapRatio);
-	TileCache::Key key(this, _zoom, QPoint(mapIndex, mapIndex));
+	TileCache::Key key(this, _zoom, mapIndex);
 
 	painter->save();
 	painter->translate(offset);

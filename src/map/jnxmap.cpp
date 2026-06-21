@@ -257,7 +257,7 @@ int JNXMap::zoomOut()
 bool JNXMap::cb(Tile *tile, void *context)
 {
 	Ctx *ctx = static_cast<Ctx*>(context);
-	TileCache::Key key(ctx->map, ctx->zoom, tile->pos.toPoint());
+	TileCache::Key key(ctx->map, ctx->zoom, tile->offset);
 
 	QPixmap *pm = TileCache::object(key);
 	if (!pm) {
