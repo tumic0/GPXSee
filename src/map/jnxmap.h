@@ -43,11 +43,8 @@ public:
 
 private:
 	struct Tile {
-		qint32 top, right, bottom, left;
-		quint16 width, height;
-		quint32 size;
 		quint32 offset;
-
+		quint32 size;
 		QPointF pos;
 	};
 

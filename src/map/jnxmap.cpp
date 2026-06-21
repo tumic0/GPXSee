@@ -112,23 +112,23 @@ bool JNXMap::readTiles()
 
 		z->tiles = QVector<Tile>(z->level.count);
 		for (quint32 j = 0; j < z->level.count; j++) {
+			qint32 top, right, bottom, left;
+			quint16 width, height;
 			Tile &tile = z->tiles[j];
 
-			if (!(readValue(tile.top) && readValue(tile.right)
-			  && readValue(tile.bottom) && readValue(tile.left)
-			  && readValue(tile.width) && readValue(tile.height)
+			if (!(readValue(top) && readValue(right) && readValue(bottom)
+			  && readValue(left) && readValue(width) && readValue(height)
 			  && readValue(tile.size) && readValue(tile.offset)))
 				return false;
 
-			RectC llrect(Coordinates(ic2dc(tile.left), ic2dc(tile.top)),
-			  Coordinates(ic2dc(tile.right), ic2dc(tile.bottom)));
+			RectC llrect(Coordinates(ic2dc(left), ic2dc(top)),
+			  Coordinates(ic2dc(right), ic2dc(bottom)));
 			RectD rect(_projection.ll2xy(llrect.topLeft()),
 			  _projection.ll2xy(llrect.bottomRight()));
 
 			if (j == 0) {
 				ReferencePoint tl(PointD(0, 0), rect.topLeft());
-				ReferencePoint br(PointD(tile.width, tile.height),
-				  rect.bottomRight());
+				ReferencePoint br(PointD(width, height), rect.bottomRight());
 				z->transform = Transform(tl, br);
 			}
 
