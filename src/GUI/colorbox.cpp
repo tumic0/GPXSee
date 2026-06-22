@@ -7,7 +7,7 @@
 #if QT_VERSION >= QT_VERSION_CHECK(6, 1, 0)
 static bool useButtonCommand(const QStyle *style)
 {
-	static const QStringList list = {"breeze", "windowsvista"};
+	static const QStringList list = {"breeze", "oxygen", "windowsvista"};
 	return list.contains(style->name().toLower());
 }
 #else // QT6
