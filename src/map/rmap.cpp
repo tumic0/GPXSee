@@ -402,9 +402,6 @@ QPixmap *RMap::tile(const QPoint &xy)
 			return 0;
 		quint32 width, height, size;
 		stream >> width >> height >> size;
-		// Each scanline of data in the image must be 32-bit aligned
-		if (width & 3)
-			return 0;
 		QSize tileSize(width, -(int)height);
 
 		quint32 bes = qToBigEndian(tileSize.width() * tileSize.height());
@@ -418,7 +415,7 @@ QPixmap *RMap::tile(const QPoint &xy)
 		if (uba.size() < tileSize.width() * tileSize.height())
 			return 0;
 		QImage img((const uchar*)uba.constData(), tileSize.width(),
-		  tileSize.height(), QImage::Format_Indexed8);
+		  tileSize.height(), tileSize.width(), QImage::Format_Indexed8);
 		img.setColorTable(_palette);
 
 		return new QPixmap(QPixmap::fromImage(img));

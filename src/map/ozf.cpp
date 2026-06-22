@@ -73,9 +73,6 @@ bool OZF::initOZF3()
 	if (!read(h1, sizeof(h1)))
 		return false;
 	_tileSize = *(h1 + 6);
-	// Each scanline of data in the image must be 32-bit aligned
-	if (_tileSize & 3)
-		return false;
 
 	if (!_file.seek(15 + randomNumber + 4))
 		return false;
@@ -231,7 +228,7 @@ QPixmap *OZF::tile(int zoom, const QPoint &xy)
 	if (uba.size() != _tileSize * _tileSize)
 		return 0;
 
-	QImage img((const uchar*)uba.constData(), _tileSize, _tileSize,
+	QImage img((const uchar*)uba.constData(), _tileSize, _tileSize, _tileSize,
 	  QImage::Format_Indexed8);
 	img.setColorTable(z.palette);
 
