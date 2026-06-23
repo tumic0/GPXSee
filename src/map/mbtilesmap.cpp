@@ -13,9 +13,6 @@
 #include "tilecache.h"
 #include "mbtilesmap.h"
 
-#define MVT_TILE_SIZE 512
-#define MAX_TILE_SIZE 4096
-
 using namespace MVT;
 using namespace OSM;
 

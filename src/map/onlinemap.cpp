@@ -7,8 +7,6 @@
 #include "tilecache.h"
 #include "onlinemap.h"
 
-#define MAX_TILE_SIZE 4096
-
 using namespace MVT;
 using namespace OSM;
 

@@ -5,8 +5,6 @@
 #include "tilecache.h"
 #include "coros5map.h"
 
-#define MVT_TILE_SIZE   512
-#define MAX_TILE_SIZE   4096
 #define ROOT_CACHE_SIZE 32
 
 using namespace PMTiles;

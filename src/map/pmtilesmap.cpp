@@ -11,8 +11,6 @@
 #include "tilecache.h"
 #include "pmtilesmap.h"
 
-#define MVT_TILE_SIZE   512
-#define MAX_TILE_SIZE   4096
 #define LEAF_CACHE_SIZE 16
 
 using namespace PMTiles;
