@@ -317,21 +317,17 @@ void PMTilesMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 	unsigned f = 1U<<overzoom;
 	int width = ceil(s.width() / (tileSize() * f));
 	int height = ceil(s.height() / (tileSize() * f));
-
 	QList<RasterTile> tiles;
 
 	for (int i = 0; i < width; i++) {
 		for (int j = 0; j < height; j++) {
 			QPoint t(tile.x() + i, tile.y() + j);
-
-			if (isRunning(zoom.z, t))
-				continue;
-
 			QPixmap *pm = TileCache::object(TileCache::Key(this, zoom.z, t));
+
 			if (pm) {
 				QPointF tp(tilePos(tl, t, tile, overzoom));
 				drawTile(painter, pm, tp);
-			} else
+			} else if (!isRunning(zoom.z, t))
 				tiles.append(RasterTile(Source(tileData(id(zoom.base, t)),
 				  _tc == 2, _mvt), _style, zoom.z, t, _tileSize, _tileRatio,
 				  overzoom, _hillShading));

@@ -284,21 +284,17 @@ void Coros4Map::draw(QPainter *painter, const QRectF &rect, Flags flags)
 	QSizeF s(rect.right() - tl.x(), rect.bottom() - tl.y());
 	int width = ceil(s.width() / TILE_SIZE);
 	int height = ceil(s.height() / TILE_SIZE);
-
 	QList<RasterTile> tiles;
 
 	for (int i = 0; i < width; i++) {
 		for (int j = 0; j < height; j++) {
 			QPoint ttl(tl.x() + i * TILE_SIZE, tl.y() + j * TILE_SIZE);
 			TileCache::Key key(this, _zoom, ttl);
-
-			if (isRunning(key))
-				continue;
-
 			QPixmap *pm = TileCache::object(key);
+
 			if (pm)
 				painter->drawPixmap(ttl, *pm);
-			else {
+			else if (!isRunning(key)) {
 				RectD rectD(_transform.img2proj(ttl), _transform.img2proj(
 				  QPoint(ttl.x() + TILE_SIZE, ttl.y() + TILE_SIZE)));
 				RectC rectC(rectD.toRectC(_projection, 20));

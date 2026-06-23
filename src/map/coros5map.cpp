@@ -314,22 +314,17 @@ void Coros5Map::draw(QPainter *painter, const QRectF &rect, Flags flags)
 	unsigned f = 1U<<overzoom;
 	int width = ceil(s.width() / (tileSize() * f));
 	int height = ceil(s.height() / (tileSize() * f));
-
-	double min[2], max[2];
 	QList<RasterTile> tiles;
 
 	for (int i = 0; i < width; i++) {
 		for (int j = 0; j < height; j++) {
 			QPoint t(tile.x() + i, tile.y() + j);
-
-			if (isRunning(zoom.z, t))
-				continue;
-
 			QPixmap *pm = TileCache::object(TileCache::Key(this, zoom.z, t));
+
 			if (pm) {
 				QPointF tp(tilePos(tl, t, tile, overzoom));
 				drawTile(painter, pm, tp);
-			} else {
+			} else if (!isRunning(zoom.z, t)) {
 				Coordinates tl(OSM::tile2ll(t, zoom.base));
 				Coordinates br(OSM::tile2ll(QPoint(t.x() + 1, t.y() + 1),
 				  zoom.base));
@@ -337,6 +332,7 @@ void Coros5Map::draw(QPainter *painter, const QRectF &rect, Flags flags)
 				  Coordinates(br.lon(), -br.lat()));
 				MapTile *vsmMap = 0, *vcmMap = 0;
 				QList<Source> data;
+				double min[2], max[2];
 
 				min[0] = r.left();
 				min[1] = r.bottom();

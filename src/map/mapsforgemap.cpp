@@ -193,22 +193,19 @@ void MapsforgeMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 	QSizeF s(rect.right() - tl.x(), rect.bottom() - tl.y());
 	int width = ceil(s.width() / tileSize);
 	int height = ceil(s.height() / tileSize);
-
 	QList<RasterTile> tiles;
 
 	for (int i = 0; i < width; i++) {
 		for (int j = 0; j < height; j++) {
 			QPoint ttl(tl.x() + i * tileSize, tl.y() + j * tileSize);
-			if (isRunning(_zoom, ttl))
-				continue;
-
 			QPixmap *pm = TileCache::object(TileCache::Key(this, _zoom, ttl));
+
 			if (pm)
 				painter->drawPixmap(ttl, *pm);
-			else {
-				tiles.append(RasterTile(&_projection, _transform, _style, &_data,
-				  _zoom, QRect(ttl, QSize(tileSize, tileSize)), _tileRatio,
-				  _hillShading));
+			else if (!isRunning(_zoom, ttl)) {
+				tiles.append(RasterTile(&_projection, _transform, _style,
+				  &_data, _zoom, QRect(ttl, QSize(tileSize, tileSize)),
+				  _tileRatio, _hillShading));
 			}
 		}
 	}

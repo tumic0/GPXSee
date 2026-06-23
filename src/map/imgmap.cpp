@@ -272,7 +272,6 @@ void IMGMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 	QSizeF s(rect.right() - tl.x(), rect.bottom() - tl.y());
 	int width = ceil(s.width() / TILE_SIZE);
 	int height = ceil(s.height() / TILE_SIZE);
-
 	QList<RasterTile> tiles;
 
 	for (int n = 0; n < _data.size(); n++) {
@@ -280,14 +279,11 @@ void IMGMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 			for (int j = 0; j < height; j++) {
 				QPoint ttl(tl.x() + i * TILE_SIZE, tl.y() + j * TILE_SIZE);
 				TileCache::Key key(_data.at(n), _zoom, ttl);
-
-				if (isRunning(key))
-					continue;
-
 				QPixmap *pm = TileCache::object(key);
+
 				if (pm)
 					painter->drawPixmap(ttl, *pm);
-				else {
+				else if (!isRunning(key)) {
 					tiles.append(RasterTile(&_projection, _transform,
 					  _data.at(n), _styles.at(n), _zoom,
 					  QRect(ttl, QSize(TILE_SIZE, TILE_SIZE)), _tileRatio,

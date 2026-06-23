@@ -341,19 +341,16 @@ void ENCMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 	QSizeF s(rect.right() - tl.x(), rect.bottom() - tl.y());
 	int width = ceil(s.width() / TILE_SIZE);
 	int height = ceil(s.height() / TILE_SIZE);
-
 	QList<RasterTile> tiles;
 
 	for (int i = 0; i < width; i++) {
 		for (int j = 0; j < height; j++) {
 			QPoint ttl(tl.x() + i * TILE_SIZE, tl.y() + j * TILE_SIZE);
-			if (isRunning(_zoom, ttl))
-				continue;
-
 			QPixmap *pm = TileCache::object(TileCache::Key(this, _zoom, ttl));
+
 			if (pm)
 				painter->drawPixmap(ttl, *pm);
-			else
+			else if (!isRunning(_zoom, ttl))
 				tiles.append(RasterTile(_projection, _transform, _style, _data,
 				  _zoom, _zooms, QRect(ttl, QSize(TILE_SIZE, TILE_SIZE)),
 				  _tileRatio));
