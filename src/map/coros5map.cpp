@@ -3,6 +3,7 @@
 #include <QDir>
 #include "osm.h"
 #include "tilecache.h"
+#include "mvttile.h"
 #include "coros5map.h"
 
 #define ROOT_CACHE_SIZE 32

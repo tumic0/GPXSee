@@ -8,6 +8,7 @@
 #include <QJsonArray>
 #include "osm.h"
 #include "tilecache.h"
+#include "mvttile.h"
 #include "pmtilesmap.h"
 
 #define LEAF_CACHE_SIZE 16

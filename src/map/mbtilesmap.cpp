@@ -11,6 +11,7 @@
 #include "common/util.h"
 #include "osm.h"
 #include "tilecache.h"
+#include "mvttile.h"
 #include "mbtilesmap.h"
 
 using namespace MVT;

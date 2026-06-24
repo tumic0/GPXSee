@@ -5,6 +5,7 @@
 #include "downloader.h"
 #include "osm.h"
 #include "tilecache.h"
+#include "mvttile.h"
 #include "onlinemap.h"
 
 using namespace MVT;
