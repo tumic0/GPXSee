@@ -6,7 +6,6 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonArray>
-#include "MVT/style_mvt.h"
 #include "osm.h"
 #include "tilecache.h"
 #include "pmtilesmap.h"
