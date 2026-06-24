@@ -39,4 +39,7 @@ private:
 	QList<MVT::RasterTile> _tiles;
 };
 
+static constexpr int MAX_TILE_SIZE = 4096;
+static constexpr int TILE_SIZE = 512;
+
 #endif // MVTJOB_H

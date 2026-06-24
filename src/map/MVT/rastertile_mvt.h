@@ -11,9 +11,6 @@ class QPainter;
 
 namespace MVT {
 
-static constexpr int MAX_TILE_SIZE = 4096;
-static constexpr int TILE_SIZE = 512;
-
 class RasterTile
 {
 public:
