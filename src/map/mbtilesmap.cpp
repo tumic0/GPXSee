@@ -155,7 +155,7 @@ bool MBTilesMap::getTileSizeAndStyle()
 				_layers.append(vl.at(i).toObject().value("id").toString());
 		} else
 			qWarning("%s: missing MVT json metadata", qUtf8Printable(path()));
-		_tileSize = MVT_TILE_SIZE;
+		_tileSize = TILE_SIZE;
 	} else {
 		QString sql("SELECT tile_data FROM tiles LIMIT 1");
 		QSqlQuery query(sql, _db);

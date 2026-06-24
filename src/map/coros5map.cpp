@@ -150,13 +150,13 @@ void Coros5Map::load(const Projection &in, const Projection &out,
 
 	for (int i = _zooms.last().base + 1; i <= OSM::ZOOMS.max(); i++) {
 		Zoom z(i, _zooms.last().base);
-		if (MVT_TILE_SIZE * _tileRatio * (1U<<(z.z - z.base)) > MAX_TILE_SIZE)
+		if (TILE_SIZE * _tileRatio * (1U<<(z.z - z.base)) > MAX_TILE_SIZE)
 			break;
 		_zooms.append(Zoom(i, _zooms.last().base));
 	}
 
 	_coordinatesRatio = _mapRatio > 1.0 ? _mapRatio / _tileRatio : 1.0;
-	_factor = zoom2scale(_zooms.at(_zoom).z, MVT_TILE_SIZE) * _coordinatesRatio;
+	_factor = zoom2scale(_zooms.at(_zoom).z, TILE_SIZE) * _coordinatesRatio;
 
 	TileCache::clear();
 }
@@ -185,7 +185,7 @@ int Coros5Map::zoomFit(const QSize &size, const RectC &rect)
 		QRectF tbr(OSM::ll2m(rect.topLeft()), OSM::ll2m(rect.bottomRight()));
 		QPointF sc(tbr.width() / size.width(), tbr.height() / size.height());
 		int zoom = OSM::scale2zoom(qMax(sc.x(), -sc.y()) / _coordinatesRatio,
-		  MVT_TILE_SIZE);
+		  TILE_SIZE);
 
 		_zoom = 0;
 		for (int i = 1; i < _zooms.size(); i++) {
@@ -195,7 +195,7 @@ int Coros5Map::zoomFit(const QSize &size, const RectC &rect)
 		}
 	}
 
-	_factor = zoom2scale(_zooms.at(_zoom).z, MVT_TILE_SIZE) * _coordinatesRatio;
+	_factor = zoom2scale(_zooms.at(_zoom).z, TILE_SIZE) * _coordinatesRatio;
 
 	return _zoom;
 }
@@ -203,7 +203,7 @@ int Coros5Map::zoomFit(const QSize &size, const RectC &rect)
 void Coros5Map::setZoom(int zoom)
 {
 	_zoom = zoom;
-	_factor = zoom2scale(_zooms.at(_zoom).z, MVT_TILE_SIZE) * _coordinatesRatio;
+	_factor = zoom2scale(_zooms.at(_zoom).z, TILE_SIZE) * _coordinatesRatio;
 }
 
 int Coros5Map::zoomIn()
@@ -211,7 +211,7 @@ int Coros5Map::zoomIn()
 	cancelJobs(false);
 
 	_zoom = qMin(_zoom + 1, _zooms.size() - 1);
-	_factor = zoom2scale(_zooms.at(_zoom).z, MVT_TILE_SIZE) * _coordinatesRatio;
+	_factor = zoom2scale(_zooms.at(_zoom).z, TILE_SIZE) * _coordinatesRatio;
 
 	return _zoom;
 }
@@ -221,14 +221,14 @@ int Coros5Map::zoomOut()
 	cancelJobs(false);
 
 	_zoom = qMax(_zoom - 1, 0);
-	_factor = zoom2scale(_zooms.at(_zoom).z, MVT_TILE_SIZE) * _coordinatesRatio;
+	_factor = zoom2scale(_zooms.at(_zoom).z, TILE_SIZE) * _coordinatesRatio;
 
 	return _zoom;
 }
 
 qreal Coros5Map::tileSize() const
 {
-	return (MVT_TILE_SIZE / _coordinatesRatio);
+	return (TILE_SIZE / _coordinatesRatio);
 }
 
 QString Coros5Map::key(int zoom, const QPoint &xy) const
@@ -350,7 +350,7 @@ void Coros5Map::draw(QPainter *painter, const QRectF &rect, Flags flags)
 
 				if (!data.isEmpty())
 					tiles.append(RasterTile(data, _style, zoom.z, t,
-					  MVT_TILE_SIZE, _tileRatio, overzoom, _hillShading));
+					  TILE_SIZE, _tileRatio, overzoom, _hillShading));
 			}
 		}
 	}

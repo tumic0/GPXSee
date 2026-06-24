@@ -70,10 +70,6 @@ signals:
 	void tilesLoaded();
 	void mapLoaded();
 
-protected:
-	static constexpr int MAX_TILE_SIZE = 4096;
-	static constexpr int MVT_TILE_SIZE = 512;
-
 private:
 	QString _path;
 };

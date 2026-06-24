@@ -81,7 +81,7 @@ PMTilesMap::PMTilesMap(const QString &fileName, QObject *parent)
 
 	// tile info
 	if (hdr.tt == 1) {
-		_tileSize = MVT_TILE_SIZE;
+		_tileSize = TILE_SIZE;
 		_mvt = true;
 	} else {
 		QByteArray data((_tc == 2)
