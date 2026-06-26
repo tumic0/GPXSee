@@ -5,8 +5,6 @@
 
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #include <QPoint>
-#include <QPair>
-#include <QHash>
 #include <qhashfunctions.h>
 
 #define HASH_T uint
