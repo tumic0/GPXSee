@@ -705,7 +705,7 @@ QList<const Style*> Style::loadStyles()
 	return list;
 }
 
-QList<const Style*> &Style::styles()
+const QList<const Style*> &Style::styles()
 {
 	static QList<const Style*> list = loadStyles();
 	return list;
