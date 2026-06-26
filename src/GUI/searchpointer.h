@@ -18,9 +18,9 @@ private:
 };
 
 template <class T>
-inline HASH_T qHash(const SearchPointer<T> &t)
+inline HASH_T qHash(const SearchPointer<T> &t, HASH_T seed = 0)
 {
-	return ::qHash(*(t.data()));
+	return ::qHash(*(t.data()), seed);
 }
 
 #endif // SEARCHPOINTER_H

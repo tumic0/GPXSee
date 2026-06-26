@@ -11,9 +11,28 @@
 
 #define HASH_T uint
 
-inline uint qHash(const QPoint &p)
+template <typename T1, typename T2>
+uint qHashMulti(uint seed, const T1 &key1, const T2 &key2)
 {
-	return qHash(QPair<int, int>(p.x(), p.y()));
+	QtPrivate::QHashCombine hash;
+	seed = hash(seed, key1);
+	seed = hash(seed, key2);
+	return seed;
+}
+
+template <typename T1, typename T2, typename T3>
+uint qHashMulti(uint seed, const T1 &key1, const T2 &key2, const T3 &key3)
+{
+	QtPrivate::QHashCombine hash;
+	seed = hash(seed, key1);
+	seed = hash(seed, key2);
+	seed = hash(seed, key3);
+	return seed;
+}
+
+inline uint qHash(const QPoint &p, uint seed = 0)
+{
+	return qHashMulti(seed, p.x(), p.y());
 }
 #else // QT6
 #define HASH_T size_t

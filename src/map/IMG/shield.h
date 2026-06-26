@@ -38,9 +38,9 @@ private:
 	QString _text;
 };
 
-inline HASH_T qHash(const IMG::Shield &shield)
+inline HASH_T qHash(const IMG::Shield &shield, HASH_T seed = 0)
 {
-	return ::qHash(shield.text()) ^ ::qHash(shield.type());
+	return qHashMulti(seed, shield.type(), shield.text());
 }
 
 }

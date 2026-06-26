@@ -31,9 +31,9 @@ private:
 	quint8 _bits;
 };
 
-inline HASH_T qHash(const Zoom &zoom)
+inline HASH_T qHash(const Zoom &zoom, HASH_T seed = 0)
 {
-	return ::qHash(zoom.level()) ^ ::qHash(zoom.bits());
+	return qHashMulti(seed, zoom.level(), zoom.bits());
 }
 
 }

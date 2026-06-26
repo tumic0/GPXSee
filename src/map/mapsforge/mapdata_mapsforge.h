@@ -167,7 +167,7 @@ private:
 	static bool pathCb(VectorTile *tile, void *context);
 	static bool pointCb(VectorTile *tile, void *context);
 
-	friend HASH_T qHash(const MapData::Key &key);
+	friend HASH_T qHash(const MapData::Key &key, HASH_T seed);
 
 	QString _fileName;
 	RectC _bounds;
@@ -185,14 +185,14 @@ private:
 	QString _errorString;
 };
 
-inline HASH_T qHash(const MapData::Key &key)
+inline HASH_T qHash(const MapData::Key &key, HASH_T seed = 0)
 {
-	return ::qHash(key.tile) ^ ::qHash(key.zoom);
+	return qHashMulti(seed, key.tile, key.zoom);
 }
 
-inline HASH_T qHash(const MapData::Tag &tag)
+inline HASH_T qHash(const MapData::Tag &tag, HASH_T seed = 0)
 {
-	return ::qHash(tag.key) ^ ::qHash(tag.value);
+	return qHashMulti(seed, tag.key, tag.value);
 }
 
 }

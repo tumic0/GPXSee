@@ -206,8 +206,8 @@ private:
 		~PathItem() {delete _text;}
 	};
 
-	friend HASH_T qHash(const RasterTile::PathKey &key);
-	friend HASH_T qHash(const RasterTile::PointKey &key);
+	friend HASH_T qHash(const RasterTile::PathKey &key, HASH_T seed);
+	friend HASH_T qHash(const RasterTile::PointKey &key, HASH_T seed);
 
 	void fetchData(QList<MapData::Path> &paths,
 	  QList<MapData::Point> &points, bool &hasDEM) const;
@@ -245,14 +245,14 @@ private:
 	bool _hillShading;
 };
 
-inline HASH_T qHash(const RasterTile::PathKey &key)
+inline HASH_T qHash(const RasterTile::PathKey &key, HASH_T seed = 0)
 {
-	return ::qHash(key.zoom) ^ ::qHash(key.tags);
+	return qHashMulti(seed, key.zoom, key.tags);
 }
 
-inline HASH_T qHash(const RasterTile::PointKey &key)
+inline HASH_T qHash(const RasterTile::PointKey &key, HASH_T seed = 0)
 {
-	return ::qHash(key.zoom) ^ ::qHash(key.tags);
+	return qHashMulti(seed, key.zoom, key.tags);
 }
 
 }

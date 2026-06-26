@@ -42,19 +42,9 @@ private:
 	static QCache<Key, QPixmap> _cache;
 };
 
-inline HASH_T qHash(const TileCache::Key &key, HASH_T seed)
+inline HASH_T qHash(const TileCache::Key &key, HASH_T seed = 0)
 {
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-	QtPrivate::QHashCombine hash;
-
-	seed = hash(seed, key.object);
-	seed = hash(seed, key.zoom);
-	seed = hash(seed, key.tile);
-
-	return seed;
-#else // QT6
 	return qHashMulti(seed, key.object, key.zoom, key.tile);
-#endif // QT6
 }
 
 #endif // TILECACHE_H

@@ -173,18 +173,18 @@ private:
 	bool _valid, _ready;
 	QString _errorString;
 
-	friend HASH_T qHash(const WMTS::TileMatrix &key);
-	friend HASH_T qHash(const WMTS::MatrixLimits &key);
+	friend HASH_T qHash(const WMTS::TileMatrix &key, HASH_T seed);
+	friend HASH_T qHash(const WMTS::MatrixLimits &key, HASH_T seed);
 };
 
-inline HASH_T qHash(const WMTS::TileMatrix &key)
+inline HASH_T qHash(const WMTS::TileMatrix &key, HASH_T seed = 0)
 {
-	return ::qHash(key.id);
+	return ::qHash(key.id, seed);
 }
 
-inline HASH_T qHash(const WMTS::MatrixLimits &key)
+inline HASH_T qHash(const WMTS::MatrixLimits &key, HASH_T seed = 0)
 {
-	return ::qHash(key.id);
+	return ::qHash(key.id, seed);
 }
 
 #ifndef QT_NO_DEBUG

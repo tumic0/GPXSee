@@ -87,9 +87,9 @@ private:
 	static QHash<QString, QPixmap> _symbolIcons;
 };
 
-inline HASH_T qHash(const Waypoint &key)
+inline HASH_T qHash(const Waypoint &key, HASH_T seed = 0)
 {
-	return ::qHash(key.name());
+	return ::qHash(key.name(), seed);
 }
 
 #ifndef QT_NO_DEBUG

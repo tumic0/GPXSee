@@ -50,9 +50,9 @@ inline bool operator<(const Coordinates &c1, const Coordinates &c2)
 		return (c1.lat() < c2.lat());
 }
 
-inline HASH_T qHash(const Coordinates &c)
+inline HASH_T qHash(const Coordinates &c, HASH_T seed = 0)
 {
-	return qHash(QPair<double, double>(c.lon(), c.lat()));
+	return qHashMulti(seed, c.lon(), c.lat());
 }
 
 #ifndef QT_NO_DEBUG

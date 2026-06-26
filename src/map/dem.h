@@ -67,9 +67,9 @@ private:
 	static QMutex _lock;
 };
 
-inline HASH_T qHash(const DEM::Tile &tile)
+inline HASH_T qHash(const DEM::Tile &tile, HASH_T seed = 0)
 {
-	return qHash((static_cast<quint64>(tile.lon()) << 32) | tile.lat());
+	return qHashMulti(seed, tile.lon(), tile.lat());
 }
 
 #ifndef QT_NO_DEBUG
