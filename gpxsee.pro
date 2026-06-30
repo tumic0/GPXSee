@@ -137,7 +137,7 @@ unix:!macx:!android {
 }
 
 android {
-    QT += core5compat
+    QT += core5compat core-private
     LIBS += -lz
     RESOURCES += theme-color.qrc
 
