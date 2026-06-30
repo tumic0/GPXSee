@@ -6,6 +6,8 @@
 #include <QDir>
 #include "parser.h"
 
+class Zip;
+
 class KMLParser : public Parser
 {
 public:
@@ -16,12 +18,12 @@ public:
 
 private:
 	struct Ctx {
-		Ctx(const QString &path, const QDir &dir, bool zip)
+		Ctx(const QString &path, const QDir *dir, const Zip *zip)
 		  : path(path), dir(dir), zip(zip) {}
 
 		QString path;
-		QDir dir;
-		bool zip;
+		const QDir *dir;
+		const Zip *zip;
 	};
 
 	typedef QMap<QString, PointStyle> PointStyleMap;
@@ -68,11 +70,12 @@ private:
 	QColor color();
 	QString icon();
 	QString styleUrl();
-	void style(const QDir &dir, PointStyleMap &pointStyles,
+	void style(const QDir *dir, const Zip *zip, PointStyleMap &pointStyles,
 	  PolygonStyleMap &polyStyles, LineStyleMap &lineStyles);
 	void styleMapPair(const QString &id, QMap<QString, QString> &map);
 	void styleMap(QMap<QString, QString> &map);
-	void iconStyle(const QDir &dir, const QString &id, PointStyleMap &style);
+	void iconStyle(const QDir *dir, const Zip *zip, const QString &id,
+	  PointStyleMap &style);
 	void polyStyle(const QString &id, PolygonStyleMap &styles);
 	void lineStyle(const QString &id, LineStyleMap &styles);
 

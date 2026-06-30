@@ -7,7 +7,7 @@
 #include "map.h"
 
 class QXmlStreamReader;
-class QZipReader;
+class Zip;
 
 class KMZMap : public Map
 {
@@ -58,7 +58,7 @@ private:
 
 	class Tile {
 	public:
-		Tile(const Overlay &overlay, QZipReader &zip);
+		Tile(const Overlay &overlay, const Zip &zip);
 
 		bool operator==(const Tile &other) const
 		  {return _overlay.path() == other._overlay.path();}
@@ -107,7 +107,7 @@ private:
 	void drawTile(QPainter *painter, const QPixmap *pixmap,
 	  const QPointF &pos, const QRectF &rect) const;
 
-	bool createTiles(const QList<Overlay> &overlays, QZipReader &zip);
+	bool createTiles(const QList<Overlay> &overlays, Zip &zip);
 	void computeZooms();
 	void computeBounds();
 	void computeLLBounds();
@@ -127,7 +127,7 @@ private:
 	QVector<Bounds> _bounds;
 	int _zoom;
 	int _mapIndex;
-	QZipReader *_zip;
+	Zip *_zip;
 	qreal _adjust;
 	Projection _projection;
 	qreal _mapRatio;

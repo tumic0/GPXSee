@@ -25,7 +25,6 @@ namespace Util
 	QString displayName(const QString &path);
 	const QTemporaryDir &tempDir();
 	bool isSQLiteDB(const QString &path, QString &errorString);
-	bool isZIP(QFile *file);
 	QImage svg2img(const QString &path, qreal ratio);
 	QByteArray gunzip(const QByteArray &data);
 }

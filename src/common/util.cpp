@@ -182,14 +182,6 @@ bool Util::isSQLiteDB(const QString &path, QString &errorString)
 	return true;
 }
 
-bool Util::isZIP(QFile *file)
-{
-	quint32 magic;
-
-	return (file->peek((char *)&magic, sizeof(magic)) == (qint64)sizeof(magic)
-	  && qFromLittleEndian(magic) == 0x04034b50);
-}
-
 QImage Util::svg2img(const QString &path, qreal ratio)
 {
 	QImageReader ir(path, "svg");

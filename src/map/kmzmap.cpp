@@ -1,25 +1,11 @@
-/*
-	WARNING: This code uses internal Qt API - the QZipReader class for reading
-	ZIP files - and things may break if Qt changes the API. For Qt5 this is not
-	a problem as we can "see the future" now and there are no changes in all
-	the supported Qt5 versions up to the last one (5.15). In Qt6 the class
-	might change or even disappear in the future, but this is very unlikely
-	as there were no changes for several years and The Qt Company's policy
-	is: "do not invest any resources into any desktop related stuff unless
-	absolutely necessary". There is an issue (QTBUG-3897) since the year 2009 to
-	include the ZIP reader into the public API, which aptly illustrates the
-	effort The Qt Company is willing to make about anything desktop related...
-*/
-
 #include <QFileInfo>
 #include <QXmlStreamReader>
 #include <QBuffer>
 #include <QImageReader>
 #include <QPainter>
-#include <private/qzipreader_p.h>
+#include "common/zip.h"
 #include "tilecache.h"
 #include "kmzmap.h"
-
 
 #define ZOOM_THRESHOLD 0.9
 
@@ -42,10 +28,10 @@ bool KMZMap::yCmp(const Tile &m1, const Tile &m2)
 }
 
 
-KMZMap::Tile::Tile(const Overlay &overlay, QZipReader &zip)
+KMZMap::Tile::Tile(const Overlay &overlay, const Zip &zip)
   : _overlay(overlay)
 {
-	QByteArray ba(zip.fileData(overlay.path()));
+	QByteArray ba(zip.file(overlay.path()));
 	QBuffer img(&ba);
 	QImageReader ir(&img);
 	_size = ir.size();
@@ -85,7 +71,7 @@ qreal KMZMap::Tile::resolution() const
 	return ds/ps;
 }
 
-bool KMZMap::createTiles(const QList<Overlay> &overlays, QZipReader &zip)
+bool KMZMap::createTiles(const QList<Overlay> &overlays, Zip &zip)
 {
 	if (overlays.isEmpty()) {
 		_errorString = "No usable overlay found";
@@ -282,13 +268,17 @@ KMZMap::KMZMap(const QString &fileName, QObject *parent)
 		_errorString = file.errorString();
 		return;
 	}
-	if (!Util::isZIP(&file)) {
+	if (!Zip::isZIP(&file)) {
 		_errorString = "Not a ZIP file";
 		return;
 	}
 
-	QZipReader zip(&file);
-	QByteArray xml(zip.fileData("doc.kml"));
+	Zip zip(&file);
+	if (!zip.isValid()) {
+		_errorString = "Invalid/unsupported ZIP file";
+		return;
+	}
+	QByteArray xml(zip.file("doc.kml"));
 	QXmlStreamReader reader(xml);
 	QList<Overlay> overlays;
 
@@ -453,7 +443,7 @@ void KMZMap::load(const Projection &in, const Projection &out,
 	computeBounds();
 
 	Q_ASSERT(!_zip);
-	_zip = new QZipReader(path(), QIODevice::ReadOnly);
+	_zip = new Zip(path());
 }
 
 void KMZMap::unload()
@@ -479,7 +469,7 @@ void KMZMap::draw(QPainter *painter, const QRectF &rect, int mapIndex)
 
 	QPixmap *pm = TileCache::object(key);
 	if (!pm) {
-		QByteArray ba(_zip->fileData(map.path()));
+		QByteArray ba(_zip->file(map.path()));
 		QImage img(QImage::fromData(ba));
 		if (!img.isNull()) {
 			pm = new QPixmap(QPixmap::fromImage(img));

@@ -1,24 +1,23 @@
-/*
-	WARNING: This code uses internal Qt API - the QZipReader class for reading
-	ZIP files - and things may break if Qt changes the API. For Qt5 this is not
-	a problem as we can "see the future" now and there are no changes in all
-	the supported Qt5 versions up to the last one (5.15). In Qt6 the class
-	might change or even disappear in the future, but this is very unlikely
-	as there were no changes for several years and The Qt Company's policy
-	is: "do not invest any resources into any desktop related stuff unless
-	absolutely necessary". There is an issue (QTBUG-3897) since the year 2009 to
-	include the ZIP reader into the public API, which aptly illustrates the
-	effort The Qt Company is willing to make about anything desktop related...
-*/
-
 #include <QFileInfo>
 #include <QTemporaryDir>
 #include <QCryptographicHash>
 #include <QUrl>
 #include <QRegularExpression>
-#include <private/qzipreader_p.h>
+#include <QBuffer>
 #include "common/util.h"
+#include "common/zip.h"
 #include "kmlparser.h"
+
+static QString kmlFile(const QList<QString> &files)
+{
+	for (int i = 0; i < files.size(); i++) {
+		QFileInfo fi(files.at(i));
+		if (fi.suffix() == "kml")
+			return files.at(i);
+	}
+
+	return QString();
+}
 
 qreal KMLParser::number()
 {
@@ -546,7 +545,7 @@ void KMLParser::photoOverlay(const Ctx &ctx, QVector<Waypoint> &waypoints,
 		else if (_reader.name() == QLatin1String("TimeStamp"))
 			w.setTimestamp(timeStamp());
 		else if (_reader.name() == QLatin1String("Style")) {
-			style(ctx.dir, pointStyles, unused, unused2);
+			style(ctx.dir, ctx.zip, pointStyles, unused, unused2);
 			id = QString();
 		} else if (_reader.name() == QLatin1String("StyleMap"))
 			styleMap(map);
@@ -570,16 +569,21 @@ void KMLParser::photoOverlay(const Ctx &ctx, QVector<Waypoint> &waypoints,
 		img.replace(re, "0");
 		if (!QUrl(img).scheme().isEmpty())
 			w.addLink(Link(img, "Photo Overlay"));
-		else if (ctx.zip && Util::tempDir().isValid()) {
+		else if (ctx.zip) {
 			QFileInfo fi(img);
 			QByteArray id(ctx.path.toUtf8() + img.toUtf8());
 			QString path(Util::tempDir().path() + "/" + QString("%0.%1")
 			  .arg(QCryptographicHash::hash(id, QCryptographicHash::Sha1)
 			  .toHex(), QString(fi.suffix())));
-			QFile::rename(ctx.dir.absoluteFilePath(img), path);
+
+			QByteArray ba(ctx.zip->file(img));
+			QFile file(path);
+			if (file.open(QIODevice::WriteOnly))
+				file.write(ba);
+
 			w.addImage(path);
-		} else if (!ctx.zip)
-			w.addImage(ctx.dir.absoluteFilePath(img));
+		} else if (ctx.dir)
+			w.addImage(ctx.dir->absoluteFilePath(img));
 
 		waypoints.append(w);
 	}
@@ -638,7 +642,7 @@ void KMLParser::placemark(const Ctx &ctx, QList<TrackData> &tracks,
 		else if (_reader.name() == QLatin1String("TimeStamp"))
 			timestamp = timeStamp();
 		else if (_reader.name() == QLatin1String("Style")) {
-			style(ctx.dir, pointStyles, polyStyles, lineStyles);
+			style(ctx.dir, ctx.zip, pointStyles, polyStyles, lineStyles);
 			id = QString();
 		} else if (_reader.name() == QLatin1String("StyleMap"))
 			styleMap(map);
@@ -743,16 +747,19 @@ QString KMLParser::styleUrl()
 	return (id.at(0) == '#') ? id.right(id.size() - 1) : QString();
 }
 
-void KMLParser::iconStyle(const QDir &dir, const QString &id,
+void KMLParser::iconStyle(const QDir *dir, const Zip *zip, const QString &id,
   PointStyleMap &styles)
 {
 	QPixmap img;
 	QColor c(0x55, 0x55, 0x55);
 
 	while (_reader.readNextStartElement()) {
-		if (_reader.name() == QLatin1String("Icon"))
-			img = QPixmap(dir.absoluteFilePath(icon()));
-		else if (_reader.name() == QLatin1String("color"))
+		if (_reader.name() == QLatin1String("Icon")) {
+			if (dir)
+				img = QPixmap(dir->absoluteFilePath(icon()));
+			else if (zip)
+				img = QPixmap::fromImage(QImage::fromData(zip->file(icon())));
+		} else if (_reader.name() == QLatin1String("color"))
 			c = color();
 		else
 			_reader.skipCurrentElement();
@@ -827,14 +834,15 @@ void KMLParser::styleMap(QMap<QString, QString> &map)
 	}
 }
 
-void KMLParser::style(const QDir &dir, PointStyleMap &pointStyles,
-  PolygonStyleMap &polyStyles, LineStyleMap &lineStyles)
+void KMLParser::style(const QDir *dir, const Zip *zip,
+  PointStyleMap &pointStyles, PolygonStyleMap &polyStyles,
+  LineStyleMap &lineStyles)
 {
 	QString id = _reader.attributes().value("id").toString();
 
 	while (_reader.readNextStartElement()) {
 		if (_reader.name() == QLatin1String("IconStyle"))
-			iconStyle(dir, id, pointStyles);
+			iconStyle(dir, zip, id, pointStyles);
 		else if (_reader.name() == QLatin1String("PolyStyle"))
 			polyStyle(id, polyStyles);
 		else if (_reader.name() == QLatin1String("LineStyle"))
@@ -885,7 +893,7 @@ void KMLParser::document(const Ctx &ctx, QList<TrackData> &tracks,
 		else if (_reader.name() == QLatin1String("PhotoOverlay"))
 			photoOverlay(ctx, waypoints, pointStyles, map);
 		else if (_reader.name() == QLatin1String("Style"))
-			style(ctx.dir, pointStyles, polyStyles, lineStyles);
+			style(ctx.dir, ctx.zip, pointStyles, polyStyles, lineStyles);
 		else if (_reader.name() == QLatin1String("StyleMap"))
 			styleMap(map);
 		else
@@ -925,32 +933,28 @@ bool KMLParser::parse(QFile *file, QList<TrackData> &tracks,
 
 	_reader.clear();
 
-	if (Util::isZIP(file)) {
-		QZipReader zip(file);
-		QTemporaryDir tempDir;
-		if (!tempDir.isValid() || !zip.extractAll(tempDir.path()))
-			_reader.raiseError("Error extracting ZIP file");
-		else {
-			QDir zipDir(tempDir.path());
-			QFileInfoList files(zipDir.entryInfoList(QStringList("*.kml"),
-			  QDir::Files));
+	if (Zip::isZIP(file)) {
+		Zip zip(file);
 
-			if (files.isEmpty())
+		if (!zip.isValid())
+			_reader.raiseError("Invalid/unsupported ZIP file");
+		else {
+			QString doc(kmlFile(zip.files()));
+
+			if (doc.isEmpty())
 				_reader.raiseError("No KML file found in ZIP file");
 			else {
-				QFile kmlFile(files.first().absoluteFilePath());
-				if (!kmlFile.open(QIODevice::ReadOnly))
-					_reader.raiseError("Error opening KML file");
-				else {
-					_reader.setDevice(&kmlFile);
+				QByteArray data(zip.file(doc));
+				QBuffer buffer(&data);
+				buffer.open(QIODevice::ReadOnly);
 
-					if (_reader.readNextStartElement()) {
-						if (_reader.name() == QLatin1String("kml"))
-							kml(Ctx(fi.absoluteFilePath(), zipDir, true),
-							  tracks, areas, waypoints);
-						else
-							_reader.raiseError("Not a KML file");
-					}
+				_reader.setDevice(&buffer);
+				if (_reader.readNextStartElement()) {
+					if (_reader.name() == QLatin1String("kml"))
+						kml(Ctx(fi.absoluteFilePath(), 0, &zip),
+						  tracks, areas, waypoints);
+					else
+						_reader.raiseError("Not a KML file");
 				}
 			}
 		}
@@ -958,10 +962,11 @@ bool KMLParser::parse(QFile *file, QList<TrackData> &tracks,
 		_reader.setDevice(file);
 
 		if (_reader.readNextStartElement()) {
-			if (_reader.name() == QLatin1String("kml"))
-				kml(Ctx(fi.absoluteFilePath(), fi.absoluteDir(), false), tracks,
-				  areas, waypoints);
-			else
+			if (_reader.name() == QLatin1String("kml")) {
+				QDir dir(fi.absoluteDir());
+				kml(Ctx(fi.absoluteFilePath(), &dir, 0), tracks, areas,
+				  waypoints);
+			} else
 				_reader.raiseError("Not a KML file");
 		}
 	}

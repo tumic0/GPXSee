@@ -20,12 +20,6 @@ QT += core \
 greaterThan(QT_MAJOR_VERSION, 5) {
     QT += openglwidgets
 }
-# QZipReader
-versionAtLeast(QT_VERSION, 6.6) {
-    QT += core-private
-} else {
-    QT += gui-private
-}
 
 INCLUDEPATH += ./src
 HEADERS += $$files(src/*.h, true)

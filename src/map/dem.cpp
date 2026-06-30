@@ -1,25 +1,11 @@
-/*
-	WARNING: This code uses internal Qt API - the QZipReader class for reading
-	ZIP files - and things may break if Qt changes the API. For Qt5 this is not
-	a problem as we can "see the future" now and there are no changes in all
-	the supported Qt5 versions up to the last one (5.15). In Qt6 the class
-	might change or even disappear in the future, but this is very unlikely
-	as there were no changes for several years and The Qt Company's policy
-	is: "do not invest any resources into any desktop related stuff unless
-	absolutely necessary". There is an issue (QTBUG-3897) since the year 2009 to
-	include the ZIP reader into the public API, which aptly illustrates the
-	effort The Qt Company is willing to make about anything desktop related...
-*/
-
 #include <QtEndian>
 #include <QDir>
 #include <QFile>
 #include <QRegularExpression>
 #include <QLocale>
-#include <private/qzipreader_p.h>
 #include "common/rectc.h"
+#include "common/zip.h"
 #include "dem.h"
-
 
 static unsigned int isqrt(size_t x)
 {
@@ -126,8 +112,13 @@ DEM::Entry *DEM::loadTile(const Tile &tile)
 	QString zipPath(path + ".zip");
 
 	if (QFileInfo::exists(zipPath)) {
-		QZipReader zip(zipPath, QIODevice::ReadOnly);
-		return new Entry(zip.fileData(fileName));
+		Zip zip(zipPath);
+		if (!zip.isValid()) {
+			qWarning("%s: invalid/unsupported ZIP file",
+			  qUtf8Printable(zipPath));
+			return new Entry();
+		} else
+			return new Entry(zip.file(fileName));
 	} else {
 		QFile file(path);
 		if (!file.open(QIODevice::ReadOnly)) {
