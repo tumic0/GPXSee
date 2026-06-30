@@ -20,7 +20,7 @@
 Zip::Zip(const QString &path) : _deleteDevice(true), _valid(false)
 {
 	_device = new QFile(path);
-	if (_device && _device->open(QIODeviceBase::ReadOnly))
+	if (_device && _device->open(QIODevice::ReadOnly))
 		_valid = readHeaders();
 }
 
@@ -39,7 +39,7 @@ Zip::~Zip()
 
 bool Zip::readHeaders()
 {
-	if (!(_device->isOpen() && (_device->openMode() & QIODevice::ReadOnly)))
+	if (!(_device->isOpen() && _device->isReadable()))
 		return false;
 
 	quint32 magic;
