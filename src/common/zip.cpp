@@ -17,43 +17,69 @@
 #define UINT16(data) qFromLittleEndian<quint16>(data)
 #define UINT32(data) qFromLittleEndian<quint32>(data)
 
-Zip::Zip(const QString &path) : _deleteDevice(true), _valid(false)
+struct EndOfDirectory
 {
-	_device = new QFile(path);
-	if (_device && _device->open(QIODevice::ReadOnly))
-		_valid = readHeaders();
-}
+	uchar signature[4];
+	uchar this_disk[2];
+	uchar start_of_directory_disk[2];
+	uchar num_dir_entries_this_disk[2];
+	uchar num_dir_entries[2];
+	uchar directory_size[4];
+	uchar dir_start_offset[4];
+	uchar comment_length[2];
+};
 
-Zip::Zip(QIODevice *device)
-  : _device(device), _deleteDevice(false), _valid(false)
+struct CentralFileHeader
 {
-	if (device)
-		_valid = readHeaders();
-}
+	uchar signature[4];
+	uchar version_made[2];
+	uchar version_needed[2];
+	uchar general_purpose_bits[2];
+	uchar compression_method[2];
+	uchar last_mod_file[4];
+	uchar crc_32[4];
+	uchar compressed_size[4];
+	uchar uncompressed_size[4];
+	uchar file_name_length[2];
+	uchar extra_field_length[2];
+	uchar file_comment_length[2];
+	uchar disk_start[2];
+	uchar internal_file_attributes[2];
+	uchar external_file_attributes[4];
+	uchar offset_local_header[4];
+};
 
-Zip::~Zip()
+struct LocalFileHeader
 {
-	if (_deleteDevice)
-		delete _device;
-}
+	uchar signature[4];
+	uchar version_needed[2];
+	uchar general_purpose_bits[2];
+	uchar compression_method[2];
+	uchar last_mod_file[4];
+	uchar crc_32[4];
+	uchar compressed_size[4];
+	uchar uncompressed_size[4];
+	uchar file_name_length[2];
+	uchar extra_field_length[2];
+};
 
-bool Zip::readHeaders()
+bool Zip::readHeaders(QIODevice *device, QHash<QString, FileInfo> &files)
 {
-	if (!(_device->isOpen() && _device->isReadable()))
+	if (!(device->isOpen() && device->isReadable()))
 		return false;
 
 	quint32 magic;
-	if (!(_device->read((char*)&magic, sizeof(MAGIC)) == sizeof(magic)
+	if (!(device->read((char*)&magic, sizeof(MAGIC)) == sizeof(magic)
 	  && qFromLittleEndian(magic) == MAGIC))
 		return false;
 
 	EndOfDirectory eod;
 	for (int i = 0; ; i++) {
-		qint64 pos = _device->size() - int(sizeof(EndOfDirectory)) - i;
+		qint64 pos = device->size() - int(sizeof(EndOfDirectory)) - i;
 		if ((pos < 0) || (i > 65535))
 			return false;
 
-		if (!(_device->seek(pos) && _device->read((char *)&eod,
+		if (!(device->seek(pos) && device->read((char *)&eod,
 		  sizeof(EndOfDirectory)) == sizeof(EndOfDirectory)))
 			return false;
 		if (UINT32(eod.signature) == 0x06054b50)
@@ -63,29 +89,52 @@ bool Zip::readHeaders()
 	quint32 offset = UINT32(eod.dir_start_offset);
 	quint16 numEntries = UINT16(eod.num_dir_entries);
 
-	if (!_device->seek(offset))
+	if (!device->seek(offset))
 		return false;
 	for (int i = 0; i < numEntries; i++) {
 		CentralFileHeader h;
-		int read = _device->read((char *)&h, sizeof(CentralFileHeader));
+		int read = device->read((char *)&h, sizeof(CentralFileHeader));
 		if (read < (int)sizeof(CentralFileHeader))
 			return false;
 		if (UINT32(h.signature) != 0x02014b50)
 			return false;
 
 		quint16 l = UINT16(h.file_name_length);
-		QByteArray fileName(_device->read(l));
+		QByteArray fileName(device->read(l));
 		if (fileName.size() != l)
 			return false;
 
-		if (!_device->seek(_device->pos() + UINT16(h.extra_field_length)
+		if (!device->seek(device->pos() + UINT16(h.extra_field_length)
 		  + UINT16(h.file_comment_length)))
 			return false;
 
-		_fileHeaders.insert(fileName, h);
+		if ((UINT16(h.version_needed) <= VERSION)
+		  && !(UINT16(h.general_purpose_bits) & ENCRYPTED))
+			files.insert(fileName, FileInfo(UINT32(h.compressed_size),
+			  UINT32(h.uncompressed_size), UINT32(h.offset_local_header)));
 	}
 
 	return true;
+}
+
+Zip::Zip(const QString &path) : _deleteDevice(true), _valid(false)
+{
+	_device = new QFile(path);
+	if (_device && _device->open(QIODevice::ReadOnly))
+		_valid = readHeaders(_device, _files);
+}
+
+Zip::Zip(QIODevice *device)
+  : _device(device), _deleteDevice(false), _valid(false)
+{
+	if (device)
+		_valid = readHeaders(_device, _files);
+}
+
+Zip::~Zip()
+{
+	if (_deleteDevice)
+		delete _device;
 }
 
 QByteArray Zip::file(const QString &fileName) const
@@ -93,38 +142,26 @@ QByteArray Zip::file(const QString &fileName) const
 	if (!_valid)
 		return QByteArray();
 
-	QHash<QString, CentralFileHeader>::const_iterator it
-	  = _fileHeaders.find(fileName);
-	if (it == _fileHeaders.constEnd())
+	QHash<QString, FileInfo>::const_iterator it(_files.find(fileName));
+	if (it == _files.constEnd())
 		return QByteArray();
 
-	const CentralFileHeader &h = it.value();
-	quint16 versionNeeded = UINT16(h.version_needed);
-	if (versionNeeded > VERSION)
-		return QByteArray();
-
-	quint16 generalPurposeBits = UINT16(h.general_purpose_bits);
-	quint32 compressedSize = UINT32(h.compressed_size);
-	quint32 uncompressedSize = UINT32(h.uncompressed_size);
-	quint32 start = UINT32(h.offset_local_header);
+	const FileInfo &fi = it.value();
 
 	LocalFileHeader lh;
-	if (!(_device->seek(start) && _device->read((char*)&lh,
+	if (!(_device->seek(fi.localHeaderOffset) && _device->read((char*)&lh,
 	  sizeof(LocalFileHeader)) == sizeof(LocalFileHeader)))
 		return QByteArray();
 	quint16 skip = UINT16(lh.file_name_length) + UINT16(lh.extra_field_length);
 	if (!_device->seek(_device->pos() + skip))
 		return QByteArray();
 
-	if ((generalPurposeBits & ENCRYPTED))
-		return QByteArray();
-
 	quint16 compressionMethod = UINT16(lh.compression_method);
 	if (compressionMethod == COMPRESSION_NONE)
-		return _device->read(compressedSize);
+		return _device->read(fi.compressedSize);
 	else if (compressionMethod == CCOMPRESSION_DEFLATE) {
-		QByteArray ba(_device->read(compressedSize));
-		QByteArray uba(uncompressedSize, Qt::Initialization::Uninitialized);
+		QByteArray ba(_device->read(fi.compressedSize));
+		QByteArray uba(fi.uncompressedSize, Qt::Initialization::Uninitialized);
 
 		z_stream strm;
 		strm.zalloc = Z_NULL;
