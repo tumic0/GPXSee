@@ -21,24 +21,10 @@ public:
 	static bool isZIP(QIODevice *device);
 
 private:
-	struct FileInfo
-	{
-		FileInfo(quint32 compressedSize, quint32 uncompressedSize,
-		  quint32 localHeaderOffset)
-		  : compressedSize(compressedSize), uncompressedSize(uncompressedSize),
-		  localHeaderOffset(localHeaderOffset) {}
-
-		quint32 compressedSize;
-		quint32 uncompressedSize;
-		quint32 localHeaderOffset;
-	};
-
-	static bool readHeaders(QIODevice *device, QHash<QString, FileInfo> &files);
-
 	QIODevice *_device;
 	bool _deleteDevice;
 	bool _valid;
-	QHash<QString, FileInfo> _files;
+	QHash<QString, quint32> _files;
 };
 
 #endif // ZIP_H
