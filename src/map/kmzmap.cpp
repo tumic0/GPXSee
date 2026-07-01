@@ -279,6 +279,10 @@ KMZMap::KMZMap(const QString &fileName, QObject *parent)
 		return;
 	}
 	QByteArray xml(zip.file("doc.kml"));
+	if (xml.isNull()) {
+		_errorString = "doc.kml file not present in ZIP";
+		return;
+	}
 	QXmlStreamReader reader(xml);
 	QList<Overlay> overlays;
 
@@ -286,7 +290,7 @@ KMZMap::KMZMap(const QString &fileName, QObject *parent)
 		if (reader.name() == QLatin1String("kml"))
 			kml(reader, overlays);
 		else
-			reader.raiseError("Not a KMZ file");
+			reader.raiseError("doc.kml: not a KML file");
 	}
 	if (reader.error()) {
 		_errorString = "doc.kml:" + QString::number(reader.lineNumber()) + ": "
