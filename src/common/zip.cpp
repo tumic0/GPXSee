@@ -10,8 +10,8 @@
 
 #define MAGIC 0x04034b50
 #define ENCRYPTED 0x01
-#define COMPRESSION_NONE     0
-#define CCOMPRESSION_DEFLATE 8
+#define COMPRESSION_NONE    0
+#define COMPRESSION_DEFLATE 8
 
 #define UINT16(data) qFromLittleEndian<quint16>(data)
 #define UINT32(data) qFromLittleEndian<quint32>(data)
@@ -157,7 +157,7 @@ QByteArray Zip::file(const QString &fileName) const
 	quint16 compressionMethod = UINT16(lh.compression_method);
 	if (compressionMethod == COMPRESSION_NONE)
 		return _device->read(UINT32(lh.compressed_size));
-	else if (compressionMethod == CCOMPRESSION_DEFLATE) {
+	else if (compressionMethod == COMPRESSION_DEFLATE) {
 		QByteArray ba(_device->read(UINT32(lh.compressed_size)));
 		QByteArray uba(UINT32(lh.uncompressed_size),
 		  Qt::Initialization::Uninitialized);
