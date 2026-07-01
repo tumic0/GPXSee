@@ -1,6 +1,5 @@
 #include <QtEndian>
 #include <QFile>
-#include <QDebug>
 #ifdef _MSC_VER
 #include <QtZlib/zlib.h>
 #else // _MSC_VER
