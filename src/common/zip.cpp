@@ -9,7 +9,6 @@
 #include "zip.h"
 
 #define MAGIC 0x04034b50
-#define VERSION 20
 #define ENCRYPTED 0x01
 #define COMPRESSION_NONE     0
 #define CCOMPRESSION_DEFLATE 8
@@ -98,6 +97,10 @@ static bool readHeaders(QIODevice *device, QHash<QString, quint32> &files)
 			return false;
 		if (UINT32(h.signature) != 0x02014b50)
 			return false;
+		if (UINT16(h.version_needed) > 20)
+			return false;
+		if (UINT16(h.general_purpose_bits) & ENCRYPTED)
+			return false;
 
 		quint16 l = UINT16(h.file_name_length);
 		QByteArray fileName(device->read(l));
@@ -108,9 +111,7 @@ static bool readHeaders(QIODevice *device, QHash<QString, quint32> &files)
 		  + UINT16(h.file_comment_length)))
 			return false;
 
-		if ((UINT16(h.version_needed) <= VERSION)
-		  && !(UINT16(h.general_purpose_bits) & ENCRYPTED))
-			files.insert(fileName, UINT32(h.offset_local_header));
+		files.insert(fileName, UINT32(h.offset_local_header));
 	}
 
 	return true;
