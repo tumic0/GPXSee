@@ -78,9 +78,6 @@ static bool findEOD(QIODevice *device, EndOfDirectory *eod)
 
 static bool readHeaders(QIODevice *device, QHash<QString, quint32> &files)
 {
-	if (!(device->isOpen() && device->isReadable()))
-		return false;
-
 	quint32 magic;
 	if (!(device->read((char*)&magic, sizeof(MAGIC)) == sizeof(magic)
 	  && qFromLittleEndian(magic) == MAGIC))
