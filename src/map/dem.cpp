@@ -139,7 +139,7 @@ double DEM::elevationLockFree(const Coordinates &c)
 	if (!e) {
 		e = loadTile(tile);
 		ele = height(c, e);
-		_data.insert(tile, e, e->data().size() / 1024);
+		_data.insert(tile, e, qMax(e->data().size() >> 10, 1));
 	} else
 		ele = height(c, e);
 
