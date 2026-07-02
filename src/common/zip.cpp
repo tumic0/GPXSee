@@ -65,7 +65,7 @@ static bool findEOD(QIODevice *device, EndOfDirectory *eod)
 {
 	qint64 ds = device->size() - (qint64)sizeof(EndOfDirectory);
 
-	for (qint64 pos = ds; pos >= qMax(ds - 65535, 0); pos--) {
+	for (qint64 pos = ds; pos >= qMax(ds - 65535, 0ll); pos--) {
 		if (!(device->seek(pos) && device->read((char *)eod,
 		  sizeof(EndOfDirectory)) == sizeof(EndOfDirectory)))
 			break;
