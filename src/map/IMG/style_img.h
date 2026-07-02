@@ -5,6 +5,7 @@
 #include <QBrush>
 #include <QFont>
 #include <QDebug>
+#include <QHash>
 #include "light.h"
 #include "subfile_img.h"
 
@@ -210,9 +211,9 @@ private:
 	static bool itemInfo(const SubFile *file, SubFile::Handle &hdl,
 	  const Section &section, ItemInfo &info);
 
-	QMap<quint32, Line> _lines;
-	QMap<quint32, Polygon> _polygons;
-	QMap<quint32, Point> _points;
+	QHash<quint32, Line> _lines;
+	QHash<quint32, Polygon> _polygons;
+	QHash<quint32, Point> _points;
 	QList<quint32> _drawOrder;
 
 	/* Fonts and images must be initialized after QGuiApplication! */

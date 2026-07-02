@@ -1484,7 +1484,7 @@ const Style::Line &Style::line(quint32 type) const
 {
 	static Line null;
 
-	QMap<quint32, Line>::const_iterator it(_lines.find(type));
+	QHash<quint32, Line>::const_iterator it(_lines.find(type));
 	return (it == _lines.constEnd()) ? null : *it;
 }
 
@@ -1492,7 +1492,7 @@ const Style::Polygon &Style::polygon(quint32 type) const
 {
 	static Polygon null;
 
-	QMap<quint32, Polygon>::const_iterator it(_polygons.find(type));
+	QHash<quint32, Polygon>::const_iterator it(_polygons.find(type));
 	return (it == _polygons.constEnd()) ? null : *it;
 }
 
@@ -1500,7 +1500,7 @@ const Style::Point &Style::point(quint32 type) const
 {
 	static Point null;
 
-	QMap<quint32, Point>::const_iterator it(_points.find(type));
+	QHash<quint32, Point>::const_iterator it(_points.find(type));
 	return (it == _points.constEnd()) ? null : *it;
 }
 

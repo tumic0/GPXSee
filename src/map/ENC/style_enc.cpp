@@ -745,7 +745,7 @@ const Style::Line &Style::line(uint type) const
 {
 	static Line null;
 
-	QMap<uint, Line>::const_iterator it(_lines.find(type));
+	QHash<uint, Line>::const_iterator it(_lines.find(type));
 	return (it == _lines.constEnd()) ? null : *it;
 }
 
@@ -753,7 +753,7 @@ const Style::Polygon &Style::polygon(uint type) const
 {
 	static Polygon null;
 
-	QMap<uint, Polygon>::const_iterator it(_polygons.find(type));
+	QHash<uint, Polygon>::const_iterator it(_polygons.find(type));
 	return (it == _polygons.constEnd()) ? null : *it;
 }
 
@@ -761,7 +761,7 @@ const Style::Point &Style::point(uint type) const
 {
 	static Point null;
 
-	QMap<uint, Point>::const_iterator it(_points.find(type));
+	QHash<uint, Point>::const_iterator it(_points.find(type));
 	return (it == _points.constEnd()) ? null : *it;
 }
 

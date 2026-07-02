@@ -4,7 +4,7 @@
 #include <QPen>
 #include <QBrush>
 #include <QFont>
-#include <QMap>
+#include <QHash>
 
 namespace ENC {
 
@@ -114,9 +114,9 @@ private:
 	void lineStyle(qreal ratio);
 	void pointStyle(qreal ratio);
 
-	QMap<uint, Line> _lines;
-	QMap<uint, Polygon> _polygons;
-	QMap<uint, Point> _points;
+	QHash<uint, Line> _lines;
+	QHash<uint, Polygon> _polygons;
+	QHash<uint, Point> _points;
 	QVector<uint> _drawOrder;
 
 	/* Fonts and images must be initialized after QGuiApplication! */
