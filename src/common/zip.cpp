@@ -61,6 +61,21 @@ struct LocalFileHeader
 	uchar extra_field_length[2];
 };
 
+static bool findEOD(QIODevice *device, EndOfDirectory *eod)
+{
+	qint64 ds = device->size() - (qint64)sizeof(EndOfDirectory);
+
+	for (qint64 pos = ds; pos >= qMax(ds - 65535, 0); pos--) {
+		if (!(device->seek(pos) && device->read((char *)eod,
+		  sizeof(EndOfDirectory)) == sizeof(EndOfDirectory)))
+			break;
+		if (UINT32(eod->signature) == 0x06054b50)
+			return true;
+	}
+
+	return false;
+}
+
 static bool readHeaders(QIODevice *device, QHash<QString, quint32> &files)
 {
 	if (!(device->isOpen() && device->isReadable()))
@@ -72,17 +87,8 @@ static bool readHeaders(QIODevice *device, QHash<QString, quint32> &files)
 		return false;
 
 	EndOfDirectory eod;
-	for (int i = 0; ; i++) {
-		qint64 pos = device->size() - int(sizeof(EndOfDirectory)) - i;
-		if ((pos < 0) || (i > 65535))
-			return false;
-
-		if (!(device->seek(pos) && device->read((char *)&eod,
-		  sizeof(EndOfDirectory)) == sizeof(EndOfDirectory)))
-			return false;
-		if (UINT32(eod.signature) == 0x06054b50)
-			break;
-	}
+	if (!findEOD(device, &eod))
+		return false;
 
 	quint32 offset = UINT32(eod.dir_start_offset);
 	quint16 numEntries = UINT16(eod.num_dir_entries);
