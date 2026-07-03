@@ -66,7 +66,7 @@ static bool findEOD(QIODevice *device, EndOfDirectory *eod)
 	qint64 ds = device->size() - (qint64)sizeof(EndOfDirectory);
 
 	for (qint64 pos = ds; pos >= qMax(ds - 65535, 0ll); pos--) {
-		if (!(device->seek(pos) && device->read((char *)eod,
+		if (!(device->seek(pos) && device->read((char*)eod,
 		  sizeof(EndOfDirectory)) == sizeof(EndOfDirectory)))
 			break;
 		if (UINT32(eod->signature) == 0x06054b50)
@@ -79,7 +79,7 @@ static bool findEOD(QIODevice *device, EndOfDirectory *eod)
 static bool readHeaders(QIODevice *device, QMap<QString, quint32> &files)
 {
 	quint32 magic;
-	if (!(device->read((char*)&magic, sizeof(MAGIC)) == sizeof(magic)
+	if (!(device->read((char*)&magic, sizeof(magic)) == sizeof(magic)
 	  && qFromLittleEndian(magic) == MAGIC))
 		return false;
 
@@ -94,7 +94,7 @@ static bool readHeaders(QIODevice *device, QMap<QString, quint32> &files)
 		return false;
 	for (int i = 0; i < numEntries; i++) {
 		CentralFileHeader h;
-		int read = device->read((char *)&h, sizeof(CentralFileHeader));
+		int read = device->read((char*)&h, sizeof(CentralFileHeader));
 		if (read < (int)sizeof(CentralFileHeader))
 			return false;
 		if (UINT32(h.signature) != 0x02014b50)
@@ -152,7 +152,7 @@ QByteArray Zip::file(const QString &fileName) const
 	if (!(_device->seek(it.value()) && _device->read((char*)&lh,
 	  sizeof(LocalFileHeader)) == sizeof(LocalFileHeader)))
 		return QByteArray();
-	quint16 skip = UINT16(lh.file_name_length) + UINT16(lh.extra_field_length);
+	quint32 skip = UINT16(lh.file_name_length) + UINT16(lh.extra_field_length);
 	if (!_device->seek(_device->pos() + skip))
 		return QByteArray();
 
@@ -187,6 +187,6 @@ bool Zip::isZIP(QIODevice *device)
 {
 	quint32 magic;
 
-	return (device->peek((char *)&magic, sizeof(magic)) == (qint64)sizeof(magic)
+	return (device->peek((char*)&magic, sizeof(magic)) == sizeof(magic)
 	  && qFromLittleEndian(magic) == MAGIC);
 }

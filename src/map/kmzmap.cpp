@@ -268,10 +268,6 @@ KMZMap::KMZMap(const QString &fileName, QObject *parent)
 		_errorString = file.errorString();
 		return;
 	}
-	if (!Zip::isZIP(&file)) {
-		_errorString = "Not a ZIP file";
-		return;
-	}
 
 	Zip zip(&file);
 	if (!zip.isValid()) {
