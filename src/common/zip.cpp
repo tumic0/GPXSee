@@ -76,7 +76,7 @@ static bool findEOD(QIODevice *device, EndOfDirectory *eod)
 	return false;
 }
 
-static bool readHeaders(QIODevice *device, QHash<QString, quint32> &files)
+static bool readHeaders(QIODevice *device, QMap<QString, quint32> &files)
 {
 	quint32 magic;
 	if (!(device->read((char*)&magic, sizeof(MAGIC)) == sizeof(magic)
@@ -144,7 +144,7 @@ QByteArray Zip::file(const QString &fileName) const
 	if (!_valid)
 		return QByteArray();
 
-	QHash<QString, quint32>::const_iterator it(_files.find(fileName));
+	QMap<QString, quint32>::const_iterator it(_files.find(fileName));
 	if (it == _files.constEnd())
 		return QByteArray();
 

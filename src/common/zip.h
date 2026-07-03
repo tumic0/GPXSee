@@ -2,7 +2,7 @@
 #define ZIP_H
 
 #include <QByteArray>
-#include <QHash>
+#include <QMap>
 #include <QStringList>
 
 class QIODevice;
@@ -24,7 +24,7 @@ private:
 	QIODevice *_device;
 	bool _deleteDevice;
 	bool _valid;
-	QHash<QString, quint32> _files;
+	QMap<QString, quint32> _files;
 };
 
 #endif // ZIP_H
