@@ -44,9 +44,9 @@ jobs:
           else
             macdeployqt GPXSee.app -dmg -appstore-compliant
           fi
+          mv GPXSee.dmg GPXSee-`grep '^VERSION =' gpxsee.pro | cut -d= -f2 | xargs`.dmg
       - name: Upload artifacts
         uses: actions/upload-artifact@v7
         with:
           path: GPXSee.dmg
-          name: GPXSee.dmg
           archive: false
