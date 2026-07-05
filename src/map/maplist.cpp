@@ -75,13 +75,13 @@ MapList::ParserMap MapList::_parsers = MapList::parsers();
 
 Map *MapList::loadFile(const QString &path, const Projection &proj, bool *isDir)
 {
-	ParserMap::iterator it;
 	QFileInfo fi(Util::displayName(path));
 	QString suffix(fi.completeSuffix().toLower());
 	QList<QPair<const char*, QString> > errors;
 
-	if ((it = _parsers.find(suffix)) != _parsers.end()) {
-		while (it != _parsers.end() && it.key() == suffix) {
+	ParserMap::const_iterator it = _parsers.find(suffix);
+	if (it != _parsers.constEnd()) {
+		while (it != _parsers.constEnd() && it.key() == suffix) {
 			const Parser &p = it.value();
 
 			Map *map = p.cb(path, proj, isDir);
@@ -107,7 +107,7 @@ Map *MapList::loadFile(const QString &path, const Projection &proj, bool *isDir)
 
 		return new InvalidMap(path, errorString);
 	} else {
-		for (it = _parsers.begin(); it != _parsers.end(); it++) {
+		for (it = _parsers.constBegin(); it != _parsers.constEnd(); it++) {
 			const Parser &p = it.value();
 
 			Map *map = p.cb(path, proj, isDir);
