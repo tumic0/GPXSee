@@ -271,7 +271,7 @@ KMZMap::KMZMap(const QString &fileName, QObject *parent)
 
 	Zip zip(&file);
 	if (!zip.isValid()) {
-		_errorString = "Invalid/unsupported ZIP file";
+		_errorString = zip.errorString();
 		return;
 	}
 	QByteArray xml(zip.file("doc.kml"));

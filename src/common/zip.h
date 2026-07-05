@@ -15,15 +15,19 @@ public:
 	~Zip();
 
 	bool isValid() const {return _valid;}
+	const QString &errorString() const {return _errorString;}
 	QStringList files() const {return _files.keys();}
 	QByteArray file(const QString &fileName) const;
 
 	static bool isZIP(QIODevice *device);
 
 private:
+	bool readHeaders(QIODevice *device, QMap<QString, quint32> &files);
+
 	QIODevice *_device;
 	bool _deleteDevice;
 	bool _valid;
+	QString _errorString;
 	QMap<QString, quint32> _files;
 };
 

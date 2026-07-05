@@ -114,8 +114,8 @@ DEM::Entry *DEM::loadTile(const Tile &tile)
 	if (QFileInfo::exists(zipPath)) {
 		Zip zip(zipPath);
 		if (!zip.isValid()) {
-			qWarning("%s: invalid/unsupported ZIP file",
-			  qUtf8Printable(zipPath));
+			qWarning("%s: %s", qUtf8Printable(zipPath),
+			  qUtf8Printable(zip.errorString()));
 			return new Entry();
 		} else
 			return new Entry(zip.file(fileName));

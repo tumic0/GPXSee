@@ -937,7 +937,7 @@ bool KMLParser::parse(QFile *file, QList<TrackData> &tracks,
 		Zip zip(file);
 
 		if (!zip.isValid())
-			_reader.raiseError("Invalid/unsupported ZIP file");
+			_reader.raiseError(zip.errorString());
 		else {
 			QString doc(kmlFile(zip.files()));
 
