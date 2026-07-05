@@ -48,5 +48,5 @@ jobs:
       - name: Upload artifacts
         uses: actions/upload-artifact@v7
         with:
-          path: GPXSee.dmg
+          path: GPXSee-*.dmg
           archive: false
