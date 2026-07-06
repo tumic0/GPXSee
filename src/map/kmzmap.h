@@ -1,7 +1,8 @@
 #ifndef KMZMAP_H
 #define KMZMAP_H
 
-#include <QImage>
+#include <QFile>
+#include "common/zip.h"
 #include "projection.h"
 #include "transform.h"
 #include "map.h"
@@ -15,7 +16,6 @@ class KMZMap : public Map
 
 public:
 	KMZMap(const QString &fileName, QObject *parent = 0);
-	~KMZMap();
 
 	RectC llBounds() {return _llbounds;}
 	QRectF bounds();
@@ -107,7 +107,7 @@ private:
 	void drawTile(QPainter *painter, const QPixmap *pixmap,
 	  const QPointF &pos, const QRectF &rect) const;
 
-	bool createTiles(const QList<Overlay> &overlays, Zip &zip);
+	bool createTiles(const QList<Overlay> &overlays);
 	void computeZooms();
 	void computeBounds();
 	void computeLLBounds();
@@ -127,7 +127,8 @@ private:
 	QVector<Bounds> _bounds;
 	int _zoom;
 	int _mapIndex;
-	Zip *_zip;
+	QFile _file;
+	Zip _zip;
 	qreal _adjust;
 	Projection _projection;
 	qreal _mapRatio;

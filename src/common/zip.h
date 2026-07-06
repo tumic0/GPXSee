@@ -10,6 +10,7 @@ class QIODevice;
 class Zip
 {
 public:
+	Zip() : _device(0), _deleteDevice(false), _valid(false) {}
 	Zip(const QString &path);
 	Zip(QIODevice *device);
 	~Zip();
