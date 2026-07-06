@@ -23,7 +23,7 @@ public:
 	static bool isZIP(QIODevice *device);
 
 private:
-	bool readHeaders(QIODevice *device, QMap<QString, quint32> &files);
+	bool readHeaders();
 
 	QIODevice *_device;
 	bool _deleteDevice;

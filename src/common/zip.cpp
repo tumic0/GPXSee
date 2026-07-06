@@ -76,17 +76,17 @@ static bool findEOD(QIODevice *device, EndOfDirectory *eod)
 	return false;
 }
 
-bool Zip::readHeaders(QIODevice *device, QMap<QString, quint32> &files)
+bool Zip::readHeaders()
 {
 	quint32 magic;
-	if (!(device->read((char*)&magic, sizeof(magic)) == sizeof(magic)
+	if (!(_device->read((char*)&magic, sizeof(magic)) == sizeof(magic)
 	  && qFromLittleEndian(magic) == MAGIC)) {
 		_errorString = "Not a ZIP file";
 		return false;
 	}
 
 	EndOfDirectory eod;
-	if (!findEOD(device, &eod)) {
+	if (!findEOD(_device, &eod)) {
 		_errorString = "EOCD record not found";
 		return false;
 	}
@@ -94,13 +94,13 @@ bool Zip::readHeaders(QIODevice *device, QMap<QString, quint32> &files)
 	quint32 offset = UINT32(eod.dir_start_offset);
 	quint16 numEntries = UINT16(eod.num_dir_entries);
 
-	if (!device->seek(offset)) {
+	if (!_device->seek(offset)) {
 		_errorString = "Invalid central directory offset";
 		return false;
 	}
 	for (int i = 0; i < numEntries; i++) {
 		CentralFileHeader h;
-		if (device->read((char*)&h, sizeof(CentralFileHeader))
+		if (_device->read((char*)&h, sizeof(CentralFileHeader))
 		  != sizeof(CentralFileHeader)) {
 			_errorString = "Error reading central directory entry";
 			return false;
@@ -116,14 +116,14 @@ bool Zip::readHeaders(QIODevice *device, QMap<QString, quint32> &files)
 		}
 
 		quint16 l = UINT16(h.file_name_length);
-		QByteArray fileName(device->read(l));
-		if (!((fileName.size() == l) && device->seek(device->pos()
+		QByteArray fileName(_device->read(l));
+		if (!((fileName.size() == l) && _device->seek(_device->pos()
 		  + UINT16(h.extra_field_length) + UINT16(h.file_comment_length)))) {
 			_errorString = "Error reading central directory entry data";
 			return false;
 		}
 
-		files.insert(fileName, UINT32(h.offset_local_header));
+		_files.insert(fileName, UINT32(h.offset_local_header));
 	}
 
 	return true;
@@ -133,7 +133,7 @@ Zip::Zip(const QString &path) : _deleteDevice(true), _valid(false)
 {
 	_device = new QFile(path);
 	if (_device && _device->open(QIODevice::ReadOnly))
-		_valid = readHeaders(_device, _files);
+		_valid = readHeaders();
 	else
 		_errorString = _device ? _device->errorString() : "Internal error";
 }
@@ -142,7 +142,7 @@ Zip::Zip(QIODevice *device)
   : _device(device), _deleteDevice(false), _valid(false)
 {
 	if (_device && _device->isReadable())
-		_valid = readHeaders(_device, _files);
+		_valid = readHeaders();
 	else
 		_errorString = _device ? "File not readable" : "Internal error";
 }
