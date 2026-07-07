@@ -8,12 +8,12 @@
 #include "common/zip.h"
 #include "kmlparser.h"
 
-static QString kmlFile(const QList<QString> &files)
+static QString kmlFile(const QStringList &files)
 {
 	for (int i = 0; i < files.size(); i++) {
-		QFileInfo fi(files.at(i));
-		if (fi.suffix() == "kml")
-			return files.at(i);
+		const QString &file = files.at(i);
+		if (QFileInfo(file).suffix().toLower() == "kml")
+			return file;
 	}
 
 	return QString();
