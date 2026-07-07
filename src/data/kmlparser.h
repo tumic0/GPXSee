@@ -30,6 +30,8 @@ private:
 	typedef QMap<QString, PolygonStyle> PolygonStyleMap;
 	typedef QMap<QString, LineStyle> LineStyleMap;
 
+	void parse(const Ctx &ctx, QList<TrackData> &tracks,
+	  QList<Area> &areas, QVector<Waypoint> &waypoints);
 	void kml(const Ctx &ctx, QList<TrackData> &tracks, QList<Area> &areas,
 	  QVector<Waypoint> &waypoints);
 	void document(const Ctx &ctx, QList<TrackData> &tracks, QList<Area> &areas,

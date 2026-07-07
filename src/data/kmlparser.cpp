@@ -925,6 +925,17 @@ void KMLParser::kml(const Ctx &ctx, QList<TrackData> &tracks,
 	}
 }
 
+void KMLParser::parse(const Ctx &ctx, QList<TrackData> &tracks,
+  QList<Area> &areas, QVector<Waypoint> &waypoints)
+{
+	if (_reader.readNextStartElement()) {
+		if (_reader.name() == QLatin1String("kml"))
+			kml(ctx, tracks, areas, waypoints);
+		else
+			_reader.raiseError("Not a KML file");
+	}
+}
+
 bool KMLParser::parse(QFile *file, QList<TrackData> &tracks,
   QList<RouteData> &routes, QList<Area> &areas, QVector<Waypoint> &waypoints)
 {
@@ -949,26 +960,15 @@ bool KMLParser::parse(QFile *file, QList<TrackData> &tracks,
 				buffer.open(QIODevice::ReadOnly);
 
 				_reader.setDevice(&buffer);
-				if (_reader.readNextStartElement()) {
-					if (_reader.name() == QLatin1String("kml"))
-						kml(Ctx(fi.absoluteFilePath(), 0, &zip),
-						  tracks, areas, waypoints);
-					else
-						_reader.raiseError("Not a KML file");
-				}
+				Ctx ctx(fi.absoluteFilePath(), 0, &zip);
+				parse(ctx, tracks, areas, waypoints);
 			}
 		}
 	} else {
 		_reader.setDevice(file);
-
-		if (_reader.readNextStartElement()) {
-			if (_reader.name() == QLatin1String("kml")) {
-				QDir dir(fi.absoluteDir());
-				kml(Ctx(fi.absoluteFilePath(), &dir, 0), tracks, areas,
-				  waypoints);
-			} else
-				_reader.raiseError("Not a KML file");
-		}
+		QDir dir(fi.absoluteDir());
+		Ctx ctx(fi.absoluteFilePath(), &dir, 0);
+		parse(ctx, tracks, areas, waypoints);
 	}
 
 	return !_reader.error();
