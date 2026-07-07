@@ -268,13 +268,11 @@ KMZMap::KMZMap(const QString &fileName, QObject *parent)
 	_zip = Zip(&_file);
 	if (!_zip.isValid()) {
 		_errorString = _zip.errorString();
-		_file.close();
 		return;
 	}
 
 	QByteArray xml(_zip.file("doc.kml"));
 	if (xml.isNull()) {
-		_file.close();
 		_errorString = "doc.kml file not present in ZIP";
 		return;
 	}
@@ -288,16 +286,13 @@ KMZMap::KMZMap(const QString &fileName, QObject *parent)
 			reader.raiseError("doc.kml: not a KML file");
 	}
 	if (reader.error()) {
-		_file.close();
 		_errorString = "doc.kml:" + QString::number(reader.lineNumber()) + ": "
 		  + reader.errorString();
 		return;
 	}
 
-	if (!createTiles(overlays)) {
-		_file.close();
+	if (!createTiles(overlays))
 		return;
-	}
 	computeLLBounds();
 	computeZooms();
 
