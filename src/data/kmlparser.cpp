@@ -570,18 +570,22 @@ void KMLParser::photoOverlay(const Ctx &ctx, QVector<Waypoint> &waypoints,
 		if (!QUrl(img).scheme().isEmpty())
 			w.addLink(Link(img, "Photo Overlay"));
 		else if (ctx.zip) {
-			QFileInfo fi(img);
-			QByteArray id(ctx.path.toUtf8() + img.toUtf8());
-			QString path(Util::tempDir().path() + "/" + QString("%0.%1")
-			  .arg(QCryptographicHash::hash(id, QCryptographicHash::Sha1)
-			  .toHex(), QString(fi.suffix())));
+			if (Util::tempDir().isValid()) {
+				QFileInfo fi(img);
+				QByteArray id(ctx.path.toUtf8() + img.toUtf8());
+				QString path(Util::tempDir().path() + "/" + QString("%0.%1")
+				  .arg(QCryptographicHash::hash(id, QCryptographicHash::Sha1)
+				  .toHex(), QString(fi.suffix())));
 
-			QByteArray ba(ctx.zip->file(img));
-			QFile file(path);
-			if (file.open(QIODevice::WriteOnly))
-				file.write(ba);
-
-			w.addImage(path);
+				QByteArray ba(ctx.zip->file(img));
+				if (!ba.isEmpty()) {
+					QFile file(path);
+					if (file.open(QIODevice::WriteOnly)) {
+						if (file.write(ba) == ba.size())
+							w.addImage(path);
+					}
+				}
+			}
 		} else if (ctx.dir)
 			w.addImage(ctx.dir->absoluteFilePath(img));
 
