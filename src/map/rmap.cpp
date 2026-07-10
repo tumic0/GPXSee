@@ -12,7 +12,6 @@
 #include "tilecache.h"
 #include "rmap.h"
 
-
 #define MAGIC "CompeGPSRasterImage"
 
 static CalibrationPoint parseCalibrationPoint(const QString &str)
@@ -83,6 +82,13 @@ static Projection parseProjection(const QString &str, const GCS &gcs)
 		case 14: // Swiss Grid
 			return Projection(PCS(gcs, Conversion(9815, Conversion::Setup(
 			  46.570866, 7.26225, 1.0, 600000, 200000, 90.0, 90.0), 9001)));
+		case 25: // Albers
+			if (fields.size() < 8)
+				return Projection();
+			return Projection(PCS(gcs, Conversion(9822, Conversion::Setup(
+			  fields.at(4).toDouble(), fields.at(5).toDouble(), NAN,
+			  fields.at(6).toDouble(), fields.at(7).toDouble(),
+			  fields.at(2).toDouble(), fields.at(3).toDouble()), 9001)));
 		case 108: // Dutch RD grid
 			return Projection(PCS(gcs, Conversion(9809, Conversion::Setup(
 			  52.15616055555555, 5.38763888888889, 0.9999079, 155000, 463000,
@@ -233,7 +239,9 @@ QByteArray RMap::readIMP(quint64 IMPOffset)
 
 bool RMap::readHeader(QDataStream &stream, Header &hdr)
 {
-	quint32 subtype, obfuscated;
+	quint32 subtype;
+	quint32 encryption = 0;
+	quint32 code = 0;
 	char magic[sizeof(MAGIC) - 1];
 
 	if (stream.readRawData(magic, sizeof(magic)) != sizeof(magic)
@@ -243,12 +251,31 @@ bool RMap::readHeader(QDataStream &stream, Header &hdr)
 	}
 
 	stream >> hdr.type;
+	if (hdr.type < 4 || hdr.type > 10) {
+		_errorString = QString::number(hdr.type) + ": invalid map type";
+		return false;
+	}
+
 	if (hdr.type > 5)
 		stream >> subtype;
 	if (hdr.type > 6)
-		stream >> obfuscated;
-	else
-		obfuscated = 0;
+		stream >> encryption;
+
+	if (encryption == 5) {
+		quint16 len;
+		stream >> code >> len;
+		stream.skipRawData(len + 1);
+	}
+
+	if (encryption && hdr.type >= 9) {
+		quint32 k;
+		stream >> k;
+		qint32 d = (k - 0xc) / 0x17;
+		qint32 m = code % 0x17;
+		qint32 skip = ((m + 0x40) * 8) * d;
+		stream.skipRawData(skip);
+	}
+
 	stream >> hdr.width >> hdr.height >> hdr.bpp >> hdr.unknown >> hdr.tileWidth
 	  >> hdr.tileHeight >> hdr.IMPOffset >> hdr.paletteSize;
 	if (stream.status() != QDataStream::Ok) {
@@ -256,13 +283,13 @@ bool RMap::readHeader(QDataStream &stream, Header &hdr)
 		return false;
 	}
 
-	if (hdr.type < 4 || hdr.type > 10) {
-		_errorString = QString::number(hdr.type) + ": unsupported map type";
-		return false;
-	}
-	if (obfuscated) {
-		_errorString = "Obfuscated maps not supported";
-		return false;
+	if (encryption) {
+		/* Only print a warning instead of returning an error as only the tile
+		   images will be invalid (blank). Everything else (map bounds,
+		   projection, zoom levels) should work. */
+		QFile *f = qobject_cast<QFile*>(stream.device());
+		if (f)
+			qWarning("%s: Encrypted tile data", qUtf8Printable(f->fileName()));
 	}
 
 	return true;
