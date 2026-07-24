@@ -71,9 +71,9 @@ POI::~POI()
 
 bool POI::loadFile(const QString &path)
 {
-	Data data(path);
+    Data data;
 
-	if (!data.isValid()) {
+    if (!data.load(path)) {
 		_errorString = data.errorString();
 		_errorLine = data.errorLine();
 		return false;

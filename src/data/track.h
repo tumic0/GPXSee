@@ -17,6 +17,8 @@ public:
 	Track(const TrackData &data);
 
 	Path path() const;
+    const TrackData& data() const;
+    TrackData& data();
 
 	GraphPair elevation(Map *map) const;
 	GraphPair speed() const;
@@ -57,6 +59,9 @@ public:
 	static void showSecondaryElevation(bool show) {_show2ndElevation = show;}
 	static void showSecondarySpeed(bool show) {_show2ndSpeed = show;}
 	static void useSegments(bool use) {_useSegments = use;}
+
+    bool newSegment();
+    bool addTrackPoint(const Trackpoint& point);
 
 private:
 	struct Segment {

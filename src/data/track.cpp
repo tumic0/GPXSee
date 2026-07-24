@@ -636,6 +636,16 @@ Path Track::path() const
 	return ret;
 }
 
+const TrackData &Track::data() const
+{
+    return _data;
+}
+
+TrackData& Track::data()
+{
+    return _data;
+}
+
 bool Track::discardStopPoint(const Segment &seg, int i) const
 {
 	return (seg.stop.contains(i) && seg.stop.contains(i-1)
@@ -648,4 +658,20 @@ bool Track::isValid() const
 		if (_data.at(i).size() >= 2)
 			return true;
 	return false;
+}
+
+bool Track::newSegment()
+{
+    _data.append(SegmentData());
+    return true;
+}
+
+bool Track::addTrackPoint(const Trackpoint &point)
+{
+    if(_useSegments) {
+        if(_data.isEmpty())
+            newSegment();
+        _data.last().append(point);
+    }
+    return true;
 }

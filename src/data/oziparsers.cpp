@@ -122,6 +122,14 @@ bool PLTParser::parse(QFile *file, QList<TrackData> &tracks,
 	return true;
 }
 
+bool PLTParser::save(QFile *file, QList<TrackData> &tracks,
+                     QList<RouteData> &routes, QList<Area> &polygons, QVector<Waypoint> &waypoints)
+{
+    bool ret = false;
+    qWarning() << Q_FUNC_INFO << "This function is not implemented";
+    return ret;
+}
+
 bool RTEParser::parse(QFile *file, QList<TrackData> &tracks,
   QList<RouteData> &routes, QList<Area> &polygons,
   QVector<Waypoint> &waypoints)
@@ -227,6 +235,14 @@ bool RTEParser::parse(QFile *file, QList<TrackData> &tracks,
 	return true;
 }
 
+bool RTEParser::save(QFile *file, QList<TrackData> &tracks,
+                     QList<RouteData> &routes, QList<Area> &polygons, QVector<Waypoint> &waypoints)
+{
+    bool ret = false;
+    qWarning() << Q_FUNC_INFO << "This function is not implemented";
+    return ret;
+}
+
 bool WPTParser::parse(QFile *file, QList<TrackData> &tracks,
   QList<RouteData> &routes, QList<Area> &polygons,
   QVector<Waypoint> &waypoints)
@@ -317,4 +333,12 @@ bool WPTParser::parse(QFile *file, QList<TrackData> &tracks,
 	}
 
 	return true;
+}
+
+bool WPTParser::save(QFile *file, QList<TrackData> &tracks,
+                     QList<RouteData> &routes, QList<Area> &polygons, QVector<Waypoint> &waypoints)
+{
+    bool ret = false;
+    qWarning() << Q_FUNC_INFO << "This function is not implemented";
+    return ret;
 }

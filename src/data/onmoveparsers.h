@@ -9,6 +9,9 @@ class OMDParser : public Parser
 public:
 	bool parse(QFile *file, QList<TrackData> &tracks, QList<RouteData> &routes,
 	  QList<Area> &polygons, QVector<Waypoint> &waypoints);
+    bool save(QFile *file, QList<TrackData> &tracks,
+      QList<RouteData> &routes, QList<Area> &polygons,
+      QVector<Waypoint> &waypoints);
 	QString errorString() const {return _errorString;}
 	int errorLine() const {return 0;}
 
@@ -45,6 +48,9 @@ class GHPParser : public Parser
 public:
 	bool parse(QFile *file, QList<TrackData> &tracks, QList<RouteData> &routes,
 	  QList<Area> &polygons, QVector<Waypoint> &waypoints);
+    bool save(QFile *file, QList<TrackData> &tracks,
+      QList<RouteData> &routes, QList<Area> &polygons,
+      QVector<Waypoint> &waypoints);
 	QString errorString() const {return _errorString;}
 	int errorLine() const {return 0;}
 

@@ -321,3 +321,12 @@ bool EXIFParser::parse(QFile *file, QList<TrackData> &tracks,
 	_errorString = "No EXIF data found";
 	return false;
 }
+
+bool EXIFParser::save(QFile *file, QList<TrackData> &tracks,
+                     QList<RouteData> &routes, QList<Area> &polygons, QVector<Waypoint> &waypoints)
+{
+    bool ret = false;
+    //TODO: save() is not implemented
+    qWarning() << Q_FUNC_INFO << "This function is not implemented";
+    return ret;
+}

@@ -45,3 +45,12 @@ bool ITNParser::parse(QFile *file, QList<TrackData> &tracks,
 
 	return true;
 }
+
+bool ITNParser::save(QFile *file, QList<TrackData> &tracks,
+                      QList<RouteData> &routes, QList<Area> &polygons, QVector<Waypoint> &waypoints)
+{
+    bool ret = false;
+    //TODO: save() is not implemented
+    qWarning() << Q_FUNC_INFO << "This function is not implemented";
+    return ret;
+}

@@ -112,12 +112,22 @@ QMultiMap<QString, Parser*> Data::_parsers = parsers();
 bool Data::_permChecked = false;
 #endif // Q_OS_ANDROID
 
-void Data::processData(QList<TrackData> &trackData, QList<RouteData> &routeData)
+bool Data::processData(QList<TrackData> &trackData, QList<RouteData> &routeData)
 {
 	for (int i = 0; i < trackData.count(); i++)
 		_tracks.append(Track(trackData.at(i)));
 	for (int i = 0; i < routeData.count(); i++)
 		_routes.append(Route(routeData.at(i)));
+    return true;
+}
+
+bool Data::GenerateData(QList<TrackData> &trackData, QList<RouteData> &routeData)
+{
+    for(int i = 0; i < _tracks.size(); i++)
+        trackData.append(_tracks.at(i).data());
+    for(int j = 0; j < _routes.size(); j++)
+        routeData.append(_routes.at(j).data());
+    return true;
 }
 
 #ifdef Q_OS_ANDROID
@@ -128,7 +138,13 @@ static bool isMedia(const QString &suffix)
 }
 #endif // Q_OS_ANDROID
 
-Data::Data(const QString &fileName, bool tryUnknown)
+Data::Data()
+{
+    _valid = false;
+    _errorLine = 0;
+}
+
+bool Data::load(const QString &fileName, bool tryUnknown)
 {
 	QFile file(fileName);
 	QFileInfo fi(Util::displayName(fileName));
@@ -154,7 +170,7 @@ Data::Data(const QString &fileName, bool tryUnknown)
 
 	if (!file.open(QFile::ReadOnly)) {
 		_errorString = file.errorString();
-		return;
+        return false;
 	}
 
 	QMultiMap<QString, Parser*>::iterator it;
@@ -164,7 +180,7 @@ Data::Data(const QString &fileName, bool tryUnknown)
 			  _waypoints)) {
 				processData(trackData, routeData);
 				_valid = true;
-				return;
+                return true;
 			} else {
 				_errorLine = it.value()->errorLine();
 				_errorString = it.value()->errorString();
@@ -185,7 +201,7 @@ Data::Data(const QString &fileName, bool tryUnknown)
 			  _waypoints)) {
 				processData(trackData, routeData);
 				_valid = true;
-				return;
+                return true;
 			}
 			file.reset();
 		}
@@ -198,9 +214,11 @@ Data::Data(const QString &fileName, bool tryUnknown)
 		_errorLine = 0;
 		_errorString = "Unknown format";
 	}
+
+    return _valid;
 }
 
-Data::Data(const QUrl &url)
+bool Data::load(const QUrl &url)
 {
 	bool caOk, cbOk, ccOk;
 	Projection proj(GCS::WGS84());
@@ -210,25 +228,25 @@ Data::Data(const QUrl &url)
 	QStringList parts(url.path().split(';'));
 	if (parts.size() < 1) {
 		_errorString = "Syntax error";
-		return;
+        return false;
 	}
 	QStringList coords(parts.at(0).split(','));
 	if (coords.size() < 2 || coords.size() > 3) {
 		_errorString = "Syntax error";
-		return;
+        return false;
 	}
 	double ca = coords.at(0).toDouble(&caOk);
 	double cb = coords.at(1).toDouble(&cbOk);
 	double cc = NAN;
 	if (!(caOk && cbOk)) {
 		_errorString = "Invalid coordinates";
-		return;
+        return false;
 	}
 	if (coords.size() > 2) {
 		cc = coords.at(2).toDouble(&ccOk);
 		if (!ccOk) {
 			_errorString = "Invalid elevation";
-			return;
+            return false;
 		}
 	}
 
@@ -236,14 +254,14 @@ Data::Data(const QUrl &url)
 		QStringList crsp(parts.at(1).split('='));
 		if (crsp.size() != 2) {
 			_errorString = "Syntax error";
-			return;
+            return false;
 		}
 		if (!crsp.at(0).compare("crs", Qt::CaseInsensitive)) {
 			if (crsp.at(1).compare("wgs84", Qt::CaseInsensitive)) {
 				proj = CRS::projection(crsp.at(1));
 				if (!proj.isValid()) {
 					_errorString = "Unknown CRS";
-					return;
+                    return false;
 				}
 			}
 		}
@@ -254,7 +272,7 @@ Data::Data(const QUrl &url)
 	Coordinates c(proj.xy2ll(p));
 	if (!c.isValid()) {
 		_errorString = "Invalid coordinates";
-		return;
+        return false;
 	}
 
 	Waypoint w(c);
@@ -262,6 +280,45 @@ Data::Data(const QUrl &url)
 	_waypoints.append(w);
 
 	_valid = true;
+    return _valid;
+}
+
+bool Data::save(const QString &fileName)
+{
+    bool ret = false;
+    QFile file(fileName);
+    QFileInfo fi(Util::displayName(fileName));
+    QString suffix(fi.suffix().toLower());
+    QList<TrackData> trackData;
+    QList<RouteData> routeData;
+
+    if (!file.open(QFile::WriteOnly)) {
+        _errorString = file.errorString();
+        return false;
+    }
+
+    auto [it, end] = _parsers.equal_range(suffix);
+    for(; it != end; it++) {
+        GenerateData(trackData, routeData);
+        ret = it.value()->save(
+            &file, trackData, routeData, _polygons, _waypoints);
+        if(ret)
+            break;
+        else {
+            _errorLine = it.value()->errorLine();
+            _errorString = it.value()->errorString();
+        }
+        file.reset();
+    }
+    if(!ret) {
+        qWarning("%s:", qUtf8Printable(fileName));
+        for(; it != end; it++)
+            qWarning("  %s: %s", qUtf8Printable(it.key()),
+                     qUtf8Printable(it.value()->errorString()));
+    }
+
+    file.close();
+    return ret;
 }
 
 QString Data::formats()
@@ -314,4 +371,17 @@ QStringList Data::filter()
 	}
 
 	return filter;
+}
+
+bool Data::addTrack(const Track &track)
+{
+    _tracks.append(track);
+    return true;
+}
+
+bool Data::addTrackPoint(const Trackpoint &point)
+{
+    if(_tracks.isEmpty())
+        addTrack(Track(TrackData()));
+    return _tracks.last().addTrackPoint(point);
 }

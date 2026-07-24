@@ -277,3 +277,11 @@ bool TCXParser::parse(QFile *file, QList<TrackData> &tracks,
 
 	return !_reader.error();
 }
+
+bool TCXParser::save(QFile *file, QList<TrackData> &tracks,
+                     QList<RouteData> &routes, QList<Area> &polygons, QVector<Waypoint> &waypoints)
+{
+    bool ret = false;
+    qWarning() << Q_FUNC_INFO << "This function is not implemented";
+    return ret;
+}

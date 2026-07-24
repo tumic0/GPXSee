@@ -175,6 +175,14 @@ bool OMDParser::parse(QFile *file, QList<TrackData> &tracks,
 	return true;
 }
 
+bool OMDParser::save(QFile *file, QList<TrackData> &tracks,
+                      QList<RouteData> &routes, QList<Area> &polygons, QVector<Waypoint> &waypoints)
+{
+    bool ret = false;
+    //TODO: save() is not implemented
+    qWarning() << Q_FUNC_INFO << "This function is not implemented";
+    return ret;
+}
 
 bool GHPParser::readHeaderFile(const QString &ghpPath, Header &hdr)
 {
@@ -282,4 +290,13 @@ bool GHPParser::parse(QFile *file, QList<TrackData> &tracks,
 	tracks.last().append(segment);
 
 	return true;
+}
+
+bool GHPParser::save(QFile *file, QList<TrackData> &tracks,
+                      QList<RouteData> &routes, QList<Area> &polygons, QVector<Waypoint> &waypoints)
+{
+    bool ret = false;
+    //TODO: save() is not implemented
+    qWarning() << Q_FUNC_INFO << "This function is not implemented";
+    return ret;
 }

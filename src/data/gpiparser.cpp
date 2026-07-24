@@ -801,3 +801,12 @@ bool GPIParser::parse(QFile *file, QList<TrackData> &tracks,
 	} else
 		return readData(stream, waypoints, polygons, file->fileName());
 }
+
+bool GPIParser::save(QFile *file, QList<TrackData> &tracks,
+                      QList<RouteData> &routes, QList<Area> &polygons, QVector<Waypoint> &waypoints)
+{
+    bool ret = false;
+    //TODO: save() is not implemented
+    qWarning() << Q_FUNC_INFO << "This function is not implemented";
+    return ret;
+}

@@ -1250,9 +1250,9 @@ bool GUI::openFile(const QString &fileName, bool tryUnknown, int &showError)
 
 bool GUI::loadURL(const QUrl &url, int &showError)
 {
-	Data data(url);
+    Data data;
 
-	if (data.isValid()) {
+    if (data.load(url)) {
 		loadData(data);
 		return true;
 	} else {
@@ -1280,9 +1280,9 @@ bool GUI::loadURL(const QUrl &url, int &showError)
 
 bool GUI::loadFile(const QString &fileName, bool tryUnknown, int &showError)
 {
-	Data data(fileName, tryUnknown);
+    Data data;
 
-	if (data.isValid()) {
+    if (data.load(fileName, tryUnknown)) {
 		loadData(data);
 		return true;
 	} else {

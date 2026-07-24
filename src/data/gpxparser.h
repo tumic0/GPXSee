@@ -9,6 +9,9 @@ class GPXParser : public Parser
 public:
 	bool parse(QFile *file, QList<TrackData> &tracks, QList<RouteData> &routes,
 	  QList<Area> &areas, QVector<Waypoint> &waypoints);
+    bool save(QFile *file, QList<TrackData> &tracks,
+      QList<RouteData> &routes, QList<Area> &polygons,
+      QVector<Waypoint> &waypoints);
 	QString errorString() const {return _reader.errorString();}
 	int errorLine() const {return _reader.lineNumber();}
 

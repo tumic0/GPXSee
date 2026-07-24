@@ -13,14 +13,17 @@
 class Data
 {
 public:
-	Data(const QString &fileName, bool tryUnknown = true);
-	Data(const QUrl &url);
+    Data();
+
+    bool load(const QString &fileName, bool tryUnknown = true);
+    bool load(const QUrl &url);
+    bool save(const QString &fileName);
 
 	bool isValid() const {return _valid;}
 	const QString &errorString() const {return _errorString;}
 	int errorLine() const {return _errorLine;}
 
-	const QList<Track> &tracks() const {return _tracks;}
+    const QList<Track> &tracks() const {return _tracks;}
 	const QList<Route> &routes() const {return _routes;}
 	const QVector<Waypoint> &waypoints() const {return _waypoints;}
 	const QList<Area> &areas() const {return _polygons;}
@@ -28,8 +31,12 @@ public:
 	static QString formats();
 	static QStringList filter();
 
+    bool addTrack(const Track& track = Track(TrackData()));
+    bool addTrackPoint(const Trackpoint& point);
+
 private:
-	void processData(QList<TrackData> &trackData, QList<RouteData> &routeData);
+    bool processData(QList<TrackData> &trackData, QList<RouteData> &routeData);
+    bool GenerateData(QList<TrackData> &trackData, QList<RouteData> &routeData);
 
 	bool _valid;
 	QString _errorString;
