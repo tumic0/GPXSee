@@ -14,7 +14,7 @@
 
 #define MAGIC "CompeGPSRasterImage"
 
-static CalibrationPoint parseCalibrationPoint(const QString &str)
+static CalibrationPoint parseCalibrationPoint(const QString &str, int coord)
 {
 	QStringList fields(str.split(","));
 	if (fields.size() != 5)
@@ -28,7 +28,7 @@ static CalibrationPoint parseCalibrationPoint(const QString &str)
 	if (!ret1 || !ret2)
 		return CalibrationPoint();
 
-	return (fields.at(2) == "A")
+	return (coord == 1)
 	  ? CalibrationPoint(xy, Coordinates(pp.x(), pp.y()))
 	  : CalibrationPoint(xy, pp);
 }
@@ -111,6 +111,7 @@ bool RMap::parseIMP(const QByteArray &data)
 	QStringList lines(QString(data).split("\r\n"));
 	QVector<CalibrationPoint> calibrationPoints;
 	QString projection, datum;
+	int coord = 0;
 
 	for (int i = 0; i < lines.count(); i++) {
 		const QString &line = lines.at(i);
@@ -119,9 +120,12 @@ bool RMap::parseIMP(const QByteArray &data)
 			projection = line.split("=").at(1);
 		else if (line.startsWith("Datum="))
 			datum = line.split("=").at(1);
-		else if (line.contains(re)) {
+		else if (line.startsWith("Coordinates=")) {
+			QString cs(line.split("=").at(1));
+			coord = cs.toInt();
+		} else if (line.contains(re)) {
 			QString point(line.split("=").at(1));
-			CalibrationPoint cp(parseCalibrationPoint(point));
+			CalibrationPoint cp(parseCalibrationPoint(point, coord));
 			if (cp.isValid())
 				calibrationPoints.append(cp);
 			else {
@@ -287,9 +291,7 @@ bool RMap::readHeader(QDataStream &stream, Header &hdr)
 		/* Only print a warning instead of returning an error as only the tile
 		   images will be invalid (blank). Everything else (map bounds,
 		   projection, zoom levels) should work. */
-		QFile *f = qobject_cast<QFile*>(stream.device());
-		if (f)
-			qWarning("%s: Encrypted tile data", qUtf8Printable(f->fileName()));
+		qWarning("%s: encrypted tile data", qUtf8Printable(path()));
 	}
 
 	return true;
