@@ -31,7 +31,7 @@ static inline unsigned segments(qreal distance)
 PathItem::PathItem(const Path &path, Map *map, QGraphicsItem *parent)
   : GraphicsItem(parent), _path(path), _map(map), _graph(0), _video(0)
 {
-	Q_ASSERT(_path.isValid());
+    //Q_ASSERT(_path.isValid());
 
 	_digitalZoom = 0;
 	_width = 3;
@@ -49,15 +49,59 @@ PathItem::PathItem(const Path &path, Map *map, QGraphicsItem *parent)
 	updateShape();
 	updateTicks();
 
-	_markerDistance = _path.first().first().distance();
 	_marker = new MarkerItem(this);
 	_marker->setZValue(1);
-	_marker->setPos(position(_markerDistance));
+    if(_path.isValid()) {
+        _markerDistance = _path.first().first().distance();
+        _marker->setPos(position(_markerDistance));
+    }
 	_markerInfo = new MarkerInfoItem(_marker);
 	_markerInfo->setVisible(false);
 
 	setCursor(Qt::ArrowCursor);
 	setAcceptHoverEvents(true);
+}
+
+void PathItem::newPathSegment()
+{
+    _path.append(PathSegment());
+}
+
+bool PathItem::addPosition(const Coordinates &c)
+{
+    bool ret = false;
+    qreal distance = 0;
+    Coordinates last;
+    if(_path.isEmpty())
+        _path.append(PathSegment());
+    auto &segment =_path.last();
+    if(!segment.isEmpty()) {
+        distance = segment.last().distance();
+        last = segment.last().coordinates();
+    }
+    if(last.isValid())
+        distance += c.distanceTo(last);
+    segment.append(PathPoint(c, distance));
+
+    if(segment.size() < 2)
+        _painterPath.moveTo(_map->ll2xy(c));
+    else {
+        double dist = c.distanceTo(last);
+        if(dist > GEOGRAPHICAL_MILE) {
+            GreatCircle gc(last, c);
+            unsigned n = segments(dist);
+
+            for (unsigned k = 1; k <= n; k++) {
+                Coordinates cc(gc.pointAt(k/(double)n));
+                addSegment(last, cc);
+                last = cc;
+            }
+        } else
+            addSegment(c, last);
+    }
+    updateShape();
+
+    return ret;
 }
 
 void PathItem::updateShape()
@@ -188,7 +232,7 @@ void PathItem::setMap(Map *map)
 
 const QColor &PathItem::color() const
 {
-	return (_useStyle && _path.style().color().isValid())
+    return (_useStyle && _path.isValid() && _path.style().color().isValid())
 	  ? _path.style().color() : _color;
 }
 
@@ -212,7 +256,7 @@ void PathItem::updateColor()
 
 qreal PathItem::width() const
 {
-	return (_useStyle && _path.style().width() > 0)
+    return (_useStyle && _path.isValid() && _path.style().width() > 0)
 	  ? _path.style().width() : _width;
 }
 
@@ -233,7 +277,7 @@ void PathItem::updateWidth()
 
 Qt::PenStyle PathItem::penStyle() const
 {
-	return (_useStyle && _path.style().style() != Qt::NoPen)
+    return (_useStyle && _path.isValid() && _path.style().style() != Qt::NoPen)
 	  ? _path.style().style() : _penStyle;
 }
 
@@ -512,6 +556,9 @@ void PathItem::updateTicks()
 
 	if (!_showTicks)
 		return;
+
+    if(!_path.isValid())
+        return;
 
 	int ts = tickSize();
 	int tc = _path.last().last().distance() / (ts * xInM());

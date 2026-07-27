@@ -35,6 +35,9 @@ public:
 	const Path &path() const {return _path;}
 	const QColor &color() const;
 
+    void newPathSegment();
+    bool addPosition(const Coordinates& c);
+
 	void addGraph(GraphItem *graph);
 
 	void setMap(Map *map);
@@ -88,8 +91,8 @@ private:
 	const PathSegment *segment(qreal x) const;
 	QPointF position(qreal distance) const;
 	void updatePainterPath();
-	void updateShape();
-	bool addSegment(const Coordinates &c1, const Coordinates &c2);
+    void updateShape();
+    bool addSegment(const Coordinates &c1, const Coordinates &c2);
 	void setMarkerInfo(qreal pos);
 	void updateColor();
 	void updateWidth();
@@ -101,9 +104,8 @@ private:
 	qreal xInM() const;
 	unsigned tickSize() const;
 
-	Path _path;
-
-	Map *_map;
+    Path _path;
+    Map *_map;
 	QList<GraphItem *> _graphs;
 	GraphItem *_graph;
 	MarkerItem *_marker;
@@ -113,7 +115,7 @@ private:
 
 	QPen _pen;
 	QPainterPath _shape;
-	QPainterPath _painterPath;
+    QPainterPath _painterPath;
 
 	qreal _width;
 	QColor _color;

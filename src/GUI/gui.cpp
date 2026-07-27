@@ -27,6 +27,8 @@
 #include <QTabBar>
 #include <QPushButton>
 #include <QGeoPositionInfoSource>
+#include <QGeoPositionInfo>
+#include <QStandardPaths>
 #if QT_VERSION >= QT_VERSION_CHECK(6, 5, 0)
 #include <QPermissions>
 #endif // QT 6.5
@@ -131,6 +133,7 @@ GUI::GUI(const QString &lang)
 	updateGraphTabs();
 	updateStatusBarInfo();
 	updateMapDEMDownloadAction();
+
 }
 
 void GUI::createBrowser()
@@ -408,6 +411,17 @@ void GUI::createActions()
 	  &GUI::selectMapLayer);
 
 	// Position
+    _recordPostionAction = new QAction(tr("Start record positions"), this);
+    _recordPostionAction->setCheckable(true);
+    _recordPostionAction->setChecked(false);
+    connect(_recordPostionAction, &QAction::triggered, this,
+            &GUI::recordPostion);
+    _pauseRecordPositionAction = new QAction(tr("Pause record positions"), this);
+    _pauseRecordPositionAction->setCheckable(true);
+    _pauseRecordPositionAction->setEnabled(false);
+    connect(_pauseRecordPositionAction, &QAction::triggered, this,
+            &GUI::pauseRecordPosition);
+
 	_showPositionAction = new QAction(QIcon::fromTheme(SHOW_POS_NAME,
 	  QIcon(SHOW_POS_ICON)), tr("Show position"), this);
 	_showPositionAction->setMenuRole(QAction::NoRole);
@@ -871,6 +885,9 @@ void GUI::createMenus()
 #else
 	QMenu *positionMenu = menuBar()->addMenu(tr("Position"));
 #endif
+    positionMenu->addAction(_recordPostionAction);
+    positionMenu->addAction(_pauseRecordPositionAction);
+    positionMenu->addSeparator();
 	positionMenu->addAction(_showPositionCoordinatesAction);
 	positionMenu->addAction(_showMotionInfoAction);
 	positionMenu->addAction(_followPositionAction);
@@ -2255,6 +2272,85 @@ void GUI::showPosition(bool show)
 }
 #endif // QT 6.5 && (Q_OS_ANDROID || Q_OS_MACOS)
 
+void GUI::recordPostion(bool record)
+{
+    if(_mapView)
+        _mapView->recordPosition(record);
+
+    if(record) {
+        _recordPostionAction->setText(tr("Stop record positions"));
+
+        _recordData = QSharedPointer<Data>(new Data());
+        QString szPath = QStandardPaths::writableLocation(
+                          QStandardPaths::DocumentsLocation)
+                         + QDir::separator() + "GPXSee";
+        QDir d;
+        if(!d.exists(szPath))
+            if(!d.mkpath(szPath))
+                qCritical() << "mkdir dir fail:" << szPath;
+        _recordFile = szPath + QDir::separator()
+                      + QDateTime::currentDateTime().toString("yyyyMMddhhmm") + ".gpx";
+    } else {
+        _recordPostionAction->setText(tr("Start record positions"));
+        if(_recordFile.isEmpty()) {
+#ifdef Q_OS_ANDROID
+            _recordFile = QFileDialog::getSaveFileName(
+                this, tr("Save file"));
+#else // Q_OS_ANDROID
+            _recordFile = QFileDialog::getSaveFileName(
+                this, tr("Save file"), QString(), Data::formats());
+#endif // Q_OS_ANDROID
+        }
+        if(!_recordFile.isEmpty() && _recordData) {
+            if(_recordData->save(_recordFile))
+                qInfo() << "Successful: Save record file:" << _recordFile;
+            else
+                qCritical() << "Failed: Save record file:" << _recordFile;
+            _recordData.reset();
+        }
+    }
+
+    _pauseRecordPositionAction->setText(tr("Pause record positions"));
+    _pauseRecordPositionAction->setChecked(false);
+    _pauseRecordPositionAction->setEnabled(record);
+}
+
+void GUI::pauseRecordPosition(bool record)
+{
+    if(_mapView)
+        _mapView->pauseRecordPosition(record);
+    if(record) {
+        _pauseRecordPositionAction->setText(tr("Continue recording positions"));
+    } else {
+        _pauseRecordPositionAction->setText(tr("Pause record positions"));
+        if(_recordData)
+            _recordData->addTrackPoint(Trackpoint(), true);
+    }
+}
+
+void GUI::updatePosition(const QGeoPositionInfo &pos)
+{
+    QGeoCoordinate gc(pos.coordinate());
+    if (!gc.isValid())
+        return;
+
+    Coordinates c(gc.longitude(), gc.latitude());
+    Trackpoint point(c);
+    point.setElevation(gc.altitude());
+    if(pos.hasAttribute(QGeoPositionInfo::Direction))
+        point.setBearing(pos.attribute(QGeoPositionInfo::Direction));
+    if(pos.hasAttribute(QGeoPositionInfo::GroundSpeed))
+        point.setSpeed(pos.attribute(QGeoPositionInfo::GroundSpeed));
+    if(pos.hasAttribute(QGeoPositionInfo::VerticalSpeed))
+        point.setVerticalSpeed(pos.attribute(QGeoPositionInfo::VerticalSpeed));
+
+    if(_recordData)
+        _recordData->addTrackPoint(point);
+
+    if(_mapView)
+        _mapView->updatePosition(point);
+}
+
 void GUI::updateStatusBarInfo()
 {
 	if (_files.count() == 0)
@@ -2753,10 +2849,13 @@ QGeoPositionInfoSource *GUI::positionSource(const Options &options)
 
 	source = QGeoPositionInfoSource::createSource(options.plugin,
 	  options.pluginParams.value(options.plugin), this);
-	if (source)
-		source->setPreferredPositioningMethods(
-		  QGeoPositionInfoSource::SatellitePositioningMethods);
+    if (source) {
+        source->setPreferredPositioningMethods(
+            QGeoPositionInfoSource::SatellitePositioningMethods);
 
+        connect(source, &QGeoPositionInfoSource::positionUpdated, this,
+                &GUI::updatePosition);
+    }
 	return source;
 }
 

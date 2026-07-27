@@ -25,6 +25,7 @@ class QPinchGesture;
 class Data;
 class POI;
 class Map;
+class Trackpoint;
 class Track;
 class Route;
 class TrackItem;
@@ -111,6 +112,8 @@ public:
 public slots:
 	void showMap(bool show);
 	void showPOI(bool show);
+    void recordPosition(bool record);
+    void pauseRecordPosition(bool pause);
 	void showPosition(bool show);
 	void showPOILabels(bool show);
 	void showPOIIcons(bool show);
@@ -134,12 +137,12 @@ public slots:
 	void showMotionInfo(bool show);
 	void showLegend(bool show);
 	void useStyles(bool use);
-	void drawHillShading(bool draw);
+    void drawHillShading(bool draw);
+    void updatePosition(const Trackpoint &point);
 
 private slots:
 	void updatePOI();
 	void reloadMap();
-	void updatePosition(const QGeoPositionInfo &pos);
 
 private:
 	typedef QHash<SearchPointer<Waypoint>, WaypointItem*> POIHash;
@@ -194,12 +197,15 @@ private:
 	QList<PlaneItem*> _areas;
 	POIHash _pois;
 
-	RectC _tr, _rr, _wr, _ar;
+    RectC _tr, _rr, _wr, _ar;
 	qreal _res;
 
 	Map *_map;
 	POI *_poi;
 	QGeoPositionInfoSource *_positionSource;
+    QList<TrackItem*> _recordPositions;
+    RectC updateRecordPositionBoundingRect() const;
+    bool _recordingPostion;
 
 	Palette _palette;
 	qreal _mapOpacity;

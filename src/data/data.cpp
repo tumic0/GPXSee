@@ -379,9 +379,9 @@ bool Data::addTrack(const Track &track)
     return true;
 }
 
-bool Data::addTrackPoint(const Trackpoint &point)
+bool Data::addTrackPoint(const Trackpoint &point, bool newSegment)
 {
     if(_tracks.isEmpty())
         addTrack(Track(TrackData()));
-    return _tracks.last().addTrackPoint(point);
+    return _tracks.last().addTrackPoint(point, newSegment);
 }

@@ -35,7 +35,7 @@
 #define LEGEND_OFFSET SCALE_OFFSET
 
 MapView::MapView(Map *map, POI *poi, QWidget *parent)
-  : QGraphicsView(parent), _map(map), _poi(poi)
+    : QGraphicsView(parent), _map(map), _poi(poi), _recordingPostion(false)
 {
 	Q_ASSERT(map != 0);
 	Q_ASSERT(poi != 0);
@@ -370,7 +370,7 @@ void MapView::loadDEMs(const QList<Area> &dems)
 
 int MapView::fitMapZoom() const
 {
-	RectC br = _tr | _rr | _wr | _ar;
+    RectC br = _tr | _rr | _wr | _ar | updateRecordPositionBoundingRect();
 
 	return _map->zoomFit(viewport()->size() - QSize(2*MARGIN, 2*MARGIN),
 	  br.isNull() ? _map->llBounds() : br);
@@ -378,7 +378,7 @@ int MapView::fitMapZoom() const
 
 QPointF MapView::contentCenter() const
 {
-	RectC br = _tr | _rr | _wr | _ar;
+    RectC br = _tr | _rr | _wr | _ar | updateRecordPositionBoundingRect();
 
 	return br.isNull() ? sceneRect().center() : _map->ll2xy(br.center());
 }
@@ -418,6 +418,8 @@ void MapView::rescale()
 		_areas.at(i)->setMap(_map);
 	for (int i = 0; i < _waypoints.size(); i++)
 		_waypoints.at(i)->setMap(_map);
+    for (int i = 0; i < _recordPositions.size(); i++)
+		_recordPositions.at(i)->setMap(_map);
 
 	for (POIHash::const_iterator it = _pois.constBegin();
 	  it != _pois.constEnd(); it++)
@@ -439,6 +441,8 @@ void MapView::setPalette(const Palette &palette)
 		_routes.at(i)->setColor(_palette.nextColor());
 	for (int i = 0; i < _areas.count(); i++)
 		_areas.at(i)->setColor(_palette.nextColor());
+    for (int i = 0; i < _recordPositions.count(); i++)
+		_recordPositions.at(i)->setColor(_palette.nextColor());
 
 	updateLegend();
 }
@@ -486,12 +490,12 @@ void MapView::setPOI(POI *poi)
 
 void MapView::setPositionSource(QGeoPositionInfoSource *source)
 {
-	if (_positionSource)
-		disconnect(_positionSource, &QGeoPositionInfoSource::positionUpdated,
-		  this, &MapView::updatePosition);
-	if (source)
-		connect(source, &QGeoPositionInfoSource::positionUpdated, this,
-		  &MapView::updatePosition);
+    // if (_positionSource)
+    // 	disconnect(_positionSource, &QGeoPositionInfoSource::positionUpdated,
+    // 	  this, &MapView::updatePosition);
+    // if (source)
+    // 	connect(source, &QGeoPositionInfoSource::positionUpdated, this,
+    // 	  &MapView::updatePosition);
 
 	_positionSource = source;
 
@@ -504,6 +508,9 @@ void MapView::setGraph(int index)
 		_tracks.at(i)->setGraph(index);
 	for (int i = 0; i < _routes.size(); i++)
 		_routes.at(i)->setGraph(index);
+    /*TODO: set graph
+    for (int i = 0; i < _recordPositions.count(); i++)
+        _recordPositions.at(i)->setGraph(index);//*/
 }
 
 void MapView::updatePOI()
@@ -561,6 +568,9 @@ void MapView::setUnits(Units units)
 		_tracks.at(i)->updateTicks();
 	for (int i = 0; i < _routes.count(); i++)
 		_routes.at(i)->updateTicks();
+    /*TODO: set units
+    for (int i = 0; i < _recordPositions.count(); i++)
+        _recordPositions.at(i)->updateTicks();*/
 
 	_mapScale->setUnits(units);
 	_cursorCoordinates->setUnits(units);
@@ -577,6 +587,8 @@ void MapView::setCoordinatesFormat(CoordinatesFormat format)
 		_tracks.at(i)->updateMarkerInfo();
 	for (int i = 0; i < _routes.count(); i++)
 		_routes.at(i)->updateMarkerInfo();
+    for (int i = 0; i < _recordPositions.count(); i++)
+        _recordPositions.at(i)->updateMarkerInfo();
 
 	_cursorCoordinates->setFormat(format);
 	_positionCoordinates->setFormat(format);
@@ -591,6 +603,8 @@ void MapView::setTimeZone(const QTimeZone &zone)
 		_tracks.at(i)->updateMarkerInfo();
 	for (int i = 0; i < _routes.count(); i++)
 		_routes.at(i)->updateMarkerInfo();
+    for (int i = 0; i < _recordPositions.count(); i++)
+        _recordPositions.at(i)->updateMarkerInfo();
 }
 
 void MapView::clearMapCache()
@@ -620,6 +634,8 @@ void MapView::digitalZoom(int zoom)
 	for (POIHash::const_iterator it = _pois.constBegin();
 	  it != _pois.constEnd(); it++)
 		it.value()->setDigitalZoom(_digitalZoom);
+    for (int i = 0; i < _recordPositions.count(); i++)
+        _recordPositions.at(i)->setDigitalZoom(_digitalZoom);
 
 	_mapScale->setDigitalZoom(_digitalZoom);
 	_cursorCoordinates->setDigitalZoom(_digitalZoom);
@@ -784,7 +800,7 @@ void MapView::plot(QPainter *painter, const QRectF &target, qreal scale,
 		  painter->device()->logicalDpiY()
 		  / (qreal)metric(QPaintDevice::PdmDpiY));
 		adj = QRectF(0, 0, adj.width() * s.x(), adj.height() * s.y());
-		_map->zoomFit(adj.size().toSize(), _tr | _rr | _wr | _ar);
+        _map->zoomFit(adj.size().toSize(), _tr | _rr | _wr | _ar | updateRecordPositionBoundingRect());
 		rescale();
 
 		QPointF center = contentCenter();
@@ -846,6 +862,7 @@ void MapView::clear()
 	_routes.clear();
 	_areas.clear();
 	_waypoints.clear();
+    _recordPositions.clear();
 
 	_scene->removeItem(_mapScale);
 	_scene->removeItem(_cursorCoordinates);
@@ -961,6 +978,8 @@ void MapView::showMarkers(bool show)
 		_tracks.at(i)->showMarker(show);
 	for (int i = 0; i < _routes.size(); i++)
 		_routes.at(i)->showMarker(show);
+    for (int i = 0; i < _recordPositions.count(); i++)
+        _recordPositions.at(i)->showMarker(show);
 }
 
 void MapView::showMarkerInfo(MarkerInfoItem::Type type)
@@ -971,6 +990,8 @@ void MapView::showMarkerInfo(MarkerInfoItem::Type type)
 		_tracks.at(i)->showMarkerInfo(type);
 	for (int i = 0; i < _routes.size(); i++)
 		_routes.at(i)->showMarkerInfo(type);
+    for (int i = 0; i < _recordPositions.count(); i++)
+        _recordPositions.at(i)->showMarkerInfo(type);
 }
 
 void MapView::showTicks(bool show)
@@ -981,6 +1002,8 @@ void MapView::showTicks(bool show)
 		_tracks.at(i)->showTicks(show);
 	for (int i = 0; i < _routes.size(); i++)
 		_routes.at(i)->showTicks(show);
+    for (int i = 0; i < _recordPositions.count(); i++)
+        _recordPositions.at(i)->showTicks(show);
 }
 
 void MapView::showVideos(bool show)
@@ -1076,6 +1099,8 @@ void MapView::setTrackWidth(int width)
 
 	for (int i = 0; i < _tracks.count(); i++)
 		_tracks.at(i)->setWidth(width);
+    for (int i = 0; i < _recordPositions.count(); i++)
+        _recordPositions.at(i)->setWidth(width);
 }
 
 void MapView::setRouteWidth(int width)
@@ -1100,6 +1125,8 @@ void MapView::setTrackStyle(Qt::PenStyle style)
 
 	for (int i = 0; i < _tracks.count(); i++)
 		_tracks.at(i)->setPenStyle(style);
+    for (int i = 0; i < _recordPositions.count(); i++)
+        _recordPositions.at(i)->setPenStyle(style);
 }
 
 void MapView::setRouteStyle(Qt::PenStyle style)
@@ -1178,6 +1205,8 @@ void MapView::setBackgroundColor(const QColor &color)
 		_tracks.at(i)->setMarkerBackgroundColor(color);
 	for (int i = 0; i < _routes.size(); i++)
 		_routes.at(i)->setMarkerBackgroundColor(color);
+    for (int i = 0; i < _recordPositions.count(); i++)
+        _recordPositions.at(i)->setMarkerBackgroundColor(color);
 
 	reloadMap();
 }
@@ -1394,6 +1423,8 @@ void MapView::useStyles(bool use)
 		_areas.at(i)->updateStyle();
 	for (int i = 0; i < _waypoints.size(); i++)
 		_waypoints.at(i)->updateStyle();
+    for (int i = 0; i < _recordPositions.count(); i++)
+        _recordPositions.at(i)->updateStyle();
 
 	updateLegend();
 }
@@ -1406,6 +1437,8 @@ void MapView::setMarkerColor(const QColor &color)
 		_tracks.at(i)->setMarkerColor(color);
 	for (int i = 0; i < _routes.size(); i++)
 		_routes.at(i)->setMarkerColor(color);
+    for (int i = 0; i < _recordPositions.count(); i++)
+        _recordPositions.at(i)->setMarkerColor(color);
 }
 
 void MapView::setMarkerPosition(qreal pos)
@@ -1414,6 +1447,8 @@ void MapView::setMarkerPosition(qreal pos)
 		_tracks.at(i)->setMarkerPosition(pos);
 	for (int i = 0; i < _routes.size(); i++)
 		_routes.at(i)->setMarkerPosition(pos);
+    for (int i = 0; i < _recordPositions.count(); i++)
+        _recordPositions.at(i)->setMarkerPosition(pos);
 }
 
 void MapView::reloadMap()
@@ -1459,6 +1494,8 @@ RectC MapView::boundingRect() const
 		rect |= _wr;
 	if (_showAreas)
 		rect |= _ar;
+    if(_recordingPostion)
+        rect |= updateRecordPositionBoundingRect();
 
 	return rect;
 }
@@ -1496,22 +1533,62 @@ void MapView::followPosition(bool follow)
 		centerOn(_map->ll2xy(_crosshair->coordinates()));
 }
 
-void MapView::updatePosition(const QGeoPositionInfo &pos)
+void MapView::recordPosition(bool record)
 {
-	QGeoCoordinate gc(pos.coordinate());
-	if (!gc.isValid())
-		return;
+    _recordingPostion = record;
+    if(_recordingPostion) {
+        TrackItem* record = new TrackItem(_map);
+        _recordPositions.append(record);
+        record->setVisible(true);
+        record->setColor(_palette.nextColor());
+        record->setWidth(_trackWidth);
+        record->setPenStyle(_trackStyle);
+        record->setDigitalZoom(_digitalZoom);
+        record->setMarkerColor(_markerColor);
+        record->setMarkerBackgroundColor(_backgroundColor);
+        record->drawMarkerBackground(_infoBackground);
+        record->showMarker(_showMarkers);
+        record->showMarkerInfo(_markerInfoType);
+        record->showTicks(_showPathTicks);
+        record->showVideo(_showVideos);
+        record->showPoints(_showTrackWaypoints);
+        _scene->addItem(record);
+    }
+}
 
-	Coordinates c(gc.longitude(), gc.latitude());
+void MapView::pauseRecordPosition(bool pause)
+{
+    _recordingPostion = !pause;
+    if(_recordingPostion) {
+        if(!_recordPositions.isEmpty())
+            _recordPositions.last()->newPathSegment();
+    }
+}
+
+void MapView::updatePosition(const Trackpoint &point)
+{
+    Coordinates c = point.coordinates();
 	_crosshair->setCoordinates(c);
 	_crosshair->setMap(_map);
-	_positionCoordinates->setCoordinates(c, gc.altitude());
-	_motionInfo->setInfo(pos.attribute(QGeoPositionInfo::Direction),
-	  pos.attribute(QGeoPositionInfo::GroundSpeed),
-	  pos.attribute(QGeoPositionInfo::VerticalSpeed));
+    _positionCoordinates->setCoordinates(c, point.elevation());
+    _motionInfo->setInfo(point.bearing(), point.speed(), point.verticalSpeed());
 
 	if (_followPosition)
 		centerOn(_map->ll2xy(c));
+
+    if(_recordingPostion) {
+        if(!_recordPositions.isEmpty())
+            _recordPositions.last()->addPosition(c);
+    }
+}
+
+RectC MapView::updateRecordPositionBoundingRect() const
+{
+    RectC r;
+    foreach(auto t, _recordPositions) {
+        r |= t->path().boundingRect();
+    }
+    return r;
 }
 
 void MapView::setCrosshairColor(const QColor &color)
@@ -1540,6 +1617,8 @@ void MapView::drawInfoBackground(bool draw)
 		_tracks.at(i)->drawMarkerBackground(draw);
 	for (int i = 0; i < _routes.size(); i++)
 		_routes.at(i)->drawMarkerBackground(draw);
+    for (int i = 0; i < _recordPositions.count(); i++)
+        _recordPositions.at(i)->drawMarkerBackground(draw);
 }
 
 void MapView::setHidpi(bool hidpi)

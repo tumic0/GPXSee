@@ -6,12 +6,14 @@
 
 class Map;
 class Track;
+class Trackpoint;
 
 class TrackItem : public PathItem
 {
 	Q_OBJECT
 
 public:
+    TrackItem(Map *map, QGraphicsItem *parent = 0);
 	TrackItem(const Track &track, Map *map, QGraphicsItem *parent = 0);
 
 	ToolTip info(bool extended) const;

@@ -6,6 +6,7 @@
 #include <QList>
 #include <QDate>
 #include <QPrinter>
+
 #include "common/treenode.h"
 #include "common/rectc.h"
 #include "data/graph.h"
@@ -25,6 +26,7 @@ class QLabel;
 class QSplitter;
 class QPrinter;
 class QGeoPositionInfoSource;
+class QGeoPositionInfo;
 class QPermission;
 class FileBrowser;
 class GraphTab;
@@ -97,6 +99,9 @@ private slots:
   && (defined(Q_OS_ANDROID) || defined(Q_OS_MACOS))
 	void showPosition(bool show);
 #endif // QT 6.5 && (Q_OS_ANDROID || Q_OS_MACOS)
+    void recordPostion(bool record);
+    void pauseRecordPosition(bool record);
+    void updatePosition(const QGeoPositionInfo &pos);
 
 	void mapChanged(QAction *action);
 	void graphChanged(int);
@@ -279,6 +284,8 @@ private:
 	QAction *_followPositionAction;
 	QAction *_showPositionCoordinatesAction;
 	QAction *_showMotionInfoAction;
+    QAction *_recordPostionAction;
+    QAction *_pauseRecordPositionAction;
 	QAction *_loadMapAction;
 	QAction *_loadMapDirAction;
 	QAction *_clearMapCacheAction;
@@ -380,6 +387,9 @@ private:
 	Units _units;
 
 	QList<RectC> _demRects;
+
+    QSharedPointer<Data> _recordData;
+    QString _recordFile;
 };
 
 #endif // GUI_H

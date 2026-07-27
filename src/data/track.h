@@ -60,8 +60,7 @@ public:
 	static void showSecondarySpeed(bool show) {_show2ndSpeed = show;}
 	static void useSegments(bool use) {_useSegments = use;}
 
-    bool newSegment();
-    bool addTrackPoint(const Trackpoint& point);
+    bool addTrackPoint(const Trackpoint& point, bool newSegment = false);
 
 private:
 	struct Segment {

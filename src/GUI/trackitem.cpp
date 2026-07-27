@@ -1,5 +1,6 @@
 #include <QLocale>
 #include "common/util.h"
+#include "map/map.h"
 #include "data/track.h"
 #include "format.h"
 #include "tooltip.h"
@@ -48,6 +49,10 @@ ToolTip TrackItem::info(bool extended) const
 
 	return tt;
 }
+
+TrackItem::TrackItem(Map *map, QGraphicsItem *parent)
+    : PathItem(Path(), map, parent)
+{}
 
 TrackItem::TrackItem(const Track &track, Map *map, QGraphicsItem *parent)
   : PathItem(track.path(), map, parent)

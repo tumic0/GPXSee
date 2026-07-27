@@ -660,18 +660,16 @@ bool Track::isValid() const
 	return false;
 }
 
-bool Track::newSegment()
-{
-    _data.append(SegmentData());
-    return true;
-}
-
-bool Track::addTrackPoint(const Trackpoint &point)
+bool Track::addTrackPoint(const Trackpoint &point, bool newSegment)
 {
     if(_useSegments) {
-        if(_data.isEmpty())
-            newSegment();
-        _data.last().append(point);
+        if(newSegment)
+            _data.append(SegmentData());
+        else {
+            if(_data.isEmpty())
+                _data.append(SegmentData());
+            _data.last().append(point);
+        }
     }
     return true;
 }

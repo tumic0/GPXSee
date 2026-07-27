@@ -32,7 +32,7 @@ public:
 	static QStringList filter();
 
     bool addTrack(const Track& track = Track(TrackData()));
-    bool addTrackPoint(const Trackpoint& point);
+    bool addTrackPoint(const Trackpoint& point, bool newSegment = false);
 
 private:
     bool processData(QList<TrackData> &trackData, QList<RouteData> &routeData);
