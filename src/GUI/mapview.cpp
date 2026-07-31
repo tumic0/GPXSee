@@ -1553,7 +1553,14 @@ void MapView::recordPosition(bool record)
         record->showVideo(_showVideos);
         record->showPoints(_showTrackWaypoints);
         _scene->addItem(record);
+    } else {
+        foreach(auto item, _recordPositions) {
+            _scene->removeItem(item);
+            delete item;
+        }
+        _recordPositions.clear();
     }
+
 }
 
 void MapView::pauseRecordPosition(bool pause)
