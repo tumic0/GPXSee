@@ -210,7 +210,14 @@ void Downloader::readData(QNetworkReply *reply)
 {
 	QFile *file = _currentDownloads.value(reply->request().url());
 	Q_ASSERT(file);
-	file->write(reply->readAll());
+	if (file) {
+		QByteArray ba(reply->readAll());
+		if (file->write(ba) != ba.size()) {
+			qWarning("%s: %s", qUtf8Printable(file->fileName()),
+			  qUtf8Printable(file->errorString()));
+			reply->abort();
+		}
+	}
 }
 
 void Downloader::downloadFinished(QNetworkReply *reply)
