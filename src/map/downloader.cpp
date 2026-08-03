@@ -209,7 +209,7 @@ void Downloader::insertError(const QUrl &url, QNetworkReply::NetworkError error)
 void Downloader::readData(QNetworkReply *reply)
 {
 	QFile *file = _currentDownloads.value(reply->request().url());
-	Q_ASSERT(file);
+
 	if (file) {
 		QByteArray ba(reply->readAll());
 		if (file->write(ba) != ba.size()) {
@@ -217,22 +217,26 @@ void Downloader::readData(QNetworkReply *reply)
 			  qUtf8Printable(file->errorString()));
 			reply->abort();
 		}
-	}
+	} else
+		reply->abort();
 }
 
 void Downloader::downloadFinished(QNetworkReply *reply)
 {
 	QUrl url(reply->request().url());
 	QNetworkReply::NetworkError error = reply->error();
+	QFile *file = _currentDownloads.value(url);
 
-	QFile *file = _currentDownloads.value(reply->request().url());
 	if (error) {
 		insertError(url, error);
 		qWarning("%s: %s", url.toEncoded().constData(), errorString(error));
-		file->remove();
+		if (file)
+			file->remove();
 	} else {
-		file->close();
-		file->rename(origName(file->fileName()));
+		if (file) {
+			file->close();
+			file->rename(origName(file->fileName()));
+		}
 	}
 
 	_currentDownloads.remove(url);
