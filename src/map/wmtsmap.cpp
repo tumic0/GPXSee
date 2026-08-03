@@ -20,13 +20,14 @@ WMTSMap::WMTSMap(const QString &fileName, const QString &name,
   QObject *parent) : Map(fileName, parent), _name(name), _tileLoader(0),
   _zoom(0), _mapRatio(1.0), _tileRatio(tileRatio)
 {
-	QString tilesDir(QDir(ProgramPaths::tilesDir()).filePath(_name));
+	QDir tilesDir(QDir(ProgramPaths::tilesDir()).filePath(_name));
 
-	_tileLoader = new TileLoader(tilesDir, this);
+	_tileLoader = new TileLoader(tilesDir, QFileInfo(fileName).absoluteDir(),
+	  this);
 	_tileLoader->setHeaders(setup.headers());
 	connect(_tileLoader, &TileLoader::finished, this, &WMTSMap::tilesLoaded);
 
-	_wmts = new WMTS(QDir(tilesDir).filePath(CAPABILITIES_FILE), setup, this);
+	_wmts = new WMTS(tilesDir.filePath(CAPABILITIES_FILE), setup, this);
 	connect(_wmts, &WMTS::downloadFinished, this, &WMTSMap::wmtsReady);
 	if (_wmts->isReady())
 		init();

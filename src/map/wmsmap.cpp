@@ -74,13 +74,14 @@ WMSMap::WMSMap(const QString &fileName, const QString &name,
   : Map(fileName, parent), _name(name), _tileLoader(0), _zoom(0),
   _tileSize(tileSize), _mapRatio(1.0)
 {
-	QString tilesDir(QDir(ProgramPaths::tilesDir()).filePath(_name));
+	QDir tilesDir(QDir(ProgramPaths::tilesDir()).filePath(_name));
 
-	_tileLoader = new TileLoader(tilesDir, this);
+	_tileLoader = new TileLoader(tilesDir, QFileInfo(fileName).absoluteDir(),
+	  this);
 	_tileLoader->setHeaders(setup.headers());
 	connect(_tileLoader, &TileLoader::finished, this, &WMSMap::tilesLoaded);
 
-	_wms = new WMS(QDir(tilesDir).filePath(CAPABILITIES_FILE), setup, this);
+	_wms = new WMS(tilesDir.filePath(CAPABILITIES_FILE), setup, this);
 	connect(_wms, &WMS::downloadFinished, this, &WMSMap::wmsReady);
 	if (_wms->isReady())
 		init();

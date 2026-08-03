@@ -41,15 +41,21 @@ static QString quadKey(const QPoint &xy, int zoom)
 	return qk;
 }
 
-TileLoader::TileLoader(const QString &dir, QObject *parent)
-  : QObject(parent), _urlType(XYZ), _dir(dir)
+TileLoader::TileLoader(const QDir &tilesDir, const QDir &mapDir, QObject *parent)
+  : QObject(parent), _urlType(XYZ), _tilesDir(tilesDir), _mapDir(mapDir)
 {
-	if (!_dir.mkpath("."))
-		qWarning("%s: %s", qUtf8Printable(_dir.absolutePath()),
+	if (!_tilesDir.mkpath("."))
+		qWarning("%s: %s", qUtf8Printable(_tilesDir.absolutePath()),
 		  "Error creating tiles directory");
 
 	_downloader = new Downloader(this);
 	connect(_downloader, &Downloader::finished, this, &TileLoader::finished);
+}
+
+QString TileLoader::localPath(const QUrl &url) const
+{
+	QString path(url.toLocalFile());
+	return QFileInfo(path).isAbsolute() ? path : _mapDir.absoluteFilePath(path);
 }
 
 void TileLoader::loadTilesAsync(QVector<Tile> &list)
@@ -67,7 +73,7 @@ void TileLoader::loadTilesAsync(QVector<Tile> &list)
 			else {
 				QUrl url(tileUrl(t, j));
 				if (url.isLocalFile())
-					t.addFile(url.toLocalFile());
+					t.addFile(localPath(url));
 				else {
 					if (_downloader->hasError(url))
 						t.addFile(NULLFILE);
@@ -100,7 +106,7 @@ void TileLoader::loadTilesSync(QVector<Tile> &list)
 			else {
 				QUrl url(tileUrl(t, j));
 				if (url.isLocalFile())
-					t.addFile(url.toLocalFile());
+					t.addFile(localPath(url));
 				else {
 					if (_downloader->hasError(url))
 						t.addFile(NULLFILE);
@@ -141,10 +147,10 @@ void TileLoader::loadTilesSync(QVector<Tile> &list)
 
 void TileLoader::clearCache()
 {
-	QStringList list = _dir.entryList();
+	QStringList list = _tilesDir.entryList();
 
 	for (int i = 0; i < list.count(); i++)
-		_dir.remove(list.at(i));
+		_tilesDir.remove(list.at(i));
 
 	_downloader->clearErrors();
 }
@@ -179,7 +185,7 @@ QString TileLoader::tileFile(const Tile &tile, int layer) const
 	  ? tile.zoom().toString() : fsSafeStr(tile.zoom().toString()));
 	QString ls(layer ? "#" + QString::number(layer) : QString());
 
-	return _dir.absoluteFilePath(zoom + QLatin1Char('-')
+	return _tilesDir.absoluteFilePath(zoom + QLatin1Char('-')
 	  + QString::number(tile.xy().x()) + QLatin1Char('-')
 	  + QString::number(tile.xy().y()) + ls);
 }

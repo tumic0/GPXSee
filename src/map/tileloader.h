@@ -61,7 +61,7 @@ public:
 	};
 
 
-	TileLoader(const QString &dir, QObject *parent = 0);
+	TileLoader(const QDir &tilesDir, const QDir &mapDir, QObject *parent = 0);
 
 	void setUrl(const QString &url, UrlType type)
 	  {_url.append(url); _urlType = type;}
@@ -80,11 +80,12 @@ signals:
 private:
 	QUrl tileUrl(const Tile &tile, int layer) const;
 	QString tileFile(const Tile &tile, int layer) const;
+	QString localPath(const QUrl &url) const;
 
 	Downloader *_downloader;
 	QStringList _url;
 	UrlType _urlType;
-	QDir _dir;
+	QDir _tilesDir, _mapDir;
 	QList<HTTPHeader> _headers;
 };
 

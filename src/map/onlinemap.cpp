@@ -22,7 +22,7 @@ OnlineMap::OnlineMap(const QString &fileName, const QString &name,
 	_invertY(invertY), _style(0), _vectorLayers(vectorLayers)
 {
 	_tileLoader = new TileLoader(QDir(ProgramPaths::tilesDir()).filePath(_name),
-	  this);
+	  QFileInfo(fileName).absoluteDir(), this);
 	_tileLoader->setUrl(url, quadTiles ? TileLoader::QuadTiles : TileLoader::XYZ);
 	_tileLoader->setHeaders(headers);
 	connect(_tileLoader, &TileLoader::finished, this, &OnlineMap::tilesLoaded);
