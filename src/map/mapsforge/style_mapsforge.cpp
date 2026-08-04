@@ -225,7 +225,7 @@ bool Style::Rule::match(int zoom, const QVector<MapData::Tag> &tags) const
 void Style::area(QXmlStreamReader &reader, const QString &dir, qreal ratio,
   qreal baseStrokeWidth, const Rule &rule)
 {
-	PathRender ri(rule, _paths.size() + _circles.size() + _hillShading.isValid());
+	PathRender ri(rule, _paths.size() + _circles.size() + _hillShading.size());
 	const QXmlStreamAttributes &attr = reader.attributes();
 	QString file;
 	QColor fillColor;
@@ -290,7 +290,7 @@ void Style::area(QXmlStreamReader &reader, const QString &dir, qreal ratio,
 void Style::line(QXmlStreamReader &reader, const QString &dir, qreal ratio,
   qreal baseStrokeWidth, const Rule &rule)
 {
-	PathRender ri(rule, _paths.size() + _circles.size() + _hillShading.isValid());
+	PathRender ri(rule, _paths.size() + _circles.size() + _hillShading.size());
 	const QXmlStreamAttributes &attr = reader.attributes();
 	QString file;
 	int height = 0, width = 0, percent = 100;
@@ -392,7 +392,7 @@ void Style::line(QXmlStreamReader &reader, const QString &dir, qreal ratio,
 void Style::circle(QXmlStreamReader &reader, qreal baseStrokeWidth,
   const Rule &rule)
 {
-	CircleRender ri(rule, _paths.size() + _circles.size() + _hillShading.isValid());
+	CircleRender ri(rule, _paths.size() + _circles.size() + _hillShading.size());
 	const QXmlStreamAttributes &attr = reader.attributes();
 	bool ok;
 	QColor fillColor, strokeColor;
@@ -587,7 +587,7 @@ void Style::symbol(QXmlStreamReader &reader, const QString &dir, qreal ratio,
 
 	if (bitmapLine) {
 		PathRender pr(rule, _paths.size() + _circles.size()
-		  + _hillShading.isValid());
+		  + _hillShading.size());
 
 		double gap = attr.hasAttribute("repeat-gap")
 		  ? attr.value("repeat-gap").toDouble(&ok) : 200;
@@ -734,7 +734,8 @@ void Style::hillshading(QXmlStreamReader &reader, const QSet<QString> &cats)
 		}
 	}
 
-	_hillShading = HillShadingRender(r, _paths.size() + _circles.size(), layer);
+	_hillShading.append(HillShadingRender(r, _paths.size() + _circles.size()
+	  + _hillShading.size(), layer));
 
 	reader.skipCurrentElement();
 }
@@ -888,7 +889,7 @@ Style::Style(const QString &path, const MapData &data, qreal ratio, int layer)
 		_labels = QList<TextRender>();
 		_symbols = QList<Symbol>();
 		_lineSymbols = QList<Symbol>();
-		_hillShading = HillShadingRender();
+		_hillShading = QList<HillShadingRender>();
 		_menu = Menu();
 	} else {
 		std::sort(_symbols.begin(), _symbols.end());
@@ -924,8 +925,13 @@ QList<const Style::CircleRender *> Style::circles(int zoom,
 
 const Style::HillShadingRender *Style::hillShading(int zoom) const
 {
-	return (_hillShading.isValid() && _hillShading.rule()._zooms.contains(zoom))
-	  ? &_hillShading : 0;
+	for (int i = 0; i < _hillShading.size(); i++) {
+		const HillShadingRender &hr = _hillShading.at(i);
+		if (hr.rule()._zooms.contains(zoom))
+			return &hr;
+	}
+
+	return 0;
 }
 
 QList<const Style::TextRender*> Style::pathLabels(int zoom) const

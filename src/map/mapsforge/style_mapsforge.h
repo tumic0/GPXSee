@@ -142,7 +142,6 @@ public:
 		HillShadingRender(const Rule &rule, int zOrder, int layer)
 		  : Render(rule), _zOrder(zOrder), _layer(layer) {}
 
-		bool isValid() const {return _zOrder >= 0;}
 		int zOrder() const {return _zOrder;}
 		int layer() const {return _layer;}
 
@@ -281,7 +280,7 @@ public:
 	const HillShadingRender *hillShading(int zoom) const;
 
 	QStringList layers(const QString &lang, int &defaultLayer) const;
-	bool hasHillShading() const {return _hillShading.isValid();}
+	bool hasHillShading() const {return !_hillShading.isEmpty();}
 
 private:
 	class Menu {
@@ -334,7 +333,7 @@ private:
 		QList<Layer> _layers;
 	};
 
-	HillShadingRender _hillShading;
+	QList<HillShadingRender> _hillShading;
 	QList<PathRender> _paths;
 	QList<CircleRender> _circles;
 	QList<TextRender> _labels, _pathLabels;
