@@ -19,8 +19,6 @@ using namespace IMG;
 #define ICON_PADDING 2
 #define RANGE_FACTOR 4
 #define MAJOR_RANGE  10
-#define ROAD  0
-#define WATER 1
 
 #define AREA(rect) \
 	(rect.size().width() * rect.size().height())
@@ -367,17 +365,18 @@ void RasterTile::processPolygons(const QList<MapData::Poly> &polygons,
 }
 
 void RasterTile::processLines(QList<MapData::Poly> &lines,
-  QList<TextItem*> &textItems, const QImage (&arrows)[2])
+  QList<TextItem*> &textItems)
 {
 	std::stable_sort(lines.begin(), lines.end());
 
 	if (_zoom >= 22)
-		processStreetNames(lines, textItems, arrows);
+		processStreetNames(lines, textItems);
+
 	processShields(lines, textItems);
 }
 
 void RasterTile::processStreetNames(const QList<MapData::Poly> &lines,
-  QList<TextItem*> &textItems, const QImage (&arrows)[2])
+  QList<TextItem*> &textItems)
 {
 	for (int i = 0; i < lines.size(); i++) {
 		const MapData::Poly &poly = lines.at(i);
@@ -394,7 +393,7 @@ void RasterTile::processStreetNames(const QList<MapData::Poly> &lines,
 		const QColor *hColor = Style::isContourLine(poly.type) ? 0 : &haloColor;
 		const QImage *img = (poly.flags & MapData::Poly::OneWay)
 		  ? Style::isWaterLine(poly.type)
-			? &arrows[WATER] : &arrows[ROAD] : 0;
+			? &_style->arrow(Style::Water) : &_style->arrow(Style::Road) : 0;
 		const QString *label = poly.label.text().isEmpty()
 		  ? 0 : &poly.label.text();
 
@@ -688,16 +687,12 @@ void RasterTile::render()
 	MatrixD dem;
 	QList<TextItem*> textItems, lights;
 	QList<const MapData::Point*> sectorLights;
-	QImage arrows[2];
-
-	arrows[ROAD] = Util::svg2img(":/symbols/oneway.svg", _ratio);
-	arrows[WATER] = Util::svg2img(":/symbols/flow.svg", _ratio);
 
 	fetchData(polygons, lines, points, dem);
 
 	processPoints(points, textItems, lights, sectorLights);
 	processPolygons(polygons, textItems);
-	processLines(lines, textItems, arrows);
+	processLines(lines, textItems);
 
 	img.setDevicePixelRatio(_ratio);
 	img.fill(Qt::transparent);

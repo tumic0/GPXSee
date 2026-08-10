@@ -1471,6 +1471,8 @@ Style::Style(qreal ratio, const SubFile *typ)
 	_lightYellow = QImage(":/marine/light-yellow.png");
 	_lightWhite = QImage(":/marine/light-white.png");
 	_lightOffset = QPoint(11, 11);
+	_arrows[Road] = Util::svg2img(":/symbols/oneway.svg", ratio);
+	_arrows[Water] = Util::svg2img(":/symbols/flow.svg", ratio);
 
 	defaultLineStyle(ratio);
 	defaultPolygonStyle();

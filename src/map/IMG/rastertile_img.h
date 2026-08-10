@@ -87,15 +87,14 @@ private:
 
 	void processPolygons(const QList<MapData::Poly> &polygons,
 	  QList<TextItem*> &textItems);
-	void processLines(QList<MapData::Poly> &lines, QList<TextItem*> &textItems,
-	  const QImage (&arrows)[2]);
+	void processLines(QList<MapData::Poly> &lines, QList<TextItem*> &textItems);
 	void processPoints(QList<MapData::Point> &points,
 	  QList<TextItem*> &textItems, QList<TextItem*> &lights,
 	  QList<const MapData::Point*> &sectorLights);
 	void processShields(const QList<MapData::Poly> &lines,
 	  QList<TextItem*> &textItems);
 	void processStreetNames(const QList<MapData::Poly> &lines,
-	  QList<TextItem*> &textItems, const QImage (&arrows)[2]);
+	  QList<TextItem*> &textItems);
 
 	const QFont *poiFont(Style::FontSize size = Style::Normal,
 	  int zoom = -1, bool extended = false) const;
