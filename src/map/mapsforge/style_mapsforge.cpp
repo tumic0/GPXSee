@@ -4,6 +4,7 @@
 #include <QFileInfo>
 #include <QImageReader>
 #include <QPainter>
+#include <QDir>
 #include <QtMath>
 #include "common/programpaths.h"
 #include "style_mapsforge.h"
@@ -16,7 +17,7 @@ static QString resourcePath(const QString &src, const QString &dir)
 	if (url.scheme().isEmpty())
 		return src;
 	else
-		return dir + "/" + url.toLocalFile();
+		return QDir(dir).absoluteFilePath(url.toLocalFile());
 }
 
 static QImage image(const QString &path, int width, int height, int percent,

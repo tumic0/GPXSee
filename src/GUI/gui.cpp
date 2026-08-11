@@ -1490,8 +1490,8 @@ void GUI::exportPNGFile()
 		plotGraphsPage(&p2, contentRect, 1);
 
 		QFileInfo fi(_pngExport.fileName);
-		img2.save(fi.absolutePath() + "/" + fi.baseName() + "-graphs."
-		  + fi.suffix(), "png");
+		img2.save(fi.absoluteDir().absoluteFilePath(fi.baseName() + "-graphs."
+		  + fi.suffix()), "png");
 	}
 }
 

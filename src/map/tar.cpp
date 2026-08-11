@@ -1,6 +1,7 @@
 #include <cctype>
 #include <QFile>
 #include <QFileInfo>
+#include <QDir>
 #include "tar.h"
 
 
@@ -55,7 +56,8 @@ bool Tar::open()
 		return true;
 
 	QFileInfo fi(_file.fileName());
-	QString tmiPath = fi.path() + "/" + fi.completeBaseName() + ".tmi";
+	QString tmiPath = fi.absoluteDir().absoluteFilePath(fi.completeBaseName()
+	  + ".tmi");
 
 	if (loadTmi(tmiPath))
 		return true;
