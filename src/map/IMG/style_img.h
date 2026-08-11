@@ -115,7 +115,8 @@ public:
 	  = Style::Normal) const;
 	const QImage *light(Light::Color color) const;
 	const QPoint &lightOffset() const {return _lightOffset;}
-	const QImage *arrow(quint32 type) const;
+	const QImage *arrow(quint32 type) const
+	  {return isWaterLine(type) ? &_arrowWater : &_arrowRoad;}
 
 	static bool isPOI(quint32 type)
 	  {return !((type >= TYPE(0x01) && type <= TYPE(0x1f))
@@ -174,8 +175,6 @@ public:
 	static QColor color(Light::Color c);
 
 private:
-	enum ArrowType {Road, Water};
-
 	struct Section {
 		quint32 offset;
 		quint32 size;
@@ -221,9 +220,9 @@ private:
 	/* Fonts and images must be initialized after QGuiApplication! */
 	QFont _large, _normal, _small, _extraSmall;
 
+	QImage _arrowRoad, _arrowWater;
 	QImage _light, _lightRed, _lightGreen, _lightYellow, _lightWhite;
 	QPoint _lightOffset;
-	QImage _arrows[2];
 };
 
 }

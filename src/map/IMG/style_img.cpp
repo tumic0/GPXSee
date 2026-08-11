@@ -1471,8 +1471,8 @@ Style::Style(qreal ratio, const SubFile *typ)
 	_lightYellow = QImage(":/marine/light-yellow.png");
 	_lightWhite = QImage(":/marine/light-white.png");
 	_lightOffset = QPoint(11, 11);
-	_arrows[Road] = Util::svg2img(":/symbols/oneway.svg", ratio);
-	_arrows[Water] = Util::svg2img(":/symbols/flow.svg", ratio);
+	_arrowRoad = Util::svg2img(":/symbols/oneway.svg", ratio);
+	_arrowWater = Util::svg2img(":/symbols/flow.svg", ratio);
 
 	defaultLineStyle(ratio);
 	defaultPolygonStyle();
@@ -1558,11 +1558,6 @@ QColor Style::color(Light::Color c)
 		default:
 			return Qt::magenta;
 	}
-}
-
-const QImage *Style::arrow(quint32 type) const
-{
-	return isWaterLine(type) ? &_arrows[Water] : &_arrows[Road];
 }
 
 #ifndef QT_NO_DEBUG
