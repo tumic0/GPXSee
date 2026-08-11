@@ -1560,6 +1560,11 @@ QColor Style::color(Light::Color c)
 	}
 }
 
+const QImage *Style::arrow(quint32 type) const
+{
+	return isWaterLine(type) ? &_arrows[Water] : &_arrows[Road];
+}
+
 #ifndef QT_NO_DEBUG
 static QString penColor(const QPen &pen)
 {

@@ -105,8 +105,6 @@ public:
 		QPoint _offset;
 	};
 
-	enum ArrowType {Road, Water};
-
 	Style(qreal ratio, const SubFile *typ = 0);
 
 	const Line &line(quint32 type) const;
@@ -117,7 +115,7 @@ public:
 	  = Style::Normal) const;
 	const QImage *light(Light::Color color) const;
 	const QPoint &lightOffset() const {return _lightOffset;}
-	const QImage &arrow(ArrowType type) const {return _arrows[type];}
+	const QImage *arrow(quint32 type) const;
 
 	static bool isPOI(quint32 type)
 	  {return !((type >= TYPE(0x01) && type <= TYPE(0x1f))
@@ -176,6 +174,8 @@ public:
 	static QColor color(Light::Color c);
 
 private:
+	enum ArrowType {Road, Water};
+
 	struct Section {
 		quint32 offset;
 		quint32 size;

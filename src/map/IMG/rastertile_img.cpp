@@ -392,8 +392,7 @@ void RasterTile::processStreetNames(const QList<MapData::Poly> &lines,
 			? 0 : &textColor;
 		const QColor *hColor = Style::isContourLine(poly.type) ? 0 : &haloColor;
 		const QImage *img = (poly.flags & MapData::Poly::OneWay)
-		  ? Style::isWaterLine(poly.type)
-			? &_style->arrow(Style::Water) : &_style->arrow(Style::Road) : 0;
+		  ? _style->arrow(poly.type) : 0;
 		const QString *label = poly.label.text().isEmpty()
 		  ? 0 : &poly.label.text();
 
