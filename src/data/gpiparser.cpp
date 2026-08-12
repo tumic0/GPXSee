@@ -396,9 +396,9 @@ static quint32 readImageInfo(DataStream &stream, Waypoint &waypoint,
 		QImageReader ir(&buf);
 
 		QByteArray id(fileName.toUtf8() + QByteArray::number(imgId++));
-		QFile imgFile(Util::tempDir().path() + "/" + QString("%0.%1").arg(
-		  QCryptographicHash::hash(id, QCryptographicHash::Sha1).toHex(),
-		  QString(ir.format())));
+		QFile imgFile(QDir(Util::tempDir().path()).absoluteFilePath(
+		  QString("%0.%1").arg(QCryptographicHash::hash(id,
+		  QCryptographicHash::Sha1).toHex(), QString(ir.format()))));
 		if (imgFile.open(QIODevice::WriteOnly)) {
 			if (imgFile.write(ba) == ba.size())
 				waypoint.addImage(imgFile.fileName());

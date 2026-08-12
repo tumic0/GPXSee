@@ -573,9 +573,9 @@ void KMLParser::photoOverlay(const Ctx &ctx, QVector<Waypoint> &waypoints,
 			if (Util::tempDir().isValid()) {
 				QFileInfo fi(img);
 				QByteArray id(ctx.path.toUtf8() + img.toUtf8());
-				QString path(Util::tempDir().path() + "/" + QString("%0.%1")
-				  .arg(QCryptographicHash::hash(id, QCryptographicHash::Sha1)
-				  .toHex(), QString(fi.suffix())));
+				QString path(QDir(Util::tempDir().path()).absoluteFilePath(
+				  QString("%0.%1").arg(QCryptographicHash::hash(id,
+				  QCryptographicHash::Sha1).toHex(), fi.suffix())));
 
 				QByteArray ba(ctx.zip->file(img));
 				if (!ba.isEmpty()) {
