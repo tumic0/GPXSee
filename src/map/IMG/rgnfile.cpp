@@ -921,7 +921,7 @@ bool RGNFile::pointObjects(Handle &hdl, const SubDiv *subdiv,
 			point.label = lbl->label(lblHdl, labelPtr & 0x3FFFFF,
 			  labelPtr & 0x400000, !(Style::isCountry(point.type)
 			  || Style::isState(point.type)), Style::isSpot(point.type)
-			  || Style::isSummit(point.type));
+			  || Style::isLandFeature(point.type));
 		point.id = pointId(pos, point.type, point.label.text());
 
 		points->append(point);

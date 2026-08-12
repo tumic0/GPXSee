@@ -136,8 +136,8 @@ public:
 	  {return (type == TYPE(0x16) || type == 0x10a03);}
 	static bool isSpot(quint32 type)
 	  {return (type == TYPE(0x62) || type == TYPE(0x63));}
-	static bool isSummit(quint32 type)
-	  {return (type == 0x6616);}
+	static bool isLandFeature(quint32 type)
+	  {return (type >= 0x6600 && type <= 0x6618);}
 	static bool isMajorRoad(quint32 type)
 	  {return (type <= TYPE(0x04));}
 	static bool isCountry(quint32 type)
