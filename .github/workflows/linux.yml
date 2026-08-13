@@ -8,7 +8,7 @@ on:
 jobs:
   build:
     name: GPXSee
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         config: ['release', 'debug']
