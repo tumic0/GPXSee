@@ -8,7 +8,7 @@ on:
 jobs:
   build:
     name: GPXSee
-    runs-on: macos-26
+    runs-on: macos-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v7
