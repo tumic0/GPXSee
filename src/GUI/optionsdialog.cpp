@@ -854,6 +854,8 @@ OptionsDialog::OptionsDialog(Options &options, Units units, QWidget *parent)
 	pages->addWidget(createSystemPage(macos));
 
 	QListWidget *menu = new QListWidget();
+	if (macos)
+		menu->setFrameShape(QFrame::NoFrame);
 	menu->setIconSize(QSize(MENU_ICON_SIZE, MENU_ICON_SIZE));
 #ifdef Q_OS_ANDROID
 	new QListWidgetItem(QIcon(APPEARANCE_ICON), QString(), menu);
