@@ -72,17 +72,17 @@
     <message>
         <location filename="../src/map/coros4map.cpp" line="401"/>
         <source>All</source>
-        <translation type="unfinished">모두</translation>
+        <translation>모두</translation>
     </message>
     <message>
         <location filename="../src/map/coros4map.cpp" line="401"/>
         <source>Landscape</source>
-        <translation type="unfinished">가로</translation>
+        <translation>가로</translation>
     </message>
     <message>
         <location filename="../src/map/coros4map.cpp" line="401"/>
         <source>Topo</source>
-        <translation type="unfinished"></translation>
+        <translation>Topo</translation>
     </message>
 </context>
 <context>
@@ -90,17 +90,17 @@
     <message>
         <location filename="../src/map/coros5map.cpp" line="468"/>
         <source>All</source>
-        <translation type="unfinished">모두</translation>
+        <translation>모두</translation>
     </message>
     <message>
         <location filename="../src/map/coros5map.cpp" line="468"/>
         <source>Landscape</source>
-        <translation type="unfinished">가로</translation>
+        <translation>가로</translation>
     </message>
     <message>
         <location filename="../src/map/coros5map.cpp" line="468"/>
         <source>Topo</source>
-        <translation type="unfinished"></translation>
+        <translation>Topo</translation>
     </message>
 </context>
 <context>
@@ -168,12 +168,12 @@
     <message>
         <location filename="../src/data/data.cpp" line="284"/>
         <source>MP4 videos</source>
-        <translation type="unfinished"></translation>
+        <translation>MP4 비디오</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="290"/>
         <source>GPMF files</source>
-        <translation type="unfinished"></translation>
+        <translation>GPMF 파일</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="285"/>
@@ -208,7 +208,7 @@
     <message>
         <location filename="../src/data/data.cpp" line="293"/>
         <source>DJI SRT files</source>
-        <translation type="unfinished"></translation>
+        <translation>DJI SRT 파일</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="294"/>
@@ -453,7 +453,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="245"/>
         <source>Browse directory...</source>
-        <translation type="unfinished"></translation>
+        <translation>디렉터리 탐색...</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="251"/>
@@ -614,7 +614,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="486"/>
         <source>Track waypoints</source>
-        <translation type="unfinished"></translation>
+        <translation>웨이포인트 추적</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="491"/>
@@ -649,7 +649,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="520"/>
         <source>Video preview</source>
-        <translation type="unfinished"></translation>
+        <translation>비디오 미리보기</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="525"/>
@@ -715,13 +715,13 @@
         <location filename="../src/GUI/gui.cpp" line="600"/>
         <location filename="../src/GUI/gui.cpp" line="1085"/>
         <source>Next graph tab</source>
-        <translation type="unfinished"></translation>
+        <translation>다음 그래프 탭</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="607"/>
         <location filename="../src/GUI/gui.cpp" line="1087"/>
         <source>Previous graph tab</source>
-        <translation type="unfinished"></translation>
+        <translation>이전 그래프 탭</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="617"/>
@@ -820,7 +820,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="788"/>
         <source>Styles</source>
-        <translation type="unfinished"></translation>
+        <translation>스타일</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="791"/>
@@ -1405,7 +1405,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="190"/>
         <source>COROS maps</source>
-        <translation type="unfinished"></translation>
+        <translation>COROS 지도</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="192"/>
@@ -1455,7 +1455,7 @@
     <message>
         <location filename="../src/map/maplist.cpp" line="205"/>
         <source>PMTiles maps</source>
-        <translation type="unfinished"></translation>
+        <translation>PMTiles 지도</translation>
     </message>
     <message>
         <location filename="../src/map/maplist.cpp" line="207"/>
@@ -1536,12 +1536,12 @@
     <message>
         <location filename="../src/map/onlinemap.cpp" line="356"/>
         <source>All</source>
-        <translation type="unfinished">모두</translation>
+        <translation>모두</translation>
     </message>
     <message>
         <location filename="../src/map/onlinemap.cpp" line="356"/>
         <source>Basemap only</source>
-        <translation type="unfinished"></translation>
+        <translation>기본 지도만</translation>
     </message>
 </context>
 <context>
@@ -1549,7 +1549,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="68"/>
         <source>Select the proper coordinate reference system (CRS) of maps without a CRS definition (JNX, KMZ and World file maps).</source>
-        <translation>CRS 정의가 없는 지도 (JNX, KMZ 및 World 파일 맵)의 적절한 좌표 참조 시스템(CRS)을 선택합니다.</translation>
+        <translation>CRS 정의가 없는 지도 (JNX, KMZ 및 World 파일 지도)의 적절한 좌표 참조 시스템 (CRS)을 선택합니다.</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="71"/>
@@ -2795,7 +2795,7 @@
     <message>
         <location filename="../src/GUI/waypointitem.cpp" line="75"/>
         <source>File</source>
-        <translation type="unfinished">파일</translation>
+        <translation>파일</translation>
     </message>
 </context>
 </TS>
