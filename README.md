@@ -47,6 +47,10 @@ make # nmake on Windows
 * [Linux packages](https://software.opensuse.org/download.html?project=home%3Atumic%3AGPXSee&package=gpxsee)
 * [Android APKs](https://play.google.com/store/apps/details?id=org.gpxsee.gpxsee)
 
+_Warning: Never use the Flatpak version from flathub.org which is crippled by
+design. Several fundamental features like file browsing and many file formats
+are broken in the Flatpak package!_
+
 ## Changelog
 [Changelog](https://build.opensuse.org/package/view_file/home:tumic:GPXSee/gpxsee/gpxsee.changes)
 
