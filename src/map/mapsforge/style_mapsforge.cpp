@@ -14,17 +14,21 @@ using namespace Mapsforge;
 static QString resourcePath(const QString &src, const QString &dir)
 {
 	QUrl url(src);
-	if (url.scheme().isEmpty())
-		return src;
-	else
-		return QDir(dir).absoluteFilePath(url.toLocalFile());
+
+	return (url.scheme().isEmpty())
+	  ? QDir(dir).absoluteFilePath(src)
+	  : QDir(dir).absoluteFilePath(url.toLocalFile());
 }
 
 static QImage image(const QString &path, int width, int height, int percent,
   qreal ratio)
 {
-	QImageReader ir(path, "svg");
+	if (!QFileInfo::exists(path)) {
+		qWarning("%s: no such file", qUtf8Printable(path));
+		return QImage();
+	}
 
+	QImageReader ir(path, "svg");
 	if (ir.canRead()) {
 		QSize s(ir.size());
 
