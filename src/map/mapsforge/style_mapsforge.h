@@ -110,10 +110,9 @@ public:
 				_filters.append(filter);
 		}
 
-		bool match(int zoom, Type type, Closed closed,
+		bool matchPath(int zoom, bool closed,
 		  const QVector<MapData::Tag> &tags) const;
-		bool match(int zoom, bool closed,
-		  const QVector<MapData::Tag> &tags) const;
+		bool match(int zoom, bool path, const QVector<MapData::Tag> &tags) const;
 		bool match(int zoom, const QVector<MapData::Tag> &tags) const;
 
 		friend class Style;
@@ -269,7 +268,7 @@ public:
 
 	QList<const PathRender *> paths(int zoom, bool closed,
 	  const QVector<MapData::Tag> &tags) const;
-	QList<const CircleRender *> circles(int zoom,
+	QList<const CircleRender *> circles(int zoom, bool path,
 	  const QVector<MapData::Tag> &tags) const;
 	QList<const TextRender*> pathLabels(int zoom) const;
 	QList<const TextRender*> labels(int zoom) const;

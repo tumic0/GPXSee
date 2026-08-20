@@ -328,7 +328,7 @@ void RasterTile::circleInstructions(const QList<MapData::Point> &points,
 
 		if (!(ri = cache.object(key))) {
 			ri = new QList<const Style::CircleRender*>(_style->circles(_zoom,
-			  point.tags));
+			  point.center(), point.tags));
 			for (int j = 0; j < ri->size(); j++)
 				instructions.append(RenderInstruction(ri->at(j), &point));
 			cache.insert(key, ri);

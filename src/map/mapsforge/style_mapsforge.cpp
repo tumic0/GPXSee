@@ -198,7 +198,7 @@ bool Style::Rule::matchPath(bool closed, const QVector<MapData::Tag> &tags) cons
 	return true;
 }
 
-bool Style::Rule::match(int zoom, bool closed,
+bool Style::Rule::matchPath(int zoom, bool closed,
   const QVector<MapData::Tag> &tags) const
 {
 	Closed cl = closed ? YesClosed : NoClosed;
@@ -206,6 +206,23 @@ bool Style::Rule::match(int zoom, bool closed,
 	if (!_zooms.contains(zoom))
 		return false;
 	if (_closed && cl != _closed)
+		return false;
+
+	for (int i = 0; i < _filters.size(); i++)
+		if (!_filters.at(i).match(tags))
+			return false;
+
+	return true;
+}
+
+bool Style::Rule::match(int zoom, bool path,
+  const QVector<MapData::Tag> &tags) const
+{
+	Type type = path ? WayType : NodeType;
+
+	if (!(_type == Rule::AnyType || _type == type))
+		return false;
+	if (!_zooms.contains(zoom))
 		return false;
 
 	for (int i = 0; i < _filters.size(); i++)
@@ -910,19 +927,19 @@ QList<const Style::PathRender *> Style::paths(int zoom, bool closed,
 	QList<const PathRender*> ri;
 
 	for (int i = 0; i < _paths.size(); i++)
-		if (_paths.at(i).rule().match(zoom, closed, tags))
+		if (_paths.at(i).rule().matchPath(zoom, closed, tags))
 			ri.append(&_paths.at(i));
 
 	return ri;
 }
 
-QList<const Style::CircleRender *> Style::circles(int zoom,
+QList<const Style::CircleRender *> Style::circles(int zoom, bool path,
   const QVector<MapData::Tag> &tags) const
 {
 	QList<const CircleRender*> ri;
 
 	for (int i = 0; i < _circles.size(); i++)
-		if (_circles.at(i).rule().match(zoom, tags))
+		if (_circles.at(i).rule().match(zoom, path, tags))
 			ri.append(&_circles.at(i));
 
 	return ri;
