@@ -209,10 +209,10 @@
     <!-- Borders -->
     <rule e="way" k="admin_level" v="2">
         <rule e="any" k="*" v="*" zoom-max="13">
-            <line stroke="#505145" stroke-dasharray="6, 6, 2, 6" stroke-width="2" stroke-linecap="butt"/>
+            <line stroke="#505145" stroke-dasharray="6,6,2,6" stroke-width="2" stroke-linecap="butt"/>
         </rule>
         <rule e="any" k="*" v="*" zoom-min="14">
-            <line stroke="#505145" stroke-dasharray="15, 15, 5, 15" stroke-width="1" stroke-linecap="butt"/>
+            <line stroke="#505145" stroke-dasharray="15,15,5,15" stroke-width="1" stroke-linecap="butt"/>
         </rule>
     </rule>
 
