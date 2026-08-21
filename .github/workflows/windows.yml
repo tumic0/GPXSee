@@ -36,6 +36,9 @@ jobs:
       - name: Build project
         run: nmake release
       - name: Create installer
+        env:
+          CERTIFICATE: ${{secrets.CERTIFICATE}}
+          CERTIFICATE_PWD: ${{secrets.CERTIFICATE_PWD}}
         run: |
           md installer
           copy release\GPXSee.exe installer
@@ -47,17 +50,10 @@ jobs:
           xcopy lang\*.qm installer\translations\ /sy
           xcopy icons\symbols installer\symbols /i
           copy licence.txt installer
-          makensis /D${{matrix.arch}} installer\gpxsee64.nsi
-      - name: Code Signing
-        env:
-          CERTIFICATE: ${{secrets.CERTIFICATE}}
-          CERTIFICATE_PWD: ${{secrets.CERTIFICATE_PWD}}
-        if: env.CERTIFICATE
-        run: |
           md certificate
           echo "$env:CERTIFICATE" > certificate\certificate.txt
           certutil -decode certificate\certificate.txt certificate\certificate.pfx
-          signtool sign /f certificate\certificate.pfx /fd SHA256 /p "$env:CERTIFICATE_PWD" /tr "http://timestamp.acs.microsoft.com" /td SHA256 installer\GPXSee-*.exe
+          makensis /D${{matrix.arch}} /DCERT="certificate\certificate.pfx" /DPWD="$env:CERTIFICATE_PWD" installer\gpxsee64.nsi
       - name: Upload artifacts
         uses: actions/upload-artifact@v7
         with:

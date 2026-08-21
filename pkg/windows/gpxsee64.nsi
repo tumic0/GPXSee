@@ -66,6 +66,15 @@ OutFile "GPXSee-${VERSION}_${ARCH}.exe"
 ; Compression method
 SetCompressor /SOLID lzma
 
+; Code signing
+!ifdef CERT
+!ifdef PWD
+!define TIMESTAMP_URL "http://timestamp.acs.microsoft.com"
+!finalize 'signtool sign /f ${CERT} /p ${PWD} /tr ${TIMESTAMP_URL} /td sha256 /fd sha256 "%1"' = 0
+!uninstfinalize 'signtool sign /f ${CERT} /p ${PWD} /tr ${TIMESTAMP_URL} /td sha256 /fd sha256 "%1"' = 0
+!endif
+!endif
+
 ; Required execution level
 RequestExecutionLevel admin
 
