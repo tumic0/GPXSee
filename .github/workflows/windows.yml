@@ -52,7 +52,8 @@ jobs:
           copy licence.txt installer
           echo "$env:CERTIFICATE" > installer\certificate.txt
           certutil -decode installer\certificate.txt installer\certificate.pfx
-          makensis /D${{matrix.arch}} /DCERT="certificate.pfx" /DPWD="$env:CERTIFICATE_PWD" installer\gpxsee64.nsi
+          signtool sign /f installer\certificate.pfx /p "$env:CERTIFICATE_PWD" /tr "http://timestamp.acs.microsoft.com" /fd SHA256 /td SHA256 installer\GPXSee.exe
+          makensis /D${{matrix.arch}} /DCERT="certificate.pfx" /DPWD="$env:CERTIFICATE_PWD" /DTIMESTAMP="http://timestamp.acs.microsoft.com" installer\gpxsee64.nsi
       - name: Upload artifacts
         uses: actions/upload-artifact@v7
         with:
