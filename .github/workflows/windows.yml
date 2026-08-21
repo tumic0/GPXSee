@@ -50,10 +50,9 @@ jobs:
           xcopy lang\*.qm installer\translations\ /sy
           xcopy icons\symbols installer\symbols /i
           copy licence.txt installer
-          md certificate
-          echo "$env:CERTIFICATE" > certificate\certificate.txt
-          certutil -decode certificate\certificate.txt certificate\certificate.pfx
-          makensis /D${{matrix.arch}} /DCERT="certificate\certificate.pfx" /DPWD="$env:CERTIFICATE_PWD" installer\gpxsee64.nsi
+          echo "$env:CERTIFICATE" > installer\certificate.txt
+          certutil -decode installer\certificate.txt installer\certificate.pfx
+          makensis /D${{matrix.arch}} /DCERT="certificate.pfx" /DPWD="$env:CERTIFICATE_PWD" installer\gpxsee64.nsi
       - name: Upload artifacts
         uses: actions/upload-artifact@v7
         with:
