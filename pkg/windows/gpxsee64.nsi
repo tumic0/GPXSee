@@ -1,6 +1,7 @@
 ﻿!include "MUI2.nsh"
 !include "x64.nsh"
 !include "WinVer.nsh"
+!include "TextFunc.nsh"
 
 
 ; Macros
@@ -151,7 +152,79 @@ Section "GPXSee" SEC_APP
   File /r "style"
   File /r "CRS"
   File /r "symbols"
+SectionEnd
 
+Section "Qt" SEC_QT
+  SectionIn RO
+  SetOutPath $INSTDIR
+
+  File "Qt6Concurrent.dll"
+  File "Qt6Core.dll"
+  File "Qt6Gui.dll"
+  File "Qt6Network.dll"
+  File "Qt6OpenGL.dll"
+  File "Qt6OpenGLWidgets.dll"
+  File "Qt6PrintSupport.dll"
+  File "Qt6Sql.dll"
+  File "Qt6Svg.dll"
+  File "Qt6Widgets.dll"
+  File "Qt6Positioning.dll"
+  File "Qt6SerialPort.dll"
+  File "Qt6Multimedia.dll"
+  File "Qt6MultimediaWidgets.dll"
+  File /r "tls"
+  File /r "platforms"
+  File /r "iconengines"
+  File /r "imageformats"
+  File /r "styles"
+  File /r "sqldrivers"
+  File /r "position"
+  File /r "multimedia"
+SectionEnd
+
+Section "FFmpeg" SEC_FFMPEG
+  SectionIn RO
+  SetOutPath $INSTDIR
+
+  File avcodec-*.dll
+  File avformat-*.dll
+  File avutil-*.dll
+  File swresample-*.dll
+  File swscale-*.dll
+SectionEnd
+
+Section "MSVC runtime" SEC_MSVC
+  SectionIn RO
+  SetOutPath $TEMP
+
+  File "vc_redist.${ARCH}.exe"
+  ExecWait '"$TEMP\vc_redist.${ARCH}.exe" /install /quiet /norestart'
+SectionEnd
+
+SectionGroup "Localization" SEC_LOCALIZATION
+  !insertmacro LOCALIZATION "Catalan" "ca"
+  !insertmacro LOCALIZATION "Chinese (Simplified)" "zh_CN"
+  !insertmacro LOCALIZATION "Czech" "cs"
+  !insertmacro LOCALIZATION "Danish" "da"
+  !insertmacro LOCALIZATION "English" "en"
+  !insertmacro LOCALIZATION "Esperanto" "eo"
+  !insertmacro LOCALIZATION "Finnish" "fi"
+  !insertmacro LOCALIZATION "French" "fr"
+  !insertmacro LOCALIZATION "German" "de"
+  !insertmacro LOCALIZATION "Hungarian" "hu"
+  !insertmacro LOCALIZATION "Italian" "it"
+  !insertmacro LOCALIZATION "Korean" "ko"
+  !insertmacro LOCALIZATION "Norwegian" "nb"
+  !insertmacro LOCALIZATION "Polish" "pl"
+  !insertmacro LOCALIZATION "Portuguese (Brazil)" "pt_BR"
+  !insertmacro LOCALIZATION "Russian" "ru"
+  !insertmacro LOCALIZATION "Spanish" "es"
+  !insertmacro LOCALIZATION "Swedish" "sv"
+  !insertmacro LOCALIZATION "Turkish" "tr"
+  !insertmacro LOCALIZATION "Ukrainian" "uk"
+SectionGroupEnd
+
+Section "-PostInstall"
   ; Create the uninstaller
   WriteUninstaller "$INSTDIR\uninstall.exe"
   
@@ -178,6 +251,8 @@ Section "GPXSee" SEC_APP
   WriteRegStr HKLM "${REGENTRY}" "URLInfoAbout" "https://www.gpxsee.org"
   WriteRegDWORD HKLM "${REGENTRY}" "NoModify" 1
   WriteRegDWORD HKLM "${REGENTRY}" "NoRepair" 1
+  ${GetSize} "$INSTDIR" "/S=0K" $0 $1 $2
+  WriteRegDWORD HKLM "${REGENTRY}" "EstimatedSize" $0
 
   ; Associate file formats
   DetailPrint "Associating file types..."
@@ -297,76 +372,6 @@ Section "GPXSee" SEC_APP
 
   System::Call 'shell32.dll::SHChangeNotify(i, i, i, i) v (0x08000000, 0, 0, 0)'
 SectionEnd
-
-Section "Qt" SEC_QT
-  SectionIn RO
-  SetOutPath $INSTDIR
-
-  File "Qt6Concurrent.dll"
-  File "Qt6Core.dll"
-  File "Qt6Gui.dll"
-  File "Qt6Network.dll"
-  File "Qt6OpenGL.dll"
-  File "Qt6OpenGLWidgets.dll"
-  File "Qt6PrintSupport.dll"
-  File "Qt6Sql.dll"
-  File "Qt6Svg.dll"
-  File "Qt6Widgets.dll"
-  File "Qt6Positioning.dll"
-  File "Qt6SerialPort.dll"
-  File "Qt6Multimedia.dll"
-  File "Qt6MultimediaWidgets.dll"
-  File /r "tls"
-  File /r "platforms"
-  File /r "iconengines"
-  File /r "imageformats"
-  File /r "styles"
-  File /r "sqldrivers"
-  File /r "position"
-  File /r "multimedia"
-SectionEnd
-
-Section "FFmpeg" SEC_FFMPEG
-  SectionIn RO
-  SetOutPath $INSTDIR
-
-  File avcodec-*.dll
-  File avformat-*.dll
-  File avutil-*.dll
-  File swresample-*.dll
-  File swscale-*.dll
-SectionEnd
-
-Section "MSVC runtime" SEC_MSVC
-  SectionIn RO
-  SetOutPath $TEMP
-
-  File "vc_redist.${ARCH}.exe"
-  ExecWait '"$TEMP\vc_redist.${ARCH}.exe" /install /quiet /norestart'
-SectionEnd
-
-SectionGroup "Localization" SEC_LOCALIZATION
-  !insertmacro LOCALIZATION "Catalan" "ca"
-  !insertmacro LOCALIZATION "Chinese (Simplified)" "zh_CN"
-  !insertmacro LOCALIZATION "Czech" "cs"
-  !insertmacro LOCALIZATION "Danish" "da"
-  !insertmacro LOCALIZATION "English" "en"
-  !insertmacro LOCALIZATION "Esperanto" "eo"
-  !insertmacro LOCALIZATION "Finnish" "fi"
-  !insertmacro LOCALIZATION "French" "fr"
-  !insertmacro LOCALIZATION "German" "de"
-  !insertmacro LOCALIZATION "Hungarian" "hu"
-  !insertmacro LOCALIZATION "Italian" "it"
-  !insertmacro LOCALIZATION "Korean" "ko"
-  !insertmacro LOCALIZATION "Norwegian" "nb"
-  !insertmacro LOCALIZATION "Polish" "pl"
-  !insertmacro LOCALIZATION "Portuguese (Brazil)" "pt_BR"
-  !insertmacro LOCALIZATION "Russian" "ru"
-  !insertmacro LOCALIZATION "Spanish" "es"
-  !insertmacro LOCALIZATION "Swedish" "sv"
-  !insertmacro LOCALIZATION "Turkish" "tr"
-  !insertmacro LOCALIZATION "Ukrainian" "uk"
-SectionGroupEnd
 
 ;--------------------------------
 
