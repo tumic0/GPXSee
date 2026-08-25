@@ -20,6 +20,33 @@ static qint16 limit(const DEMTile *tile, quint16 factor)
 	return l;
 }
 
+static inline qint16 ft2m(qint16 val)
+{
+	return (qint16)qRound(val * 0.3048);
+}
+
+static Matrix<qint16> &adjust(Matrix<qint16> &m, quint16 limit, qint16 base,
+  qint16 minHeight, qint16 maxHeight, bool convert)
+{
+	for (int i = 0; i < m.size(); i++) {
+		qint16 &v = m.at(i);
+
+		if (v >= limit)
+			v = -32768;
+		else {
+			v += base;
+			if (v < minHeight)
+				v = minHeight;
+			if (v > maxHeight)
+				v = maxHeight;
+			if (convert)
+				v = ft2m(v);
+		}
+	}
+
+	return m;
+}
+
 void DEMFile::clear()
 {
 	_levels = QVector<Level>();
@@ -155,33 +182,19 @@ MapData::Elevation *DEMFile::elevations(Handle &hdl, int level,
 	ele->yr = l.yr;
 
 	if (!tile->diff()) {
-		ele->m = Matrix<qint16>(tile->h(), tile->w(),
-		  tile->flags() ? -32768 : meters(tile->base()));
+		ele->m = Matrix<qint16>(tile->h(), tile->w(), tile->flags() ? -32768 :
+		  (_flags & 1) ? ft2m(tile->base()) : tile->base());
 		return ele;
 	}
 
 	if (!seek(hdl, tile->offset() + l.data))
 		return ele;
 
-	quint16 lim = limit(tile, l.factor);
 	Matrix<qint16> m(tile->h(), tile->w());
 	JLS jls(tile->diff(), l.factor);
-	if (jls.decode(this, hdl, m)) {
-		for (int i = 0; i < m.size(); i++) {
-			if (m.at(i) >= lim)
-				m.at(i) = -32768;
-			else {
-				m.at(i) += tile->base();
-				if (m.at(i) < l.minHeight)
-					m.at(i) = l.minHeight;
-				if (m.at(i) > l.maxHeight)
-					m.at(i) = l.maxHeight;
-				m.at(i) = meters(m.at(i));
-			}
-		}
-
-		ele->m = m;
-	}
+	if (jls.decode(this, hdl, m))
+		ele->m = adjust(m, limit(tile, l.factor), tile->base(), l.minHeight,
+		  l.maxHeight, _flags & 1);
 
 	return ele;
 }
