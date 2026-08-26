@@ -672,8 +672,7 @@ void RasterTile::drawHillShading(QPainter *painter, const MatrixD &dem) const
 		painter->drawImage(_rect.x(), _rect.y(), HillShading::render(
 		  filtered, HillShading::blur() + 1));
 	} else
-		painter->drawImage(_rect.x(), _rect.y(), HillShading::render(
-		  dem, HillShading::blur() + 1));
+		painter->drawImage(_rect.x(), _rect.y(), HillShading::render(dem, 1));
 }
 
 void RasterTile::render()
