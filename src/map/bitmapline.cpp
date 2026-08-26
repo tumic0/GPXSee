@@ -7,11 +7,14 @@
 
 static QImage img2line(const QImage &img, int width, int offset)
 {
+	if (!width)
+		return QImage();
+
 	Q_ASSERT(img.format() == QImage::Format_ARGB32_Premultiplied);
 	QImage res(width, img.height(), QImage::Format_ARGB32_Premultiplied);
 	const int srcBpl = img.bytesPerLine();
 	const int dstBpl = res.bytesPerLine();
-	const uchar *srcBits = img.bits();
+	const uchar *srcBits = img.constBits();
 	uchar *dstBits = res.bits();
 
 	for (int i = 0; i < img.height(); i++) {
