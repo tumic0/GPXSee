@@ -66,7 +66,7 @@ public:
 	private:
 		class Filter {
 		public:
-			Filter() : _type(None) {}
+			Filter() : _type(None), _not(false) {}
 			Filter(const QJsonArray &json);
 
 			bool match(const VectorTile::Feature &feature) const;
