@@ -22,7 +22,7 @@ static qint16 limit(const DEMTile *tile, quint16 factor)
 
 static inline qint16 ft2m(qint16 val)
 {
-	return (qint16)qRound(val * 0.3048);
+	return static_cast<qint16>((val * 381) / 1250);
 }
 
 static Matrix<qint16> &adjust(Matrix<qint16> &m, quint16 limit, qint16 base,
