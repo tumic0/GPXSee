@@ -8,7 +8,7 @@
 #include <QHash>
 #include "common/kv.h"
 
-class QFile;
+class QSaveFile;
 
 typedef KV<QByteArray, QByteArray> HTTPHeader;
 
@@ -67,7 +67,7 @@ private:
 	void downloadFinished(QNetworkReply *reply);
 	void readData(QNetworkReply *reply);
 
-	QHash<QUrl, QFile*> _currentDownloads;
+	QHash<QUrl, QSaveFile*> _currentDownloads;
 	QHash<QUrl, int> _errorDownloads;
 
 	static QNetworkAccessManager *_manager;

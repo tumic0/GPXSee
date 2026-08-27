@@ -1,10 +1,9 @@
-#include <QFile>
 #include <QNetworkRequest>
+#include <QSaveFile>
 #include <QDir>
 #include <QTimerEvent>
 #include "common/config.h"
 #include "downloader.h"
-
 
 #if defined(Q_OS_ANDROID)
 #define PLATFORM_STR "Android"
@@ -27,7 +26,6 @@
 
 #define MAX_REDIRECT_LEVEL 5
 #define RETRIES 3
-#define TMP_SUFFIX ".download"
 
 // QNetworkReply::errorString() returns bullshit, use our own reporting
 static const char *errorString(QNetworkReply::NetworkError error)
@@ -104,16 +102,6 @@ static const char *errorString(QNetworkReply::NetworkError error)
 	}
 }
 
-static QString tmpName(const QString &origName)
-{
-	return origName + TMP_SUFFIX;
-}
-
-static QString origName(const QString &tmpName)
-{
-	return tmpName.left(tmpName.size() - (sizeof(TMP_SUFFIX) - 1));
-}
-
 Authorization::Authorization(const QString &username, const QString &password)
 {
 	QString concatenated = username + ":" + password;
@@ -157,7 +145,7 @@ bool Downloader::doDownload(const Download &dl, const QList<HTTPHeader> &headers
 	if (!userAgent)
 		request.setRawHeader("User-Agent", USER_AGENT);
 
-	QFile *file = new QFile(tmpName(dl.file()));
+	QSaveFile *file = new QSaveFile(dl.file());
 	if (!file->open(QIODevice::WriteOnly)) {
 		qWarning("%s: %s", qUtf8Printable(file->fileName()),
 		  qUtf8Printable(file->errorString()));
@@ -208,15 +196,12 @@ void Downloader::insertError(const QUrl &url, QNetworkReply::NetworkError error)
 
 void Downloader::readData(QNetworkReply *reply)
 {
-	QFile *file = _currentDownloads.value(reply->request().url());
+	QSaveFile *file = _currentDownloads.value(reply->request().url());
 
 	if (file) {
 		QByteArray ba(reply->readAll());
-		if (file->write(ba) != ba.size()) {
-			qWarning("%s: %s", qUtf8Printable(file->fileName()),
-			  qUtf8Printable(file->errorString()));
+		if (file->write(ba) != ba.size())
 			reply->abort();
-		}
 	} else
 		reply->abort();
 }
@@ -225,18 +210,15 @@ void Downloader::downloadFinished(QNetworkReply *reply)
 {
 	QUrl url(reply->request().url());
 	QNetworkReply::NetworkError error = reply->error();
-	QFile *file = _currentDownloads.value(url);
 
 	if (error) {
 		insertError(url, error);
 		qWarning("%s: %s", url.toEncoded().constData(), errorString(error));
-		if (file)
-			file->remove();
 	} else {
-		if (file) {
-			file->close();
-			file->rename(origName(file->fileName()));
-		}
+		QSaveFile *file = _currentDownloads.value(url);
+		if (file && !file->commit())
+			qWarning("%s: %s", qUtf8Printable(file->fileName()),
+			  qUtf8Printable(file->errorString()));
 	}
 
 	_currentDownloads.remove(url);
