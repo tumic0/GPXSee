@@ -191,13 +191,13 @@ public:
 	bool matches(const QStringList &layers) const;
 	bool hasHillShading() const;
 
-	static const QList<const Style *> &styles();
+	static const QList<Style> &styles();
 
 private:
 	QStringList sourceLayers() const;
 
-	static QList<const Style*> loadStyles(const QString &path);
-	static QList<const Style*> loadStyles();
+	static QList<Style> loadStyles(const QString &path);
+	static QList<Style> loadStyles();
 
 	QString _name;
 	QVector<Layer> _layers;

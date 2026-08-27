@@ -676,37 +676,30 @@ bool Style::hasHillShading() const
 	return false;
 }
 
-QList<const Style*> Style::loadStyles(const QString &path)
+QList<Style> Style::loadStyles(const QString &path)
 {
 	QDir dir(path);
 	QFileInfoList styles(dir.entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot));
-	QList<const Style*> list;
+	QList<Style> list;
 
 	for (int i = 0; i < styles.size(); i++) {
 		QDir d(styles.at(i).absoluteFilePath());
-		Style *style = new Style(d.filePath("style.json"));
-		if (style->isValid())
+		Style style(d.filePath("style.json"));
+		if (style.isValid())
 			list.append(style);
-		else
-			delete style;
 	}
 
 	return list;
 }
 
-QList<const Style*> Style::loadStyles()
+QList<Style> Style::loadStyles()
 {
-	QList<const Style*> list;
-
 	QString dir(ProgramPaths::styleDir());
-	if (!dir.isEmpty())
-		list = loadStyles(dir);
-
-	return list;
+	return dir.isEmpty() ? QList<Style>() : loadStyles(dir);
 }
 
-const QList<const Style*> &Style::styles()
+const QList<Style> &Style::styles()
 {
-	static QList<const Style*> list = loadStyles();
+	static QList<Style> list(loadStyles());
 	return list;
 }

@@ -32,13 +32,15 @@ OnlineMap::OnlineMap(const QString &fileName, const QString &name,
 
 const Style *OnlineMap::defaultStyle() const
 {
-	for (int i = 0; i < Style::styles().size(); i++)
-		if (Style::styles().at(i)->matches(_vectorLayers))
-			return Style::styles().at(i);
+	const QList<Style> &styles = Style::styles();
+
+	for (int i = 0; i < styles.size(); i++)
+		if (styles.at(i).matches(_vectorLayers))
+			return &styles.at(i);
 
 	qWarning("%s: no matching MVT style found", qUtf8Printable(path()));
 
-	return Style::styles().isEmpty() ? 0 : Style::styles().first();
+	return styles.isEmpty() ? 0 : &styles.first();
 }
 
 QRectF OnlineMap::bounds()
@@ -117,7 +119,7 @@ void OnlineMap::load(const Projection &in, const Projection &out,
 		if (!_tileType.contains(Raster))
 			_tileRatio = deviceRatio;
 		_style = (style >= 0 && style < Style::styles().size())
-		  ? Style::styles().at(style) : defaultStyle();
+		  ? &Style::styles().at(style) : defaultStyle();
 
 		for (int i = _baseZoom + 1; i <= ZOOMS.max(); i++) {
 			if (_tileSize * _tileRatio * (1U<<(i - _baseZoom)) > MAX_TILE_SIZE)
@@ -327,14 +329,19 @@ QStringList OnlineMap::styles(int &defaultStyle) const
 {
 	QStringList list;
 
-	if (_tileType.contains(MVT)) {
-		list.reserve(Style::styles().size());
-		for (int i = 0; i < Style::styles().size(); i++)
-			list.append(Style::styles().at(i)->name());
+	defaultStyle = -1;
 
-		defaultStyle = Style::styles().indexOf(_style);
-	} else
-		defaultStyle = -1;
+	if (_tileType.contains(MVT)) {
+		const QList<Style> &styles = Style::styles();
+
+		list.reserve(styles.size());
+		for (int i = 0; i < styles.size(); i++) {
+			const Style &s = styles.at(i);
+			list.append(s.name());
+			if (_style == &s)
+				defaultStyle = i;
+		}
+	}
 
 	return list;
 }

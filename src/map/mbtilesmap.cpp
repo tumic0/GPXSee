@@ -36,13 +36,15 @@ static RectC str2bounds(const QString &str)
 
 const Style *MBTilesMap::defaultStyle() const
 {
-	for (int i = 0; i < Style::styles().size(); i++)
-		if (Style::styles().at(i)->matches(_layers))
-			return Style::styles().at(i);
+	const QList<Style> &styles = Style::styles();
+
+	for (int i = 0; i < styles.size(); i++)
+		if (styles.at(i).matches(_layers))
+			return &styles.at(i);
 
 	qWarning("%s: no matching MVT style found", qUtf8Printable(path()));
 
-	return Style::styles().isEmpty() ? 0 : Style::styles().first();
+	return styles.isEmpty() ? 0 : &styles.first();
 }
 
 bool MBTilesMap::getMinZoom(int &zoom)
@@ -268,7 +270,7 @@ void MBTilesMap::load(const Projection &in, const Projection &out,
 	if (_mvt) {
 		_tileRatio = deviceRatio;
 		_style = (style >= 0 && style < Style::styles().size())
-		  ? Style::styles().at(style) : defaultStyle();
+		  ? &Style::styles().at(style) : defaultStyle();
 
 		for (int i = _zooms.last().base + 1; i <= ZOOMS.max(); i++) {
 			Zoom z(i, _zooms.last().base);
@@ -519,14 +521,19 @@ QStringList MBTilesMap::styles(int &defaultStyle) const
 {
 	QStringList list;
 
-	if (_mvt) {
-		list.reserve(Style::styles().size());
-		for (int i = 0; i < Style::styles().size(); i++)
-			list.append(Style::styles().at(i)->name());
+	defaultStyle = -1;
 
-		defaultStyle = Style::styles().indexOf(_style);
-	} else
-		defaultStyle = -1;
+	if (_mvt) {
+		const QList<Style> &styles = Style::styles();
+
+		list.reserve(styles.size());
+		for (int i = 0; i < styles.size(); i++) {
+			const Style &s = styles.at(i);
+			list.append(s.name());
+			if (_style == &s)
+				defaultStyle = i;
+		}
+	}
 
 	return list;
 }

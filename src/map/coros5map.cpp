@@ -146,7 +146,7 @@ void Coros5Map::load(const Projection &in, const Projection &out,
 	_zooms = _zoomsBase;
 	_tileRatio = deviceRatio;
 	_style = (style >= 0 && style < Style::styles().size())
-	  ? Style::styles().at(style) : defaultStyle();
+	  ? &Style::styles().at(style) : defaultStyle();
 	_hillShading = Coros5Map::hillShading() & hillShading;
 
 	for (int i = _zooms.last().base + 1; i <= OSM::ZOOMS.max(); i++) {
@@ -434,25 +434,31 @@ const Style *Coros5Map::defaultStyle() const
 {
 	static const QStringList layers(
 	  {"Q", "F", "N", "I", "K", "J", "P", "H", "A", "L", "B"});
+	const QList<Style> &styles = Style::styles();
 
-	for (int i = 0; i < Style::styles().size(); i++)
-		if (Style::styles().at(i)->matches(layers))
-			return Style::styles().at(i);
+	for (int i = 0; i < styles.size(); i++)
+		if (styles.at(i).matches(layers))
+			return &styles.at(i);
 
 	qWarning("%s: no matching MVT style found", qUtf8Printable(path()));
 
-	return Style::styles().isEmpty() ? 0 : Style::styles().first();
+	return styles.isEmpty() ? 0 : &styles.first();
 }
 
 QStringList Coros5Map::styles(int &defaultStyle) const
 {
+	const QList<Style> &styles = Style::styles();
 	QStringList list;
 
-	list.reserve(Style::styles().size());
-	for (int i = 0; i < Style::styles().size(); i++)
-		list.append(Style::styles().at(i)->name());
+	defaultStyle = -1;
 
-	defaultStyle = Style::styles().indexOf(_style);
+	list.reserve(styles.size());
+	for (int i = 0; i < styles.size(); i++) {
+		const Style &s = styles.at(i);
+		list.append(s.name());
+		if (_style == &s)
+			defaultStyle = i;
+	}
 
 	return list;
 }
