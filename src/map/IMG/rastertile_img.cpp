@@ -345,7 +345,7 @@ void RasterTile::processPolygons(const QList<MapData::Poly> &polygons,
 		  || Style::isNatureReserve(poly.type))) {
 			const Style::Polygon &style = _style->polygon(poly.type);
 			QPointF center(centroid(poly.points));
-			if (qIsNaN(center.x()))
+			if (qIsNaN(center.x()) || qIsInf(center.x()))
 				continue;
 			TextPointItem *item = new TextPointItem(center.toPoint(),
 			  &poly.label.text(), poiFont(), 0, &style.brush().color(),
