@@ -344,9 +344,12 @@ void RasterTile::processPolygons(const QList<MapData::Poly> &polygons,
 		  || Style::isMilitaryArea(poly.type)
 		  || Style::isNatureReserve(poly.type))) {
 			const Style::Polygon &style = _style->polygon(poly.type);
-			TextPointItem *item = new TextPointItem(
-			  centroid(poly.points).toPoint(), &poly.label.text(), poiFont(),
-			  0, &style.brush().color(), &haloColor);
+			QPointF center(centroid(poly.points));
+			if (qIsNaN(center.x()))
+				continue;
+			TextPointItem *item = new TextPointItem(center.toPoint(),
+			  &poly.label.text(), poiFont(), 0, &style.brush().color(),
+			  &haloColor);
 			if (item->isValid() && !item->collides(textItems)
 			  && !item->collides(labels)
 			  && !(exists && _rect.contains(item->boundingRect().toRect()))
