@@ -299,7 +299,7 @@ void RasterTile::pathInstructions(const QList<MapData::Path> &paths,
 	for (int i = 0; i < paths.size(); i++) {
 		const MapData::Path &path = paths.at(i);
 		PainterPath &rp = painterPaths[i];
-		PathKey key(_zoom, path.closed, path.point.tags);
+		PathKey key(path.closed, path.point.tags);
 
 		rp.path = &path;
 
@@ -324,7 +324,7 @@ void RasterTile::circleInstructions(const QList<MapData::Point> &points,
 
 	for (int i = 0; i < points.size(); i++) {
 		const MapData::Point &point = points.at(i);
-		PointKey key(_zoom, point.tags);
+		PointKey key(point.tags);
 
 		if (!(ri = cache.object(key))) {
 			ri = new QList<const Style::CircleRender*>(_style->circles(_zoom,

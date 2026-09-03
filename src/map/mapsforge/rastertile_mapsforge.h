@@ -142,28 +142,24 @@ private:
 	};
 
 	struct PathKey {
-		PathKey(int zoom, bool closed, const QVector<MapData::Tag> &tags)
-		  : zoom(zoom), closed(closed), tags(tags) {}
+		PathKey(bool closed, const QVector<MapData::Tag> &tags)
+		  : closed(closed), tags(tags) {}
 		bool operator==(const PathKey &other) const
 		{
-			return zoom == other.zoom && closed == other.closed
-			  && tags == other.tags;
+			return closed == other.closed && tags == other.tags;
 		}
 
-		int zoom;
 		bool closed;
 		const QVector<MapData::Tag> &tags;
 	};
 
 	struct PointKey {
-		PointKey(int zoom, const QVector<MapData::Tag> &tags)
-		  : zoom(zoom), tags(tags) {}
+		PointKey(const QVector<MapData::Tag> &tags) : tags(tags) {}
 		bool operator==(const PointKey &other) const
 		{
-			return zoom == other.zoom && tags == other.tags;
+			return tags == other.tags;
 		}
 
-		int zoom;
 		const QVector<MapData::Tag> &tags;
 	};
 
@@ -247,12 +243,12 @@ private:
 
 inline HASH_T qHash(const RasterTile::PathKey &key, HASH_T seed = 0)
 {
-	return qHashMulti(seed, key.zoom, key.tags);
+	return qHashMulti(seed, key.closed, key.tags);
 }
 
 inline HASH_T qHash(const RasterTile::PointKey &key, HASH_T seed = 0)
 {
-	return qHashMulti(seed, key.zoom, key.tags);
+	return qHashMulti(seed, key.tags);
 }
 
 }
