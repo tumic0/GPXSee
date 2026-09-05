@@ -87,7 +87,7 @@
     <rule cat="landuse" e="way" closed="yes" k="leisure" v="golf_course" zoom-min="10">
         <area src=":/patterns/golf.svg" symbol-width="7"/>
     </rule>
-    <rule cat="landuse-winter" e="way" closed="yes" k="leisure" v="park|garden" zoom-min="10">
+    <rule cat="landuse-winter" e="way" closed="yes" k="leisure" v="park|garden|golf_course" zoom-min="10">
         <area fill="#f6fbff"/>
     </rule>
     <rule e="way" closed="yes" k="landuse" v="construction|landfill|industrial|farmyard|railway">
@@ -124,13 +124,13 @@
     <rule cat="landuse" e="way" closed="yes" k="landuse" v="grass|greenfield|village_green" zoom-min="10">
         <area fill="#e4efcf"/>
     </rule>
-    <rule cat="landuse-winter" e="way" closed="yes" k="landuse" v="grass|greenfield|village_green" zoom-min="10">
+    <rule cat="landuse-winter" e="way" closed="yes" k="landuse" v="grass|greenfield|village_green|orchard|vineyard" zoom-min="10">
         <area fill="#f6fbff"/>
     </rule>
-    <rule e="way" closed="yes" k="landuse" v="orchard" zoom-min="10">
+    <rule cat="landuse" e="way" closed="yes" k="landuse" v="orchard" zoom-min="10">
         <area src=":/patterns/orchard.svg" symbol-width="7"/>
     </rule>
-    <rule e="way" closed="yes" k="landuse" v="vineyard" zoom-min="10">
+    <rule cat="landuse" e="way" closed="yes" k="landuse" v="vineyard" zoom-min="10">
         <area src=":/patterns/vineyard.svg" symbol-width="7" symbol-height="8"/>
     </rule>
 
