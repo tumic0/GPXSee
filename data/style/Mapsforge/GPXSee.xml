@@ -84,6 +84,9 @@
     <rule cat="landuse" e="way" closed="yes" k="leisure" v="park|garden" zoom-min="10">
         <area fill="#e4efcf"/>
     </rule>
+    <rule cat="landuse" e="way" closed="yes" k="leisure" v="golf_course" zoom-min="10">
+        <area src=":/patterns/golf.svg" symbol-width="7"/>
+    </rule>
     <rule cat="landuse-winter" e="way" closed="yes" k="leisure" v="park|garden" zoom-min="10">
         <area fill="#f6fbff"/>
     </rule>
