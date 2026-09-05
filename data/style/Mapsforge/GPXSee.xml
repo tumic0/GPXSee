@@ -81,6 +81,14 @@
     </rule>
 
     <!-- Landuse -->
+    <rule e="way" closed="yes" k="landuse" v="comercial|residential|retail" zoom-min="10">
+        <rule e="way" k="*" v="*" zoom-min="10" zoom-max="14">
+            <area fill="#e6ded5"/>
+        </rule>
+        <rule e="way" k="*" v="*" zoom-min="15">
+            <area fill="#f2eae1"/>
+        </rule>
+    </rule>
     <rule cat="landuse" e="way" closed="yes" k="leisure" v="park|garden" zoom-min="10">
         <area fill="#e4efcf"/>
     </rule>
@@ -103,14 +111,6 @@
     </rule>
     <rule e="way" closed="yes" k="landuse" v="allotments" zoom-min="10">
         <area fill="#f4e7d5"/>
-    </rule>
-    <rule e="way" closed="yes" k="landuse" v="comercial|residential|retail" zoom-min="10">
-        <rule e="way" k="*" v="*" zoom-min="10" zoom-max="14">
-            <area fill="#e6ded5"/>
-        </rule>
-        <rule e="way" k="*" v="*" zoom-min="15">
-            <area fill="#f2eae1"/>
-        </rule>
     </rule>
     <rule cat="landuse" e="way" closed="yes" k="landuse" v="farmland|meadow" zoom-min="9">
         <area fill="#f5f4e9"/>
