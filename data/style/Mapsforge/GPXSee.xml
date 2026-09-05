@@ -100,10 +100,10 @@
     </rule>
     <rule e="way" closed="yes" k="landuse" v="comercial|residential|retail" zoom-min="10">
         <rule e="way" k="*" v="*" zoom-min="10" zoom-max="14">
-            <area fill="#e4e0d7"/>
+            <area fill="#e6ded5"/>
         </rule>
         <rule e="way" k="*" v="*" zoom-min="15">
-            <area fill="#f4f0e7"/>
+            <area fill="#f2eae1"/>
         </rule>
     </rule>
     <rule cat="landuse" e="way" closed="yes" k="landuse" v="forest|wood" zoom-min="9">
