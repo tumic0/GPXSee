@@ -21,6 +21,7 @@
 		<file alias="military-area.svg">icons/map/patterns/military-area.svg</file>
 		<file alias="nature-reserve.svg">icons/map/patterns/nature-reserve.svg</file>
 		<file alias="orchard.svg">icons/map/patterns/orchard.svg</file>
+		<file alias="quarry.svg">icons/map/patterns/quarry.svg</file>
 		<file alias="vineyard.svg">icons/map/patterns/vineyard.svg</file>
 		<file alias="wetland.svg">icons/map/patterns/wetland.svg</file>
 	</qresource>
