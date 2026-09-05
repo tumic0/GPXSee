@@ -96,7 +96,7 @@
         </rule>
     </rule>
     <rule e="way" closed="yes" k="landuse" v="allotments" zoom-min="10">
-        <area fill="#f0e7d5"/>
+        <area fill="#f4e7d5"/>
     </rule>
     <rule e="way" closed="yes" k="landuse" v="comercial|residential|retail" zoom-min="10">
         <rule e="way" k="*" v="*" zoom-min="10" zoom-max="14">
