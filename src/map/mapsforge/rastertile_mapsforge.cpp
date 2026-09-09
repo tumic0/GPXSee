@@ -120,6 +120,62 @@ static const Style::SymbolRender *filtered(
 	return 0;
 }
 
+static const Style::SymbolRender *filteredPath(
+  const QList<const Style::SymbolRender*> &symbols, bool closed,
+  const QVector<MapData::Tag> &tags)
+{
+	for (int j = 0; j < symbols.size(); j++) {
+		const Style::SymbolRender *ri = symbols.at(j);
+		if (ri->rule().matchPath(closed, tags))
+			return ri;
+	}
+
+	return 0;
+}
+
+static const Style::TextRender *filteredPath(
+  const QList<const Style::TextRender*> &labels, bool closed,
+  const QVector<MapData::Tag> &tags)
+{
+	for (int j = 0; j < labels.size(); j++) {
+		const Style::TextRender *ri = labels.at(j);
+		if (ri->rule().matchPath(closed, tags))
+			return ri;
+	}
+
+	return 0;
+}
+
+static QList<const Style::PathRender *> filteredPath(
+  const QList<const Style::PathRender *> &paths, bool closed,
+  const QVector<MapData::Tag> &tags)
+{
+	QList<const Style::PathRender*> list;
+
+	for (int i = 0; i < paths.size(); i++) {
+		const Style::PathRender *pr = paths.at(i);
+		if (pr->rule().matchPath(closed, tags))
+			list.append(pr);
+	}
+
+	return list;
+}
+
+static QList<const Style::CircleRender *> filtered(
+  const QList<const Style::CircleRender *> &circles, bool path,
+  const QVector<MapData::Tag> &tags)
+{
+	QList<const Style::CircleRender*> list;
+
+	for (int i = 0; i < circles.size(); i++) {
+		const Style::CircleRender *pr = circles.at(i);
+		if (pr->rule().match(path, tags))
+			list.append(pr);
+	}
+
+	return list;
+}
+
 void RasterTile::processLabels(const QList<MapData::Point> &points,
   QList<TextItem*> &textItems) const
 {
@@ -182,32 +238,6 @@ void RasterTile::processLabels(const QList<MapData::Point> &points,
 		else
 			delete item;
 	}
-}
-
-static const Style::SymbolRender *filteredPath(
-  const QList<const Style::SymbolRender*> &symbols, bool closed,
-  const QVector<MapData::Tag> &tags)
-{
-	for (int j = 0; j < symbols.size(); j++) {
-		const Style::SymbolRender *ri = symbols.at(j);
-		if (ri->rule().matchPath(closed, tags))
-			return ri;
-	}
-
-	return 0;
-}
-
-static const Style::TextRender *filteredPath(
-  const QList<const Style::TextRender*> &labels, bool closed,
-  const QVector<MapData::Tag> &tags)
-{
-	for (int j = 0; j < labels.size(); j++) {
-		const Style::TextRender *ri = labels.at(j);
-		if (ri->rule().matchPath(closed, tags))
-			return ri;
-	}
-
-	return 0;
 }
 
 void RasterTile::processLineLabels(QVector<PainterPath> &paths,
@@ -375,36 +405,6 @@ QPainterPath RasterTile::painterPath(const Polygon &polygon, bool curve) const
 	return path;
 }
 
-static QList<const Style::PathRender *> filteredPath(
-  const QList<const Style::PathRender *> &paths, bool closed,
-  const QVector<MapData::Tag> &tags)
-{
-	QList<const Style::PathRender*> list;
-
-	for (int i = 0; i < paths.size(); i++) {
-		const Style::PathRender *pr = paths.at(i);
-		if (pr->rule().matchPath(closed, tags))
-			list.append(pr);
-	}
-
-	return list;
-}
-
-static QList<const Style::CircleRender *> filtered(
-  const QList<const Style::CircleRender *> &circles, bool path,
-  const QVector<MapData::Tag> &tags)
-{
-	QList<const Style::CircleRender*> list;
-
-	for (int i = 0; i < circles.size(); i++) {
-		const Style::CircleRender *pr = circles.at(i);
-		if (pr->rule().match(path, tags))
-			list.append(pr);
-	}
-
-	return list;
-}
-
 void RasterTile::pathInstructions(const QList<MapData::Path> &paths,
   QVector<PainterPath> &painterPaths,
   QVector<RasterTile::RenderInstruction> &instructions) const
@@ -417,15 +417,17 @@ void RasterTile::pathInstructions(const QList<MapData::Path> &paths,
 	QList<const Style::PathRender*> *ri;
 
 	for (int i = 0; i < paths.size(); i++) {
-		const MapData::Path &path = paths.at(i);
 		PainterPath &rp = painterPaths[i];
-		PathKey key(path.closed, path.point.tags);
+		const MapData::Path &path = paths.at(i);
+		const QVector<MapData::Tag> &tags = path.point.tags;
+		bool closed = path.closed;
+		PathKey key(closed, tags);
 
 		rp.path = &path;
 
 		if (!(ri = cache.object(key))) {
-			ri = new QList<const Style::PathRender*>(filteredPath(all,
-			  path.closed, path.point.tags));
+			ri = new QList<const Style::PathRender*>(filteredPath(all, closed,
+			  tags));
 			for (int j = 0; j < ri->size(); j++)
 				instructions.append(RenderInstruction(ri->at(j), &rp));
 			cache.insert(key, ri);
@@ -448,11 +450,13 @@ void RasterTile::circleInstructions(const QList<MapData::Point> &points,
 
 	for (int i = 0; i < points.size(); i++) {
 		const MapData::Point &point = points.at(i);
-		PointKey key(point.center(), point.tags);
+		const QVector<MapData::Tag> &tags = point.tags;
+		bool path = point.center();
+		PointKey key(path, tags);
 
 		if (!(ri = cache.object(key))) {
-			ri = new QList<const Style::CircleRender*>(filtered(all,
-			  point.center(), point.tags));
+			ri = new QList<const Style::CircleRender*>(filtered(all, path,
+			  tags));
 			for (int j = 0; j < ri->size(); j++)
 				instructions.append(RenderInstruction(ri->at(j), &point));
 			cache.insert(key, ri);
