@@ -72,43 +72,91 @@ static QPainterPath parallelPath(const QPainterPath &p, double dy)
 	return h;
 }
 
+static bool addLabel(const Style::TextRender *ri,
+  const QVector<MapData::Tag> &tags, const Style::SymbolRender *si,
+  const Style::TextRender *&ti, QList<const QByteArray *> &ll)
+{
+	const QByteArray *lbl = label(ri->key(), tags);
+	if (lbl) {
+		if (!si) {
+			ti = ri;
+			ll.append(lbl);
+			return false;
+		} else if (si->id() == ri->symbolId()) {
+			if (!ti)
+				ti = ri;
+			ll.append(lbl);
+		}
+	}
+
+	return true;
+}
+
+static QList<const Style::TextRender*> filtered(
+  const QList<const Style::TextRender*> &labels, bool path,
+  const QVector<MapData::Tag> &tags)
+{
+	QList<const Style::TextRender*> list;
+
+	for (int j = 0; j < labels.size(); j++) {
+		const Style::TextRender *ri = labels.at(j);
+		if (ri->rule().match(path, tags))
+			list.append(ri);
+	}
+
+	return list;
+}
+
+static const Style::SymbolRender *filtered(
+  const QList<const Style::SymbolRender*> &symbols, bool path,
+  const QVector<MapData::Tag> &tags)
+{
+	for (int j = 0; j < symbols.size(); j++) {
+		const Style::SymbolRender *ri = symbols.at(j);
+		if (ri->rule().match(path, tags))
+			return ri;
+	}
+
+	return 0;
+}
+
 void RasterTile::processLabels(const QList<MapData::Point> &points,
   QList<TextItem*> &textItems) const
 {
 	QList<Label> items;
 	QList<const Style::TextRender*> labels(_style->labels(_zoom));
 	QList<const Style::SymbolRender*> symbols(_style->symbols(_zoom));
+	QCache<PointKey, const Style::SymbolRender*> symbolCache(8192);
+	const Style::SymbolRender **sri;
+	QCache<PointKey, QList<const Style::TextRender *> > labelCache(8192);
+	QList<const Style::TextRender*> *tri;
 
 	for (int i = 0; i < points.size(); i++) {
 		const MapData::Point &point = points.at(i);
 		const Style::TextRender *ti = 0;
 		const Style::SymbolRender *si = 0;
 		QList<const QByteArray *> ll;
+		PointKey key(point.center(), point.tags);
 
-		for (int j = 0; j < symbols.size(); j++) {
-			const Style::SymbolRender *ri = symbols.at(j);
-			if (ri->rule().match(point.center(), point.tags)) {
-				si = ri;
-				break;
-			}
-		}
+		if (!(sri = symbolCache.object(key))) {
+			sri = new const Style::SymbolRender*(filtered(symbols,
+			  point.center(), point.tags));
+			si = *sri;
+			symbolCache.insert(key, sri);
+		} else
+			si = *sri;
 
-		for (int j = 0; j < labels.size(); j++) {
-			const Style::TextRender *ri = labels.at(j);
-			if (ri->rule().match(point.center(), point.tags)) {
-				const QByteArray *lbl = label(ri->key(), point.tags);
-				if (lbl) {
-					if (!si) {
-						ti = ri;
-						ll.append(lbl);
-						break;
-					} else if (si->id() == ri->symbolId()) {
-						if (!ti)
-							ti = ri;
-						ll.append(lbl);
-					}
-				}
-			}
+		if (!(tri = labelCache.object(key))) {
+			tri = new QList<const Style::TextRender*>(filtered(labels,
+			  point.center(), point.tags));
+			for (int j = 0; j < tri->size(); j++)
+				if (!addLabel(tri->at(j), point.tags, si, ti, ll))
+					break;
+			labelCache.insert(key, tri);
+		} else {
+			for (int j = 0; j < tri->size(); j++)
+				if (!addLabel(tri->at(j), point.tags, si, ti, ll))
+					break;
 		}
 
 		if (ti || si)
