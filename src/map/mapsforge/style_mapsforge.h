@@ -64,11 +64,11 @@ public:
 			bool keyMatches(const QVector<MapData::Tag> &tags) const
 			{
 				for (int i = 0; i < _keys.size(); i++) {
-					for (int j = 0; j < tags.size(); j++) {
-						unsigned key = _keys.at(i);
+					unsigned key = _keys.at(i);
+
+					for (int j = 0; j < tags.size(); j++)
 						if (!key || key == tags.at(j).key)
 							return true;
-					}
 				}
 
 				return false;
@@ -77,11 +77,11 @@ public:
 			bool valueMatches(const QVector<MapData::Tag> &tags) const
 			{
 				for (int i = 0; i < _vals.size(); i++) {
-					for (int j = 0; j < tags.size(); j++) {
-						const QByteArray &ba = _vals.at(i);
+					const QByteArray &ba = _vals.at(i);
+
+					for (int j = 0; j < tags.size(); j++)
 						if (!ba.size() || ba == tags.at(j).value)
 							return true;
-					}
 				}
 
 				return false;
