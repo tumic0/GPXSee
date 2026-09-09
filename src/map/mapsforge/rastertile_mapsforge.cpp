@@ -126,36 +126,37 @@ void RasterTile::processLabels(const QList<MapData::Point> &points,
 	QList<Label> items;
 	QList<const Style::TextRender*> labels(_style->labels(_zoom));
 	QList<const Style::SymbolRender*> symbols(_style->symbols(_zoom));
-	QCache<PointKey, const Style::SymbolRender*> symbolCache(8192);
-	const Style::SymbolRender **sri;
 	QCache<PointKey, QList<const Style::TextRender *> > labelCache(8192);
+	QCache<PointKey, const Style::SymbolRender*> symbolCache(8192);
 	QList<const Style::TextRender*> *tri;
+	const Style::SymbolRender **sri;
 
 	for (int i = 0; i < points.size(); i++) {
 		const MapData::Point &point = points.at(i);
+		const QVector<MapData::Tag> &tags = point.tags;
 		const Style::TextRender *ti = 0;
 		const Style::SymbolRender *si = 0;
 		QList<const QByteArray *> ll;
-		PointKey key(point.center(), point.tags);
+		bool path = point.center();
+		PointKey key(path, tags);
 
 		if (!(sri = symbolCache.object(key))) {
-			sri = new const Style::SymbolRender*(filtered(symbols,
-			  point.center(), point.tags));
+			sri = new const Style::SymbolRender*(filtered(symbols, path, tags));
 			si = *sri;
 			symbolCache.insert(key, sri);
 		} else
 			si = *sri;
 
 		if (!(tri = labelCache.object(key))) {
-			tri = new QList<const Style::TextRender*>(filtered(labels,
-			  point.center(), point.tags));
+			tri = new QList<const Style::TextRender*>(filtered(labels, path,
+			  tags));
 			for (int j = 0; j < tri->size(); j++)
-				if (!addLabel(tri->at(j), point.tags, si, ti, ll))
+				if (!addLabel(tri->at(j), tags, si, ti, ll))
 					break;
 			labelCache.insert(key, tri);
 		} else {
 			for (int j = 0; j < tri->size(); j++)
-				if (!addLabel(tri->at(j), point.tags, si, ti, ll))
+				if (!addLabel(tri->at(j), tags, si, ti, ll))
 					break;
 		}
 
@@ -183,40 +184,77 @@ void RasterTile::processLabels(const QList<MapData::Point> &points,
 	}
 }
 
+static const Style::SymbolRender *filteredPath(
+  const QList<const Style::SymbolRender*> &symbols, bool closed,
+  const QVector<MapData::Tag> &tags)
+{
+	for (int j = 0; j < symbols.size(); j++) {
+		const Style::SymbolRender *ri = symbols.at(j);
+		if (ri->rule().matchPath(closed, tags))
+			return ri;
+	}
+
+	return 0;
+}
+
+static const Style::TextRender *filteredPath(
+  const QList<const Style::TextRender*> &labels, bool closed,
+  const QVector<MapData::Tag> &tags)
+{
+	for (int j = 0; j < labels.size(); j++) {
+		const Style::TextRender *ri = labels.at(j);
+		if (ri->rule().matchPath(closed, tags))
+			return ri;
+	}
+
+	return 0;
+}
+
 void RasterTile::processLineLabels(QVector<PainterPath> &paths,
   QList<TextItem*> &textItems) const
 {
 	QList<const Style::TextRender*> labels(_style->pathLabels(_zoom));
 	QList<const Style::SymbolRender*> symbols(_style->lineSymbols(_zoom));
+	QCache<PathKey, const Style::SymbolRender*> symbolCache(8192);
+	QCache<PathKey, const Style::TextRender*> labelCache(8192);
+	const Style::SymbolRender **sri;
+	const Style::TextRender **tri;
 	QList<LineLabel> items;
 	QSet<QByteArray> set;
 
 	for (int i = 0; i < paths.size(); i++) {
 		PainterPath &path = paths[i];
+		bool closed = path.path->closed;
+
+		if (closed)
+			continue;
+
+		const QVector<MapData::Tag> &tags = path.path->point.tags;
 		const Style::TextRender *ti = 0;
 		const Style::SymbolRender *si = 0;
 		const QByteArray *lbl = 0;
+		PathKey key(closed, tags);
 
-		if (path.path->closed)
-			continue;
+		if (!(sri = symbolCache.object(key))) {
+			sri = new const Style::SymbolRender*(filteredPath(symbols, closed,
+			  tags));
+			si = *sri;
+			symbolCache.insert(key, sri);
+		} else
+			si = *sri;
 
-		for (int j = 0; j < symbols.size(); j++) {
-			const Style::SymbolRender *ri = symbols.at(j);
-			if (ri->rule().matchPath(path.path->closed, path.path->point.tags)) {
-				si = ri;
-				break;
+		if (!(tri = labelCache.object(key))) {
+			tri = new const Style::TextRender*(filteredPath(labels, closed,
+			  tags));
+			if (*tri && (lbl = label((*tri)->key(), tags))) {
+				if (!si || si->id() == (*tri)->symbolId())
+					ti = *tri;
 			}
-		}
-
-		for (int j = 0; j < labels.size(); j++) {
-			const Style::TextRender *ri = labels.at(j);
-			if (ri->rule().matchPath(path.path->closed, path.path->point.tags)) {
-				if ((lbl = label(ri->key(), path.path->point.tags))) {
-					if (!si || si->id() == ri->symbolId()) {
-						ti = ri;
-						break;
-					}
-				}
+			labelCache.insert(key, tri);
+		} else {
+			if (*tri && (lbl = label((*tri)->key(), tags))) {
+				if (!si || si->id() == (*tri)->symbolId())
+					ti = *tri;
 			}
 		}
 
@@ -337,7 +375,7 @@ QPainterPath RasterTile::painterPath(const Polygon &polygon, bool curve) const
 	return path;
 }
 
-static QList<const Style::PathRender *> filtered(
+static QList<const Style::PathRender *> filteredPath(
   const QList<const Style::PathRender *> &paths, bool closed,
   const QVector<MapData::Tag> &tags)
 {
@@ -386,8 +424,8 @@ void RasterTile::pathInstructions(const QList<MapData::Path> &paths,
 		rp.path = &path;
 
 		if (!(ri = cache.object(key))) {
-			ri = new QList<const Style::PathRender*>(filtered(all, path.closed,
-			  path.point.tags));
+			ri = new QList<const Style::PathRender*>(filteredPath(all,
+			  path.closed, path.point.tags));
 			for (int j = 0; j < ri->size(); j++)
 				instructions.append(RenderInstruction(ri->at(j), &rp));
 			cache.insert(key, ri);
