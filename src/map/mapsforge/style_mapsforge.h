@@ -266,10 +266,8 @@ public:
 	Style() {}
 	Style(const QString &path, const MapData &data, qreal ratio, int layer);
 
-	QList<const PathRender *> paths(int zoom, bool closed,
-	  const QVector<MapData::Tag> &tags) const;
-	QList<const CircleRender *> circles(int zoom, bool path,
-	  const QVector<MapData::Tag> &tags) const;
+	QList<const PathRender *> paths(int zoom) const;
+	QList<const CircleRender *> circles(int zoom) const;
 	QList<const TextRender*> pathLabels(int zoom) const;
 	QList<const TextRender*> labels(int zoom) const;
 	QList<const TextRender*> areaLabels(int zoom) const;

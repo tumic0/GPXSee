@@ -289,10 +289,44 @@ QPainterPath RasterTile::painterPath(const Polygon &polygon, bool curve) const
 	return path;
 }
 
+static QList<const Style::PathRender *> filtered(
+  const QList<const Style::PathRender *> &paths, bool closed,
+  const QVector<MapData::Tag> &tags)
+{
+	QList<const Style::PathRender*> list;
+
+	for (int i = 0; i < paths.size(); i++) {
+		const Style::PathRender *pr = paths.at(i);
+		if (pr->rule().matchPath(closed, tags))
+			list.append(pr);
+	}
+
+	return list;
+}
+
+static QList<const Style::CircleRender *> filtered(
+  const QList<const Style::CircleRender *> &circles, bool path,
+  const QVector<MapData::Tag> &tags)
+{
+	QList<const Style::CircleRender*> list;
+
+	for (int i = 0; i < circles.size(); i++) {
+		const Style::CircleRender *pr = circles.at(i);
+		if (pr->rule().match(path, tags))
+			list.append(pr);
+	}
+
+	return list;
+}
+
 void RasterTile::pathInstructions(const QList<MapData::Path> &paths,
   QVector<PainterPath> &painterPaths,
   QVector<RasterTile::RenderInstruction> &instructions) const
 {
+	QList<const Style::PathRender*> all(_style->paths(_zoom));
+	if (all.isEmpty())
+		return;
+
 	QCache<PathKey, QList<const Style::PathRender *> > cache(8192);
 	QList<const Style::PathRender*> *ri;
 
@@ -304,8 +338,8 @@ void RasterTile::pathInstructions(const QList<MapData::Path> &paths,
 		rp.path = &path;
 
 		if (!(ri = cache.object(key))) {
-			ri = new QList<const Style::PathRender*>(_style->paths(_zoom,
-			  path.closed, path.point.tags));
+			ri = new QList<const Style::PathRender*>(filtered(all, path.closed,
+			  path.point.tags));
 			for (int j = 0; j < ri->size(); j++)
 				instructions.append(RenderInstruction(ri->at(j), &rp));
 			cache.insert(key, ri);
@@ -319,15 +353,19 @@ void RasterTile::pathInstructions(const QList<MapData::Path> &paths,
 void RasterTile::circleInstructions(const QList<MapData::Point> &points,
   QVector<RasterTile::RenderInstruction> &instructions) const
 {
+	QList<const Style::CircleRender*> all(_style->circles(_zoom));
+	if (all.isEmpty())
+		return;
+
 	QCache<PointKey, QList<const Style::CircleRender *> > cache(8192);
 	QList<const Style::CircleRender*> *ri;
 
 	for (int i = 0; i < points.size(); i++) {
 		const MapData::Point &point = points.at(i);
-		PointKey key(point.tags);
+		PointKey key(point.center(), point.tags);
 
 		if (!(ri = cache.object(key))) {
-			ri = new QList<const Style::CircleRender*>(_style->circles(_zoom,
+			ri = new QList<const Style::CircleRender*>(filtered(all,
 			  point.center(), point.tags));
 			for (int j = 0; j < ri->size(); j++)
 				instructions.append(RenderInstruction(ri->at(j), &point));

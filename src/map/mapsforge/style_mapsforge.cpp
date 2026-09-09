@@ -921,30 +921,6 @@ Style::Style(const QString &path, const MapData &data, qreal ratio, int layer)
 	}
 }
 
-QList<const Style::PathRender *> Style::paths(int zoom, bool closed,
-  const QVector<MapData::Tag> &tags) const
-{
-	QList<const PathRender*> ri;
-
-	for (int i = 0; i < _paths.size(); i++)
-		if (_paths.at(i).rule().matchPath(zoom, closed, tags))
-			ri.append(&_paths.at(i));
-
-	return ri;
-}
-
-QList<const Style::CircleRender *> Style::circles(int zoom, bool path,
-  const QVector<MapData::Tag> &tags) const
-{
-	QList<const CircleRender*> ri;
-
-	for (int i = 0; i < _circles.size(); i++)
-		if (_circles.at(i).rule().match(zoom, path, tags))
-			ri.append(&_circles.at(i));
-
-	return ri;
-}
-
 const Style::HillShadingRender *Style::hillShading(int zoom) const
 {
 	for (int i = 0; i < _hillShading.size(); i++) {
@@ -1001,6 +977,32 @@ QList<const Style::Symbol*> Style::symbols(int zoom) const
 		const Symbol &symbol = _symbols.at(i);
 		if (symbol.rule()._zooms.contains(zoom))
 			list.append(&symbol);
+	}
+
+	return list;
+}
+
+QList<const Style::PathRender*> Style::paths(int zoom) const
+{
+	QList<const PathRender*> list;
+
+	for (int i = 0; i < _paths.size(); i++) {
+		const PathRender &path = _paths.at(i);
+		if (path.rule()._zooms.contains(zoom))
+			list.append(&path);
+	}
+
+	return list;
+}
+
+QList<const Style::CircleRender*> Style::circles(int zoom) const
+{
+	QList<const CircleRender*> list;
+
+	for (int i = 0; i < _circles.size(); i++) {
+		const CircleRender &circle = _circles.at(i);
+		if (circle.rule()._zooms.contains(zoom))
+			list.append(&circle);
 	}
 
 	return list;

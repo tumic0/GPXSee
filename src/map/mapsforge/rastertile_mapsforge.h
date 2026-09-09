@@ -146,7 +146,7 @@ private:
 		  : closed(closed), tags(tags) {}
 		bool operator==(const PathKey &other) const
 		{
-			return closed == other.closed && tags == other.tags;
+			return (closed == other.closed && tags == other.tags);
 		}
 
 		bool closed;
@@ -154,12 +154,14 @@ private:
 	};
 
 	struct PointKey {
-		PointKey(const QVector<MapData::Tag> &tags) : tags(tags) {}
+		PointKey(bool path, const QVector<MapData::Tag> &tags)
+		  : path(path), tags(tags) {}
 		bool operator==(const PointKey &other) const
 		{
-			return tags == other.tags;
+			return (path == other.path && tags == other.tags);
 		}
 
+		bool path;
 		const QVector<MapData::Tag> &tags;
 	};
 
