@@ -45,7 +45,7 @@ private:
 
 	struct Label {
 		Label(const MapData::Point *p, const QList<const QByteArray *> lbl,
-		  const Style::Symbol *si, const Style::TextRender *ti)
+		  const Style::SymbolRender *si, const Style::TextRender *ti)
 		  : point(p), ti(ti), si(si), lbl(lbl)
 		{
 			Q_ASSERT(si || ti);
@@ -62,13 +62,13 @@ private:
 
 		const MapData::Point *point;
 		const Style::TextRender *ti;
-		const Style::Symbol *si;
+		const Style::SymbolRender *si;
 		QList<const QByteArray *> lbl;
 	};
 
 	struct LineLabel {
 		LineLabel(const PainterPath *p, const QByteArray *lbl,
-		  const Style::Symbol *si, const Style::TextRender *ti)
+		  const Style::SymbolRender *si, const Style::TextRender *ti)
 		  : path(p), lbl(lbl), ti(ti), si(si)
 		{
 			Q_ASSERT(si || ti);
@@ -83,7 +83,7 @@ private:
 		const PainterPath *path;
 		const QByteArray *lbl;
 		const Style::TextRender *ti;
-		const Style::Symbol *si;
+		const Style::SymbolRender *si;
 	};
 
 	class RenderInstruction

@@ -562,7 +562,7 @@ void Style::text(QXmlStreamReader &reader, const MapData &data,
 void Style::symbol(QXmlStreamReader &reader, const QString &dir, qreal ratio,
   const Rule &rule, bool line)
 {
-	Symbol ri(rule);
+	SymbolRender ri(rule);
 	const QXmlStreamAttributes &attr = reader.attributes();
 	QString file;
 	int height = 0, width = 0, percent = 100;
@@ -909,8 +909,8 @@ Style::Style(const QString &path, const MapData &data, qreal ratio, int layer)
 		_circles = QList<CircleRender>();
 		_pathLabels = QList<TextRender>();
 		_labels = QList<TextRender>();
-		_symbols = QList<Symbol>();
-		_lineSymbols = QList<Symbol>();
+		_symbols = QList<SymbolRender>();
+		_lineSymbols = QList<SymbolRender>();
 		_hillShading = QList<HillShadingRender>();
 		_menu = Menu();
 	} else {
@@ -956,12 +956,12 @@ QList<const Style::TextRender*> Style::labels(int zoom) const
 	return list;
 }
 
-QList<const Style::Symbol*> Style::lineSymbols(int zoom) const
+QList<const Style::SymbolRender*> Style::lineSymbols(int zoom) const
 {
-	QList<const Symbol*> list;
+	QList<const SymbolRender*> list;
 
 	for (int i = 0; i < _lineSymbols.size(); i++) {
-		const Symbol &symbol = _lineSymbols.at(i);
+		const SymbolRender &symbol = _lineSymbols.at(i);
 		if (symbol.rule()._zooms.contains(zoom))
 			list.append(&symbol);
 	}
@@ -969,12 +969,12 @@ QList<const Style::Symbol*> Style::lineSymbols(int zoom) const
 	return list;
 }
 
-QList<const Style::Symbol*> Style::symbols(int zoom) const
+QList<const Style::SymbolRender*> Style::symbols(int zoom) const
 {
-	QList<const Symbol*> list;
+	QList<const SymbolRender*> list;
 
 	for (int i = 0; i < _symbols.size(); i++) {
-		const Symbol &symbol = _symbols.at(i);
+		const SymbolRender &symbol = _symbols.at(i);
 		if (symbol.rule()._zooms.contains(zoom))
 			list.append(&symbol);
 	}

@@ -77,16 +77,16 @@ void RasterTile::processLabels(const QList<MapData::Point> &points,
 {
 	QList<Label> items;
 	QList<const Style::TextRender*> labels(_style->labels(_zoom));
-	QList<const Style::Symbol*> symbols(_style->symbols(_zoom));
+	QList<const Style::SymbolRender*> symbols(_style->symbols(_zoom));
 
 	for (int i = 0; i < points.size(); i++) {
 		const MapData::Point &point = points.at(i);
 		const Style::TextRender *ti = 0;
-		const Style::Symbol *si = 0;
+		const Style::SymbolRender *si = 0;
 		QList<const QByteArray *> ll;
 
 		for (int j = 0; j < symbols.size(); j++) {
-			const Style::Symbol *ri = symbols.at(j);
+			const Style::SymbolRender *ri = symbols.at(j);
 			if (ri->rule().match(point.center(), point.tags)) {
 				si = ri;
 				break;
@@ -139,21 +139,21 @@ void RasterTile::processLineLabels(QVector<PainterPath> &paths,
   QList<TextItem*> &textItems) const
 {
 	QList<const Style::TextRender*> labels(_style->pathLabels(_zoom));
-	QList<const Style::Symbol*> symbols(_style->lineSymbols(_zoom));
+	QList<const Style::SymbolRender*> symbols(_style->lineSymbols(_zoom));
 	QList<LineLabel> items;
 	QSet<QByteArray> set;
 
 	for (int i = 0; i < paths.size(); i++) {
 		PainterPath &path = paths[i];
 		const Style::TextRender *ti = 0;
-		const Style::Symbol *si = 0;
+		const Style::SymbolRender *si = 0;
 		const QByteArray *lbl = 0;
 
 		if (path.path->closed)
 			continue;
 
 		for (int j = 0; j < symbols.size(); j++) {
-			const Style::Symbol *ri = symbols.at(j);
+			const Style::SymbolRender *ri = symbols.at(j);
 			if (ri->rule().matchPath(path.path->closed, path.path->point.tags)) {
 				si = ri;
 				break;

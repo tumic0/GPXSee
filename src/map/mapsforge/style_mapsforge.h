@@ -240,10 +240,10 @@ public:
 		TextPointItem::Anchor _anchor;
 	};
 
-	class Symbol : public Render
+	class SymbolRender : public Render
 	{
 	public:
-		Symbol(const Rule &rule)
+		SymbolRender(const Rule &rule)
 		  : Render(rule), _priority(0), _rotate(true) {}
 
 		const QString &id() const {return _id;}
@@ -251,7 +251,7 @@ public:
 		bool rotate() const {return _rotate;}
 		int priority() const {return _priority;}
 
-		bool operator<(const Symbol &other) const
+		bool operator<(const SymbolRender &other) const
 		  {return _priority > other._priority;}
 
 	private:
@@ -271,9 +271,9 @@ public:
 	QList<const TextRender*> pathLabels(int zoom) const;
 	QList<const TextRender*> labels(int zoom) const;
 	QList<const TextRender*> areaLabels(int zoom) const;
-	QList<const Symbol*> symbols(int zoom) const;
-	QList<const Symbol*> areaSymbols(int zoom) const;
-	QList<const Symbol*> lineSymbols(int zoom) const;
+	QList<const SymbolRender*> symbols(int zoom) const;
+	QList<const SymbolRender*> areaSymbols(int zoom) const;
+	QList<const SymbolRender*> lineSymbols(int zoom) const;
 	const HillShadingRender *hillShading(int zoom) const;
 
 	QStringList layers(const QString &lang, int &defaultLayer) const;
@@ -334,7 +334,7 @@ private:
 	QList<PathRender> _paths;
 	QList<CircleRender> _circles;
 	QList<TextRender> _labels, _pathLabels;
-	QList<Symbol> _symbols, _lineSymbols;
+	QList<SymbolRender> _symbols, _lineSymbols;
 	Menu _menu;
 
 	bool loadXml(const QString &path, const MapData &data, qreal ratio,
