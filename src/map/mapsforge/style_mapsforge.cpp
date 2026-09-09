@@ -198,52 +198,6 @@ bool Style::Rule::matchPath(bool closed, const QVector<MapData::Tag> &tags) cons
 	return true;
 }
 
-bool Style::Rule::matchPath(int zoom, bool closed,
-  const QVector<MapData::Tag> &tags) const
-{
-	Closed cl = closed ? YesClosed : NoClosed;
-
-	if (!_zooms.contains(zoom))
-		return false;
-	if (_closed && cl != _closed)
-		return false;
-
-	for (int i = 0; i < _filters.size(); i++)
-		if (!_filters.at(i).match(tags))
-			return false;
-
-	return true;
-}
-
-bool Style::Rule::match(int zoom, bool path,
-  const QVector<MapData::Tag> &tags) const
-{
-	Type type = path ? WayType : NodeType;
-
-	if (!(_type == Rule::AnyType || _type == type))
-		return false;
-	if (!_zooms.contains(zoom))
-		return false;
-
-	for (int i = 0; i < _filters.size(); i++)
-		if (!_filters.at(i).match(tags))
-			return false;
-
-	return true;
-}
-
-bool Style::Rule::match(int zoom, const QVector<MapData::Tag> &tags) const
-{
-	if (!_zooms.contains(zoom))
-		return false;
-
-	for (int i = 0; i < _filters.size(); i++)
-		if (!_filters.at(i).match(tags))
-			return false;
-
-	return true;
-}
-
 void Style::area(QXmlStreamReader &reader, const QString &dir, qreal ratio,
   qreal baseStrokeWidth, const Rule &rule)
 {

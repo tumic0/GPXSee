@@ -110,11 +110,6 @@ public:
 				_filters.append(filter);
 		}
 
-		bool matchPath(int zoom, bool closed,
-		  const QVector<MapData::Tag> &tags) const;
-		bool match(int zoom, bool path, const QVector<MapData::Tag> &tags) const;
-		bool match(int zoom, const QVector<MapData::Tag> &tags) const;
-
 		friend class Style;
 
 		Type _type;
