@@ -132,7 +132,6 @@ public:
 	class HillShadingRender : public Render
 	{
 	public:
-		HillShadingRender() : Render(Rule()), _zOrder(-1), _layer(-1) {}
 		HillShadingRender(const Rule &rule, int zOrder, int layer)
 		  : Render(rule), _zOrder(zOrder), _layer(layer) {}
 
