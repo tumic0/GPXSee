@@ -965,15 +965,16 @@ QList<const Style::CircleRender*> Style::circles(int zoom) const
 QPen Style::PathRender::pen(int zoom) const
 {
 	if (!_img.isNull() || _strokeColor.isValid()) {
-		qreal width = (_scale > None && zoom >= 12)
-		  ? pow(1.5, zoom - 12) * _strokeWidth : _strokeWidth;
+		qreal factor = (_scale > None && zoom >= 12)
+		  ? pow(1.5, zoom - 12) : 1.0;
+		qreal width = factor * _strokeWidth;
 		QBrush brush = _img.isNull() ? QBrush(_strokeColor) : QBrush(_img);
 		QPen p(brush, width, Qt::SolidLine, _strokeCap, _strokeJoin);
 		if (!_strokeDasharray.isEmpty()) {
 			QVector<qreal>pattern(_strokeDasharray);
 			for (int i = 0; i < _strokeDasharray.size(); i++) {
 				if (_scale > Stroke && zoom >= 12)
-					pattern[i] = (pow(1.5, zoom - 12) * pattern[i]);
+					pattern[i] *= factor;
 				// QPainter pattern is specified in units of the pens width!
 				pattern[i] /= width;
 			}
@@ -986,12 +987,14 @@ QPen Style::PathRender::pen(int zoom) const
 
 qreal Style::PathRender::dy(int zoom) const
 {
-	return (_scale && zoom >= 12) ? pow(1.5, zoom - 12) * _dy : _dy;
+	return (_dy != 0 && _scale && zoom >= 12)
+	  ? pow(1.5, zoom - 12) * _dy : _dy;
 }
 
 qreal Style::CircleRender::radius(int zoom) const
 {
-	return (_scale && zoom >= 12) ? pow(1.5, zoom - 12) * _radius : _radius;
+	return (_radius != 0 && _scale && zoom >= 12)
+	  ? pow(1.5, zoom - 12) * _radius : _radius;
 }
 
 QStringList Style::layers(const QString &lang, int &defaultLayer) const
