@@ -250,7 +250,7 @@ inline HASH_T qHash(const RasterTile::PathKey &key, HASH_T seed = 0)
 
 inline HASH_T qHash(const RasterTile::PointKey &key, HASH_T seed = 0)
 {
-	return qHashRange(key.tags.constBegin(), key.tags.constEnd(), seed);
+	return qHashMulti(seed, key.path, key.tags);
 }
 
 }
