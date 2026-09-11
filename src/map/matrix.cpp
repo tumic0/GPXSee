@@ -54,3 +54,26 @@ MatrixD MatrixD::augemented(const MatrixD &M) const
 
 	return A;
 }
+
+RectC MatrixC::boundingRect() const
+{
+	if (!_m.size())
+		return RectC();
+
+	RectC rect(_m.first(), _m.first());
+
+	for (int i = 1; i < _m.size(); i++) {
+		const Coordinates &c = _m.at(i);
+
+		if (c.lon() < rect.left())
+			rect.setLeft(c.lon());
+		if (c.lon() > rect.right())
+			rect.setRight(c.lon());
+		if (c.lat() < rect.bottom())
+			rect.setBottom(c.lat());
+		if (c.lat() > rect.top())
+			rect.setTop(c.lat());
+	}
+
+	return rect;
+}

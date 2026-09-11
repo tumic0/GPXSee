@@ -6,6 +6,7 @@
 #include "map/hillshading.h"
 #include "map/filter.h"
 #include "map/bitmapline.h"
+#include "map/pcs.h"
 #include "rastertile_mapsforge.h"
 
 using namespace Mapsforge;
@@ -572,11 +573,22 @@ MatrixD RasterTile::elevation(int extend) const
 	int right = _rect.right() + extend;
 	int top = _rect.top() - extend;
 	int bottom = _rect.bottom() + extend;
-
 	MatrixC ll(_rect.height() + 2 * extend, _rect.width() + 2 * extend);
-	for (int y = top, i = 0; y <= bottom; y++)
-		for (int x = left; x <= right; x++, i++)
-			ll.at(i) = xy2ll(QPointF(x, y));
+
+	if (*_proj == PCS::pcs(3857)) {
+		RectC rect(xy2ll(QPointF(left, top)), xy2ll(QPointF(right, bottom)));
+		double sx = rect.width() / ll.w();
+		double sy = rect.height() / ll.h();
+
+		for (int i = 0, n = 0; i < ll.h(); i++)
+			for (int j = 0; j < ll.w(); j++, n++)
+				ll.at(n) = Coordinates(rect.left() + j * sx,
+				  rect.top() - i * sy);
+	} else {
+		for (int y = top, i = 0; y <= bottom; y++)
+			for (int x = left; x <= right; x++, i++)
+				ll.at(i) = xy2ll(QPointF(x, y));
+	}
 
 	return DEM::elevation(ll);
 }

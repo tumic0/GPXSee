@@ -181,9 +181,12 @@ MatrixD RasterTile::elevation(int extend) const
 
 	MatrixC ll((int)(_size * _ratio) + 2 * extend,
 	  (int)(_size * _ratio) + 2 * extend);
-	for (int y = top, i = 0; y < bottom; y++)
-		for (int x = left; x < right; x++, i++)
-			ll.at(i) = xy2ll(x, y, factor);
+	double sx = rect.width() / ll.w();
+	double sy = rect.height() / ll.h();
+
+	for (int i = 0, n = 0; i < ll.h(); i++)
+		for (int j = 0; j < ll.w(); j++, n++)
+			ll.at(n) = Coordinates(rect.left() + j * sx, rect.top() - i * sy);
 
 	return DEM::elevation(ll);
 }

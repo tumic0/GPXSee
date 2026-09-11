@@ -8,6 +8,7 @@
 #include "map/rectd.h"
 #include "map/hillshading.h"
 #include "map/filter.h"
+#include "map/pcs.h"
 #include "style_img.h"
 #include "lblfile.h"
 #include "demtree.h"
@@ -598,6 +599,10 @@ void RasterTile::fetchData(QList<MapData::Poly> &polygons,
 	  _transform.img2proj(polyRect.bottomRight()));
 	RectC polyRectC(polyRectD.toRectC(*_proj, 20));
 	RectC pointRectC;
+	RectC demRectC;
+	MatrixC demLL;
+	QList<MapData::Elevation> tiles;
+
 	if (_vectors) {
 		QRectF pointRect(QPointF(ttl.x() - TEXT_EXTENT, ttl.y() - TEXT_EXTENT),
 		  QPointF(ttl.x() + _rect.width() + TEXT_EXTENT, ttl.y() + _rect.height()
@@ -607,30 +612,39 @@ void RasterTile::fetchData(QList<MapData::Poly> &polygons,
 		pointRectC = pointRectD.toRectC(*_proj, 20);
 	}
 
-	RectC demRectC;
-	MatrixC demLL;
-	QList<MapData::Elevation> tiles;
 	if (_hillShading && _zoom >= 17 && _zoom <= 24 && hasDEM()) {
 		int extend = HillShading::blur() + 1;
 		int left = _rect.left() - extend;
 		int right = _rect.right() + extend;
 		int top = _rect.top() - extend;
 		int bottom = _rect.bottom() + extend;
-
+		RectC br;
 		demLL = MatrixC(_rect.height() + 2 * extend, _rect.width() + 2 * extend);
-		for (int y = top, i = 0; y <= bottom; y++)
-			for (int x = left; x <= right; x++, i++)
-				demLL.at(i) = xy2ll(QPointF(x, y));
 
-		RectC rect;
-		for (int i = 0; i < demLL.size(); i++)
-			rect = rect.united(demLL.at(i));
+		if (*_proj == PCS::pcs(3857)) {
+			RectC rect(xy2ll(QPointF(left, top)), xy2ll(QPointF(right, bottom)));
+			double sx = rect.width() / demLL.w();
+			double sy = rect.height() / demLL.h();
+
+			for (int i = 0, n = 0; i < demLL.h(); i++)
+				for (int j = 0; j < demLL.w(); j++, n++)
+					demLL.at(n) = Coordinates(rect.left() + j * sx,
+					  rect.top() - i * sy);
+
+			br = rect;
+		} else {
+			for (int y = top, i = 0; y <= bottom; y++)
+				for (int x = left; x <= right; x++, i++)
+					demLL.at(i) = xy2ll(QPointF(x, y));
+
+			br = demLL.boundingRect();
+		}
+
 		/* Extra margin for always including the next DEM tile on the map
 		   tile edges (the DEM tile resolution is usally 0.5-15% of the map
 		   tile) */
 		double factor = 6 - (_zoom - 24) * 1.7;
-		demRectC = rect.adjusted(0, 0, rect.width() / factor, -rect.height()
-		  / factor);
+		demRectC = br.adjusted(0, 0, br.width() / factor, -br.height() / factor);
 	}
 
 	for (int i = 0; i < _data.size(); i++) {

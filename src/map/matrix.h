@@ -4,8 +4,7 @@
 #include <cfloat>
 #include <QVector>
 #include <QDebug>
-
-class Coordinates;
+#include "common/rectc.h"
 
 template <class T>
 class Matrix
@@ -42,7 +41,16 @@ public:
 	MatrixD augemented(const MatrixD &M) const;
 };
 
-typedef Matrix<Coordinates> MatrixC;
+class MatrixC : public Matrix<Coordinates>
+{
+public:
+	MatrixC() : Matrix<Coordinates>() {}
+	MatrixC(int h, int w) : Matrix<Coordinates>(h, w) {}
+	MatrixC(int h, int w, const Coordinates &val)
+	  : Matrix<Coordinates>(h, w, val) {}
+
+	RectC boundingRect() const;
+};
 
 #ifndef QT_NO_DEBUG
 template <class T>
