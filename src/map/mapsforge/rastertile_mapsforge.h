@@ -209,8 +209,7 @@ private:
 
 	void fetchData(QList<MapData::Path> &paths,
 	  QList<MapData::Point> &points, bool &hasDEM) const;
-	void pathInstructions(const QList<MapData::Path> &paths,
-	  QVector<PainterPath> &painterPaths,
+	void pathInstructions(QVector<PainterPath> &paths,
 	  QVector<RasterTile::RenderInstruction> &instructions) const;
 	void circleInstructions(const QList<MapData::Point> &points,
 	  QVector<RasterTile::RenderInstruction> &instructions) const;
@@ -226,9 +225,8 @@ private:
 	  QList<TextItem*> &textItems) const;
 	QPainterPath painterPath(const Polygon &polygon, bool curve) const;
 	void drawTextItems(QPainter *painter, const QList<TextItem*> &textItems);
-	void drawPaths(QPainter *painter, const QList<MapData::Path> &paths,
-	  const QList<MapData::Point> &points, QVector<PainterPath> &painterPaths,
-	  bool hillShading);
+	void drawPaths(QPainter *painter, const QList<MapData::Point> &points,
+	  QVector<PainterPath> &paths, bool hillShading);
 
 	MatrixD elevation(int extend) const;
 

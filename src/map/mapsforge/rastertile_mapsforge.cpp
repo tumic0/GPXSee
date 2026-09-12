@@ -406,8 +406,7 @@ QPainterPath RasterTile::painterPath(const Polygon &polygon, bool curve) const
 	return path;
 }
 
-void RasterTile::pathInstructions(const QList<MapData::Path> &paths,
-  QVector<PainterPath> &painterPaths,
+void RasterTile::pathInstructions(QVector<PainterPath> &paths,
   QVector<RasterTile::RenderInstruction> &instructions) const
 {
 	QList<const Style::PathRender*> all(_style->paths(_zoom));
@@ -418,23 +417,21 @@ void RasterTile::pathInstructions(const QList<MapData::Path> &paths,
 	QList<const Style::PathRender*> *ri;
 
 	for (int i = 0; i < paths.size(); i++) {
-		PainterPath &rp = painterPaths[i];
-		const MapData::Path &path = paths.at(i);
-		const QVector<MapData::Tag> &tags = path.point.tags;
-		bool closed = path.closed;
+		PainterPath &path = paths[i];
+		const MapData::Path *dp = path.path;
+		const QVector<MapData::Tag> &tags = dp->point.tags;
+		bool closed = dp->closed;
 		PathKey key(closed, tags);
-
-		rp.path = &path;
 
 		if (!(ri = cache.object(key))) {
 			ri = new QList<const Style::PathRender*>(filteredPath(all, closed,
 			  tags));
 			for (int j = 0; j < ri->size(); j++)
-				instructions.append(RenderInstruction(ri->at(j), &rp));
+				instructions.append(RenderInstruction(ri->at(j), &path));
 			cache.insert(key, ri);
 		} else {
 			for (int j = 0; j < ri->size(); j++)
-				instructions.append(RenderInstruction(ri->at(j), &rp));
+				instructions.append(RenderInstruction(ri->at(j), &path));
 		}
 	}
 }
@@ -476,12 +473,12 @@ void RasterTile::hillShadingInstructions(
 		instructions.append(RenderInstruction(hs));
 }
 
-void RasterTile::drawPaths(QPainter *painter, const QList<MapData::Path> &paths,
-  const QList<MapData::Point> &points, QVector<PainterPath> &painterPaths,
+void RasterTile::drawPaths(QPainter *painter,
+  const QList<MapData::Point> &points, QVector<PainterPath> &paths,
   bool hillShading)
 {
 	QVector<RenderInstruction> instructions;
-	pathInstructions(paths, painterPaths, instructions);
+	pathInstructions(paths, instructions);
 	circleInstructions(points, instructions);
 	hillShadingInstructions(instructions);
 	std::sort(instructions.begin(), instructions.end());
@@ -605,6 +602,8 @@ void RasterTile::render()
 
 	QList<TextItem*> textItems;
 	QVector<PainterPath> renderPaths(paths.size());
+	for (int i = 0; i < paths.size(); i++)
+		renderPaths[i].path = &paths.at(i);
 
 	img.setDevicePixelRatio(_ratio);
 	img.fill(Qt::transparent);
@@ -614,7 +613,7 @@ void RasterTile::render()
 	painter.setRenderHint(QPainter::SmoothPixmapTransform);
 	painter.translate(-_rect.x(), -_rect.y());
 
-	drawPaths(&painter, paths, points, renderPaths, hillShading);
+	drawPaths(&painter, points, renderPaths, hillShading);
 
 	processLabels(points, textItems);
 	processLineLabels(renderPaths, textItems);
