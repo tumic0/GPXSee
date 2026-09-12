@@ -256,10 +256,6 @@ void RasterTile::processLineLabels(QVector<PainterPath> &paths,
 	for (int i = 0; i < paths.size(); i++) {
 		PainterPath &path = paths[i];
 		bool closed = path.path->closed;
-
-		if (closed)
-			continue;
-
 		const QVector<MapData::Tag> &tags = path.path->point.tags;
 		const Style::TextRender *ti = 0;
 		const Style::SymbolRender *si = 0;
