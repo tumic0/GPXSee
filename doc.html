@@ -548,17 +548,19 @@ style
           is compiled by default.</p>
 
 
-          <h2 id="issues">Known issues</h2>
+          <h2 id="codesign">Code signing</h3>
+          <p>GPXSee uses self-signed
+          <a href="https://github.com/tumic0/GPXSee/tree/master/cert">certificates</a> available
+          in the Git repository next to the source codes for code signing on Windows and Mac.
+          Even though, especially on macOS, you will see messages from your OS that are designed
+          to scare you as much as possible, in reality this does not pose any security problem.
+          Directly provided certificates are even more secure as there is no intermediate
+          link in form of a corporate process when verifying the executable origin (you directly
+          verify the executable origin down to it's sources, not down to some paperwork provided
+          to Apple or a commercial certification authority).</p>
 
-          <h3 id="codesign">Code signing</h3>
-          <p>Due to lack of project funding GPXSee uses self-signed certificates for code signing on
-          Windows and Mac. Even though you will see messages from your OS that are designed to scare
-          you as much as possible, in reality this does not pose any security problem (you can check
-          the certificate issuer yourself in the git repository instead of trusting the bureaucratic
-          process of a corporation like Apple or DigiCert).</p>
-
-          <p>If you want a "clean user experience" like with the commercial certificates, you have
-          to:</p>
+          <p>However, if you want the same "clean user experience" like with the commercial
+          certificates, you have to:</p>
 
           <h4>Windows</h4>
           <p>Import the <a href="https://github.com/tumic0/GPXSee/blob/master/cert/win/gpxsee.cer">
@@ -574,9 +576,14 @@ sudo spctl --add --type execute --label 'GPXSee' --requirement \
   'certificate leaf H"F45CCC1FF42FDF031C949BD8DC47412E8D3826D8"'
 </pre>
 
-          <p><i>Note: This only works up to macOS 14 (Sonoma), starting with macOS 15 (Sequoia)
-          Apple has crippled the spctl command and you have to unblock each application separately
-          in System settings -> Privacy &amp; Security.</i></p>
+          <p><i>Note: This only works up to macOS 14 (Sonoma). Starting with macOS 15 (Sequoia),
+          Apple has yet again taken away some more control from the users by crippling the spctl
+          command and you have now to
+          <a href="https://support.apple.com/en-gb/guide/mac-help/mh40616/mac">unblock each
+          application separately in System settings -> Privacy &amp; Security.</a></i></p>
+
+
+          <h2 id="issues">Known issues</h2>
 
           <h3>Android file system</h3>
           <p>Due to the limited file system access on Android, all map formats that consist of
@@ -598,9 +605,8 @@ sudo spctl --add --type execute --label 'GPXSee' --requirement \
           are supported on those platforms.</p>
 
           <h3>Broken large files handling in Qt5</h3>
-          <p>Some distributions (e.g. Fedora and Macports) still use Qt5 for building GPXSee
-          which does not support files > 2GB in QDataStream. As a consequence parsing some
-          formats - especially MP4 - does not work on large files in such builds.</p>
+          <p>When Qt5 (which does not support files > 2GB in QDataStream) is used for building
+          GPXSee, parsing some formats - especially MP4 - does not work on large files.</p>
 
           <h3>OpenGL</h3>
           <p>There are numerous OpenGL issues in Qt that cause some kind of broken rendering
@@ -693,6 +699,7 @@ sudo spctl --add --type execute --label 'GPXSee' --requirement \
           <div class="h4l"><a href="#positioning">Positioning</a></div>
             <div class="h5l"><a href="#positioning_winmac">Windows &amp; Mac</a></div>
             <div class="h5l"><a href="#positioning_linux">Linux</a></div>
+          <div class="h4l"><a href="#codesign">Code signing</a></div>
           <div class="h4l"><a href="#issues">Known issues</a></div>
         </div>
       </div>
