@@ -76,7 +76,7 @@
           </table>
 
           <p>The expanded user specific paths, including the actual configuration
-          directories, are also accesible from the GPXSee "Help" menu.</p>
+          directories, are also accessible from the GPXSee "Help" menu.</p>
 
 
           <h2 id="data">Data files</h2>
@@ -362,7 +362,7 @@ $ gpxsee 'geo:323482,4306480;crs=EPSG:32618'
           <p>While the COROS watches rely on the obscure directory structure of the atlas and
           the maps must be one minute tiles, GPXSee is much more versatile when handling
           the atlases which allows users to create their own atlases from aggregated IMG files.
-          The "Map" directory and it's "OSM" and "CM" subdirectories for the "landscape" and
+          The "Map" directory and it's "OSM" and "CM" sub directories for the "landscape" and
           "topo" layers are mandatory, but the structure/content of the two directories is
           arbitrary and can be a flat list of maps. For example to merge multiple GARMIN
           <a href="https://garmin.opentopomap.org/">OpenTopoMaps</a>, you can create the following
@@ -401,15 +401,15 @@ Czechoslovakia
 
           <h4 id="JNXKML">JNX &amp; KMZ maps</h4>
           <p>JNX &amp; KMZ maps do not contain any info about the projection of their
-          tile images, so it has to be provided externaly<sup><a href="#garmin">2</a></sup>.
+          tile images, so it has to be provided externally<sup><a href="#garmin">2</a></sup>.
           Generally, only two projections are used for JNX/KMZ maps - EPSG:4326 and
           EPSG:3857. If you see <a href="img/wrong_proj.png">background color stripes</a>
-          in your JNX/KMZ map, you have to switch to the propper input projection
+          in your JNX/KMZ map, you have to switch to the proper input projection
           in the preferences.</p>
 
           <h4 id="worldfiles">World Files</h4>
           <p>World-File georeferenced images require the projection info to be provided
-          additionaly to the world file. This can be done either using a separete PRJ
+          additionally to the world file. This can be done either using a separete PRJ
           file in <a href="https://portal.ogc.org/files/?artifact_id=999">WKT1 format</a>
           or by selecting the input projection in the preferences. If a PRJ file
           exists, it takes precedence.</p>
@@ -503,7 +503,7 @@ style
 
           <p>Since version 10.2, there is a default DEM tiles download source hosted
           by the GPXSee project predefined in the preferences. The data is the
-          <a href="http://viewfinderpanoramas.org/dem3.html">DEM3 data</a> originaly
+          <a href="http://viewfinderpanoramas.org/dem3.html">DEM3 data</a> originally
           provided by Jonathan de Ferranti and repacked by the
           <a href="https://bailu.ch/aat/">AAT</a> project.</p>
 
@@ -544,7 +544,7 @@ style
           <a href="https://bugzilla.redhat.com/show_bug.cgi?id=2030899">all</a> distributions
           fail to build the plugin... The only exception are distributions using Qt6 like
           ArchLinux. The <a href="https://doc-snapshots.qt.io/qt6-dev/position-plugin-nmea.html">NMEA
-          plugin</a> has been completely reworked in Qt6, is much more powerfull than in Qt5 and
+          plugin</a> has been completely reworked in Qt6, is much more powerful than in Qt5 and
           is compiled by default.</p>
 
 
@@ -663,7 +663,7 @@ sudo spctl --add --type execute --label 'GPXSee' --requirement \
 
           <div id="footnote">
           <p id="androidGlobalConfig"><i>[1] The Android global configuration is part of the APK
-          and is not accessible on an unrooted phone.</i></p>
+          and is not accessible on an un-rooted phone.</i></p>
           <p id="garmin"><i>[2] Some tools like Garmin software &quot;solve&quot; this by
           rescaling the images, but this introduces a small, but still visible distortion
           to the map.</i></p>
