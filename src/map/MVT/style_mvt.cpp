@@ -528,12 +528,12 @@ Style::Layer::Layer(const QJsonObject &json)
 
 bool Style::Layer::match(int zoom) const
 {
-	return (zoom >= 0 && (zoom < _minZoom || zoom >= _maxZoom)) ? false : true;
+	return (zoom < _minZoom || zoom >= _maxZoom) ? false : true;
 }
 
 bool Style::Layer::match(int zoom, const VectorTile::Feature &feature) const
 {
-	if (zoom >= 0 && (zoom < _minZoom || zoom >= _maxZoom))
+	if (zoom < _minZoom || zoom >= _maxZoom)
 		return false;
 
 	return _filter.match(feature);
