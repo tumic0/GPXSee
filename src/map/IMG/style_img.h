@@ -88,7 +88,8 @@ public:
 		Point(FontSize fontSize, const QColor &textColor = QColor())
 		  : _text(textColor, fontSize) {}
 		Point(const QImage &img, const QPoint &offset = QPoint(0, 0))
-		  : _img(img), _offset(offset) {}
+		  : _img(img.convertToFormat(QImage::Format_ARGB32_Premultiplied)),
+		  _offset(offset) {}
 
 		const Font &text() const {return _text;}
 		const QImage &img() const {return _img;}

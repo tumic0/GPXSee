@@ -959,7 +959,6 @@ bool Style::parsePolygon(const SubFile *file, SubFile::Handle &hdl,
 	flags = t8 & 0x0F;
 
 	QColor c1, c2, c3, c4;
-	QImage img(32, 32, QImage::Format_Indexed8);
 
 	switch (flags) {
 		case 0x01:
@@ -977,38 +976,43 @@ bool Style::parsePolygon(const SubFile *file, SubFile::Handle &hdl,
 			break;
 
 		case 0x08:
-			if (!(readColor(file, hdl, c1) && readColor(file, hdl, c2)))
+			{if (!(readColor(file, hdl, c1) && readColor(file, hdl, c2)))
 				return false;
 
+			QImage img(32, 32, QImage::Format_Indexed8);
 			img.setColorCount(2);
 			img.setColor(0, c2.rgb());
 			img.setColor(1, c1.rgb());
 			if (!readBitmap(file, hdl, img, 1))
 				return false;
 
-			_polygons[type] = Polygon(QBrush(img));
+			_polygons[type] = Polygon(QBrush(img.convertToFormat(
+			  QImage::Format_ARGB32_Premultiplied)));}
 			break;
 
 		case 0x09:
-			if (!(readColor(file, hdl, c1) && readColor(file, hdl, c2)
+			{if (!(readColor(file, hdl, c1) && readColor(file, hdl, c2)
 			  && readColor(file, hdl, c3) && readColor(file, hdl, c4)))
 				return false;
 
+			QImage img(32, 32, QImage::Format_Indexed8);
 			img.setColorCount(2);
 			img.setColor(0, c2.rgb());
 			img.setColor(1, c1.rgb());
 			if (!readBitmap(file, hdl, img, 1))
 				return false;
 
-			_polygons[type] = Polygon(QBrush(img));
+			_polygons[type] = Polygon(QBrush(img.convertToFormat(
+			  QImage::Format_ARGB32_Premultiplied)));}
 			break;
 
 		case 0x0B:
 		case 0x0D:
-			if (!(readColor(file, hdl, c1) && readColor(file, hdl, c2)
+			{if (!(readColor(file, hdl, c1) && readColor(file, hdl, c2)
 			  && readColor(file, hdl, c3)))
 				return false;
 
+			QImage img(32, 32, QImage::Format_Indexed8);
 			img.setColorCount(2);
 			img.setColor(0, (flags == 0x0B) ? qRgba(255, 255, 255, 0)
 			  : c2.rgb());
@@ -1016,33 +1020,38 @@ bool Style::parsePolygon(const SubFile *file, SubFile::Handle &hdl,
 			if (!readBitmap(file, hdl, img, 1))
 				return false;
 
-			_polygons[type] = Polygon(QBrush(img));
+			_polygons[type] = Polygon(QBrush(img.convertToFormat(
+			  QImage::Format_ARGB32_Premultiplied)));}
 			break;
 
 		case 0x0E:
-			if (!readColor(file, hdl, c1))
+			{if (!readColor(file, hdl, c1))
 				return false;
 
+			QImage img(32, 32, QImage::Format_Indexed8);
 			img.setColorCount(2);
 			img.setColor(0, qRgba(255, 255, 255, 0));
 			img.setColor(1, c1.rgb());
 			if (!readBitmap(file, hdl, img, 1))
 				return false;
 
-			_polygons[type] = Polygon(QBrush(img));
+			_polygons[type] = Polygon(QBrush(img.convertToFormat(
+			  QImage::Format_ARGB32_Premultiplied)));}
 			break;
 
 		case 0x0F:
-			if (!(readColor(file, hdl, c1) && readColor(file, hdl, c2)))
+			{if (!(readColor(file, hdl, c1) && readColor(file, hdl, c2)))
 				return false;
 
+			QImage img(32, 32, QImage::Format_Indexed8);
 			img.setColorCount(2);
 			img.setColor(0, qRgba(255, 255, 255, 0));
 			img.setColor(1, c1.rgb());
 			if (!readBitmap(file, hdl, img, 1))
 				return false;
 
-			_polygons[type] = Polygon(QBrush(img));
+			_polygons[type] = Polygon(QBrush(img.convertToFormat(
+			  QImage::Format_ARGB32_Premultiplied)));}
 			break;
 
 		default:
