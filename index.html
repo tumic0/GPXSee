@@ -131,29 +131,31 @@
           </ul>
 
           <p>Additionally to the source codes, GPXSee is available as a Windows
-          installer and a Mac dmg from the project's Sourceforge page and in
-          form of various Linux packages from the project's openSUSE Build Service
-          page. Most Linux distributions (Archlinux, Fedora, Gentoo, openSUSE, ...)
-          as well as BSD distributions (FreeBSD, NetBSD, OpenBSD) also provide
-          GPXSee in their official repositories, however not always in the latest
-          version. On Mac you can also use the MacPorts or Homebrew packaging systems
-          to install GPXSee and on Windows you can use the Windows Package Manager
-          (winget).</p>
+          installer and a Mac DMG from the project's Sourceforge page and in
+          form of various Linux packages from the project's openSUSE Build
+          Service page. Most Linux distributions (Archlinux, Fedora, Gentoo,
+          openSUSE, ...) as well as BSD distributions (FreeBSD, NetBSD, OpenBSD)
+          also provide GPXSee in their official repositories, however not always
+          in the latest version. On Mac you can also use the MacPorts packaging
+          system to install GPXSee and on Windows you can use the Windows
+          Package Manager (winget).</p>
 
           <p>On Android, you can install GPXSee from the Google Play app store.</p>
 
-          <p><b>The official Windows and Mac installers are always signed using
-          certificates available at the GitHub project page. Due to lack of project
-          funding the certificates are non-commercial (self-signed) and you have to
-          import the certificate (on Windows) or modify gatekeeper rules (on Mac)
-          first if you want your OS automatically check/accept the installer. Recent
-          versions of macOS will even not allow you to run the program at all until
-          you fiddle with gatekeeper!</b> See the <a href="doc.html#codesign">documentation</a>
-          for details.</p>
+          <p><b>The official Windows and Mac installers are always signed during
+          the build on GitHub using certificates available in the Git repository.
+          As we belive that it shall be the user who decides what software can
+          be run on their machine, not corporations like Apple or Microsoft, the
+          certificates used are not issued/controlled by corporations and you
+          have to import the certificate (on Windows) or modify gatekeeper rules
+          (on Mac) first if you want your OS automatically check/accept the
+          installer.</b> Recent versions of macOS will even not allow you to run
+          the program at all until you fiddle with gatekeeper! See the
+          <a href="doc.html#codesign">documentation</a> for details.</p>
 
           <p><i>Warning: Never use the Flatpak version from flathub.org which is
-          crippled by design. Several fundamental features like file browsing and many
-          file formats are broken in the Flatpak package!</i></p>
+          crippled by design. Several fundamental features like file browsing
+          and many file formats are broken in the Flatpak package!</i></p>
 
           <h2 id="maps">GPXSee maps</h2>
 
@@ -172,7 +174,7 @@
           on GitHub where you can find a lot of additional map definitions for various
           map services, usually run by some state geographic institution or a non-profit
           organization.</p>
-          
+
           <p>Additionally to the online maps, you can use the most common community provided
           offline maps. This includes Garmin IMG maps and Mapsforge vector maps, MBTiles,
           JNX and KML maps as well as  images in GeoTIFF format or using ESRI world files
