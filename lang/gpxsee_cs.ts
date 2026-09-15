@@ -2057,35 +2057,35 @@
         <location filename="../src/GUI/optionsdialog.cpp" line="146"/>
         <location filename="../src/GUI/optionsdialog.cpp" line="157"/>
         <source>IMG maps detail level</source>
-        <translation type="unfinished"></translation>
+        <translation>Úroveň detailů IMG map</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="147"/>
         <location filename="../src/GUI/optionsdialog.cpp" line="154"/>
         <source>Paths:</source>
-        <translation type="unfinished"></translation>
+        <translation>Cesty:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="148"/>
         <location filename="../src/GUI/optionsdialog.cpp" line="155"/>
         <source>Points:</source>
-        <translation type="unfinished"></translation>
+        <translation>Body:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="149"/>
         <location filename="../src/GUI/optionsdialog.cpp" line="156"/>
         <source>Hillshading:</source>
-        <translation type="unfinished"></translation>
+        <translation>Stínování kopců:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="166"/>
         <source>HiDPI mode</source>
-        <translation type="unfinished"></translation>
+        <translation>HiDPI režim</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="167"/>
         <source>Miscellaneous</source>
-        <translation type="unfinished"></translation>
+        <translation>Různé</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="417"/>
