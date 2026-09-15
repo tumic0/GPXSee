@@ -29,6 +29,7 @@ PercentSlider::PercentSlider(QWidget *parent) : QWidget(parent)
 	QHBoxLayout *layout = new QHBoxLayout();
 	layout->addWidget(_slider);
 	layout->addWidget(_label);
+	layout->setContentsMargins(QMargins());
 
 	setLayout(layout);
 }
