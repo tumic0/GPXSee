@@ -93,6 +93,10 @@ static bool rectNearPolygon(const QPolygonF &polygon, const QRectF &rect)
 	  || polygon.containsPoint(rect.bottomRight(), Qt::OddEvenFill)));
 }
 
+int RasterTile::_pathsDetail = 0;
+int RasterTile::_pointsDetail = 0;
+int RasterTile::_hillshadingDetail = 0;
+
 const QFont *RasterTile::poiFont(Style::FontSize size, int zoom,
   bool extended) const
 {
@@ -373,7 +377,7 @@ void RasterTile::processLines(QList<MapData::Poly> &lines,
 {
 	std::stable_sort(lines.begin(), lines.end());
 
-	if (_zoom >= 22)
+	if (_zoom + _pathsDetail >= 22)
 		processStreetNames(lines, textItems);
 
 	processShields(lines, textItems);
@@ -426,7 +430,8 @@ void RasterTile::processShields(const QList<MapData::Poly> &lines,
   QList<TextItem*> &textItems)
 {
 	for (int type = FIRST_SHIELD; type <= LAST_SHIELD; type++) {
-		if (minShieldZoom(static_cast<Shield::Type>(type)) > _zoom)
+		if (minShieldZoom(static_cast<Shield::Type>(type)) > _zoom
+		  + _pathsDetail)
 			continue;
 
 		QHash<Shield, QPolygonF> shields;
@@ -553,7 +558,7 @@ void RasterTile::processPoints(QList<MapData::Point> &points,
 		  ? 0 : &(point.label.text());
 		const QImage *img = ps.img().isNull() ? 0 : &ps.img();
 		const QFont *fnt = poi
-		  ? poiFont(ps.text().size(), _zoom, point.flags
+		  ? poiFont(ps.text().size(), _zoom + _pointsDetail, point.flags
 			& MapData::Point::ClassLabel)
 		  : _style->font(ps.text().size());
 		const QColor *color = ps.text().color().isValid()
@@ -661,12 +666,13 @@ void RasterTile::fetchData(QList<MapData::Poly> &polygons,
 			}
 		}
 
-		data->polys(file, polyRectC, _zoom, &polygons, _vectors ? &lines : 0);
+		data->polys(file, polyRectC, _zoom + _pathsDetail, &polygons,
+		  _vectors ? &lines : 0);
 		if (_vectors)
-			data->points(file, pointRectC, _zoom, &points);
+			data->points(file, pointRectC, _zoom + _pointsDetail, &points);
 
 		if (!demRectC.isNull())
-			data->elevations(file, demRectC, _zoom, &tiles);
+			data->elevations(file, demRectC, _zoom + _hillshadingDetail, &tiles);
 
 		delete file;
 	}

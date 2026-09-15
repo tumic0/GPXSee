@@ -21,6 +21,7 @@ class ProjectionComboBox;
 class DirSelectWidget;
 class AuthenticationWidget;
 class PluginParameters;
+class QSlider;
 
 struct Options {
 	// Appearance
@@ -49,6 +50,9 @@ struct Options {
 	int outputProjection;
 	int inputProjection;
 	bool hidpiMap;
+	int pathsDetail;
+	int pointsDetail;
+	int hillshadingDetail;
 	// Data
 	int elevationFilter;
 	int speedFilter;
@@ -157,6 +161,9 @@ private:
 	ProjectionComboBox *_inputProjection;
 	QRadioButton *_hidpi;
 	QRadioButton *_lodpi;
+	QSlider *_pathsDetail;
+	QSlider *_pointsDetail;
+	QSlider *_hillshadingDetail;
 	// Data
 	OddSpinBox *_elevationFilter;
 	OddSpinBox *_speedFilter;

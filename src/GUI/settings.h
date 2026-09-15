@@ -221,6 +221,9 @@ public:
 	static const Setting outputProjection;
 	static const Setting inputProjection;
 	static const Setting hidpiMap;
+	static const Setting pathsDetail;
+	static const Setting pointsDetail;
+	static const Setting hillshadingDetail;
 	static const Setting poiPath;
 	static const Setting mapsPath;
 	static const Setting dataPath;

@@ -302,10 +302,7 @@ void VectorTile::elevations(QFile *file, const RectC &rect, const Zoom &zoom,
 		}
 	}
 
-	// Shift the DEM level to get better data then what the map defines for
-	// the given zoom (we prefer rendering quality rather than speed). For
-	// maps with a single level this has no effect.
-	int level = qMax(0, _dem->level(zoom) - 1);
+	int level = _dem->level(zoom);
 	QList<const DEMTile*> tiles(_dem->tiles(rect, level));
 
 	cacheLock->lock();

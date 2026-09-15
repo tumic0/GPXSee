@@ -1,4 +1,5 @@
 #include <QFrame>
+#include <QLabel>
 #include <QStyle>
 #include "macos.h"
 
@@ -7,6 +8,16 @@ QFrame *MacOS::line()
 	QFrame *l = new QFrame();
 	l->setFrameShape(QFrame::HLine);
 	l->setFrameShadow(QFrame::Sunken);
+
+	return l;
+}
+
+QLabel *MacOS::heading(const QString &text)
+{
+	QLabel *l = new QLabel(text);
+	QFont font = l->font();
+	font.setWeight(QFont::Medium);
+	l->setFont(font);
 
 	return l;
 }

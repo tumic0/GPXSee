@@ -40,6 +40,10 @@ public:
 
 	void render();
 
+	static void setPathsDetail(int detail) {_pathsDetail = detail;}
+	static void setPointsDetail(int detail) {_pointsDetail = detail;}
+	static void setHillshadingDetail(int detail) {_hillshadingDetail = detail;}
+
 private:
 	struct Sector
 	{
@@ -112,6 +116,10 @@ private:
 	QPixmap _pixmap;
 	bool _hillShading;
 	bool _rasters, _vectors;
+
+	static int _pathsDetail;
+	static int _pointsDetail;
+	static int _hillshadingDetail;
 };
 
 }

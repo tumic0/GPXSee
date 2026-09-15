@@ -121,9 +121,50 @@ QWidget *OptionsDialog::createMapPage(bool macos)
 	QWidget *hidpiTab = new QWidget();
 	hidpiTab->setLayout(hidpiTabLayout);
 
+	_pathsDetail = new QSlider();
+	_pathsDetail->setOrientation(Qt::Horizontal);
+	_pathsDetail->setMaximum(3);
+	_pathsDetail->setTickInterval(1);
+	_pathsDetail->setTickPosition(QSlider::TicksBelow);
+	_pathsDetail->setValue(_options.pathsDetail);
+	_pointsDetail = new QSlider();
+	_pointsDetail->setOrientation(Qt::Horizontal);
+	_pointsDetail->setMaximum(3);
+	_pointsDetail->setTickInterval(1);
+	_pointsDetail->setTickPosition(QSlider::TicksBelow);
+	_pointsDetail->setValue(_options.pointsDetail);
+	_hillshadingDetail = new QSlider();
+	_hillshadingDetail->setOrientation(Qt::Horizontal);
+	_hillshadingDetail->setMaximum(3);
+	_hillshadingDetail->setTickInterval(1);
+	_hillshadingDetail->setTickPosition(QSlider::TicksBelow);
+	_hillshadingDetail->setValue(_options.hillshadingDetail);
+
+	QWidget *miscTab = new QWidget();
+	if (macos) {
+		QFormLayout *miscTabLayout = new QFormLayout();
+		miscTabLayout->addWidget(MacOS::heading(tr("IMG maps detail level")));
+		miscTabLayout->addRow(tr("Paths:"), _pathsDetail);
+		miscTabLayout->addRow(tr("Points:"), _pointsDetail);
+		miscTabLayout->addRow(tr("Hillshading:"), _hillshadingDetail);
+		miscTab->setLayout(miscTabLayout);
+	} else {
+		QVBoxLayout *miscTabLayout = new QVBoxLayout();
+		QFormLayout *detailsLayout = new QFormLayout();
+		detailsLayout->addRow(tr("Paths:"), _pathsDetail);
+		detailsLayout->addRow(tr("Points:"), _pointsDetail);
+		detailsLayout->addRow(tr("Hillshading:"), _hillshadingDetail);
+		QGroupBox *detailsBox = new QGroupBox(tr("IMG maps detail level"));
+		detailsBox->setLayout(detailsLayout);
+		miscTabLayout->addWidget(detailsBox);
+		miscTabLayout->addStretch();
+		miscTab->setLayout(miscTabLayout);
+	}
+
 	QTabWidget *mapPage = new QTabWidget();
 	mapPage->addTab(projectionTab, tr("Projection"));
-	mapPage->addTab(hidpiTab, tr("HiDPI display mode"));
+	mapPage->addTab(hidpiTab, tr("HiDPI mode"));
+	mapPage->addTab(miscTab, tr("Miscellaneous"));
 
 	return mapPage;
 }
@@ -343,13 +384,16 @@ QWidget *OptionsDialog::createDataPage(bool macos)
 	QWidget *filterTab = new QWidget();
 	if (macos) {
 		QFormLayout *filterTabLayout = new QFormLayout();
-		filterTabLayout->addWidget(new QLabel(tr("Smoothing")));
+		// The spacer prevents collapsing the form to the left side
+		QWidget *spacer = new QWidget();
+		spacer->setFixedSize(100, 1);
+		filterTabLayout->addRow(spacer, MacOS::heading(tr("Smoothing")));
 		filterTabLayout->addRow(tr("Elevation:"), _elevationFilter);
 		filterTabLayout->addRow(tr("Speed:"), _speedFilter);
 		filterTabLayout->addRow(tr("Heart rate:"), _heartRateFilter);
 		filterTabLayout->addRow(tr("Cadence:"), _cadenceFilter);
 		filterTabLayout->addRow(tr("Power:"), _powerFilter);
-		filterTabLayout->addWidget(new QWidget());
+		filterTabLayout->addRow(MacOS::line());
 		filterTabLayout->addWidget(_outlierEliminate);
 		filterTab->setLayout(filterTabLayout);
 	} else {
@@ -951,6 +995,9 @@ void OptionsDialog::accept()
 	_options.inputProjection = _inputProjection->itemData(
 	  _inputProjection->currentIndex()).toInt();
 	_options.hidpiMap = _hidpi->isChecked();
+	_options.pathsDetail = _pathsDetail->value();
+	_options.pointsDetail = _pointsDetail->value();
+	_options.hillshadingDetail = _hillshadingDetail->value();
 
 	_options.elevationFilter = _elevationFilter->value();
 	_options.speedFilter = _speedFilter->value();

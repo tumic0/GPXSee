@@ -42,6 +42,7 @@
 #include "map/crs.h"
 #include "map/hillshading.h"
 #include "map/tilecache.h"
+#include "map/IMG/rastertile_img.h"
 #include "icons.h"
 #include "keys.h"
 #include "settings.h"
@@ -2974,6 +2975,9 @@ void GUI::writeSettings()
 	WRITE(outputProjection, _options.outputProjection);
 	WRITE(inputProjection, _options.inputProjection);
 	WRITE(hidpiMap, _options.hidpiMap);
+	WRITE(pathsDetail, _options.pathsDetail);
+	WRITE(pointsDetail, _options.pointsDetail);
+	WRITE(hillshadingDetail, _options.hillshadingDetail);
 	WRITE(dataPath, _options.dataPath);
 	WRITE(mapsPath, _options.mapsPath);
 	WRITE(poiPath, _options.poiPath);
@@ -3296,6 +3300,9 @@ void GUI::readSettings(QString &activeMap, QStringList &disabledPOIs,
 	_options.outputProjection = READ(outputProjection).toInt();
 	_options.inputProjection = READ(inputProjection).toInt();
 	_options.hidpiMap = READ(hidpiMap).toBool();
+	_options.pathsDetail = READ(pathsDetail).toInt();
+	_options.pointsDetail = READ(pointsDetail).toInt();
+	_options.hillshadingDetail = READ(hillshadingDetail).toInt();
 	_options.dataPath = READ(dataPath).toString();
 	_options.mapsPath = READ(mapsPath).toString();
 	_options.poiPath = READ(poiPath).toString();
@@ -3387,6 +3394,10 @@ void GUI::loadOptions()
 	_dataDir = _options.dataPath;
 	_mapDir = _options.mapsPath;
 	_poiDir = _options.poiPath;
+
+	IMG::RasterTile::setPathsDetail(_options.pathsDetail);
+	IMG::RasterTile::setPointsDetail(_options.pointsDetail);
+	IMG::RasterTile::setHillshadingDetail(_options.hillshadingDetail);
 }
 
 void GUI::updateOptions(const Options &options)
@@ -3416,6 +3427,11 @@ void GUI::updateOptions(const Options &options)
 #define SET_HS_OPTION(option, action) \
 	if (options.option != _options.option) { \
 		HillShading::action(options.option); \
+		redraw = true; \
+	}
+#define SET_IMGMAP_OPTION(option, action) \
+	if (options.option != _options.option) { \
+		IMG::RasterTile::action(options.option); \
 		redraw = true; \
 	}
 
@@ -3516,6 +3532,10 @@ void GUI::updateOptions(const Options &options)
 	SET_HS_OPTION(hillshadingAltitude, setAltitude);
 	SET_HS_OPTION(hillshadingZFactor, setZFactor);
 	SET_HS_OPTION(hillshadingLightening, setLightening);
+
+	SET_IMGMAP_OPTION(pathsDetail, setPathsDetail);
+	SET_IMGMAP_OPTION(pointsDetail, setPointsDetail);
+	SET_IMGMAP_OPTION(hillshadingDetail, setHillshadingDetail);
 
 	if (options.connectionTimeout != _options.connectionTimeout)
 		Downloader::setTimeout(options.connectionTimeout);
