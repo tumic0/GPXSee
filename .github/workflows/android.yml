@@ -28,11 +28,11 @@ jobs:
       - name: Install Qt (Desktop)
         uses: jurplel/install-qt-action@v4
         with:
-          version: '6.11.1'
+          version: '6.12.0'
       - name: Install Qt (Android)
         uses: jurplel/install-qt-action@v4
         with:
-          version: '6.11.1'
+          version: '6.12.0'
           host: 'all_os'
           target: 'android'
           arch: 'android_arm64_v8a'
