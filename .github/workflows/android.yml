@@ -33,6 +33,7 @@ jobs:
         uses: jurplel/install-qt-action@v4
         with:
           version: '6.11.1'
+          host: 'all_os'
           target: 'android'
           arch: 'android_arm64_v8a'
           modules: qtimageformats qtpositioning qtserialport qtmultimedia qt5compat
