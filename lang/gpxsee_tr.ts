@@ -1925,25 +1925,25 @@
         <location filename="../src/GUI/optionsdialog.cpp" line="146"/>
         <location filename="../src/GUI/optionsdialog.cpp" line="157"/>
         <source>IMG maps detail level</source>
-        <translation type="unfinished"></translation>
+        <translation>IMG haritalarının ayrıntı seviyesi</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="147"/>
         <location filename="../src/GUI/optionsdialog.cpp" line="154"/>
         <source>Paths:</source>
-        <translation type="unfinished"></translation>
+        <translation>Yollar:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="148"/>
         <location filename="../src/GUI/optionsdialog.cpp" line="155"/>
         <source>Points:</source>
-        <translation type="unfinished"></translation>
+        <translation>Noktalar:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="149"/>
         <location filename="../src/GUI/optionsdialog.cpp" line="156"/>
         <source>Hillshading:</source>
-        <translation type="unfinished"></translation>
+        <translation>Tepe gölgelendirmesi:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="165"/>
@@ -1953,12 +1953,12 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="166"/>
         <source>HiDPI mode</source>
-        <translation type="unfinished"></translation>
+        <translation>HiDPI modu</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="167"/>
         <source>Miscellaneous</source>
-        <translation type="unfinished"></translation>
+        <translation>Çeşitli</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="177"/>
