@@ -2072,35 +2072,35 @@
         <location filename="../src/GUI/optionsdialog.cpp" line="146"/>
         <location filename="../src/GUI/optionsdialog.cpp" line="157"/>
         <source>IMG maps detail level</source>
-        <translation type="unfinished"></translation>
+        <translation>Nivell de detall dels mapes IMG</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="147"/>
         <location filename="../src/GUI/optionsdialog.cpp" line="154"/>
         <source>Paths:</source>
-        <translation type="unfinished"></translation>
+        <translation>Camins:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="148"/>
         <location filename="../src/GUI/optionsdialog.cpp" line="155"/>
         <source>Points:</source>
-        <translation type="unfinished"></translation>
+        <translation>Punts:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="149"/>
         <location filename="../src/GUI/optionsdialog.cpp" line="156"/>
         <source>Hillshading:</source>
-        <translation type="unfinished"></translation>
+        <translation>Ombrejat:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="166"/>
         <source>HiDPI mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Mode HiDPI</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="167"/>
         <source>Miscellaneous</source>
-        <translation type="unfinished"></translation>
+        <translation>Diversos</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="685"/>
