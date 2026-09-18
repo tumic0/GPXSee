@@ -1547,710 +1547,634 @@
 <context>
     <name>OptionsDialog</name>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="68"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="69"/>
         <source>Select the proper coordinate reference system (CRS) of maps without a CRS definition (JNX, KMZ and World file maps).</source>
         <translation>CRS 정의가 없는 지도 (JNX, KMZ 및 World 파일 지도)의 적절한 좌표 참조 시스템 (CRS)을 선택합니다.</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="71"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="72"/>
         <source>Select the desired projection of vector maps (IMG, Mapsforge and ENC maps). The projection must be valid for the whole map area.</source>
         <translation>원하는 벡터 지도 투영(IMG, Mapsforge 및 ENC 지도)을 선택합니다. 투영은 전체 지도 영역에 대해 유효해야 합니다.</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="76"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="77"/>
         <source>Standard</source>
         <translation>표준</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="81"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="82"/>
         <source>Non-HiDPI maps are loaded as HiDPI maps. The map is sharp but map objects are small/hard to read.</source>
         <translation>비 HiDPI 지도는 HiDPI 지도로 불러옵니다. 지도는 날카롭지만 지도 객체가 작거나 읽기 어렵습니다.</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="83"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="84"/>
         <source>Non-HiDPI maps are loaded such as they are. Map objects have the expected size but the map is blurry.</source>
         <translation>비 HiDPI 지도는 그대로 불러옵니다. 지도 개체의 크기가 예상되지만 지도가 흐립니다.</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="102"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="97"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="103"/>
         <source>Input</source>
         <translation>입력</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="104"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="100"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="105"/>
         <source>Output</source>
         <translation>출력</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="96"/>
-        <source>Input:</source>
-        <translation>입력:</translation>
-    </message>
-    <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="99"/>
-        <source>Output:</source>
-        <translation>출력:</translation>
-    </message>
-    <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="165"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="163"/>
         <source>Projection</source>
         <translation>프로젝션</translation>
     </message>
     <message>
-        <source>HiDPI display mode</source>
-        <translation type="vanished">HiDPI 디스플레이 모드</translation>
-    </message>
-    <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="177"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="184"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="190"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="257"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="264"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="301"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="668"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="175"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="182"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="188"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="273"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="280"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="317"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="683"/>
         <source>px</source>
         <translation>px</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="201"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="303"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="199"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="319"/>
         <source>Use anti-aliasing</source>
         <translation>안티앨리어싱 사용</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="207"/>
-        <source>Track width:</source>
-        <translation>트랙 너비:</translation>
-    </message>
-    <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="208"/>
-        <source>Track style:</source>
-        <translation>트랙 스타일:</translation>
-    </message>
-    <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="210"/>
-        <source>Route width:</source>
-        <translation>경로 너비:</translation>
-    </message>
-    <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="211"/>
-        <source>Route style:</source>
-        <translation>경로 스타일:</translation>
-    </message>
-    <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="213"/>
-        <source>Area border width:</source>
-        <translation>영역 경계 너비:</translation>
-    </message>
-    <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="214"/>
-        <source>Area border style:</source>
-        <translation>영역 경계 스타일:</translation>
-    </message>
-    <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="215"/>
-        <source>Area fill opacity:</source>
-        <translation>영역 채우기 불투명도:</translation>
-    </message>
-    <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="217"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="240"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="219"/>
         <source>Base color:</source>
         <translation>기본 색상:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="218"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="241"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="220"/>
         <source>Palette shift:</source>
         <translation>팔레트 이동:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="224"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="229"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="234"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="202"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="207"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="212"/>
         <source>Width:</source>
         <translation>너비:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="225"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="230"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="235"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="203"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="208"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="213"/>
         <source>Style:</source>
         <translation>스타일:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="226"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="242"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="254"/>
         <source>Tracks</source>
         <translation>트랙</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="231"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="245"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="256"/>
         <source>Routes</source>
         <translation>경로</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="237"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="248"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="258"/>
         <source>Areas</source>
         <translation>영역</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="272"/>
-        <source>Waypoint color:</source>
-        <translation>경유지 색상:</translation>
-    </message>
-    <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="273"/>
-        <source>Waypoint size:</source>
-        <translation>경유지 크기:</translation>
-    </message>
-    <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="275"/>
-        <source>POI color:</source>
-        <translation>POI 색상:</translation>
-    </message>
-    <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="276"/>
-        <source>POI size:</source>
-        <translation>POI 크기:</translation>
-    </message>
-    <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="280"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="285"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="286"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="289"/>
         <source>Color:</source>
         <translation>색상:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="281"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="286"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="287"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="290"/>
         <source>Size:</source>
         <translation>크기:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="282"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="295"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="301"/>
         <source>Waypoints</source>
         <translation>경유지</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="287"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="298"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="303"/>
         <source>POIs</source>
         <translation>POI</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="309"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="315"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="325"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="331"/>
         <source>Line width:</source>
         <translation>선 너비:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="310"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="316"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="326"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="332"/>
         <source>Slider color:</source>
         <translation>슬라이더 색상:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="336"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="352"/>
         <source>Info background</source>
         <translation>정보 배경</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="340"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="356"/>
         <source>Background color:</source>
         <translation>배경 색상:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="342"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="358"/>
         <source>Crosshair color:</source>
         <translation>십자선 색상:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="343"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="359"/>
         <source>Info color:</source>
         <translation>정보 색상:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="353"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="369"/>
         <source>Paths</source>
         <translation>경로</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="354"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="370"/>
         <source>Points</source>
         <translation>지점</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="355"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="797"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="371"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="812"/>
         <source>Graphs</source>
         <translation>그래프</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="356"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="372"/>
         <source>Map</source>
         <translation>지도</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="363"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="379"/>
         <source>Moving average window size</source>
         <translation>이동 평균 창 크기</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="381"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="396"/>
         <source>Eliminate GPS outliers</source>
         <translation>GPS 특이치 제거</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="390"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="407"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="411"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="416"/>
         <source>Smoothing</source>
         <translation>평활</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="391"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="401"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="524"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="400"/>
         <source>Elevation:</source>
         <translation>고도:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="392"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="402"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="523"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="401"/>
         <source>Speed:</source>
         <translation>속도:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="393"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="403"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="402"/>
         <source>Heart rate:</source>
         <translation>심박수:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="394"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="404"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="403"/>
         <source>Cadence:</source>
         <translation>케이던스:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="395"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="405"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="404"/>
         <source>Power:</source>
         <translation>파워:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="417"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="425"/>
         <source>Detect pauses</source>
         <translation>일시 중지 감지</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="420"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="428"/>
         <source>Automatic</source>
         <translation>자동</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="421"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="475"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="429"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="489"/>
         <source>Custom</source>
         <translation>사용자 지정</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="434"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="442"/>
         <source>mi/h</source>
         <translation>mi/h</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="437"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="445"/>
         <source>kn</source>
         <translation>kn</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="440"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="448"/>
         <source>km/h</source>
         <translation>km/h</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="444"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="824"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="452"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="839"/>
         <source>s</source>
         <translation>초</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="455"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="463"/>
         <source>Computed from distance/time</source>
         <translation>거리/시간으로 계산됨</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="456"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="464"/>
         <source>Recorded by device</source>
         <translation>장치별로 기록</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="461"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="472"/>
         <source>Show secondary speed</source>
         <translation>보조 속도 표시</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="464"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="475"/>
         <source>GPS data</source>
         <translation>GPS 데이터</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="465"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="476"/>
         <source>DEM data</source>
         <translation>DEM 데이터</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="470"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="484"/>
         <source>Show secondary elevation</source>
         <translation>보조 고도 표시</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="473"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="487"/>
         <source>UTC</source>
         <translation>UTC</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="474"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="874"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="929"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="488"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="889"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="944"/>
         <source>System</source>
         <translation>시스템</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="494"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="515"/>
         <source>Use segments</source>
         <translation>세그먼트 사용</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="525"/>
-        <source>Time zone:</source>
-        <translation>시간대:</translation>
-    </message>
-    <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="538"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="547"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="558"/>
         <source>Speed</source>
         <translation>속도</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="543"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="550"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="560"/>
         <source>Elevation</source>
         <translation>고도</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="549"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="553"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="562"/>
         <source>Time zone</source>
         <translation>시간대</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="565"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="578"/>
         <source>Detection:</source>
         <translation>감지:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="566"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="579"/>
         <source>Minimal speed:</source>
         <translation>최소 속도:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="567"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="580"/>
         <source>Minimal duration:</source>
         <translation>최소 지속 시간:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="578"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="593"/>
         <source>Sources</source>
         <translation>소스</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="579"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="594"/>
         <source>Filtering</source>
         <translation>필터링</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="580"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="595"/>
         <source>Pause detection</source>
         <translation>일시 중지 감지</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="594"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="609"/>
         <source>mi</source>
         <translation>mi</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="597"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="612"/>
         <source>nmi</source>
         <translation>nmi</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="600"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="615"/>
         <source>km</source>
         <translation>km</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="604"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="619"/>
         <source>Radius:</source>
         <translation>반지름:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="610"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="920"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="625"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="935"/>
         <source>POI</source>
         <translation>POI</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="627"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="642"/>
         <source>Use HTTP authentication</source>
         <translation>HTTP 인증 사용</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="633"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="648"/>
         <source>Use $lat and $lon for NYY/SYY and EXXX/WXXX in the URL.</source>
         <translation>URL에서 NYY/SYY 및 EXXX/WXXX의 경우 $lat 및 $lon을 사용합니다.</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="639"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="651"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="654"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="666"/>
         <source>URL:</source>
         <translation>URL:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="236"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="341"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="684"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="214"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="357"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="699"/>
         <source>Opacity:</source>
         <translation>불투명:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="686"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="701"/>
         <source>Blur radius:</source>
         <translation>흐림 반경:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="688"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="703"/>
         <source>Azimuth:</source>
         <translation>방위:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="689"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="704"/>
         <source>Altitude:</source>
         <translation>고도:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="690"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="705"/>
         <source>Z Factor:</source>
         <translation>Z 요인:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="695"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="727"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="710"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="742"/>
         <source>Source</source>
         <translation>소스</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="696"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="711"/>
         <source>Hillshading</source>
         <translation>언덕 음영</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="716"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="731"/>
         <source>Plugin:</source>
         <translation>플러그인:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="736"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="751"/>
         <source>WYSIWYG</source>
         <translation>WYSIWYG</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="75"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="737"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="76"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="752"/>
         <source>High-Resolution</source>
         <translation>고해상도</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="146"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="157"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="152"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="155"/>
         <source>IMG maps detail level</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="147"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="154"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="145"/>
         <source>Paths:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="148"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="155"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="146"/>
         <source>Points:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="149"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="156"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="147"/>
         <source>Hillshading:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="166"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="164"/>
         <source>HiDPI mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="167"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="165"/>
         <source>Miscellaneous</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="685"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="700"/>
         <source>Lightening:</source>
         <translation>라이트닝:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="742"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="757"/>
         <source>The printed area is approximately the display area. The map zoom level does not change.</source>
         <translation>인쇄된 영역은 대략 표시 영역입니다. 지도 확대/축소 수준은 변경되지 않습니다.</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="744"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="759"/>
         <source>The zoom level will be changed so that the whole content (tracks/waypoints) fits to the printed area and the map resolution is as close as possible to the print resolution.</source>
         <translation>전체 콘텐츠 (트랙/경유지)가 인쇄 영역에 맞고 지도 해상도가 인쇄 해상도에 최대한 근접하도록 확대/축소 수준이 변경됩니다.</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="760"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="775"/>
         <source>Name</source>
         <translation>이름</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="762"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="777"/>
         <source>Date</source>
         <translation>날짜</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="764"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="779"/>
         <source>Distance</source>
         <translation>거리</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="766"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="781"/>
         <source>Time</source>
         <translation>시간</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="768"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="783"/>
         <source>Moving time</source>
         <translation>이동 시간</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="770"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="785"/>
         <source>Item count (&gt;1)</source>
         <translation>항목수 (&gt;1)</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="785"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="800"/>
         <source>Separate graph page</source>
         <translation>별도 그래프 페이지</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="795"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="810"/>
         <source>Print mode</source>
         <translation>인쇄 모드</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="796"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="811"/>
         <source>Header</source>
         <translation>머리말</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="804"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="819"/>
         <source>Use OpenGL</source>
         <translation>OpenGL 사용</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="806"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="821"/>
         <source>Enable HTTP/2</source>
         <translation>HTTP/2 사용</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="812"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="818"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="827"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="833"/>
         <source>MB</source>
         <translation>MB</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="830"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="838"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="845"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="853"/>
         <source>Image cache size:</source>
         <translation>이미지 캐시 크기:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="832"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="840"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="847"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="855"/>
         <source>Connection timeout:</source>
         <translation>연결 시간 초과:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="831"/>
-        <location filename="../src/GUI/optionsdialog.cpp" line="839"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="846"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="854"/>
         <source>DEM cache size:</source>
         <translation>DEM 캐시 크기:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="858"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="873"/>
         <source>Select the initial paths of the file open dialogues. Leave the field empty for the system default.</source>
         <translation>파일 열기 대화 상자의 초기 경로를 선택합니다. 시스템 기본값의 경우 필드를 비워 둡니다.</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="862"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="877"/>
         <source>Data:</source>
         <translation>날짜:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="863"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="878"/>
         <source>Maps:</source>
         <translation>지도:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="864"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="879"/>
         <source>POI:</source>
         <translation>POI:</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="875"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="890"/>
         <source>Initial paths</source>
         <translation>초기 경로</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="915"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="930"/>
         <source>Appearance</source>
         <translation>모양새</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="917"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="932"/>
         <source>Maps</source>
         <translation>지도</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="919"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="934"/>
         <source>Data</source>
         <translation>데이터</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="922"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="937"/>
         <source>DEM</source>
         <translation>DEM</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="925"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="940"/>
         <source>Position</source>
         <translation>위치</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="927"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="942"/>
         <source>Print &amp; Export</source>
         <translation>인쇄 및 내보내기</translation>
     </message>
     <message>
-        <location filename="../src/GUI/optionsdialog.cpp" line="961"/>
+        <location filename="../src/GUI/optionsdialog.cpp" line="974"/>
         <source>Options</source>
         <translation>옵션</translation>
     </message>
