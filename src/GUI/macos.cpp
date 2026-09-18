@@ -18,6 +18,7 @@ QLabel *MacOS::heading(const QString &text)
 	QFont font = l->font();
 	font.setWeight(QFont::Medium);
 	l->setFont(font);
+	l->setAlignment(Qt::AlignHCenter);
 
 	return l;
 }

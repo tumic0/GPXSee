@@ -14,6 +14,7 @@
 #include <QSysInfo>
 #include <QButtonGroup>
 #include <QGeoPositionInfoSource>
+#include "common/util.h"
 #include "map/pcs.h"
 #include "icons.h"
 #include "infolabel.h"
@@ -93,10 +94,10 @@ QWidget *OptionsDialog::createMapPage(bool macos)
 	QWidget *projectionTab = new QWidget();
 	QVBoxLayout *projectionTabLayout = new QVBoxLayout();
 	if (macos) {
-		projectionTabLayout->addWidget(new QLabel(tr("Input:")));
+		projectionTabLayout->addWidget(MacOS::heading(tr("Input")));
 		projectionTabLayout->addLayout(inLayout);
 		projectionTabLayout->addWidget(MacOS::line());
-		projectionTabLayout->addWidget(new QLabel(tr("Output:")));
+		projectionTabLayout->addWidget(MacOS::heading(tr("Output")));
 		projectionTabLayout->addLayout(outLayout);
 	} else {
 		QGroupBox *inBox = new QGroupBox(tr("Input"));
@@ -140,26 +141,23 @@ QWidget *OptionsDialog::createMapPage(bool macos)
 	_hillshadingDetail->setTickPosition(QSlider::TicksBelow);
 	_hillshadingDetail->setValue(_options.hillshadingDetail);
 
+	QFormLayout *detailsLayout = new QFormLayout();
+	detailsLayout->addRow(tr("Paths:"), _pathsDetail);
+	detailsLayout->addRow(tr("Points:"), _pointsDetail);
+	detailsLayout->addRow(tr("Hillshading:"), _hillshadingDetail);
+
 	QWidget *miscTab = new QWidget();
+	QVBoxLayout *miscTabLayout = new QVBoxLayout();
 	if (macos) {
-		QFormLayout *miscTabLayout = new QFormLayout();
 		miscTabLayout->addWidget(MacOS::heading(tr("IMG maps detail level")));
-		miscTabLayout->addRow(tr("Paths:"), _pathsDetail);
-		miscTabLayout->addRow(tr("Points:"), _pointsDetail);
-		miscTabLayout->addRow(tr("Hillshading:"), _hillshadingDetail);
-		miscTab->setLayout(miscTabLayout);
+		miscTabLayout->addLayout(detailsLayout);
 	} else {
-		QVBoxLayout *miscTabLayout = new QVBoxLayout();
-		QFormLayout *detailsLayout = new QFormLayout();
-		detailsLayout->addRow(tr("Paths:"), _pathsDetail);
-		detailsLayout->addRow(tr("Points:"), _pointsDetail);
-		detailsLayout->addRow(tr("Hillshading:"), _hillshadingDetail);
 		QGroupBox *detailsBox = new QGroupBox(tr("IMG maps detail level"));
 		detailsBox->setLayout(detailsLayout);
 		miscTabLayout->addWidget(detailsBox);
-		miscTabLayout->addStretch();
-		miscTab->setLayout(miscTabLayout);
 	}
+	miscTabLayout->addStretch();
+	miscTab->setLayout(miscTabLayout);
 
 	QTabWidget *mapPage = new QTabWidget();
 	mapPage->addTab(projectionTab, tr("Projection"));
@@ -201,55 +199,73 @@ QWidget *OptionsDialog::createAppearancePage(bool macos)
 	_pathAA = new QCheckBox(tr("Use anti-aliasing"));
 	_pathAA->setChecked(_options.pathAntiAliasing);
 
+	QLabel *trackWidthLabel = new QLabel(tr("Width:"));
+	QLabel *trackStyleLabel = new QLabel(tr("Style:"));
+	QFormLayout *trackLayout = new QFormLayout();
+	trackLayout->addRow(trackWidthLabel, _trackWidth);
+	trackLayout->addRow(trackStyleLabel, _trackStyle);
+	QLabel *routeWidthLabel = new QLabel(tr("Width:"));
+	QLabel *routeStyleLabel = new QLabel(tr("Style:"));
+	QFormLayout *routeLayout = new QFormLayout();
+	routeLayout->addRow(routeWidthLabel, _routeWidth);
+	routeLayout->addRow(routeStyleLabel, _routeStyle);
+	QLabel *areaWidthLabel = new QLabel(tr("Width:"));
+	QLabel *areaStyleLabel = new QLabel(tr("Style:"));
+	QLabel *areaOpacityLabel = new QLabel(tr("Opacity:"));
+	QFormLayout *areaLayout = new QFormLayout();
+	areaLayout->addRow(areaWidthLabel, _areaWidth);
+	areaLayout->addRow(areaStyleLabel, _areaStyle);
+	areaLayout->addRow(areaOpacityLabel, _areaOpacity);
+	QLabel *baseColorLabel = new QLabel(tr("Base color:"));
+	QLabel *paletteShiftLabel = new QLabel(tr("Palette shift:"));
+	QFormLayout *paletteLayout = new QFormLayout();
+	paletteLayout->addRow(baseColorLabel, _baseColor);
+	paletteLayout->addRow(paletteShiftLabel, _colorOffset);
+	QLabel *aaLabel = new QLabel();
+	QFormLayout *pathAALayout = new QFormLayout();
+	pathAALayout->addRow(aaLabel, _pathAA);
+
 	QWidget *pathTab = new QWidget();
+	QVBoxLayout *pathTabLayout = new QVBoxLayout();
 	if (macos) {
-		QFormLayout *pathTabLayout = new QFormLayout();
-		pathTabLayout->addRow(tr("Track width:"), _trackWidth);
-		pathTabLayout->addRow(tr("Track style:"), _trackStyle);
-		pathTabLayout->addRow(MacOS::line());
-		pathTabLayout->addRow(tr("Route width:"), _routeWidth);
-		pathTabLayout->addRow(tr("Route style:"), _routeStyle);
-		pathTabLayout->addRow(MacOS::line());
-		pathTabLayout->addRow(tr("Area border width:"), _areaWidth);
-		pathTabLayout->addRow(tr("Area border style:"), _areaStyle);
-		pathTabLayout->addRow(tr("Area fill opacity:"), _areaOpacity);
-		pathTabLayout->addRow(MacOS::line());
-		pathTabLayout->addRow(tr("Base color:"), _baseColor);
-		pathTabLayout->addRow(tr("Palette shift:"), _colorOffset);
-		pathTabLayout->addRow(MacOS::line());
-		pathTabLayout->addWidget(_pathAA);
-		pathTab->setLayout(pathTabLayout);
+		QLabel *labels[] = {trackWidthLabel, trackStyleLabel, routeWidthLabel,
+		  routeStyleLabel, areaWidthLabel, areaStyleLabel, areaOpacityLabel,
+		  baseColorLabel, paletteShiftLabel, aaLabel};
+		int max = 0;
+		for (size_t i = 0; i < ARRAY_SIZE(labels); i++)
+			max = qMax(max, labels[i]->sizeHint().width() - 15);
+		for (size_t i = 0; i < ARRAY_SIZE(labels); i++) {
+			labels[i]->setMinimumWidth(max);
+			labels[i]->setAlignment(Qt::AlignRight);
+		}
+
+		pathTabLayout->addWidget(MacOS::heading(tr("Tracks")));
+		pathTabLayout->addLayout(trackLayout);
+		pathTabLayout->addWidget(MacOS::line());
+		pathTabLayout->addWidget(MacOS::heading(tr("Routes")));
+		pathTabLayout->addLayout(routeLayout);
+		pathTabLayout->addWidget(MacOS::line());
+		pathTabLayout->addWidget(MacOS::heading(tr("Areas")));
+		pathTabLayout->addLayout(areaLayout);
+		pathTabLayout->addWidget(MacOS::line());
+		pathTabLayout->addLayout(paletteLayout);
+		pathTabLayout->addLayout(pathAALayout);
 	} else {
-		QFormLayout *trackLayout = new QFormLayout();
-		trackLayout->addRow(tr("Width:"), _trackWidth);
-		trackLayout->addRow(tr("Style:"), _trackStyle);
 		QGroupBox *trackBox = new QGroupBox(tr("Tracks"));
 		trackBox->setLayout(trackLayout);
-		QFormLayout *routeLayout = new QFormLayout();
-		routeLayout->addRow(tr("Width:"), _routeWidth);
-		routeLayout->addRow(tr("Style:"), _routeStyle);
 		QGroupBox *routeBox = new QGroupBox(tr("Routes"));
 		routeBox->setLayout(routeLayout);
-		QFormLayout *areaLayout = new QFormLayout();
-		areaLayout->addRow(tr("Width:"), _areaWidth);
-		areaLayout->addRow(tr("Style:"), _areaStyle);
-		areaLayout->addRow(tr("Opacity:"), _areaOpacity);
 		QGroupBox *areaBox = new QGroupBox(tr("Areas"));
 		areaBox->setLayout(areaLayout);
-		QFormLayout *paletteLayout = new QFormLayout();
-		paletteLayout->addRow(tr("Base color:"), _baseColor);
-		paletteLayout->addRow(tr("Palette shift:"), _colorOffset);
-		QFormLayout *pathAALayout = new QFormLayout();
-		pathAALayout->addWidget(_pathAA);
-		QVBoxLayout *pathTabLayout = new QVBoxLayout();
+
 		pathTabLayout->addWidget(trackBox);
 		pathTabLayout->addWidget(routeBox);
 		pathTabLayout->addWidget(areaBox);
 		pathTabLayout->addLayout(paletteLayout);
 		pathTabLayout->addLayout(pathAALayout);
-		pathTabLayout->addStretch();
-		pathTab->setLayout(pathTabLayout);
 	}
+	pathTabLayout->addStretch();
+	pathTab->setLayout(pathTabLayout);
 
 	// Waypoints
 	_waypointSize = new QSpinBox();
@@ -266,32 +282,32 @@ QWidget *OptionsDialog::createAppearancePage(bool macos)
 	_poiColor = new ColorBox();
 	_poiColor->setColor(_options.poiColor);
 
+	QFormLayout *waypointLayout = new QFormLayout();
+	waypointLayout->addRow(tr("Color:"), _waypointColor);
+	waypointLayout->addRow(tr("Size:"), _waypointSize);
+	QFormLayout *poiLayout = new QFormLayout();
+	poiLayout->addRow(tr("Color:"), _poiColor);
+	poiLayout->addRow(tr("Size:"), _poiSize);
+
 	QWidget *pointTab = new QWidget();
+	QVBoxLayout *pointTabLayout = new QVBoxLayout();
 	if (macos) {
-		QFormLayout *pointTabLayout = new QFormLayout();
-		pointTabLayout->addRow(tr("Waypoint color:"), _waypointColor);
-		pointTabLayout->addRow(tr("Waypoint size:"), _waypointSize);
-		pointTabLayout->addRow(MacOS::line());
-		pointTabLayout->addRow(tr("POI color:"), _poiColor);
-		pointTabLayout->addRow(tr("POI size:"), _poiSize);
-		pointTab->setLayout(pointTabLayout);
+		pointTabLayout->addWidget(MacOS::heading(tr("Waypoints")));
+		pointTabLayout->addLayout(waypointLayout);
+		pointTabLayout->addWidget(MacOS::line());
+		pointTabLayout->addWidget(MacOS::heading(tr("POIs")));
+		pointTabLayout->addLayout(poiLayout);
 	} else {
-		QFormLayout *waypointLayout = new QFormLayout();
-		waypointLayout->addRow(tr("Color:"), _waypointColor);
-		waypointLayout->addRow(tr("Size:"), _waypointSize);
 		QGroupBox *waypointBox = new QGroupBox(tr("Waypoints"));
 		waypointBox->setLayout(waypointLayout);
-		QFormLayout *poiLayout = new QFormLayout();
-		poiLayout->addRow(tr("Color:"), _poiColor);
-		poiLayout->addRow(tr("Size:"), _poiSize);
 		QGroupBox *poiBox = new QGroupBox(tr("POIs"));
 		poiBox->setLayout(poiLayout);
-		QVBoxLayout *pointTabLayout = new QVBoxLayout();
+
 		pointTabLayout->addWidget(waypointBox);
 		pointTabLayout->addWidget(poiBox);
-		pointTabLayout->addStretch();
-		pointTab->setLayout(pointTabLayout);
 	}
+	pointTabLayout->addStretch();
+	pointTab->setLayout(pointTabLayout);
 
 	// Graphs
 	_sliderColor = new ColorBox();
@@ -377,42 +393,34 @@ QWidget *OptionsDialog::createDataPage(bool macos)
 	_powerFilter = new OddSpinBox();
 	_powerFilter->setValue(_options.powerFilter);
 	_powerFilter->setToolTip(filterToolTip);
-
 	_outlierEliminate = new QCheckBox(tr("Eliminate GPS outliers"));
 	_outlierEliminate->setChecked(_options.outlierEliminate);
 
+	QFormLayout *smoothLayout = new QFormLayout();
+	smoothLayout->addRow(tr("Elevation:"), _elevationFilter);
+	smoothLayout->addRow(tr("Speed:"), _speedFilter);
+	smoothLayout->addRow(tr("Heart rate:"), _heartRateFilter);
+	smoothLayout->addRow(tr("Cadence:"), _cadenceFilter);
+	smoothLayout->addRow(tr("Power:"), _powerFilter);
+	QFormLayout *outlierLayout = new QFormLayout();
+	outlierLayout->addWidget(_outlierEliminate);
+
 	QWidget *filterTab = new QWidget();
+	QVBoxLayout *filterTabLayout = new QVBoxLayout();
 	if (macos) {
-		QFormLayout *filterTabLayout = new QFormLayout();
-		// The spacer prevents collapsing the form to the left side
-		QWidget *spacer = new QWidget();
-		spacer->setFixedSize(100, 1);
-		filterTabLayout->addRow(spacer, MacOS::heading(tr("Smoothing")));
-		filterTabLayout->addRow(tr("Elevation:"), _elevationFilter);
-		filterTabLayout->addRow(tr("Speed:"), _speedFilter);
-		filterTabLayout->addRow(tr("Heart rate:"), _heartRateFilter);
-		filterTabLayout->addRow(tr("Cadence:"), _cadenceFilter);
-		filterTabLayout->addRow(tr("Power:"), _powerFilter);
-		filterTabLayout->addRow(MacOS::line());
-		filterTabLayout->addWidget(_outlierEliminate);
-		filterTab->setLayout(filterTabLayout);
+		filterTabLayout->addWidget(MacOS::heading(tr("Smoothing")));
+		filterTabLayout->addLayout(smoothLayout);
+		filterTabLayout->addWidget(MacOS::line());
+		filterTabLayout->addLayout(outlierLayout);
 	} else {
-		QFormLayout *smoothLayout = new QFormLayout();
-		smoothLayout->addRow(tr("Elevation:"), _elevationFilter);
-		smoothLayout->addRow(tr("Speed:"), _speedFilter);
-		smoothLayout->addRow(tr("Heart rate:"), _heartRateFilter);
-		smoothLayout->addRow(tr("Cadence:"), _cadenceFilter);
-		smoothLayout->addRow(tr("Power:"), _powerFilter);
-		QVBoxLayout *filterTabLayout = new QVBoxLayout();
 		QGroupBox *smoothBox = new QGroupBox(tr("Smoothing"));
 		smoothBox->setLayout(smoothLayout);
-		QFormLayout *outlierLayout = new QFormLayout();
-		outlierLayout->addWidget(_outlierEliminate);
+
 		filterTabLayout->addWidget(smoothBox);
 		filterTabLayout->addLayout(outlierLayout);
-		filterTabLayout->addStretch();
-		filterTab->setLayout(filterTabLayout);
 	}
+	filterTabLayout->addStretch();
+	filterTab->setLayout(filterTabLayout);
 
 	_detectPauses = new QCheckBox(tr("Detect pauses"));
 	_detectPauses->setChecked(_options.detectPauses);
@@ -454,6 +462,9 @@ QWidget *OptionsDialog::createDataPage(bool macos)
 
 	_computedSpeed = new QRadioButton(tr("Computed from distance/time"));
 	_reportedSpeed = new QRadioButton(tr("Recorded by device"));
+	QButtonGroup *speedGroup = new QButtonGroup(this);
+	speedGroup->addButton(_computedSpeed);
+	speedGroup->addButton(_reportedSpeed);
 	if (_options.useReportedSpeed)
 		_reportedSpeed->setChecked(true);
 	else
@@ -463,6 +474,9 @@ QWidget *OptionsDialog::createDataPage(bool macos)
 
 	_dataGPSElevation = new QRadioButton(tr("GPS data"));
 	_dataDEMElevation = new QRadioButton(tr("DEM data"));
+	QButtonGroup *elevationGroup = new QButtonGroup(this);
+	elevationGroup->addButton(_dataGPSElevation);
+	elevationGroup->addButton(_dataDEMElevation);
 	if (_options.dataUseDEM)
 		_dataDEMElevation->setChecked(true);
 	else
@@ -473,6 +487,10 @@ QWidget *OptionsDialog::createDataPage(bool macos)
 	_utcZone = new QRadioButton(tr("UTC"));
 	_systemZone = new QRadioButton(tr("System"));
 	_customZone = new QRadioButton(tr("Custom"));
+	QButtonGroup *timeZoneGroup = new QButtonGroup(this);
+	timeZoneGroup->addButton(_utcZone);
+	timeZoneGroup->addButton(_systemZone);
+	timeZoneGroup->addButton(_customZone);
 	if (_options.timeZone.type() == TimeZoneInfo::UTC)
 		_utcZone->setChecked(true);
 	else if (_options.timeZone.type() == TimeZoneInfo::System)
@@ -488,74 +506,69 @@ QWidget *OptionsDialog::createDataPage(bool macos)
 	connect(_customZone, &QRadioButton::toggled, _timeZone,
 	  &QComboBox::setEnabled);
 	QHBoxLayout *customZoneLayout = new QHBoxLayout();
+	customZoneLayout->setContentsMargins(QMargins());
 	customZoneLayout->addSpacing(20);
 	customZoneLayout->addWidget(_timeZone);
+	QWidget *customZoneWidget = new QWidget();
+	customZoneWidget->setLayout(customZoneLayout);
 
 	_useSegments = new QCheckBox(tr("Use segments"));
 	_useSegments->setChecked(_options.useSegments);
 
+	QFormLayout *elevationLayout = new QFormLayout();
+	elevationLayout->addWidget(_dataGPSElevation);
+	elevationLayout->addWidget(_dataDEMElevation);
+	elevationLayout->addWidget(_showSecondaryElevation);
+	QFormLayout *segmentsLayout = new QFormLayout();
+	segmentsLayout->addWidget(_useSegments);
+	QFormLayout *speedLayout = new QFormLayout();
+	speedLayout->addWidget(_computedSpeed);
+	speedLayout->addWidget(_reportedSpeed);
+	speedLayout->addWidget(_showSecondarySpeed);
+	QFormLayout *timeZoneLayout = new QFormLayout();
+	timeZoneLayout->addWidget(_utcZone);
+	timeZoneLayout->addWidget(_systemZone);
+	timeZoneLayout->addWidget(_customZone);
+	timeZoneLayout->addWidget(customZoneWidget);
+
 	QWidget *sourceTab = new QWidget();
+	QVBoxLayout *sourceTabLayout = new QVBoxLayout();
 	if (macos) {
-		QFormLayout *sourceTabLayout = new QFormLayout();
-		QButtonGroup *speedGroup = new QButtonGroup(this);
-		speedGroup->addButton(_computedSpeed);
-		speedGroup->addButton(_reportedSpeed);
-		QVBoxLayout *speedOptions = new QVBoxLayout();
-		speedOptions->addWidget(_computedSpeed);
-		speedOptions->addWidget(_reportedSpeed);
-		speedOptions->addWidget(_showSecondarySpeed);
-		QButtonGroup *elevationGroup = new QButtonGroup(this);
-		elevationGroup->addButton(_dataGPSElevation);
-		elevationGroup->addButton(_dataDEMElevation);
-		QVBoxLayout *elevationOptions = new QVBoxLayout();
-		elevationOptions->addWidget(_dataGPSElevation);
-		elevationOptions->addWidget(_dataDEMElevation);
-		elevationOptions->addWidget(_showSecondaryElevation);
-		QButtonGroup *timeZoneGroup = new QButtonGroup(this);
-		timeZoneGroup->addButton(_utcZone);
-		timeZoneGroup->addButton(_systemZone);
-		timeZoneGroup->addButton(_customZone);
-		QVBoxLayout *zoneOptions = new QVBoxLayout();
-		zoneOptions->addWidget(_utcZone);
-		zoneOptions->addWidget(_systemZone);
-		zoneOptions->addWidget(_customZone);
-		zoneOptions->addItem(customZoneLayout);
-		sourceTabLayout->addRow(tr("Speed:"), speedOptions);
-		sourceTabLayout->addRow(tr("Elevation:"), elevationOptions);
-		sourceTabLayout->addRow(tr("Time zone:"), zoneOptions);
-		sourceTabLayout->addRow(MacOS::line());
-		sourceTabLayout->addWidget(_useSegments);
-		sourceTab->setLayout(sourceTabLayout);
+		QWidget *widgets[] = {_dataGPSElevation, _dataDEMElevation,
+		  _showSecondaryElevation, _useSegments, _computedSpeed, _reportedSpeed,
+		  _showSecondarySpeed, _utcZone, _systemZone, _customZone,
+		  customZoneWidget};
+		int max = 0;
+		for (size_t i = 0; i < ARRAY_SIZE(widgets); i++)
+			max = qMax(max, widgets[i]->sizeHint().width());
+		for (size_t i = 0; i < ARRAY_SIZE(widgets); i++)
+			widgets[i]->setMinimumWidth(max);
+
+		sourceTabLayout->addWidget(MacOS::heading(tr("Speed")));
+		sourceTabLayout->addLayout(speedLayout);
+		sourceTabLayout->addWidget(MacOS::line());
+		sourceTabLayout->addWidget(MacOS::heading(tr("Elevation")));
+		sourceTabLayout->addLayout(elevationLayout);
+		sourceTabLayout->addWidget(MacOS::line());
+		sourceTabLayout->addWidget(MacOS::heading(tr("Time zone")));
+		sourceTabLayout->addLayout(timeZoneLayout);
+		sourceTabLayout->addWidget(MacOS::line());
+		sourceTabLayout->addLayout(segmentsLayout);
 	} else {
-		QVBoxLayout *sourceTabLayout = new QVBoxLayout();
-		QFormLayout *speedLayout = new QFormLayout();
-		QFormLayout *elevationLayout = new QFormLayout();
-		QFormLayout *timeZoneLayout = new QFormLayout();
-		QFormLayout *segmentsLayout = new QFormLayout();
-		speedLayout->addWidget(_computedSpeed);
-		speedLayout->addWidget(_reportedSpeed);
-		speedLayout->addWidget(_showSecondarySpeed);
 		QGroupBox *speedBox = new QGroupBox(tr("Speed"));
 		speedBox->setLayout(speedLayout);
-		elevationLayout->addWidget(_dataGPSElevation);
-		elevationLayout->addWidget(_dataDEMElevation);
-		elevationLayout->addWidget(_showSecondaryElevation);
 		QGroupBox *elevationBox = new QGroupBox(tr("Elevation"));
 		elevationBox->setLayout(elevationLayout);
-		timeZoneLayout->addWidget(_utcZone);
-		timeZoneLayout->addWidget(_systemZone);
-		timeZoneLayout->addWidget(_customZone);
-		timeZoneLayout->addItem(customZoneLayout);
 		QGroupBox *timeZoneBox = new QGroupBox(tr("Time zone"));
 		timeZoneBox->setLayout(timeZoneLayout);
-		segmentsLayout->addWidget(_useSegments);
+
 		sourceTabLayout->addWidget(speedBox);
 		sourceTabLayout->addWidget(elevationBox);
 		sourceTabLayout->addWidget(timeZoneBox);
 		sourceTabLayout->addLayout(segmentsLayout);
-		sourceTabLayout->addStretch();
-		sourceTab->setLayout(sourceTabLayout);
 	}
+	sourceTabLayout->addStretch();
+	sourceTab->setLayout(sourceTabLayout);
 
 	QVBoxLayout *pauseTypeLayout = new QVBoxLayout();
 	pauseTypeLayout->addWidget(_automaticPause);
@@ -569,6 +582,8 @@ QWidget *OptionsDialog::createDataPage(bool macos)
 	QVBoxLayout *pauseLayout = new QVBoxLayout();
 	pauseLayout->addWidget(_detectPauses);
 	pauseLayout->addLayout(pauseValuesLayout);
+	if (macos)
+		pauseLayout->setAlignment(Qt::AlignHCenter);
 
 	QWidget *pauseTab = new QWidget();
 	pauseTab->setLayout(pauseLayout);
@@ -954,8 +969,6 @@ OptionsDialog::OptionsDialog(Options &options, Units units, QWidget *parent)
 	QVBoxLayout *layout = new QVBoxLayout;
 	layout->addLayout(contentLayout);
 	layout->addWidget(buttonBox);
-	if (macos)
-		layout->setSizeConstraint(QLayout::SetFixedSize);
 	setLayout(layout);
 
 	setWindowTitle(tr("Options"));
