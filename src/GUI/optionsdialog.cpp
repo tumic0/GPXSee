@@ -221,16 +221,14 @@ QWidget *OptionsDialog::createAppearancePage(bool macos)
 	QFormLayout *paletteLayout = new QFormLayout();
 	paletteLayout->addRow(baseColorLabel, _baseColor);
 	paletteLayout->addRow(paletteShiftLabel, _colorOffset);
-	QLabel *aaLabel = new QLabel();
-	QFormLayout *pathAALayout = new QFormLayout();
-	pathAALayout->addRow(aaLabel, _pathAA);
+	paletteLayout->addWidget(_pathAA);
 
 	QWidget *pathTab = new QWidget();
 	QVBoxLayout *pathTabLayout = new QVBoxLayout();
 	if (macos) {
 		QLabel *labels[] = {trackWidthLabel, trackStyleLabel, routeWidthLabel,
 		  routeStyleLabel, areaWidthLabel, areaStyleLabel, areaOpacityLabel,
-		  baseColorLabel, paletteShiftLabel, aaLabel};
+		  baseColorLabel, paletteShiftLabel};
 		int max = 0;
 		for (size_t i = 0; i < ARRAY_SIZE(labels); i++)
 			max = qMax(max, labels[i]->sizeHint().width() - 15);
@@ -249,7 +247,6 @@ QWidget *OptionsDialog::createAppearancePage(bool macos)
 		pathTabLayout->addLayout(areaLayout);
 		pathTabLayout->addWidget(MacOS::line());
 		pathTabLayout->addLayout(paletteLayout);
-		pathTabLayout->addLayout(pathAALayout);
 	} else {
 		QGroupBox *trackBox = new QGroupBox(tr("Tracks"));
 		trackBox->setLayout(trackLayout);
@@ -262,7 +259,6 @@ QWidget *OptionsDialog::createAppearancePage(bool macos)
 		pathTabLayout->addWidget(routeBox);
 		pathTabLayout->addWidget(areaBox);
 		pathTabLayout->addLayout(paletteLayout);
-		pathTabLayout->addLayout(pathAALayout);
 	}
 	pathTabLayout->addStretch();
 	pathTab->setLayout(pathTabLayout);
@@ -319,25 +315,16 @@ QWidget *OptionsDialog::createAppearancePage(bool macos)
 	_graphAA = new QCheckBox(tr("Use anti-aliasing"));
 	_graphAA->setChecked(_options.graphAntiAliasing);
 
+	QFormLayout *graphLayout = new QFormLayout();
+	graphLayout->addRow(tr("Line width:"), _graphWidth);
+	graphLayout->addRow(tr("Slider color:"), _sliderColor);
+	graphLayout->addWidget(_graphAA);
+
 	QWidget *graphTab = new QWidget();
-	if (macos) {
-		QFormLayout *graphTabLayout = new QFormLayout();
-		graphTabLayout->addRow(tr("Line width:"), _graphWidth);
-		graphTabLayout->addRow(tr("Slider color:"), _sliderColor);
-		graphTabLayout->addWidget(_graphAA);
-		graphTab->setLayout(graphTabLayout);
-	} else {
-		QFormLayout *graphLayout = new QFormLayout();
-		graphLayout->addRow(tr("Line width:"), _graphWidth);
-		graphLayout->addRow(tr("Slider color:"), _sliderColor);
-		QFormLayout *graphAALayout = new QFormLayout();
-		graphAALayout->addWidget(_graphAA);
-		QVBoxLayout *graphTabLayout = new QVBoxLayout();
-		graphTabLayout->addLayout(graphLayout);
-		graphTabLayout->addLayout(graphAALayout);
-		graphTabLayout->addStretch();
-		graphTab->setLayout(graphTabLayout);
-	}
+	QVBoxLayout *graphTabLayout = new QVBoxLayout();
+	graphTabLayout->addLayout(graphLayout);
+	graphTabLayout->addStretch();
+	graphTab->setLayout(graphTabLayout);
 
 	// Map
 	_mapOpacity = new PercentSlider();
