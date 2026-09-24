@@ -66,16 +66,18 @@ bool ENCAtlas::processRecord(const ISO8211::Record &record, QByteArray &file,
 	const ENC::ISO8211::Field &field = record.at(1);
 
 	if (field.tag() == CATD) {
-		if (field.data().at(0).size() < 10)
+		const QVector<QVariant> &e = field.data().at(0);
+		if (e.size() < 10)
 			return false;
-		QByteArray impl = field.data().at(0).at(5).toByteArray();
-		file = field.data().at(0).at(2).toByteArray();
+
+		QByteArray impl = e.at(5).toByteArray();
+		file = e.at(2).toByteArray();
 
 		if (impl == "BIN" && file.endsWith("000")) {
-			QByteArray slat = field.data().at(0).at(6).toByteArray();
-			QByteArray wlon = field.data().at(0).at(7).toByteArray();
-			QByteArray nlat = field.data().at(0).at(8).toByteArray();
-			QByteArray elon = field.data().at(0).at(9).toByteArray();
+			QByteArray slat = e.at(6).toByteArray();
+			QByteArray wlon = e.at(7).toByteArray();
+			QByteArray nlat = e.at(8).toByteArray();
+			QByteArray elon = e.at(9).toByteArray();
 
 			bool ok1, ok2, ok3, ok4;
 			bounds = RectC(Coordinates(wlon.toDouble(&ok1), nlat.toDouble(&ok2)),

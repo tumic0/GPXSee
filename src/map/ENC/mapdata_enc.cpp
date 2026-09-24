@@ -247,8 +247,9 @@ static Coordinates point(const ISO8211::Record &r, uint comf)
 	if (!f)
 		return Coordinates();
 
-	int y = f->data().at(0).at(0).toInt();
-	int x = f->data().at(0).at(1).toInt();
+	const QVector<QVariant> &e = f->data().at(0);
+	int y = e.at(0).toInt();
+	int x = e.at(1).toInt();
 
 	return coordinates(x, y, comf);
 }
@@ -575,9 +576,12 @@ QVector<MapData::Sounding> MapData::soundings(const ISO8211::Record &r,
 
 	s.reserve(f->data().size());
 	for (int i = 0; i < f->data().size(); i++) {
-		int y = f->data().at(i).at(0).toInt();
-		int x = f->data().at(i).at(1).toInt();
-		int z = f->data().at(i).at(2).toInt();
+		const QVector<QVariant> &row = f->data().at(i);
+
+		int y = row.at(0).toInt();
+		int x = row.at(1).toInt();
+		int z = row.at(2).toInt();
+
 		s.append(Sounding(coordinates(x, y, comf), z / (double)somf));
 	}
 
@@ -722,8 +726,10 @@ Polygon MapData::polyGeometry(const ISO8211::Record &r, const RecordMap &vc,
 	for (int i = 0; i < fspt->data().size(); i++) {
 		if (!parseNAME(fspt, &type, &id, i) || type != RCNM_VE)
 			return Polygon();
-		ornt = fspt->data().at(i).at(1).toUInt();
-		usag = fspt->data().at(i).at(2).toUInt();
+
+		const QVector<QVariant> &row = fspt->data().at(i);
+		ornt = row.at(1).toUInt();
+		usag = row.at(2).toUInt();
 
 		if (usag == 2 && path.isEmpty()) {
 			path.append(v);
@@ -847,11 +853,12 @@ bool MapData::processRecord(const ISO8211::Record &record,
 
 	if (tag == VRID) {
 		bool nmok, idok;
+		const QVector<QVariant> &e = f.data().at(0);
 
-		if (f.data().at(0).size() < 2)
+		if (e.size() < 2)
 			return false;
-		int rcnm = f.data().at(0).at(0).toInt(&nmok);
-		uint rcid = f.data().at(0).at(1).toUInt(&idok);
+		int rcnm = e.at(0).toInt(&nmok);
+		uint rcid = e.at(1).toUInt(&idok);
 		if (!(nmok && idok))
 			return false;
 
@@ -875,12 +882,13 @@ bool MapData::processRecord(const ISO8211::Record &record,
 		fe.append(record);
 	} else if (tag == DSPM) {
 		bool cok, sok, hok;
+		const QVector<QVariant> &e = f.data().at(0);
 
-		if (f.data().at(0).size() < 12)
+		if (e.size() < 12)
 			return false;
-		comf = f.data().at(0).at(10).toUInt(&cok);
-		somf = f.data().at(0).at(11).toUInt(&sok);
-		huni = f.data().at(0).at(7).toUInt(&hok);
+		comf = e.at(10).toUInt(&cok);
+		somf = e.at(11).toUInt(&sok);
+		huni = e.at(7).toUInt(&hok);
 
 		return (cok && sok && hok);
 	}
@@ -916,11 +924,12 @@ MapData::MapData(const QString &path)
 	for (int i = 0; i < fe.size(); i++) {
 		const ISO8211::Record &r = fe.at(i);
 		const ISO8211::Field &frid = r.at(1);
+		const QVector<QVariant> &e = frid.data().at(0);
 
-		if (frid.data().at(0).size() < 5)
+		if (e.size() < 5)
 			continue;
-		prim = frid.data().at(0).at(2).toUInt();
-		objl = frid.data().at(0).at(4).toUInt();
+		prim = e.at(2).toUInt();
+		objl = e.at(4).toUInt();
 
 		switch (prim) {
 			case PRIM_P:

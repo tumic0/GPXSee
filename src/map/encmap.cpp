@@ -110,18 +110,19 @@ bool ENCMap::processRecord(const ISO8211::Record &record,
 
 	const ISO8211::Field &f = record.at(1);
 	quint32 tag = f.tag();
+	const QVector<QVariant> &e = f.data().at(0);
 
 	if (tag == VRID) {
 		rv.append(record);
 	} else if (tag == DSID) {
-		if (f.data().at(0).size() < 5)
+		if (e.size() < 5)
 			return false;
-		dsnm = f.data().at(0).at(4).toByteArray();
+		dsnm = e.at(4).toByteArray();
 	} else if (tag == DSPM) {
 		bool ok;
-		if (f.data().at(0).size() < 11)
+		if (e.size() < 11)
 			return false;
-		comf = f.data().at(0).at(10).toUInt(&ok);
+		comf = e.at(10).toUInt(&ok);
 		if (!ok)
 			return false;
 	}
