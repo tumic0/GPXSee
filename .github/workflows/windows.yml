@@ -12,7 +12,7 @@ jobs:
       matrix:
         include:
           - arch: x64
-            os: windows-2022
+            os: windows-latest
           - arch: arm64
             os: windows-11-arm
     runs-on: ${{matrix.os}}
@@ -25,6 +25,10 @@ jobs:
           version: '6.12.0'
           modules: qtpositioning qtserialport qtimageformats qtmultimedia
           aqtsource: 'git+https://github.com/miurahr/aqtinstall.git'
+      - name: Install NSIS
+        uses: repolevedavaj/install-nsis@v1
+        with:
+          nsis-version: '3.12'
       - name: Set up Visual Studio shell
         uses: egor-tensin/vs-shell@v2
         with:
