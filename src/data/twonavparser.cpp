@@ -211,7 +211,7 @@ bool TwoNavParser::parse(QFile *file, QList<TrackData> &tracks,
 		_errorLine++;
 	}
 
-	if (!(waypoint | route | track)) {
+	if (!(waypoint || route || track)) {
 		_errorString = "No valid data found";
 		return false;
 	} else

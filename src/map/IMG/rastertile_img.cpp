@@ -246,7 +246,7 @@ static QRect lightRect(const QPoint &pos, quint32 range)
 }
 
 void RasterTile::drawSectorLights(QPainter *painter,
-  const QList<const MapData::Point*> &lights) const
+  const QList<const MapData::Point*> &lights)
 {
 	for (int i = 0; i < lights.size(); i++) {
 		const MapData::Point *p = lights.at(i);

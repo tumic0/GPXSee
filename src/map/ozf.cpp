@@ -162,13 +162,13 @@ bool OZF::readTileTable()
 		zoom.palette = QVector<quint32>(256);
 		if (!read(&(zoom.palette[0]), sizeof(quint32) * 256))
 			return false;
-		for (int i = 0; i < zoom.palette.size(); i++)
-			zoom.palette[i] = Color::bgr2rgb(qFromLittleEndian(
-			  zoom.palette.at(i)));
+		for (int j = 0; j < zoom.palette.size(); j++)
+			zoom.palette[j] = Color::bgr2rgb(qFromLittleEndian(
+			  zoom.palette.at(j)));
 
 		zoom.tiles = QVector<quint32>(zoom.dim.width() * zoom.dim.height() + 1);
-		for (int i = 0; i < zoom.tiles.size(); i++)
-			if (!readValue(zoom.tiles[i]))
+		for (int j = 0; j < zoom.tiles.size(); j++)
+			if (!readValue(zoom.tiles[j]))
 				return false;
 
 		_zooms.append(zoom);

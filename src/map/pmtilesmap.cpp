@@ -133,7 +133,7 @@ void PMTilesMap::load(const Projection &in, const Projection &out,
 	_coordinatesRatio = _mapRatio > 1.0 ? _mapRatio / _tileRatio : 1.0;
 	_factor = zoom2scale(_zooms.at(_zoom).z, _tileSize) * _coordinatesRatio;
 
-	_hillShading = PMTilesMap::hillShading() & hillShading;
+	_hillShading = PMTilesMap::hillShading() && hillShading;
 
 	if (!_file.open(QIODevice::ReadOnly))
 		qWarning("%s: %s", qUtf8Printable(_file.fileName()),
@@ -320,7 +320,7 @@ void PMTilesMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 	for (int i = 0; i < width; i++) {
 		for (int j = 0; j < height; j++) {
 			QPoint t(tile.x() + i, tile.y() + j);
-			QPixmap *pm = TileCache::object(TileCache::Key(this, zoom.z, t));
+			const QPixmap *pm = TileCache::object(TileCache::Key(this, zoom.z, t));
 
 			if (pm) {
 				QPointF tp(tilePos(tl, t, tile, overzoom));

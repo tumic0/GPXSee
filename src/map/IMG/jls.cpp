@@ -33,7 +33,7 @@ JLS::JLS(quint16 maxval, quint16 near)
 }
 
 bool JLS::processRunMode(BitStream &bs, Context &ctx, quint16 col,
-  quint16 &samples) const
+  quint16 &samples)
 {
 	quint8 z;
 	quint16 cnt = 0;
@@ -126,7 +126,6 @@ bool JLS::decodeError(BitStream &bs, quint8 limit, quint8 k,
 
 bool JLS::readLine(BitStream &bs, Context &ctx) const
 {
-	quint8 ictx, rctx;
 	quint8 k;
 	uint MErrval;
 	int Errval;
@@ -228,11 +227,11 @@ bool JLS::readLine(BitStream &bs, Context &ctx) const
 				Rb = ctx.last[col + 1];
 			}
 
-			rctx = (abs(Rc - Ra) <= _near);
+			quint8 rctx = (abs(Rc - Ra) <= _near);
 			quint16 TEMP = ctx.a[rctx + 2];
 			if (rctx)
 				TEMP += ctx.n[rctx + 2] >> 1;
-			ictx = rctx | 2;
+			quint8 ictx = rctx | 2;
 
 			for (k = 0; ctx.n[rctx + 2] << k < TEMP; k++)
 				;

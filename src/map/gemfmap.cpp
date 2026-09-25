@@ -272,7 +272,8 @@ void GEMFMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 	for (int i = 0; i < width; i++) {
 		for (int j = 0; j < height; j++) {
 			QPoint t(tile.x() + i, tile.y() + j);
-			QPixmap *pm = TileCache::object(TileCache::Key(this, z.level, t));
+			TileCache::Key key(this, z.level, t);
+			const QPixmap *pm = TileCache::object(key);
 			if (pm) {
 				QPointF tp(tl.x() + (t.x() - tile.x()) * tileSize(),
 				  tl.y() + (t.y() - tile.y()) * tileSize());

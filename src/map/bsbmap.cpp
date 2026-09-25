@@ -288,7 +288,7 @@ bool BSBMap::createTransform(QList<ReferencePoint> &points)
 }
 
 bool BSBMap::createProjection(const QString &datum, const QString &proj,
-  double params[9], const Coordinates &c)
+  const double params[9], const Coordinates &c)
 {
 	GCS gcs;
 	PCS pcs;
@@ -390,7 +390,8 @@ QImage BSBMap::readImage()
 }
 
 BSBMap::BSBMap(const QString &fileName, QObject *parent)
-  : Map(fileName, parent), _img(0), _mapRatio(1.0), _dataOffset(-1), _valid(false)
+  : Map(fileName, parent), _img(0), _mapRatio(1.0), _dataOffset(-1),
+  _valid(false)
 {
 	QFile file(fileName);
 

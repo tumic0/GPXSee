@@ -89,10 +89,11 @@ private:
 	};
 
 	bool readLine(BitStream &bs, Context &ctx) const;
-	bool processRunMode(BitStream &bs, Context &ctx, quint16 col,
-	  quint16 &samples) const;
 	bool decodeError(BitStream &bs, quint8 limit, quint8 k,
 	  uint &MErrval) const;
+
+	static bool processRunMode(BitStream &bs, Context &ctx, quint16 col,
+	  quint16 &samples);
 
 	quint16 _maxval;
 	quint16 _near;

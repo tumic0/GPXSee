@@ -495,7 +495,7 @@ void GraphView::updateSliderInfo()
 {
 	QLocale l(QLocale::system());
 	qreal r = 0, y = 0;
-	GraphItem *cardinal = singleGraph() ? _graphs.first() : 0;
+	const GraphItem *cardinal = singleGraph() ? _graphs.first() : 0;
 
 	if (cardinal) {
 		QRectF br(_bounds);
@@ -571,7 +571,7 @@ void GraphView::setPalette(const Palette &palette)
 
 	QSet<GraphItem*> secondary;
 	for (int i = 0; i < _graphs.count(); i++) {
-		GraphItem *g = _graphs[i];
+		const GraphItem *g = _graphs[i];
 		if (g->secondaryGraph())
 			secondary.insert(g->secondaryGraph());
 	}

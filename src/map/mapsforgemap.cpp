@@ -44,7 +44,7 @@ void MapsforgeMap::load(const Projection &in, const Projection &out,
 	else
 		_style = new Style();
 
-	_hillShading = MapsforgeMap::hillShading() & hillShading;
+	_hillShading = MapsforgeMap::hillShading() && hillShading;
 
 	updateTransform();
 
@@ -198,7 +198,8 @@ void MapsforgeMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 	for (int i = 0; i < width; i++) {
 		for (int j = 0; j < height; j++) {
 			QPoint ttl(tl.x() + i * tileSize, tl.y() + j * tileSize);
-			QPixmap *pm = TileCache::object(TileCache::Key(this, _zoom, ttl));
+			TileCache::Key key(this, _zoom, ttl);
+			const QPixmap *pm = TileCache::object(key);
 
 			if (pm)
 				painter->drawPixmap(ttl, *pm);

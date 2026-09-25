@@ -223,7 +223,7 @@ void MapItem::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 	update();
 
 #ifdef Q_OS_ANDROID
-	GraphicsScene *gs = dynamic_cast<GraphicsScene *>(scene());
+	const GraphicsScene *gs = dynamic_cast<GraphicsScene *>(scene());
 	if (gs)
 		Popup::show(event->screenPos(), info(gs->showExtendedInfo()),
 		  event->widget());

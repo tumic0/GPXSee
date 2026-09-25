@@ -15,7 +15,7 @@ OnlineMap::OnlineMap(const QString &fileName, const QString &name,
   const QStringList &url, const QList<TileType> &tileType, int tileSize,
   qreal tileRatio, const Range &zooms, const RectC &bounds,
   const QList<HTTPHeader> &headers, bool invertY, bool quadTiles,
-  QStringList vectorLayers, QObject *parent)
+  const QStringList &vectorLayers, QObject *parent)
     : Map(fileName, parent), _name(name), _zooms(zooms), _bounds(bounds),
 	_tileSize(tileSize), _zoom(_zooms.max()), _mapRatio(1.0),
 	_tileRatio(tileRatio), _tileType(tileType), _layers(0), _hillShading(false),
@@ -129,7 +129,7 @@ void OnlineMap::load(const Projection &in, const Projection &out,
 	}
 
 	_layers = (layer > 0) ? 1 : _tileType.size();
-	_hillShading = OnlineMap::hillShading() & hillShading;
+	_hillShading = OnlineMap::hillShading() && hillShading;
 
 	_coordinatesRatio = _mapRatio > 1.0 ? _mapRatio / _tileRatio : 1.0;
 	_factor = zoom2scale(_zoom, _tileSize) * _coordinatesRatio;
@@ -226,7 +226,8 @@ void OnlineMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 	for (int i = 0; i < width; i++) {
 		for (int j = 0; j < height; j++) {
 			QPoint tc(tileCoordinates(tile.x() + i, tile.y() + j, baseZoom));
-			QPixmap *pm = TileCache::object(TileCache::Key(this, _zoom, tc));
+			TileCache::Key key(this, _zoom, tc);
+			const QPixmap *pm = TileCache::object(key);
 			if (pm) {
 				QPointF tp(tilePos(tl, tc, tile, overzoom));
 				drawTile(painter, pm, tp);

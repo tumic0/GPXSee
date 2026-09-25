@@ -6,7 +6,7 @@
 #define INT "[\\+-]?[0-9]+"
 #define DATE "[0-9]{4}\\.[0-9]{2}\\.[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}"
 
-static bool parseDataOld(const QByteArray line, Trackpoint &tp)
+static bool parseDataOld(const QByteArray &line, Trackpoint &tp)
 {
 	static const QRegularExpression gps("GPS\\((" FLT "),(" FLT ")(," INT ")?\\)");
 	static const QRegularExpression rtk("RTK \\((" FLT "), (" FLT ")(, " INT ")?\\)");
@@ -40,7 +40,7 @@ static bool parseDataOld(const QByteArray line, Trackpoint &tp)
 	return false;
 }
 
-static bool parseDataNew(const QByteArray line, Trackpoint &tp)
+static bool parseDataNew(const QByteArray &line, Trackpoint &tp)
 {
 	static const QRegularExpression date(
 	  "[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}.[0-9]+");

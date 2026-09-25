@@ -94,7 +94,6 @@ static bool huffman(QDataStream &stream, quint8 tileData[TILE_PIXELS])
 
 		const quint8 *tp = table.constData();
 		int bitsLeft = 8;
-		int bitVal;
 		quint8 val;
 
 		stream >> val;
@@ -104,7 +103,7 @@ static bool huffman(QDataStream &stream, quint8 tileData[TILE_PIXELS])
 				tileData[pixelnum++] = *tp;
 				tp = table.constData();
 			} else {
-				bitVal = (val & 1);
+				int bitVal = (val & 1);
 
 				val >>= 1;
 				bitsLeft--;
@@ -142,11 +141,11 @@ static bool pixelPacking(QDataStream &stream, quint8 tileData[TILE_PIXELS],
 		stream >> paletteIndex[i];
 
 	for (int pixelnum = 0; pixelnum < TILE_PIXELS; ) {
-		quint32 colour, val;
+		quint32 val;
 		stream >> val;
 
 		for (int runs = 0; runs < wordSize; runs++) {
-			colour = val & mask;
+			quint32 colour = val & mask;
 			val = val >> shift;
 			tileData[pixelnum++] = paletteIndex[colour];
 		}
@@ -420,7 +419,7 @@ Coordinates QCTMap::xy2ll(const QPointF &p)
 
 QPixmap *QCTMap::tile(const QPoint &xy)
 {
-	static quint8 rowSeq[] = {
+	static const quint8 rowSeq[] = {
 		 0, 32, 16, 48,  8, 40, 24, 56,  4, 36, 20, 52, 12, 44, 28, 60,
 		 2, 34, 18, 50, 10, 42, 26, 58,  6, 38, 22, 54, 14, 46, 30, 62,
 		 1, 33, 17, 49,  9, 41, 25, 57,  5, 37, 21, 53, 13, 45, 29, 61,

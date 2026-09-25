@@ -159,10 +159,10 @@ Track::Track(const TrackData &data) : _pause(0)
 					qWarning("%s: missing timestamp(s), time graphs disabled",
 					  qUtf8Printable(_data.file()));
 					hasTime = false;
-					for (int i = 0; i < seg.time.size(); i++)
-						seg.time[i] = NAN;
-					for (int i = 0; i < seg.speed.size(); i++)
-						seg.speed[i] = NAN;
+					for (int k = 0; k < seg.time.size(); k++)
+						seg.time[k] = NAN;
+					for (int k = 0; k < seg.speed.size(); k++)
+						seg.speed[k] = NAN;
 				}
 			}
 			seg.time.append(seg.time.last() + dt);
@@ -636,7 +636,7 @@ Path Track::path() const
 	return ret;
 }
 
-bool Track::discardStopPoint(const Segment &seg, int i) const
+bool Track::discardStopPoint(const Segment &seg, int i)
 {
 	return (seg.stop.contains(i) && seg.stop.contains(i-1)
 	  && seg.stop.contains(i+1) && i > 0 && i < seg.distance.size() - 1);

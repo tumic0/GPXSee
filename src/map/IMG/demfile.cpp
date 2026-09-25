@@ -64,7 +64,7 @@ bool DEMFile::load(Handle &hdl)
 
 	_levels.reserve(zooms);
 
-	for (quint16 i = 0; i < zooms; i++) {
+	for (quint16 n = 0; n < zooms; n++) {
 		quint32 pixelWidth, pixelHeight, pixelWidth2, pixelHeight2, table, cols,
 		  rows, xr, yr, data;
 		qint32 lon, lat;
@@ -73,7 +73,7 @@ bool DEMFile::load(Handle &hdl)
 		quint8 layer, level;
 		QList<DEMTile> tiles;
 
-		if (!(seek(hdl, zoomData + i * zoomDataSize) && readUInt8(hdl, layer)
+		if (!(seek(hdl, zoomData + n * zoomDataSize) && readUInt8(hdl, layer)
 		  && readUInt8(hdl, level) && readUInt32(hdl, pixelHeight)
 		  && readUInt32(hdl, pixelWidth) && readUInt32(hdl, pixelHeight2)
 		  && readUInt32(hdl, pixelWidth2) && readUInt16(hdl, factor)

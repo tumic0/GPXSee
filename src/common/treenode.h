@@ -22,7 +22,7 @@ public:
 	void clear() {clear(*this);}
 
 private:
-	void clear(TreeNode<T> &node)
+	static void clear(TreeNode<T> &node)
 	{
 		for (int i = 0; i < node._childs.size(); i++)
 			clear(node._childs[i]);

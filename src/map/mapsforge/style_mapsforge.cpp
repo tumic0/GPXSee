@@ -716,7 +716,7 @@ void Style::hillshading(QXmlStreamReader &reader, const QSet<QString> &cats)
 	reader.skipCurrentElement();
 }
 
-QString Style::cat(QXmlStreamReader &reader)
+static QString cat(QXmlStreamReader &reader)
 {
 	const QXmlStreamAttributes &attr = reader.attributes();
 

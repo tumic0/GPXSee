@@ -70,12 +70,13 @@ private:
 
 	qreal lastDistance(int seg);
 	qreal lastTime(int seg);
-	bool discardStopPoint(const Segment &seg, int i) const;
 
 	Graph demElevation(Map *map) const;
 	Graph gpsElevation() const;
 	Graph reportedSpeed() const;
 	Graph computedSpeed() const;
+
+	static bool discardStopPoint(const Segment &seg, int i);
 
 	TrackData _data;
 	QList<Segment> _segments;

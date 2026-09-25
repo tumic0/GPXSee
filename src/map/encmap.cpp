@@ -347,7 +347,8 @@ void ENCMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 	for (int i = 0; i < width; i++) {
 		for (int j = 0; j < height; j++) {
 			QPoint ttl(tl.x() + i * TILE_SIZE, tl.y() + j * TILE_SIZE);
-			QPixmap *pm = TileCache::object(TileCache::Key(this, _zoom, ttl));
+			TileCache::Key key(this, _zoom, ttl);
+			const QPixmap *pm = TileCache::object(key);
 
 			if (pm)
 				painter->drawPixmap(ttl, *pm);

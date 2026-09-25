@@ -210,7 +210,7 @@ bool RGNFile::readLightInfo(Handle &hdl, quint8 flags, quint32 size,
 
 		point->lights.append(Light(sectors));
 	} else {
-		quint8 v1, v2, range;
+		quint8 v1, range;
 
 		if (!(size >= 1 && readUInt8(hdl, v1)))
 			return false;
@@ -218,6 +218,7 @@ bool RGNFile::readLightInfo(Handle &hdl, quint8 flags, quint32 size,
 
 		range = v1 & 0x1f;
 		if ((v1 & 0x1f) == 0x1f) {
+			quint8 v2;
 			if (!(size >= 1 && readUInt8(hdl, v2)))
 				return false;
 			size--;
@@ -508,7 +509,7 @@ bool RGNFile::readLclLights(Handle &hdl, quint32 &size, quint32 lights,
 bool RGNFile::readLclNavaid(Handle &hdl, quint32 size,
   MapData::Point *point) const
 {
-	quint32 unused, color, flags;
+	quint32 unused, flags;
 
 	// Discard the class lights info if any (marine points may have both!)
 	point->lights.clear();
@@ -518,6 +519,7 @@ bool RGNFile::readLclNavaid(Handle &hdl, quint32 size,
 		return false;
 	size -= 4;
 	if (flags & 1) {
+		quint32 color;
 		if (!(size >= 1 && readUInt8(hdl, color)))
 			return false;
 		size--;

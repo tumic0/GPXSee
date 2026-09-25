@@ -389,14 +389,14 @@ void MapView::updatePOIVisibility()
 		return;
 
 	for (POIHash::const_iterator it = _pois.constBegin();
-	  it != _pois.constEnd(); it++)
+	  it != _pois.constEnd(); ++it)
 		it.value()->show();
 
 	if (!_overlapPOIs) {
 		for (POIHash::const_iterator it = _pois.constBegin();
-		  it != _pois.constEnd(); it++) {
+		  it != _pois.constEnd(); ++it) {
 			for (POIHash::const_iterator jt = _pois.constBegin();
-			  jt != _pois.constEnd(); jt++) {
+			  jt != _pois.constEnd(); ++jt) {
 				if (it.value()->isVisible() && jt.value()->isVisible()
 				  && it != jt && it.value()->collidesWithItem(jt.value()))
 					jt.value()->hide();
@@ -420,7 +420,7 @@ void MapView::rescale()
 		_waypoints.at(i)->setMap(_map);
 
 	for (POIHash::const_iterator it = _pois.constBegin();
-	  it != _pois.constEnd(); it++)
+	  it != _pois.constEnd(); ++it)
 		it.value()->setMap(_map);
 
 	_crosshair->setMap(_map);
@@ -509,7 +509,7 @@ void MapView::setGraph(int index)
 void MapView::updatePOI()
 {
 	for (POIHash::const_iterator it = _pois.constBegin();
-	  it != _pois.constEnd(); it++)
+	  it != _pois.constEnd(); ++it)
 		_scene->removeItem(it.value());
 	qDeleteAll(_pois);
 	_pois.clear();
@@ -618,7 +618,7 @@ void MapView::digitalZoom(int zoom)
 	for (int i = 0; i < _waypoints.size(); i++)
 		_waypoints.at(i)->setDigitalZoom(_digitalZoom);
 	for (POIHash::const_iterator it = _pois.constBegin();
-	  it != _pois.constEnd(); it++)
+	  it != _pois.constEnd(); ++it)
 		it.value()->setDigitalZoom(_digitalZoom);
 
 	_mapScale->setDigitalZoom(_digitalZoom);
@@ -988,7 +988,7 @@ void MapView::showVideos(bool show)
 	_showVideos = show;
 
 	for (int i = 0; i < _tracks.size(); i++)
-		_tracks.at(i)->showVideo(_tracks.at(i)->isVideo() & show);
+		_tracks.at(i)->showVideo(_tracks.at(i)->isVideo() && show);
 }
 
 void MapView::showMap(bool show)
@@ -1002,7 +1002,7 @@ void MapView::showPOI(bool show)
 	_showPOI = show;
 
 	for (POIHash::const_iterator it = _pois.constBegin();
-	  it != _pois.constEnd(); it++)
+	  it != _pois.constEnd(); ++it)
 		it.value()->setVisible(show);
 
 	updatePOIVisibility();
@@ -1013,7 +1013,7 @@ void MapView::showPOILabels(bool show)
 	_showPOILabels = show;
 
 	for (POIHash::const_iterator it = _pois.constBegin();
-	  it != _pois.constEnd(); it++)
+	  it != _pois.constEnd(); ++it)
 		it.value()->showLabel(show);
 
 	updatePOIVisibility();
@@ -1024,7 +1024,7 @@ void MapView::showPOIIcons(bool show)
 	_showPOIIcons = show;
 
 	for (POIHash::const_iterator it = _pois.constBegin();
-	  it != _pois.constEnd(); it++)
+	  it != _pois.constEnd(); ++it)
 		it.value()->showIcon(show);
 
 	updatePOIVisibility();
@@ -1147,7 +1147,7 @@ void MapView::setPOISize(int size)
 	_poiSize = size;
 
 	for (POIHash::const_iterator it = _pois.constBegin();
-	  it != _pois.constEnd(); it++)
+	  it != _pois.constEnd(); ++it)
 		it.value()->setSize(size);
 }
 
@@ -1156,7 +1156,7 @@ void MapView::setPOIColor(const QColor &color)
 	_poiColor = color;
 
 	for (POIHash::const_iterator it = _pois.constBegin();
-	  it != _pois.constEnd(); it++)
+	  it != _pois.constEnd(); ++it)
 		it.value()->setColor(color);
 }
 

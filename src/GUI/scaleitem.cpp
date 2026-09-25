@@ -115,8 +115,8 @@ void ScaleItem::updateCache()
 		  : QCoreApplication::translate("ScaleItem", "m");
 	_unitsBB = fm.tightBoundingRect(_unitsStr);
 
-	QRect ss = _ticks.isEmpty() ? QRect() : _ticks.first().boundingBox;
-	QRect es = _ticks.isEmpty() ? QRect() : _ticks.last().boundingBox;
+	QRect ss = _ticks.first().boundingBox;
+	QRect es = _ticks.last().boundingBox;
 	_boundingRect = QRectF(-ss.width()/2, 0, _width * SEGMENTS + ss.width()/2
 	  + qMax(_unitsBB.width() + PADDING, es.width()/2) + 1, SCALE_HEIGHT
 	  + PADDING + ss.height() + 2*fm.descent());

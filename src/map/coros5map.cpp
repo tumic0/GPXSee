@@ -147,7 +147,7 @@ void Coros5Map::load(const Projection &in, const Projection &out,
 	_tileRatio = deviceRatio;
 	_style = (style >= 0 && style < Style::styles().size())
 	  ? &Style::styles().at(style) : defaultStyle();
-	_hillShading = Coros5Map::hillShading() & hillShading;
+	_hillShading = Coros5Map::hillShading() && hillShading;
 
 	for (int i = _zooms.last().base + 1; i <= OSM::ZOOMS.max(); i++) {
 		Zoom z(i, _zooms.last().base);
@@ -318,7 +318,8 @@ void Coros5Map::draw(QPainter *painter, const QRectF &rect, Flags flags)
 	for (int i = 0; i < width; i++) {
 		for (int j = 0; j < height; j++) {
 			QPoint t(tile.x() + i, tile.y() + j);
-			QPixmap *pm = TileCache::object(TileCache::Key(this, zoom.z, t));
+			TileCache::Key key(this, zoom.z, t);
+			const QPixmap *pm = TileCache::object(key);
 
 			if (pm) {
 				QPointF tp(tilePos(tl, t, tile, overzoom));

@@ -131,11 +131,11 @@ int PRJFile::getChar(CTX &ctx)
 
 void PRJFile::nextToken(CTX &ctx)
 {
-	int c, state = 0;
+	int state = 0;
 	QString flstr;
 
 	while (1) {
-		c = getChar(ctx);
+		int c = getChar(ctx);
 
 		switch (state) {
 			case 0:
@@ -470,12 +470,10 @@ void PRJFile::primeMeridian(CTX &ctx, PrimeMeridian *pm, int *epsg)
 
 void PRJFile::parameter(CTX &ctx, Conversion::Setup *setup)
 {
-	QString name;
-
 	if (ctx.token == PARAMETER) {
 		nextToken(ctx);
 		compare(ctx, LBRK);
-		name = ctx.string;
+		QString name(ctx.string);
 		compare(ctx, STRING);
 		compare(ctx, COMMA);
 		setParameter(setup, name, ctx.number);

@@ -78,7 +78,7 @@ private:
 	void cancelJobs(bool wait);
 
 	QList<IMG::MapData*> overlays(const QString &fileName);
-	IMG::Style *createStyle(IMG::MapData *data, const QString *typFile);
+	IMG::Style *createStyle(const IMG::MapData *data, const QString *typFile);
 
 	static StyleList &styles();
 

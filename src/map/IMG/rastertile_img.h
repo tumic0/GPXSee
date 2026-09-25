@@ -86,8 +86,6 @@ private:
 	void drawTextItems(QPainter *painter,
 	  const QList<TextItem*> &textItems) const;
 	void drawHillShading(QPainter *painter, const MatrixD &dem) const;
-	void drawSectorLights(QPainter *painter,
-	  const QList<const MapData::Point*> &lights) const;
 
 	void processPolygons(const QList<MapData::Poly> &polygons,
 	  QList<TextItem*> &textItems);
@@ -104,6 +102,9 @@ private:
 	  int zoom = -1, bool extended = false) const;
 
 	bool hasDEM() const;
+
+	static void drawSectorLights(QPainter *painter,
+	  const QList<const MapData::Point*> &lights);
 
 	const Projection *_proj;
 	Transform _transform;

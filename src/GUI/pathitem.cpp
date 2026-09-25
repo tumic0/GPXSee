@@ -478,7 +478,7 @@ void PathItem::showPoints(bool show)
 	update();
 }
 
-qreal PathItem::xInM() const
+qreal PathItem::xInM()
 {
 	return (_units == Nautical) ? NMIINM : (_units == Imperial) ? MIINM : KMINM;
 }
@@ -580,7 +580,7 @@ void PathItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 
 void PathItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-	GraphicsScene *gs = dynamic_cast<GraphicsScene *>(scene());
+	const GraphicsScene *gs = dynamic_cast<GraphicsScene*>(scene());
 	if (gs)
 		Popup::show(event->screenPos(), info(gs->showExtendedInfo()),
 		  event->widget());

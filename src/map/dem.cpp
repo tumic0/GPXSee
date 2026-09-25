@@ -10,11 +10,10 @@
 static unsigned int isqrt(size_t x)
 {
 	size_t l = 0;
-	size_t m;
 	size_t r = x + 1;
 
 	while (l != r - 1) {
-		m = (l + r) / 2;
+		size_t m = (l + r) / 2;
 
 		if (m * m <= x)
 			l = m;

@@ -102,7 +102,7 @@ QVector<QPolygonF> RasterTile::polylineM(const QVector<Coordinates> &path) const
 	return polys;
 }
 
-QPolygonF RasterTile::tsslptArrow(const QPointF &p, qreal angle) const
+static QPolygonF tsslptArrow(const QPointF &p, qreal angle)
 {
 	QPointF t[3], r[4];
 	QPolygonF polygon;
@@ -163,8 +163,8 @@ void RasterTile::drawPolygons(QPainter *painter,
 			const Style::Polygon &style = _style->polygon(poly.type());
 
 			if (!style.img().isNull()) {
-				for (int i = 0; i < poly.path().size(); i++)
-					BitmapLine::draw(painter, polylineM(poly.path().at(i)),
+				for (int j = 0; j < poly.path().size(); j++)
+					BitmapLine::draw(painter, polylineM(poly.path().at(j)),
 					  style.img());
 			} else {
 				if (style.brush() != Qt::NoBrush) {
@@ -179,10 +179,10 @@ void RasterTile::drawPolygons(QPainter *painter,
 				}
 				if (style.pen() != Qt::NoPen) {
 					painter->setPen(style.pen());
-					for (int i = 0; i < poly.path().size(); i++) {
-						QVector<QPolygonF> outline(polylineM(poly.path().at(i)));
-						for (int j = 0; j < outline.size(); j++)
-							painter->drawPolyline(outline.at(j));
+					for (int j = 0; j < poly.path().size(); j++) {
+						QVector<QPolygonF> outline(polylineM(poly.path().at(j)));
+						for (int k = 0; k < outline.size(); k++)
+							painter->drawPolyline(outline.at(k));
 					}
 				}
 			}

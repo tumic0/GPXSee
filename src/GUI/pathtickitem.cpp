@@ -76,7 +76,7 @@ QRect PathTickItem::tickRect(int value)
 void PathTickItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
 	const PathItem *pi = static_cast<PathItem*>(parentItem());
-	GraphicsScene *gs = dynamic_cast<GraphicsScene *>(scene());
+	const GraphicsScene *gs = dynamic_cast<GraphicsScene*>(scene());
 	if (gs)
 		Popup::show(event->screenPos(), pi->info(gs->showExtendedInfo()),
 		  event->widget());

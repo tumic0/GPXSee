@@ -73,7 +73,7 @@ Sprites::Sprites(const QString &jsonFile, const QString &imageFile)
 
 	QJsonObject json(doc.object());
 	for (QJsonObject::const_iterator it = json.constBegin();
-	  it != json.constEnd(); it++) {
+	  it != json.constEnd(); ++it) {
 		QJsonValue val(*it);
 		if (val.isObject()) {
 			Sprite s(val.toObject());

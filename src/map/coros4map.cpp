@@ -129,7 +129,7 @@ void Coros4Map::load(const Projection &in, const Projection &out,
 	} else
 		_style = new Style(_tileRatio);
 
-	_hillShading = Coros4Map::hillShading() & hillShading;
+	_hillShading = Coros4Map::hillShading() && hillShading;
 
 	updateTransform();
 
@@ -290,7 +290,7 @@ void Coros4Map::draw(QPainter *painter, const QRectF &rect, Flags flags)
 		for (int j = 0; j < height; j++) {
 			QPoint ttl(tl.x() + i * TILE_SIZE, tl.y() + j * TILE_SIZE);
 			TileCache::Key key(this, _zoom, ttl);
-			QPixmap *pm = TileCache::object(key);
+			const QPixmap *pm = TileCache::object(key);
 
 			if (pm)
 				painter->drawPixmap(ttl, *pm);

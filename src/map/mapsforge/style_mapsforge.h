@@ -335,10 +335,6 @@ private:
 	  int layer);
 	void rendertheme(QXmlStreamReader &reader, const QString &dir,
 	  const MapData &data, qreal ratio, int layer);
-	Menu::Layer layer(QXmlStreamReader &reader);
-	Menu stylemenu(QXmlStreamReader &reader);
-	QString cat(QXmlStreamReader &reader);
-	void name(QXmlStreamReader &reader, Menu::Layer &layer);
 	void rule(QXmlStreamReader &reader, const QString &dir, const MapData &data,
 	  qreal ratio, qreal baseStrokeWidth, const QSet<QString> &cats,
 	  const Rule &parent);
@@ -353,6 +349,10 @@ private:
 	  bool line);
 	void symbol(QXmlStreamReader &reader, const QString &dir, qreal ratio,
 	  const Rule &rule, bool line);
+
+	static void name(QXmlStreamReader &reader, Menu::Layer &layer);
+	static Menu::Layer layer(QXmlStreamReader &reader);
+	static Menu stylemenu(QXmlStreamReader &reader);
 };
 
 }

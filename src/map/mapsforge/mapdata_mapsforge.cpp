@@ -538,7 +538,7 @@ void MapData::points(QFile &file, VectorTile *tile, const RectC &rect,
 	tile->lock.lock();
 
 	_pointCacheLock.lock();
-	QList<Point> *tilePoints = _pointCache.object(key);
+	const QList<Point> *tilePoints = _pointCache.object(key);
 	if (!tilePoints) {
 		_pointCacheLock.unlock();
 		QList<Point> *p = new QList<Point>();
@@ -555,7 +555,7 @@ void MapData::points(QFile &file, VectorTile *tile, const RectC &rect,
 	}
 
 	_pathCacheLock.lock();
-	QList<Path> *tilePaths = _pathCache.object(key);
+	const QList<Path> *tilePaths = _pathCache.object(key);
 	if (!tilePaths) {
 		_pathCacheLock.unlock();
 		QList<Path> *p = new QList<Path>();
@@ -600,7 +600,7 @@ void MapData::paths(QFile &file, VectorTile *tile, const RectC &rect, int zoom,
 	tile->lock.lock();
 
 	_pathCacheLock.lock();
-	QList<Path> *cached = _pathCache.object(key);
+	const QList<Path> *cached = _pathCache.object(key);
 	if (!cached) {
 		_pathCacheLock.unlock();
 		QList<Path> *p = new QList<Path>();

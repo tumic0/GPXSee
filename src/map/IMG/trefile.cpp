@@ -105,7 +105,7 @@ bool TREFile::init(QFile *file)
 	_levels = QVector<MapLevel>(levelsCount);
 
 	for (quint32 i = 0; i < levelsCount; i++) {
-		quint8 *zoom = levels + (i * 4);
+		const quint8 *zoom = levels + (i * 4);
 		_levels[i].level = *zoom;
 		_levels[i].bits = *(zoom + 1);
 		_levels[i].subdivs = *(zoom + 2) | (quint16)(*(zoom + 3)) << 8;

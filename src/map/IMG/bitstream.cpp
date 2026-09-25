@@ -132,7 +132,7 @@ bool BitStream4R::readVUInt32(quint32 &val)
 
 bool BitStream4R::readVUint32SM(quint32 &val1, quint32 &val2, quint32 &val2Bits)
 {
-	quint32 b, eb;
+	quint32 b;
 
 	if (!readBytesAligned(1, b))
 		return false;
@@ -142,7 +142,7 @@ bool BitStream4R::readVUint32SM(quint32 &val1, quint32 &val2, quint32 &val2Bits)
 		val2 = b >> 1 & 3;
 		val2Bits = 2;
 	} else {
-		eb = b & 2;
+		quint32 eb = b & 2;
 		val2 = b >> 2 & 0x3f;
 		val2Bits = eb * 2 + 6;
 		if (!readBytes((eb >> 1 | 2) - 1, b))

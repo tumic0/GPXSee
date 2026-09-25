@@ -61,7 +61,8 @@ public:
 		  QColor &haloColor, QFont &font, SymbolPlacement &symbolPlacement,
 		  RotationAlignment &rotationAlignment) const;
 		void symbol(int zoom, const Sprites &sprites,
-		  VectorTile::Feature &feature, QString &label, QImage &img) const;
+		  const VectorTile::Feature &feature, QString &label,
+		  QImage &img) const;
 
 	private:
 		class Filter {

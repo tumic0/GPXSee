@@ -28,7 +28,7 @@ static SubFile::Type tileType(const QString &suffix)
 		return SubFile::Unknown;
 }
 
-void GMAPData::subProduct(QXmlStreamReader &reader, QString &dataDir)
+static void subProduct(QXmlStreamReader &reader, QString &dataDir)
 {
 	while (reader.readNextStartElement()) {
 		if (reader.name() == QLatin1String("Directory"))

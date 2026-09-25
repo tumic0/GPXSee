@@ -97,9 +97,9 @@ private:
 	qreal width() const;
 	Qt::PenStyle penStyle() const;
 	void enableVideo(bool enable);
-
-	qreal xInM() const;
 	unsigned tickSize() const;
+
+	static qreal xInM();
 
 	Path _path;
 

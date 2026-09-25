@@ -29,7 +29,8 @@ public:
 	static QStringList filter();
 
 private:
-	void processData(QList<TrackData> &trackData, QList<RouteData> &routeData);
+	void processData(const QList<TrackData> &trackData,
+	  const QList<RouteData> &routeData);
 
 	bool _valid;
 	QString _errorString;

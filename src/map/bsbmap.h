@@ -44,7 +44,7 @@ private:
 	bool parseRGB(const QByteArray &line);
 	bool readHeader(QFile &file);
 	bool createProjection(const QString &datum, const QString &proj,
-	  double params[9], const Coordinates &c);
+	  const double params[9], const Coordinates &c);
 	bool createTransform(QList<ReferencePoint> &points);
 	QImage readImage();
 	bool readRow(QFile &file, char bits, uchar *buf);

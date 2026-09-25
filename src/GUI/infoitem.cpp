@@ -16,10 +16,10 @@ void InfoItem::updateBoundingRect()
 	QFontMetrics fm(_font);
 	qreal width = 0;
 
-	for (QList<KV<QString, QString> >::const_iterator i = _list.constBegin();
-	  i != _list.constEnd(); i++) {
-		width += fm.horizontalAdvance(i->key() + ": " + i->value());
-		if (i != _list.constEnd() - 1)
+	for (QList<KV<QString, QString> >::const_iterator it = _list.constBegin();
+	  it != _list.constEnd(); ++it) {
+		width += fm.horizontalAdvance(it->key() + ": " + it->value());
+		if (it != _list.constEnd() - 1)
 			width += PADDING;
 	}
 
@@ -37,12 +37,12 @@ void InfoItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 	painter->setFont(_font);
 	painter->setRenderHint(QPainter::Antialiasing, false);
 
-	for (QList<KV<QString, QString> >::const_iterator i = _list.constBegin();
-	  i != _list.constEnd(); i++) {
-		QString text(i->key() + ": " + i->value());
+	for (QList<KV<QString, QString> >::const_iterator it = _list.constBegin();
+	  it != _list.constEnd(); ++it) {
+		QString text(it->key() + ": " + it->value());
 		painter->drawText(width, fm.height() - fm.descent(), text);
 		width += fm.horizontalAdvance(text);
-		if (i != _list.constEnd() - 1) {
+		if (it != _list.constEnd() - 1) {
 			width += PADDING;
 			painter->save();
 			painter->setPen(Qt::gray);

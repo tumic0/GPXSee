@@ -715,7 +715,6 @@ Polygon MapData::polyGeometry(const ISO8211::Record &r, const RecordMap &vc,
 	Polygon path;
 	QVector<Coordinates> v;
 	Coordinates c[2];
-	uint ornt, usag;
 	quint8 type;
 	quint32 id;
 
@@ -728,8 +727,8 @@ Polygon MapData::polyGeometry(const ISO8211::Record &r, const RecordMap &vc,
 			return Polygon();
 
 		const QVector<QVariant> &row = fspt->data().at(i);
-		ornt = row.at(1).toUInt();
-		usag = row.at(2).toUInt();
+		uint ornt = row.at(1).toUInt();
+		uint usag = row.at(2).toUInt();
 
 		if (usag == 2 && path.isEmpty()) {
 			path.append(v);
@@ -935,8 +934,8 @@ MapData::MapData(const QString &path)
 			case PRIM_P:
 				if (objl == SOUNDG) {
 					QVector<Sounding> s(soundingGeometry(r, vi, vc, comf, somf));
-					for (int i = 0; i < s.size(); i++) {
-						point = pointObject(s.at(i));
+					for (int j = 0; j < s.size(); j++) {
+						point = pointObject(s.at(j));
 						pointBounds(point->pos(), min, max);
 						_points.Insert(min, max, point);
 					}

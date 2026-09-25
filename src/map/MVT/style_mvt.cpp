@@ -571,7 +571,7 @@ void Style::Layer::setTextProperties(int zoom, qreal &maxWidth,
 }
 
 void Style::Layer::symbol(int zoom, const Sprites &sprites,
-  VectorTile::Feature &feature, QString &label, QImage &img) const
+  const VectorTile::Feature &feature, QString &label, QImage &img) const
 {
 	QString icon(_layout.icon(zoom, feature));
 	QColor color(_paint.iconColor(zoom));

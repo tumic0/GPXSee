@@ -284,7 +284,7 @@ void WaypointItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 
 void WaypointItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-	GraphicsScene *gs = dynamic_cast<GraphicsScene *>(scene());
+	const GraphicsScene *gs = dynamic_cast<GraphicsScene*>(scene());
 	if (gs)
 		Popup::show(event->screenPos(), info(gs->showExtendedInfo()),
 		  event->widget());

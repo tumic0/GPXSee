@@ -112,7 +112,8 @@ QMultiMap<QString, Parser*> Data::_parsers = parsers();
 bool Data::_permChecked = false;
 #endif // Q_OS_ANDROID
 
-void Data::processData(QList<TrackData> &trackData, QList<RouteData> &routeData)
+void Data::processData(const QList<TrackData> &trackData,
+  const QList<RouteData> &routeData)
 {
 	for (int i = 0; i < trackData.count(); i++)
 		_tracks.append(Track(trackData.at(i)));
@@ -175,12 +176,12 @@ Data::Data(const QString &fileName, bool tryUnknown)
 
 		qWarning("%s:", qUtf8Printable(fileName));
 		for (it = _parsers.find(suffix); it != _parsers.end()
-		  && it.key() == suffix; it++)
+		  && it.key() == suffix; ++it)
 			qWarning("  %s: line %d: %s", qUtf8Printable(it.key()),
 			  it.value()->errorLine(), qUtf8Printable(it.value()->errorString()));
 
 	} else if (tryUnknown) {
-		for (it = _parsers.begin(); it != _parsers.end(); it++) {
+		for (it = _parsers.begin(); it != _parsers.end(); ++it) {
 			if (it.value()->parse(&file, trackData, routeData, _polygons,
 			  _waypoints)) {
 				processData(trackData, routeData);
@@ -191,7 +192,7 @@ Data::Data(const QString &fileName, bool tryUnknown)
 		}
 
 		qWarning("%s:", qUtf8Printable(fileName));
-		for (it = _parsers.begin(); it != _parsers.end(); it++)
+		for (it = _parsers.begin(); it != _parsers.end(); ++it)
 			qWarning("  %s: line %d: %s", qUtf8Printable(it.key()),
 			  it.value()->errorLine(), qUtf8Printable(it.value()->errorString()));
 
@@ -206,6 +207,7 @@ Data::Data(const QUrl &url)
 	Projection proj(GCS::WGS84());
 
 	_valid = false;
+	_errorLine = 0;
 
 	QStringList parts(url.path().split(';'));
 	if (parts.size() < 1) {
@@ -307,7 +309,7 @@ QStringList Data::filter()
 	QString last;
 
 	for (QMultiMap<QString, Parser*>::iterator it = _parsers.begin();
-	  it != _parsers.end(); it++) {
+	  it != _parsers.end(); ++it) {
 		if (it.key() != last)
 			filter << "*." + it.key();
 		last = it.key();

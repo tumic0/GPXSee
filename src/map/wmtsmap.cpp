@@ -197,7 +197,8 @@ void WMTSMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 	for (int i = tl.x(); i < br.x(); i++) {
 		for (int j = tl.y(); j < br.y(); j++) {
 			QPoint xy(i, j);
-			QPixmap *pm = TileCache::object(TileCache::Key(this, _zoom, xy));
+			TileCache::Key key(this, _zoom, xy);
+			const QPixmap *pm = TileCache::object(key);
 			if (pm) {
 				QPointF tp(xy.x() * ts.width(), xy.y() * ts.height());
 				drawTile(painter, pm, tp);

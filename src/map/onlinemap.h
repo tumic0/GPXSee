@@ -23,7 +23,7 @@ public:
 	  const QStringList &url, const QList<TileType> &tileType, int tileSize,
 	  qreal tileRatio, const Range &zooms, const RectC &bounds,
 	  const QList<HTTPHeader> &headers, bool invertY, bool quadTiles,
-	  QStringList vectorLayers, QObject *parent = 0);
+	  const QStringList &vectorLayers, QObject *parent = 0);
 
 	QString name() const {return _name;}
 

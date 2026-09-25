@@ -412,13 +412,13 @@ bool NETFile::link(const SubDiv *subdiv, quint32 shift, Handle &hdl,
 	BitStream4R bs(*this, hdl, linkOffset - _links.offset);
 	QVector<quint16> ca;
 	quint16 mask = 0;
-	quint32 size;
 
 	bool firstIsShape = (linkInfo.flags >> 10) & 1;
 	bool singleTopology = (linkInfo.flags >> 9) & 1;
 	bool hasLevels = (linkInfo.flags >> 11) & 1;
 
 	if (!singleTopology || hasLevels) {
+		quint32 size;
 		if (!bs.readVUInt32(size))
 			return false;
 	}

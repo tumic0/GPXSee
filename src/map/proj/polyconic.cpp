@@ -54,11 +54,6 @@ Defense.
 Polyconic::Polyconic(const Ellipsoid &ellipsoid, double latitudeOrigin,
   double longitudeOrigin, double falseEasting, double falseNorthing)
 {
-	double j, three_es4;
-	double lat, sin2lat, sin4lat, sin6lat;
-	double a2;
-	double b2;
-
 	_longitudeOrigin = deg2rad(longitudeOrigin);
 	_latitudeOrigin = deg2rad(latitudeOrigin);
 	_a = ellipsoid.radius();
@@ -67,23 +62,23 @@ Polyconic::Polyconic(const Ellipsoid &ellipsoid, double latitudeOrigin,
 		_longitudeOrigin -= 2 * M_PI;
 	_falseNorthing = falseNorthing;
 	_falseEasting = falseEasting;
-	a2 = _a * _a;
-	b2 = _b * _b;
+	double a2 = _a * _a;
+	double b2 = _b * _b;
 	_es2 = (a2 - b2) / a2;
 	_es4 = _es2 * _es2;
 	_es6 = _es4 * _es2;
 
-	j = 45.0 * _es6 / 1024.0;
-	three_es4 = 3.0 * _es4;
+	double j = 45.0 * _es6 / 1024.0;
+	double three_es4 = 3.0 * _es4;
 	_c0 = 1.0 - _es2 / 4.0 - three_es4 / 64.0 - 5.0 * _es6 / 256.0;
 	_c1 = 3.0 * _es2 / 8.0 + three_es4 / 32.0 + j;
 	_c2 = 15.0 * _es4 / 256.0 + j;
 	_c3 = 35.0 * _es6 / 3072.0;
 
-	lat = _c0 * _latitudeOrigin;
-	sin2lat = POLY_COEFF_TIMES_SIN(_c1, 2.0, _latitudeOrigin);
-	sin4lat = POLY_COEFF_TIMES_SIN(_c2, 4.0, _latitudeOrigin);
-	sin6lat = POLY_COEFF_TIMES_SIN(_c3, 6.0, _latitudeOrigin);
+	double lat = _c0 * _latitudeOrigin;
+	double sin2lat = POLY_COEFF_TIMES_SIN(_c1, 2.0, _latitudeOrigin);
+	double sin4lat = POLY_COEFF_TIMES_SIN(_c2, 4.0, _latitudeOrigin);
+	double sin6lat = POLY_COEFF_TIMES_SIN(_c3, 6.0, _latitudeOrigin);
 	_m0 = POLY_M(lat, sin2lat, sin4lat, sin6lat);
 }
 
@@ -91,32 +86,26 @@ PointD Polyconic::ll2xy(const Coordinates &c) const
 {
 	double Longitude = deg2rad(c.lon());
 	double Latitude = deg2rad(c.lat());
-	double slat = sin(Latitude);
-	double lat, sin2lat, sin4lat, sin6lat;
-	double dlam;
-	double NN;
-	double NN_OVER_tlat;
-	double MM;
-	double EE;
 
-	dlam = Longitude - _longitudeOrigin;
+	double dlam = Longitude - _longitudeOrigin;
 	if (dlam > M_PI)
 		dlam -= 2 * M_PI;
 	if (dlam < -M_PI)
 		dlam += 2 * M_PI;
 
 	if (Latitude == 0.0) {
-		return PointD(_a * dlam + _falseEasting,
-		  -_m0 + _falseNorthing);
+		return PointD(_a * dlam + _falseEasting, -_m0 + _falseNorthing);
 	} else {
-		NN = _a / sqrt(1.0 - _es2 * (slat * slat));
-		NN_OVER_tlat = NN  / tan(Latitude);
-		lat = _c0 * Latitude;
-		sin2lat = POLY_COEFF_TIMES_SIN(_c1, 2.0, Latitude);
-		sin4lat = POLY_COEFF_TIMES_SIN(_c2, 4.0, Latitude);
-		sin6lat = POLY_COEFF_TIMES_SIN(_c3, 6.0, Latitude);
-		MM = POLY_M(lat, sin2lat, sin4lat, sin6lat);
-		EE = dlam * slat;
+		double slat = sin(Latitude);
+		double NN = _a / sqrt(1.0 - _es2 * (slat * slat));
+		double NN_OVER_tlat = NN  / tan(Latitude);
+		double lat = _c0 * Latitude;
+		double sin2lat = POLY_COEFF_TIMES_SIN(_c1, 2.0, Latitude);
+		double sin4lat = POLY_COEFF_TIMES_SIN(_c2, 4.0, Latitude);
+		double sin6lat = POLY_COEFF_TIMES_SIN(_c3, 6.0, Latitude);
+		double MM = POLY_M(lat, sin2lat, sin4lat, sin6lat);
+		double EE = dlam * slat;
+
 		return PointD(NN_OVER_tlat * sin(EE) + _falseEasting,
 		  MM - _m0 + NN_OVER_tlat * (1.0 - cos(EE)) + _falseNorthing);
 	}
@@ -124,50 +113,38 @@ PointD Polyconic::ll2xy(const Coordinates &c) const
 
 Coordinates Polyconic::xy2ll(const PointD &p) const
 {
-	double dx;
-	double dy;
-	double dx_OVER_Poly_a;
-	double AA;
-	double BB;
-	double CC = 0.0;
-	double PHIn, Delta_PHI = 1.0;
-	double sin_PHIn;
-	double PHI, sin2PHI, sin4PHI, sin6PHI;
-	double Mn, Mn_prime, Ma;
-	double AA_Ma;
-	double Ma2_PLUS_BB;
-	double AA_MINUS_Ma;
-	double tolerance = 1.0e-12;
 	double Latitude;
 	double Longitude;
 
-
-	dy = p.y() - _falseNorthing;
-	dx = p.x() - _falseEasting;
-	dx_OVER_Poly_a = dx / _a;
+	double dy = p.y() - _falseNorthing;
+	double dx = p.x() - _falseEasting;
+	double dx_OVER_Poly_a = dx / _a;
 
 	if (FLOAT_EQ(dy,-_m0,1)) {
 		Latitude = 0.0;
 		Longitude = dx_OVER_Poly_a + _longitudeOrigin;
 	} else {
-		AA = (_m0 + dy) / _a;
-		BB = dx_OVER_Poly_a * dx_OVER_Poly_a + (AA * AA);
-		PHIn = AA;
+		double AA = (_m0 + dy) / _a;
+		double BB = dx_OVER_Poly_a * dx_OVER_Poly_a + (AA * AA);
+		double CC = 0.0;
+		double PHIn = AA;
+		double Delta_PHI = 1.0;
+		double tolerance = 1.0e-12;
 
 		while (fabs(Delta_PHI) > tolerance) {
-			sin_PHIn = sin(PHIn);
+			double sin_PHIn = sin(PHIn);
 			CC = sqrt(1.0 - _es2 * sin_PHIn * sin_PHIn) * tan(PHIn);
-			PHI = _c0 * PHIn;
-			sin2PHI = POLY_COEFF_TIMES_SIN(_c1, 2.0, PHIn);
-			sin4PHI = POLY_COEFF_TIMES_SIN(_c2, 4.0, PHIn);
-			sin6PHI = POLY_COEFF_TIMES_SIN(_c3, 6.0, PHIn);
-			Mn = POLY_M(PHI, sin2PHI, sin4PHI, sin6PHI);
-			Mn_prime = _c0 - 2.0 * _c1 * cos(2.0 * PHIn) + 4.0 * _c2
+			double PHI = _c0 * PHIn;
+			double sin2PHI = POLY_COEFF_TIMES_SIN(_c1, 2.0, PHIn);
+			double sin4PHI = POLY_COEFF_TIMES_SIN(_c2, 4.0, PHIn);
+			double sin6PHI = POLY_COEFF_TIMES_SIN(_c3, 6.0, PHIn);
+			double Mn = POLY_M(PHI, sin2PHI, sin4PHI, sin6PHI);
+			double Mn_prime = _c0 - 2.0 * _c1 * cos(2.0 * PHIn) + 4.0 * _c2
 			  * cos(4.0 * PHIn) - 6.0 * _c3 * cos(6.0 * PHIn);
-			Ma = Mn / _a;
-			AA_Ma = AA * Ma;
-			Ma2_PLUS_BB = Ma * Ma + BB;
-			AA_MINUS_Ma = AA - Ma;
+			double Ma = Mn / _a;
+			double AA_Ma = AA * Ma;
+			double Ma2_PLUS_BB = Ma * Ma + BB;
+			double AA_MINUS_Ma = AA - Ma;
 			Delta_PHI = (AA_Ma * CC + AA_MINUS_Ma - 0.5 * (Ma2_PLUS_BB) * CC) /
 			  (_es2 * sin2PHI * (Ma2_PLUS_BB - 2.0 * AA_Ma) / 4.0 * CC
 			   + (AA_MINUS_Ma) * (CC * Mn_prime - 2.0 / sin2PHI) - Mn_prime);

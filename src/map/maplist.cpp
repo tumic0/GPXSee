@@ -107,7 +107,7 @@ Map *MapList::loadFile(const QString &path, const Projection &proj, bool *isDir)
 
 		return new InvalidMap(path, errorString);
 	} else {
-		for (it = _parsers.constBegin(); it != _parsers.constEnd(); it++) {
+		for (it = _parsers.constBegin(); it != _parsers.constEnd(); ++it) {
 			const Parser &p = it.value();
 
 			Map *map = p.cb(path, proj, isDir);
@@ -227,7 +227,7 @@ QStringList MapList::filter()
 	QStringList filter;
 	QString last;
 
-	for (ParserMap::iterator it = _parsers.begin(); it != _parsers.end(); it++) {
+	for (ParserMap::iterator it = _parsers.begin(); it != _parsers.end(); ++it) {
 		if (it.key() != last)
 			filter << "*." + it.key();
 		last = it.key();

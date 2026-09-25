@@ -67,7 +67,6 @@ private:
 	QPainterPath painterPath(const Polygon &polygon) const;
 	QPolygonF polyline(const QVector<Coordinates> &path) const;
 	QVector<QPolygonF> polylineM(const QVector<Coordinates> &path) const;
-	QPolygonF tsslptArrow(const QPointF &p, qreal angle) const;
 	void processPoints(const QList<Data::Point> &points,
 	  QList<TextItem*> &textItems, QList<TextItem*> &lightItems,
 	  SectorLightsMap &sectorLights, bool overZoom) const;

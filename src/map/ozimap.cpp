@@ -32,7 +32,7 @@ static QString tarFile(const QString &path)
 	return QString();
 }
 
-QString OziMap::calibrationFile(const QStringList &files, const QString path,
+QString OziMap::calibrationFile(const QStringList &files, const QString &path,
   CalibrationType &type)
 {
 	for (int i = 0; i < files.size(); i++) {

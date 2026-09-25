@@ -65,14 +65,14 @@ static bool readColorTable(const SubFile *file, SubFile::Handle &hdl,
 
 	if (transparent) {
 		quint8 byte;
-		quint32 bits = 0, reg = 0, mask = 0x000000FF;
+		quint32 bits = 0, reg = 0;
 
 		for (int i = 0; i < colors; i++) {
 			while (bits < 28) {
 				if (!file->readByte(hdl, &byte))
 					return false;
 
-				mask = 0x000000FF << bits;
+				quint32 mask = 0x000000FF << bits;
 				reg  = reg & (~mask);
 				reg  = reg | (byte << bits);
 				bits += 8;
@@ -1412,7 +1412,7 @@ bool Style::parseDrawOrder(const SubFile *file, SubFile::Handle &hdl,
 			drawOrder.append(((quint32)type) << 8);
 		else {
 			for (int j = 0; j < 32; j++) {
-				quint32 mask = 1 << j;
+				quint32 mask = 1u << j;
 				if (subtype & mask)
 					drawOrder.append(0x010000 | (((quint32)type) << 8) | j);
 			}

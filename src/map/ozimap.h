@@ -81,8 +81,8 @@ private:
 	void rescale(int zoom);
 	void computeTransform();
 
-	static QString calibrationFile(const QStringList &files, const QString path,
-	  CalibrationType &type);
+	static QString calibrationFile(const QStringList &files,
+	  const QString &path, CalibrationType &type);
 
 	QString _name;
 	Projection _projection;

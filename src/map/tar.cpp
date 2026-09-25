@@ -68,8 +68,7 @@ bool Tar::open()
 bool Tar::loadTar()
 {
 	char buffer[BLOCKSIZE];
-	TARHeader *hdr = (TARHeader*)&buffer;
-	quint64 size;
+	const TARHeader *hdr = (TARHeader*)&buffer;
 	qint64 ret;
 
 	while ((ret = _file.read(buffer, BLOCKSIZE))) {
@@ -79,7 +78,7 @@ bool Tar::loadTar()
 			_errorString = "Error reading TAR header block";
 			return false;
 		}
-		size = number(hdr->size, sizeof(hdr->size));
+		quint64 size = number(hdr->size, sizeof(hdr->size));
 		_index.insert(hdr->name, _file.pos() / BLOCKSIZE - 1);
 		if (!_file.seek(_file.pos() + BLOCKCOUNT(size) * BLOCKSIZE)) {
 			_file.close();
@@ -94,7 +93,6 @@ bool Tar::loadTar()
 
 bool Tar::loadTmi(const QString &path)
 {
-	quint64 block;
 	int ln = 1;
 
 	QFile file(path);
@@ -109,7 +107,7 @@ bool Tar::loadTmi(const QString &path)
 			_index.clear();
 			return false;
 		}
-		block = number(line.constData() + 6, line.size() - 6, 10);
+		quint64 block = number(line.constData() + 6, line.size() - 6, 10);
 		QString file(line.mid(pos + 1).trimmed());
 
 		_index.insert(file, block);
@@ -122,8 +120,7 @@ bool Tar::loadTmi(const QString &path)
 QByteArray Tar::file(const QString &name)
 {
 	char buffer[BLOCKSIZE];
-	TARHeader *hdr = (TARHeader*)&buffer;
-	quint64 size;
+	const TARHeader *hdr = (TARHeader*)&buffer;
 
 	QMap<QString, quint64>::const_iterator it(_index.find(name));
 	if (it == _index.constEnd())
@@ -133,7 +130,7 @@ QByteArray Tar::file(const QString &name)
 	if (_file.seek(it.value() * BLOCKSIZE)) {
 		if (_file.read(buffer, BLOCKSIZE) < BLOCKSIZE)
 			return QByteArray();
-		size = number(hdr->size, sizeof(hdr->size));
+		quint64 size = number(hdr->size, sizeof(hdr->size));
 		return _file.read(size);
 	} else
 		return QByteArray();

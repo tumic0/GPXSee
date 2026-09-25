@@ -65,10 +65,10 @@ Coordinates ObliqueStereographic::xy2ll(const PointD &p) const
 	double psi0 = 0.5 * log((1.0 + sin(chi)) / (_c * (1.0 - sin(chi)))) / _n;
 	double phi1 = 2.0 * atan(pow(M_E, psi0)) - M_PI_2;
 
-	double psi, phi = phi1, prev = phi;
-	for (int i = 0; i < 8; i++) {
+	double phi = phi1, prev = phi;
+	for (int n = 0; n < 8; n++) {
 		double sinPhi = sin(phi);
-		psi = log((tan(phi/2.0 + M_PI_4)) * pow((1.0 - _e * sinPhi)
+		double psi = log((tan(phi/2.0 + M_PI_4)) * pow((1.0 - _e * sinPhi)
 		  / (1.0 + _e * sinPhi), _e/2.0));
 		phi = phi - (psi - psi0) * cos(phi) * (1.0 - _es * sinPhi * sinPhi)
 		  / (1.0 - _es);

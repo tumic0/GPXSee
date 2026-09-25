@@ -47,7 +47,6 @@ private:
 	};
 
 	Token keyword(CTX &ctx);
-	int getChar(CTX &ctx);
 	void error(CTX &ctx);
 	void nextToken(CTX &ctx);
 	void compare(CTX &ctx, Token token);
@@ -85,6 +84,8 @@ private:
 	void optCS(CTX &ctx, int *epsg);
 	void optVerticalCS(CTX &ctx, int *epsg);
 	void optVerticalCS2(CTX &ctx, int *epsg);
+
+	static int getChar(CTX &ctx);
 
 	Projection _projection;
 	QString _errorString;

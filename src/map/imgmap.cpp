@@ -87,7 +87,7 @@ IMGMap::~IMGMap()
 	qDeleteAll(_styles);
 }
 
-IMG::Style *IMGMap::createStyle(IMG::MapData *data, const QString *typFile)
+IMG::Style *IMGMap::createStyle(const IMG::MapData *data, const QString *typFile)
 {
 	if (typFile) {
 		SubFile typ(*typFile);
@@ -128,7 +128,7 @@ void IMGMap::load(const Projection &in, const Projection &out,
 	for (int i = 0; i < _data.size(); i++)
 		_styles.append(createStyle(_data.at(i), i ? 0 : typ));
 
-	_hillShading = IMGMap::hillShading() & hillShading;
+	_hillShading = IMGMap::hillShading() && hillShading;
 
 	updateTransform();
 
@@ -279,7 +279,7 @@ void IMGMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 			for (int j = 0; j < height; j++) {
 				QPoint ttl(tl.x() + i * TILE_SIZE, tl.y() + j * TILE_SIZE);
 				TileCache::Key key(_data.at(n), _zoom, ttl);
-				QPixmap *pm = TileCache::object(key);
+				const QPixmap *pm = TileCache::object(key);
 
 				if (pm)
 					painter->drawPixmap(ttl, *pm);
@@ -329,7 +329,7 @@ double IMGMap::elevation(const Coordinates &c)
 QStringList IMGMap::styles(int &defaultStyle) const
 {
 	QStringList list;
-	MapData *d = _data.first();
+	const MapData *d = _data.first();
 	list.reserve(styles().size() + (d->typ() ? 1 : 0));
 
 	for (int i = 0; i < styles().size(); i++)
