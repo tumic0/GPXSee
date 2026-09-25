@@ -32,7 +32,11 @@
 #define STATISTICS_SHORTCUT     QKeySequence(Qt::CTRL | Qt::Key_S)
 #define DOWNLOAD_DEM_SHORTCUT   QKeySequence(Qt::CTRL | Qt::Key_D)
 #define SHOW_TRACKS_SHORTCUT    QKeySequence(Qt::CTRL | Qt::Key_T)
+#ifdef Q_OS_MACOS
+#define SHOW_ROUTES_SHORTCUT    QKeySequence(Qt::CTRL | Qt::Key_U)
+#else
 #define SHOW_ROUTES_SHORTCUT    QKeySequence(Qt::CTRL | Qt::Key_R)
+#endif
 #define SHOW_AREAS_SHORTCUT     QKeySequence(Qt::CTRL | Qt::Key_A)
 #define SHOW_WAYPOINTS_SHORTCUT QKeySequence(Qt::CTRL | Qt::Key_P)
 #define HILLSHADING_SHORTCUT    QKeySequence(Qt::CTRL | Qt::Key_H)
