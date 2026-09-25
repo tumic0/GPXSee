@@ -31,11 +31,12 @@ private:
 		int idx[2];
 	};
 
-	bool readHeaderFile(const QString &omdPath, Header &hdr);
 	bool readF1(const char *chunk, const Header &hdr, Sequence &seq,
 	  SegmentData &segment);
 	bool readF2(const char *chunk, const Header &hdr, Sequence &seq,
 	  SegmentData &segment);
+
+	static bool readHeaderFile(const QString &omdPath, Header &hdr);
 
 	QString _errorString;
 };
@@ -58,9 +59,10 @@ private:
 		bool hr;
 	};
 
-	bool readHeaderFile(const QString &ghpPath, Header &hdr);
 	bool readF0(const char *chunk, const Header &hdr, int &time,
 	  SegmentData &segment);
+
+	static bool readHeaderFile(const QString &ghpPath, Header &hdr);
 
 	QString _errorString;
 };

@@ -31,7 +31,6 @@ private:
 	};
 
 	bool a2c(const QJsonArray &data, const Projection &proj, Coordinates &c);
-	Type type(const QJsonObject &json);
 	bool crs(const QJsonObject &object, Projection &proj);
 	bool point(const QJsonObject &object, const Projection &parent,
 	  const QJsonValue &properties, QVector<Waypoint> &waypoints);
@@ -56,6 +55,8 @@ private:
 	bool featureCollection(const QJsonObject &object, const QString &file,
 	  const Projection &parent, QList<TrackData> &tracks, QList<Area> &areas,
 	  QVector<Waypoint> &waypoints);
+
+	static Type type(const QJsonObject &json);
 
 	QString _errorString;
 };

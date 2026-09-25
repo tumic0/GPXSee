@@ -490,17 +490,15 @@ bool NMEAParser::parse(QFile *file, QList<TrackData> &tracks,
 {
 	Q_UNUSED(routes);
 	Q_UNUSED(polygons);
-	qint64 len;
 	char line[1024];
 	SegmentData segment;
 	CTX ctx;
-
 
 	_errorLine = 1;
 	_errorString.clear();
 
 	while (!file->atEnd()) {
-		len = file->readLine(line, sizeof(line));
+		qint64 len = file->readLine(line, sizeof(line));
 
 		if (len < 0) {
 			_errorString = "I/O error";
