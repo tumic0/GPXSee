@@ -579,17 +579,17 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="443"/>
         <source>Show tracks</source>
-        <translation>显示航迹</translation>
+        <translation>显示轨迹</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="450"/>
         <source>Show routes</source>
-        <translation>显示航线</translation>
+        <translation>显示路线</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="457"/>
         <source>Show waypoints</source>
-        <translation>显示航点</translation>
+        <translation>显示标记点</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="465"/>
@@ -599,22 +599,22 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="472"/>
         <source>Waypoint icons</source>
-        <translation>航点图标</translation>
+        <translation>标记点图标</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="477"/>
         <source>Waypoint labels</source>
-        <translation>航点标签</translation>
+        <translation>标记点标签</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="482"/>
         <source>Route waypoints</source>
-        <translation>航线航点</translation>
+        <translation>路线标记点</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="487"/>
         <source>Track waypoints</source>
-        <translation>跟踪航点</translation>
+        <translation>轨迹标记点</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="492"/>
@@ -1085,19 +1085,19 @@
         <location filename="../src/GUI/gui.cpp" line="1562"/>
         <location filename="../src/GUI/gui.cpp" line="1620"/>
         <source>Tracks</source>
-        <translation>航迹</translation>
+        <translation>轨迹</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1564"/>
         <location filename="../src/GUI/gui.cpp" line="1622"/>
         <source>Routes</source>
-        <translation>航线</translation>
+        <translation>路线</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1566"/>
         <location filename="../src/GUI/gui.cpp" line="1624"/>
         <source>Waypoints</source>
-        <translation>航点</translation>
+        <translation>标记点</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="1568"/>
@@ -1633,13 +1633,13 @@
         <location filename="../src/GUI/optionsdialog.cpp" line="242"/>
         <location filename="../src/GUI/optionsdialog.cpp" line="254"/>
         <source>Tracks</source>
-        <translation>航迹</translation>
+        <translation>轨迹</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="245"/>
         <location filename="../src/GUI/optionsdialog.cpp" line="256"/>
         <source>Routes</source>
-        <translation>航线</translation>
+        <translation>路线</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="248"/>
@@ -1663,7 +1663,7 @@
         <location filename="../src/GUI/optionsdialog.cpp" line="295"/>
         <location filename="../src/GUI/optionsdialog.cpp" line="301"/>
         <source>Waypoints</source>
-        <translation>航点</translation>
+        <translation>标记点</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="298"/>
@@ -1997,32 +1997,32 @@
         <location filename="../src/GUI/optionsdialog.cpp" line="152"/>
         <location filename="../src/GUI/optionsdialog.cpp" line="155"/>
         <source>IMG maps detail level</source>
-        <translation type="unfinished"></translation>
+        <translation>IMG 地图细节等级</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="145"/>
         <source>Paths:</source>
-        <translation type="unfinished"></translation>
+        <translation>路径：</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="146"/>
         <source>Points:</source>
-        <translation type="unfinished"></translation>
+        <translation>点：</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="147"/>
         <source>Hillshading:</source>
-        <translation type="unfinished"></translation>
+        <translation>山体阴影：</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="164"/>
         <source>HiDPI mode</source>
-        <translation type="unfinished"></translation>
+        <translation>HiDPI 模式</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="165"/>
         <source>Miscellaneous</source>
-        <translation type="unfinished"></translation>
+        <translation>杂项</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="700"/>
@@ -2037,7 +2037,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="759"/>
         <source>The zoom level will be changed so that the whole content (tracks/waypoints) fits to the printed area and the map resolution is as close as possible to the print resolution.</source>
-        <translation>缩放级别将被改变以使整个内容（航迹/航点）适应打印区域，并且地图分辨率尽可能接近打印分辨率。</translation>
+        <translation>缩放级别将被改变以使整个内容（轨迹/标记点）适应打印区域，并且地图分辨率尽可能接近打印分辨率。</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="775"/>
