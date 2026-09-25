@@ -285,9 +285,11 @@ void MBTilesMap::load(const Projection &in, const Projection &out,
 	_coordinatesRatio = _mapRatio > 1.0 ? _mapRatio / _tileRatio : 1.0;
 	_factor = zoom2scale(_zooms.at(_zoom).z, _tileSize) * _coordinatesRatio;
 
-	_hillShading = MBTilesMap::hillShading() & hillShading;
+	_hillShading = MBTilesMap::hillShading() && hillShading;
 
-	_db.open();
+	if (!_db.open())
+		qWarning("%s: %s", qUtf8Printable(_db.databaseName()),
+		  qUtf8Printable(_db.lastError().text()));
 }
 
 void MBTilesMap::unload()
@@ -363,17 +365,16 @@ qreal MBTilesMap::tileSize() const
 QByteArray MBTilesMap::tileData(int zoom, const QPoint &tile) const
 {
 	QSqlQuery query(_db);
-	query.prepare("SELECT tile_data FROM tiles "
-	  "WHERE zoom_level=:zoom AND tile_column=:x AND tile_row=:y");
+	if (!query.prepare("SELECT tile_data FROM tiles "
+	  "WHERE zoom_level=:zoom AND tile_column=:x AND tile_row=:y"))
+		return QByteArray();
 	query.bindValue(":zoom", zoom);
 	query.bindValue(":x", tile.x());
 	query.bindValue(":y", (1<<zoom) - tile.y() - 1);
-	query.exec();
+	if (!(query.exec() && query.first()))
+		return QByteArray();
 
-	if (query.first())
-		return query.value(0).toByteArray();
-
-	return QByteArray();
+	return query.value(0).toByteArray();
 }
 
 QString MBTilesMap::key(int zoom, const QPoint &xy) const
@@ -455,7 +456,8 @@ void MBTilesMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 	for (int i = 0; i < width; i++) {
 		for (int j = 0; j < height; j++) {
 			QPoint t(tile.x() + i, tile.y() + j);
-			QPixmap *pm = TileCache::object(TileCache::Key(this, zoom.z, t));
+			TileCache::Key key(this, zoom.z, t);
+			const QPixmap *pm = TileCache::object(key);
 
 			if (pm) {
 				QPointF tp(tilePos(tl, t, tile, overzoom));

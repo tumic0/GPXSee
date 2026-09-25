@@ -2,6 +2,7 @@
 #include <QSqlQuery>
 #include <QSqlRecord>
 #include <QSqlField>
+#include <QSqlError>
 #include <QFile>
 #include <QFileInfo>
 #include <QDir>
@@ -424,7 +425,7 @@ OruxMap::OruxMap(const QString &fileName, QObject *parent)
 		_db.setDatabaseName(dbFile);
 		_db.setConnectOptions("QSQLITE_OPEN_READONLY");
 		if (!_db.open()) {
-			_errorString = "Error opening database file";
+			_errorString = "OruxMapsImages.db: " + _db.lastError().text();
 			return;
 		}
 
@@ -496,8 +497,11 @@ void OruxMap::load(const Projection &in, const Projection &out,
 
 	_mapRatio = hidpi ? deviceRatio : 1.0;
 
-	if (_db.isValid())
-		_db.open();
+	if (_db.isValid()) {
+		if (!_db.open())
+			qWarning("%s: %s", qUtf8Printable(_db.databaseName()),
+			  qUtf8Printable(_db.lastError().text()));
+	}
 }
 
 void OruxMap::unload()
@@ -510,13 +514,12 @@ QPixmap *OruxMap::tile(const Zoom &z, const QPoint &xy) const
 {
 	if (_db.isValid()) {
 		QSqlQuery query(_db);
-		query.prepare("SELECT image FROM tiles WHERE z=:z AND x=:x AND y=:y");
+		if (!query.prepare("SELECT image FROM tiles WHERE z=:z AND x=:x AND y=:y"))
+			return 0;
 		query.bindValue(":z", z.zoom);
 		query.bindValue(":x", xy.x());
 		query.bindValue(":y", xy.y());
-		query.exec();
-
-		if (!query.first())
+		if (!(query.exec() && query.first()))
 			return 0;
 
 		QImage img(QImage::fromData(query.value(0).toByteArray()));

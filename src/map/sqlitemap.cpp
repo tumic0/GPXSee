@@ -112,7 +112,9 @@ void SqliteMap::load(const Projection &in, const Projection &out,
 	_mapRatio = hidpi ? deviceRatio : 1.0;
 	_factor = zoom2scale(_zoom, _tileSize) * _mapRatio;
 
-	_db.open();
+	if (!_db.open())
+		qWarning("%s: %s", qUtf8Printable(_db.databaseName()),
+		  qUtf8Printable(_db.lastError().text()));
 }
 
 void SqliteMap::unload()
@@ -186,16 +188,15 @@ qreal SqliteMap::tileSize() const
 QByteArray SqliteMap::tileData(int zoom, const QPoint &tile) const
 {
 	QSqlQuery query(_db);
-	query.prepare("SELECT image FROM tiles WHERE z=:zoom AND x=:x AND y=:y");
+	if (!query.prepare("SELECT image FROM tiles WHERE z=:zoom AND x=:x AND y=:y"))
+		return QByteArray();
 	query.bindValue(":zoom", 17 - zoom);
 	query.bindValue(":x", tile.x());
 	query.bindValue(":y", tile.y());
-	query.exec();
+	if (!(query.exec() && query.first()))
+		return QByteArray();
 
-	if (query.first())
-		return query.value(0).toByteArray();
-
-	return QByteArray();
+	return query.value(0).toByteArray();
 }
 
 void SqliteMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
@@ -213,7 +214,8 @@ void SqliteMap::draw(QPainter *painter, const QRectF &rect, Flags flags)
 	for (int i = 0; i < width; i++) {
 		for (int j = 0; j < height; j++) {
 			QPoint t(tile.x() + i, tile.y() + j);
-			QPixmap *pm = TileCache::object(TileCache::Key(this, _zoom, t));
+			TileCache::Key key(this, _zoom, t);
+			const QPixmap *pm = TileCache::object(key);
 			if (pm) {
 				QPointF tp(tl.x() + (t.x() - tile.x()) * tileSize(),
 				  tl.y() + (t.y() - tile.y()) * tileSize());
