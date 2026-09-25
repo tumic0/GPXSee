@@ -413,7 +413,7 @@ QPixmap *RMap::tile(const QPoint &xy)
 
 	qint32 index = xy.y() / _tileSize.height() * zoom.dim.width()
 	  + xy.x() / _tileSize.width();
-	if (index > zoom.tiles.size())
+	if (index >= zoom.tiles.size())
 		return 0;
 
 	quint64 offset = zoom.tiles.at(index);
