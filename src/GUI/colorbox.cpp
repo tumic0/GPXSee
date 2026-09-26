@@ -2,6 +2,8 @@
 #include <QStyleOptionButton>
 #include <QColorDialog>
 #include <QComboBox>
+#include <QPainterPath>
+#include "macos.h"
 #include "colorbox.h"
 
 #if QT_VERSION >= QT_VERSION_CHECK(6, 1, 0)
@@ -40,20 +42,31 @@ void ColorBox::paintEvent(QPaintEvent *event)
 {
 	Q_UNUSED(event);
 
-	QStylePainter painter(this);
+	if (MacOS::match(style())) {
+		QColor c(palette().window().color());
+		QPen pen(c.darker(110), 1);
 
-	QStyleOptionButton option;
-	option.initFrom(this);
-	option.palette.setColor(QPalette::Button, _color);
-	if (isDown())
-		option.state |= QStyle::State_Sunken;
-	else
-		option.state |= QStyle::State_Raised;
+		QPainter p(this);
+		p.setRenderHint(QPainter::Antialiasing);
+		p.setPen(pen);
+		p.setBrush(isDown() ? QBrush(_color.darker(110)) : QBrush(_color));
+		p.drawRoundedRect(rect().adjusted(1, 1, -1, -1), 6, 6);
+	} else {
+		QStylePainter painter(this);
 
-	if (useButtonCommand(painter.style()))
-		painter.drawPrimitive(QStyle::PE_PanelButtonCommand, option);
-	else
-		painter.drawPrimitive(QStyle::PE_PanelButtonBevel, option);
+		QStyleOptionButton option;
+		option.initFrom(this);
+		option.palette.setColor(QPalette::Button, _color);
+		if (isDown())
+			option.state |= QStyle::State_Sunken;
+		else
+			option.state |= QStyle::State_Raised;
+
+		if (useButtonCommand(painter.style()))
+			painter.drawPrimitive(QStyle::PE_PanelButtonCommand, option);
+		else
+			painter.drawPrimitive(QStyle::PE_PanelButtonBevel, option);
+	}
 }
 
 void ColorBox::setColor(const QColor &color)
