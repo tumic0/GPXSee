@@ -554,7 +554,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="399"/>
         <source>Show cursor coordinates</source>
-        <translation type="unfinished"></translation>
+        <translation>Montri koordinatojn de la kursoro</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="413"/>
@@ -815,7 +815,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="792"/>
         <source>Layers</source>
-        <translation type="unfinished"></translation>
+        <translation>Tavoloj</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="800"/>
