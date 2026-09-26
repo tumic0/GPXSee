@@ -1984,32 +1984,32 @@
         <location filename="../src/GUI/optionsdialog.cpp" line="152"/>
         <location filename="../src/GUI/optionsdialog.cpp" line="155"/>
         <source>IMG maps detail level</source>
-        <translation type="unfinished"></translation>
+        <translation>уровень детализации IMG карты</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="145"/>
         <source>Paths:</source>
-        <translation type="unfinished"></translation>
+        <translation>Пути:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="146"/>
         <source>Points:</source>
-        <translation type="unfinished"></translation>
+        <translation>Точки:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="147"/>
         <source>Hillshading:</source>
-        <translation type="unfinished"></translation>
+        <translation>Отмывка рельефа:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="164"/>
         <source>HiDPI mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Режим HiDPI</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="165"/>
         <source>Miscellaneous</source>
-        <translation type="unfinished"></translation>
+        <translation>Разные</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="425"/>
