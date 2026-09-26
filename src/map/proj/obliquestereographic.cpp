@@ -1,7 +1,6 @@
 #include "map/ellipsoid.h"
 #include "obliquestereographic.h"
 
-
 #define S1(x) ((1.0 + x) / (1.0 - x))
 #define S2(x) ((1.0 - _e * x) / (1.0 + _e * x))
 

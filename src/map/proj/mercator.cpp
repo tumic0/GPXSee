@@ -48,10 +48,6 @@ Mercator::Mercator(const Ellipsoid &ellipsoid, double latitudeOrigin,
   double longitudeOrigin, double falseEasting, double falseNorthing)
 {
 	double es = ellipsoid.es();
-	double es2;
-	double es3;
-	double es4;
-	double sin_olat;
 
 	_latitudeOrigin = deg2rad(latitudeOrigin);
 	_longitudeOrigin = deg2rad(longitudeOrigin);
@@ -63,12 +59,12 @@ Mercator::Mercator(const Ellipsoid &ellipsoid, double latitudeOrigin,
 	_a = ellipsoid.radius();
 	_e = sqrt(es);
 
-	sin_olat = sin(_latitudeOrigin);
+	double sin_olat = sin(_latitudeOrigin);
 	_scaleFactor = 1.0 / (sqrt(1.e0 - es * sin_olat * sin_olat)
 	  / cos(_latitudeOrigin));
-	es2 = es * es;
-	es3 = es2 * es;
-	es4 = es3 * es;
+	double es2 = es * es;
+	double es3 = es2 * es;
+	double es4 = es3 * es;
 	_ab = es / 2.e0 + 5.e0 * es2 / 24.e0 + es3 / 12.e0 + 13.e0 * es4 / 360.e0;
 	_bb = 7.e0 * es2 / 48.e0 + 29.e0 * es3 / 240.e0 + 811.e0 * es4 / 11520.e0;
 	_cb = 7.e0 * es3 / 120.e0 + 81.e0 * es4 / 1120.e0;
@@ -79,19 +75,16 @@ PointD Mercator::ll2xy(const Coordinates &c) const
 {
 	double lon = deg2rad(c.lon());
 	double lat = deg2rad(c.lat());
-	double ctanz2;
-	double e_x_sinlat;
-	double delta_lon;
-	double tan_temp;
-	double pow_temp;
 
 	if (lon > M_PI)
 		lon -= 2 * M_PI;
-	e_x_sinlat = _e * sin(lat);
-	tan_temp = tan(M_PI_4 + lat / 2.e0);
-	pow_temp = pow((1.e0 - e_x_sinlat) / (1.e0 + e_x_sinlat), _e / 2.e0);
-	ctanz2 = tan_temp * pow_temp;
-	delta_lon = lon - _longitudeOrigin;
+
+	double e_x_sinlat = _e * sin(lat);
+	double tan_temp = tan(M_PI_4 + lat / 2.e0);
+	double pow_temp = pow((1.e0 - e_x_sinlat) / (1.e0 + e_x_sinlat), _e / 2.e0);
+	double ctanz2 = tan_temp * pow_temp;
+	double delta_lon = lon - _longitudeOrigin;
+
 	if (delta_lon > M_PI)
 	  delta_lon -= 2 * M_PI;
 	if (delta_lon < -M_PI)
@@ -103,17 +96,13 @@ PointD Mercator::ll2xy(const Coordinates &c) const
 
 Coordinates Mercator::xy2ll(const PointD &p) const
 {
-	double dx;
-	double dy;
-	double xphi;
-	double lat, lon;
-
-	dy = p.y() - _falseNorthing;
-	dx = p.x() - _falseEasting;
-	lon = _longitudeOrigin + dx / (_scaleFactor * _a);
-	xphi = M_PI_2 - 2.e0 * atan(1.e0 / exp(dy / (_scaleFactor * _a)));
-	lat = xphi + _ab * sin(2.e0 * xphi) + _bb * sin(4.e0 * xphi)
+	double dy = p.y() - _falseNorthing;
+	double dx = p.x() - _falseEasting;
+	double lon = _longitudeOrigin + dx / (_scaleFactor * _a);
+	double xphi = M_PI_2 - 2.e0 * atan(1.e0 / exp(dy / (_scaleFactor * _a)));
+	double lat = xphi + _ab * sin(2.e0 * xphi) + _bb * sin(4.e0 * xphi)
 	  + _cb * sin(6.e0 * xphi) + _db * sin(8.e0 * xphi);
+
 	if (lon > M_PI)
 		lon -= 2 * M_PI;
 	if (lon < -M_PI)

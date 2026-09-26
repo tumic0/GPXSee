@@ -44,7 +44,6 @@ Defense.
 #include "map/ellipsoid.h"
 #include "polarstereographic.h"
 
-
 #define POLAR_POW(EsSin) pow((1.0 - EsSin) / (1.0 + EsSin), _es_OVER_2)
 
 PolarStereographic::PolarStereographic(const Ellipsoid &ellipsoid,
@@ -93,7 +92,6 @@ PointD PolarStereographic::ll2xy(const Coordinates &c) const
 	double Easting, Northing;
 	double Longitude = deg2rad(c.lon());
 	double Latitude = deg2rad(c.lat());
-
 
 	if (fabs(fabs(Latitude) - M_PI_2) < 1.0e-10) {
 		Easting = 0.0;

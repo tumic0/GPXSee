@@ -44,7 +44,6 @@ Defense.
 #include "map/ellipsoid.h"
 #include "albersequal.h"
 
-
 #define ONE_MINUS_SQR(x) (1.0 - (x) * (x))
 #define ALBERS_Q(slat, one_minus_sqr_e_sin, es_sin) \
 	(_one_minus_es * ((slat) / (one_minus_sqr_e_sin) - \
@@ -52,27 +51,17 @@ Defense.
 #define ALBERS_M(clat, one_minus_sqr_e_sin) \
 	((clat) / sqrt(one_minus_sqr_e_sin))
 
-
 AlbersEqual::AlbersEqual(const Ellipsoid &ellipsoid, double standardParallel1,
   double standardParallel2, double latitudeOrigin, double longitudeOrigin,
   double falseEasting, double falseNorthing)
 {
-	double sin_lat, sin_lat1, sin_lat2, cos_lat1, cos_lat2;
-	double m1, m2, sqr_m1, sqr_m2;
-	double q0, q1, q2;
-	double e_sin, e_sin1, e_sin2;
-	double one_minus_sqr_e_sin1, one_minus_sqr_e_sin2;
-	double nq0;
-	double sp1, sp2;
-
-
 	_latitudeOrigin = deg2rad(latitudeOrigin);
 	_longitudeOrigin = deg2rad(longitudeOrigin);
 	_falseEasting = falseEasting;
 	_falseNorthing = falseNorthing;
 
-	sp1 = deg2rad(standardParallel1);
-	sp2 = deg2rad(standardParallel2);
+	double sp1 = deg2rad(standardParallel1);
+	double sp2 = deg2rad(standardParallel2);
 
 	_a2 = ellipsoid.radius() * ellipsoid.radius();
 	_es = ellipsoid.es();
@@ -80,59 +69,50 @@ AlbersEqual::AlbersEqual(const Ellipsoid &ellipsoid, double standardParallel1,
 	_one_minus_es = 1 - _es;
 	_two_e = 2 * _e;
 
-	sin_lat = sin(_latitudeOrigin);
-	e_sin = _e * sin_lat;
-	q0 = ALBERS_Q(sin_lat, ONE_MINUS_SQR(e_sin), e_sin);
+	double sin_lat = sin(_latitudeOrigin);
+	double e_sin = _e * sin_lat;
+	double q0 = ALBERS_Q(sin_lat, ONE_MINUS_SQR(e_sin), e_sin);
 
-	sin_lat1 = sin(sp1);
-	cos_lat1 = cos(sp1);
-	e_sin1 = _e * sin_lat1;
-	one_minus_sqr_e_sin1 = ONE_MINUS_SQR(e_sin1);
-	m1 = ALBERS_M(cos_lat1, one_minus_sqr_e_sin1);
-	q1 = ALBERS_Q(sin_lat1, one_minus_sqr_e_sin1, e_sin1);
+	double sin_lat1 = sin(sp1);
+	double cos_lat1 = cos(sp1);
+	double e_sin1 = _e * sin_lat1;
+	double one_minus_sqr_e_sin1 = ONE_MINUS_SQR(e_sin1);
+	double m1 = ALBERS_M(cos_lat1, one_minus_sqr_e_sin1);
+	double q1 = ALBERS_Q(sin_lat1, one_minus_sqr_e_sin1, e_sin1);
 
-	sqr_m1 = m1 * m1;
+	double sqr_m1 = m1 * m1;
 	if (fabs(sp1 - sp2) > 1.0e-10) {
-		sin_lat2 = sin(sp2);
-		cos_lat2 = cos(sp2);
-		e_sin2 = _e * sin_lat2;
-		one_minus_sqr_e_sin2 = ONE_MINUS_SQR(e_sin2);
-		m2 = ALBERS_M(cos_lat2, one_minus_sqr_e_sin2);
-		q2 = ALBERS_Q(sin_lat2, one_minus_sqr_e_sin2, e_sin2);
-		sqr_m2 = m2 * m2;
+		double sin_lat2 = sin(sp2);
+		double cos_lat2 = cos(sp2);
+		double e_sin2 = _e * sin_lat2;
+		double one_minus_sqr_e_sin2 = ONE_MINUS_SQR(e_sin2);
+		double m2 = ALBERS_M(cos_lat2, one_minus_sqr_e_sin2);
+		double q2 = ALBERS_Q(sin_lat2, one_minus_sqr_e_sin2, e_sin2);
+		double sqr_m2 = m2 * m2;
 		_n = (sqr_m1 - sqr_m2) / (q2 - q1);
 	} else
 		_n = sin_lat1;
 
 	_c = sqr_m1 + _n * q1;
 	_a_over_n = ellipsoid.radius() / _n;
-	nq0 = _n * q0;
+	double nq0 = _n * q0;
 	_rho0 = (_c < nq0) ? 0 : _a_over_n * sqrt(_c - nq0);
 }
 
 PointD AlbersEqual::ll2xy(const Coordinates &c) const
 {
-	double dlam;
-	double sin_lat;
-	double e_sin;
-	double q;
-	double rho;
-	double theta;
-	double nq;
-
-
-	dlam = deg2rad(c.lon()) - _longitudeOrigin;
+	double dlam = deg2rad(c.lon()) - _longitudeOrigin;
 	if (dlam > M_PI)
 		dlam -= 2 * M_PI;
 	if (dlam < -M_PI)
 		dlam += 2 * M_PI;
 
-	sin_lat = sin(deg2rad(c.lat()));
-	e_sin = _e * sin_lat;
-	q = ALBERS_Q(sin_lat, ONE_MINUS_SQR(e_sin), e_sin);
-	nq = _n * q;
-	rho = (_c < nq) ? 0 : _a_over_n * sqrt(_c - nq);
-	theta = _n * dlam;
+	double sin_lat = sin(deg2rad(c.lat()));
+	double e_sin = _e * sin_lat;
+	double q = ALBERS_Q(sin_lat, ONE_MINUS_SQR(e_sin), e_sin);
+	double nq = _n * q;
+	double rho = (_c < nq) ? 0 : _a_over_n * sqrt(_c - nq);
+	double theta = _n * dlam;
 
 	return PointD(rho * sin(theta) + _falseEasting,
 	  _rho0 - rho * cos(theta) + _falseNorthing);
@@ -140,24 +120,14 @@ PointD AlbersEqual::ll2xy(const Coordinates &c) const
 
 Coordinates AlbersEqual::xy2ll(const PointD &p) const
 {
-	double dy, dx;
-	double rho0_minus_dy;
-	double q, qc, q_over_2;
-	double rho, rho_n;
-	double phi, delta_phi = 1.0;
-	double sin_phi;
-	double e_sin, one_minus_sqr_e_sin;
-	double theta = 0.0;
-	int count = 30;
-	double tolerance = 4.85e-10;
 	double lat, lon;
+	double theta = 0.0;
 
+	double dy = p.y() - _falseNorthing;
+	double dx = p.x() - _falseEasting;
 
-	dy = p.y() - _falseNorthing;
-	dx = p.x() - _falseEasting;
-
-	rho0_minus_dy = _rho0 - dy;
-	rho = sqrt(dx * dx + rho0_minus_dy * rho0_minus_dy);
+	double rho0_minus_dy = _rho0 - dy;
+	double rho = sqrt(dx * dx + rho0_minus_dy * rho0_minus_dy);
 
 	if (_n < 0) {
 		rho *= -1.0;
@@ -167,24 +137,29 @@ Coordinates AlbersEqual::xy2ll(const PointD &p) const
 
 	if (rho != 0.0)
 		theta = atan2(dx, rho0_minus_dy);
-	rho_n = rho * _n;
-	q = (_c - (rho_n * rho_n) / _a2) / _n;
-	qc = 1 - ((_one_minus_es) / (_two_e)) * log((1.0 - _e) / (1.0 + _e));
+	double rho_n = rho * _n;
+	double q = (_c - (rho_n * rho_n) / _a2) / _n;
+	double qc = 1 - ((_one_minus_es) / (_two_e)) * log((1.0 - _e) / (1.0 + _e));
+
 	if (fabs(fabs(qc) - fabs(q)) > 1.0e-6) {
-		q_over_2 = q / 2.0;
+		double q_over_2 = q / 2.0;
 		if (q_over_2 > 1.0)
 			lat = M_PI_2;
 		else if (q_over_2 < -1.0)
 			lat = -M_PI_2;
 		else {
-			phi = asin(q_over_2);
+			double phi = asin(q_over_2);
 			if (_e < 1.0e-10)
 				lat = phi;
 			else  {
+				double delta_phi = 1.0;
+				int count = 30;
+				double tolerance = 4.85e-10;
+
 				while ((fabs(delta_phi) > tolerance) && count) {
-					sin_phi = sin(phi);
-					e_sin = _e * sin_phi;
-					one_minus_sqr_e_sin = ONE_MINUS_SQR(e_sin);
+					double sin_phi = sin(phi);
+					double e_sin = _e * sin_phi;
+					double one_minus_sqr_e_sin = ONE_MINUS_SQR(e_sin);
 					delta_phi = (one_minus_sqr_e_sin * one_minus_sqr_e_sin)
 					  / (2.0 * cos(phi)) * (q / (_one_minus_es) - sin_phi
 					  / one_minus_sqr_e_sin + (log((1.0 - e_sin)
