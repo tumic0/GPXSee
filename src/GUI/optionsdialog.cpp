@@ -234,7 +234,7 @@ QWidget *OptionsDialog::createAppearancePage(bool macos)
 			max = qMax(max, labels[i]->sizeHint().width() - 15);
 		for (size_t i = 0; i < ARRAY_SIZE(labels); i++) {
 			labels[i]->setMinimumWidth(max);
-			labels[i]->setAlignment(Qt::AlignRight);
+			labels[i]->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
 		}
 
 		pathTabLayout->addWidget(MacOS::heading(tr("Tracks")));
