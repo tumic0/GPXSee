@@ -504,7 +504,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="246"/>
         <source>Browse directory...</source>
-        <translation type="unfinished"></translation>
+        <translation>Selaa hakemistoa…</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="267"/>
@@ -665,7 +665,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="549"/>
         <source>Show hillshading</source>
-        <translation type="unfinished"></translation>
+        <translation>Näytä rinnevarjostus</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="561"/>
@@ -691,13 +691,13 @@
         <location filename="../src/GUI/gui.cpp" line="601"/>
         <location filename="../src/GUI/gui.cpp" line="1086"/>
         <source>Next graph tab</source>
-        <translation type="unfinished"></translation>
+        <translation>Seuraava kaavio-välilehti</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="608"/>
         <location filename="../src/GUI/gui.cpp" line="1088"/>
         <source>Previous graph tab</source>
-        <translation type="unfinished"></translation>
+        <translation>Edellinen kaavio-välilehti</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="618"/>
@@ -1960,7 +1960,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="711"/>
         <source>Hillshading</source>
-        <translation>Rinnevarjoste</translation>
+        <translation>Rinnevarjostus</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="731"/>
@@ -1982,7 +1982,7 @@
         <location filename="../src/GUI/optionsdialog.cpp" line="152"/>
         <location filename="../src/GUI/optionsdialog.cpp" line="155"/>
         <source>IMG maps detail level</source>
-        <translation type="unfinished"></translation>
+        <translation>IMG-karttojen yksityiskohtataso</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="145"/>
@@ -1992,22 +1992,22 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="146"/>
         <source>Points:</source>
-        <translation type="unfinished"></translation>
+        <translation>Pisteet:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="147"/>
         <source>Hillshading:</source>
-        <translation type="unfinished"></translation>
+        <translation>Rinnevarjostus:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="164"/>
         <source>HiDPI mode</source>
-        <translation type="unfinished"></translation>
+        <translation>HiDPI-tila</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="165"/>
         <source>Miscellaneous</source>
-        <translation type="unfinished"></translation>
+        <translation>Muut</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="425"/>
