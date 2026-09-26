@@ -625,7 +625,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="497"/>
         <source>Legend</source>
-        <translation type="unfinished"></translation>
+        <translation>Selite</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="505"/>
@@ -1543,7 +1543,7 @@
     <message>
         <location filename="../src/map/onlinemap.cpp" line="356"/>
         <source>Basemap only</source>
-        <translation type="unfinished"></translation>
+        <translation>Vain taustakartta</translation>
     </message>
 </context>
 <context>
@@ -2022,7 +2022,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="700"/>
         <source>Lightening:</source>
-        <translation type="unfinished"></translation>
+        <translation>Vaalennus:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="757"/>
