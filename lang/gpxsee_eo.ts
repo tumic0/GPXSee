@@ -168,7 +168,7 @@
     <message>
         <location filename="../src/data/data.cpp" line="284"/>
         <source>MP4 videos</source>
-        <translation type="unfinished"></translation>
+        <translation>MP4-videoj</translation>
     </message>
     <message>
         <location filename="../src/data/data.cpp" line="290"/>
@@ -453,7 +453,7 @@
     <message>
         <location filename="../src/GUI/gui.cpp" line="246"/>
         <source>Browse directory...</source>
-        <translation type="unfinished"></translation>
+        <translation>Foliumi dosierujon…</translation>
     </message>
     <message>
         <location filename="../src/GUI/gui.cpp" line="252"/>
@@ -1951,7 +1951,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="704"/>
         <source>Altitude:</source>
-        <translation type="unfinished"></translation>
+        <translation>Alteco:</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="705"/>
@@ -2009,7 +2009,7 @@
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="164"/>
         <source>HiDPI mode</source>
-        <translation type="unfinished"></translation>
+        <translation>HiDPI-reĝimo</translation>
     </message>
     <message>
         <location filename="../src/GUI/optionsdialog.cpp" line="165"/>
