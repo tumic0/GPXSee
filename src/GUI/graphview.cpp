@@ -504,7 +504,8 @@ void GraphView::updateSliderInfo()
 			  _minYRange/2 - br.height()/2);
 
 		y = -cardinal->yAtX(_sliderPos);
-		r = (y - br.bottom()) / br.height();
+		if (!std::isnan(y))
+			r = (y - br.bottom()) / br.height();
 	}
 
 	qreal pos = (_sliderPos / bounds().width()) * _slider->area().width();
@@ -516,12 +517,15 @@ void GraphView::updateSliderInfo()
 	QString xText(_graphType == Time ? Format::timeSpan(_sliderPos,
 	  bounds().width() > 3600) : l.toString(_sliderPos * _xScale, 'f', 1)
 	  + UNIT_SPACE + _xUnits);
-	QString yText((!cardinal) ? QString() : l.toString(-y * _yScale + _yOffset,
-	  'f', _precision) + UNIT_SPACE + _yUnits);
+	QString yText((!cardinal || std::isnan(y))
+	  ? QString()
+	  : l.toString(-y * _yScale + _yOffset, 'f', _precision) + UNIT_SPACE
+	    + _yUnits);
 	if (cardinal && cardinal->secondaryGraph()) {
 		qreal delta = y + cardinal->secondaryGraph()->yAtX(_sliderPos);
-		yText += QString(" ") + QChar(0x0394) + l.toString(-delta * _yScale
-		  + _yOffset, 'f', _precision) + UNIT_SPACE + _yUnits;
+		if (!(std::isnan(y) || std::isnan(delta)))
+			yText += QString(" ") + QChar(0x0394) + l.toString(-delta * _yScale
+			  + _yOffset, 'f', _precision) + UNIT_SPACE + _yUnits;
 	}
 	_sliderInfo->setText(xText, yText);
 }
