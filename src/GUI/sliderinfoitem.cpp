@@ -67,7 +67,8 @@ void SliderInfoItem::paint(QPainter *painter, const QStyleOptionGraphicsItem
 		painter->drawText(-(width + SIZE), -fm.descent()/2, _y);
 		painter->drawText(-(width + SIZE), fm.height() - fm.descent()*1.5, _x);
 	}
-	painter->drawLine(QPointF(-SIZE/2, 0), QPointF(SIZE/2, 0));
+	if (!_y.isEmpty())
+		painter->drawLine(QPointF(-SIZE/2, 0), QPointF(SIZE/2, 0));
 
 	//painter->drawRect(boundingRect());
 }
