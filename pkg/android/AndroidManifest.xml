@@ -4,8 +4,14 @@
     android:installLocation="auto"
     android:versionCode="-- %%INSERT_VERSION_CODE%% --"
     android:versionName="-- %%INSERT_VERSION_NAME%% --">
-    <!-- %%INSERT_PERMISSIONS -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+	<uses-permission android:name="android.permission.BLUETOOTH"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.ACCESS_MEDIA_LOCATION"/>
     <!-- %%INSERT_FEATURES -->
+    <uses-feature android:glEsVersion="0x00030001" android:required="false"/>
     <supports-screens
         android:anyDensity="true"
         android:largeScreens="true"
@@ -15,13 +21,12 @@
         android:name="org.qtproject.qt.android.bindings.QtApplication"
         android:hardwareAccelerated="true"
         android:label="-- %%INSERT_APP_NAME%% --"
-        android:requestLegacyExternalStorage="true"
-        android:allowBackup="true"
-        android:fullBackupOnly="false"
-        android:icon="@drawable/icon">
+        android:icon="@drawable/icon"
+        android:enableOnBackInvokedCallback="true">
         <activity
             android:name="org.gpxsee.gpxsee.Activity"
             android:configChanges="orientation|uiMode|screenLayout|screenSize|smallestScreenSize|layoutDirection|locale|fontScale|keyboard|keyboardHidden|navigation|mcc|mnc|density"
+            android:label="-- %%INSERT_APP_NAME%% --"
             android:launchMode="singleTop"
             android:screenOrientation="unspecified"
             android:exported="true">
@@ -67,6 +72,4 @@
                 android:resource="@xml/qtprovider_paths"/>
         </provider>
     </application>
-    <uses-feature android:glEsVersion="0x00030001" android:required="false"/>
-    <uses-permission android:name="android.permission.ACCESS_MEDIA_LOCATION"/>
 </manifest>
