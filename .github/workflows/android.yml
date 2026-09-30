@@ -25,6 +25,10 @@ jobs:
         run:  ${ANDROID_HOME}/cmdline-tools/latest/bin/sdkmanager --install "platforms;android-36" "build-tools;36.0.0" "ndk;27.2.12479018"
       - name: Setup NDK path
         run: echo "ANDROID_NDK_ROOT=${ANDROID_HOME}/ndk/27.2.12479018/" >> $GITHUB_ENV
+      - name: Install Qt (Desktop)
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: '6.12.0'
       - name: Install Qt (Android)
         uses: jurplel/install-qt-action@v4
         with:
@@ -35,8 +39,6 @@ jobs:
           modules: qtimageformats qtpositioning qtserialport qtmultimedia qt5compat
       - name: Install Android OpenSSL
         run:  git clone https://github.com/KDAB/android_openssl.git
-      - name: Debug PATH
-        run: echo $PATH
       - name: Create localization
         run:  lrelease-pro gpxsee.pro
       - name: Configure build
