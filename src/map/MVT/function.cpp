@@ -63,6 +63,7 @@ FunctionF::FunctionF(const QJsonValue &json, qreal dflt)
 			return;
 
 		QJsonArray stops = obj["stops"].toArray();
+		_stops.reserve(stops.size());
 		for (int i = 0; i < stops.size(); i++) {
 			if (!stops.at(i).isArray())
 				return;
@@ -105,6 +106,7 @@ FunctionC::FunctionC(const QJsonValue &json, const QColor &dflt)
 			return;
 
 		QJsonArray stops = obj["stops"].toArray();
+		_stops.reserve(stops.size());
 		for (int i = 0; i < stops.size(); i++) {
 			if (!stops.at(i).isArray())
 				return;
@@ -147,6 +149,7 @@ FunctionB::FunctionB(const QJsonValue &json, bool dflt) : _default(dflt)
 			return;
 
 		QJsonArray stops = obj["stops"].toArray();
+		_stops.reserve(stops.size());
 		for (int i = 0; i < stops.size(); i++) {
 			if (!stops.at(i).isArray())
 				return;
@@ -187,6 +190,7 @@ FunctionS::FunctionS(const QJsonValue &json, const QString &dflt)
 			return;
 
 		QJsonArray stops = obj["stops"].toArray();
+		_stops.reserve(stops.size());
 		for (int i = 0; i < stops.size(); i++) {
 			if (!stops.at(i).isArray())
 				return;

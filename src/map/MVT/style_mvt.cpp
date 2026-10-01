@@ -221,9 +221,10 @@ bool Style::Layer::Filter::match(const VectorTile::Feature &feature) const
 	}
 }
 
-QString Style::Layer::Template::value(int zoom, const VectorTile::Feature &feature) const
+QString Style::Layer::Template::value(int zoom,
+  const VectorTile::Feature &feature) const
 {
-	static QRegularExpression rx("\\{[^\\}]*\\}");
+	static const QRegularExpression rx("\\{[^\\}]*\\}");
 	QString text(_field.value(zoom));
 	QRegularExpressionMatchIterator it = rx.globalMatch(text);
 	QStringList keys;
