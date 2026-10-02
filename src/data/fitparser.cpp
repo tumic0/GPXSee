@@ -394,7 +394,7 @@ bool FITParser::parseData(CTX &ctx, const MessageDefinition *def)
 				ctx.segment = true;
 			}
 			ctx.track.last().append(ctx.trackpoint);
-			ctx.trackpoint = Trackpoint();
+			ctx.trackpoint = Trackpoint(ctx.trackpoint.coordinates());
 		}
 	} else if (def->globalId == COURSEPOINT) {
 		if (waypoint.coordinates().isValid())
