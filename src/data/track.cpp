@@ -538,9 +538,6 @@ Graph Track::cadence() const
 Graph Track::power() const
 {
 	Graph ret;
-	QList<int> stop;
-	qreal p;
-
 
 	for (int i = 0; i < _data.size(); i++) {
 		const SegmentData &sd = _data.at(i);
@@ -548,6 +545,8 @@ Graph Track::power() const
 			continue;
 		const Segment &seg = _segments.at(i);
 		GraphSegment gs(seg.start);
+		QList<int> stop;
+		qreal p;
 
 		for (int j = 0; j < sd.size(); j++) {
 			if (sd.at(j).hasPower() && seg.stop.contains(j)) {
