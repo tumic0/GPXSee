@@ -28,16 +28,16 @@ static QImage image(const QString &path, int width, int height, int percent,
 		return QImage();
 	}
 
-	QImageReader ir(path, "svg");
-	if (ir.canRead()) {
-		QSize s(ir.size());
+	QImageReader ir(path);
+	QSize s(ir.size());
 
+	if (ir.format() == "svg") {
 		if (!height && !width) {
 			height = 20;
 			width = 20;
-		} else if (!width) {
+		} else if (!width)
 			width = s.height() / (s.height() / (double)height);
-		} else if (!height)
+		else if (!height)
 			height = s.width() / (s.width() / (double)width);
 
 		if (percent != 100) {
@@ -49,8 +49,24 @@ static QImage image(const QString &path, int width, int height, int percent,
 		QImage img(ir.read());
 		img.setDevicePixelRatio(ratio);
 		return img;
-	} else
-		return QImage(path);
+	} else {
+		if (!height && !width) {
+			height = s.height();
+			width = s.width();
+		} else if (!width)
+			width = s.height() / (s.height() / (double)height);
+		else if (!height)
+			height = s.width() / (s.width() / (double)width);
+
+		if (percent != 100) {
+			width *= percent / 100.0;
+			height *= percent / 100.0;
+		}
+
+		if (width != s.width() || height != s.height())
+			ir.setScaledSize(QSize(width, height));
+		return QImage(ir.read());
+	}
 }
 
 static QList<unsigned> keyList(const MapData &data, const QList<QByteArray> &in)
