@@ -2,6 +2,11 @@
 #include <QDesktopServices>
 #include <QFileInfo>
 #include <QMouseEvent>
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+#include <QMediaPlayer>
+#include <QVideoFrame>
+#include <QVideoSink>
+#endif // QT 6.0
 #include "thumbnail.h"
 
 static QSize thumbnailSize(const QSize &size, int limit)
@@ -20,16 +25,36 @@ static QSize thumbnailSize(const QSize &size, int limit)
 	return QSize(width, height);
 }
 
-Thumbnail::Thumbnail(const QString &path, int limit, QWidget *parent)
+Thumbnail::Thumbnail(const QString &path, int limit, bool video, QWidget *parent)
   : QLabel(parent)
 {
-	QImageReader reader(path);
-	reader.setAutoTransform(true);
-	reader.setScaledSize(thumbnailSize(reader.size(), limit));
-	setPixmap(QPixmap::fromImage(reader.read()));
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+	if (video) {
+		_limit = limit;
+		_player = new QMediaPlayer(this);
+		_player->setAudioOutput(0);
+		_sink = new QVideoSink(this);
+		_player->setVideoSink(_sink);
+
+		connect(_sink, &QVideoSink::videoFrameChanged, this, &Thumbnail::capture);
+
+		_player->setSource(QUrl::fromLocalFile(path));
+		_player->setPosition(0);
+		_player->play();
+		_player->pause();
+	} else {
+#else // QT 6.0
+	Q_UNUSED(video);
+#endif // QT 6.0
+		QImageReader reader(path);
+		reader.setAutoTransform(true);
+		reader.setScaledSize(thumbnailSize(reader.size(), limit));
+		setPixmap(QPixmap::fromImage(reader.read()));
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+	}
+#endif // QT 6.0
 
 	setCursor(Qt::PointingHandCursor);
-
 	setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 
 #ifdef Q_OS_ANDROID
@@ -50,3 +75,13 @@ void Thumbnail::mousePressEvent(QMouseEvent *event)
 
 	QLabel::mousePressEvent(event);
 }
+
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+void Thumbnail::capture(const QVideoFrame &frame)
+{
+	if (frame.isValid())
+		setPixmap(QPixmap::fromImage(frame.toImage().scaled(
+		  thumbnailSize(frame.size(), _limit), Qt::IgnoreAspectRatio,
+		  Qt::SmoothTransformation)));
+}
+#endif // QT 6.0

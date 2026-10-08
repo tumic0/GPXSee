@@ -9,10 +9,14 @@
 #include <QVBoxLayout>
 #include <QFormLayout>
 #include <QApplication>
+#include <QFileInfo>
 #include "tooltip.h"
 #include "thumbnail.h"
 #include "flowlayout.h"
 #include "popup.h"
+
+#define THUMBNAIL_LIMIT 240
+#define POPUP_LIMIT     960
 
 static inline QPointF mousePos(QEvent *ev)
 {
@@ -21,6 +25,23 @@ static inline QPointF mousePos(QEvent *ev)
 #else // QT 6
 	return static_cast<QMouseEvent*>(ev)->globalPosition();
 #endif // QT 6
+}
+
+static void addRow(const QString &key, const QString &value, QFormLayout *layout)
+{
+	QLabel *k = new QLabel(key + ":");
+	k->setTextFormat(Qt::PlainText);
+	k->setAlignment(Qt::AlignTop);
+	k->setStyleSheet("font-weight: bold");
+	QLabel *v = new QLabel(value);
+	v->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
+	v->setTextFormat(Qt::RichText);
+	v->setAlignment(Qt::AlignTop);
+	v->setTextInteractionFlags(Qt::TextBrowserInteraction);
+	v->setOpenExternalLinks(true);
+	v->setWordWrap(true);
+
+	layout->addRow(k, v);
 }
 
 class PopupFrame : public QFrame
@@ -79,9 +100,14 @@ void PopupFrame::createLayout(const ToolTip &content)
 	layout->setContentsMargins(margin, margin, margin, margin);
 	layout->setSpacing(0);
 
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+	if (!content.video().isEmpty())
+		layout->addWidget(new Thumbnail(content.video(), THUMBNAIL_LIMIT, true));
+	else
+#endif // QT 6.0
 	if (!content.images().isEmpty()) {
 		FlowLayout *imagesLayout = new FlowLayout(0, 2, 2);
-		int size = qMin(960/content.images().size(), 240);
+		int size = qMin(POPUP_LIMIT/content.images().size(), THUMBNAIL_LIMIT);
 
 		for (int i = 0; i < content.images().size(); i++)
 			imagesLayout->addWidget(new Thumbnail(content.images().at(i), size));
@@ -96,21 +122,15 @@ void PopupFrame::createLayout(const ToolTip &content)
 		textLayout->setVerticalSpacing(2);
 
 		for (int i = 0; i < content.list().count(); i++) {
-			QLabel *key = new QLabel(content.list().at(i).key() + ":");
-			key->setTextFormat(Qt::PlainText);
-			key->setAlignment(Qt::AlignTop);
-			key->setStyleSheet("font-weight: bold");
-			QLabel *value = new QLabel(content.list().at(i).value());
-			value->setSizePolicy(QSizePolicy::MinimumExpanding,
-			  QSizePolicy::Preferred);
-			value->setTextFormat(Qt::RichText);
-			value->setAlignment(Qt::AlignTop);
-			value->setTextInteractionFlags(Qt::TextBrowserInteraction);
-			value->setOpenExternalLinks(true);
-			value->setWordWrap(true);
-
-			textLayout->addRow(key, value);
+			const KV<QString, QString> &kv = content.list().at(i);
+			addRow(kv.key(), kv.value(), textLayout);
 		}
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+		if (!content.video().isEmpty())
+			addRow(tr("File"), QString("<a href=\"file:%1\">%2</a>")
+			  .arg(content.video(), QFileInfo(content.video()).fileName())
+			  , textLayout);
+#endif // QT 6.0
 
 		layout->addLayout(textLayout);
 	}

@@ -11,6 +11,7 @@ class ToolTip
 public:
 	const QList<KV<QString, QString> > &list() const {return _list;}
 	const QVector<QString> &images() const {return _images;}
+	const QString &video() const {return _video;}
 
 	bool isEmpty() const
 	{
@@ -34,10 +35,15 @@ public:
 	{
 		_images = images;
 	}
+	void setVideo(const QString &video)
+	{
+		_video = video;
+	}
 
 private:
 	QList<KV<QString, QString> > _list;
 	QVector<QString> _images;
+	QString _video;
 };
 
 #endif // TOOLTIP_H
