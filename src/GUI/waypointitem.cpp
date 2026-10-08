@@ -46,7 +46,8 @@ ToolTip WaypointItem::info(bool extended) const
 	  && _waypoint.comment() != _waypoint.description())
 		tt.insert(QCoreApplication::translate("WaypointItem", "Comment"),
 		  _waypoint.comment());
-	if (!_waypoint.symbol().isEmpty())
+	if (!(_waypoint.symbol().isEmpty() || _waypoint.symbol() == "Photo"
+	  || _waypoint.symbol() == "Video"))
 		tt.insert(QCoreApplication::translate("WaypointItem", "Symbol"),
 		  _waypoint.symbol());
 	if (!_waypoint.address().isEmpty()) {
