@@ -9,7 +9,7 @@
 #endif // QT 6.0
 #include "thumbnail.h"
 
-static QSize thumbnailSize(const QSize &size, int limit)
+static QSize thumbnailSize(const QSize &size, int limit, qreal deviceRatio)
 {
 	int width, height;
 	if (size.width() > size.height()) {
@@ -22,7 +22,7 @@ static QSize thumbnailSize(const QSize &size, int limit)
 		width = (int)(height / ratio);
 	}
 
-	return QSize(width, height);
+	return QSize(width * deviceRatio, height * deviceRatio);
 }
 
 Thumbnail::Thumbnail(const QString &path, int limit, bool video, QWidget *parent)
@@ -46,10 +46,13 @@ Thumbnail::Thumbnail(const QString &path, int limit, bool video, QWidget *parent
 #else // QT 6.0
 	Q_UNUSED(video);
 #endif // QT 6.0
+		qreal r = devicePixelRatioF();
 		QImageReader reader(path);
 		reader.setAutoTransform(true);
-		reader.setScaledSize(thumbnailSize(reader.size(), limit));
-		setPixmap(QPixmap::fromImage(reader.read()));
+		reader.setScaledSize(thumbnailSize(reader.size(), limit, r));
+		QPixmap pm(QPixmap::fromImage(reader.read()));
+		pm.setDevicePixelRatio(r);
+		setPixmap(pm);
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
 	}
 #endif // QT 6.0
@@ -79,9 +82,13 @@ void Thumbnail::mousePressEvent(QMouseEvent *event)
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
 void Thumbnail::capture(const QVideoFrame &frame)
 {
-	if (frame.isValid())
-		setPixmap(QPixmap::fromImage(frame.toImage().scaled(
-		  thumbnailSize(frame.size(), _limit), Qt::IgnoreAspectRatio,
+	if (frame.isValid()) {
+		qreal r = devicePixelRatioF();
+		QPixmap pm(QPixmap::fromImage(frame.toImage().scaled(
+		  thumbnailSize(frame.size(), _limit, r), Qt::IgnoreAspectRatio,
 		  Qt::SmoothTransformation)));
+		pm.setDevicePixelRatio(r);
+		setPixmap(pm);
+	}
 }
 #endif // QT 6.0
