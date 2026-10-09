@@ -4,9 +4,6 @@
 #include "thumbnail.h"
 
 class QVideoFrame;
-class QMediaPlayer;
-class QVideoSink;
-class QVideoProbe;
 
 class VideoThumbnail : public Thumbnail
 {
@@ -20,12 +17,6 @@ private slots:
 
 private:
 	QString _path;
-	QMediaPlayer *_player;
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-	QVideoProbe *_probe;
-#else
-	QVideoSink *_sink;
-#endif // QT 6.0
 	int _limit;
 };
 

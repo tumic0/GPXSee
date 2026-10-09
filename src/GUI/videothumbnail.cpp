@@ -13,23 +13,22 @@
 VideoThumbnail::VideoThumbnail(const QString &path, int limit, QWidget *parent)
   : Thumbnail(path, parent), _limit(limit)
 {
+	QMediaPlayer *player = new QMediaPlayer(this);
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-	_probe = new QVideoProbe(this);
-	_player = new QMediaPlayer(_probe);
-	_probe->setSource(_player);
-	connect(_probe, &QVideoProbe::videoFrameProbed, this,
+	QVideoProbe *probe = new QVideoProbe(player);
+	probe->setSource(player);
+	connect(probe, &QVideoProbe::videoFrameProbed, this,
 	  &VideoThumbnail::capture);
-	_player->setMedia(QUrl::fromLocalFile(path));
+	player->setMedia(QUrl::fromLocalFile(path));
 #else // QT 6
-	_sink = new QVideoSink(this);
-	_player = new QMediaPlayer(_sink);
-	_player->setVideoSink(_sink);
-	_player->setAudioOutput(new QAudioOutput(_player));
-	connect(_sink, &QVideoSink::videoFrameChanged, this,
+	QVideoSink *sink = new QVideoSink(player);
+	player->setVideoSink(sink);
+	player->setAudioOutput(new QAudioOutput(player));
+	connect(sink, &QVideoSink::videoFrameChanged, this,
 	  &VideoThumbnail::capture);
-	_player->setSource(QUrl::fromLocalFile(path));
+	player->setSource(QUrl::fromLocalFile(path));
 #endif // QT 6
-	_player->play();
+	player->play();
 }
 
 void VideoThumbnail::capture(const QVideoFrame &frame)
