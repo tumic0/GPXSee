@@ -9,9 +9,9 @@
 #include <QVBoxLayout>
 #include <QFormLayout>
 #include <QApplication>
+#include "tooltip.h"
 #include "thumbnail.h"
 #include "flowlayout.h"
-#include "tooltip.h"
 #include "popup.h"
 
 #define THUMBNAIL_LIMIT 240
@@ -26,13 +26,13 @@ static inline QPointF mousePos(QEvent *ev)
 #endif // QT 6
 }
 
-static void addRow(const QString &key, const QString &value, QFormLayout *layout)
+static void addRow(const KV<QString, QString> &kv, QFormLayout *layout)
 {
-	QLabel *k = new QLabel(key + ":");
+	QLabel *k = new QLabel(kv.key() + ":");
 	k->setTextFormat(Qt::PlainText);
 	k->setAlignment(Qt::AlignTop);
 	k->setStyleSheet("font-weight: bold");
-	QLabel *v = new QLabel(value);
+	QLabel *v = new QLabel(kv.value());
 	v->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
 	v->setTextFormat(Qt::RichText);
 	v->setAlignment(Qt::AlignTop);
@@ -117,10 +117,8 @@ void PopupFrame::createLayout(const ToolTip &content)
 		textLayout->setHorizontalSpacing(5);
 		textLayout->setVerticalSpacing(2);
 
-		for (int i = 0; i < content.list().count(); i++) {
-			const KV<QString, QString> &kv = content.list().at(i);
-			addRow(kv.key(), kv.value(), textLayout);
-		}
+		for (int i = 0; i < content.list().count(); i++)
+			addRow(content.list().at(i), textLayout);
 
 		layout->addLayout(textLayout);
 	}
