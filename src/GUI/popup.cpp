@@ -10,7 +10,8 @@
 #include <QFormLayout>
 #include <QApplication>
 #include "tooltip.h"
-#include "thumbnail.h"
+#include "imagethumbnail.h"
+#include "videothumbnail.h"
 #include "flowlayout.h"
 #include "popup.h"
 
@@ -73,7 +74,7 @@ PopupFrame *PopupFrame::_instance = 0;
 
 PopupFrame::PopupFrame(const ToolTip &toolTip, QWidget *parent)
   : QFrame(parent, Qt::ToolTip | Qt::BypassGraphicsProxyWidget
-    | Qt::WindowDoesNotAcceptFocus), _toolTip(toolTip)
+	| Qt::WindowDoesNotAcceptFocus), _toolTip(toolTip)
 {
 	setForegroundRole(QPalette::ToolTipText);
 	setBackgroundRole(QPalette::ToolTipBase);
@@ -100,13 +101,15 @@ void PopupFrame::createLayout(const ToolTip &content)
 	layout->setSpacing(0);
 
 	if (!content.video().isEmpty())
-		layout->addWidget(new Thumbnail(content.video(), THUMBNAIL_LIMIT, true));
+		layout->addWidget(new VideoThumbnail(content.video(), THUMBNAIL_LIMIT),
+		  0, Qt::AlignHCenter);
 	else if (!content.images().isEmpty()) {
 		FlowLayout *imagesLayout = new FlowLayout(0, 2, 2);
 		int size = qMin(POPUP_LIMIT/content.images().size(), THUMBNAIL_LIMIT);
 
 		for (int i = 0; i < content.images().size(); i++)
-			imagesLayout->addWidget(new Thumbnail(content.images().at(i), size));
+			imagesLayout->addWidget(new ImageThumbnail(content.images().at(i),
+			  size));
 
 		layout->addLayout(imagesLayout);
 	}

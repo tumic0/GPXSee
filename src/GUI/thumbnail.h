@@ -3,36 +3,17 @@
 
 #include <QLabel>
 
-class ImageInfo;
-class QVideoFrame;
-class QMediaPlayer;
-class QVideoSink;
-class QVideoProbe;
-
 class Thumbnail : public QLabel
 {
-	Q_OBJECT
-
 public:
-	Thumbnail(const QString &path, int limit, bool video = false,
-	  QWidget *parent = 0);
+	Thumbnail(const QString &path, QWidget *parent = 0);
 
 protected:
 	void mousePressEvent(QMouseEvent *event);
-
-private slots:
-	void capture(const QVideoFrame &frame);
+	static QSize size(const QSize &size, int limit, qreal deviceRatio);
 
 private:
 	QString _path;
-	QMediaPlayer *_player;
-	int _limit;
-
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-	QVideoProbe *_probe;
-#else
-	QVideoSink *_sink;
-#endif // QT 6.0
 };
 
 #endif // THUMBNAIL_H
