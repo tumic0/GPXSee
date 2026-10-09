@@ -2,9 +2,11 @@
 #include <QDesktopServices>
 #include <QFileInfo>
 #include <QMouseEvent>
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
 #include <QMediaPlayer>
 #include <QVideoFrame>
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+#include <QVideoProbe>
+#else // QT 6
 #include <QVideoSink>
 #endif // QT 6.0
 #include "thumbnail.h"
@@ -28,24 +30,27 @@ static QSize thumbnailSize(const QSize &size, int limit, qreal deviceRatio)
 Thumbnail::Thumbnail(const QString &path, int limit, bool video, QWidget *parent)
   : QLabel(parent)
 {
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
 	if (video) {
 		_limit = limit;
 		_player = new QMediaPlayer(this);
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+		_probe = new QVideoProbe(this);
+		_probe->setSource(_player);
+		connect(_probe, &QVideoProbe::videoFrameProbed, this,
+		  &Thumbnail::capture);
+		_player->setMedia(QUrl::fromLocalFile(path));
+#else // QT 6
 		_player->setAudioOutput(0);
 		_sink = new QVideoSink(this);
 		_player->setVideoSink(_sink);
-
-		connect(_sink, &QVideoSink::videoFrameChanged, this, &Thumbnail::capture);
-
+		connect(_sink, &QVideoSink::videoFrameChanged, this,
+		  &Thumbnail::capture);
 		_player->setSource(QUrl::fromLocalFile(path));
+#endif // QT 6
 		_player->setPosition(0);
 		_player->play();
 		_player->pause();
 	} else {
-#else // QT 6.0
-	Q_UNUSED(video);
-#endif // QT 6.0
 		qreal r = devicePixelRatioF();
 		QImageReader reader(path);
 		reader.setAutoTransform(true);
@@ -53,9 +58,7 @@ Thumbnail::Thumbnail(const QString &path, int limit, bool video, QWidget *parent
 		QPixmap pm(QPixmap::fromImage(reader.read()));
 		pm.setDevicePixelRatio(r);
 		setPixmap(pm);
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
 	}
-#endif // QT 6.0
 
 	setCursor(Qt::PointingHandCursor);
 	setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
@@ -79,16 +82,18 @@ void Thumbnail::mousePressEvent(QMouseEvent *event)
 	QLabel::mousePressEvent(event);
 }
 
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
 void Thumbnail::capture(const QVideoFrame &frame)
 {
 	if (frame.isValid()) {
 		qreal r = devicePixelRatioF();
-		QPixmap pm(QPixmap::fromImage(frame.toImage().scaled(
-		  thumbnailSize(frame.size(), _limit, r), Qt::IgnoreAspectRatio,
-		  Qt::SmoothTransformation)));
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+		QImage img(frame.image());
+#else // QT 6
+		QImage img(frame.toImage());
+#endif // QT 6
+		QPixmap pm(QPixmap::fromImage(img.scaled(thumbnailSize(frame.size(),
+		  _limit, r), Qt::IgnoreAspectRatio, Qt::SmoothTransformation)));
 		pm.setDevicePixelRatio(r);
 		setPixmap(pm);
 	}
 }
-#endif // QT 6.0

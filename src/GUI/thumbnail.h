@@ -7,6 +7,7 @@ class ImageInfo;
 class QVideoFrame;
 class QMediaPlayer;
 class QVideoSink;
+class QVideoProbe;
 
 class Thumbnail : public QLabel
 {
@@ -19,18 +20,18 @@ public:
 protected:
 	void mousePressEvent(QMouseEvent *event);
 
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
 private slots:
 	void capture(const QVideoFrame &frame);
-#endif // QT 6.0
 
 private:
 	QString _path;
-
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
 	QMediaPlayer *_player;
-	QVideoSink *_sink;
 	int _limit;
+
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+	QVideoProbe *_probe;
+#else
+	QVideoSink *_sink;
 #endif // QT 6.0
 };
 

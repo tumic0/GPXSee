@@ -72,12 +72,9 @@ void PopupFrame::createLayout(const ToolTip &content)
 	layout->setContentsMargins(margin, margin, margin, margin);
 	layout->setSpacing(0);
 
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
 	if (!content.video().isEmpty())
 		layout->addWidget(new Thumbnail(content.video(), THUMBNAIL_LIMIT, true));
-	else
-#endif // QT 6.0
-	if (!content.images().isEmpty()) {
+	else if (!content.images().isEmpty()) {
 		FlowLayout *imagesLayout = new FlowLayout(0, 2, 2);
 		int size = qMin(POPUP_LIMIT/content.images().size(), THUMBNAIL_LIMIT);
 
@@ -97,12 +94,6 @@ void PopupFrame::createLayout(const ToolTip &content)
 			const KV<QString, QString> &kv = content.list().at(i);
 			addRow(kv.key(), kv.value(), textLayout);
 		}
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-		if (!content.video().isEmpty())
-			addRow(tr("File"), QString("<a href=\"file:%1\">%2</a>")
-			  .arg(content.video(), QFileInfo(content.video()).fileName())
-			  , textLayout);
-#endif // QT 6.0
 
 		layout->addLayout(textLayout);
 	}
