@@ -2352,7 +2352,7 @@
     <message>
         <location filename="../src/GUI/popup.cpp" line="130"/>
         <source>File</source>
-        <translation type="unfinished">Soubor</translation>
+        <translation>Soubor</translation>
     </message>
 </context>
 <context>
