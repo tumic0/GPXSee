@@ -2344,14 +2344,6 @@
     </message>
 </context>
 <context>
-    <name>PopupFrame</name>
-    <message>
-        <location filename="../src/GUI/popup.cpp" line="130"/>
-        <source>File</source>
-        <translation type="unfinished">文件</translation>
-    </message>
-</context>
-<context>
     <name>PowerGraph</name>
     <message>
         <location filename="../src/GUI/powergraph.cpp" line="11"/>
