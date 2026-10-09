@@ -2350,7 +2350,7 @@
     <message>
         <location filename="../src/GUI/popup.cpp" line="130"/>
         <source>File</source>
-        <translation type="unfinished">Datei</translation>
+        <translation>Datei</translation>
     </message>
 </context>
 <context>
