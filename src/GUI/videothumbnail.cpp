@@ -6,6 +6,7 @@
 #include <QVideoProbe>
 #else // QT 6
 #include <QVideoSink>
+#include <QAudioOutput>
 #endif // QT 6.0
 #include "videothumbnail.h"
 
@@ -23,7 +24,7 @@ VideoThumbnail::VideoThumbnail(const QString &path, int limit, QWidget *parent)
 	_sink = new QVideoSink(this);
 	_player = new QMediaPlayer(_sink);
 	_player->setVideoSink(_sink);
-	_player->setAudioOutput(0);
+	_player->setAudioOutput(new QAudioOutput(_player));
 	connect(_sink, &QVideoSink::videoFrameChanged, this,
 	  &VideoThumbnail::capture);
 	_player->setSource(QUrl::fromLocalFile(path));
