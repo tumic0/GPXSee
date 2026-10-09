@@ -4,12 +4,11 @@
 #include <QStyleOptionFrame>
 #include <QLabel>
 #include <QMouseEvent>
+#include <QBasicTimer>
+#include <QScreen>
 #include <QVBoxLayout>
 #include <QFormLayout>
-#include <QFileInfo>
-#include <QScreen>
 #include <QApplication>
-#include <QBasicTimer>
 #include "thumbnail.h"
 #include "flowlayout.h"
 #include "tooltip.h"
