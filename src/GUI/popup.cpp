@@ -9,8 +9,10 @@
 #include <QFileInfo>
 #include <QScreen>
 #include <QApplication>
+#include <QBasicTimer>
 #include "thumbnail.h"
 #include "flowlayout.h"
+#include "tooltip.h"
 #include "popup.h"
 
 #define THUMBNAIL_LIMIT 240
@@ -41,6 +43,32 @@ static void addRow(const QString &key, const QString &value, QFormLayout *layout
 
 	layout->addRow(k, v);
 }
+
+class PopupFrame : public QFrame
+{
+public:
+	PopupFrame(const ToolTip &toolTip, QWidget *parent = 0);
+
+	const ToolTip &toolTip() const {return _toolTip;}
+
+	bool eventFilter(QObject *o, QEvent *ev);
+	void place(const QPoint &pos, QWidget *w);
+	void deleteAfterTimer();
+	void stopTimer() {_timer.stop();}
+
+	static PopupFrame *_instance;
+
+protected:
+	void paintEvent(QPaintEvent *event);
+	void timerEvent(QTimerEvent *event);
+	void contextMenuEvent(QContextMenuEvent *) {}
+
+private:
+	void createLayout(const ToolTip &content);
+
+	QBasicTimer _timer;
+	ToolTip _toolTip;
+};
 
 PopupFrame *PopupFrame::_instance = 0;
 
