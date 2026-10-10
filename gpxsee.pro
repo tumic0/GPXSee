@@ -161,7 +161,6 @@ android {
         message("OpenSSL not found, building without HTTPS support!")
     }
 
-    ANDROID_FEATURES -= android_permissions
     ANDROID_TARGET_SDK_VERSION = 36
     ANDROID_VERSION_NAME = $$VERSION
     ANDROID_VERSION_CODE = $$versionCode($$ANDROID_VERSION_NAME)
