@@ -136,8 +136,7 @@ GUI::GUI(const QString &lang)
 
 void GUI::createBrowser()
 {
-	_browser = new FileBrowser(this);
-	_browser->setFilter(Data::filter());
+	_browser = new FileBrowser(Data::filter(), this);
 	connect(_browser, &FileBrowser::listChanged, this,
 	  &GUI::updateNavigationActions);
 }
@@ -1164,6 +1163,11 @@ void GUI::openFile()
 
 void GUI::openDir(const QString &path, int &showError)
 {
+#ifdef Q_OS_ANDROID
+	QStringList ml(Util::fileInfoList(path));
+	for (int i = 0; i < ml.size(); i++)
+		openFile(ml.at(i), true, showError);
+#else // Q_OS_ANDROID
 	QDir md(path);
 	md.setFilter(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot);
 	md.setSorting(QDir::DirsLast);
@@ -1177,6 +1181,7 @@ void GUI::openDir(const QString &path, int &showError)
 		else
 			openFile(fi.absoluteFilePath(), true, showError);
 	}
+#endif // Q_OS_ANDROID
 }
 
 void GUI::openDir()
@@ -1221,8 +1226,12 @@ bool GUI::openFile(const QString &fileName, bool tryUnknown, int &showError)
 	else
 		path = fileName;
 
+#ifdef Q_OS_ANDROID
+	QString canonicalPath(path);
+#else // Q_OS_ANDROID
 	QFileInfo fi(path);
 	QString canonicalPath(fi.canonicalFilePath());
+#endif // Q_OS_ANDROID
 
 	if (_files.contains(canonicalPath))
 		return true;

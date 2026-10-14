@@ -27,6 +27,9 @@ namespace Util
 	bool isSQLiteDB(const QString &path, QString &errorString);
 	QImage svg2img(const QString &path, qreal ratio);
 	QByteArray gunzip(const QByteArray &data);
+#ifdef Q_OS_ANDROID
+	QStringList fileInfoList(const QString &contentUri);
+#endif // Q_OS_ANDROID
 }
 
 #endif // UTIL_H

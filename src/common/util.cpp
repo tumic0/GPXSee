@@ -223,3 +223,55 @@ QByteArray Util::gunzip(const QByteArray &data)
 
 	return (ret == Z_STREAM_END) ? uba : QByteArray();
 }
+
+#ifdef Q_OS_ANDROID
+QStringList Util::fileInfoList(const QString &contentUri)
+{
+	QStringList result;
+
+	if (contentUri.isEmpty())
+		return result;
+
+	QJniEnvironment env;
+	QJniObject uri(QJniObject::fromString(contentUri));
+
+	QJniObject context = QNativeInterface::QAndroidApplication::context();
+	if (!context.isValid()) {
+		env->ExceptionClear();
+		return result;
+	}
+
+	QJniObject files = QJniObject::callStaticObjectMethod(
+		"org/gpxsee/gpxsee/FileUtils",
+		"listDir",
+		"(Landroid/content/Context;Ljava/lang/String;)[Ljava/lang/String;",
+		context.object<jstring>(),
+		uri.object<jstring>()
+	);
+
+	if (!files.isValid())
+		return result;
+
+	jobjectArray arr = reinterpret_cast<jobjectArray>(files.object<jobjectArray>());
+	if (!arr)
+		return result;
+
+	jsize len = env->GetArrayLength(arr);
+	result.reserve(len);
+	for (jsize i = 0; i < len; ++i) {
+		jstring s = (jstring)env->GetObjectArrayElement(arr, i);
+		if (!s)
+			continue;
+
+		const char *utf = env->GetStringUTFChars(s, 0);
+		if (utf) {
+			result.append(QString::fromUtf8(utf));
+			env->ReleaseStringUTFChars(s, utf);
+		}
+
+		env->DeleteLocalRef(s);
+	}
+
+	return result;
+}
+#endif
