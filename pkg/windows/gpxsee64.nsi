@@ -172,14 +172,16 @@ Section "Qt" SEC_QT
   File "Qt6SerialPort.dll"
   File "Qt6Multimedia.dll"
   File "Qt6MultimediaWidgets.dll"
-  File /r "tls"
-  File /r "platforms"
+  File /r "generic"
   File /r "iconengines"
   File /r "imageformats"
-  File /r "styles"
-  File /r "sqldrivers"
-  File /r "position"
   File /r "multimedia"
+  File /r "networkinformation"
+  File /r "platforms"
+  File /r "position"
+  File /r "sqldrivers"
+  File /r "styles"
+  File /r "tls"
 SectionEnd
 
 Section "FFmpeg" SEC_FFMPEG
