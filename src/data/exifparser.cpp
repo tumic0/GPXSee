@@ -7,6 +7,7 @@
 
 #define SOI_MARKER       0xFFD8
 #define APP1_MARKER      0xFFE1
+#define SOS_MARKER       0xFFDA
 
 #define GPSIFDTag        34853
 #define ImageDescription 270
@@ -316,7 +317,8 @@ bool EXIFParser::parse(QFile *file, QList<TrackData> &tracks,
 				return parseTIFF(file, waypoints);
 			else
 				break;
-		}
+		} else if (marker == SOS_MARKER)
+			break;
 	}
 
 	_errorString = "No EXIF data found";
