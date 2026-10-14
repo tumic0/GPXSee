@@ -11,4 +11,4 @@ Makefile*
 
 # Binary
 GPXSee
-gpxsee
+./gpxsee
