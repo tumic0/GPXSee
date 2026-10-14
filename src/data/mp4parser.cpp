@@ -1664,7 +1664,7 @@ bool MP4Parser::parse(QFile *file, QList<TrackData> &tracks,
 		if (wpt.coordinates().isValid()) {
 			wpt.setName(Util::file2name(file->fileName()));
 			wpt.setVideo(file->fileName());
-			wpt.setSymbol("Video");
+			wpt.setStyle(PointStyle(*Waypoint::symbolIcon("Video")));
 			waypoints.append(wpt);
 			return true;
 		}
