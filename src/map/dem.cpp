@@ -31,10 +31,10 @@ static double interpolate(double dx, double dy, double p0, double p1, double p2,
 	  + p2 * dy * (1.0 - dx) + p3 * dx * dy;
 }
 
-static double value(int col, int row, int samples, const QByteArray &data)
+static double value(int col, int row, int samples, const qint16 *data)
 {
-	int pos = ((samples - 1 - row) * samples + col) * sizeof(qint16);
-	qint16 val = qFromBigEndian(*((const qint16*)(data.constData() + pos)));
+	int pos = ((samples - 1 - row) * samples + col);
+	qint16 val = qFromBigEndian(*(data + pos));
 
 	return (val == -32768) ? NAN : val;
 }
@@ -91,15 +91,16 @@ double DEM::height(const Coordinates &c, const Entry *e)
 	if (!e->samples())
 		return NAN;
 
+	const qint16 *data = (const qint16*)(e->data().constData());
 	double lat = (c.lat() - floor(c.lat())) * (e->samples() - 1);
 	double lon = (c.lon() - floor(c.lon())) * (e->samples() - 1);
 	int row = (int)lat;
 	int col = (int)lon;
 
-	double p0 = value(col, row, e->samples(), e->data());
-	double p1 = value(col + 1, row, e->samples(), e->data());
-	double p2 = value(col, row + 1, e->samples(), e->data());
-	double p3 = value(col + 1, row + 1, e->samples(), e->data());
+	double p0 = value(col, row, e->samples(), data);
+	double p1 = value(col + 1, row, e->samples(), data);
+	double p2 = value(col, row + 1, e->samples(), data);
+	double p3 = value(col + 1, row + 1, e->samples(), data);
 
 	return interpolate(lon - col, lat - row, p0, p1, p2, p3);
 }
