@@ -1164,7 +1164,7 @@ void GUI::openFile()
 void GUI::openDir(const QString &path, int &showError)
 {
 #ifdef Q_OS_ANDROID
-	QStringList ml(Util::fileInfoList(path));
+	QStringList ml(Util::listDirFiles(path));
 	for (int i = 0; i < ml.size(); i++)
 		openFile(ml.at(i), true, showError);
 #else // Q_OS_ANDROID

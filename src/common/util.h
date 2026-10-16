@@ -28,7 +28,7 @@ namespace Util
 	QImage svg2img(const QString &path, qreal ratio);
 	QByteArray gunzip(const QByteArray &data);
 #ifdef Q_OS_ANDROID
-	QStringList fileInfoList(const QString &contentUri);
+	QStringList listDirFiles(const QString &treeUri);
 #endif // Q_OS_ANDROID
 }
 

@@ -26,11 +26,11 @@ FileBrowser::FileBrowser(const QStringList &filter, QObject *parent)
 void FileBrowser::setCurrentDir(const QString &path)
 {
 	if (_filter.isEmpty())
-		_files = Util::fileInfoList(path);
+		_files = Util::listDirFiles(path);
 	else {
 		_files = QStringList();
 
-		QStringList files(Util::fileInfoList(path));
+		QStringList files(Util::listDirFiles(path));
 
 		for (int i = 0; i < files.size(); i++) {
 			for (int j = 0; j < _filter.size(); j++) {

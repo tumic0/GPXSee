@@ -225,15 +225,15 @@ QByteArray Util::gunzip(const QByteArray &data)
 }
 
 #ifdef Q_OS_ANDROID
-QStringList Util::fileInfoList(const QString &contentUri)
+QStringList Util::listDirFiles(const QString &treeUri)
 {
 	QStringList result;
 
-	if (contentUri.isEmpty())
+	if (treeUri.isEmpty())
 		return result;
 
 	QJniEnvironment env;
-	QJniObject uri(QJniObject::fromString(contentUri));
+	QJniObject uri(QJniObject::fromString(treeUri));
 
 	QJniObject context = QNativeInterface::QAndroidApplication::context();
 	if (!context.isValid()) {
