@@ -3044,7 +3044,9 @@ void GUI::readSettings(QString &activeMap, QStringList &disabledPOIs,
 	settings.endGroup();
 
 	/* File */
-#ifndef Q_OS_ANDROID
+#ifdef Q_OS_ANDROID
+	Q_UNUSED(recentFiles);
+#else // Q_OS_ANDROID
 	settings.beginGroup(SETTINGS_FILE);
 	recentFiles = READ(recentDataFiles);
 	settings.endGroup();
