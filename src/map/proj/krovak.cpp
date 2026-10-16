@@ -81,5 +81,5 @@ bool Krovak::operator==(const CT &ct) const
 bool KrovakNE::operator==(const CT &ct) const
 {
 	const KrovakNE *other = dynamic_cast<const KrovakNE*>(&ct);
-	return (other != 0 && _k == other->_k);
+	return (other != 0 && _k.operator==(other->_k));
 }

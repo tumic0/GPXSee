@@ -247,5 +247,5 @@ Coordinates LambertConic2::xy2ll(const PointD &p) const
 bool LambertConic2::operator==(const CT &ct) const
 {
 	const LambertConic2 *other = dynamic_cast<const LambertConic2*>(&ct);
-	return (other != 0 && _lc1 == other->_lc1);
+	return (other != 0 && _lc1.operator==(other->_lc1));
 }
