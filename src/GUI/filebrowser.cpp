@@ -31,12 +31,13 @@ void FileBrowser::setCurrentDir(const QString &path)
 		_files = QStringList();
 
 		QStringList files(Util::listDirFiles(path));
+		QList<QRegularExpression> re(_filter.size());
+		for (int i = 0; i < _filter.size(); i++)
+			re[i] = QRegularExpression::fromWildcard(_filter.at(i));
 
 		for (int i = 0; i < files.size(); i++) {
 			for (int j = 0; j < _filter.size(); j++) {
-				QRegularExpression re(QRegularExpression::fromWildcard(
-				  _filter.at(j)));
-				QRegularExpressionMatch match(re.match(Util::displayName(
+				QRegularExpressionMatch match(re.at(j).match(Util::displayName(
 				  files.at(i))));
 
 				if (match.hasMatch()) {
