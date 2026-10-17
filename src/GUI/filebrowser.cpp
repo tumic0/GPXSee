@@ -36,7 +36,7 @@ void FileBrowser::setCurrentDir(const QString &path)
 			re[i] = QRegularExpression::fromWildcard(_filter.at(i));
 
 		for (int i = 0; i < files.size(); i++) {
-			for (int j = 0; j < _filter.size(); j++) {
+			for (int j = 0; j < re.size(); j++) {
 				QRegularExpressionMatch match(re.at(j).match(Util::displayName(
 				  files.at(i))));
 
