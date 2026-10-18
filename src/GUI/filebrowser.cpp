@@ -1,6 +1,5 @@
 #include <QFileSystemWatcher>
 #include <QDir>
-#include <QRegularExpression>
 #include "common/util.h"
 #include "filebrowser.h"
 
@@ -11,9 +10,14 @@
 #endif // Q_OS_ANDROID
 
 FileBrowser::FileBrowser(const QStringList &filter, QObject *parent)
-  : QObject(parent), _filter(filter)
+  : QObject(parent)
 {
-#ifndef Q_OS_ANDROID
+#ifdef Q_OS_ANDROID
+	_filter.resize(filter.size());
+	for (int i = 0; i < _filter.size(); i++)
+		_filter[i] = QRegularExpression::fromWildcard(filter.at(i));
+#else // Q_OS_ANDROID
+	_filter = filter;
 	_watcher = new QFileSystemWatcher(this);
 	connect(_watcher, &QFileSystemWatcher::directoryChanged, this,
 	  &FileBrowser::reloadDirectory);
@@ -28,18 +32,14 @@ void FileBrowser::setCurrentDir(const QString &path)
 	if (_filter.isEmpty())
 		_files = Util::listDirFiles(path);
 	else {
-		_files = QStringList();
-
 		QStringList files(Util::listDirFiles(path));
-		QList<QRegularExpression> re(_filter.size());
-		for (int i = 0; i < _filter.size(); i++)
-			re[i] = QRegularExpression::fromWildcard(_filter.at(i));
 
+		_files = QStringList();
 		for (int i = 0; i < files.size(); i++) {
-			for (int j = 0; j < re.size(); j++) {
-				QRegularExpressionMatch match(re.at(j).match(Util::displayName(
-				  files.at(i))));
+			QString name(Util::displayName(files.at(i)));
 
+			for (int j = 0; j < _filter.size(); j++) {
+				QRegularExpressionMatch match(_filter.at(j).match(name));
 				if (match.hasMatch()) {
 					_files.append(files.at(i));
 					break;

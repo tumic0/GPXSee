@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QFileInfo>
 #include <QStringList>
+#include <QRegularExpression>
 
 class QFileSystemWatcher;
 
@@ -39,10 +40,12 @@ private slots:
 
 private:
 	int _index;
-	QStringList _filter;
+
 #ifdef Q_OS_ANDROID
 	QStringList _files;
+	QList<QRegularExpression> _filter;
 #else // Q_OS_ANDROID
+	QStringList _filter;
 	QFileInfoList _files;
 	QFileSystemWatcher *_watcher;
 #endif // Q_OS_ANDROID
