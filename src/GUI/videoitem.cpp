@@ -18,7 +18,7 @@ VideoItem::VideoItem(const QString &file, QGraphicsItem *parent)
 
 void VideoItem::seek()
 {
-	qreal f = _eos / (_duration * 1000.0);
+	qreal f = qMin(1.0, _eos / (_duration * 1000.0));
 	_player->setPosition((qint64)(_pos * 1000.0 * f));
 }
 
