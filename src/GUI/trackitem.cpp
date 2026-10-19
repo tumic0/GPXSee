@@ -38,13 +38,15 @@ ToolTip TrackItem::info(bool extended) const
 		}
 		tt.insert(tr("Links"), links);
 	}
-#ifdef Q_OS_ANDROID
-	Q_UNUSED(extended);
-#else // Q_OS_ANDROID
-	if ((extended || _video) && !_file.isEmpty())
+	if (extended && !_file.isEmpty())
 		tt.insert(tr("File"), QString("<a href=\"file:%1\">%2</a>")
+#ifdef Q_OS_ANDROID
+		  .arg(_file, Util::displayName(_file)));
+#else // Q_OS_ANDROID
 		  .arg(_file, QFileInfo(_file).fileName()));
 #endif // Q_OS_ANDROID
+	if (_video)
+		tt.setVideo(_file);
 
 	return tt;
 }
