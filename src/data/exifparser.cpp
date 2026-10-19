@@ -273,7 +273,9 @@ bool EXIFParser::parseTIFF(QFile *file, QVector<Waypoint> &waypoints)
 	Waypoint wp(c);
 	wp.setName(Util::file2name(file->fileName()));
 	wp.addImage(file->fileName());
-	wp.setStyle(PointStyle(*Waypoint::symbolIcon("Photo")));
+	const QPixmap *pm = Waypoint::symbolIcon("Photo");
+	if (pm)
+		wp.setStyle(PointStyle(*pm));
 	if (GPSIFD.contains(GPSAltitude))
 		wp.setElevation(altitude(tiff, GPSIFD.value(GPSAltitude),
 		  GPSIFD.value(GPSAltitudeRef)));
