@@ -122,7 +122,7 @@
         <area fill="#dcf6ff"/>
     </rule>
     <rule cat="landuse" e="way" closed="yes" k="landuse" v="grass|greenfield|village_green" zoom-min="10">
-        <area fill="#e4efcf"/>
+        <area fill="#f9ffee"/>
     </rule>
     <rule cat="landuse-winter" e="way" closed="yes" k="landuse" v="grass|greenfield|village_green|orchard|vineyard" zoom-min="10">
         <area fill="#f6fbff"/>
@@ -464,7 +464,7 @@
             </rule>
         </rule>
     </rule>
-    <rule e="way" k="highway" v="primary|primary_link|secondary|secondary_link">
+    <rule e="way" k="highway" v="secondary|secondary_link">
         <rule e="way" k="tunnel" v="~|false|no">
             <rule e="way" k="*" v="*" zoom-min="9" zoom-max="13">
                 <line stroke="#dbd27b" stroke-width="3.6" stroke-linecap="butt"/>
@@ -492,7 +492,7 @@
             </rule>
         </rule>
     </rule>
-    <rule e="way" k="highway" v="trunk|trunk_link">
+    <rule e="way" k="highway" v="primary|primary_link">
         <rule e="way" k="tunnel" v="~|false|no">
             <rule e="way" k="*" v="*" zoom-max="13">
                 <line stroke="#e8a541" stroke-width="4" stroke-linecap="butt"/>
@@ -520,7 +520,7 @@
             </rule>
         </rule>
     </rule>
-    <rule e="way" k="highway" v="motorway|motorway_link">
+    <rule e="way" k="highway" v="motorway|motorway_link|trunk|trunk_link">
         <rule e="way" k="tunnel" v="~|false|no">
             <rule e="way" k="*" v="*" zoom-max="13">
                 <line stroke="#72a35a" stroke-width="4" stroke-linecap="butt"/>
