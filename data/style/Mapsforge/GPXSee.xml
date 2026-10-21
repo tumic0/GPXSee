@@ -368,7 +368,7 @@
                 <line stroke="#666666" stroke-linecap="butt" stroke-width="1.2"/>
             </rule>
         </rule>
-        <rule e="way" k="highway" v="primary|primary_link|secondary|secondary_link">
+        <rule e="way" k="highway" v="secondary|secondary_link">
             <rule e="way" k="*" v="*" zoom-min="9" zoom-max="13">
                 <line stroke="#666666" stroke-linecap="butt" stroke-width="3.8"/>
             </rule>
@@ -376,7 +376,7 @@
                 <line stroke="#666666" stroke-linecap="butt" stroke-width="2.0"/>
             </rule>
         </rule>
-        <rule e="way" k="highway" v="trunk|trunk_link|motorway|motorway_link">
+        <rule e="way" k="highway" v="trunk|trunk_link|motorway|motorway_link|primary|primary_link">
             <rule e="way" k="*" v="*" zoom-max="13">
                 <line stroke="#666666" stroke-linecap="butt" stroke-width="4.2"/>
             </rule>
