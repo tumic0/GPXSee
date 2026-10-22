@@ -51,7 +51,10 @@ bool KMLParser::coord(Trackpoint &trackpoint)
 	// In addition to space as given by the specification also allow comma as
 	// a separator due to broken KML files in the wild.
 	static const QRegularExpression	re("\\s+|,");
-	QStringList list(_reader.readElementText().trimmed().split(re));
+	QString data(_reader.readElementText());
+	if (data.isEmpty())
+		return true;
+	QStringList list(data.trimmed().split(re));
 	if (list.size() < 2 || list.size() > 3)
 		return false;
 
