@@ -48,43 +48,28 @@ QDateTime KMLParser::time()
 
 bool KMLParser::coord(Trackpoint &trackpoint)
 {
-	QString data = _reader.readElementText();
-	const QChar *sp, *ep, *cp, *vp;
-	int c = 0;
-	qreal val[3];
-	bool res;
+	// In addition to space as given by the specification also allow comma as
+	// a separator due to broken KML files in the wild.
+	static const QRegularExpression	re("\\s+|,");
+	QStringList list(_reader.readElementText().split(re));
+	if (list.size() < 2 || list.size() > 3)
+		return false;
 
-	if (data.isEmpty())
-		return true;
+	bool lonRes, latRes;
+	double lon = list.at(0).toDouble(&lonRes);
+	double lat = list.at(1).toDouble(&latRes);
+	if (!(lonRes && latRes))
+		return false;
+	trackpoint.setCoordinates(Coordinates(lon, lat));
+	if (!trackpoint.coordinates().isValid())
+		return false;
 
-	sp = data.constData();
-	ep = sp + data.size();
-
-	for (cp = sp; cp < ep; cp++)
-		if (!cp->isSpace())
-			break;
-
-	for (vp = cp; cp <= ep; cp++) {
-		if (cp->isSpace() || cp->isNull()) {
-			if (c > 2)
-				return false;
-
-			val[c] = QString(vp, cp - vp).toDouble(&res);
-			if (!res)
-				return false;
-
-			if (c == 1) {
-				trackpoint.setCoordinates(Coordinates(val[0], val[1]));
-				if (!trackpoint.coordinates().isValid())
-					return false;
-			} else if (c == 2)
-				trackpoint.setElevation(val[2]);
-
-			while (cp->isSpace())
-				cp++;
-			vp = cp;
-			c++;
-		}
+	if (list.size() > 2) {
+		bool eleRes;
+		double ele = list.at(2).toDouble(&eleRes);
+		if (!eleRes)
+			return false;
+		trackpoint.setElevation(ele);
 	}
 
 	return true;
