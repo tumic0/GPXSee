@@ -1,50 +1,46 @@
 #include <QDesktopServices>
 #include <QMouseEvent>
 #include <QMediaPlayer>
-#include <QVideoFrame>
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-#include <QVideoProbe>
-#else // QT 6
-#include <QVideoSink>
+#include <QVideoWidget>
+#include <QFileInfo>
 #include <QAudioOutput>
-#endif // QT 6.0
 #include "videothumbnail.h"
 
 VideoThumbnail::VideoThumbnail(const QString &path, int limit, QWidget *parent)
-  : Thumbnail(path, parent), _limit(limit)
+  : QVideoWidget(parent), _path(path)
 {
+#ifdef Q_OS_ANDROID
+	_path = path;
+	QUrl url(_path);
+#else // Q_OS_ANDROID
+	_path = QFileInfo(path).absoluteFilePath();
+	QUrl url(QUrl::fromLocalFile(_path));
+#endif // Q_OS_ANDROID
+
+	setCursor(Qt::PointingHandCursor);
+	setMinimumWidth(limit);
+	setMinimumHeight(limit * 0.5625);
+	setAspectRatioMode(Qt::KeepAspectRatio);
+
 	QMediaPlayer *player = new QMediaPlayer(this);
+	player->setVideoOutput(this);
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-	QVideoProbe *probe = new QVideoProbe(player);
-	probe->setSource(player);
-	connect(probe, &QVideoProbe::videoFrameProbed, this,
-	  &VideoThumbnail::capture);
-	player->setMedia(QUrl::fromLocalFile(path));
+	player->setMedia(url);
 #else // QT 6
-	QVideoSink *sink = new QVideoSink(player);
-	player->setVideoSink(sink);
-	player->setAudioOutput(new QAudioOutput(player));
-	connect(sink, &QVideoSink::videoFrameChanged, this,
-	  &VideoThumbnail::capture);
-	player->setSource(QUrl::fromLocalFile(path));
+	player->setAudioOutput(new QAudioOutput(this));
+	player->setSource(url);
 #endif // QT 6
 	player->play();
 }
 
-void VideoThumbnail::capture(const QVideoFrame &frame)
+void VideoThumbnail::mousePressEvent(QMouseEvent *event)
 {
-	if (!frame.isValid())
-		return;
+	if (event->button() == Qt::LeftButton)
+#ifdef Q_OS_ANDROID
+		QDesktopServices::openUrl(_path);
+#else // Q_OS_ANDROID
+		QDesktopServices::openUrl(QUrl::fromLocalFile(_path));
+#endif // Q_OS_ANDROID
 
-	qreal r = devicePixelRatioF();
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-	QImage img(frame.image());
-#else // QT 6
-	QImage img(frame.toImage());
-#endif // QT 6
-	QPixmap pm(QPixmap::fromImage(img.scaled(size(frame.size(), _limit, r),
-	  Qt::IgnoreAspectRatio, Qt::SmoothTransformation)));
-	pm.setDevicePixelRatio(r);
-
-	setPixmap(pm);
+	QVideoWidget::mousePressEvent(event);
 }

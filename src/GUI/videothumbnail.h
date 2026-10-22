@@ -1,23 +1,18 @@
 #ifndef VIDEOTHUMBNAIL_H
 #define VIDEOTHUMBNAIL_H
 
-#include "thumbnail.h"
+#include <QVideoWidget>
 
-class QVideoFrame;
-
-class VideoThumbnail : public Thumbnail
+class VideoThumbnail : public QVideoWidget
 {
-	Q_OBJECT
-
 public:
 	VideoThumbnail(const QString &path, int limit, QWidget *parent = 0);
 
-private slots:
-	void capture(const QVideoFrame &frame);
+protected:
+	void mousePressEvent(QMouseEvent *event);
 
 private:
 	QString _path;
-	int _limit;
 };
 
 #endif // VIDEOTHUMBNAIL_H

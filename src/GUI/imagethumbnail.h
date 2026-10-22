@@ -1,12 +1,18 @@
 #ifndef IMAGETHUMBNAIL_H
 #define IMAGETHUMBNAIL_H
 
-#include "thumbnail.h"
+#include <QLabel>
 
-class ImageThumbnail : public Thumbnail
+class ImageThumbnail : public QLabel
 {
 public:
 	ImageThumbnail(const QString &path, int limit, QWidget *parent = 0);
+
+protected:
+	void mousePressEvent(QMouseEvent *event);
+
+private:
+	QString _path;
 };
 
 #endif // IMAGETHUMBNAIL_H

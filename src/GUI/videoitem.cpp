@@ -8,10 +8,16 @@ VideoItem::VideoItem(const QString &file, QGraphicsItem *parent)
 	_player->setVideoOutput(this);
 	connect(_player, &QMediaPlayer::mediaStatusChanged, this,
 	  &VideoItem::mediaStatusChanged);
+
+#ifdef Q_OS_ANDROID
+	QUrl url(file);
+#else // Q_OS_ANDROID
+	QUrl url(QUrl::fromLocalFile(file));
+#endif // Q_OS_ANDROID
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-	_player->setMedia(QUrl::fromLocalFile(file));
+	_player->setMedia(url);
 #else
-	_player->setSource(QUrl::fromLocalFile(file));
+	_player->setSource(url);
 #endif
 	_player->pause();
 }
