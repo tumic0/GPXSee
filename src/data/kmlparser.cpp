@@ -37,8 +37,7 @@ qreal KMLParser::number()
 
 QDateTime KMLParser::time()
 {
-	QDateTime d = QDateTime::fromString(_reader.readElementText(),
-	  Qt::ISODate);
+	QDateTime d(QDateTime::fromString(_reader.readElementText(), Qt::ISODate));
 	if (!d.isValid())
 		_reader.raiseError(QString("Invalid %1").arg(
 		  _reader.name().toString()));
@@ -80,7 +79,7 @@ bool KMLParser::coord(Trackpoint &trackpoint)
 
 bool KMLParser::pointCoordinates(Waypoint &waypoint)
 {
-	QString data = _reader.readElementText();
+	QString data(_reader.readElementText());
 	const QChar *sp, *ep, *cp, *vp;
 	int c = 0;
 	qreal val[3];
@@ -130,7 +129,7 @@ bool KMLParser::pointCoordinates(Waypoint &waypoint)
 
 bool KMLParser::lineCoordinates(SegmentData &segment)
 {
-	QString data = _reader.readElementText();
+	QString data(_reader.readElementText());
 	const QChar *sp, *ep, *cp, *vp;
 	int c = 0;
 	qreal val[3];
@@ -181,7 +180,7 @@ bool KMLParser::lineCoordinates(SegmentData &segment)
 
 bool KMLParser::polygonCoordinates(QVector<Coordinates> &points)
 {
-	QString data = _reader.readElementText();
+	QString data(_reader.readElementText());
 	const QChar *sp, *ep, *cp, *vp;
 	int c = 0;
 	qreal val[3];
