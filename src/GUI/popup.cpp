@@ -88,8 +88,6 @@ PopupFrame::PopupFrame(const ToolTip &toolTip, QWidget *parent)
 	createLayout(toolTip);
 
 	setMouseTracking(true);
-
-	qApp->installEventFilter(this);
 }
 
 void PopupFrame::createLayout(const ToolTip &content)
@@ -154,15 +152,14 @@ bool PopupFrame::eventFilter(QObject *o, QEvent *ev)
 
 	switch (ev->type()) {
 		case QEvent::KeyPress:
-		case QEvent::KeyRelease: {
-			const int key = static_cast<QKeyEvent *>(ev)->key();
+		case QEvent::KeyRelease:
+			{const int key = static_cast<QKeyEvent *>(ev)->key();
 			if (key == Qt::Key_Escape) {
 				deleteLater();
 				PopupFrame::_instance = 0;
 				return true;
-			}
+			}}
 			break;
-		}
 		case QEvent::FocusIn:
 		case QEvent::FocusOut:
 		case QEvent::WindowActivate:
@@ -171,12 +168,11 @@ bool PopupFrame::eventFilter(QObject *o, QEvent *ev)
 			deleteLater();
 			PopupFrame::_instance = 0;
 			break;
-		case QEvent::MouseMove: {
-			QRectF r(geometry().adjusted(-5, -20, 5, 20));
+		case QEvent::MouseMove:
+			{QRectF r(geometry().adjusted(-5, -20, 5, 20));
 			if (!r.contains(mousePos(ev)))
-				deleteAfterTimer();
+				deleteAfterTimer();}
 			break;
-		}
 		default:
 			break;
 	}
@@ -213,6 +209,8 @@ void PopupFrame::deleteAfterTimer()
 
 void Popup::show(const QPoint &pos, const ToolTip &toolTip, QWidget *w)
 {
+	bool installFilter = false;
+
 	if (toolTip.isEmpty())
 		return;
 
@@ -223,13 +221,19 @@ void Popup::show(const QPoint &pos, const ToolTip &toolTip, QWidget *w)
 		else {
 			delete PopupFrame::_instance;
 			PopupFrame::_instance = new PopupFrame(toolTip, w);
+			installFilter = true;
 		}
-	} else
+	} else {
 		PopupFrame::_instance = new PopupFrame(toolTip, w);
+		installFilter = true;
+	}
 
 	PopupFrame::_instance->resize(PopupFrame::_instance->sizeHint());
 	PopupFrame::_instance->place(pos, w);
 	PopupFrame::_instance->showNormal();
+
+	if (installFilter)
+		qApp->installEventFilter(PopupFrame::_instance);
 }
 
 void Popup::clear()
