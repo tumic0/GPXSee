@@ -27,9 +27,9 @@ ImageThumbnail::ImageThumbnail(const QString &path, int limit, QWidget *parent)
 	setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 
 #ifdef Q_OS_ANDROID
-	_path = path;
+	_url = QUrl(path);
 #else //Q_OS_ANDROID
-	_path = QFileInfo(path).absoluteFilePath();
+	_url = QUrl::fromLocalFile(QFileInfo(path).absoluteFilePath());
 #endif // Q_OS_ANDROID
 
 	qreal r = devicePixelRatioF();
@@ -45,11 +45,7 @@ ImageThumbnail::ImageThumbnail(const QString &path, int limit, QWidget *parent)
 void ImageThumbnail::mousePressEvent(QMouseEvent *event)
 {
 	if (event->button() == Qt::LeftButton)
-#ifdef Q_OS_ANDROID
-		QDesktopServices::openUrl(_path);
-#else // Q_OS_ANDROID
-		QDesktopServices::openUrl(QUrl::fromLocalFile(_path));
-#endif // Q_OS_ANDROID
+		QDesktopServices::openUrl(_url);
 
 	QLabel::mousePressEvent(event);
 }

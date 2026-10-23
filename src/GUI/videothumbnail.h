@@ -12,7 +12,7 @@ protected:
 	void mousePressEvent(QMouseEvent *event);
 
 private:
-	QString _path;
+	QUrl _url;
 };
 
 #endif // VIDEOTHUMBNAIL_H

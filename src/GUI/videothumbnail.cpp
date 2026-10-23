@@ -7,14 +7,12 @@
 #include "videothumbnail.h"
 
 VideoThumbnail::VideoThumbnail(const QString &path, int limit, QWidget *parent)
-  : QVideoWidget(parent), _path(path)
+  : QVideoWidget(parent)
 {
 #ifdef Q_OS_ANDROID
-	_path = path;
-	QUrl url(_path);
+	_url = QUrl(path);
 #else // Q_OS_ANDROID
-	_path = QFileInfo(path).absoluteFilePath();
-	QUrl url(QUrl::fromLocalFile(_path));
+	_url = QUrl::fromLocalFile(QFileInfo(path).absoluteFilePath());
 #endif // Q_OS_ANDROID
 
 	setCursor(Qt::PointingHandCursor);
@@ -25,10 +23,10 @@ VideoThumbnail::VideoThumbnail(const QString &path, int limit, QWidget *parent)
 	QMediaPlayer *player = new QMediaPlayer(this);
 	player->setVideoOutput(this);
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-	player->setMedia(url);
+	player->setMedia(_url);
 #else // QT 6
 	player->setAudioOutput(new QAudioOutput(this));
-	player->setSource(url);
+	player->setSource(_url);
 #endif // QT 6
 	player->play();
 }
@@ -36,11 +34,7 @@ VideoThumbnail::VideoThumbnail(const QString &path, int limit, QWidget *parent)
 void VideoThumbnail::mousePressEvent(QMouseEvent *event)
 {
 	if (event->button() == Qt::LeftButton)
-#ifdef Q_OS_ANDROID
-		QDesktopServices::openUrl(_path);
-#else // Q_OS_ANDROID
-		QDesktopServices::openUrl(QUrl::fromLocalFile(_path));
-#endif // Q_OS_ANDROID
+		QDesktopServices::openUrl(_url);
 
 	QVideoWidget::mousePressEvent(event);
 }
