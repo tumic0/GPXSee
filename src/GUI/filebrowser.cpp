@@ -36,17 +36,19 @@ void FileBrowser::setCurrentDir(const QString &path)
 
 		_files = QStringList();
 		for (int i = 0; i < files.size(); i++) {
-			QString name(Util::displayName(files.at(i)));
+			const QString &f = files.at(i);
+			QString name(f.mid(f.lastIndexOf('/') + 1));
 
 			for (int j = 0; j < _filter.size(); j++) {
 				QRegularExpressionMatch match(_filter.at(j).match(name));
 				if (match.hasMatch()) {
-					_files.append(files.at(i));
+					_files.append(f);
 					break;
 				}
 			}
 		}
 	}
+	std::sort(_files.begin(), _files.end());
 
 	_index = _files.empty() ? -1 : 0;
 
@@ -63,7 +65,7 @@ void FileBrowser::setCurrent(const QString &path)
 		if (!_watcher->directories().isEmpty())
 			_watcher->removePaths(_watcher->directories());
 		_watcher->addPath(dir.canonicalPath());
-		_files = dir.entryInfoList(_filter, QDir::Files);
+		_files = dir.entryInfoList(_filter, QDir::Files, QDir::Name);
 	}
 
 	_index = _files.empty() ? -1 : _files.indexOf(file);
