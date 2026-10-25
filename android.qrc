@@ -1,0 +1,10 @@
+<RCC>
+	<qresource prefix="/icons/Android">
+		<file alias="menu-normal.svg">icons/GUI/Android/bars.normal.svg</file>
+		<file alias="menu-active.svg">icons/GUI/Android/bars.active.svg</file>
+		<file alias="prev-normal.svg">icons/GUI/Android/circle-chevron-left.normal.svg</file>
+		<file alias="prev-active.svg">icons/GUI/Android/circle-chevron-left.active.svg</file>
+		<file alias="next-normal.svg">icons/GUI/Android/circle-chevron-right.normal.svg</file>
+		<file alias="next-active.svg">icons/GUI/Android/circle-chevron-right.active.svg</file>
+	</qresource>
+</RCC>

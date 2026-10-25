@@ -36,7 +36,7 @@ class MapAction;
 class POIAction;
 class Data;
 class DEMLoader;
-class NavigationWidget;
+class ImageButton;
 
 class GUI : public QMainWindow
 {
@@ -138,7 +138,7 @@ private slots:
 	void demLoaded();
 
 #ifdef Q_OS_ANDROID
-	void menu(const QPoint &pos);
+	void menu();
 #endif // Q_OS_ANDROID
 
 private:
@@ -231,9 +231,7 @@ private:
 
 	QString _lang;
 
-#ifdef Q_OS_ANDROID
-	NavigationWidget *_navigation;
-#else // Q_OS_ANDROID
+#ifndef Q_OS_ANDROID
 	QToolBar *_fileToolBar;
 	QToolBar *_showToolBar;
 	QToolBar *_navigationToolBar;
@@ -369,6 +367,10 @@ private:
 
 #ifdef Q_OS_ANDROID
 	QMenu *_menu;
+
+	ImageButton *_menuButton;
+	ImageButton *_nextButton;
+	ImageButton *_prevButton;
 #endif // Q_OS_ANDROID
 
 	PDFExport _pdfExport;

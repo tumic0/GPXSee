@@ -17,7 +17,6 @@
 #include "palette.h"
 #include "graphicsscene.h"
 
-
 class QGeoPositionInfoSource;
 class QGeoPositionInfo;
 class QGestureEvent;
@@ -41,7 +40,6 @@ class QTimeZone;
 class MapAction;
 class CrosshairItem;
 class MotionInfoItem;
-class NavigationWidget;
 
 class MapView : public QGraphicsView
 {
@@ -104,10 +102,6 @@ public:
 	RectC boundingRect() const;
 	const Projection &inputProjection() const {return _inputProjection;}
 
-#ifdef Q_OS_ANDROID
-	NavigationWidget *navigation() {return _nav;}
-#endif // Q_OS_ANDROID
-
 public slots:
 	void showMap(bool show);
 	void showPOI(bool show);
@@ -169,9 +163,6 @@ private:
 	void mouseMoveEvent(QMouseEvent *event);
 	void mousePressEvent(QMouseEvent *event);
 	void mouseDoubleClickEvent(QMouseEvent *event);
-#ifdef Q_OS_ANDROID
-	void mouseReleaseEvent(QMouseEvent *event);
-#endif // Q_OS_ANDROID
 	void wheelEvent(QWheelEvent *event);
 	void keyPressEvent(QKeyEvent *event);
 	void keyReleaseEvent(QKeyEvent *event);
@@ -233,10 +224,6 @@ private:
 
 	int _pinchZoom;
 	int _wheelDelta;
-
-#ifdef Q_OS_ANDROID
-	NavigationWidget *_nav;
-#endif // Q_OS_ANDROID
 };
 
 #endif // MAPVIEW_H

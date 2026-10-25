@@ -23,9 +23,7 @@
 #include "markerinfoitem.h"
 #include "crosshairitem.h"
 #include "motioninfoitem.h"
-#include "navigationwidget.h"
 #include "mapview.h"
-
 
 #define MAX_DIGITAL_ZOOM 2
 #define MIN_DIGITAL_ZOOM -3
@@ -135,10 +133,6 @@ MapView::MapView(Map *map, POI *poi, QWidget *parent)
 
 	_res = _map->resolution(_map->bounds());
 	_scene->setSceneRect(_map->bounds());
-
-#ifdef Q_OS_ANDROID
-	_nav = new NavigationWidget(this);
-#endif // Q_OS_ANDROID
 
 	connect(_map, &Map::tilesLoaded, this, &MapView::reloadMap);
 	connect(_poi, &POI::pointsChanged, this, &MapView::updatePOI);
@@ -1277,32 +1271,10 @@ void MapView::mousePressEvent(QMouseEvent *event)
 		if (event->modifiers() & MODIFIER)
 			QApplication::clipboard()->setText(Format::coordinates(_map->xy2ll(
 			  mapToScene(event->pos())), _cursorCoordinates->format()));
-#ifdef Q_OS_ANDROID
-		else {
-			if (_nav->pressed(event->pos())) {
-				event->accept();
-				return;
-			}
-		}
-#endif // Q_OS_ANDROID
 	}
 
 	QGraphicsView::mousePressEvent(event);
 }
-
-#ifdef Q_OS_ANDROID
-void MapView::mouseReleaseEvent(QMouseEvent *event)
-{
-	if (event->button() == Qt::LeftButton) {
-		if (_nav->released(event->pos())) {
-			event->accept();
-			return;
-		}
-	}
-
-	QGraphicsView::mouseReleaseEvent(event);
-}
-#endif // Q_OS_ANDROID
 
 void MapView::mouseDoubleClickEvent(QMouseEvent *event)
 {

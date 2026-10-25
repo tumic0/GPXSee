@@ -61,8 +61,8 @@
 #include "pathitem.h"
 #include "mapaction.h"
 #include "poiaction.h"
-#include "navigationwidget.h"
 #include "macos.h"
+#include "imagebutton.h"
 #include "gui.h"
 
 #define MAX_RECENT_FILES      10
@@ -920,11 +920,31 @@ void GUI::createMenus()
 #ifdef Q_OS_ANDROID
 void GUI::createNavigation()
 {
-	_navigation = _mapView->navigation();
+	_menuButton = new ImageButton(
+	  QPixmap(":/icons/Android/menu-normal.svg"),
+	  QPixmap(":/icons/Android/menu-active.svg"));
+	_nextButton = new ImageButton(
+	  QPixmap(":/icons/Android/next-normal.svg"),
+	  QPixmap(":/icons/Android/next-active.svg"));
+	_nextButton->setVisible(false);
+	_prevButton = new ImageButton(
+	  QPixmap(":/icons/Android/prev-normal.svg"),
+	  QPixmap(":/icons/Android/prev-active.svg"));
+	_prevButton->setVisible(false);
 
-	connect(_navigation, &NavigationWidget::menu, this, &GUI::menu);
-	connect(_navigation, &NavigationWidget::next, this, &GUI::next);
-	connect(_navigation, &NavigationWidget::prev, this, &GUI::prev);
+	connect(_menuButton, &ImageButton::released, this, &GUI::menu);
+	connect(_nextButton, &ImageButton::released, this, &GUI::next);
+	connect(_prevButton, &ImageButton::released, this, &GUI::prev);
+
+	QHBoxLayout *hl = new QHBoxLayout();
+	hl->addWidget(_prevButton);
+	hl->addStretch();
+	hl->addWidget(_nextButton);
+
+	QVBoxLayout *vl = new QVBoxLayout(_mapView);
+	vl->addWidget(_menuButton, 1, Qt::AlignTop | Qt::AlignRight);
+	vl->addLayout(hl, 1);
+	vl->addStretch(1);
 }
 #else // Q_OS_ANDROID
 void GUI::createToolBars()
@@ -971,6 +991,7 @@ void GUI::createMapView()
 	_map = new EmptyMap(this);
 
 	_mapView = new MapView(_map, _poi, this);
+
 	_mapView->setSizePolicy(QSizePolicy(QSizePolicy::Ignored,
 	  QSizePolicy::Expanding));
 #ifdef Q_OS_ANDROID
@@ -2468,9 +2489,9 @@ void GUI::graphChanged(int index)
 void GUI::updateNavigationActions()
 {
 #ifdef Q_OS_ANDROID
-	_navigation->showNext(!_browser->isLast()
+	_nextButton->setVisible(!_browser->isLast()
 	  && !_browser->current().isNull());
-	_navigation->showPrev(!_browser->isFirst()
+	_prevButton->setVisible(!_browser->isFirst()
 	  && !_browser->current().isNull());
 #else // Q_OS_ANDROID
 	_lastAction->setEnabled(!_browser->isLast());
@@ -2645,9 +2666,9 @@ void GUI::first()
 }
 
 #ifdef Q_OS_ANDROID
-void GUI::menu(const QPoint &pos)
+void GUI::menu()
 {
-	_menu->popup(pos);
+	_menu->popup(_menuButton->frameGeometry().bottomLeft());
 }
 #endif // Q_OS_ANDROID
 
