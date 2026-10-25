@@ -72,6 +72,7 @@ different, GPL compatible, licenses:
 * [Papirus icons](icons/GUI/Papirus) - GPLv3
 * [Mapbox Maki icons](icons/map/POI) - CC0
 * [Map Icons Collection](icons/symbols) - CC BY SA 3.0
+* [Font Awesome Icons](icons/GUI/Android) - CC BY 4.0
 * [RTree implementation](src/common/rtree.h) - Public domain
 * [Albers](src/map/proj/albersequal.cpp), [Geocentric](src/map/geocentric.cpp),
   [LCC](src/map/proj/lambertconic.cpp), [Mercator](src/map/proj/mercator.cpp),
