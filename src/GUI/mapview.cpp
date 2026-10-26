@@ -1302,10 +1302,10 @@ bool MapView::gestureEvent(QGestureEvent *event)
 	return true;
 }
 
-void MapView::useOpenGL(bool use)
+bool MapView::useOpenGL(bool use)
 {
 	if (_opengl == use)
-		return;
+		return false;
 
 	_opengl = use;
 
@@ -1313,6 +1313,8 @@ void MapView::useOpenGL(bool use)
 		setViewport(new QOpenGLWidget);
 	else
 		setViewport(new QWidget);
+
+	return true;
 }
 
 void MapView::useAntiAliasing(bool use)

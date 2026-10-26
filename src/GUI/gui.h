@@ -5,7 +5,6 @@
 #include <QString>
 #include <QList>
 #include <QDate>
-#include <QPrinter>
 #include "common/treenode.h"
 #include "common/rectc.h"
 #include "data/graph.h"
@@ -228,6 +227,8 @@ private:
 	void closeEvent(QCloseEvent *event);
 	void dragEnterEvent(QDragEnterEvent *event);
 	void dropEvent(QDropEvent *event);
+
+	void fixWidgetOrder();
 
 	QString _lang;
 

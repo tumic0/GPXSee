@@ -88,7 +88,7 @@ public:
 	void setPOIColor(const QColor &color);
 	void setMapOpacity(int opacity);
 	void setBackgroundColor(const QColor &color);
-	void useOpenGL(bool use);
+	bool useOpenGL(bool use);
 	void useAntiAliasing(bool use);
 	void setCoordinatesFormat(CoordinatesFormat format);
 	void setTimeZone(const QTimeZone &zone);

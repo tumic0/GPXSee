@@ -6,6 +6,7 @@
 #include <QMessageBox>
 #include <QCheckBox>
 #include <QFileDialog>
+#include <QPrinter>
 #include <QPrintDialog>
 #include <QPainter>
 #include <QPaintEngine>
@@ -3367,7 +3368,8 @@ void GUI::loadOptions()
 	_mapView->setPOIColor(_options.poiColor);
 	_mapView->setRenderHint(QPainter::Antialiasing, _options.pathAntiAliasing);
 	_mapView->setMarkerColor(_options.sliderColor);
-	_mapView->useOpenGL(_options.useOpenGL);
+	if (_mapView->useOpenGL(_options.useOpenGL))
+		fixWidgetOrder();
 	_mapView->setMapConfig(CRS::projection(_options.inputProjection),
 	  CRS::projection(4326, _options.outputProjection), _options.hidpiMap);
 	_mapView->setTimeZone(_options.timeZone.zone());
@@ -3485,11 +3487,14 @@ void GUI::updateOptions(const Options &options)
 	SET_VIEW_OPTION(poiSize, setPOISize);
 	SET_VIEW_OPTION(poiColor, setPOIColor);
 	SET_VIEW_OPTION(pathAntiAliasing, useAntiAliasing);
-	SET_VIEW_OPTION(useOpenGL, useOpenGL);
 	SET_VIEW_OPTION(sliderColor, setMarkerColor);
 	SET_VIEW_OPTION(crosshairColor, setCrosshairColor);
 	SET_VIEW_OPTION(infoColor, setInfoColor);
 	SET_VIEW_OPTION(infoBackground, drawInfoBackground);
+	if (options.useOpenGL != _options.useOpenGL) {
+		if (_mapView->useOpenGL(options.useOpenGL))
+			fixWidgetOrder();
+	}
 
 	if (options.plugin != _options.plugin
 	  || options.pluginParams.value(options.plugin)
@@ -3713,4 +3718,13 @@ void GUI::logicalDotsPerInchChanged(qreal dpi)
 	Q_UNUSED(dpi)
 
 	_mapView->setDevicePixelRatio(devicePixelRatioF());
+}
+
+void GUI::fixWidgetOrder()
+{
+#ifdef Q_OS_ANDROID
+	_menuButton->raise();
+	_nextButton->raise();
+	_prevButton->raise();
+#endif // Q_OS_ANDROID
 }
