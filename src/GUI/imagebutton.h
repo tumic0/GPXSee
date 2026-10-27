@@ -8,7 +8,7 @@ class ImageButton : public QAbstractButton
 	Q_OBJECT
 
 public:
-	ImageButton(const QPixmap &normal, const QPixmap &active,
+	ImageButton(const QPixmap &normal, const QPixmap &active, int size,
 	  QWidget *parent = 0);
 
 	QSize sizeHint() const {return iconSize();}

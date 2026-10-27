@@ -1,7 +1,7 @@
 #include <QPainter>
 #include "imagebutton.h"
 
-ImageButton::ImageButton(const QPixmap &normal, const QPixmap &active,
+ImageButton::ImageButton(const QPixmap &normal, const QPixmap &active, int size,
   QWidget *parent) : QAbstractButton(parent)
 {
 	QIcon icon;
@@ -9,7 +9,7 @@ ImageButton::ImageButton(const QPixmap &normal, const QPixmap &active,
 	icon.addPixmap(active, QIcon::Active);
 
 	setIcon(icon);
-	setIconSize(QSize(32, 32));
+	setIconSize(QSize(size, size));
 }
 
 void ImageButton::paintEvent(QPaintEvent *event)

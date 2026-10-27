@@ -174,6 +174,8 @@ void App::appStateChanged(Qt::ApplicationState state)
 						a->trigger();
 				}
 			}
+
+			_gui->showClose();
 		}
 	}
 }

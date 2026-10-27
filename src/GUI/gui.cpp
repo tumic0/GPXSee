@@ -923,29 +923,40 @@ void GUI::createNavigation()
 {
 	_menuButton = new ImageButton(
 	  QPixmap(":/icons/Android/menu-normal.svg"),
-	  QPixmap(":/icons/Android/menu-active.svg"));
+	  QPixmap(":/icons/Android/menu-active.svg"), 32);
+	_closeButton = new ImageButton(
+	  QPixmap(":/icons/Android/arrow-left-normal.svg"),
+	  QPixmap(":/icons/Android/arrow-left-active.svg"), 24);
+	_closeButton->setVisible(false);
 	_nextButton = new ImageButton(
 	  QPixmap(":/icons/Android/next-normal.svg"),
-	  QPixmap(":/icons/Android/next-active.svg"));
+	  QPixmap(":/icons/Android/next-active.svg"), 32);
 	_nextButton->setVisible(false);
 	_prevButton = new ImageButton(
 	  QPixmap(":/icons/Android/prev-normal.svg"),
-	  QPixmap(":/icons/Android/prev-active.svg"));
+	  QPixmap(":/icons/Android/prev-active.svg"), 32);
 	_prevButton->setVisible(false);
 
 	connect(_menuButton, &ImageButton::released, this, &GUI::menu);
+	connect(_closeButton, &ImageButton::released, this, &GUI::close);
 	connect(_nextButton, &ImageButton::released, this, &GUI::next);
 	connect(_prevButton, &ImageButton::released, this, &GUI::prev);
 
-	QHBoxLayout *hl = new QHBoxLayout();
-	hl->addWidget(_prevButton);
-	hl->addStretch();
-	hl->addWidget(_nextButton);
+	QHBoxLayout *ctrl = new QHBoxLayout();
+	ctrl->addWidget(_closeButton);
+	ctrl->addStretch();
+	ctrl->addWidget(_menuButton);
+	ctrl->setAlignment(Qt::AlignTop);
 
-	QVBoxLayout *vl = new QVBoxLayout(_mapView);
-	vl->addWidget(_menuButton, 1, Qt::AlignTop | Qt::AlignRight);
-	vl->addLayout(hl, 1);
-	vl->addStretch(1);
+	QHBoxLayout *nav = new QHBoxLayout();
+	nav->addWidget(_prevButton);
+	nav->addStretch();
+	nav->addWidget(_nextButton);
+
+	QVBoxLayout *layout = new QVBoxLayout(_mapView);
+	layout->addLayout(ctrl, 1);
+	layout->addLayout(nav, 1);
+	layout->addStretch(1);
 }
 #else // Q_OS_ANDROID
 void GUI::createToolBars()
@@ -3724,7 +3735,15 @@ void GUI::fixWidgetOrder()
 {
 #ifdef Q_OS_ANDROID
 	_menuButton->raise();
+	_closeButton->raise();
 	_nextButton->raise();
 	_prevButton->raise();
 #endif // Q_OS_ANDROID
 }
+
+#ifdef Q_OS_ANDROID
+void GUI::showClose()
+{
+	_closeButton->setVisible(true);
+}
+#endif // Q_OS_ANDROID

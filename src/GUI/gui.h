@@ -48,6 +48,9 @@ public:
 	bool loadMap(const QString &fileName, MapAction *&action, int &showError);
 	void show();
 	void writeSettings();
+#ifdef Q_OS_ANDROID
+	void showClose();
+#endif // Q_OS_ANDROID
 
 private slots:
 	void about();
@@ -370,6 +373,7 @@ private:
 	QMenu *_menu;
 
 	ImageButton *_menuButton;
+	ImageButton *_closeButton;
 	ImageButton *_nextButton;
 	ImageButton *_prevButton;
 #endif // Q_OS_ANDROID
