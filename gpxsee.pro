@@ -25,7 +25,7 @@ INCLUDEPATH += ./src
 HEADERS += $$files(src/*.h, true)
 SOURCES += $$files(src/*.cpp, true)
 DEFINES += APP_VERSION=\\\"$$VERSION\\\"
-RESOURCES += gpxsee.qrc
+RESOURCES += common.qrc
 TRANSLATIONS = $$files(lang/*.ts)
 
 macx {
