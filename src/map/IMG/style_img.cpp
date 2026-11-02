@@ -244,7 +244,7 @@ void Style::defaultPolygonStyle()
 	_polygons[TYPE(0x13)] = Polygon(QBrush(QColor(0xdb, 0xd0, 0xb6)),
 	  QPen(QColor(0xcd, 0xcc, 0xc4), 1));
 	_polygons[TYPE(0x14)] = Polygon(QBrush(QColor(0xca, 0xdf, 0xaf)));
-	_polygons[TYPE(0x15)] = Polygon(QBrush(QColor(0xca, 0xdf, 0xaf)));
+	_polygons[TYPE(0x15)] = Polygon(QBrush(QColor(0xf9, 0xff, 0xee)));
 	_polygons[TYPE(0x16)] = Polygon(QBrush(QColor(0x9a, 0xc2, 0x69),
 	  Qt::BDiagPattern));
 	_polygons[TYPE(0x17)] = Polygon(QBrush(QColor(0xe4, 0xef, 0xcf)));
@@ -393,8 +393,8 @@ void Style::defaultLineStyle(qreal ratio)
 	_lines[TYPE(0x01)] = Line(QPen(QColor(0x9b, 0xd7, 0x72), 2, Qt::SolidLine),
 	  QPen(QColor(0x72, 0xa3, 0x5a), 6, Qt::SolidLine, Qt::RoundCap,
 	  Qt::RoundJoin));
-	_lines[TYPE(0x02)] = Line(QPen(QColor(0xff, 0xcc, 0x78), 2, Qt::SolidLine),
-	  QPen(QColor(0xe8, 0xa5, 0x41), 6, Qt::SolidLine, Qt::RoundCap,
+	_lines[TYPE(0x02)] = Line(QPen(QColor(0x9b, 0xd7, 0x72), 2, Qt::SolidLine),
+	  QPen(QColor(0x72, 0xa3, 0x5a), 6, Qt::SolidLine, Qt::RoundCap,
 	  Qt::RoundJoin));
 	_lines[TYPE(0x03)] = Line(QPen(QColor(0xff, 0xcc, 0x78), 2, Qt::SolidLine),
 	  QPen(QColor(0xe8, 0xa5, 0x41), 6, Qt::SolidLine, Qt::RoundCap,
@@ -414,8 +414,8 @@ void Style::defaultLineStyle(qreal ratio)
 	_lines[TYPE(0x08)] = Line(QPen(QColor(0xfa, 0xef, 0x75), 3, Qt::SolidLine),
 	  QPen(QColor(0xdb, 0xd2, 0x7b), 5, Qt::SolidLine, Qt::RoundCap,
 	  Qt::RoundJoin));
-	_lines[TYPE(0x09)] = Line(QPen(QColor(0xff, 0xcc, 0x78), 2, Qt::SolidLine),
-	  QPen(QColor(0xe8, 0xa5, 0x41), 6, Qt::SolidLine, Qt::RoundCap,
+	_lines[TYPE(0x09)] = Line(QPen(QColor(0x9b, 0xd7, 0x72), 2, Qt::SolidLine),
+	  QPen(QColor(0x72, 0xa3, 0x5a), 6, Qt::SolidLine, Qt::RoundCap,
 	  Qt::RoundJoin));
 	_lines[TYPE(0x0a)] = Line(QPen(QColor(0xab, 0xa0, 0x83), 1, Qt::DashLine));
 	_lines[TYPE(0x0b)] = Line(QPen(QColor(0xff, 0xcc, 0x78), 2, Qt::SolidLine),
