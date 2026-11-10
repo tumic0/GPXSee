@@ -110,6 +110,12 @@ static QMultiMap<QString, Parser*> parsers()
 QMultiMap<QString, Parser*> Data::_parsers = parsers();
 #ifdef Q_OS_ANDROID
 bool Data::_permChecked = false;
+
+static bool isMedia(const QString &suffix)
+{
+	return (suffix == "jpg" || suffix == "jpeg" || suffix == "mp4"
+	  || suffix == "mov");
+}
 #endif // Q_OS_ANDROID
 
 void Data::processData(const QList<TrackData> &trackData,
@@ -120,14 +126,6 @@ void Data::processData(const QList<TrackData> &trackData,
 	for (int i = 0; i < routeData.count(); i++)
 		_routes.append(Route(routeData.at(i)));
 }
-
-#ifdef Q_OS_ANDROID
-static bool isMedia(const QString &suffix)
-{
-	return (suffix == "jpg" || suffix == "jpeg" || suffix == "mp4"
-	  || suffix == "mov");
-}
-#endif // Q_OS_ANDROID
 
 Data::Data(const QString &fileName, bool tryUnknown)
 {
