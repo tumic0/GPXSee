@@ -31,6 +31,11 @@ int main(int argc, char *argv[])
 	fmt.setSamples(4);
 	QSurfaceFormat::setDefaultFormat(fmt);
 
+#ifdef Q_OS_ANDROID
+	// QTBUG-151972 workaround
+	qputenv("QT_FFMPEG_DECODING_HW_DEVICE_TYPES", QByteArray());
+#endif // Android
+
 	App app(argc, argv);
 	return app.run();
 }
