@@ -12,7 +12,11 @@
 
 #define GEOGRAPHICAL_MILE 1855.3248
 
+#ifdef Q_OS_ANDROID
+#define VIDEO_SIZE QSize(240, 135)
+#else // Android
 #define VIDEO_SIZE QSize(320, 180)
+#endif // Android
 #define VIDEO_OFFSET QPoint(6, -12)
 
 Units PathItem::_units = Metric;
