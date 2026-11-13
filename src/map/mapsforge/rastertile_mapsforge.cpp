@@ -15,7 +15,7 @@ using namespace Mapsforge;
 #define PATHS_EXTENT 20
 #define SEARCH_EXTENT -0.5
 
-static double LIMIT = cos(deg2rad(170));
+static const double LIMIT = cos(deg2rad(170));
 
 static const QByteArray *label(unsigned key, const QVector<MapData::Tag> &tags)
 {
