@@ -33,7 +33,7 @@ GPS log file formats.
 ## Build
 ### Prerequisites
 * Qt5 >= 5.15 or Qt6 >= 6.2 (Android builds require Qt6)
-* Zlib (the Qt-provided one is used where the platform does not provide its own)
+* zlib (the Qt-provided one is used on Windows)
 
 ### Steps
 ```shell
