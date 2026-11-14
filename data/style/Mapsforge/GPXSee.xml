@@ -81,7 +81,7 @@
     </rule>
 
     <!-- Landuse -->
-    <rule e="way" closed="yes" k="landuse" v="comercial|residential|retail" zoom-min="10">
+    <rule e="way" closed="yes" k="landuse" v="commercial|residential|retail" zoom-min="10">
         <rule e="way" k="*" v="*" zoom-min="10" zoom-max="14">
             <area fill="#e6ded5"/>
         </rule>
