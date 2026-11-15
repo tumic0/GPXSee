@@ -45,10 +45,11 @@ jobs:
       - name: Configure build
         run:  qmake gpxsee.pro OPENSSL_PATH=android_openssl
       - name: Build project
-        run:  make -j4 apk
+        run: |
+          make -j4 apk
+          mv android-build/build/outputs/apk/debug/android-build-debug.apk GPXSee-`grep '^VERSION =' gpxsee.pro | cut -d= -f2 | xargs`-arm64_v8a.apk
       - name: Upload artifacts
         uses: actions/upload-artifact@v7
         with:
-          name: GPXSee-arm64_v8a.apk
-          path: android-build/build/outputs/apk/debug/android-build-debug.apk
+          path: GPXSee-*-arm64_v8a.apk
           archive: false
