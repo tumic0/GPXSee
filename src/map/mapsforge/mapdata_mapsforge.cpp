@@ -150,15 +150,17 @@ static bool readPolygonPath(SubFile &subfile, const Coordinates &c,
 	return true;
 }
 
-static bool readOffset(QDataStream &stream, quint64 &offset)
+static bool readOffset(QFile &file, quint64 &offset)
 {
-	quint8 b0, b1, b2, b3, b4;
+	quint8 data[5];
 
-	stream >> b0 >> b1 >> b2 >> b3 >> b4;
-	offset = b4 | ((quint64)b3) << 8 | ((quint64)b2) << 16
-	  | ((quint64)b1) << 24 | ((quint64)b0) << 32;
+	if (file.read((char*)data, sizeof(data)) != sizeof(data))
+		return false;
 
-	return (stream.status() == QDataStream::Ok);
+	offset = data[4] | ((quint64)data[3]) << 8 | ((quint64)data[2]) << 16
+	  | ((quint64)data[1]) << 24 | ((quint64)data[0]) << 32;
+
+	return true;
 }
 
 bool MapData::readTags(SubFile &subfile, int count,
@@ -221,19 +223,17 @@ bool MapData::readTags(SubFile &subfile, int count,
 
 bool MapData::readSubFiles(QFile &file)
 {
-	QDataStream stream(&file);
-
 	for (int i = 0; i < _subFiles.size(); i++) {
 		const SubFileInfo &f = _subFiles.at(i);
 		quint64 offset, nextOffset;
 
-		if (!stream.device()->seek(f.offset))
+		if (!file.seek(f.offset))
 			return false;
 
 		QPoint tl(OSM::ll2tile(_bounds.topLeft(), f.base));
 		QPoint br(OSM::ll2tile(_bounds.bottomRight(), f.base));
 
-		if (!readOffset(stream, offset) || (offset & OFFSET_MASK) > f.size)
+		if (!readOffset(file, offset) || (offset & OFFSET_MASK) > f.size)
 			return false;
 
 		_tiles.append(new TileTree());
@@ -241,7 +241,7 @@ bool MapData::readSubFiles(QFile &file)
 		for (int h = tl.y(); h <= br.y(); h++) {
 			for (int w = tl.x(); w <= br.x(); w++) {
 				if (!(h == br.y() && w == br.x())) {
-					if (!readOffset(stream, nextOffset)
+					if (!readOffset(file, nextOffset)
 					  || (nextOffset & OFFSET_MASK) > f.size)
 						return false;
 					if (nextOffset == offset)
