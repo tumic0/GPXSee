@@ -141,28 +141,42 @@ private:
 		const MapData::Point *_point;
 	};
 
-	struct PathKey {
-		PathKey(bool closed, const QVector<MapData::Tag> &tags)
-		  : closed(closed), tags(tags) {}
+	class PathKey
+	{
+	public:
+		PathKey(const MapData::Path &path) : _path(path)
+		{
+			_hash = qHashMulti(0, path.closed, path.point.tags);
+		}
 		bool operator==(const PathKey &other) const
 		{
-			return (closed == other.closed && tags == other.tags);
+			return (_path.closed == other._path.closed
+			  && _path.point.tags == other._path.point.tags);
 		}
+		HASH_T hash() const {return _hash;}
 
-		bool closed;
-		const QVector<MapData::Tag> &tags;
+	private:
+		const MapData::Path &_path;
+		HASH_T _hash;
 	};
 
-	struct PointKey {
-		PointKey(bool path, const QVector<MapData::Tag> &tags)
-		  : path(path), tags(tags) {}
+	class PointKey
+	{
+	public:
+		PointKey(const MapData::Point &point) : _point(point)
+		{
+			_hash = qHashMulti(0, point.center(), point.tags);
+		}
 		bool operator==(const PointKey &other) const
 		{
-			return (path == other.path && tags == other.tags);
+			return (_point.center() == other._point.center()
+			  && _point.tags == other._point.tags);
 		}
+		HASH_T hash() const {return _hash;}
 
-		bool path;
-		const QVector<MapData::Tag> &tags;
+	private:
+		const MapData::Point &_point;
+		HASH_T _hash;
 	};
 
 	class PointItem : public TextPointItem
@@ -243,12 +257,16 @@ private:
 
 inline HASH_T qHash(const RasterTile::PathKey &key, HASH_T seed = 0)
 {
-	return qHashMulti(seed, key.closed, key.tags);
+	Q_UNUSED(seed);
+
+	return key.hash();
 }
 
 inline HASH_T qHash(const RasterTile::PointKey &key, HASH_T seed = 0)
 {
-	return qHashMulti(seed, key.path, key.tags);
+	Q_UNUSED(seed);
+
+	return key.hash();
 }
 
 }

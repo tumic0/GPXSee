@@ -195,7 +195,7 @@ void RasterTile::processLabels(const QList<MapData::Point> &points,
 		const Style::SymbolRender *si = 0;
 		QList<const QByteArray *> ll;
 		bool path = point.center();
-		PointKey key(path, tags);
+		PointKey key(point);
 
 		if (!(sri = symbolCache.object(key))) {
 			sri = new const Style::SymbolRender*(filtered(symbols, path, tags));
@@ -260,7 +260,7 @@ void RasterTile::processLineLabels(QVector<PainterPath> &paths,
 		const Style::TextRender *ti = 0;
 		const Style::SymbolRender *si = 0;
 		const QByteArray *lbl = 0;
-		PathKey key(closed, tags);
+		PathKey key(*path.path);
 
 		if (!(sri = symbolCache.object(key))) {
 			sri = new const Style::SymbolRender*(filteredPath(symbols, closed,
@@ -414,14 +414,11 @@ void RasterTile::pathInstructions(QVector<PainterPath> &paths,
 
 	for (int i = 0; i < paths.size(); i++) {
 		PainterPath &path = paths[i];
-		const MapData::Path *dp = path.path;
-		const QVector<MapData::Tag> &tags = dp->point.tags;
-		bool closed = dp->closed;
-		PathKey key(closed, tags);
+		PathKey key(*path.path);
 
 		if (!(ri = cache.object(key))) {
-			ri = new QList<const Style::PathRender*>(filteredPath(all, closed,
-			  tags));
+			ri = new QList<const Style::PathRender*>(filteredPath(all,
+			  path.path->closed, path.path->point.tags));
 			for (int j = 0; j < ri->size(); j++)
 				instructions.append(RenderInstruction(ri->at(j), &path));
 			cache.insert(key, ri);
@@ -446,7 +443,7 @@ void RasterTile::circleInstructions(const QList<MapData::Point> &points,
 		const MapData::Point &point = points.at(i);
 		const QVector<MapData::Tag> &tags = point.tags;
 		bool path = point.center();
-		PointKey key(path, tags);
+		PointKey key(point);
 
 		if (!(ri = cache.object(key))) {
 			ri = new QList<const Style::CircleRender*>(filtered(all, path,
