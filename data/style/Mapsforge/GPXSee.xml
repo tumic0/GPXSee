@@ -70,13 +70,13 @@
     <rule cat="natural-winter" e="way" closed="yes" k="natural" v="scrub" zoom-min="10">
         <area fill="#f6fbff"/>
     </rule>
-    <rule e="way" closed="yes" k="natural" v="beach" zoom-min="10">
+    <rule e="way" closed="yes" k="natural" v="beach|sand" zoom-min="10">
         <area fill="#fff3c7"/>
     </rule>
     <rule e="way" closed="yes" k="natural" v="rock|stone|bare_rock|bedrock" zoom-min="14">
         <area fill="#96968f"/>
     </rule>
-    <rule e="way" closed="yes" k="natural" v="glacier" zoom-min="10">
+    <rule e="way" closed="yes" k="natural" v="glacier" zoom-min="8">
         <area fill="#ddf1fd"/>
     </rule>
 
@@ -98,7 +98,7 @@
     <rule cat="landuse-winter" e="way" closed="yes" k="leisure" v="park|garden|golf_course" zoom-min="10">
         <area fill="#f6fbff"/>
     </rule>
-    <rule e="way" closed="yes" k="landuse" v="construction|landfill|industrial|farmyard|railway">
+    <rule e="way" closed="yes" k="landuse" v="construction|landfill|industrial|farmyard|railway|brownfield">
         <rule e="way" k="*" v="*" zoom-min="10" zoom-max="14">
             <area fill="#d6d4ce"/>
         </rule>
