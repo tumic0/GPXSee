@@ -159,6 +159,7 @@ static bool readOffset(QFile &file, quint64 &offset)
 
 	offset = data[4] | ((quint64)data[3]) << 8 | ((quint64)data[2]) << 16
 	  | ((quint64)data[1]) << 24 | ((quint64)data[0]) << 32;
+	offset &= OFFSET_MASK;
 
 	return true;
 }
@@ -233,7 +234,7 @@ bool MapData::readSubFiles(QFile &file)
 		QPoint tl(OSM::ll2tile(_bounds.topLeft(), f.base));
 		QPoint br(OSM::ll2tile(_bounds.bottomRight(), f.base));
 
-		if (!readOffset(file, offset) || (offset & OFFSET_MASK) > f.size)
+		if (!readOffset(file, offset) || offset > f.size)
 			return false;
 
 		_tiles.append(new TileTree());
@@ -241,8 +242,7 @@ bool MapData::readSubFiles(QFile &file)
 		for (int h = tl.y(); h <= br.y(); h++) {
 			for (int w = tl.x(); w <= br.x(); w++) {
 				if (!(h == br.y() && w == br.x())) {
-					if (!readOffset(file, nextOffset)
-					  || (nextOffset & OFFSET_MASK) > f.size)
+					if (!readOffset(file, nextOffset) || nextOffset > f.size)
 						return false;
 					if (nextOffset == offset)
 						continue;
@@ -632,7 +632,7 @@ bool MapData::readPaths(QFile &file, const VectorTile *tile, int zoom,
 	QByteArray name, houseNumber, reference;
 
 
-	if (!subfile.seek(tile->offset & OFFSET_MASK))
+	if (!subfile.seek(tile->offset))
 		return false;
 
 	for (int i = 0; i < rows; i++) {
@@ -720,7 +720,7 @@ bool MapData::readPoints(QFile &file, const VectorTile *tile, int zoom,
 	QByteArray name, houseNumber;
 
 
-	if (!subfile.seek(tile->offset & OFFSET_MASK))
+	if (!subfile.seek(tile->offset))
 		return false;
 
 	for (int i = 0; i < rows; i++) {
