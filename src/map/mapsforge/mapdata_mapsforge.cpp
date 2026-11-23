@@ -233,6 +233,7 @@ bool MapData::readSubFiles(QFile &file)
 
 		QPoint tl(OSM::ll2tile(_bounds.topLeft(), f.base));
 		QPoint br(OSM::ll2tile(_bounds.bottomRight(), f.base));
+		qDebug() << i << tl << br;
 
 		if (!readOffset(file, offset) || offset > f.size)
 			return false;
@@ -425,7 +426,7 @@ MapData::MapData(const QString &fileName) : _fileName(fileName), _valid(false)
 {
 	QFile file(fileName);
 
-	if (!file.open(QFile::ReadOnly | QIODevice::Unbuffered)) {
+	if (!file.open(QFile::ReadOnly)) {
 		_errorString = file.errorString();
 		return;
 	}
@@ -460,7 +461,7 @@ void MapData::load()
 {
 	QFile file(_fileName);
 
-	if (!file.open(QIODevice::ReadOnly | QIODevice::Unbuffered))
+	if (!file.open(QIODevice::ReadOnly))
 		qWarning("%s: %s", qUtf8Printable(file.fileName()),
 		  qUtf8Printable(file.errorString()));
 	else

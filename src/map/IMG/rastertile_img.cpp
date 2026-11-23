@@ -658,7 +658,7 @@ void RasterTile::fetchData(QList<MapData::Poly> &polygons,
 
 		if (dynamic_cast<IMGData*>(data)) {
 			file = new QFile(data->fileName());
-			if (!file->open(QIODevice::ReadOnly | QIODevice::Unbuffered)) {
+			if (!file->open(QIODevice::ReadOnly)) {
 				qWarning("%s: %s", qUtf8Printable(file->fileName()),
 				  qUtf8Printable(file->errorString()));
 				delete file;

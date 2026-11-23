@@ -25,7 +25,7 @@ public:
 
 			if (!_file) {
 				_file = new QFile(subFile->fileName());
-				if (!_file->open(QIODevice::ReadOnly | QIODevice::Unbuffered))
+				if (!_file->open(QIODevice::ReadOnly))
 					qWarning("%s: %s", qUtf8Printable(_file->fileName()),
 					  qUtf8Printable(_file->errorString()));
 				_delete = true;
