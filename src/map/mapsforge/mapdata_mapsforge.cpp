@@ -233,7 +233,6 @@ bool MapData::readSubFiles(QFile &file)
 
 		QPoint tl(OSM::ll2tile(_bounds.topLeft(), f.base));
 		QPoint br(OSM::ll2tile(_bounds.bottomRight(), f.base));
-		qDebug() << i << tl << br;
 
 		if (!readOffset(file, offset) || offset > f.size)
 			return false;
