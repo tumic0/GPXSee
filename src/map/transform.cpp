@@ -99,7 +99,7 @@ Transform::Transform(const ReferencePoint &p, const PointD &scale)
 Transform::Transform(double matrix[16])
   : _proj2img(NULL_QTRANSFORM), _img2proj(NULL_QTRANSFORM)
 {
-	_img2proj = QTransform(matrix[0], matrix[1], matrix[4], matrix[5],
+	_img2proj = QTransform(matrix[0], matrix[4], matrix[1], matrix[5],
 	  matrix[3], matrix[7]);
 	if (!_img2proj.isInvertible())
 		_errorString = "Singular transformation matrix";
