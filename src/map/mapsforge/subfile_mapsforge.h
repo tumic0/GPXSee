@@ -3,27 +3,27 @@
 
 #include <QFile>
 
-#define BLOCK_BITS 12 /* 4096 bytes */
-
 namespace Mapsforge {
 
 class SubFile
 {
 public:
 	SubFile(QFile &file, quint64 offset, quint64 size)
-	  : _file(file), _offset(offset), _size(size), _pos(-1),
-	  _blockNum(-1), _blockPos(-1) {}
+	  : _file(file), _offset(offset), _end(offset + size) {}
 
-	quint64 pos() const {return _pos;}
-	bool seek(quint64 pos);
-
-	bool read(char *buff, quint32 size);
+	quint64 pos() const {return _file.pos() - _offset;}
+	bool seek(quint64 pos)
+	{
+		if (pos >= (quint64)_end)
+			return false;
+		return _file.seek(pos + _offset);
+	}
 
 	bool readByte(quint8 &val)
 	{
-		val = _data[_blockPos++];
-		_pos++;
-		return (_blockPos >= (int)sizeof(_data)) ? seek(_pos) : true;
+		if (_file.pos() >= _end)
+			return false;
+		return (_file.read((char*)&val, 1) == 1);
 	}
 
 	template<typename T>
@@ -107,9 +107,11 @@ public:
 
 		if (!readVUInt32(len))
 			return false;
+		if (_file.pos() + len >= _end)
+			return false;
 
 		str.resize(len);
-		if (!read(str.data(), len))
+		if (_file.read(str.data(), len) != len)
 			return false;
 
 		return true;
@@ -117,12 +119,8 @@ public:
 
 private:
 	QFile &_file;
-	quint8 _data[1U<<BLOCK_BITS];
-	quint64 _offset;
-	quint64 _size;
-	qint64 _pos;
-	int _blockNum;
-	int _blockPos;
+	qint64 _offset;
+	qint64 _end;
 };
 
 }

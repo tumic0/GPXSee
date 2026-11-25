@@ -387,12 +387,12 @@ bool MapData::readHeader(QFile &file)
 		return false;
 	}
 
-	if (file.read((char*)&hdrSize, sizeof(hdrSize)) < (qint64)sizeof(hdrSize)) {
+	if (file.read((char*)&hdrSize, sizeof(hdrSize)) != (qint64)sizeof(hdrSize)) {
 		_errorString = "Unexpected EOF";
 		return false;
 	}
 
-	SubFile hdr(file, MAGIC_SIZE, qFromBigEndian(hdrSize));
+	SubFile hdr(file, MAGIC_SIZE, qFromBigEndian(hdrSize) + sizeof(hdrSize));
 
 	if (!readMapInfo(hdr, projection, debugMap)) {
 		_errorString = "Error reading map info";
