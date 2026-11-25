@@ -28,7 +28,7 @@ public:
 	Transform(const QList<ReferencePoint> &points);
 	Transform(const ReferencePoint &p1, const ReferencePoint &p2);
 	Transform(const ReferencePoint &p, const PointD &scale);
-	Transform(double matrix[16]);
+	Transform(const double matrix[16]);
 
 	QPointF proj2img(const PointD &p) const
 	  {return _proj2img.map(p.toPointF());}

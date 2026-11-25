@@ -96,7 +96,7 @@ Transform::Transform(const ReferencePoint &p, const PointD &scale)
 	_proj2img = _img2proj.inverted();
 }
 
-Transform::Transform(double matrix[16])
+Transform::Transform(const double matrix[16])
   : _proj2img(NULL_QTRANSFORM), _img2proj(NULL_QTRANSFORM)
 {
 	_img2proj = QTransform(matrix[0], matrix[4], matrix[1], matrix[5],
