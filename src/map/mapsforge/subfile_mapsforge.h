@@ -21,7 +21,7 @@ public:
 
 	bool readByte(quint8 &val)
 	{
-		if (_file.pos() >= _end)
+		if (_file.pos() + 1 > _end)
 			return false;
 		return (_file.read((char*)&val, 1) == 1);
 	}
@@ -29,31 +29,44 @@ public:
 	template<typename T>
 	bool readUInt16(T &val)
 	{
-		quint8 b0, b1;
-		if (!(readByte(b0) && readByte(b1)))
+		quint8 b[2];
+
+		if (_file.pos() + (qint64)sizeof(b) > _end)
 			return false;
-		val = b1 | ((quint16)b0) << 8;
+		if (_file.read((char*)&b, sizeof(b)) != sizeof(b))
+			return false;
+		val = b[1] | ((quint16)b[0]) << 8;
+
 		return true;
 	}
 
 	bool readUInt32(quint32 &val)
 	{
-		quint8 b0, b1, b2, b3;
-		if (!(readByte(b0) && readByte(b1) && readByte(b2) && readByte(b3)))
+		quint8 b[4];
+
+		if (_file.pos() + (qint64)sizeof(b) > _end)
 			return false;
-		val = b3 | ((quint32)b2) << 8 | ((quint32)b1) << 16 | ((quint32)b0) << 24;
+		if (_file.read((char*)&b, sizeof(b)) != sizeof(b))
+			return false;
+		val = b[3] | ((quint32)b[2]) << 8 | ((quint32)b[1]) << 16
+		  | ((quint32)b[0]) << 24;
+
 		return true;
 	}
 
 	bool readUInt64(quint64 &val)
 	{
-		quint8 b0, b1, b2, b3, b4, b5, b6, b7;
-		if (!(readByte(b0) && readByte(b1) && readByte(b2) && readByte(b3)
-		 && readByte(b4) && readByte(b5) && readByte(b6) && readByte(b7)))
+		quint8 b[8];
+
+		if (_file.pos() + (qint64)sizeof(b) > _end)
 			return false;
-		val = b7 | ((quint64)b6) << 8 | ((quint64)b5) << 16
-		  | ((quint64)b4) << 24 | ((quint64)b3) << 32 | ((quint64)b2) << 40
-		  | ((quint64)b1) << 48 | ((quint64)b0) << 56;
+		if (_file.read((char*)&b, sizeof(b)) != sizeof(b))
+			return false;
+		val = b[7] | ((quint64)b[6]) << 8 | ((quint64)b[5]) << 16
+		  | ((quint64)b[4]) << 24 | ((quint64)b[3]) << 32
+		  | ((quint64)b[2]) << 40 | ((quint64)b[1]) << 48
+		  | ((quint64)b[0]) << 56;
+
 		return true;
 	}
 
@@ -107,7 +120,7 @@ public:
 
 		if (!readVUInt32(len))
 			return false;
-		if (_file.pos() + len >= _end)
+		if (_file.pos() + len > _end)
 			return false;
 
 		str.resize(len);
