@@ -8,64 +8,71 @@ namespace Mapsforge {
 class SubFile
 {
 public:
-	SubFile(QFile &file, quint64 offset, quint64 size)
-	  : _file(file), _offset(offset), _end(offset + size) {}
+	SubFile(QFile &file, quint64 offset, quint64 size) : _file(file)
+	{
+		_data = file.map(offset, size);
+		_end = _data ? _data + size : 0;
+		_dp = _data;
+	}
+	~SubFile()
+	{
+		_file.unmap(_data);
+	}
 
-	quint64 pos() const {return _file.pos() - _offset;}
+	quint64 pos() const {return _dp - _data;}
 	bool seek(quint64 pos)
 	{
-		if (pos >= (quint64)_end)
+		if (_data + pos >= _end)
 			return false;
-		return _file.seek(pos + _offset);
+
+		_dp = _data + pos;
+
+		return true;
 	}
 
 	bool readByte(quint8 &val)
 	{
-		if (_file.pos() + 1 > _end)
+		if (_dp + 1 > _end)
 			return false;
-		return (_file.read((char*)&val, 1) == 1);
+
+		val = *_dp++;
+
+		return true;
 	}
 
 	template<typename T>
 	bool readUInt16(T &val)
 	{
-		quint8 b[2];
+		if (_dp + 2 > _end)
+			return false;
 
-		if (_file.pos() + (qint64)sizeof(b) > _end)
-			return false;
-		if (_file.read((char*)&b, sizeof(b)) != sizeof(b))
-			return false;
-		val = b[1] | ((quint16)b[0]) << 8;
+		val = *(_dp + 1) | ((quint16)*_dp) << 8;
+		_dp += 2;
 
 		return true;
 	}
 
 	bool readUInt32(quint32 &val)
 	{
-		quint8 b[4];
+		if (_dp + 4 > _end)
+			return false;
 
-		if (_file.pos() + (qint64)sizeof(b) > _end)
-			return false;
-		if (_file.read((char*)&b, sizeof(b)) != sizeof(b))
-			return false;
-		val = b[3] | ((quint32)b[2]) << 8 | ((quint32)b[1]) << 16
-		  | ((quint32)b[0]) << 24;
+		val = *(_dp + 3) | ((quint32)*(_dp + 2)) << 8
+		  | ((quint32)*(_dp + 1)) << 16 | ((quint32)*_dp) << 24;
+		_dp += 4;
 
 		return true;
 	}
 
 	bool readUInt64(quint64 &val)
 	{
-		quint8 b[8];
-
-		if (_file.pos() + (qint64)sizeof(b) > _end)
+		if (_dp + 8 > _end)
 			return false;
-		if (_file.read((char*)&b, sizeof(b)) != sizeof(b))
-			return false;
-		val = b[7] | ((quint64)b[6]) << 8 | ((quint64)b[5]) << 16
-		  | ((quint64)b[4]) << 24 | ((quint64)b[3]) << 32
-		  | ((quint64)b[2]) << 40 | ((quint64)b[1]) << 48
-		  | ((quint64)b[0]) << 56;
+		val = *(_dp + 7) | ((quint64)*(_dp + 6)) << 8
+		  | ((quint64)*(_dp + 5)) << 16 | ((quint64)*(_dp + 4)) << 24
+		  | ((quint64)*(_dp + 3)) << 32 | ((quint64)*(_dp + 2)) << 40
+		  | ((quint64)*(_dp + 1)) << 48 | ((quint64)*_dp) << 56;
+		_dp += 8;
 
 		return true;
 	}
@@ -120,20 +127,21 @@ public:
 
 		if (!readVUInt32(len))
 			return false;
-		if (_file.pos() + len > _end)
+		if (_dp + len > _end)
 			return false;
 
 		str.resize(len);
-		if (_file.read(str.data(), len) != len)
-			return false;
+		memcpy(str.data(), _dp, len);
+		_dp += len;
 
 		return true;
 	}
 
 private:
 	QFile &_file;
-	qint64 _offset;
-	qint64 _end;
+	uchar *_data;
+	uchar *_end;
+	uchar *_dp;
 };
 
 }
