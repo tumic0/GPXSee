@@ -32,10 +32,12 @@ public:
 		const Field *field(quint32 name) const;
 	};
 
-	ISO8211(const QString &path) : _file(path) {}
+	ISO8211(const QString &path);
+	~ISO8211();
+
 	bool readDDR();
 	bool readRecord(Record &record);
-	bool atEnd() const {return _file.atEnd();}
+	bool atEnd() const {return _dp >= _end;}
 	const QString &errorString() const {return _errorString;}
 
 	static constexpr quint32 TAG(const char name[4])
@@ -96,10 +98,14 @@ private:
 
 	int readDR(QVector<FieldDefinition> &fields);
 	bool readDDA(const FieldDefinition &def, SubFields &fields);
-	bool readUDA(quint64 pos, const FieldDefinition &def,
+	bool readUDA(int pos, const FieldDefinition &def,
 	  const QVector<SubFieldDefinition> &fields, bool repeat, Data &data);
 
 	QFile _file;
+	uchar *_data;
+	uchar *_end;
+	uchar *_dp;
+
 	FieldsMap _map;
 	QString _errorString;
 };
